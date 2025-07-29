@@ -69,7 +69,7 @@ func (e EntityType) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e),
 		},
-	}.getMixins()
+	}.getMixins(e)
 }
 
 // Edges of the EntityType

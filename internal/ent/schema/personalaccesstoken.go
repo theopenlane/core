@@ -149,7 +149,7 @@ func (p PersonalAccessToken) Mixin() []ent.Mixin {
 				withSkipInterceptor(interceptors.SkipOnlyQuery),
 			),
 		},
-	}.getMixins()
+	}.getMixins(p)
 }
 
 func (p PersonalAccessToken) Features() []models.OrgModule {

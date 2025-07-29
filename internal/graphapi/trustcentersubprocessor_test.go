@@ -620,8 +620,6 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 }
 
 func TestQueryTrustCenterSubprocessors(t *testing.T) {
-	t.Parallel()
-
 	// Create test data
 	testUser := suite.userBuilder(context.Background(), t)
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)

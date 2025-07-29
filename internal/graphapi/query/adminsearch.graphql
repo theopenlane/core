@@ -472,6 +472,25 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    jobTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          title
+          description
+        }
+      }
+    }
     mappableDomains {
       totalCount
       pageInfo {
@@ -711,26 +730,6 @@ query AdminSearch($query: String!) {
           ownerID
           target
           metadata
-        }
-      }
-    }
-    scheduledJobs {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          displayID
-          tags
-          ownerID
-          title
-          description
-          configuration
         }
       }
     }

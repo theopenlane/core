@@ -622,3 +622,231 @@ func TestMutationDeleteProcedure(t *testing.T) {
 		})
 	}
 }
+
+func TestMutationUpdateBulkProcedure(t *testing.T) {
+	// create procedures to be updated
+	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure3 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create another user and add them to the same organization and group as testUser1
+	// this will allow us to test the group editor permissions
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+
+	procedureAnotherUser := (&ProcedureBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	// ensure the user does not currently have access to update the procedure
+	res, err := suite.client.api.UpdateBulkProcedure(testUser2.UserCtx, []*openlaneclient.BulkUpdateProcedureInput{
+		{
+			ID: procedure1.ID,
+			Input: &openlaneclient.UpdateProcedureInput{
+				Status: lo.ToPtr(enums.DocumentPublished),
+			},
+		},
+	})
+
+	assert.Assert(t, is.Nil(err))
+	// make sure nothing was updated
+	assert.Equal(t, len(res.UpdateBulkProcedure.Procedures), 0)
+
+	testCases := []struct {
+		name                 string
+		request              []*openlaneclient.BulkUpdateProcedureInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedUpdatedCount int
+	}{
+		{
+			name: "happy path, update multiple procedures with different fields",
+			request: []*openlaneclient.BulkUpdateProcedureInput{
+				{
+					ID: procedure1.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						Name:         lo.ToPtr("Updated Procedure 1"),
+						ApproverID:   &approverGroup.ID,
+						RevisionBump: &models.Minor,
+					},
+				},
+				{
+					ID: procedure2.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						Status:     &enums.DocumentPublished,
+						Tags:       []string{"tag1", "tag2"},
+						DelegateID: &delegateGroup.ID,
+					},
+				},
+				{
+					ID: procedure3.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						Details:       lo.ToPtr("Updated details for procedure 3"),
+						ProcedureType: lo.ToPtr("Policy"),
+					},
+				},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "happy path, editor permissions",
+			request: []*openlaneclient.BulkUpdateProcedureInput{
+				{
+					ID: procedure1.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						AddEditorIDs: []string{groupMember.GroupID},
+					},
+				},
+				{
+					ID: procedure2.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						RevisionBump: &models.Major,
+					},
+				},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+		{
+			name:        "empty input array",
+			request:     []*openlaneclient.BulkUpdateProcedureInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "input is required",
+		},
+		{
+			name: "mixed success and failure - some procedures not authorized",
+			request: []*openlaneclient.BulkUpdateProcedureInput{
+				{
+					ID: procedure1.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						Status: &enums.DocumentDraft,
+					},
+				},
+				{
+					ID: procedureAnotherUser.ID, // this should fail authorization
+					Input: &openlaneclient.UpdateProcedureInput{
+						Status: &enums.DocumentPublished,
+					},
+				},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 1, // only procedure1 should be updated
+		},
+		{
+			name: "update not allowed, no permissions to procedures",
+			request: []*openlaneclient.BulkUpdateProcedureInput{
+				{
+					ID: procedure1.ID,
+					Input: &openlaneclient.UpdateProcedureInput{
+						Status: &enums.DocumentPublished,
+					},
+				},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedUpdatedCount: 0, // should not find any procedures to update
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateBulkProcedure(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.UpdateBulkProcedure.Procedures, tc.expectedUpdatedCount))
+			assert.Check(t, is.Len(resp.UpdateBulkProcedure.UpdatedIDs, tc.expectedUpdatedCount))
+
+			procedureMap := make(map[string]*openlaneclient.UpdateBulkProcedure_UpdateBulkProcedure_Procedures)
+			for _, procedure := range resp.UpdateBulkProcedure.Procedures {
+				procedureMap[procedure.ID] = procedure
+			}
+
+			for _, requestInput := range tc.request {
+				responseProcedure, found := procedureMap[requestInput.ID]
+				if !found {
+					continue
+				}
+
+				if requestInput.Input.Name != nil {
+					assert.Check(t, is.Equal(*requestInput.Input.Name, responseProcedure.Name))
+				}
+
+				if requestInput.Input.Status != nil {
+					assert.Check(t, is.Equal(*requestInput.Input.Status, *responseProcedure.Status))
+				}
+
+				if requestInput.Input.Tags != nil {
+					assert.Check(t, is.DeepEqual(requestInput.Input.Tags, responseProcedure.Tags))
+				}
+
+				if requestInput.Input.ProcedureType != nil {
+					assert.Check(t, is.Equal(*requestInput.Input.ProcedureType, *responseProcedure.ProcedureType))
+				}
+
+				if requestInput.Input.Details != nil {
+					assert.Check(t, is.DeepEqual(requestInput.Input.Details, responseProcedure.Details))
+				}
+
+				if requestInput.Input.ApproverID != nil {
+					assert.Check(t, responseProcedure.Approver != nil)
+					assert.Check(t, is.Equal(*requestInput.Input.ApproverID, responseProcedure.Approver.ID))
+				}
+
+				if requestInput.Input.DelegateID != nil {
+					assert.Check(t, responseProcedure.Delegate != nil)
+					assert.Check(t, is.Equal(*requestInput.Input.DelegateID, responseProcedure.Delegate.ID))
+				}
+
+				if requestInput.Input.RevisionBump == &models.Minor {
+					assert.Check(t, is.Equal("v0.1.0", *responseProcedure.Revision))
+				}
+
+				if requestInput.Input.RevisionBump == &models.Major {
+					assert.Check(t, is.Equal("v1.0.0", *responseProcedure.Revision))
+				}
+
+				if len(requestInput.Input.AddEditorIDs) > 0 {
+					// ensure the user has access to the procedure now
+					res, err := suite.client.api.UpdateProcedure(anotherAdminUser.UserCtx, requestInput.ID, openlaneclient.UpdateProcedureInput{
+						Tags: []string{"bulk-test-tag"},
+					})
+					assert.NilError(t, err)
+					assert.Check(t, res != nil)
+					assert.Check(t, is.Equal(requestInput.ID, res.UpdateProcedure.Procedure.ID))
+				}
+			}
+
+			for _, updatedID := range resp.UpdateBulkProcedure.UpdatedIDs {
+				found := false
+				for _, requestInput := range tc.request {
+					if requestInput.ID == updatedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID, procedure3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedureAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{approverGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+}

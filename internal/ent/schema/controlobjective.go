@@ -124,7 +124,7 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(c)
 }
 
 func (ControlObjective) Features() []entx.FeatureModule {

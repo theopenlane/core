@@ -142,7 +142,7 @@ func (s Standard) Mixin() []ent.Mixin {
 			),
 			mixin.SystemOwnedMixin{},
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Hooks of the Standard

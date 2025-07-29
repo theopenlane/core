@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/echox/middleware"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
@@ -192,6 +193,9 @@ func RegisterRoutes(router *Router) error {
 		registerWebauthnAuthVerificationHandler,
 		registerUserInfoHandler,
 		registerOAuthRegisterHandler,
+		registerIntegrationOAuthStartHandler,
+		registerIntegrationOAuthCallbackHandler,
+		registerRefreshIntegrationTokenHandler,
 		registerSwitchRoute,
 		registerLivenessHandler,
 		registerSecurityTxtHandler,
@@ -215,6 +219,8 @@ func RegisterRoutes(router *Router) error {
 		registerSSOTokenAuthorizeHandler,
 		registerSSOTokenCallbackHandler,
 		registerTrustCenterAnonymousJWTHandler,
+		registerStartImpersonationHandler,
+		registerEndImpersonationHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into
@@ -272,6 +278,8 @@ func authMiddleware(router *Router) []echo.MiddlewareFunc {
 	mw := baseMW
 	// add the auth middleware
 	mw = append(mw, router.Handler.AuthMiddleware...)
+	// add system admin user context middleware (after auth, so we know if user is system admin)
+	mw = append(mw, impersonation.SystemAdminUserContextMiddleware())
 	// append any additional middleware after the auth middleware (includes csrf)
 	return append(mw, router.Handler.AdditionalMiddleware...)
 }

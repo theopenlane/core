@@ -10,6 +10,20 @@ extend type Query {
     ):  Procedure!
 }
 
+"""
+Input for updating a single procedure in a bulk operation
+"""
+input BulkUpdateProcedureInput {
+    """
+    ID of the procedure to update
+    """
+    id: ID!
+    """
+    Data to update the procedure with
+    """
+    input: UpdateProcedureInput!
+}
+
 extend type Mutation{
     """
     Create a new procedure
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ProcedureBulkCreatePayload!
+    """
+    Update multiple existing procedures
+    """
+    updateBulkProcedure(
+        """
+        values to update the procedures with
+        """
+        input: [BulkUpdateProcedureInput!]
+    ): ProcedureBulkUpdatePayload!
     """
     Update an existing procedure
     """
@@ -100,4 +123,18 @@ type ProcedureBulkCreatePayload {
     Created procedures
     """
     procedures: [Procedure!]
+}
+
+"""
+Return response for updateBulkProcedure mutation
+"""
+type ProcedureBulkUpdatePayload {
+    """
+    Updated procedures
+    """
+    procedures: [Procedure!]
+    """
+    IDs of the updated procedures
+    """
+    updatedIDs: [ID!]
 }

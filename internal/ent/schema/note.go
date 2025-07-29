@@ -60,7 +60,7 @@ func (n Note) Mixin() []ent.Mixin {
 				withOwnerRelation(fgax.OwnerRelation),
 			),
 		},
-	}.getMixins()
+	}.getMixins(n)
 }
 
 // Edges of the Note

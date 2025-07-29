@@ -106,7 +106,7 @@ func (t Task) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 		},
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Edges of the Task

@@ -126,6 +126,10 @@ coreConfiguration:
       cookiePath: "/"  # @schema type:string; default:/
     # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
     defaultTrustCenterDomain: ""  # @schema type:string
+    # -- FieldLevelEncryption contains the configuration for field level encryption
+    fieldLevelEncryption:
+      # -- Enabled indicates whether Tink encryption is enabled
+      enabled: false  # @schema type:boolean; default:false
   # -- EntConfig contains the ent configuration used by the ent middleware
   entConfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
@@ -196,8 +200,6 @@ coreConfiguration:
       onFailureScript: ""  # @schema type:string
       # -- OnSuccessScript script to run when a scheduled job succeeds
       onSuccessScript: ""  # @schema type:string
-      # -- FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
-      folderName: "openlane"  # @schema type:string; default:openlane
     # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
     maxPoolSize: 100  # @schema type:integer; default:100
   # -- Auth contains the authentication token settings and provider(s)
@@ -225,14 +227,12 @@ coreConfiguration:
       # -- Github contains the configuration settings for the Github Oauth Provider
       github:
         clientId: ""  # @schema type:string
-        clientSecret: ""  # @schema type:string
         clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
         scopes: []
         redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
       # -- Google contains the configuration settings for the Google Oauth Provider
       google:
         clientId: ""  # @schema type:string
-        clientSecret: ""  # @schema type:string
         clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
         scopes: []
         redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
@@ -265,12 +265,8 @@ coreConfiguration:
     modelFile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
     # -- credentials for the openFGA client
     credentials:
-      # -- api token for the openFGA client
-      apiToken: ""  # @schema type:string
       # -- client id for the openFGA client
       clientId: ""  # @schema type:string
-      # -- client secret for the openFGA client
-      clientSecret: ""  # @schema type:string
       # -- audience for the openFGA client
       audience: ""  # @schema type:string
       # -- issuer for the openFGA client
@@ -374,7 +370,6 @@ coreConfiguration:
     codeLength: 6  # @schema type:integer; default:6
     issuer: ""  # @schema type:string
     redis: true  # @schema type:boolean; default:true
-    secret: ""  # @schema type:string
     recoveryCodeCount: 16  # @schema type:integer; default:16
     recoveryCodeLength: 8  # @schema type:integer; default:8
   # -- Ratelimit contains the configuration for the rate limiter
@@ -438,6 +433,32 @@ coreConfiguration:
     newSubscriberMessageFile: ""  # @schema type:string
     # -- NewUserMessageFile is the path to the template used for new user notifications
     newUserMessageFile: ""  # @schema type:string
+  # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
+  integrationOauthProvider:
+    # -- RedirectURL is the base URL for integration OAuth callbacks
+    redirectUrl: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+    # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration
+    successRedirectUrl: "/integrations/success"  # @schema type:string; default:/integrations/success
+    # -- Github contains the configuration settings for GitHub integrations
+    github:
+      # -- ClientID is the OAuth2 client ID
+      clientId: ""  # @schema type:string
+      # -- ClientSecret is the OAuth2 client secret
+      clientSecret: ""  # @schema type:string
+      # -- ClientEndpoint is the base URL for the OAuth endpoints
+      clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+      # -- Scopes are the OAuth2 scopes to request
+      scopes: []
+    # -- Slack contains the configuration settings for Slack integrations
+    slack:
+      # -- ClientID is the OAuth2 client ID
+      clientId: ""  # @schema type:string
+      # -- ClientSecret is the OAuth2 client secret
+      clientSecret: ""  # @schema type:string
+      # -- ClientEndpoint is the base URL for the OAuth endpoints
+      clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+      # -- Scopes are the OAuth2 scopes to request
+      scopes: []
 
 # -- External Secrets configuration
 externalSecrets:
@@ -453,6 +474,14 @@ externalSecrets:
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
+    # -- core-server-fieldlevelencryption-keyset secret configuration
+    core-server-fieldlevelencryption-keyset:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for server.fieldLevelEncryption.keyset
+      secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
     # -- core-entconfig-summarizer-llm-gemini-credentialsjson secret configuration
     core-entconfig-summarizer-llm-gemini-credentialsjson:
       # -- Enable this external secret
@@ -469,6 +498,46 @@ externalSecrets:
       secretKey: "CORE_ENTCONFIG_WINDMILL_TOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-entconfig-windmill-token"  # @schema type:string
+    # -- core-auth-providers-github-clientsecret secret configuration
+    core-auth-providers-github-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.providers.github.clientSecret
+      secretKey: "CORE_AUTH_PROVIDERS_GITHUB_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-providers-github-clientsecret"  # @schema type:string
+    # -- core-auth-providers-google-clientsecret secret configuration
+    core-auth-providers-google-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.providers.google.clientSecret
+      secretKey: "CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-providers-google-clientsecret"  # @schema type:string
+    # -- core-authz-credentials-apitoken secret configuration
+    core-authz-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for authz.credentials.apiToken
+      secretKey: "CORE_AUTHZ_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-authz-credentials-apitoken"  # @schema type:string
+    # -- core-authz-credentials-clientsecret secret configuration
+    core-authz-credentials-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for authz.credentials.clientSecret
+      secretKey: "CORE_AUTHZ_CREDENTIALS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-authz-credentials-clientsecret"  # @schema type:string
+    # -- core-totp-secret secret configuration
+    core-totp-secret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for totp.secret
+      secretKey: "CORE_TOTP_SECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-totp-secret"  # @schema type:string
     # -- core-objectstorage-accesskey secret configuration
     core-objectstorage-accesskey:
       # -- Enable this external secret

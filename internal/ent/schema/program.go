@@ -131,7 +131,7 @@ func (p Program) Mixin() []ent.Mixin {
 			// add group permissions to the program
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(p)
 }
 
 // Edges of the Program

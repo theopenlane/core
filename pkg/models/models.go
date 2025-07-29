@@ -1,9 +1,11 @@
 package models
 
 import (
+	"errors"
 	"mime/multipart"
 	"net/mail"
 	"net/textproto"
+	"slices"
 	"strings"
 	"time"
 
@@ -15,6 +17,11 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/utils/passwd"
+)
+
+var (
+	errProviderRequired      = errors.New("provider parameter is required")
+	errIntegrationIDRequired = errors.New("integration ID is required")
 )
 
 // =========
@@ -1184,4 +1191,335 @@ var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
 // CreateTrustCenterAnonymousJWTResponse is the response to a request to create a trust center anonymous JWT
 type CreateTrustCenterAnonymousJWTResponse struct {
 	AuthData
+}
+
+// =================
+// IMPERSONATION
+// =================
+//
+
+const (
+	// MinImpersonationReasonLength is the minimum length for impersonation reason
+	MinImpersonationReasonLength = 10
+	// MaxImpersonationReasonLength is the maximum length for impersonation reason
+	MaxImpersonationReasonLength = 500
+)
+
+// StartImpersonationRequest represents a request to start impersonating a user
+type StartImpersonationRequest struct {
+	TargetUserID   string   `json:"target_user_id" validate:"required" description:"The ID of the user to impersonate"`
+	Type           string   `json:"type" validate:"required,oneof=support job admin" description:"The type of impersonation (support, job, admin)"`
+	Reason         string   `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
+	Duration       *int     `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
+	Scopes         []string `json:"scopes,omitempty" description:"Specific scopes for the impersonation session"`
+	OrganizationID string   `json:"organization_id,omitempty" description:"Organization context for impersonation"`
+}
+
+// StartImpersonationReply represents the response when starting impersonation
+type StartImpersonationReply struct {
+	rout.Reply
+	Token     string    `json:"token" description:"The impersonation token"`
+	ExpiresAt time.Time `json:"expires_at" description:"When the impersonation token expires"`
+	SessionID string    `json:"session_id" description:"The impersonation session ID"`
+	Message   string    `json:"message" description:"Success message"`
+}
+
+// EndImpersonationRequest represents a request to end an impersonation session
+type EndImpersonationRequest struct {
+	SessionID string `json:"session_id" validate:"required" description:"The session ID to end"`
+	Reason    string `json:"reason,omitempty" description:"Optional reason for ending the session"`
+}
+
+// EndImpersonationReply represents the response when ending impersonation
+type EndImpersonationReply struct {
+	rout.Reply
+	Message string `json:"message" description:"Success message"`
+}
+
+// Validate ensures the required fields are set on the StartImpersonationRequest
+func (r *StartImpersonationRequest) Validate() error {
+	r.TargetUserID = strings.TrimSpace(r.TargetUserID)
+	r.Type = strings.TrimSpace(r.Type)
+	r.Reason = strings.TrimSpace(r.Reason)
+	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
+
+	switch {
+	case r.TargetUserID == "":
+		return rout.NewMissingRequiredFieldError("target_user_id")
+	case r.Type == "":
+		return rout.NewMissingRequiredFieldError("type")
+	case r.Reason == "":
+		return rout.NewMissingRequiredFieldError("reason")
+	case len(r.Reason) < MinImpersonationReasonLength:
+		return rout.InvalidField("reason must be at least 10 characters")
+	case len(r.Reason) > MaxImpersonationReasonLength:
+		return rout.InvalidField("reason must be less than 500 characters")
+	}
+
+	return nil
+}
+
+// Validate ensures the required fields are set on the EndImpersonationRequest
+func (r *EndImpersonationRequest) Validate() error {
+	r.SessionID = strings.TrimSpace(r.SessionID)
+	r.Reason = strings.TrimSpace(r.Reason)
+
+	if r.SessionID == "" {
+		return rout.NewMissingRequiredFieldError("session_id")
+	}
+
+	return nil
+}
+
+// =========
+// OAUTH INTEGRATIONS
+// =========
+
+// IntegrationToken represents stored OAuth tokens for an integration
+type IntegrationToken struct {
+	Provider         string     `json:"provider" description:"OAuth provider (github, slack, etc.)"`
+	AccessToken      string     `json:"accessToken" description:"OAuth access token"`
+	RefreshToken     string     `json:"refreshToken,omitempty" description:"OAuth refresh token"`
+	ExpiresAt        *time.Time `json:"expiresAt,omitempty" description:"Token expiration time"`
+	ProviderUserID   string     `json:"providerUserId,omitempty" description:"User ID from the OAuth provider"`
+	ProviderUsername string     `json:"providerUsername,omitempty" description:"Username from the OAuth provider"`
+	ProviderEmail    string     `json:"providerEmail,omitempty" description:"Email from the OAuth provider"`
+}
+
+// IsExpired returns true if the token has expired
+func (t *IntegrationToken) IsExpired() bool {
+	if t.ExpiresAt == nil {
+		return false // No expiry means never expires
+	}
+	return time.Now().After(*t.ExpiresAt)
+}
+
+// HasValidToken returns true if the token is valid and not expired
+func (t *IntegrationToken) HasValidToken() bool {
+	return t.Provider != "" && t.AccessToken != "" && !t.IsExpired()
+}
+
+// IntegrationTokenResponse is the response for getting integration tokens
+type IntegrationTokenResponse struct {
+	rout.Reply
+	Provider  string            `json:"provider"`
+	Token     *IntegrationToken `json:"token"`
+	ExpiresAt *time.Time        `json:"expiresAt,omitempty"`
+}
+
+// ListIntegrationsResponse is the response for listing integrations
+type ListIntegrationsResponse struct {
+	rout.Reply
+	Integrations any `json:"integrations"` // Will be []*ent.Integration
+}
+
+// DeleteIntegrationResponse is the response for deleting an integration
+type DeleteIntegrationResponse struct {
+	rout.Reply
+	Message string `json:"message"`
+}
+
+// IntegrationStatusResponse is the response for checking integration status
+type IntegrationStatusResponse struct {
+	rout.Reply
+	Provider     string `json:"provider"`
+	Connected    bool   `json:"connected"`
+	Status       string `json:"status,omitempty"` // "connected", "expired", "invalid"
+	TokenValid   bool   `json:"tokenValid,omitempty"`
+	TokenExpired bool   `json:"tokenExpired,omitempty"`
+	Message      string `json:"message"`
+	Integration  any    `json:"integration,omitempty"` // Will be *ent.Integration
+}
+
+// GetIntegrationTokenRequest is the request for getting integration tokens
+type GetIntegrationTokenRequest struct {
+	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+}
+
+// DeleteIntegrationRequest is the request for deleting an integration
+type DeleteIntegrationRequest struct {
+	ID string `param:"id" description:"Integration ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// RefreshIntegrationTokenRequest is the request for refreshing integration tokens
+type RefreshIntegrationTokenRequest struct {
+	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+}
+
+// GetIntegrationStatusRequest is the request for checking integration status
+type GetIntegrationStatusRequest struct {
+	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+}
+
+// Validate validates the GetIntegrationTokenRequest
+func (r *GetIntegrationTokenRequest) Validate() error {
+	r.Provider = strings.TrimSpace(r.Provider)
+	if r.Provider == "" {
+		return errProviderRequired
+	}
+	return nil
+}
+
+// Validate validates the DeleteIntegrationRequest
+func (r *DeleteIntegrationRequest) Validate() error {
+	r.ID = strings.TrimSpace(r.ID)
+	if r.ID == "" {
+		return errIntegrationIDRequired
+	}
+	return nil
+}
+
+// Validate validates the RefreshIntegrationTokenRequest
+func (r *RefreshIntegrationTokenRequest) Validate() error {
+	r.Provider = strings.TrimSpace(r.Provider)
+	if r.Provider == "" {
+		return errProviderRequired
+	}
+	return nil
+}
+
+// Validate validates the GetIntegrationStatusRequest
+func (r *GetIntegrationStatusRequest) Validate() error {
+	r.Provider = strings.TrimSpace(r.Provider)
+	if r.Provider == "" {
+		return errProviderRequired
+	}
+	return nil
+}
+
+// =========
+// OAUTH INTEGRATION REQUESTS/RESPONSES
+// =========
+
+// OAuthFlowRequest represents the initial OAuth flow request
+type OAuthFlowRequest struct {
+	Provider    string   `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+	RedirectURI string   `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
+	Scopes      []string `json:"scopes,omitempty" description:"Additional OAuth scopes to request" example:"repo,gist"`
+}
+
+// Validate ensures the required fields are set on the OAuthFlowRequest
+func (r *OAuthFlowRequest) Validate() error {
+	r.Provider = strings.TrimSpace(strings.ToLower(r.Provider))
+
+	if r.Provider == "" {
+		return rout.NewMissingRequiredFieldError("provider")
+	}
+
+	// Validate supported providers
+	supportedProviders := []string{"github", "slack"}
+	validProvider := slices.Contains(supportedProviders, r.Provider)
+	if !validProvider {
+		return rout.InvalidField("provider")
+	}
+
+	// Clean up scopes
+	cleanScopes := make([]string, 0, len(r.Scopes))
+	for _, scope := range r.Scopes {
+		if trimmed := strings.TrimSpace(scope); trimmed != "" {
+			cleanScopes = append(cleanScopes, trimmed)
+		}
+	}
+	r.Scopes = cleanScopes
+
+	return nil
+}
+
+// OAuthFlowResponse contains the OAuth authorization URL
+type OAuthFlowResponse struct {
+	rout.Reply
+	AuthURL       string `json:"authUrl" description:"URL to redirect user to for OAuth authorization" example:"https://github.com/login/oauth/authorize?client_id=..."`
+	State         string `json:"state,omitempty" description:"OAuth state parameter for security" example:"eyJvcmdJRCI6IjAxSE..."`
+	Message       string `json:"message,omitempty" description:"Optional message (e.g., for authentication required)" example:"Authentication required. Please login first."`
+	RequiresLogin bool   `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow" example:"true"`
+}
+
+// OAuthCallbackRequest represents the OAuth callback data
+type OAuthCallbackRequest struct {
+	Provider string `json:"provider,omitempty" query:"provider" description:"OAuth provider (extracted from state)" example:"github"`
+	Code     string `json:"code" query:"code" description:"OAuth authorization code" example:"4/0AQl..."`
+	State    string `json:"state" query:"state" description:"OAuth state parameter" example:"eyJvcmdJRCI6IjAxSE..."`
+}
+
+// Validate ensures the required fields are set on the OAuthCallbackRequest
+func (r *OAuthCallbackRequest) Validate() error {
+	r.Provider = strings.TrimSpace(strings.ToLower(r.Provider))
+	r.Code = strings.TrimSpace(r.Code)
+	r.State = strings.TrimSpace(r.State)
+
+	switch {
+	case r.Code == "":
+		return rout.NewMissingRequiredFieldError("code")
+	case r.State == "":
+		return rout.NewMissingRequiredFieldError("state")
+	}
+
+	return nil
+}
+
+// ExampleStartImpersonationRequest is an example request for OpenAPI documentation
+var ExampleStartImpersonationRequest = StartImpersonationRequest{
+	TargetUserID: ulids.New().String(),
+	Type:         "support",
+	Reason:       "Customer support assistance for account recovery",
+	Duration:     nil, // Use default
+}
+
+// ExampleStartImpersonationReply is an example response for OpenAPI documentation
+var ExampleStartImpersonationReply = StartImpersonationReply{
+	Reply:     rout.Reply{Success: true},
+	Token:     "imp_" + ulids.New().String(),
+	ExpiresAt: time.Now().Add(time.Hour),
+	SessionID: ulids.New().String(),
+	Message:   "Impersonation session started successfully",
+}
+
+// ExampleEndImpersonationRequest is an example request for OpenAPI documentation
+var ExampleEndImpersonationRequest = EndImpersonationRequest{
+	SessionID: ulids.New().String(),
+	Reason:    "Support task completed",
+}
+
+// ExampleEndImpersonationReply is an example response for OpenAPI documentation
+var ExampleEndImpersonationReply = EndImpersonationReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "Impersonation session ended successfully",
+}
+
+// OAuthCallbackResponse contains the result of OAuth callback processing
+type OAuthCallbackResponse struct {
+	rout.Reply
+	Success     bool   `json:"success" description:"Whether the OAuth callback was processed successfully" example:"true"`
+	Integration any    `json:"integration,omitempty" description:"The created/updated integration object"`
+	Message     string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
+}
+
+// ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation
+var ExampleOAuthFlowRequest = OAuthFlowRequest{
+	Provider:    "github",
+	RedirectURI: "https://app.example.com/integrations",
+	Scopes:      []string{"repo", "gist"},
+}
+
+// ExampleOAuthCallbackRequest is an example OAuth callback request for OpenAPI documentation
+var ExampleOAuthCallbackRequest = OAuthCallbackRequest{
+	Provider: "github",
+	Code:     "4/0AQlEz8xY...",
+	State:    "eyJvcmdJRCI6IjAxSE...",
+}
+
+// ExampleOAuthFlowResponse is an example OAuth flow response for OpenAPI documentation
+var ExampleOAuthFlowResponse = OAuthFlowResponse{
+	Reply:         rout.Reply{Success: true},
+	AuthURL:       "https://github.com/login/oauth/authorize?client_id=...&state=eyJvcmdJRCI6IjAxSE...",
+	State:         "eyJvcmdJRCI6IjAxSE...",
+	Message:       "",
+	RequiresLogin: false,
+}
+
+// ExampleOAuthCallbackResponse is an example OAuth callback response for OpenAPI documentation
+var ExampleOAuthCallbackResponse = OAuthCallbackResponse{
+	Reply:   rout.Reply{Success: true},
+	Success: true,
+	Message: "Successfully connected GitHub integration",
 }

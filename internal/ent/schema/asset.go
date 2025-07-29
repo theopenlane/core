@@ -64,7 +64,7 @@ func (a Asset) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(a),
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(a)
 }
 
 func (a Asset) Edges() []ent.Edge {

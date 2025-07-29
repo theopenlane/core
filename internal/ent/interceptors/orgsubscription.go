@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	gc "github.com/theopenlane/core/pkg/catalog/gencatalog"
 )
 
 // InterceptorSubscriptionURL is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
@@ -98,10 +99,32 @@ func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, 
 		return err
 	}
 
+	moduleURLs := map[string]string{}
+	visible := gc.DefaultCatalog.Visible("")
+	for name, feat := range visible.Modules {
+		if len(feat.Billing.Prices) == 0 {
+			continue
+		}
+
+		priceID := feat.Billing.Prices[0].PriceID
+		if priceID == "" {
+			continue
+		}
+
+		sess, err := q.EntitlementManager.CreateBillingPortalAddModuleSession(ctx, orgSub.StripeSubscriptionID, orgSub.StripeCustomerID, priceID)
+		if err != nil {
+			zerolog.Ctx(ctx).Warn().Err(err).Str("module", name).Msg("failed to create module billing portal session")
+			continue
+		}
+
+		moduleURLs[name] = sess.ManageSubscription
+	}
+
 	// add the subscription URL to the result
 	orgSub.SubscriptionURL = updateSubscription.ManageSubscription
 	orgSub.Cancellation = cancelSubscription.Cancellation
 	orgSub.ManagePaymentMethods = updatePaymentMethod.PaymentMethods
+	orgSub.ModuleBillingURLs = moduleURLs
 
 	return nil
 }

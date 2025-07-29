@@ -8,10 +8,42 @@ import (
 	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
+
+// InterceptorFile is an ent interceptor that filters the file query on the organization id
+// this is slightly different from the organization interceptor because this is formatted differently
+// then other schemas and is not always required so keeping it separate
+func InterceptorFile() ent.Interceptor {
+	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		au, err := auth.GetAuthenticatedUserFromContext(ctx)
+		if err != nil {
+			return err
+		}
+
+		orgs := au.OrganizationIDs
+
+		if len(orgs) == 0 {
+			return nil
+		}
+
+		// filter on the organization id or empty organization id
+		// which would happen on something like a user file
+		q.WhereP(
+			file.Or(
+				file.HasOrganizationWith(organization.IDIn(orgs...)),
+				file.Not(file.HasOrganization()),
+			),
+		)
+
+		return nil
+	})
+}
 
 // InterceptorPresignedURL is an ent interceptor that sets the presignedURL field on the file query
 // if the field is requested

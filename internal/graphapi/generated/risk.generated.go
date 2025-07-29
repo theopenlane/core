@@ -144,6 +144,162 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RiskBulkUpdatePayload_risks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Risks, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.Risk)
+	fc.Result = res
+	return ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RiskBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Risk_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Risk_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Risk_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Risk_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Risk_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Risk_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Risk_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Risk_ownerID(ctx, field)
+			case "name":
+				return ec.fieldContext_Risk_name(ctx, field)
+			case "status":
+				return ec.fieldContext_Risk_status(ctx, field)
+			case "riskType":
+				return ec.fieldContext_Risk_riskType(ctx, field)
+			case "category":
+				return ec.fieldContext_Risk_category(ctx, field)
+			case "impact":
+				return ec.fieldContext_Risk_impact(ctx, field)
+			case "likelihood":
+				return ec.fieldContext_Risk_likelihood(ctx, field)
+			case "score":
+				return ec.fieldContext_Risk_score(ctx, field)
+			case "mitigation":
+				return ec.fieldContext_Risk_mitigation(ctx, field)
+			case "details":
+				return ec.fieldContext_Risk_details(ctx, field)
+			case "businessCosts":
+				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "stakeholderID":
+				return ec.fieldContext_Risk_stakeholderID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_Risk_delegateID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Risk_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Risk_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Risk_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Risk_viewers(ctx, field)
+			case "controls":
+				return ec.fieldContext_Risk_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Risk_subcontrols(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Risk_procedures(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Risk_internalPolicies(ctx, field)
+			case "programs":
+				return ec.fieldContext_Risk_programs(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Risk_actionPlans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Risk_tasks(ctx, field)
+			case "assets":
+				return ec.fieldContext_Risk_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Risk_entities(ctx, field)
+			case "scans":
+				return ec.fieldContext_Risk_scans(ctx, field)
+			case "stakeholder":
+				return ec.fieldContext_Risk_stakeholder(ctx, field)
+			case "delegate":
+				return ec.fieldContext_Risk_delegate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _RiskBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RiskBulkUpdatePayload_updatedIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedIDs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RiskBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field graphql.CollectedField, obj *model.RiskCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_RiskCreatePayload_risk(ctx, field)
 	if err != nil {
@@ -428,6 +584,40 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputBulkUpdateRiskInput(ctx context.Context, obj any) (model.BulkUpdateRiskInput, error) {
+	var it model.BulkUpdateRiskInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "input"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "input":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+			data, err := ec.unmarshalNUpdateRiskInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Input = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -449,6 +639,44 @@ func (ec *executionContext) _RiskBulkCreatePayload(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("RiskBulkCreatePayload")
 		case "risks":
 			out.Values[i] = ec._RiskBulkCreatePayload_risks(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var riskBulkUpdatePayloadImplementors = []string{"RiskBulkUpdatePayload"}
+
+func (ec *executionContext) _RiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.RiskBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, riskBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RiskBulkUpdatePayload")
+		case "risks":
+			out.Values[i] = ec._RiskBulkUpdatePayload_risks(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._RiskBulkUpdatePayload_updatedIDs(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -593,6 +821,11 @@ func (ec *executionContext) _RiskUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNBulkUpdateRiskInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInput(ctx context.Context, v any) (*model.BulkUpdateRiskInput, error) {
+	res, err := ec.unmarshalInputBulkUpdateRiskInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNRiskBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkCreatePayload) graphql.Marshaler {
 	return ec._RiskBulkCreatePayload(ctx, sel, &v)
 }
@@ -605,6 +838,20 @@ func (ec *executionContext) marshalNRiskBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._RiskBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNRiskBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkUpdatePayload) graphql.Marshaler {
+	return ec._RiskBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRiskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RiskBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNRiskCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskCreatePayload) graphql.Marshaler {
@@ -647,6 +894,24 @@ func (ec *executionContext) marshalNRiskUpdatePayload2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._RiskUpdatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOBulkUpdateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateRiskInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.BulkUpdateRiskInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNBulkUpdateRiskInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

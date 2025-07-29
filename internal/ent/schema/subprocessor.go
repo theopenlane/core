@@ -84,7 +84,7 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 			),
 			mixin.SystemOwnedMixin{},
 		},
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Edges of the Subprocessor

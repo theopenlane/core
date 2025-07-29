@@ -465,7 +465,12 @@ func TestMutationCreateEvidence(t *testing.T) {
 				tc.ctx = testUser1.UserCtx
 			}
 
+			// delete the evidence
 			(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: resp.CreateEvidence.Evidence.ID}).MustDelete(tc.ctx, t)
+			// delete the files created for the evidence
+			for _, file := range resp.CreateEvidence.Evidence.Files.Edges {
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{file.Node.ID}}).MustDelete(tc.ctx, t)
+			}
 		})
 	}
 	// delete created objects
@@ -499,7 +504,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path, update multiple fields",
+			name: "happy path, update multiple fields using PAT",
 			request: openlaneclient.UpdateEvidenceInput{
 				Name:                lo.ToPtr("Updated Evidence"),
 				Description:         lo.ToPtr("This is an updated Evidence"),
@@ -580,7 +585,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Source, *resp.UpdateEvidence.Evidence.Source))
 			}
 
-			if tc.files != nil && len(tc.files) > 0 {
+			if len(tc.files) > 0 {
 				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files)))
 			}
 		})

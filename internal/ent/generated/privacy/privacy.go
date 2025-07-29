@@ -423,54 +423,6 @@ func (f ControlObjectiveHistoryMutationRuleFunc) EvalMutation(ctx context.Contex
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlObjectiveHistoryMutation", m)
 }
 
-// The ControlScheduledJobQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type ControlScheduledJobQueryRuleFunc func(context.Context, *generated.ControlScheduledJobQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f ControlScheduledJobQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.ControlScheduledJobQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ControlScheduledJobQuery", q)
-}
-
-// The ControlScheduledJobMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type ControlScheduledJobMutationRuleFunc func(context.Context, *generated.ControlScheduledJobMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f ControlScheduledJobMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.ControlScheduledJobMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlScheduledJobMutation", m)
-}
-
-// The ControlScheduledJobHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type ControlScheduledJobHistoryQueryRuleFunc func(context.Context, *generated.ControlScheduledJobHistoryQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f ControlScheduledJobHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.ControlScheduledJobHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ControlScheduledJobHistoryQuery", q)
-}
-
-// The ControlScheduledJobHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type ControlScheduledJobHistoryMutationRuleFunc func(context.Context, *generated.ControlScheduledJobHistoryMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f ControlScheduledJobHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.ControlScheduledJobHistoryMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlScheduledJobHistoryMutation", m)
-}
-
 // The CustomDomainQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type CustomDomainQueryRuleFunc func(context.Context, *generated.CustomDomainQuery) error
@@ -1285,6 +1237,54 @@ func (f JobRunnerTokenMutationRuleFunc) EvalMutation(ctx context.Context, m gene
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.JobRunnerTokenMutation", m)
+}
+
+// The JobTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type JobTemplateQueryRuleFunc func(context.Context, *generated.JobTemplateQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f JobTemplateQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.JobTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.JobTemplateQuery", q)
+}
+
+// The JobTemplateMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type JobTemplateMutationRuleFunc func(context.Context, *generated.JobTemplateMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f JobTemplateMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.JobTemplateMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.JobTemplateMutation", m)
+}
+
+// The JobTemplateHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type JobTemplateHistoryQueryRuleFunc func(context.Context, *generated.JobTemplateHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f JobTemplateHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.JobTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.JobTemplateHistoryQuery", q)
+}
+
+// The JobTemplateHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type JobTemplateHistoryMutationRuleFunc func(context.Context, *generated.JobTemplateHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f JobTemplateHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.JobTemplateHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.JobTemplateHistoryMutation", m)
 }
 
 // The MappableDomainQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2788,10 +2788,6 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ControlObjectiveHistoryQuery:
 		return q.Filter(), nil
-	case *generated.ControlScheduledJobQuery:
-		return q.Filter(), nil
-	case *generated.ControlScheduledJobHistoryQuery:
-		return q.Filter(), nil
 	case *generated.CustomDomainQuery:
 		return q.Filter(), nil
 	case *generated.CustomDomainHistoryQuery:
@@ -2859,6 +2855,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.JobRunnerRegistrationTokenQuery:
 		return q.Filter(), nil
 	case *generated.JobRunnerTokenQuery:
+		return q.Filter(), nil
+	case *generated.JobTemplateQuery:
+		return q.Filter(), nil
+	case *generated.JobTemplateHistoryQuery:
 		return q.Filter(), nil
 	case *generated.MappableDomainQuery:
 		return q.Filter(), nil
@@ -3013,10 +3013,6 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.ControlObjectiveHistoryMutation:
 		return m.Filter(), nil
-	case *generated.ControlScheduledJobMutation:
-		return m.Filter(), nil
-	case *generated.ControlScheduledJobHistoryMutation:
-		return m.Filter(), nil
 	case *generated.CustomDomainMutation:
 		return m.Filter(), nil
 	case *generated.CustomDomainHistoryMutation:
@@ -3084,6 +3080,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.JobRunnerRegistrationTokenMutation:
 		return m.Filter(), nil
 	case *generated.JobRunnerTokenMutation:
+		return m.Filter(), nil
+	case *generated.JobTemplateMutation:
+		return m.Filter(), nil
+	case *generated.JobTemplateHistoryMutation:
 		return m.Filter(), nil
 	case *generated.MappableDomainMutation:
 		return m.Filter(), nil

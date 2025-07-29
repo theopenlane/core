@@ -110,7 +110,7 @@ func (ProgramMembership) Indexes() []ent.Index {
 
 // Mixin of the ProgramMembership
 func (ProgramMembership) Mixin() []ent.Mixin {
-	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins()
+	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins(ProgramMembership{})
 }
 
 // Hooks of the ProgramMembership

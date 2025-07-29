@@ -1,2 +1,2 @@
-Configuration,Cron,OwnerId,JobId,ControlIDs,SubcontrolIDs,JobRunnerId
-example_configuration,example_cron,example_ownerid,example_jobid,example_controlids,example_subcontrolids,example_jobrunnerid
+Configuration,Cron,OwnerId,JobTemplateId,ControlIDs,SubcontrolIDs,JobRunnerId
+example_configuration,example_cron,example_ownerid,example_jobtemplateid,example_controlids,example_subcontrolids,example_jobrunnerid

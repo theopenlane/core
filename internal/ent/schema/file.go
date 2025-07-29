@@ -119,7 +119,7 @@ func (f File) Mixin() []ent.Mixin {
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
 		},
-	}.getMixins()
+	}.getMixins(f)
 }
 
 func (File) Features() []models.OrgModule {
@@ -146,6 +146,7 @@ func (f File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorRequireAnyFeature("file", f.Features()...),
 		interceptors.InterceptorPresignedURL(),
+		interceptors.InterceptorFile(), // filter on the organization id
 	}
 }
 

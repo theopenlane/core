@@ -71,7 +71,7 @@ func (t TrustCenter) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t, withAllowAnonymousTrustCenterAccess(true)),
 		},
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Edges of the TrustCenter

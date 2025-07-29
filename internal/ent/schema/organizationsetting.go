@@ -165,7 +165,7 @@ func (o OrganizationSetting) Interceptors() []ent.Interceptor {
 
 // Mixin of the OrganizationSetting
 func (OrganizationSetting) Mixin() []ent.Mixin {
-	return getDefaultMixins()
+	return getDefaultMixins(OrganizationSetting{})
 }
 
 // Policy defines the privacy policy of the OrganizationSetting

@@ -45,7 +45,7 @@ func (TrustCenterCompliance) Fields() []ent.Field {
 
 // Mixin of the TrustCenterCompliance
 func (t TrustCenterCompliance) Mixin() []ent.Mixin {
-	return mixinConfig{}.getMixins()
+	return mixinConfig{}.getMixins(t)
 }
 
 // Edges of the TrustCenterCompliance

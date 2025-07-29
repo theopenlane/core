@@ -3,13 +3,18 @@ package objects
 import (
 	"context"
 	"path/filepath"
+	"strings"
 
+	"entgo.io/ent/dialect/sql"
+
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/iam/auth"
 )
 
 // Upload handles the file Upload process per key in the multipart form and returns the uploaded files
@@ -67,7 +72,7 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 		// update the file with the size
-		if _, err := txClientFromContext(ctx).
+		if _, err := txFileClientFromContext(ctx).
 			UpdateOne(entFile).
 			SetPersistedFileSize(metadata.Size).
 			SetURI(objects.CreateURI(entFile.StorageScheme, metadata.FolderDestination, metadata.Key)).
@@ -99,6 +104,11 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		return nil, err
 	}
 
+	orgID, err := getOrgOwnerID(ctx, f)
+	if err != nil {
+		return nil, err
+	}
+
 	set := ent.CreateFileInput{
 		ProvidedFileName:      f.Filename,
 		ProvidedFileExtension: filepath.Ext(f.Filename),
@@ -109,6 +119,10 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		StorageScheme:         u.Storage.GetScheme(),
 	}
 
+	if orgID != "" {
+		set.OrganizationIDs = []string{orgID}
+	}
+
 	// get file contents to store in the database
 	contents, err := objects.StreamToByte(f.File)
 	if err != nil {
@@ -117,7 +131,7 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		return nil, err
 	}
 
-	entFile, err := txClientFromContext(ctx).Create().
+	entFile, err := txFileClientFromContext(ctx).Create().
 		SetFileContents(contents).
 		SetInput(set).
 		Save(ctx)
@@ -130,9 +144,51 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 	return entFile, nil
 }
 
-// txClientFromContext returns the file client from the context if it exists
+// getOrgOwnerID retrieves the organization ID from the context or input
+func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
+	// skip if the file is a user file, they will not have an organization ID
+	// as the owner and can be used across organizations
+	if strings.EqualFold(f.CorrelatedObjectType, "user") {
+		return "", nil
+	}
+
+	// get the organization ID from the context, ignore the error if it is not set
+	// and instead check the parent object for the owner ID
+	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+
+	if orgID == "" {
+		// check the parent for the owner_id
+		var rows sql.Rows
+
+		objectTable := pluralize.NewClient().Plural(f.CorrelatedObjectType)
+		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
+
+		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
+			return "", err
+		}
+
+		if rows.Err() != nil {
+			return "", rows.Err()
+		}
+
+		defer rows.Close()
+
+		if rows.Next() {
+			var ownerID string
+			if err := rows.Scan(&ownerID); err != nil {
+				return "", err
+			}
+
+			orgID = ownerID
+		}
+	}
+
+	return orgID, nil
+}
+
+// txFileClientFromContext returns the file client from the context if it exists
 // used for transactional mutations, if the client does not exist, it will return nil
-func txClientFromContext(ctx context.Context) *ent.FileClient {
+func txFileClientFromContext(ctx context.Context) *ent.FileClient {
 	client := ent.FromContext(ctx)
 	if client != nil {
 		return client.File
@@ -141,6 +197,22 @@ func txClientFromContext(ctx context.Context) *ent.FileClient {
 	tx := transaction.FromContext(ctx)
 	if tx != nil {
 		return tx.File
+	}
+
+	return nil
+}
+
+// txFileClientFromContext returns the file client from the context if it exists
+// used for transactional mutations, if the client does not exist, it will return nil
+func txClientFromContext(ctx context.Context) *ent.Client {
+	client := ent.FromContext(ctx)
+	if client != nil {
+		return client
+	}
+
+	tx := transaction.FromContext(ctx)
+	if tx != nil {
+		return tx.Client()
 	}
 
 	return nil

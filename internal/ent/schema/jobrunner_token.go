@@ -101,7 +101,7 @@ func (j JobRunnerToken) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(j,
 				withSkipTokenTypesObjects(&token.JobRunnerRegistrationToken{})),
 		},
-	}.getMixins()
+	}.getMixins(j)
 }
 
 // Edges of the JobRunnerToken

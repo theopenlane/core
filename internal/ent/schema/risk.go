@@ -184,7 +184,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(r)
 }
 
 func (Risk) Features() []models.OrgModule {

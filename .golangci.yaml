@@ -40,6 +40,7 @@ linters:
       - pkg/entitlements/mocks/*
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
+      - internal/ent/hush/examples/*
 formatters:
   enable:
     - gofmt
@@ -54,3 +55,4 @@ formatters:
       - cmd/cli/cmd/*
       - pkg/events/soiree/examples/*
       - pkg/sleuth/dnsx/* # this should be fixed in the future
+      - internal/ent/hush/examples/*

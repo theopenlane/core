@@ -31,7 +31,7 @@ var (
 // Values returns a slice of strings that represents all the possible values of the EvidenceStatus enum.
 // Possible default values are "READY", "APPROVED", "MISSING_ARTIFACT", "REJECTED", and "NEEDS_RENEWAL"
 func (EvidenceStatus) Values() (kinds []string) {
-	for _, s := range []EvidenceStatus{EvidenceApproved, EvidenceReady, EvidenceMissingArtifact, EvidenceRejected, EvidenceNeedsRenewal} {
+	for _, s := range []EvidenceStatus{EvidenceApproved, EvidenceReady, EvidenceMissingArtifact, EvidenceRejected, EvidenceNeedsRenewal, EvidenceSubmitted, EvidenceInReview} {
 		kinds = append(kinds, string(s))
 	}
 

@@ -72,7 +72,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 			// all procedures are documents
 			NewDocumentMixin(p),
 		},
-	}.getMixins()
+	}.getMixins(p)
 }
 
 func (Procedure) Features() []models.OrgModule {

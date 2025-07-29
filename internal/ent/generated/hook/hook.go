@@ -165,30 +165,6 @@ func (f ControlObjectiveHistoryFunc) Mutate(ctx context.Context, m generated.Mut
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlObjectiveHistoryMutation", m)
 }
 
-// The ControlScheduledJobFunc type is an adapter to allow the use of ordinary
-// function as ControlScheduledJob mutator.
-type ControlScheduledJobFunc func(context.Context, *generated.ControlScheduledJobMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ControlScheduledJobFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.ControlScheduledJobMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlScheduledJobMutation", m)
-}
-
-// The ControlScheduledJobHistoryFunc type is an adapter to allow the use of ordinary
-// function as ControlScheduledJobHistory mutator.
-type ControlScheduledJobHistoryFunc func(context.Context, *generated.ControlScheduledJobHistoryMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ControlScheduledJobHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.ControlScheduledJobHistoryMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlScheduledJobHistoryMutation", m)
-}
-
 // The CustomDomainFunc type is an adapter to allow the use of ordinary
 // function as CustomDomain mutator.
 type CustomDomainFunc func(context.Context, *generated.CustomDomainMutation) (generated.Value, error)
@@ -595,6 +571,30 @@ func (f JobRunnerTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (g
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerTokenMutation", m)
+}
+
+// The JobTemplateFunc type is an adapter to allow the use of ordinary
+// function as JobTemplate mutator.
+type JobTemplateFunc func(context.Context, *generated.JobTemplateMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobTemplateFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobTemplateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobTemplateMutation", m)
+}
+
+// The JobTemplateHistoryFunc type is an adapter to allow the use of ordinary
+// function as JobTemplateHistory mutator.
+type JobTemplateHistoryFunc func(context.Context, *generated.JobTemplateHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobTemplateHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobTemplateHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobTemplateHistoryMutation", m)
 }
 
 // The MappableDomainFunc type is an adapter to allow the use of ordinary

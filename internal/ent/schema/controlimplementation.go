@@ -89,7 +89,7 @@ func (c ControlImplementation) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(c)
 }
 
 // Edges of the ControlImplementation

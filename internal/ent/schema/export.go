@@ -106,7 +106,7 @@ func (e Export) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(e,
 				withSkipForSystemAdmin(true)),
 		},
-	}.getMixins()
+	}.getMixins(e)
 }
 
 func (Export) Features() []models.OrgModule {

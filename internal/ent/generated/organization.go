@@ -174,10 +174,10 @@ type OrganizationEdges struct {
 	JobRunnerRegistrationTokens []*JobRunnerRegistrationToken `json:"job_runner_registration_tokens,omitempty"`
 	// DNSVerifications holds the value of the dns_verifications edge.
 	DNSVerifications []*DNSVerification `json:"dns_verifications,omitempty"`
-	// Jobs holds the value of the jobs edge.
-	Jobs []*ScheduledJob `json:"jobs,omitempty"`
+	// JobTemplates holds the value of the job_templates edge.
+	JobTemplates []*JobTemplate `json:"job_templates,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
-	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
+	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
 	// JobResults holds the value of the job_results edge.
 	JobResults []*JobResult `json:"job_results,omitempty"`
 	// ScheduledJobRuns holds the value of the scheduled_job_runs edge.
@@ -254,8 +254,8 @@ type OrganizationEdges struct {
 	namedJobRunnerTokens               map[string][]*JobRunnerToken
 	namedJobRunnerRegistrationTokens   map[string][]*JobRunnerRegistrationToken
 	namedDNSVerifications              map[string][]*DNSVerification
-	namedJobs                          map[string][]*ScheduledJob
-	namedScheduledJobs                 map[string][]*ControlScheduledJob
+	namedJobTemplates                  map[string][]*JobTemplate
+	namedScheduledJobs                 map[string][]*ScheduledJob
 	namedJobResults                    map[string][]*JobResult
 	namedScheduledJobRuns              map[string][]*ScheduledJobRun
 	namedTrustCenters                  map[string][]*TrustCenter
@@ -785,18 +785,18 @@ func (e OrganizationEdges) DNSVerificationsOrErr() ([]*DNSVerification, error) {
 	return nil, &NotLoadedError{edge: "dns_verifications"}
 }
 
-// JobsOrErr returns the Jobs value or an error if the edge
+// JobTemplatesOrErr returns the JobTemplates value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) JobsOrErr() ([]*ScheduledJob, error) {
+func (e OrganizationEdges) JobTemplatesOrErr() ([]*JobTemplate, error) {
 	if e.loadedTypes[57] {
-		return e.Jobs, nil
+		return e.JobTemplates, nil
 	}
-	return nil, &NotLoadedError{edge: "jobs"}
+	return nil, &NotLoadedError{edge: "job_templates"}
 }
 
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
+func (e OrganizationEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 	if e.loadedTypes[58] {
 		return e.ScheduledJobs, nil
 	}
@@ -1308,13 +1308,13 @@ func (o *Organization) QueryDNSVerifications() *DNSVerificationQuery {
 	return NewOrganizationClient(o.config).QueryDNSVerifications(o)
 }
 
-// QueryJobs queries the "jobs" edge of the Organization entity.
-func (o *Organization) QueryJobs() *ScheduledJobQuery {
-	return NewOrganizationClient(o.config).QueryJobs(o)
+// QueryJobTemplates queries the "job_templates" edge of the Organization entity.
+func (o *Organization) QueryJobTemplates() *JobTemplateQuery {
+	return NewOrganizationClient(o.config).QueryJobTemplates(o)
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Organization entity.
-func (o *Organization) QueryScheduledJobs() *ControlScheduledJobQuery {
+func (o *Organization) QueryScheduledJobs() *ScheduledJobQuery {
 	return NewOrganizationClient(o.config).QueryScheduledJobs(o)
 }
 
@@ -2734,33 +2734,33 @@ func (o *Organization) appendNamedDNSVerifications(name string, edges ...*DNSVer
 	}
 }
 
-// NamedJobs returns the Jobs named value or an error if the edge was not
+// NamedJobTemplates returns the JobTemplates named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedJobs(name string) ([]*ScheduledJob, error) {
-	if o.Edges.namedJobs == nil {
+func (o *Organization) NamedJobTemplates(name string) ([]*JobTemplate, error) {
+	if o.Edges.namedJobTemplates == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedJobs[name]
+	nodes, ok := o.Edges.namedJobTemplates[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedJobs(name string, edges ...*ScheduledJob) {
-	if o.Edges.namedJobs == nil {
-		o.Edges.namedJobs = make(map[string][]*ScheduledJob)
+func (o *Organization) appendNamedJobTemplates(name string, edges ...*JobTemplate) {
+	if o.Edges.namedJobTemplates == nil {
+		o.Edges.namedJobTemplates = make(map[string][]*JobTemplate)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedJobs[name] = []*ScheduledJob{}
+		o.Edges.namedJobTemplates[name] = []*JobTemplate{}
 	} else {
-		o.Edges.namedJobs[name] = append(o.Edges.namedJobs[name], edges...)
+		o.Edges.namedJobTemplates[name] = append(o.Edges.namedJobTemplates[name], edges...)
 	}
 }
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedScheduledJobs(name string) ([]*ControlScheduledJob, error) {
+func (o *Organization) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
 	if o.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
@@ -2771,12 +2771,12 @@ func (o *Organization) NamedScheduledJobs(name string) ([]*ControlScheduledJob, 
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedScheduledJobs(name string, edges ...*ControlScheduledJob) {
+func (o *Organization) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
 	if o.Edges.namedScheduledJobs == nil {
-		o.Edges.namedScheduledJobs = make(map[string][]*ControlScheduledJob)
+		o.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
+		o.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
 		o.Edges.namedScheduledJobs[name] = append(o.Edges.namedScheduledJobs[name], edges...)
 	}

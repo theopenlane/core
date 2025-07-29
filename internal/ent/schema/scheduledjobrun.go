@@ -7,17 +7,12 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/enums"
-"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
-"github.com/theopenlane/core/pkg/models"
 )
 
 // ScheduledJobRun holds the schema definition for the ScheduledJobRun entity
@@ -84,7 +79,7 @@ func (s ScheduledJobRun) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s),
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Edges of the ScheduledJobRun
@@ -92,7 +87,7 @@ func (s ScheduledJobRun) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: s,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 			field:      "scheduled_job_id",
 			required:   true,
 		}),
@@ -114,7 +109,6 @@ func (ScheduledJobRun) Indexes() []ent.Index {
 func (ScheduledJobRun) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		
 	}
 }
 
@@ -140,13 +134,14 @@ func (s ScheduledJobRun) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the ScheduledJobRun
-func (s ScheduledJobRun) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
+// add the new policy here, the default post-policy is to deny all
+// so you need to ensure there are rules in place to allow the actions you want
+func (ScheduledJobRun) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

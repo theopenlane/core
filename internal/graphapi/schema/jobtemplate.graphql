@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up jobTemplate by ID
+    """
+     jobTemplate(
+        """
+        ID of the jobTemplate
+        """
+        id: ID!
+    ):  JobTemplate!
+}
+
+extend type Mutation{
+    """
+    Create a new jobTemplate
+    """
+    createJobTemplate(
+        """
+        values of the jobTemplate
+        """
+        input: CreateJobTemplateInput!
+    ): JobTemplateCreatePayload!
+    """
+    Create multiple new jobTemplates
+    """
+    createBulkJobTemplate(
+        """
+        values of the jobTemplate
+        """
+        input: [CreateJobTemplateInput!]
+    ): JobTemplateBulkCreatePayload!
+    """
+    Create multiple new jobTemplates via file upload
+    """
+    createBulkCSVJobTemplate(
+        """
+        csv file containing values of the jobTemplate
+        """
+        input: Upload!
+    ): JobTemplateBulkCreatePayload!
+    """
+    Update an existing jobTemplate
+    """
+    updateJobTemplate(
+        """
+        ID of the jobTemplate
+        """
+        id: ID!
+        """
+        New values for the jobTemplate
+        """
+        input: UpdateJobTemplateInput!
+    ): JobTemplateUpdatePayload!
+    """
+    Delete an existing jobTemplate
+    """
+    deleteJobTemplate(
+        """
+        ID of the jobTemplate
+        """
+        id: ID!
+    ): JobTemplateDeletePayload!
+}
+
+"""
+Return response for createJobTemplate mutation
+"""
+type JobTemplateCreatePayload {
+    """
+    Created jobTemplate
+    """
+    jobTemplate: JobTemplate!
+}
+
+"""
+Return response for updateJobTemplate mutation
+"""
+type JobTemplateUpdatePayload {
+    """
+    Updated jobTemplate
+    """
+    jobTemplate: JobTemplate!
+}
+
+"""
+Return response for deleteJobTemplate mutation
+"""
+type JobTemplateDeletePayload {
+    """
+    Deleted jobTemplate ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkJobTemplate mutation
+"""
+type JobTemplateBulkCreatePayload {
+    """
+    Created jobTemplates
+    """
+    jobTemplates: [JobTemplate!]
+}

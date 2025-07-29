@@ -117,7 +117,7 @@ func (o OrgSubscription) Mixin() []ent.Mixin {
 				withHookFuncs(), // empty to skip the default hooks
 			),
 		},
-	}.getMixins()
+	}.getMixins(o)
 }
 
 func (OrgSubscription) Features() []models.OrgModule {

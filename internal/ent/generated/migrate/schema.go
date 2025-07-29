@@ -676,88 +676,6 @@ var (
 			},
 		},
 	}
-	// ControlScheduledJobsColumns holds the columns for the "control_scheduled_jobs" table.
-	ControlScheduledJobsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "job_id", Type: field.TypeString},
-		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// ControlScheduledJobsTable holds the schema information for the "control_scheduled_jobs" table.
-	ControlScheduledJobsTable = &schema.Table{
-		Name:       "control_scheduled_jobs",
-		Columns:    ControlScheduledJobsColumns,
-		PrimaryKey: []*schema.Column{ControlScheduledJobsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "control_scheduled_jobs_scheduled_jobs_job",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[9]},
-				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "control_scheduled_jobs_job_runners_job_runner",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "controlscheduledjob_owner_id",
-				Unique:  false,
-				Columns: []*schema.Column{ControlScheduledJobsColumns[11]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
-		},
-	}
-	// ControlScheduledJobHistoryColumns holds the columns for the "control_scheduled_job_history" table.
-	ControlScheduledJobHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "job_id", Type: field.TypeString},
-		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
-	}
-	// ControlScheduledJobHistoryTable holds the schema information for the "control_scheduled_job_history" table.
-	ControlScheduledJobHistoryTable = &schema.Table{
-		Name:       "control_scheduled_job_history",
-		Columns:    ControlScheduledJobHistoryColumns,
-		PrimaryKey: []*schema.Column{ControlScheduledJobHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "controlscheduledjobhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{ControlScheduledJobHistoryColumns[1]},
-			},
-		},
-	}
 	// CustomDomainsColumns holds the columns for the "custom_domains" table.
 	CustomDomainsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1297,7 +1215,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL"}, Default: "READY"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "READY"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
@@ -1352,7 +1270,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL"}, Default: "READY"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "READY"},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -2201,9 +2119,9 @@ var (
 		PrimaryKey: []*schema.Column{JobResultsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "job_results_control_scheduled_jobs_scheduled_job",
+				Symbol:     "job_results_scheduled_jobs_scheduled_job",
 				Columns:    []*schema.Column{JobResultsColumns[11]},
-				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
@@ -2367,6 +2285,93 @@ var (
 				Name:    "jobrunnertoken_token_expires_at_is_active",
 				Unique:  false,
 				Columns: []*schema.Column{JobRunnerTokensColumns[8], JobRunnerTokensColumns[9], JobRunnerTokensColumns[11]},
+			},
+		},
+	}
+	// JobTemplatesColumns holds the columns for the "job_templates" table.
+	JobTemplatesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
+		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
+		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// JobTemplatesTable holds the schema information for the "job_templates" table.
+	JobTemplatesTable = &schema.Table{
+		Name:       "job_templates",
+		Columns:    JobTemplatesColumns,
+		PrimaryKey: []*schema.Column{JobTemplatesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_templates_organizations_job_templates",
+				Columns:    []*schema.Column{JobTemplatesColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobtemplate_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobTemplatesColumns[7], JobTemplatesColumns[17]},
+			},
+			{
+				Name:    "jobtemplate_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{JobTemplatesColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// JobTemplateHistoryColumns holds the columns for the "job_template_history" table.
+	JobTemplateHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
+		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
+		{Name: "cron", Type: field.TypeString, Nullable: true},
+	}
+	// JobTemplateHistoryTable holds the schema information for the "job_template_history" table.
+	JobTemplateHistoryTable = &schema.Table{
+		Name:       "job_template_history",
+		Columns:    JobTemplateHistoryColumns,
+		PrimaryKey: []*schema.Column{JobTemplateHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobtemplatehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{JobTemplateHistoryColumns[1]},
 			},
 		},
 	}
@@ -3792,16 +3797,12 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "title", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "windmill_path", Type: field.TypeString},
-		{Name: "download_url", Type: field.TypeString},
+		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "job_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ScheduledJobsTable holds the schema information for the "scheduled_jobs" table.
 	ScheduledJobsTable = &schema.Table{
@@ -3810,9 +3811,21 @@ var (
 		PrimaryKey: []*schema.Column{ScheduledJobsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "scheduled_jobs_organizations_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[17]},
+				Symbol:     "scheduled_jobs_job_templates_scheduled_jobs",
+				Columns:    []*schema.Column{ScheduledJobsColumns[11]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
+				Columns:    []*schema.Column{ScheduledJobsColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scheduled_jobs_job_runners_job_runner",
+				Columns:    []*schema.Column{ScheduledJobsColumns[13]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3820,12 +3833,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[12]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3845,16 +3858,12 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "title", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "windmill_path", Type: field.TypeString},
-		{Name: "download_url", Type: field.TypeString},
+		{Name: "job_id", Type: field.TypeString},
+		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ScheduledJobHistoryTable holds the schema information for the "scheduled_job_history" table.
 	ScheduledJobHistoryTable = &schema.Table{
@@ -3898,9 +3907,9 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "scheduled_job_runs_control_scheduled_jobs_scheduled_job",
+				Symbol:     "scheduled_job_runs_scheduled_jobs_scheduled_job",
 				Columns:    []*schema.Column{ScheduledJobRunsColumns[11]},
-				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
@@ -5485,56 +5494,6 @@ var (
 				Symbol:     "control_objective_tasks_task_id",
 				Columns:    []*schema.Column{ControlObjectiveTasksColumns[1]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// ControlScheduledJobControlsColumns holds the columns for the "control_scheduled_job_controls" table.
-	ControlScheduledJobControlsColumns = []*schema.Column{
-		{Name: "control_scheduled_job_id", Type: field.TypeString},
-		{Name: "control_id", Type: field.TypeString},
-	}
-	// ControlScheduledJobControlsTable holds the schema information for the "control_scheduled_job_controls" table.
-	ControlScheduledJobControlsTable = &schema.Table{
-		Name:       "control_scheduled_job_controls",
-		Columns:    ControlScheduledJobControlsColumns,
-		PrimaryKey: []*schema.Column{ControlScheduledJobControlsColumns[0], ControlScheduledJobControlsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "control_scheduled_job_controls_control_scheduled_job_id",
-				Columns:    []*schema.Column{ControlScheduledJobControlsColumns[0]},
-				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "control_scheduled_job_controls_control_id",
-				Columns:    []*schema.Column{ControlScheduledJobControlsColumns[1]},
-				RefColumns: []*schema.Column{ControlsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// ControlScheduledJobSubcontrolsColumns holds the columns for the "control_scheduled_job_subcontrols" table.
-	ControlScheduledJobSubcontrolsColumns = []*schema.Column{
-		{Name: "control_scheduled_job_id", Type: field.TypeString},
-		{Name: "subcontrol_id", Type: field.TypeString},
-	}
-	// ControlScheduledJobSubcontrolsTable holds the schema information for the "control_scheduled_job_subcontrols" table.
-	ControlScheduledJobSubcontrolsTable = &schema.Table{
-		Name:       "control_scheduled_job_subcontrols",
-		Columns:    ControlScheduledJobSubcontrolsColumns,
-		PrimaryKey: []*schema.Column{ControlScheduledJobSubcontrolsColumns[0], ControlScheduledJobSubcontrolsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "control_scheduled_job_subcontrols_control_scheduled_job_id",
-				Columns:    []*schema.Column{ControlScheduledJobSubcontrolsColumns[0]},
-				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "control_scheduled_job_subcontrols_subcontrol_id",
-				Columns:    []*schema.Column{ControlScheduledJobSubcontrolsColumns[1]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -7389,6 +7348,56 @@ var (
 			},
 		},
 	}
+	// ScheduledJobControlsColumns holds the columns for the "scheduled_job_controls" table.
+	ScheduledJobControlsColumns = []*schema.Column{
+		{Name: "scheduled_job_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// ScheduledJobControlsTable holds the schema information for the "scheduled_job_controls" table.
+	ScheduledJobControlsTable = &schema.Table{
+		Name:       "scheduled_job_controls",
+		Columns:    ScheduledJobControlsColumns,
+		PrimaryKey: []*schema.Column{ScheduledJobControlsColumns[0], ScheduledJobControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scheduled_job_controls_scheduled_job_id",
+				Columns:    []*schema.Column{ScheduledJobControlsColumns[0]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "scheduled_job_controls_control_id",
+				Columns:    []*schema.Column{ScheduledJobControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ScheduledJobSubcontrolsColumns holds the columns for the "scheduled_job_subcontrols" table.
+	ScheduledJobSubcontrolsColumns = []*schema.Column{
+		{Name: "scheduled_job_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// ScheduledJobSubcontrolsTable holds the schema information for the "scheduled_job_subcontrols" table.
+	ScheduledJobSubcontrolsTable = &schema.Table{
+		Name:       "scheduled_job_subcontrols",
+		Columns:    ScheduledJobSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{ScheduledJobSubcontrolsColumns[0], ScheduledJobSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scheduled_job_subcontrols_scheduled_job_id",
+				Columns:    []*schema.Column{ScheduledJobSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "scheduled_job_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{ScheduledJobSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubcontrolControlObjectivesColumns holds the columns for the "subcontrol_control_objectives" table.
 	SubcontrolControlObjectivesColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -7754,8 +7763,6 @@ var (
 		ControlImplementationHistoryTable,
 		ControlObjectivesTable,
 		ControlObjectiveHistoryTable,
-		ControlScheduledJobsTable,
-		ControlScheduledJobHistoryTable,
 		CustomDomainsTable,
 		CustomDomainHistoryTable,
 		DNSVerificationsTable,
@@ -7790,6 +7797,8 @@ var (
 		JobRunnersTable,
 		JobRunnerRegistrationTokensTable,
 		JobRunnerTokensTable,
+		JobTemplatesTable,
+		JobTemplateHistoryTable,
 		MappableDomainsTable,
 		MappableDomainHistoryTable,
 		MappedControlsTable,
@@ -7868,8 +7877,6 @@ var (
 		ControlObjectiveEditorsTable,
 		ControlObjectiveViewersTable,
 		ControlObjectiveTasksTable,
-		ControlScheduledJobControlsTable,
-		ControlScheduledJobSubcontrolsTable,
 		DocumentDataFilesTable,
 		EntityContactsTable,
 		EntityDocumentsTable,
@@ -7944,6 +7951,8 @@ var (
 		ScanEditorsTable,
 		ScanViewersTable,
 		ScanAssetsTable,
+		ScheduledJobControlsTable,
+		ScheduledJobSubcontrolsTable,
 		SubcontrolControlObjectivesTable,
 		SubcontrolTasksTable,
 		SubcontrolRisksTable,
@@ -7993,12 +8002,6 @@ func init() {
 	ControlObjectivesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
-	}
-	ControlScheduledJobsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
-	ControlScheduledJobsTable.ForeignKeys[1].RefTable = JobRunnersTable
-	ControlScheduledJobsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ControlScheduledJobHistoryTable.Annotation = &entsql.Annotation{
-		Table: "control_scheduled_job_history",
 	}
 	CustomDomainsTable.ForeignKeys[0].RefTable = MappableDomainsTable
 	CustomDomainsTable.ForeignKeys[1].RefTable = DNSVerificationsTable
@@ -8091,13 +8094,17 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	JobResultsTable.ForeignKeys[0].RefTable = ControlScheduledJobsTable
+	JobResultsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
 	JobResultsTable.ForeignKeys[1].RefTable = FilesTable
 	JobResultsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	JobRunnerRegistrationTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerRegistrationTokensTable.ForeignKeys[1].RefTable = OrganizationsTable
 	JobRunnerTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
+	JobTemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	JobTemplateHistoryTable.Annotation = &entsql.Annotation{
+		Table: "job_template_history",
+	}
 	MappableDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mappable_domain_history",
 	}
@@ -8178,12 +8185,14 @@ func init() {
 	ScanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scan_history",
 	}
-	ScheduledJobsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ScheduledJobsTable.ForeignKeys[0].RefTable = JobTemplatesTable
+	ScheduledJobsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	ScheduledJobsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	ScheduledJobHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scheduled_job_history",
 	}
 	ScheduledJobRunsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ControlScheduledJobsTable
+	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ScheduledJobsTable
 	ScheduledJobRunsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
@@ -8280,10 +8289,6 @@ func init() {
 	ControlObjectiveViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlObjectiveTasksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlObjectiveTasksTable.ForeignKeys[1].RefTable = TasksTable
-	ControlScheduledJobControlsTable.ForeignKeys[0].RefTable = ControlScheduledJobsTable
-	ControlScheduledJobControlsTable.ForeignKeys[1].RefTable = ControlsTable
-	ControlScheduledJobSubcontrolsTable.ForeignKeys[0].RefTable = ControlScheduledJobsTable
-	ControlScheduledJobSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
 	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
 	EntityContactsTable.ForeignKeys[0].RefTable = EntitiesTable
@@ -8432,6 +8437,10 @@ func init() {
 	ScanViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ScanAssetsTable.ForeignKeys[0].RefTable = ScansTable
 	ScanAssetsTable.ForeignKeys[1].RefTable = AssetsTable
+	ScheduledJobControlsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
+	ScheduledJobControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	ScheduledJobSubcontrolsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
+	ScheduledJobSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable

@@ -25,8 +25,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -61,6 +59,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -194,8 +194,6 @@ func checkColumn(table, column string) error {
 			controlimplementationhistory.Table:   controlimplementationhistory.ValidColumn,
 			controlobjective.Table:               controlobjective.ValidColumn,
 			controlobjectivehistory.Table:        controlobjectivehistory.ValidColumn,
-			controlscheduledjob.Table:            controlscheduledjob.ValidColumn,
-			controlscheduledjobhistory.Table:     controlscheduledjobhistory.ValidColumn,
 			customdomain.Table:                   customdomain.ValidColumn,
 			customdomainhistory.Table:            customdomainhistory.ValidColumn,
 			dnsverification.Table:                dnsverification.ValidColumn,
@@ -230,6 +228,8 @@ func checkColumn(table, column string) error {
 			jobrunner.Table:                      jobrunner.ValidColumn,
 			jobrunnerregistrationtoken.Table:     jobrunnerregistrationtoken.ValidColumn,
 			jobrunnertoken.Table:                 jobrunnertoken.ValidColumn,
+			jobtemplate.Table:                    jobtemplate.ValidColumn,
+			jobtemplatehistory.Table:             jobtemplatehistory.ValidColumn,
 			mappabledomain.Table:                 mappabledomain.ValidColumn,
 			mappabledomainhistory.Table:          mappabledomainhistory.ValidColumn,
 			mappedcontrol.Table:                  mappedcontrol.ValidColumn,

@@ -53,7 +53,6 @@ func (JobRunner) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 			),
-
 		field.Enum("status").
 			GoType(enums.JobRunnerStatus("")).
 			Default(enums.JobRunnerStatusOffline.String()).
@@ -61,7 +60,6 @@ func (JobRunner) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
 			).
 			Comment("the status of this runner"),
-
 		field.String("ip_address").
 			Immutable().
 			Unique().
@@ -81,7 +79,7 @@ func (j JobRunner) Mixin() []ent.Mixin {
 			),
 			mixin.SystemOwnedMixin{},
 		},
-	}.getMixins()
+	}.getMixins(j)
 }
 
 // Edges of the JobRunner

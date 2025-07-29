@@ -43,6 +43,14 @@ type ActionPlanBulkCreatePayload struct {
 	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
 }
 
+// Return response for updateBulkActionPlan mutation
+type ActionPlanBulkUpdatePayload struct {
+	// Updated actionPlans
+	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
+	// IDs of the updated actionPlans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createActionPlan mutation
 type ActionPlanCreatePayload struct {
 	// Created actionPlan
@@ -91,6 +99,78 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
+// Input for updating a single actionPlan in a bulk operation
+type BulkUpdateActionPlanInput struct {
+	// ID of the actionPlan to update
+	ID string `json:"id"`
+	// Data to update the actionPlan with
+	Input *generated.UpdateActionPlanInput `json:"input"`
+}
+
+// Input for updating a single contact in a bulk operation
+type BulkUpdateContactInput struct {
+	// ID of the contact to update
+	ID string `json:"id"`
+	// Data to update the contact with
+	Input *generated.UpdateContactInput `json:"input"`
+}
+
+// Input for updating a single control in a bulk operation
+type BulkUpdateControlInput struct {
+	// ID of the control to update
+	ID string `json:"id"`
+	// Data to update the control with
+	Input *generated.UpdateControlInput `json:"input"`
+}
+
+// Input for updating a single hush in a bulk operation
+type BulkUpdateHushInput struct {
+	// ID of the hush to update
+	ID string `json:"id"`
+	// Data to update the hush with
+	Input *generated.UpdateHushInput `json:"input"`
+}
+
+// Input for updating a single internalPolicy in a bulk operation
+type BulkUpdateInternalPolicyInput struct {
+	// ID of the internalPolicy to update
+	ID string `json:"id"`
+	// Data to update the internalPolicy with
+	Input *generated.UpdateInternalPolicyInput `json:"input"`
+}
+
+// Input for updating a single procedure in a bulk operation
+type BulkUpdateProcedureInput struct {
+	// ID of the procedure to update
+	ID string `json:"id"`
+	// Data to update the procedure with
+	Input *generated.UpdateProcedureInput `json:"input"`
+}
+
+// Input for updating a single risk in a bulk operation
+type BulkUpdateRiskInput struct {
+	// ID of the risk to update
+	ID string `json:"id"`
+	// Data to update the risk with
+	Input *generated.UpdateRiskInput `json:"input"`
+}
+
+// Input for updating a single scan in a bulk operation
+type BulkUpdateScanInput struct {
+	// ID of the scan to update
+	ID string `json:"id"`
+	// Data to update the scan with
+	Input *generated.UpdateScanInput `json:"input"`
+}
+
+// Input for updating a single task in a bulk operation
+type BulkUpdateTaskInput struct {
+	// ID of the task to update
+	ID string `json:"id"`
+	// Data to update the task with
+	Input *generated.UpdateTaskInput `json:"input"`
+}
+
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
@@ -108,6 +188,14 @@ type CloneControlInput struct {
 type ContactBulkCreatePayload struct {
 	// Created contacts
 	Contacts []*generated.Contact `json:"contacts,omitempty"`
+}
+
+// Return response for updateBulkContact mutation
+type ContactBulkUpdatePayload struct {
+	// Updated contacts
+	Contacts []*generated.Contact `json:"contacts,omitempty"`
+	// IDs of the updated contacts
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createContact mutation
@@ -132,6 +220,14 @@ type ContactUpdatePayload struct {
 type ControlBulkCreatePayload struct {
 	// Created controls
 	Controls []*generated.Control `json:"controls,omitempty"`
+}
+
+// Return response for updateBulkControl mutation
+type ControlBulkUpdatePayload struct {
+	// Updated controls
+	Controls []*generated.Control `json:"controls,omitempty"`
+	// IDs of the updated controls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 type ControlCategory struct {
@@ -235,30 +331,6 @@ type ControlObjectiveDeletePayload struct {
 type ControlObjectiveUpdatePayload struct {
 	// Updated controlObjective
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
-}
-
-// Return response for createBulkControlScheduledJob mutation
-type ControlScheduledJobBulkCreatePayload struct {
-	// Created controlScheduledJobs
-	ControlScheduledJobs []*generated.ControlScheduledJob `json:"controlScheduledJobs,omitempty"`
-}
-
-// Return response for createControlScheduledJob mutation
-type ControlScheduledJobCreatePayload struct {
-	// Created controlScheduledJob
-	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
-}
-
-// Return response for deleteControlScheduledJob mutation
-type ControlScheduledJobDeletePayload struct {
-	// Deleted controlScheduledJob ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateControlScheduledJob mutation
-type ControlScheduledJobUpdatePayload struct {
-	// Updated controlScheduledJob
-	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
 }
 
 // Return response for updateControl mutation
@@ -679,6 +751,14 @@ type HushBulkCreatePayload struct {
 	Hushes []*generated.Hush `json:"hushes,omitempty"`
 }
 
+// Return response for updateBulkHush mutation
+type HushBulkUpdatePayload struct {
+	// Updated hushs
+	Hushes []*generated.Hush `json:"hushes,omitempty"`
+	// IDs of the updated hushs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createHush mutation
 type HushCreatePayload struct {
 	// Created hush
@@ -697,34 +777,24 @@ type HushUpdatePayload struct {
 	Hush *generated.Hush `json:"hush"`
 }
 
-// Return response for createBulkIntegration mutation
-type IntegrationBulkCreatePayload struct {
-	// Created integrations
-	Integrations []*generated.Integration `json:"integrations,omitempty"`
-}
-
-// Return response for createIntegration mutation
-type IntegrationCreatePayload struct {
-	// Created integration
-	Integration *generated.Integration `json:"integration"`
-}
-
 // Return response for deleteIntegration mutation
 type IntegrationDeletePayload struct {
 	// Deleted integration ID
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for updateIntegration mutation
-type IntegrationUpdatePayload struct {
-	// Updated integration
-	Integration *generated.Integration `json:"integration"`
-}
-
 // Return response for createBulkInternalPolicy mutation
 type InternalPolicyBulkCreatePayload struct {
 	// Created internalPolicys
 	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
+}
+
+// Return response for updateBulkInternalPolicy mutation
+type InternalPolicyBulkUpdatePayload struct {
+	// Updated internalPolicys
+	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
+	// IDs of the updated internalPolicys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createInternalPolicy mutation
@@ -817,6 +887,30 @@ type JobRunnerUpdatePayload struct {
 	JobRunner *generated.JobRunner `json:"jobRunner"`
 }
 
+// Return response for createBulkJobTemplate mutation
+type JobTemplateBulkCreatePayload struct {
+	// Created jobTemplates
+	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
+}
+
+// Return response for createJobTemplate mutation
+type JobTemplateCreatePayload struct {
+	// Created jobTemplate
+	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
+}
+
+// Return response for deleteJobTemplate mutation
+type JobTemplateDeletePayload struct {
+	// Deleted jobTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobTemplate mutation
+type JobTemplateUpdatePayload struct {
+	// Updated jobTemplate
+	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
+}
+
 // Return response for createBulkMappableDomain mutation
 type MappableDomainBulkCreatePayload struct {
 	// Created mappableDomains
@@ -863,6 +957,11 @@ type MappedControlDeletePayload struct {
 type MappedControlUpdatePayload struct {
 	// Updated mappedControl
 	MappedControl *generated.MappedControl `json:"mappedControl"`
+}
+
+type ModuleBillingURL struct {
+	Module string `json:"module"`
+	URL    string `json:"url"`
 }
 
 // Return response for createBulkNarrative mutation
@@ -1004,6 +1103,14 @@ type ProcedureBulkCreatePayload struct {
 	Procedures []*generated.Procedure `json:"procedures,omitempty"`
 }
 
+// Return response for updateBulkProcedure mutation
+type ProcedureBulkUpdatePayload struct {
+	// Updated procedures
+	Procedures []*generated.Procedure `json:"procedures,omitempty"`
+	// IDs of the updated procedures
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createProcedure mutation
 type ProcedureCreatePayload struct {
 	// Created procedure
@@ -1076,6 +1183,14 @@ type RiskBulkCreatePayload struct {
 	Risks []*generated.Risk `json:"risks,omitempty"`
 }
 
+// Return response for updateBulkRisk mutation
+type RiskBulkUpdatePayload struct {
+	// Updated risks
+	Risks []*generated.Risk `json:"risks,omitempty"`
+	// IDs of the updated risks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createRisk mutation
 type RiskCreatePayload struct {
 	// Created risk
@@ -1098,6 +1213,14 @@ type RiskUpdatePayload struct {
 type ScanBulkCreatePayload struct {
 	// Created scans
 	Scans []*generated.Scan `json:"scans,omitempty"`
+}
+
+// Return response for updateBulkScan mutation
+type ScanBulkUpdatePayload struct {
+	// Updated scans
+	Scans []*generated.Scan `json:"scans,omitempty"`
+	// IDs of the updated scans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createScan mutation
@@ -1169,6 +1292,7 @@ type SearchResults struct {
 	JobRunners                  *generated.JobRunnerConnection                  `json:"jobRunners,omitempty"`
 	JobRunnerRegistrationTokens *generated.JobRunnerRegistrationTokenConnection `json:"jobRunnerRegistrationTokens,omitempty"`
 	JobRunnerTokens             *generated.JobRunnerTokenConnection             `json:"jobRunnerTokens,omitempty"`
+	JobTemplates                *generated.JobTemplateConnection                `json:"jobTemplates,omitempty"`
 	MappableDomains             *generated.MappableDomainConnection             `json:"mappableDomains,omitempty"`
 	MappedControls              *generated.MappedControlConnection              `json:"mappedControls,omitempty"`
 	Narratives                  *generated.NarrativeConnection                  `json:"narratives,omitempty"`
@@ -1180,7 +1304,6 @@ type SearchResults struct {
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *generated.ScanConnection                       `json:"scans,omitempty"`
-	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`
@@ -1311,6 +1434,14 @@ type TFASettingUpdatePayload struct {
 type TaskBulkCreatePayload struct {
 	// Created tasks
 	Tasks []*generated.Task `json:"tasks,omitempty"`
+}
+
+// Return response for updateBulkTask mutation
+type TaskBulkUpdatePayload struct {
+	// Updated tasks
+	Tasks []*generated.Task `json:"tasks,omitempty"`
+	// IDs of the updated tasks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createTask mutation

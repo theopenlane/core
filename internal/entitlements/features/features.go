@@ -17,8 +17,6 @@ var FeatureOfType = map[string][]entx.FeatureModule{
 	"ControlImplementationHistory":   {"audit-log"},
 	"ControlObjective":               {"compliance", "continuous-compliance-automation"},
 	"ControlObjectiveHistory":        {"audit-log"},
-	"ControlScheduledJob":            {"compliance", "continuous-compliance-automation"},
-	"ControlScheduledJobHistory":     {"audit-log"},
 	"CustomDomain":                   {"trust-center"},
 	"CustomDomainHistory":            {"audit-log"},
 	"DNSVerification":                {"trust-center"},
@@ -53,6 +51,7 @@ var FeatureOfType = map[string][]entx.FeatureModule{
 	"JobRunner":                      {"compliance", "continuous-compliance-automation"},
 	"JobRunnerRegistrationToken":     {"base"},
 	"JobRunnerToken":                 {"compliance", "continuous-compliance-automation"},
+	"JobTemplateHistory":             {"audit-log"},
 	"MappableDomain":                 {"trust-center"},
 	"MappableDomainHistory":          {"audit-log"},
 	"MappedControl":                  {"compliance"},
@@ -79,7 +78,12 @@ var FeatureOfType = map[string][]entx.FeatureModule{
 	"RiskHistory":                    {"audit-log"},
 	"Scan":                           {"scanning"},
 	"ScanHistory":                    {"audit-log"},
+<<<<<<< HEAD
 	"ScheduledJob":                   {"base"},
+||||||| 79e33557
+=======
+	"ScheduledJob":                   {"compliance", "continuous-compliance-automation"},
+>>>>>>> origin/main
 	"ScheduledJobHistory":            {"audit-log"},
 	"ScheduledJobRun":                {"compliance", "continuous-compliance-automation"},
 	"Standard":                       {"compliance"},

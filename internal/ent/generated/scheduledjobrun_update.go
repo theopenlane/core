@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -174,9 +174,9 @@ func (sjru *ScheduledJobRunUpdate) SetOwner(o *Organization) *ScheduledJobRunUpd
 	return sjru.SetOwnerID(o.ID)
 }
 
-// SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
-func (sjru *ScheduledJobRunUpdate) SetScheduledJob(c *ControlScheduledJob) *ScheduledJobRunUpdate {
-	return sjru.SetScheduledJobID(c.ID)
+// SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
+func (sjru *ScheduledJobRunUpdate) SetScheduledJob(s *ScheduledJob) *ScheduledJobRunUpdate {
+	return sjru.SetScheduledJobID(s.ID)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
@@ -195,7 +195,7 @@ func (sjru *ScheduledJobRunUpdate) ClearOwner() *ScheduledJobRunUpdate {
 	return sjru
 }
 
-// ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
+// ClearScheduledJob clears the "scheduled_job" edge to the ScheduledJob entity.
 func (sjru *ScheduledJobRunUpdate) ClearScheduledJob() *ScheduledJobRunUpdate {
 	sjru.mutation.ClearScheduledJob()
 	return sjru
@@ -360,7 +360,7 @@ func (sjru *ScheduledJobRunUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{scheduledjobrun.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sjru.schemaConfig.ScheduledJobRun
@@ -374,7 +374,7 @@ func (sjru *ScheduledJobRunUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{scheduledjobrun.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sjru.schemaConfig.ScheduledJobRun
@@ -577,9 +577,9 @@ func (sjruo *ScheduledJobRunUpdateOne) SetOwner(o *Organization) *ScheduledJobRu
 	return sjruo.SetOwnerID(o.ID)
 }
 
-// SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
-func (sjruo *ScheduledJobRunUpdateOne) SetScheduledJob(c *ControlScheduledJob) *ScheduledJobRunUpdateOne {
-	return sjruo.SetScheduledJobID(c.ID)
+// SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
+func (sjruo *ScheduledJobRunUpdateOne) SetScheduledJob(s *ScheduledJob) *ScheduledJobRunUpdateOne {
+	return sjruo.SetScheduledJobID(s.ID)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
@@ -598,7 +598,7 @@ func (sjruo *ScheduledJobRunUpdateOne) ClearOwner() *ScheduledJobRunUpdateOne {
 	return sjruo
 }
 
-// ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
+// ClearScheduledJob clears the "scheduled_job" edge to the ScheduledJob entity.
 func (sjruo *ScheduledJobRunUpdateOne) ClearScheduledJob() *ScheduledJobRunUpdateOne {
 	sjruo.mutation.ClearScheduledJob()
 	return sjruo
@@ -793,7 +793,7 @@ func (sjruo *ScheduledJobRunUpdateOne) sqlSave(ctx context.Context) (_node *Sche
 			Columns: []string{scheduledjobrun.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sjruo.schemaConfig.ScheduledJobRun
@@ -807,7 +807,7 @@ func (sjruo *ScheduledJobRunUpdateOne) sqlSave(ctx context.Context) (_node *Sche
 			Columns: []string{scheduledjobrun.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sjruo.schemaConfig.ScheduledJobRun

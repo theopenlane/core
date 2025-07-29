@@ -26,9 +26,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*ControlObjectiveMutation]() {
 		c.ControlObjective.Use(hook)
 	}
-	for _, hook := range history.Hooks[*ControlScheduledJobMutation]() {
-		c.ControlScheduledJob.Use(hook)
-	}
 	for _, hook := range history.Hooks[*CustomDomainMutation]() {
 		c.CustomDomain.Use(hook)
 	}
@@ -67,6 +64,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*InternalPolicyMutation]() {
 		c.InternalPolicy.Use(hook)
+	}
+	for _, hook := range history.Hooks[*JobTemplateMutation]() {
+		c.JobTemplate.Use(hook)
 	}
 	for _, hook := range history.Hooks[*MappableDomainMutation]() {
 		c.MappableDomain.Use(hook)

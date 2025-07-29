@@ -70,7 +70,7 @@ func (TrustCenterSubprocessor) Fields() []ent.Field {
 func (t TrustCenterSubprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Edges of the TrustCenterSubprocessor

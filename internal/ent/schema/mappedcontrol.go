@@ -108,7 +108,7 @@ func (m MappedControl) Mixin() []ent.Mixin {
 			// add group edit permissions to the mapped control
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
-	}.getMixins()
+	}.getMixins(m)
 }
 
 func (MappedControl) Features() []models.OrgModule {

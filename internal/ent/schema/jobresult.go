@@ -10,15 +10,11 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/enums"
-"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
-"github.com/theopenlane/core/pkg/models"
 )
 
 // JobResult holds the schema definition for the JobResult entity
@@ -103,7 +99,7 @@ func (j JobResult) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(j),
 		},
-	}.getMixins()
+	}.getMixins(j)
 }
 
 // Edges of the JobResult
@@ -111,7 +107,7 @@ func (j JobResult) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: j,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 			field:      "scheduled_job_id",
 			required:   true,
 		}),
@@ -133,7 +129,6 @@ func (JobResult) Indexes() []ent.Index {
 func (JobResult) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		
 	}
 }
 
@@ -163,6 +158,10 @@ func (j JobResult) Policy() ent.Policy {
 			rule.DenyIfMissingAllFeatures(j.Features()...),
 			policy.CheckCreateAccess(),
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.JobResultMutation](),
+			// only system admin tokens should be posting back job results
+			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
 }

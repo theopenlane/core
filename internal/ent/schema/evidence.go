@@ -108,7 +108,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 		},
-	}.getMixins()
+	}.getMixins(e)
 }
 
 // Edges of the Evidence

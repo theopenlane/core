@@ -169,7 +169,14 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+<<<<<<< HEAD
 	Hooks        [7]ent.Hook
+||||||| 79e33557
+	Hooks        [7]ent.Hook
+	Interceptors [3]ent.Interceptor
+=======
+	Hooks        [8]ent.Hook
+>>>>>>> origin/main
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -203,7 +210,7 @@ const DefaultStatus enums.EvidenceStatus = "READY"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.EvidenceStatus) error {
 	switch s.String() {
-	case "APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL":
+	case "APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW":
 		return nil
 	default:
 		return fmt.Errorf("evidence: invalid enum value for status field: %q", s)

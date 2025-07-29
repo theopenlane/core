@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -23,6 +24,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 type OrganizationBuilder struct {
@@ -276,9 +278,10 @@ type EvidenceBuilder struct {
 	client *client
 
 	// Fields
-	Name      string
-	ProgramID string
-	ControlID string
+	Name        string
+	ProgramID   string
+	ControlID   string
+	IncludeFile bool
 }
 
 type StandardBuilder struct {
@@ -327,6 +330,13 @@ type MappableDomainBuilder struct {
 	ZoneID string
 }
 
+type FileBuilder struct {
+	client *client
+
+	// Fields
+	Name string
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -343,7 +353,7 @@ func randomName(t *testing.T) string {
 			b.WriteRune(r)
 		}
 	}
-	return b.String() + "_" + gofakeit.UUID()
+	return b.String() + "_" + ulids.New().String()
 }
 
 // DeleteClient is an interface for deleting entities
@@ -1157,30 +1167,43 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 }
 
 // MustNew control builder is used to create, without authz checks, controls in the database
-func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
-	ctx = setContext(ctx, c.client.db)
+func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
+	ctx = setContext(ctx, e.client.db)
 
-	if c.Name == "" {
-		c.Name = gofakeit.AppName()
+	if e.Name == "" {
+		e.Name = gofakeit.AppName()
 	}
 
-	mutation := c.client.db.Evidence.Create().
+	mutation := e.client.db.Evidence.Create().
 		SetCreationDate(time.Now().Add(-time.Minute)).
-		SetName(c.Name)
+		SetName(e.Name)
 
-	if c.ProgramID != "" {
-		mutation.AddProgramIDs(c.ProgramID)
+	if e.ProgramID != "" {
+		mutation.AddProgramIDs(e.ProgramID)
 	}
 
-	if c.ControlID != "" {
-		mutation.AddControlIDs(c.ControlID)
+	if e.ControlID != "" {
+		mutation.AddControlIDs(e.ControlID)
 	}
 
-	control, err := mutation.
+	if e.IncludeFile {
+		file := (&FileBuilder{client: e.client, Name: e.Name}).MustNew(ctx, t)
+
+		mutation.AddFileIDs(file.ID)
+	}
+
+	ev, err := mutation.
 		Save(ctx)
 	assert.NilError(t, err)
 
-	return control
+	if e.IncludeFile {
+		ev, err := e.client.db.Evidence.Query().WithFiles().Where(evidence.ID(ev.ID)).Only(ctx)
+		assert.NilError(t, err)
+
+		return ev
+	}
+
+	return ev
 }
 
 // MustNew standard builder is used to create, without authz checks, standards in the database
@@ -1537,28 +1560,63 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	return dnsVerification
 }
 
-type ScheduledJobBuilder struct {
+type JobTemplateBuilder struct {
 	client *client
+
+	Title        string
+	Description  *string
+	Cron         string
+	Platform     enums.JobPlatformType
+	DownloadURL  string
+	WindmillPath string
 }
 
-func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
-	const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
+const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
 
-	ctx = setContext(ctx, w.client.db)
-	wn, err := w.client.db.ScheduledJob.Create().
-		SetTitle("SSL checks").
-		SetCron("0 22 * * 1-5").
-		SetDescription("Check and verify a tls certificate is valid").
-		SetPlatform(enums.JobPlatformTypeGo).
-		SetWindmillPath("u/admin/gifted_script").
-		SetDownloadURL(testScriptURL).
-		Save(ctx)
+func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobTemplate {
+	ctx = setContext(ctx, j.client.db)
+
+	if j.Title == "" {
+		j.Title = "Test Job Template"
+	}
+
+	if j.DownloadURL == "" {
+		j.DownloadURL = testScriptURL
+	}
+
+	if j.Platform == "" {
+		j.Platform = enums.JobPlatformTypeGo
+	}
+
+	if j.WindmillPath == "" {
+		j.WindmillPath = "u/admin/gifted_script"
+	}
+
+	mut := j.client.db.JobTemplate.Create().
+		SetTitle(j.Title).
+		SetDownloadURL(j.DownloadURL).
+		SetPlatform(j.Platform).
+		SetWindmillPath(j.WindmillPath)
+
+	if j.Description != nil {
+		mut.SetDescription(*j.Description)
+	}
+
+	if j.Cron != "" {
+		mut.SetCron(models.Cron(j.Cron))
+	}
+
+	if j.Description != nil {
+		mut.SetDescription(*j.Description)
+	}
+
+	jt, err := mut.Save(ctx)
 	assert.NilError(t, err)
 
-	return wn
+	return jt
 }
 
-type ControlScheduledJobBuilder struct {
+type ScheduledJobBuilder struct {
 	client *client
 
 	// Fields
@@ -1567,12 +1625,13 @@ type ControlScheduledJobBuilder struct {
 	Cron          *string
 	JobRunnerID   string
 	ControlIDs    []string
+	Active        bool
 }
 
-func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ControlScheduledJob {
+func (b *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ScheduledJob {
 	ctx = setContext(ctx, b.client.db)
 
-	job := b.client.db.ControlScheduledJob.Create().
+	job := b.client.db.ScheduledJob.Create().
 		SetJobID(b.JobID)
 
 	if b.JobRunnerID != "" {
@@ -1680,4 +1739,171 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 	assert.NilError(t, err)
 
 	return trustCenterSetting
+}
+
+// IntegrationBuilder is used to create integrations
+type IntegrationBuilder struct {
+	client *client
+
+	// Fields
+	Name        string
+	Description string
+	Kind        string
+}
+
+// MustNew integration builder is used to create, without authz checks, integrations in the database
+func (ib *IntegrationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Integration {
+	ctx = setContext(ctx, ib.client.db)
+
+	if ib.Name == "" {
+		ib.Name = "GitHub Integration Test"
+	}
+
+	if ib.Description == "" {
+		ib.Description = "Test integration for GraphQL tests"
+	}
+
+	if ib.Kind == "" {
+		ib.Kind = "github"
+	}
+
+	mutation := ib.client.db.Integration.Create().
+		SetName(ib.Name).
+		SetDescription(ib.Description).
+		SetKind(ib.Kind)
+
+	integration, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return integration
+}
+
+// SecretBuilder is used to create secrets (hush)
+type SecretBuilder struct {
+	client *client
+
+	// Fields
+	Name           string
+	Description    string
+	Kind           string
+	SecretName     string
+	SecretValue    string
+	OwnerID        string
+	IntegrationIDs []string
+}
+
+// WithIntegration adds an integration ID to the secret
+func (sb *SecretBuilder) WithIntegration(integrationID string) *SecretBuilder {
+	sb.IntegrationIDs = append(sb.IntegrationIDs, integrationID)
+	return sb
+}
+
+// WithSecretName sets the secret name
+func (sb *SecretBuilder) WithSecretName(name string) *SecretBuilder {
+	sb.SecretName = name
+	return sb
+}
+
+// WithSecretValue sets the secret value
+func (sb *SecretBuilder) WithSecretValue(value string) *SecretBuilder {
+	sb.SecretValue = value
+	return sb
+}
+
+// MustNew secret builder is used to create, without authz checks, secrets in the database
+func (sb *SecretBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Hush {
+	ctx = setContext(ctx, sb.client.db)
+
+	if sb.Name == "" {
+		sb.Name = "Test Secret"
+	}
+
+	if sb.Description == "" {
+		sb.Description = "Test secret for GraphQL tests"
+	}
+
+	if sb.Kind == "" {
+		sb.Kind = "oauth_token"
+	}
+
+	if sb.SecretName == "" {
+		sb.SecretName = "github_access_token"
+	}
+
+	if sb.SecretValue == "" {
+		sb.SecretValue = "gho_test_token_123456"
+	}
+
+	if sb.OwnerID == "" {
+		// Use the organization ID from the test user
+		sb.OwnerID = testUser1.OrganizationID
+	}
+
+	mutation := sb.client.db.Hush.Create().
+		SetName(sb.Name).
+		SetDescription(sb.Description).
+		SetKind(sb.Kind).
+		SetSecretName(sb.SecretName).
+		SetSecretValue(sb.SecretValue).
+		SetOwnerID(sb.OwnerID)
+
+	// Add integration associations if provided
+	if len(sb.IntegrationIDs) > 0 {
+		mutation.AddIntegrationIDs(sb.IntegrationIDs...)
+	}
+
+	secret, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return secret
+}
+
+// IntegrationCleanup is used to delete integrations
+type IntegrationCleanup struct {
+	client *client
+	ID     string
+}
+
+// MustDelete deletes the integration
+func (ic *IntegrationCleanup) MustDelete(ctx context.Context, t *testing.T) {
+	ctx = setContext(ctx, ic.client.db)
+
+	err := ic.client.db.Integration.DeleteOneID(ic.ID).Exec(ctx)
+	assert.NilError(t, err)
+}
+
+// SecretCleanup is used to delete secrets
+type SecretCleanup struct {
+	client *client
+	ID     string
+}
+
+// MustDelete deletes the secret
+func (sc *SecretCleanup) MustDelete(ctx context.Context, t *testing.T) {
+	ctx = setContext(ctx, sc.client.db)
+
+	err := sc.client.db.Hush.DeleteOneID(sc.ID).Exec(ctx)
+	assert.NilError(t, err)
+}
+
+// MustNew file builder is used to create, without authz checks, files in the database
+func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
+	ctx = setContext(ctx, fb.client.db)
+
+	if fb.Name == "" {
+		fb.Name = gofakeit.Name()
+	}
+
+	url := gofakeit.URL()
+
+	mutation := fb.client.db.File.Create().
+		SetProvidedFileName(fb.Name).
+		SetProvidedFileExtension("csv").
+		SetDetectedContentType("application/csv").
+		SetURI(url)
+
+	file, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return file
 }

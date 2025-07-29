@@ -190,10 +190,10 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
 	ControlImplementationsInverseTable = "control_implementations"
 	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge. The primary key declared below.
-	ScheduledJobsTable = "control_scheduled_job_subcontrols"
-	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
-	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	ScheduledJobsTable = "scheduled_job_subcontrols"
+	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	ScheduledJobsInverseTable = "scheduled_jobs"
 	// MappedToSubcontrolsTable is the table that holds the mapped_to_subcontrols relation/edge. The primary key declared below.
 	MappedToSubcontrolsTable = "mapped_control_to_subcontrols"
 	// MappedToSubcontrolsInverseTable is the table name for the MappedControl entity.
@@ -272,7 +272,7 @@ var (
 	ControlImplementationsPrimaryKey = []string{"subcontrol_id", "control_implementation_id"}
 	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
 	// primary key for the scheduled_jobs relation (M2M).
-	ScheduledJobsPrimaryKey = []string{"control_scheduled_job_id", "subcontrol_id"}
+	ScheduledJobsPrimaryKey = []string{"scheduled_job_id", "subcontrol_id"}
 	// MappedToSubcontrolsPrimaryKey and MappedToSubcontrolsColumn2 are the table columns denoting the
 	// primary key for the mapped_to_subcontrols relation (M2M).
 	MappedToSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
@@ -302,7 +302,14 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+<<<<<<< HEAD
 	Hooks        [10]ent.Hook
+||||||| 79e33557
+	Hooks        [10]ent.Hook
+	Interceptors [3]ent.Interceptor
+=======
+	Hooks        [11]ent.Hook
+>>>>>>> origin/main
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

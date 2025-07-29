@@ -88,7 +88,7 @@ func (c Control) Edges() []ent.Edge {
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
@@ -151,7 +151,7 @@ func (c Control) Mixin() []ent.Mixin {
 			// skip view because controls are automatically viewable by all users in the organization
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
-	}.getMixins()
+	}.getMixins(c)
 }
 
 func (Control) Hooks() []ent.Hook {

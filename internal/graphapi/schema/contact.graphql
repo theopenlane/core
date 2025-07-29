@@ -10,6 +10,20 @@ extend type Query {
     ):  Contact!
 }
 
+"""
+Input for updating a single contact in a bulk operation
+"""
+input BulkUpdateContactInput {
+    """
+    ID of the contact to update
+    """
+    id: ID!
+    """
+    Data to update the contact with
+    """
+    input: UpdateContactInput!
+}
+
 extend type Mutation{
     """
     Create a new contact
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ContactBulkCreatePayload!
+    """
+    Update multiple existing contacts
+    """
+    updateBulkContact(
+        """
+        values to update the contacts with
+        """
+        input: [BulkUpdateContactInput!]
+    ): ContactBulkUpdatePayload!
     """
     Update an existing contact
     """
@@ -100,4 +123,18 @@ type ContactBulkCreatePayload {
     Created contacts
     """
     contacts: [Contact!]
+}
+
+"""
+Return response for updateBulkContact mutation
+"""
+type ContactBulkUpdatePayload {
+    """
+    Updated contacts
+    """
+    contacts: [Contact!]
+    """
+    IDs of the updated contacts
+    """
+    updatedIDs: [ID!]
 }

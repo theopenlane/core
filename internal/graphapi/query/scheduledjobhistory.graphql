@@ -15,16 +15,14 @@ query GetAllScheduledJobHistories {
         createdAt
         createdBy
         cron
-        description
         displayID
         historyTime
         id
+        jobID
+        jobRunnerID
         operation
         ownerID
         ref
-        systemOwned
-        tags
-        title
         updatedAt
         updatedBy
       }
@@ -47,16 +45,14 @@ query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHist
         createdAt
         createdBy
         cron
-        description
         displayID
         historyTime
         id
+        jobID
+        jobRunnerID
         operation
         ownerID
         ref
-        systemOwned
-        tags
-        title
         updatedAt
         updatedBy
       }

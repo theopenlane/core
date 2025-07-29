@@ -79,7 +79,7 @@ func (i Integration) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i),
 		},
-	}.getMixins()
+	}.getMixins(i)
 }
 
 // Policy of the Integration
@@ -92,6 +92,7 @@ func (i Integration) Policy() ent.Policy {
 	)
 }
 
+<<<<<<< HEAD
 func (Integration) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
@@ -102,5 +103,21 @@ func (Integration) Features() []models.OrgModule {
 func (i Integration) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorRequireAnyFeature("integration", i.Features()...),
+||||||| 79e33557
+// Annotations of the Integration
+func (Integration) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("base"),
+=======
+// Annotations of the Integration
+func (Integration) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("base"),
+		entgql.Skip(
+			// integrations are created by an oauth flow, not by the user directly
+			entgql.SkipMutationCreateInput,
+			entgql.SkipMutationUpdateInput,
+		),
+>>>>>>> origin/main
 	}
 }

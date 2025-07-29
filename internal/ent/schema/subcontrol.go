@@ -81,7 +81,7 @@ func (s Subcontrol) Edges() []ent.Edge {
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
@@ -119,7 +119,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Indexes of the Subcontrol

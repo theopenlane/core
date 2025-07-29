@@ -83,7 +83,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			NewDocumentMixin(a),
 			newOrgOwnedMixin(a),
-		}}.getMixins()
+		}}.getMixins(a)
 }
 
 func (ActionPlan) Features() []entx.FeatureModule {

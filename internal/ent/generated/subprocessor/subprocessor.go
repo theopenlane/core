@@ -119,7 +119,14 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+<<<<<<< HEAD
 	Hooks        [6]ent.Hook
+||||||| 79e33557
+	Hooks        [6]ent.Hook
+	Interceptors [3]ent.Interceptor
+=======
+	Hooks        [7]ent.Hook
+>>>>>>> origin/main
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

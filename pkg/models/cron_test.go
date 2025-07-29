@@ -17,12 +17,17 @@ func TestCron_Validate(t *testing.T) {
 	}{
 		{
 			name:    "valid hourly runs",
-			cron:    "0 * * * *",
+			cron:    "0 0 */1 * * *",
 			wantErr: false,
 		},
 		{
 			name:    "valid run every 30 minutes",
-			cron:    "0,30 * * * *",
+			cron:    "0 */30 * * * *",
+			wantErr: false,
+		},
+		{
+			name:    "valid",
+			cron:    "0 0 12 * * *",
 			wantErr: false,
 		},
 		{
@@ -36,6 +41,16 @@ func TestCron_Validate(t *testing.T) {
 			wantErr: true,
 		},
 		{
+			name:    "every 3 hours",
+			cron:    "0 0 */3 ? * *",
+			wantErr: false,
+		},
+		{
+			name:    "every weekday",
+			cron:    "0 0 12 * * MON-FRI",
+			wantErr: false,
+		},
+		{
 			name:    "invalid syntax",
 			cron:    "invalid",
 			wantErr: true,
@@ -46,7 +61,12 @@ func TestCron_Validate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := models.Cron(tt.cron).Validate()
 
-			assert.Assert(t, (err != nil) == tt.wantErr)
+			if tt.wantErr {
+				assert.Assert(t, err != nil)
+				return
+			}
+
+			assert.NilError(t, err, "expected no error for cron: %s", tt.cron)
 		})
 	}
 }

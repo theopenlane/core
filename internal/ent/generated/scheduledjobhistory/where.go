@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
@@ -117,34 +116,24 @@ func OwnerID(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
-func SystemOwned(v bool) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldSystemOwned, v))
+// JobID applies equality check predicate on the "job_id" field. It's identical to JobIDEQ.
+func JobID(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldJobID, v))
 }
 
-// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
-func Title(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldTitle, v))
-}
-
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDescription, v))
-}
-
-// WindmillPath applies equality check predicate on the "windmill_path" field. It's identical to WindmillPathEQ.
-func WindmillPath(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldWindmillPath, v))
-}
-
-// DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
-func DownloadURL(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDownloadURL, v))
+// Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
+func Active(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldActive, v))
 }
 
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
 func Cron(v models.Cron) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldCron, v))
+}
+
+// JobRunnerID applies equality check predicate on the "job_runner_id" field. It's identical to JobRunnerIDEQ.
+func JobRunnerID(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldJobRunnerID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -722,16 +711,6 @@ func DisplayIDContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldDisplayID, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldTags))
-}
-
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldTags))
-}
-
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -807,324 +786,79 @@ func OwnerIDContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
-func SystemOwnedEQ(v bool) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldSystemOwned, v))
+// JobIDEQ applies the EQ predicate on the "job_id" field.
+func JobIDEQ(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldJobID, v))
 }
 
-// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
-func SystemOwnedNEQ(v bool) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldSystemOwned, v))
+// JobIDNEQ applies the NEQ predicate on the "job_id" field.
+func JobIDNEQ(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldJobID, v))
 }
 
-// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
-func SystemOwnedIsNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldSystemOwned))
+// JobIDIn applies the In predicate on the "job_id" field.
+func JobIDIn(vs ...string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldIn(FieldJobID, vs...))
 }
 
-// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
-func SystemOwnedNotNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldSystemOwned))
+// JobIDNotIn applies the NotIn predicate on the "job_id" field.
+func JobIDNotIn(vs ...string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldJobID, vs...))
 }
 
-// TitleEQ applies the EQ predicate on the "title" field.
-func TitleEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldTitle, v))
+// JobIDGT applies the GT predicate on the "job_id" field.
+func JobIDGT(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldGT(FieldJobID, v))
 }
 
-// TitleNEQ applies the NEQ predicate on the "title" field.
-func TitleNEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldTitle, v))
+// JobIDGTE applies the GTE predicate on the "job_id" field.
+func JobIDGTE(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldJobID, v))
 }
 
-// TitleIn applies the In predicate on the "title" field.
-func TitleIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldTitle, vs...))
+// JobIDLT applies the LT predicate on the "job_id" field.
+func JobIDLT(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldLT(FieldJobID, v))
 }
 
-// TitleNotIn applies the NotIn predicate on the "title" field.
-func TitleNotIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldTitle, vs...))
+// JobIDLTE applies the LTE predicate on the "job_id" field.
+func JobIDLTE(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldJobID, v))
 }
 
-// TitleGT applies the GT predicate on the "title" field.
-func TitleGT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGT(FieldTitle, v))
+// JobIDContains applies the Contains predicate on the "job_id" field.
+func JobIDContains(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldContains(FieldJobID, v))
 }
 
-// TitleGTE applies the GTE predicate on the "title" field.
-func TitleGTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldTitle, v))
+// JobIDHasPrefix applies the HasPrefix predicate on the "job_id" field.
+func JobIDHasPrefix(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldJobID, v))
 }
 
-// TitleLT applies the LT predicate on the "title" field.
-func TitleLT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLT(FieldTitle, v))
+// JobIDHasSuffix applies the HasSuffix predicate on the "job_id" field.
+func JobIDHasSuffix(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldJobID, v))
 }
 
-// TitleLTE applies the LTE predicate on the "title" field.
-func TitleLTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldTitle, v))
+// JobIDEqualFold applies the EqualFold predicate on the "job_id" field.
+func JobIDEqualFold(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldJobID, v))
 }
 
-// TitleContains applies the Contains predicate on the "title" field.
-func TitleContains(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContains(FieldTitle, v))
+// JobIDContainsFold applies the ContainsFold predicate on the "job_id" field.
+func JobIDContainsFold(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldJobID, v))
 }
 
-// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
-func TitleHasPrefix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldTitle, v))
+// ActiveEQ applies the EQ predicate on the "active" field.
+func ActiveEQ(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldActive, v))
 }
 
-// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
-func TitleHasSuffix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldTitle, v))
-}
-
-// TitleEqualFold applies the EqualFold predicate on the "title" field.
-func TitleEqualFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldTitle, v))
-}
-
-// TitleContainsFold applies the ContainsFold predicate on the "title" field.
-func TitleContainsFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldTitle, v))
-}
-
-// DescriptionEQ applies the EQ predicate on the "description" field.
-func DescriptionEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDescription, v))
-}
-
-// DescriptionNEQ applies the NEQ predicate on the "description" field.
-func DescriptionNEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldDescription, v))
-}
-
-// DescriptionIn applies the In predicate on the "description" field.
-func DescriptionIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldDescription, vs...))
-}
-
-// DescriptionNotIn applies the NotIn predicate on the "description" field.
-func DescriptionNotIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldDescription, vs...))
-}
-
-// DescriptionGT applies the GT predicate on the "description" field.
-func DescriptionGT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGT(FieldDescription, v))
-}
-
-// DescriptionGTE applies the GTE predicate on the "description" field.
-func DescriptionGTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldDescription, v))
-}
-
-// DescriptionLT applies the LT predicate on the "description" field.
-func DescriptionLT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLT(FieldDescription, v))
-}
-
-// DescriptionLTE applies the LTE predicate on the "description" field.
-func DescriptionLTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldDescription, v))
-}
-
-// DescriptionContains applies the Contains predicate on the "description" field.
-func DescriptionContains(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContains(FieldDescription, v))
-}
-
-// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
-func DescriptionHasPrefix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldDescription, v))
-}
-
-// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
-func DescriptionHasSuffix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldDescription, v))
-}
-
-// DescriptionIsNil applies the IsNil predicate on the "description" field.
-func DescriptionIsNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldDescription))
-}
-
-// DescriptionNotNil applies the NotNil predicate on the "description" field.
-func DescriptionNotNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldDescription))
-}
-
-// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
-func DescriptionEqualFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldDescription, v))
-}
-
-// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
-func DescriptionContainsFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldDescription, v))
-}
-
-// PlatformEQ applies the EQ predicate on the "platform" field.
-func PlatformEQ(v enums.JobPlatformType) predicate.ScheduledJobHistory {
-	vc := v
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldPlatform, vc))
-}
-
-// PlatformNEQ applies the NEQ predicate on the "platform" field.
-func PlatformNEQ(v enums.JobPlatformType) predicate.ScheduledJobHistory {
-	vc := v
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldPlatform, vc))
-}
-
-// PlatformIn applies the In predicate on the "platform" field.
-func PlatformIn(vs ...enums.JobPlatformType) predicate.ScheduledJobHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldPlatform, v...))
-}
-
-// PlatformNotIn applies the NotIn predicate on the "platform" field.
-func PlatformNotIn(vs ...enums.JobPlatformType) predicate.ScheduledJobHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldPlatform, v...))
-}
-
-// WindmillPathEQ applies the EQ predicate on the "windmill_path" field.
-func WindmillPathEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldWindmillPath, v))
-}
-
-// WindmillPathNEQ applies the NEQ predicate on the "windmill_path" field.
-func WindmillPathNEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldWindmillPath, v))
-}
-
-// WindmillPathIn applies the In predicate on the "windmill_path" field.
-func WindmillPathIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldWindmillPath, vs...))
-}
-
-// WindmillPathNotIn applies the NotIn predicate on the "windmill_path" field.
-func WindmillPathNotIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldWindmillPath, vs...))
-}
-
-// WindmillPathGT applies the GT predicate on the "windmill_path" field.
-func WindmillPathGT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGT(FieldWindmillPath, v))
-}
-
-// WindmillPathGTE applies the GTE predicate on the "windmill_path" field.
-func WindmillPathGTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldWindmillPath, v))
-}
-
-// WindmillPathLT applies the LT predicate on the "windmill_path" field.
-func WindmillPathLT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLT(FieldWindmillPath, v))
-}
-
-// WindmillPathLTE applies the LTE predicate on the "windmill_path" field.
-func WindmillPathLTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldWindmillPath, v))
-}
-
-// WindmillPathContains applies the Contains predicate on the "windmill_path" field.
-func WindmillPathContains(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContains(FieldWindmillPath, v))
-}
-
-// WindmillPathHasPrefix applies the HasPrefix predicate on the "windmill_path" field.
-func WindmillPathHasPrefix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldWindmillPath, v))
-}
-
-// WindmillPathHasSuffix applies the HasSuffix predicate on the "windmill_path" field.
-func WindmillPathHasSuffix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldWindmillPath, v))
-}
-
-// WindmillPathEqualFold applies the EqualFold predicate on the "windmill_path" field.
-func WindmillPathEqualFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldWindmillPath, v))
-}
-
-// WindmillPathContainsFold applies the ContainsFold predicate on the "windmill_path" field.
-func WindmillPathContainsFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldWindmillPath, v))
-}
-
-// DownloadURLEQ applies the EQ predicate on the "download_url" field.
-func DownloadURLEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDownloadURL, v))
-}
-
-// DownloadURLNEQ applies the NEQ predicate on the "download_url" field.
-func DownloadURLNEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldDownloadURL, v))
-}
-
-// DownloadURLIn applies the In predicate on the "download_url" field.
-func DownloadURLIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldDownloadURL, vs...))
-}
-
-// DownloadURLNotIn applies the NotIn predicate on the "download_url" field.
-func DownloadURLNotIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldDownloadURL, vs...))
-}
-
-// DownloadURLGT applies the GT predicate on the "download_url" field.
-func DownloadURLGT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGT(FieldDownloadURL, v))
-}
-
-// DownloadURLGTE applies the GTE predicate on the "download_url" field.
-func DownloadURLGTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldDownloadURL, v))
-}
-
-// DownloadURLLT applies the LT predicate on the "download_url" field.
-func DownloadURLLT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLT(FieldDownloadURL, v))
-}
-
-// DownloadURLLTE applies the LTE predicate on the "download_url" field.
-func DownloadURLLTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldDownloadURL, v))
-}
-
-// DownloadURLContains applies the Contains predicate on the "download_url" field.
-func DownloadURLContains(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContains(FieldDownloadURL, v))
-}
-
-// DownloadURLHasPrefix applies the HasPrefix predicate on the "download_url" field.
-func DownloadURLHasPrefix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldDownloadURL, v))
-}
-
-// DownloadURLHasSuffix applies the HasSuffix predicate on the "download_url" field.
-func DownloadURLHasSuffix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldDownloadURL, v))
-}
-
-// DownloadURLEqualFold applies the EqualFold predicate on the "download_url" field.
-func DownloadURLEqualFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldDownloadURL, v))
-}
-
-// DownloadURLContainsFold applies the ContainsFold predicate on the "download_url" field.
-func DownloadURLContainsFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldDownloadURL, v))
+// ActiveNEQ applies the NEQ predicate on the "active" field.
+func ActiveNEQ(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldActive, v))
 }
 
 // ConfigurationIsNil applies the IsNil predicate on the "configuration" field.
@@ -1215,6 +949,81 @@ func CronEqualFold(v models.Cron) predicate.ScheduledJobHistory {
 func CronContainsFold(v models.Cron) predicate.ScheduledJobHistory {
 	vc := string(v)
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldCron, vc))
+}
+
+// JobRunnerIDEQ applies the EQ predicate on the "job_runner_id" field.
+func JobRunnerIDEQ(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDNEQ applies the NEQ predicate on the "job_runner_id" field.
+func JobRunnerIDNEQ(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDIn applies the In predicate on the "job_runner_id" field.
+func JobRunnerIDIn(vs ...string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldIn(FieldJobRunnerID, vs...))
+}
+
+// JobRunnerIDNotIn applies the NotIn predicate on the "job_runner_id" field.
+func JobRunnerIDNotIn(vs ...string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldJobRunnerID, vs...))
+}
+
+// JobRunnerIDGT applies the GT predicate on the "job_runner_id" field.
+func JobRunnerIDGT(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldGT(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDGTE applies the GTE predicate on the "job_runner_id" field.
+func JobRunnerIDGTE(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDLT applies the LT predicate on the "job_runner_id" field.
+func JobRunnerIDLT(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldLT(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDLTE applies the LTE predicate on the "job_runner_id" field.
+func JobRunnerIDLTE(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDContains applies the Contains predicate on the "job_runner_id" field.
+func JobRunnerIDContains(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldContains(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDHasPrefix applies the HasPrefix predicate on the "job_runner_id" field.
+func JobRunnerIDHasPrefix(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDHasSuffix applies the HasSuffix predicate on the "job_runner_id" field.
+func JobRunnerIDHasSuffix(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDIsNil applies the IsNil predicate on the "job_runner_id" field.
+func JobRunnerIDIsNil() predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldJobRunnerID))
+}
+
+// JobRunnerIDNotNil applies the NotNil predicate on the "job_runner_id" field.
+func JobRunnerIDNotNil() predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldJobRunnerID))
+}
+
+// JobRunnerIDEqualFold applies the EqualFold predicate on the "job_runner_id" field.
+func JobRunnerIDEqualFold(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldJobRunnerID, v))
+}
+
+// JobRunnerIDContainsFold applies the ContainsFold predicate on the "job_runner_id" field.
+func JobRunnerIDContainsFold(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldJobRunnerID, v))
 }
 
 // And groups predicates with the AND operator between them.

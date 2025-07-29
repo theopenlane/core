@@ -238,6 +238,10 @@
         "defaultTrustCenterDomain": {
           "type": "string",
           "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
+        },
+        "fieldLevelEncryption": {
+          "$ref": "#/$defs/crypto.Config",
+          "description": "FieldLevelEncryption contains the configuration for field level encryption"
         }
       },
       "additionalProperties": false,
@@ -311,6 +315,20 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config holds the cors configuration settings"
+    },
+    "crypto.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates whether Tink encryption is enabled"
+        },
+        "keyset": {
+          "type": "string",
+          "description": "Keyset is the base64-encoded Tink keyset used for encryption"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "csrf.Config": {
       "properties": {
@@ -681,10 +699,6 @@
         "onSuccessScript": {
           "type": "string",
           "description": "OnSuccessScript script to run when a scheduled job succeeds"
-        },
-        "folderName": {
-          "type": "string",
-          "description": "FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use"
         }
       },
       "additionalProperties": false,
@@ -922,6 +936,52 @@
         "scopes",
         "redirectUrl"
       ]
+    },
+    "handlers.IntegrationOauthProviderConfig": {
+      "properties": {
+        "redirectUrl": {
+          "type": "string",
+          "description": "RedirectURL is the base URL for integration OAuth callbacks"
+        },
+        "successRedirectUrl": {
+          "type": "string",
+          "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration"
+        },
+        "github": {
+          "$ref": "#/$defs/handlers.IntegrationProviderConfig",
+          "description": "Github contains the configuration settings for GitHub integrations"
+        },
+        "slack": {
+          "$ref": "#/$defs/handlers.IntegrationProviderConfig",
+          "description": "Slack contains the configuration settings for Slack integrations"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations"
+    },
+    "handlers.IntegrationProviderConfig": {
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "ClientID is the OAuth2 client ID"
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "ClientSecret is the OAuth2 client secret"
+        },
+        "clientEndpoint": {
+          "type": "string",
+          "description": "ClientEndpoint is the base URL for the OAuth endpoints"
+        },
+        "scopes": {
+          "$ref": "#/$defs/[]string",
+          "description": "Scopes are the OAuth2 scopes to request"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "IntegrationProviderConfig contains OAuth configuration for a specific integration provider"
     },
     "handlers.OauthProviderConfig": {
       "properties": {
@@ -1512,6 +1572,10 @@
     "slack": {
       "$ref": "#/$defs/config.Slack",
       "description": "Slack contains settings for Slack notifications"
+    },
+    "integrationOauthProvider": {
+      "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
+      "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
     }
   },
   "additionalProperties": false,

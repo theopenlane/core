@@ -41,6 +41,11 @@ env:
   GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
   GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
+  # CLI demo environment variables
+  ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
+
+# load the .env file for windmill
+dotenv: ['docker/configs/windmill/.env']
 
 tasks:
   default:
@@ -362,6 +367,21 @@ tasks:
       - task: go:lint
       - task: go:test
 
+  hush:keyset:
+    desc: Generates a new Tink keyset for field encryption
+    cmds:
+      - go run ./internal/ent/hush/cmd/hush generate
+
+  hush:quiet:
+    desc: Generates a new Tink keyset (output only)
+    cmds:
+      - go run ./internal/ent/hush/cmd/hush generate --quiet
+
+  hush:export:
+    desc: Generates a new Tink keyset in export format
+    cmds:
+      - go run ./internal/ent/hush/cmd/hush generate --export
+
   # dev tasks
   run-dev:
     dotenv: ["{{.ENV}}/.env-dev"]
@@ -378,6 +398,16 @@ tasks:
     desc: runs the core server in dev mode, assumes all other dependencies are running
     cmds:
       - go run main.go serve --debug --pretty
+
+  oauth-test-ui:
+    desc: runs the OAuth integration test UI on port 3004
+    cmds:
+      - docker compose -f ./docker/docker-compose-oauth-test.yml up -d
+
+  oauth-test-ui:down:
+    desc: stops the OAuth integration test UI
+    cmds:
+      - docker compose -f ./docker/docker-compose-oauth-test.yml down
 
   pr:
     desc: runs the comprehensive roll-up tasks required to ensure all files are being committed / pushed as a part of opening a PR
@@ -476,7 +506,7 @@ tasks:
       - "[ -f $(brew --prefix)/bin/{{.DEPS}} ]"
     vars:
       DEPS: >-
-        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover #magic___^_^___line
+        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover theopenlane/tap/openlane #magic___^_^___line
 
   brew-installed:
     silent: true
