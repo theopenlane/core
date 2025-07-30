@@ -80,7 +80,7 @@ tasks:
       - task: admin:grant:fga
 
   token:create:
-    desc: create PAT for admin user
+    desc: create PAT for the user
     cmds:
       - go run main.go pat create -n "generated-token" -o {{.ORG_ID}}
     vars:
