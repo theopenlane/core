@@ -2515,123 +2515,6 @@ input AuditLogWhereInput {
 	after: Time
 }
 """
-Input for updating a single actionPlan in a bulk operation
-"""
-input BulkUpdateActionPlanInput {
-	"""
-	ID of the actionPlan to update
-	"""
-	id: ID!
-	"""
-	Data to update the actionPlan with
-	"""
-	input: UpdateActionPlanInput!
-}
-"""
-Input for updating a single contact in a bulk operation
-"""
-input BulkUpdateContactInput {
-	"""
-	ID of the contact to update
-	"""
-	id: ID!
-	"""
-	Data to update the contact with
-	"""
-	input: UpdateContactInput!
-}
-"""
-Input for updating a single control in a bulk operation
-"""
-input BulkUpdateControlInput {
-	"""
-	ID of the control to update
-	"""
-	id: ID!
-	"""
-	Data to update the control with
-	"""
-	input: UpdateControlInput!
-}
-"""
-Input for updating a single hush in a bulk operation
-"""
-input BulkUpdateHushInput {
-	"""
-	ID of the hush to update
-	"""
-	id: ID!
-	"""
-	Data to update the hush with
-	"""
-	input: UpdateHushInput!
-}
-"""
-Input for updating a single internalPolicy in a bulk operation
-"""
-input BulkUpdateInternalPolicyInput {
-	"""
-	ID of the internalPolicy to update
-	"""
-	id: ID!
-	"""
-	Data to update the internalPolicy with
-	"""
-	input: UpdateInternalPolicyInput!
-}
-"""
-Input for updating a single procedure in a bulk operation
-"""
-input BulkUpdateProcedureInput {
-	"""
-	ID of the procedure to update
-	"""
-	id: ID!
-	"""
-	Data to update the procedure with
-	"""
-	input: UpdateProcedureInput!
-}
-"""
-Input for updating a single risk in a bulk operation
-"""
-input BulkUpdateRiskInput {
-	"""
-	ID of the risk to update
-	"""
-	id: ID!
-	"""
-	Data to update the risk with
-	"""
-	input: UpdateRiskInput!
-}
-"""
-Input for updating a single scan in a bulk operation
-"""
-input BulkUpdateScanInput {
-	"""
-	ID of the scan to update
-	"""
-	id: ID!
-	"""
-	Data to update the scan with
-	"""
-	input: UpdateScanInput!
-}
-"""
-Input for updating a single task in a bulk operation
-"""
-input BulkUpdateTaskInput {
-	"""
-	ID of the task to update
-	"""
-	id: ID!
-	"""
-	Data to update the task with
-	"""
-	input: UpdateTaskInput!
-}
-"""
 Change is a difference between two updates to an object used by
 the audit history resolvers
 """
@@ -25277,9 +25160,14 @@ type Mutation {
 	"""
 	updateBulkActionPlan(
 		"""
+		IDs of the actionPlans to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the actionPlans with
 		"""
-		input: [BulkUpdateActionPlanInput!]
+		input: UpdateActionPlanInput!
 	): ActionPlanBulkUpdatePayload!
 	"""
 	Update an existing actionPlan
@@ -25436,9 +25324,14 @@ type Mutation {
 	"""
 	updateBulkContact(
 		"""
+		IDs of the contacts to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the contacts with
 		"""
-		input: [BulkUpdateContactInput!]
+		input: UpdateContactInput!
 	): ContactBulkUpdatePayload!
 	"""
 	Update an existing contact
@@ -25495,9 +25388,14 @@ type Mutation {
 	"""
 	updateBulkControl(
 		"""
+		IDs of the controls to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the controls with
 		"""
-		input: [BulkUpdateControlInput!]
+		input: UpdateControlInput!
 	): ControlBulkUpdatePayload!
 	"""
 	Update an existing control
@@ -26235,9 +26133,14 @@ type Mutation {
 	"""
 	updateBulkHush(
 		"""
+		IDs of the hushs to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the hushs with
 		"""
-		input: [BulkUpdateHushInput!]
+		input: UpdateHushInput!
 	): HushBulkUpdatePayload!
 	"""
 	Update an existing hush
@@ -26303,9 +26206,14 @@ type Mutation {
 	"""
 	updateBulkInternalPolicy(
 		"""
+		IDs of the internalPolicys to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the internalPolicys with
 		"""
-		input: [BulkUpdateInternalPolicyInput!]
+		input: UpdateInternalPolicyInput!
 	): InternalPolicyBulkUpdatePayload!
 	"""
 	Update an existing internalPolicy
@@ -26882,9 +26790,14 @@ type Mutation {
 	"""
 	updateBulkProcedure(
 		"""
+		IDs of the procedures to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the procedures with
 		"""
-		input: [BulkUpdateProcedureInput!]
+		input: UpdateProcedureInput!
 	): ProcedureBulkUpdatePayload!
 	"""
 	Update an existing procedure
@@ -27068,9 +26981,14 @@ type Mutation {
 	"""
 	updateBulkRisk(
 		"""
+		IDs of the risks to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the risks with
 		"""
-		input: [BulkUpdateRiskInput!]
+		input: UpdateRiskInput!
 	): RiskBulkUpdatePayload!
 	"""
 	Update an existing risk
@@ -27127,9 +27045,14 @@ type Mutation {
 	"""
 	updateBulkScan(
 		"""
+		IDs of the scans to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the scans with
 		"""
-		input: [BulkUpdateScanInput!]
+		input: UpdateScanInput!
 	): ScanBulkUpdatePayload!
 	"""
 	Update an existing scan
@@ -27423,9 +27346,14 @@ type Mutation {
 	"""
 	updateBulkTask(
 		"""
+		IDs of the tasks to update
+		"""
+		ids: [ID!]!
+
+		"""
 		values to update the tasks with
 		"""
-		input: [BulkUpdateTaskInput!]
+		input: UpdateTaskInput!
 	): TaskBulkUpdatePayload!
 	"""
 	Update an existing task

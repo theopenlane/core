@@ -31,38 +31,38 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 }
 
 // bulkUpdateActionPlan updates multiple ActionPlan entities
-func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, input []*model.BulkUpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.ActionPlan, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.ActionPlan, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each actionplan individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for actionplan")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for actionplan")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.ActionPlan.Get(ctx, updateInput.ID)
+		existing, err := c.ActionPlan.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("actionplan_id", updateInput.ID).Msg("failed to get actionplan in bulk update operation")
+			log.Error().Err(err).Str("actionplan_id", id).Msg("failed to get actionplan in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("actionplan_id", updateInput.ID).Msg("failed to update actionplan in bulk operation")
+			log.Error().Err(err).Str("actionplan_id", id).Msg("failed to update actionplan in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.ActionPlanBulkUpdatePayload{
@@ -129,38 +129,38 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 }
 
 // bulkUpdateContact updates multiple Contact entities
-func (r *mutationResolver) bulkUpdateContact(ctx context.Context, input []*model.BulkUpdateContactInput) (*model.ContactBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, input generated.UpdateContactInput) (*model.ContactBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Contact, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Contact, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each contact individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for contact")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for contact")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Contact.Get(ctx, updateInput.ID)
+		existing, err := c.Contact.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("contact_id", updateInput.ID).Msg("failed to get contact in bulk update operation")
+			log.Error().Err(err).Str("contact_id", id).Msg("failed to get contact in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("contact_id", updateInput.ID).Msg("failed to update contact in bulk operation")
+			log.Error().Err(err).Str("contact_id", id).Msg("failed to update contact in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.ContactBulkUpdatePayload{
@@ -189,38 +189,38 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 }
 
 // bulkUpdateControl updates multiple Control entities
-func (r *mutationResolver) bulkUpdateControl(ctx context.Context, input []*model.BulkUpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Control, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Control, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each control individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for control")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for control")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Control.Get(ctx, updateInput.ID)
+		existing, err := c.Control.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("control_id", updateInput.ID).Msg("failed to get control in bulk update operation")
+			log.Error().Err(err).Str("control_id", id).Msg("failed to get control in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("control_id", updateInput.ID).Msg("failed to update control in bulk operation")
+			log.Error().Err(err).Str("control_id", id).Msg("failed to update control in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.ControlBulkUpdatePayload{
@@ -487,38 +487,38 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 }
 
 // bulkUpdateHush updates multiple Hush entities
-func (r *mutationResolver) bulkUpdateHush(ctx context.Context, input []*model.BulkUpdateHushInput) (*model.HushBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, input generated.UpdateHushInput) (*model.HushBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Hush, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Hush, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each hush individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for hush")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for hush")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Hush.Get(ctx, updateInput.ID)
+		existing, err := c.Hush.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("hush_id", updateInput.ID).Msg("failed to get hush in bulk update operation")
+			log.Error().Err(err).Str("hush_id", id).Msg("failed to get hush in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("hush_id", updateInput.ID).Msg("failed to update hush in bulk operation")
+			log.Error().Err(err).Str("hush_id", id).Msg("failed to update hush in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.HushBulkUpdatePayload{
@@ -547,38 +547,38 @@ func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input [
 }
 
 // bulkUpdateInternalPolicy updates multiple InternalPolicy entities
-func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, input []*model.BulkUpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.InternalPolicy, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.InternalPolicy, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each internalpolicy individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for internalpolicy")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for internalpolicy")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.InternalPolicy.Get(ctx, updateInput.ID)
+		existing, err := c.InternalPolicy.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("internalpolicy_id", updateInput.ID).Msg("failed to get internalpolicy in bulk update operation")
+			log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to get internalpolicy in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("internalpolicy_id", updateInput.ID).Msg("failed to update internalpolicy in bulk operation")
+			log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to update internalpolicy in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.InternalPolicyBulkUpdatePayload{
@@ -740,38 +740,38 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 }
 
 // bulkUpdateProcedure updates multiple Procedure entities
-func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, input []*model.BulkUpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Procedure, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Procedure, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each procedure individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for procedure")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for procedure")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Procedure.Get(ctx, updateInput.ID)
+		existing, err := c.Procedure.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("procedure_id", updateInput.ID).Msg("failed to get procedure in bulk update operation")
+			log.Error().Err(err).Str("procedure_id", id).Msg("failed to get procedure in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("procedure_id", updateInput.ID).Msg("failed to update procedure in bulk operation")
+			log.Error().Err(err).Str("procedure_id", id).Msg("failed to update procedure in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.ProcedureBulkUpdatePayload{
@@ -838,38 +838,38 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 }
 
 // bulkUpdateRisk updates multiple Risk entities
-func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, input []*model.BulkUpdateRiskInput) (*model.RiskBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, input generated.UpdateRiskInput) (*model.RiskBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Risk, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Risk, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each risk individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for risk")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for risk")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Risk.Get(ctx, updateInput.ID)
+		existing, err := c.Risk.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("risk_id", updateInput.ID).Msg("failed to get risk in bulk update operation")
+			log.Error().Err(err).Str("risk_id", id).Msg("failed to get risk in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("risk_id", updateInput.ID).Msg("failed to update risk in bulk operation")
+			log.Error().Err(err).Str("risk_id", id).Msg("failed to update risk in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.RiskBulkUpdatePayload{
@@ -898,38 +898,38 @@ func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generate
 }
 
 // bulkUpdateScan updates multiple Scan entities
-func (r *mutationResolver) bulkUpdateScan(ctx context.Context, input []*model.BulkUpdateScanInput) (*model.ScanBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Scan, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Scan, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each scan individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for scan")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for scan")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Scan.Get(ctx, updateInput.ID)
+		existing, err := c.Scan.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("scan_id", updateInput.ID).Msg("failed to get scan in bulk update operation")
+			log.Error().Err(err).Str("scan_id", id).Msg("failed to get scan in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("scan_id", updateInput.ID).Msg("failed to update scan in bulk operation")
+			log.Error().Err(err).Str("scan_id", id).Msg("failed to update scan in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.ScanBulkUpdatePayload{
@@ -1034,38 +1034,38 @@ func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generate
 }
 
 // bulkUpdateTask updates multiple Task entities
-func (r *mutationResolver) bulkUpdateTask(ctx context.Context, input []*model.BulkUpdateTaskInput) (*model.TaskBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, input generated.UpdateTaskInput) (*model.TaskBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
 	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Task, 0, len(input))
-	updatedIDs := make([]string, 0, len(input))
+	results := make([]*generated.Task, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
 
 	// update each task individually to ensure proper validation
-	for _, updateInput := range input {
-		if updateInput.ID == "" {
-			log.Error().Msg("missing id in bulk update for task")
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for task")
 			continue
 		}
 
 		// get the existing entity first
-		existing, err := c.Task.Get(ctx, updateInput.ID)
+		existing, err := c.Task.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("task_id", updateInput.ID).Msg("failed to get task in bulk update operation")
+			log.Error().Err(err).Str("task_id", id).Msg("failed to get task in bulk update operation")
 			continue
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(*updateInput.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("task_id", updateInput.ID).Msg("failed to update task in bulk operation")
+			log.Error().Err(err).Str("task_id", id).Msg("failed to update task in bulk operation")
 			continue
 		}
 
 		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, updateInput.ID)
+		updatedIDs = append(updatedIDs, id)
 	}
 
 	return &model.TaskBulkUpdatePayload{

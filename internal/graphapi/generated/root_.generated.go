@@ -2504,15 +2504,15 @@ type ComplexityRoot struct {
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
-		UpdateBulkActionPlan                 func(childComplexity int, input []*model.BulkUpdateActionPlanInput) int
-		UpdateBulkContact                    func(childComplexity int, input []*model.BulkUpdateContactInput) int
-		UpdateBulkControl                    func(childComplexity int, input []*model.BulkUpdateControlInput) int
-		UpdateBulkHush                       func(childComplexity int, input []*model.BulkUpdateHushInput) int
-		UpdateBulkInternalPolicy             func(childComplexity int, input []*model.BulkUpdateInternalPolicyInput) int
-		UpdateBulkProcedure                  func(childComplexity int, input []*model.BulkUpdateProcedureInput) int
-		UpdateBulkRisk                       func(childComplexity int, input []*model.BulkUpdateRiskInput) int
-		UpdateBulkScan                       func(childComplexity int, input []*model.BulkUpdateScanInput) int
-		UpdateBulkTask                       func(childComplexity int, input []*model.BulkUpdateTaskInput) int
+		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
+		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
+		UpdateBulkControl                    func(childComplexity int, ids []string, input generated.UpdateControlInput) int
+		UpdateBulkHush                       func(childComplexity int, ids []string, input generated.UpdateHushInput) int
+		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
+		UpdateBulkProcedure                  func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
+		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
+		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
+		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
@@ -17922,7 +17922,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkActionPlan(childComplexity, args["input"].([]*model.BulkUpdateActionPlanInput)), true
+		return e.complexity.Mutation.UpdateBulkActionPlan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateActionPlanInput)), true
 
 	case "Mutation.updateBulkContact":
 		if e.complexity.Mutation.UpdateBulkContact == nil {
@@ -17934,7 +17934,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkContact(childComplexity, args["input"].([]*model.BulkUpdateContactInput)), true
+		return e.complexity.Mutation.UpdateBulkContact(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateContactInput)), true
 
 	case "Mutation.updateBulkControl":
 		if e.complexity.Mutation.UpdateBulkControl == nil {
@@ -17946,7 +17946,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkControl(childComplexity, args["input"].([]*model.BulkUpdateControlInput)), true
+		return e.complexity.Mutation.UpdateBulkControl(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateControlInput)), true
 
 	case "Mutation.updateBulkHush":
 		if e.complexity.Mutation.UpdateBulkHush == nil {
@@ -17958,7 +17958,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkHush(childComplexity, args["input"].([]*model.BulkUpdateHushInput)), true
+		return e.complexity.Mutation.UpdateBulkHush(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateHushInput)), true
 
 	case "Mutation.updateBulkInternalPolicy":
 		if e.complexity.Mutation.UpdateBulkInternalPolicy == nil {
@@ -17970,7 +17970,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkInternalPolicy(childComplexity, args["input"].([]*model.BulkUpdateInternalPolicyInput)), true
+		return e.complexity.Mutation.UpdateBulkInternalPolicy(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateInternalPolicyInput)), true
 
 	case "Mutation.updateBulkProcedure":
 		if e.complexity.Mutation.UpdateBulkProcedure == nil {
@@ -17982,7 +17982,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkProcedure(childComplexity, args["input"].([]*model.BulkUpdateProcedureInput)), true
+		return e.complexity.Mutation.UpdateBulkProcedure(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProcedureInput)), true
 
 	case "Mutation.updateBulkRisk":
 		if e.complexity.Mutation.UpdateBulkRisk == nil {
@@ -17994,7 +17994,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkRisk(childComplexity, args["input"].([]*model.BulkUpdateRiskInput)), true
+		return e.complexity.Mutation.UpdateBulkRisk(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRiskInput)), true
 
 	case "Mutation.updateBulkScan":
 		if e.complexity.Mutation.UpdateBulkScan == nil {
@@ -18006,7 +18006,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkScan(childComplexity, args["input"].([]*model.BulkUpdateScanInput)), true
+		return e.complexity.Mutation.UpdateBulkScan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScanInput)), true
 
 	case "Mutation.updateBulkTask":
 		if e.complexity.Mutation.UpdateBulkTask == nil {
@@ -18018,7 +18018,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBulkTask(childComplexity, args["input"].([]*model.BulkUpdateTaskInput)), true
+		return e.complexity.Mutation.UpdateBulkTask(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTaskInput)), true
 
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
@@ -32792,15 +32792,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssetWhereInput,
 		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
-		ec.unmarshalInputBulkUpdateActionPlanInput,
-		ec.unmarshalInputBulkUpdateContactInput,
-		ec.unmarshalInputBulkUpdateControlInput,
-		ec.unmarshalInputBulkUpdateHushInput,
-		ec.unmarshalInputBulkUpdateInternalPolicyInput,
-		ec.unmarshalInputBulkUpdateProcedureInput,
-		ec.unmarshalInputBulkUpdateRiskInput,
-		ec.unmarshalInputBulkUpdateScanInput,
-		ec.unmarshalInputBulkUpdateTaskInput,
 		ec.unmarshalInputCloneControlInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
@@ -33228,19 +33219,7 @@ var sources = []*ast.Source{
     ):  ActionPlan!
 }
 
-"""
-Input for updating a single actionPlan in a bulk operation
-"""
-input BulkUpdateActionPlanInput {
-    """
-    ID of the actionPlan to update
-    """
-    id: ID!
-    """
-    Data to update the actionPlan with
-    """
-    input: UpdateActionPlanInput!
-}
+
 
 extend type Mutation{
     """
@@ -33275,9 +33254,13 @@ extend type Mutation{
     """
     updateBulkActionPlan(
         """
+        IDs of the actionPlans to update
+        """
+        ids: [ID!]!
+        """
         values to update the actionPlans with
         """
-        input: [BulkUpdateActionPlanInput!]
+        input: UpdateActionPlanInput!
     ): ActionPlanBulkUpdatePayload!
     """
     Update an existing actionPlan
@@ -34825,19 +34808,7 @@ enum AuditLogOrderField {
     ):  Contact!
 }
 
-"""
-Input for updating a single contact in a bulk operation
-"""
-input BulkUpdateContactInput {
-    """
-    ID of the contact to update
-    """
-    id: ID!
-    """
-    Data to update the contact with
-    """
-    input: UpdateContactInput!
-}
+
 
 extend type Mutation{
     """
@@ -34872,9 +34843,13 @@ extend type Mutation{
     """
     updateBulkContact(
         """
+        IDs of the contacts to update
+        """
+        ids: [ID!]!
+        """
         values to update the contacts with
         """
-        input: [BulkUpdateContactInput!]
+        input: UpdateContactInput!
     ): ContactBulkUpdatePayload!
     """
     Update an existing contact
@@ -34965,19 +34940,7 @@ type ContactBulkUpdatePayload {
     ):  Control!
 }
 
-"""
-Input for updating a single control in a bulk operation
-"""
-input BulkUpdateControlInput {
-    """
-    ID of the control to update
-    """
-    id: ID!
-    """
-    Data to update the control with
-    """
-    input: UpdateControlInput!
-}
+
 
 extend type Mutation{
     """
@@ -35012,9 +34975,13 @@ extend type Mutation{
     """
     updateBulkControl(
         """
+        IDs of the controls to update
+        """
+        ids: [ID!]!
+        """
         values to update the controls with
         """
-        input: [BulkUpdateControlInput!]
+        input: UpdateControlInput!
     ): ControlBulkUpdatePayload!
     """
     Update an existing control
@@ -89774,19 +89741,7 @@ type GroupSettingBulkCreatePayload {
     ):  Hush!
 }
 
-"""
-Input for updating a single hush in a bulk operation
-"""
-input BulkUpdateHushInput {
-    """
-    ID of the hush to update
-    """
-    id: ID!
-    """
-    Data to update the hush with
-    """
-    input: UpdateHushInput!
-}
+
 
 extend type Mutation{
     """
@@ -89821,9 +89776,13 @@ extend type Mutation{
     """
     updateBulkHush(
         """
+        IDs of the hushs to update
+        """
+        ids: [ID!]!
+        """
         values to update the hushs with
         """
-        input: [BulkUpdateHushInput!]
+        input: UpdateHushInput!
     ): HushBulkUpdatePayload!
     """
     Update an existing hush
@@ -89947,19 +89906,7 @@ type IntegrationDeletePayload {
     ):  InternalPolicy!
 }
 
-"""
-Input for updating a single internalPolicy in a bulk operation
-"""
-input BulkUpdateInternalPolicyInput {
-    """
-    ID of the internalPolicy to update
-    """
-    id: ID!
-    """
-    Data to update the internalPolicy with
-    """
-    input: UpdateInternalPolicyInput!
-}
+
 
 extend type Mutation{
     """
@@ -89994,9 +89941,13 @@ extend type Mutation{
     """
     updateBulkInternalPolicy(
         """
+        IDs of the internalPolicys to update
+        """
+        ids: [ID!]!
+        """
         values to update the internalPolicys with
         """
-        input: [BulkUpdateInternalPolicyInput!]
+        input: UpdateInternalPolicyInput!
     ): InternalPolicyBulkUpdatePayload!
     """
     Update an existing internalPolicy
@@ -91307,19 +91258,7 @@ type PersonalAccessTokenBulkCreatePayload {
     ):  Procedure!
 }
 
-"""
-Input for updating a single procedure in a bulk operation
-"""
-input BulkUpdateProcedureInput {
-    """
-    ID of the procedure to update
-    """
-    id: ID!
-    """
-    Data to update the procedure with
-    """
-    input: UpdateProcedureInput!
-}
+
 
 extend type Mutation{
     """
@@ -91354,9 +91293,13 @@ extend type Mutation{
     """
     updateBulkProcedure(
         """
+        IDs of the procedures to update
+        """
+        ids: [ID!]!
+        """
         values to update the procedures with
         """
-        input: [BulkUpdateProcedureInput!]
+        input: UpdateProcedureInput!
     ): ProcedureBulkUpdatePayload!
     """
     Update an existing procedure
@@ -91747,19 +91690,7 @@ extend input UpdateStandardInput {
     ):  Risk!
 }
 
-"""
-Input for updating a single risk in a bulk operation
-"""
-input BulkUpdateRiskInput {
-    """
-    ID of the risk to update
-    """
-    id: ID!
-    """
-    Data to update the risk with
-    """
-    input: UpdateRiskInput!
-}
+
 
 extend type Mutation{
     """
@@ -91794,9 +91725,13 @@ extend type Mutation{
     """
     updateBulkRisk(
         """
+        IDs of the risks to update
+        """
+        ids: [ID!]!
+        """
         values to update the risks with
         """
-        input: [BulkUpdateRiskInput!]
+        input: UpdateRiskInput!
     ): RiskBulkUpdatePayload!
     """
     Update an existing risk
@@ -91953,19 +91888,7 @@ scalar SSOAuthorizationMap
     ):  Scan!
 }
 
-"""
-Input for updating a single scan in a bulk operation
-"""
-input BulkUpdateScanInput {
-    """
-    ID of the scan to update
-    """
-    id: ID!
-    """
-    Data to update the scan with
-    """
-    input: UpdateScanInput!
-}
+
 
 extend type Mutation{
     """
@@ -92000,9 +91923,13 @@ extend type Mutation{
     """
     updateBulkScan(
         """
+        IDs of the scans to update
+        """
+        ids: [ID!]!
+        """
         values to update the scans with
         """
-        input: [BulkUpdateScanInput!]
+        input: UpdateScanInput!
     ): ScanBulkUpdatePayload!
     """
     Update an existing scan
@@ -93846,19 +93773,7 @@ type SubscriberBulkCreatePayload {
     ):  Task!
 }
 
-"""
-Input for updating a single task in a bulk operation
-"""
-input BulkUpdateTaskInput {
-    """
-    ID of the task to update
-    """
-    id: ID!
-    """
-    Data to update the task with
-    """
-    input: UpdateTaskInput!
-}
+
 
 extend type Mutation{
     """
@@ -93893,9 +93808,13 @@ extend type Mutation{
     """
     updateBulkTask(
         """
+        IDs of the tasks to update
+        """
+        ids: [ID!]!
+        """
         values to update the tasks with
         """
-        input: [BulkUpdateTaskInput!]
+        input: UpdateTaskInput!
     ): TaskBulkUpdatePayload!
     """
     Update an existing task

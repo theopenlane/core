@@ -103,6 +103,8 @@ require (
 	gotest.tools/v3 v3.5.2
 )
 
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
+
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0 // indirect
 	4d63.com/gochecknoglobals v0.2.2 // indirect
@@ -649,5 +651,3 @@ require (
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/yaml.v3 v3.0.1
 )
-
-replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins

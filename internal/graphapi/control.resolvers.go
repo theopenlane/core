@@ -76,20 +76,12 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 }
 
 // UpdateBulkControl is the resolver for the updateBulkControl field.
-func (r *mutationResolver) UpdateBulkControl(ctx context.Context, input []*model.BulkUpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) UpdateBulkControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkUpdateControl(ctx, input)
+	return r.bulkUpdateControl(ctx, ids, input)
 }
 
 // UpdateControl is the resolver for the updateControl field.

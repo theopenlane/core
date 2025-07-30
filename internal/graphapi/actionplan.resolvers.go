@@ -77,20 +77,12 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 }
 
 // UpdateBulkActionPlan is the resolver for the updateBulkActionPlan field.
-func (r *mutationResolver) UpdateBulkActionPlan(ctx context.Context, input []*model.BulkUpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) UpdateBulkActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkUpdateActionPlan(ctx, input)
+	return r.bulkUpdateActionPlan(ctx, ids, input)
 }
 
 // UpdateActionPlan is the resolver for the updateActionPlan field.
