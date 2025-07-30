@@ -2,12 +2,14 @@ package graphapi_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
@@ -86,11 +88,13 @@ func (suite *GraphTestSuite) enableAllModules(ctx context.Context, t *testing.T,
 		features = models.AllOrgModules
 	}
 
+	fmt.Println("enabled features", features)
+
 	tuples := make([]fgax.TupleKey, 0, len(features))
 	for _, feature := range features {
 		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
 			SubjectID:   orgID,
-			SubjectType: ent.TypeOrganization,
+			SubjectType: generated.TypeOrganization,
 			ObjectID:    string(feature),
 			ObjectType:  "feature",
 			Relation:    "enabled",

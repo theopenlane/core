@@ -164,7 +164,7 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 	if requireAll {
 		// all features must be enabled
 		for _, f := range feats {
-			if _, ok := enabledSet[string(f)+"_module"]; !ok {
+			if _, ok := enabledSet[string(f)]; !ok {
 				return false, nil
 			}
 		}
@@ -173,7 +173,7 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 
 	// at least one feature must be enabled
 	for _, f := range feats {
-		if _, ok := enabledSet[string(f)+"_module"]; ok {
+		if _, ok := enabledSet[string(f)]; ok {
 			return true, nil
 		}
 	}
