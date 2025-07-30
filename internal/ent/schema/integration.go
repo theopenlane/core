@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx"
 )
 
 // Integration maps configured integrations (github, slack, etc.) to organizations
@@ -92,7 +94,6 @@ func (i Integration) Policy() ent.Policy {
 	)
 }
 
-<<<<<<< HEAD
 func (Integration) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
@@ -103,12 +104,9 @@ func (Integration) Features() []models.OrgModule {
 func (i Integration) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorRequireAnyFeature("integration", i.Features()...),
-||||||| 79e33557
-// Annotations of the Integration
-func (Integration) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("base"),
-=======
+	}
+}
+
 // Annotations of the Integration
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -118,6 +116,5 @@ func (Integration) Annotations() []schema.Annotation {
 			entgql.SkipMutationCreateInput,
 			entgql.SkipMutationUpdateInput,
 		),
->>>>>>> origin/main
 	}
 }

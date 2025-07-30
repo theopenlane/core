@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ActionPlan defines the actionplan schema.
@@ -86,10 +86,9 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		}}.getMixins(a)
 }
 
-func (ActionPlan) Features() []entx.FeatureModule {
-	return []entx.FeatureModule{
-		entx.ModuleCompliance,
-		entx.ModuleContinuousComplianceAutomation,
+func (ActionPlan) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
 	}
 }
 

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlObjective defines the controlobjective schema.
@@ -127,10 +128,9 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 	}.getMixins(c)
 }
 
-func (ControlObjective) Features() []entx.FeatureModule {
-	return []entx.FeatureModule{
-		entx.ModuleCompliance,
-		entx.ModuleContinuousComplianceAutomation,
+func (ControlObjective) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
 	}
 }
 

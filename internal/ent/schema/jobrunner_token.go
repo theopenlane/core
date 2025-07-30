@@ -9,17 +9,11 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
-"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/utils/keygen"
-"github.com/theopenlane/core/pkg/models"
 )
 
 // JobRunnerToken holds the schema definition for the JobRunnerToken entity
@@ -124,7 +118,6 @@ func (JobRunnerToken) Indexes() []ent.Index {
 func (JobRunnerToken) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		
 	}
 }
 

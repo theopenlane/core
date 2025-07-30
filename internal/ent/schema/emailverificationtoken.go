@@ -10,26 +10,18 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/entx/history"
-"github.com/theopenlane/core/pkg/models"
 	emixin "github.com/theopenlane/entx/mixin"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-"github.com/theopenlane/core/pkg/models"
 )
 
 // EmailVerificationToken holds the schema definition for the EmailVerificationToken entity

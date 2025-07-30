@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -136,7 +135,7 @@ func (s ScheduledJobRun) Interceptors() []ent.Interceptor {
 // Policy of the ScheduledJobRun
 // add the new policy here, the default post-policy is to deny all
 // so you need to ensure there are rules in place to allow the actions you want
-func (ScheduledJobRun) Policy() ent.Policy {
+func (s ScheduledJobRun) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures(s.Features()...),

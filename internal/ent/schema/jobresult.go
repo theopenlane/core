@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -159,7 +158,7 @@ func (j JobResult) Policy() ent.Policy {
 			policy.CheckCreateAccess(),
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 			policy.CheckCreateAccess(),
-			entfga.CheckEditAccess[*generated.JobResultMutation](),
+			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 			// only system admin tokens should be posting back job results
 			rule.AllowMutationIfSystemAdmin(),
 		),

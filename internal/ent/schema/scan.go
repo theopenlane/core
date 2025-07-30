@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
 
@@ -74,9 +75,9 @@ func (s Scan) Policy() ent.Policy {
 	)
 }
 
-func (Scan) Features() []entx.FeatureModule {
-	return []entx.FeatureModule{
-		entx.ModuleAssetManagement,
+func (Scan) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogVulnerabilityManagementModule,
 	}
 }
 

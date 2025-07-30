@@ -5,23 +5,15 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
-"github.com/theopenlane/core/pkg/models"
 	emixin "github.com/theopenlane/entx/mixin"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Event holds the schema definition for the Event entity
