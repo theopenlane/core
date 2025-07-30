@@ -778,13 +778,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 	policyAnotherUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the policy
-	res, err := suite.client.api.UpdateBulkInternalPolicy(testUser2.UserCtx, []*openlaneclient.BulkUpdateInternalPolicyInput{
-		{
-			ID: policy1.ID,
-			Input: &openlaneclient.UpdateInternalPolicyInput{
-				Status: lo.ToPtr(enums.DocumentPublished),
-			},
-		},
+	res, err := suite.client.api.UpdateBulkInternalPolicy(testUser2.UserCtx, []string{policy1.ID}, openlaneclient.UpdateInternalPolicyInput{
+		Status: lo.ToPtr(enums.DocumentPublished),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -793,86 +788,48 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		request              []*openlaneclient.BulkUpdateInternalPolicyInput
+		ids                  []string
+		input                openlaneclient.UpdateInternalPolicyInput
 		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
 	}{
 		{
-			name: "happy path, update multiple policies with different fields",
-			request: []*openlaneclient.BulkUpdateInternalPolicyInput{
-				{
-					ID: policy1.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						Name:         lo.ToPtr("Updated Policy 1"),
-						PolicyType:   lo.ToPtr("Security"),
-						RevisionBump: &models.Minor,
-					},
-				},
-				{
-					ID: policy2.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						Status:        &enums.DocumentPublished,
-						Tags:          []string{"tag1", "tag2"},
-						AddControlIDs: []string{control.ID},
-					},
-				},
-				{
-					ID: policy3.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						Details:          lo.ToPtr("Updated details for policy 3"),
-						AddSubcontrolIDs: []string{subcontrol.ID},
-						AddTaskIDs:       []string{task.ID},
-					},
-				},
+			name: "happy path, update status on multiple policies",
+			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Status:     &enums.DocumentPublished,
+				PolicyType: lo.ToPtr("Security"),
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
-			name: "happy path, editor permissions",
-			request: []*openlaneclient.BulkUpdateInternalPolicyInput{
-				{
-					ID: policy1.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						AddEditorIDs: []string{groupMember.GroupID},
-					},
-				},
-				{
-					ID: policy2.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						RevisionBump: &models.Major,
-					},
-				},
+			name: "happy path, editor permissions and revision bump",
+			ids:  []string{policy1.ID, policy2.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				AddEditorIDs: []string{groupMember.GroupID},
+				RevisionBump: &models.Major,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
-			name:        "empty input array",
-			request:     []*openlaneclient.BulkUpdateInternalPolicyInput{},
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateInternalPolicyInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "input is required",
+			expectedErr: "ids is required",
 		},
 		{
 			name: "mixed success and failure - some policies not authorized",
-			request: []*openlaneclient.BulkUpdateInternalPolicyInput{
-				{
-					ID: policy1.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						Status: &enums.DocumentDraft,
-					},
-				},
-				{
-					ID: policyAnotherUser.ID, // this should fail authorization
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						Status: &enums.DocumentPublished,
-					},
-				},
+			ids:  []string{policy1.ID, policyAnotherUser.ID}, // second policy should fail authorization
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Status: &enums.DocumentDraft,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -880,23 +837,32 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions to policies",
-			request: []*openlaneclient.BulkUpdateInternalPolicyInput{
-				{
-					ID: policy1.ID,
-					Input: &openlaneclient.UpdateInternalPolicyInput{
-						Status: &enums.DocumentPublished,
-					},
-				},
+			ids:  []string{policy1.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Status: &enums.DocumentPublished,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any policies to update
 		},
+		{
+			name: "update multiple policies with controls and tasks",
+			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Details:          lo.ToPtr("Updated details for all policies"),
+				AddControlIDs:    []string{control.ID},
+				AddSubcontrolIDs: []string{subcontrol.ID},
+				AddTaskIDs:       []string{task.ID},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateBulkInternalPolicy(tc.ctx, tc.request)
+			resp, err := tc.client.UpdateBulkInternalPolicy(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
@@ -910,56 +876,53 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 			assert.Check(t, is.Len(resp.UpdateBulkInternalPolicy.InternalPolicies, tc.expectedUpdatedCount))
 			assert.Check(t, is.Len(resp.UpdateBulkInternalPolicy.UpdatedIDs, tc.expectedUpdatedCount))
 
-			policyMap := make(map[string]*openlaneclient.UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies)
+			// verify all returned policies have the expected values from tc.input
 			for _, policy := range resp.UpdateBulkInternalPolicy.InternalPolicies {
-				policyMap[policy.ID] = policy
-			}
-
-			for _, requestInput := range tc.request {
-				responsePolicy, found := policyMap[requestInput.ID]
-				if !found {
-					continue
+				if tc.input.Name != nil {
+					assert.Check(t, is.Equal(*tc.input.Name, policy.Name))
 				}
 
-				if requestInput.Input.Name != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Name, responsePolicy.Name))
+				if tc.input.Status != nil {
+					assert.Check(t, is.Equal(*tc.input.Status, *policy.Status))
 				}
 
-				if requestInput.Input.Status != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Status, *responsePolicy.Status))
+				if tc.input.Tags != nil {
+					assert.Check(t, is.DeepEqual(tc.input.Tags, policy.Tags))
 				}
 
-				if requestInput.Input.Tags != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.Tags, responsePolicy.Tags))
+				if tc.input.PolicyType != nil {
+					assert.Check(t, is.Equal(*tc.input.PolicyType, *policy.PolicyType))
 				}
 
-				if requestInput.Input.PolicyType != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.PolicyType, *responsePolicy.PolicyType))
+				if tc.input.RevisionBump == &models.Minor {
+					assert.Check(t, is.Equal("v0.1.0", *policy.Revision))
 				}
 
-				if requestInput.Input.RevisionBump == &models.Minor {
-					assert.Check(t, is.Equal("v0.1.0", *responsePolicy.Revision))
+				if tc.input.RevisionBump == &models.Major {
+					assert.Check(t, is.Equal("v1.0.0", *policy.Revision))
 				}
 
-				if requestInput.Input.RevisionBump == &models.Major {
-					assert.Check(t, is.Equal("v1.0.0", *responsePolicy.Revision))
-				}
-
-				if len(requestInput.Input.AddEditorIDs) > 0 {
+				if len(tc.input.AddEditorIDs) > 0 {
 					// ensure the user has access to the policy now
-					res, err := suite.client.api.UpdateInternalPolicy(anotherAdminUser.UserCtx, requestInput.ID, openlaneclient.UpdateInternalPolicyInput{
+					res, err := suite.client.api.UpdateInternalPolicy(anotherAdminUser.UserCtx, policy.ID, openlaneclient.UpdateInternalPolicyInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)
 					assert.Check(t, res != nil)
-					assert.Check(t, is.Equal(requestInput.ID, res.UpdateInternalPolicy.InternalPolicy.ID))
+					assert.Check(t, is.Equal(policy.ID, res.UpdateInternalPolicy.InternalPolicy.ID))
 				}
+
+				// ensure the org owner has access to the policy that was updated
+				checkResp, err := suite.client.api.GetInternalPolicyByID(testUser1.UserCtx, policy.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(policy.ID, checkResp.InternalPolicy.ID))
 			}
 
+			// verify that the returned IDs match the ones that were actually updated
 			for _, updatedID := range resp.UpdateBulkInternalPolicy.UpdatedIDs {
 				found := false
-				for _, requestInput := range tc.request {
-					if requestInput.ID == updatedID {
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
 						found = true
 						break
 					}
