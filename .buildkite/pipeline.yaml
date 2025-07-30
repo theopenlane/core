@@ -256,6 +256,7 @@ steps:
     steps:
       - label: ":buildkite: upload test analytics report"
         key: "test-analytics"
+        skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
         depends_on: ["go_test"]
         commands: |
