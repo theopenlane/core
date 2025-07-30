@@ -60,8 +60,8 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
   }
 }
 
-mutation UpdateBulkRisk($input: [BulkUpdateRiskInput!]) {
-  updateBulkRisk(input: $input) {
+mutation UpdateBulkRisk($ids: [ID!]!, $input: UpdateRiskInput!) {
+  updateBulkRisk(ids: $ids, input: $input) {
     risks {
       businessCosts
       createdAt

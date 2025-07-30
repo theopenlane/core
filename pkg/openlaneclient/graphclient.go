@@ -16,7 +16,7 @@ import (
 type OpenlaneGraphClient interface {
 	CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVActionPlan, error)
 	CreateBulkActionPlan(ctx context.Context, input []*CreateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkActionPlan, error)
-	UpdateBulkActionPlan(ctx context.Context, input []*BulkUpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkActionPlan, error)
+	UpdateBulkActionPlan(ctx context.Context, ids []string, input UpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkActionPlan, error)
 	CreateActionPlan(ctx context.Context, input CreateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*CreateActionPlan, error)
 	DeleteActionPlan(ctx context.Context, deleteActionPlanID string, interceptors ...clientv2.RequestInterceptor) (*DeleteActionPlan, error)
 	GetAllActionPlans(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllActionPlans, error)
@@ -45,7 +45,7 @@ type OpenlaneGraphClient interface {
 	AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy *AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
-	UpdateBulkContact(ctx context.Context, input []*BulkUpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error)
+	UpdateBulkContact(ctx context.Context, ids []string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
 	DeleteContact(ctx context.Context, deleteContactID string, interceptors ...clientv2.RequestInterceptor) (*DeleteContact, error)
 	GetAllContacts(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContacts, error)
@@ -56,7 +56,7 @@ type OpenlaneGraphClient interface {
 	GetContactHistories(ctx context.Context, where *ContactHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactHistories, error)
 	CreateBulkControl(ctx context.Context, input []*CreateControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControl, error)
 	CreateBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControl, error)
-	UpdateBulkControl(ctx context.Context, input []*BulkUpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error)
+	UpdateBulkControl(ctx context.Context, ids []string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error)
 	CreateControl(ctx context.Context, input CreateControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControl, error)
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
 	GetAllControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControls, error)
@@ -212,7 +212,7 @@ type OpenlaneGraphClient interface {
 	GetIntegrationHistories(ctx context.Context, where *IntegrationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationHistories, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
-	UpdateBulkInternalPolicy(ctx context.Context, input []*BulkUpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
+	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
@@ -326,7 +326,7 @@ type OpenlaneGraphClient interface {
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProcedure, error)
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
-	UpdateBulkProcedure(ctx context.Context, input []*BulkUpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error)
+	UpdateBulkProcedure(ctx context.Context, ids []string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
@@ -367,7 +367,7 @@ type OpenlaneGraphClient interface {
 	GetProgramMembershipHistories(ctx context.Context, where *ProgramMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipHistories, error)
 	CreateBulkCSVRisk(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRisk, error)
 	CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRisk, error)
-	UpdateBulkRisk(ctx context.Context, input []*BulkUpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error)
+	UpdateBulkRisk(ctx context.Context, ids []string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error)
 	CreateRisk(ctx context.Context, input CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateRisk, error)
 	DeleteRisk(ctx context.Context, deleteRiskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteRisk, error)
 	GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
@@ -438,7 +438,7 @@ type OpenlaneGraphClient interface {
 	UpdateSubscriber(ctx context.Context, email string, input UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubscriber, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error)
 	CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error)
-	UpdateBulkTask(ctx context.Context, input []*BulkUpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTask, error)
+	UpdateBulkTask(ctx context.Context, ids []string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTask, error)
 	CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error)
 	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
 	GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
@@ -94843,8 +94843,8 @@ func (c *Client) CreateBulkActionPlan(ctx context.Context, input []*CreateAction
 	return &res, nil
 }
 
-const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($input: [BulkUpdateActionPlanInput!]) {
-	updateBulkActionPlan(input: $input) {
+const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
+	updateBulkActionPlan(ids: $ids, input: $input) {
 		actionPlans {
 			actionPlanType
 			approvalRequired
@@ -94869,8 +94869,9 @@ const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($input: [Bu
 }
 `
 
-func (c *Client) UpdateBulkActionPlan(ctx context.Context, input []*BulkUpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkActionPlan, error) {
+func (c *Client) UpdateBulkActionPlan(ctx context.Context, ids []string, input UpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkActionPlan, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 
@@ -96975,8 +96976,8 @@ func (c *Client) CreateBulkCSVContact(ctx context.Context, input graphql.Upload,
 	return &res, nil
 }
 
-const UpdateBulkContactDocument = `mutation UpdateBulkContact ($input: [BulkUpdateContactInput!]) {
-	updateBulkContact(input: $input) {
+const UpdateBulkContactDocument = `mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
+	updateBulkContact(ids: $ids, input: $input) {
 		contacts {
 			address
 			company
@@ -96998,8 +96999,9 @@ const UpdateBulkContactDocument = `mutation UpdateBulkContact ($input: [BulkUpda
 }
 `
 
-func (c *Client) UpdateBulkContact(ctx context.Context, input []*BulkUpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error) {
+func (c *Client) UpdateBulkContact(ctx context.Context, ids []string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 
@@ -97421,8 +97423,8 @@ func (c *Client) CreateBulkCSVControl(ctx context.Context, input graphql.Upload,
 	return &res, nil
 }
 
-const UpdateBulkControlDocument = `mutation UpdateBulkControl ($input: [BulkUpdateControlInput!]) {
-	updateBulkControl(input: $input) {
+const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
+	updateBulkControl(ids: $ids, input: $input) {
 		controls {
 			assessmentMethods
 			assessmentObjectives
@@ -97497,8 +97499,9 @@ const UpdateBulkControlDocument = `mutation UpdateBulkControl ($input: [BulkUpda
 }
 `
 
-func (c *Client) UpdateBulkControl(ctx context.Context, input []*BulkUpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error) {
+func (c *Client) UpdateBulkControl(ctx context.Context, ids []string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 
@@ -104705,8 +104708,8 @@ func (c *Client) CreateBulkInternalPolicy(ctx context.Context, input []*CreateIn
 	return &res, nil
 }
 
-const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($input: [BulkUpdateInternalPolicyInput!]) {
-	updateBulkInternalPolicy(input: $input) {
+const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {
+	updateBulkInternalPolicy(ids: $ids, input: $input) {
 		internalPolicies {
 			approvalRequired
 			createdAt
@@ -104738,8 +104741,9 @@ const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($in
 }
 `
 
-func (c *Client) UpdateBulkInternalPolicy(ctx context.Context, input []*BulkUpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error) {
+func (c *Client) UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 
@@ -109959,8 +109963,8 @@ func (c *Client) CreateBulkProcedure(ctx context.Context, input []*CreateProcedu
 	return &res, nil
 }
 
-const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($input: [BulkUpdateProcedureInput!]) {
-	updateBulkProcedure(input: $input) {
+const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
+	updateBulkProcedure(ids: $ids, input: $input) {
 		procedures {
 			approvalRequired
 			createdAt
@@ -109992,8 +109996,9 @@ const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($input: [Bulk
 }
 `
 
-func (c *Client) UpdateBulkProcedure(ctx context.Context, input []*BulkUpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error) {
+func (c *Client) UpdateBulkProcedure(ctx context.Context, ids []string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 
@@ -112086,8 +112091,8 @@ func (c *Client) CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, i
 	return &res, nil
 }
 
-const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($input: [BulkUpdateRiskInput!]) {
-	updateBulkRisk(input: $input) {
+const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
+	updateBulkRisk(ids: $ids, input: $input) {
 		risks {
 			businessCosts
 			createdAt
@@ -112119,8 +112124,9 @@ const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($input: [BulkUpdateRisk
 }
 `
 
-func (c *Client) UpdateBulkRisk(ctx context.Context, input []*BulkUpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error) {
+func (c *Client) UpdateBulkRisk(ctx context.Context, ids []string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 
@@ -116242,8 +116248,8 @@ func (c *Client) CreateBulkTask(ctx context.Context, input []*CreateTaskInput, i
 	return &res, nil
 }
 
-const UpdateBulkTaskDocument = `mutation UpdateBulkTask ($input: [BulkUpdateTaskInput!]) {
-	updateBulkTask(input: $input) {
+const UpdateBulkTaskDocument = `mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
+	updateBulkTask(ids: $ids, input: $input) {
 		tasks {
 			assignee {
 				id
@@ -116287,8 +116293,9 @@ const UpdateBulkTaskDocument = `mutation UpdateBulkTask ($input: [BulkUpdateTask
 }
 `
 
-func (c *Client) UpdateBulkTask(ctx context.Context, input []*BulkUpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTask, error) {
+func (c *Client) UpdateBulkTask(ctx context.Context, ids []string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTask, error) {
 	vars := map[string]any{
+		"ids":   ids,
 		"input": input,
 	}
 

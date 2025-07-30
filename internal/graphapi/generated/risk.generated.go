@@ -584,40 +584,6 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputBulkUpdateRiskInput(ctx context.Context, obj any) (model.BulkUpdateRiskInput, error) {
-	var it model.BulkUpdateRiskInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"id", "input"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "input":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNUpdateRiskInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Input = data
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -821,11 +787,6 @@ func (ec *executionContext) _RiskUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNBulkUpdateRiskInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInput(ctx context.Context, v any) (*model.BulkUpdateRiskInput, error) {
-	res, err := ec.unmarshalInputBulkUpdateRiskInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalNRiskBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkCreatePayload) graphql.Marshaler {
 	return ec._RiskBulkCreatePayload(ctx, sel, &v)
 }
@@ -894,24 +855,6 @@ func (ec *executionContext) marshalNRiskUpdatePayload2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._RiskUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOBulkUpdateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateRiskInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.BulkUpdateRiskInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNBulkUpdateRiskInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************
