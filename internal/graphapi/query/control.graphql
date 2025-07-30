@@ -62,8 +62,8 @@ mutation CreateBulkCSVControl($input: Upload!) {
   }
 }
 
-mutation UpdateBulkControl($input: [BulkUpdateControlInput!]) {
-  updateBulkControl(input: $input) {
+mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
+  updateBulkControl(ids: $ids, input: $input) {
     controls {
       assessmentMethods
       assessmentObjectives

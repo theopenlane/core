@@ -688,40 +688,6 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputBulkUpdateControlInput(ctx context.Context, obj any) (model.BulkUpdateControlInput, error) {
-	var it model.BulkUpdateControlInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"id", "input"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "input":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNUpdateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Input = data
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -925,11 +891,6 @@ func (ec *executionContext) _ControlUpdatePayload(ctx context.Context, sel ast.S
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNBulkUpdateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateControlInput(ctx context.Context, v any) (*model.BulkUpdateControlInput, error) {
-	res, err := ec.unmarshalInputBulkUpdateControlInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalNControlBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlBulkCreatePayload) graphql.Marshaler {
 	return ec._ControlBulkCreatePayload(ctx, sel, &v)
 }
@@ -998,24 +959,6 @@ func (ec *executionContext) marshalNControlUpdatePayload2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._ControlUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOBulkUpdateControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateControlInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateControlInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.BulkUpdateControlInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNBulkUpdateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateControlInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

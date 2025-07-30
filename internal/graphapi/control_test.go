@@ -1947,13 +1947,8 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
-	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []*openlaneclient.BulkUpdateControlInput{
-		{
-			ID: control1.ID,
-			Input: &openlaneclient.UpdateControlInput{
-				Status: lo.ToPtr(enums.ControlStatusPreparing),
-			},
-		},
+	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, openlaneclient.UpdateControlInput{
+		Status: lo.ToPtr(enums.ControlStatusPreparing),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -1962,7 +1957,8 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		request              []*openlaneclient.BulkUpdateControlInput
+		ids                  []string
+		input                openlaneclient.UpdateControlInput
 		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectedErr          string
@@ -1970,129 +1966,61 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		expectedUpdatedCount int
 	}{
 		{
-			name: "happy path, update multiple controls with different fields",
-			request: []*openlaneclient.BulkUpdateControlInput{
-				{
-					ID: control1.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Description:   lo.ToPtr("Updated description 1"),
-						AddProgramIDs: []string{program2.ID}, // add program2 (program1 already associated)
-						StandardID:    &standard.ID,
-					},
-				},
-				{
-					ID: control2.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Status:     &enums.ControlStatusPreparing,
-						Tags:       []string{"tag1", "tag2"},
-						StandardID: &standard.ID,
-					},
-				},
-				{
-					ID: control3.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						ControlType:    &enums.ControlTypeDetective,
-						Category:       lo.ToPtr("Availability"),
-						ControlOwnerID: &ownerGroup.ID,
-					},
-				},
+			name: "happy path, update status on multiple controls",
+			ids:  []string{control1.ID, control2.ID, control3.ID},
+			input: openlaneclient.UpdateControlInput{
+				Status:     &enums.ControlStatusPreparing,
+				StandardID: &standard.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 			expectedRefFramework: map[string]string{
 				control1.ID: standard.ShortName,
 				control2.ID: standard.ShortName,
+				control3.ID: standard.ShortName,
 			},
 			expectedUpdatedCount: 3,
 		},
 		{
 			name: "happy path, clear operations and editor permissions",
-			request: []*openlaneclient.BulkUpdateControlInput{
-				{
-					ID: control1.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						ClearReferences:       lo.ToPtr(true),
-						ClearMappedCategories: lo.ToPtr(true),
-						AddEditorIDs:          []string{groupMember.GroupID},
-					},
-				},
-				{
-					ID: control2.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						StandardID:                  &standardUpdate.ID,
-						AddControlImplementationIDs: []string{controlImplementation.ID},
-					},
-				},
+			ids:  []string{control1.ID, control2.ID},
+			input: openlaneclient.UpdateControlInput{
+				ClearReferences:       lo.ToPtr(true),
+				ClearMappedCategories: lo.ToPtr(true),
+				AddEditorIDs:          []string{groupMember.GroupID},
+				StandardID:            &standardUpdate.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 			expectedRefFramework: map[string]string{
+				control1.ID: standardUpdate.ShortName,
 				control2.ID: standardUpdate.ShortName,
 			},
 			expectedUpdatedCount: 2,
 		},
 		{
-			name:        "empty input array",
-			request:     []*openlaneclient.BulkUpdateControlInput{},
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateControlInput{Description: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "input is required",
+			expectedErr: "ids is required",
 		},
 		{
 			name: "mixed success and failure - some controls not authorized",
-			request: []*openlaneclient.BulkUpdateControlInput{
-				{
-					ID: control1.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Status: &enums.ControlStatusPreparing,
-					},
-				},
-				{
-					ID: controlAnotherUser.ID, // this should fail authorization
-					Input: &openlaneclient.UpdateControlInput{
-						Status: &enums.ControlStatusPreparing,
-					},
-				},
+			ids:  []string{control1.ID, controlAnotherUser.ID}, // second control should fail authorization
+			input: openlaneclient.UpdateControlInput{
+				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 1, // only control1 should be updated
 		},
 		{
-			name: "invalid ref code in one control",
-			request: []*openlaneclient.BulkUpdateControlInput{
-				{
-					ID: control1.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						RefCode: lo.ToPtr(""), // invalid empty ref code
-					},
-				},
-				{
-					ID: control2.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Status: &enums.ControlStatusPreparing,
-					},
-				},
-			},
-			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
-			expectedUpdatedCount: 1, // only control2 should be updated
-		},
-		{
 			name: "update allowed, user added to one of the programs",
-			request: []*openlaneclient.BulkUpdateControlInput{
-				{
-					ID: control1.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Status: &enums.ControlStatusApproved,
-					},
-				},
-				{
-					ID: control2.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Status: &enums.ControlStatusApproved,
-					},
-				},
+			ids:  []string{control1.ID, control2.ID},
+			input: openlaneclient.UpdateControlInput{
+				Status: &enums.ControlStatusApproved,
 			},
 			client:               suite.client.api,
 			ctx:                  adminUser.UserCtx,
@@ -2100,23 +2028,43 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions to controls",
-			request: []*openlaneclient.BulkUpdateControlInput{
-				{
-					ID: control1.ID,
-					Input: &openlaneclient.UpdateControlInput{
-						Status: &enums.ControlStatusPreparing,
-					},
-				},
+			ids:  []string{control1.ID},
+			input: openlaneclient.UpdateControlInput{
+				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any controls to update
 		},
+		{
+			name: "update control type and category on multiple controls",
+			ids:  []string{control1.ID, control2.ID, control3.ID},
+			input: openlaneclient.UpdateControlInput{
+				ControlType:    &enums.ControlTypeDetective,
+				Category:       lo.ToPtr("Availability"),
+				ControlOwnerID: &ownerGroup.ID,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "add programs and control implementations to multiple controls",
+			ids:  []string{control1.ID, control2.ID},
+			input: openlaneclient.UpdateControlInput{
+				AddProgramIDs:               []string{program2.ID},
+				AddControlImplementationIDs: []string{controlImplementation.ID},
+				Tags:                        []string{"bulk", "update"},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 2,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateBulkControl(tc.ctx, tc.request)
+			resp, err := tc.client.UpdateBulkControl(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
@@ -2130,88 +2078,79 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 			assert.Check(t, is.Len(resp.UpdateBulkControl.Controls, tc.expectedUpdatedCount))
 			assert.Check(t, is.Len(resp.UpdateBulkControl.UpdatedIDs, tc.expectedUpdatedCount))
 
-			controlMap := make(map[string]*openlaneclient.UpdateBulkControl_UpdateBulkControl_Controls)
+			// verify all returned controls have the expected values from tc.input
 			for _, control := range resp.UpdateBulkControl.Controls {
-				controlMap[control.ID] = control
-			}
-
-			for _, requestInput := range tc.request {
-				responseControl, found := controlMap[requestInput.ID]
-				if !found {
-					continue
+				if tc.input.Description != nil {
+					assert.Check(t, is.Equal(*tc.input.Description, *control.Description))
 				}
 
-				if requestInput.Input.Description != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Description, *responseControl.Description))
+				if tc.input.Status != nil {
+					assert.Check(t, is.Equal(*tc.input.Status, *control.Status))
 				}
 
-				if requestInput.Input.Status != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Status, *responseControl.Status))
+				if tc.input.Tags != nil {
+					assert.Check(t, is.DeepEqual(tc.input.Tags, control.Tags))
 				}
 
-				if requestInput.Input.Tags != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.Tags, responseControl.Tags))
+				if tc.input.ControlType != nil {
+					assert.Check(t, is.Equal(*tc.input.ControlType, *control.ControlType))
 				}
 
-				if requestInput.Input.ControlType != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.ControlType, *responseControl.ControlType))
+				if tc.input.Category != nil {
+					assert.Check(t, is.Equal(*tc.input.Category, *control.Category))
 				}
 
-				if requestInput.Input.Category != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Category, *responseControl.Category))
+				if tc.input.ControlOwnerID != nil {
+					assert.Check(t, control.ControlOwner != nil)
+					assert.Check(t, is.Equal(*tc.input.ControlOwnerID, control.ControlOwner.ID))
 				}
 
-				if requestInput.Input.ControlOwnerID != nil {
-					assert.Check(t, responseControl.ControlOwner != nil)
-					assert.Check(t, is.Equal(*requestInput.Input.ControlOwnerID, responseControl.ControlOwner.ID))
+				if tc.input.DelegateID != nil {
+					assert.Check(t, control.Delegate != nil)
+					assert.Check(t, is.Equal(*tc.input.DelegateID, control.Delegate.ID))
 				}
 
-				if requestInput.Input.DelegateID != nil {
-					assert.Check(t, responseControl.Delegate != nil)
-					assert.Check(t, is.Equal(*requestInput.Input.DelegateID, responseControl.Delegate.ID))
+				if tc.input.AppendReferences != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendReferences, control.References))
 				}
 
-				if requestInput.Input.AppendReferences != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.AppendReferences, responseControl.References))
+				if tc.input.ClearReferences != nil && *tc.input.ClearReferences {
+					assert.Check(t, is.Len(control.References, 0))
 				}
 
-				if requestInput.Input.ClearReferences != nil && *requestInput.Input.ClearReferences {
-					assert.Check(t, is.Len(responseControl.References, 0))
+				if tc.input.AppendMappedCategories != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendMappedCategories, control.MappedCategories))
 				}
 
-				if requestInput.Input.AppendMappedCategories != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.AppendMappedCategories, responseControl.MappedCategories))
+				if tc.input.ClearMappedCategories != nil && *tc.input.ClearMappedCategories {
+					assert.Check(t, is.Len(control.MappedCategories, 0))
 				}
 
-				if requestInput.Input.ClearMappedCategories != nil && *requestInput.Input.ClearMappedCategories {
-					assert.Check(t, is.Len(responseControl.MappedCategories, 0))
+				if tc.input.AppendControlQuestions != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendControlQuestions, control.ControlQuestions))
 				}
 
-				if requestInput.Input.AppendControlQuestions != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.AppendControlQuestions, responseControl.ControlQuestions))
+				if tc.input.AppendAssessmentObjectives != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendAssessmentObjectives, control.AssessmentObjectives))
 				}
 
-				if requestInput.Input.AppendAssessmentObjectives != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.AppendAssessmentObjectives, responseControl.AssessmentObjectives))
+				if tc.input.AddControlImplementationIDs != nil {
+					assert.Check(t, is.Len(control.ControlImplementations.Edges, len(tc.input.AddControlImplementationIDs)))
 				}
 
-				if requestInput.Input.AddControlImplementationIDs != nil {
-					assert.Check(t, is.Len(responseControl.ControlImplementations.Edges, len(requestInput.Input.AddControlImplementationIDs)))
-				}
-
-				if requestInput.Input.StandardID != nil {
-					expectedFramework, exists := tc.expectedRefFramework[requestInput.ID]
+				if tc.input.StandardID != nil {
+					expectedFramework, exists := tc.expectedRefFramework[control.ID]
 					if exists {
-						assert.Check(t, is.Equal(expectedFramework, *responseControl.ReferenceFramework))
-						assert.Check(t, is.Equal(*requestInput.Input.StandardID, *responseControl.StandardID))
+						assert.Check(t, is.Equal(expectedFramework, *control.ReferenceFramework))
+						assert.Check(t, is.Equal(*tc.input.StandardID, *control.StandardID))
 					}
 				}
 
 				// ensure the program is set
-				if len(requestInput.Input.AddProgramIDs) > 0 {
+				if len(tc.input.AddProgramIDs) > 0 {
 					foundPrograms := 0
-					for _, programID := range requestInput.Input.AddProgramIDs {
-						for _, edge := range responseControl.Programs.Edges {
+					for _, programID := range tc.input.AddProgramIDs {
+						for _, edge := range control.Programs.Edges {
 							if edge.Node.ID == programID {
 								foundPrograms++
 								break
@@ -2221,10 +2160,10 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 					assert.Check(t, foundPrograms > 0)
 				}
 
-				if len(requestInput.Input.AddEditorIDs) > 0 {
+				if len(tc.input.AddEditorIDs) > 0 {
 					found := false
-					for _, edge := range responseControl.Editors.Edges {
-						for _, editorID := range requestInput.Input.AddEditorIDs {
+					for _, edge := range control.Editors.Edges {
+						for _, editorID := range tc.input.AddEditorIDs {
 							if edge.Node.ID == editorID {
 								found = true
 								break
@@ -2234,20 +2173,21 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 					assert.Check(t, found)
 
 					// ensure the user has access to the control now
-					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, requestInput.ID, openlaneclient.UpdateControlInput{
+					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)
 					assert.Check(t, res != nil)
-					assert.Check(t, is.Equal(requestInput.ID, res.UpdateControl.Control.ID))
+					assert.Check(t, is.Equal(control.ID, res.UpdateControl.Control.ID))
 					assert.Check(t, slices.Contains(res.UpdateControl.Control.Tags, "bulk-test-tag"))
 				}
 			}
 
+			// verify that the returned IDs match the ones that were actually updated
 			for _, updatedID := range resp.UpdateBulkControl.UpdatedIDs {
 				found := false
-				for _, requestInput := range tc.request {
-					if requestInput.ID == updatedID {
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
 						found = true
 						break
 					}

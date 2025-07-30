@@ -84,8 +84,8 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
   }
 }
 
-mutation UpdateBulkTask($input: [BulkUpdateTaskInput!]) {
-  updateBulkTask(input: $input) {
+mutation UpdateBulkTask($ids: [ID!]!, $input: UpdateTaskInput!) {
+  updateBulkTask(ids: $ids, input: $input) {
     tasks {
       assignee {
         id

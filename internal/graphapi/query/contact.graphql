@@ -40,8 +40,8 @@ mutation CreateBulkCSVContact($input: Upload!) {
   }
 }
 
-mutation UpdateBulkContact($input: [BulkUpdateContactInput!]) {
-  updateBulkContact(input: $input) {
+mutation UpdateBulkContact($ids: [ID!]!, $input: UpdateContactInput!) {
+  updateBulkContact(ids: $ids, input: $input) {
     contacts {
       address
       company

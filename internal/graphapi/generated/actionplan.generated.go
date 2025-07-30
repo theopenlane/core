@@ -21,7 +21,7 @@ type MutationResolver interface {
 	CreateActionPlan(ctx context.Context, input generated.CreateActionPlanInput) (*model.ActionPlanCreatePayload, error)
 	CreateBulkActionPlan(ctx context.Context, input []*generated.CreateActionPlanInput) (*model.ActionPlanBulkCreatePayload, error)
 	CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkCreatePayload, error)
-	UpdateBulkActionPlan(ctx context.Context, input []*model.BulkUpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error)
+	UpdateBulkActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error)
 	UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error)
 	DeleteActionPlan(ctx context.Context, id string) (*model.ActionPlanDeletePayload, error)
 	CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error)
@@ -37,13 +37,13 @@ type MutationResolver interface {
 	CreateContact(ctx context.Context, input generated.CreateContactInput) (*model.ContactCreatePayload, error)
 	CreateBulkContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload) (*model.ContactBulkCreatePayload, error)
-	UpdateBulkContact(ctx context.Context, input []*model.BulkUpdateContactInput) (*model.ContactBulkUpdatePayload, error)
+	UpdateBulkContact(ctx context.Context, ids []string, input generated.UpdateContactInput) (*model.ContactBulkUpdatePayload, error)
 	UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error)
 	DeleteContact(ctx context.Context, id string) (*model.ContactDeletePayload, error)
 	CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error)
 	CreateBulkControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error)
 	CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error)
-	UpdateBulkControl(ctx context.Context, input []*model.BulkUpdateControlInput) (*model.ControlBulkUpdatePayload, error)
+	UpdateBulkControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error)
 	UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error)
 	DeleteControl(ctx context.Context, id string) (*model.ControlDeletePayload, error)
 	CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error)
@@ -115,14 +115,14 @@ type MutationResolver interface {
 	CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error)
 	CreateBulkHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error)
 	CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error)
-	UpdateBulkHush(ctx context.Context, input []*model.BulkUpdateHushInput) (*model.HushBulkUpdatePayload, error)
+	UpdateBulkHush(ctx context.Context, ids []string, input generated.UpdateHushInput) (*model.HushBulkUpdatePayload, error)
 	UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error)
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
-	UpdateBulkInternalPolicy(ctx context.Context, input []*model.BulkUpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
+	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
 	UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error)
 	DeleteInternalPolicy(ctx context.Context, id string) (*model.InternalPolicyDeletePayload, error)
 	CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*model.InviteCreatePayload, error)
@@ -178,7 +178,7 @@ type MutationResolver interface {
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
 	CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error)
-	UpdateBulkProcedure(ctx context.Context, input []*model.BulkUpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
+	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
 	UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error)
 	DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error)
 	CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error)
@@ -197,13 +197,13 @@ type MutationResolver interface {
 	CreateRisk(ctx context.Context, input generated.CreateRiskInput) (*model.RiskCreatePayload, error)
 	CreateBulkRisk(ctx context.Context, input []*generated.CreateRiskInput) (*model.RiskBulkCreatePayload, error)
 	CreateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkCreatePayload, error)
-	UpdateBulkRisk(ctx context.Context, input []*model.BulkUpdateRiskInput) (*model.RiskBulkUpdatePayload, error)
+	UpdateBulkRisk(ctx context.Context, ids []string, input generated.UpdateRiskInput) (*model.RiskBulkUpdatePayload, error)
 	UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error)
 	DeleteRisk(ctx context.Context, id string) (*model.RiskDeletePayload, error)
 	CreateScan(ctx context.Context, input generated.CreateScanInput) (*model.ScanCreatePayload, error)
 	CreateBulkScan(ctx context.Context, input []*generated.CreateScanInput) (*model.ScanBulkCreatePayload, error)
 	CreateBulkCSVScan(ctx context.Context, input graphql.Upload) (*model.ScanBulkCreatePayload, error)
-	UpdateBulkScan(ctx context.Context, input []*model.BulkUpdateScanInput) (*model.ScanBulkUpdatePayload, error)
+	UpdateBulkScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error)
 	UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput) (*model.ScanUpdatePayload, error)
 	DeleteScan(ctx context.Context, id string) (*model.ScanDeletePayload, error)
 	CreateScheduledJob(ctx context.Context, input generated.CreateScheduledJobInput) (*model.ScheduledJobCreatePayload, error)
@@ -232,7 +232,7 @@ type MutationResolver interface {
 	CreateTask(ctx context.Context, input generated.CreateTaskInput) (*model.TaskCreatePayload, error)
 	CreateBulkTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload) (*model.TaskBulkCreatePayload, error)
-	UpdateBulkTask(ctx context.Context, input []*model.BulkUpdateTaskInput) (*model.TaskBulkUpdatePayload, error)
+	UpdateBulkTask(ctx context.Context, ids []string, input generated.UpdateTaskInput) (*model.TaskBulkUpdatePayload, error)
 	UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error)
 	DeleteTask(ctx context.Context, id string) (*model.TaskDeletePayload, error)
 	CreateTemplate(ctx context.Context, input generated.CreateTemplateInput) (*model.TemplateCreatePayload, error)
@@ -2467,99 +2467,144 @@ func (ec *executionContext) field_Mutation_updateAsset_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_updateBulkActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateActionPlanInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateControlInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateHushInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateHushInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateInternalPolicyInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInternalPolicyInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateProcedureInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProcedureInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateRiskInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateScanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateScanInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScanInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_updateBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOBulkUpdateTaskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateTaskInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTaskInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -4084,7 +4129,7 @@ func (ec *executionContext) _Mutation_updateBulkActionPlan(ctx context.Context, 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkActionPlan(rctx, fc.Args["input"].([]*model.BulkUpdateActionPlanInput))
+		return ec.resolvers.Mutation().UpdateBulkActionPlan(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateActionPlanInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5030,7 +5075,7 @@ func (ec *executionContext) _Mutation_updateBulkContact(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkContact(rctx, fc.Args["input"].([]*model.BulkUpdateContactInput))
+		return ec.resolvers.Mutation().UpdateBulkContact(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateContactInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5386,7 +5431,7 @@ func (ec *executionContext) _Mutation_updateBulkControl(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkControl(rctx, fc.Args["input"].([]*model.BulkUpdateControlInput))
+		return ec.resolvers.Mutation().UpdateBulkControl(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9636,7 +9681,7 @@ func (ec *executionContext) _Mutation_updateBulkHush(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkHush(rctx, fc.Args["input"].([]*model.BulkUpdateHushInput))
+		return ec.resolvers.Mutation().UpdateBulkHush(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateHushInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10051,7 +10096,7 @@ func (ec *executionContext) _Mutation_updateBulkInternalPolicy(ctx context.Conte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkInternalPolicy(rctx, fc.Args["input"].([]*model.BulkUpdateInternalPolicyInput))
+		return ec.resolvers.Mutation().UpdateBulkInternalPolicy(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateInternalPolicyInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13357,7 +13402,7 @@ func (ec *executionContext) _Mutation_updateBulkProcedure(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkProcedure(rctx, fc.Args["input"].([]*model.BulkUpdateProcedureInput))
+		return ec.resolvers.Mutation().UpdateBulkProcedure(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProcedureInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14480,7 +14525,7 @@ func (ec *executionContext) _Mutation_updateBulkRisk(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkRisk(rctx, fc.Args["input"].([]*model.BulkUpdateRiskInput))
+		return ec.resolvers.Mutation().UpdateBulkRisk(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateRiskInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14836,7 +14881,7 @@ func (ec *executionContext) _Mutation_updateBulkScan(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkScan(rctx, fc.Args["input"].([]*model.BulkUpdateScanInput))
+		return ec.resolvers.Mutation().UpdateBulkScan(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateScanInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16549,7 +16594,7 @@ func (ec *executionContext) _Mutation_updateBulkTask(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBulkTask(rctx, fc.Args["input"].([]*model.BulkUpdateTaskInput))
+		return ec.resolvers.Mutation().UpdateBulkTask(rctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTaskInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -18556,40 +18601,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteWebauthn(ctx context.Con
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
-
-func (ec *executionContext) unmarshalInputBulkUpdateActionPlanInput(ctx context.Context, obj any) (model.BulkUpdateActionPlanInput, error) {
-	var it model.BulkUpdateActionPlanInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"id", "input"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "input":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNUpdateActionPlanInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Input = data
-		}
-	}
-
-	return it, nil
-}
 
 // endregion **************************** input.gotpl *****************************
 
@@ -20640,29 +20651,6 @@ func (ec *executionContext) marshalNActionPlanUpdatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._ActionPlanUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNBulkUpdateActionPlanInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateActionPlanInput(ctx context.Context, v any) (*model.BulkUpdateActionPlanInput, error) {
-	res, err := ec.unmarshalInputBulkUpdateActionPlanInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalOBulkUpdateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateActionPlanInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateActionPlanInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.BulkUpdateActionPlanInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNBulkUpdateActionPlanInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateActionPlanInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

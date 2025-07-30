@@ -76,20 +76,12 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 }
 
 // UpdateBulkInternalPolicy is the resolver for the updateBulkInternalPolicy field.
-func (r *mutationResolver) UpdateBulkInternalPolicy(ctx context.Context, input []*model.BulkUpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkUpdateInternalPolicy(ctx, input)
+	return r.bulkUpdateInternalPolicy(ctx, ids, input)
 }
 
 // UpdateInternalPolicy is the resolver for the updateInternalPolicy field.

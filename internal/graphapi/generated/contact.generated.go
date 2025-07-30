@@ -432,40 +432,6 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputBulkUpdateContactInput(ctx context.Context, obj any) (model.BulkUpdateContactInput, error) {
-	var it model.BulkUpdateContactInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"id", "input"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "input":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNUpdateContactInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Input = data
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -669,11 +635,6 @@ func (ec *executionContext) _ContactUpdatePayload(ctx context.Context, sel ast.S
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNBulkUpdateContactInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInput(ctx context.Context, v any) (*model.BulkUpdateContactInput, error) {
-	res, err := ec.unmarshalInputBulkUpdateContactInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalNContactBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactBulkCreatePayload) graphql.Marshaler {
 	return ec._ContactBulkCreatePayload(ctx, sel, &v)
 }
@@ -742,24 +703,6 @@ func (ec *executionContext) marshalNContactUpdatePayload2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._ContactUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOBulkUpdateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateContactInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.BulkUpdateContactInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNBulkUpdateContactInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

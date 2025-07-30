@@ -668,13 +668,8 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 	riskAnotherUser := (&RiskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the risk
-	res, err := suite.client.api.UpdateBulkRisk(testUser2.UserCtx, []*openlaneclient.BulkUpdateRiskInput{
-		{
-			ID: risk1.ID,
-			Input: &openlaneclient.UpdateRiskInput{
-				Status: lo.ToPtr(enums.RiskArchived),
-			},
-		},
+	res, err := suite.client.api.UpdateBulkRisk(testUser2.UserCtx, []string{risk1.ID}, openlaneclient.UpdateRiskInput{
+		Status: lo.ToPtr(enums.RiskArchived),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -683,86 +678,48 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		request              []*openlaneclient.BulkUpdateRiskInput
+		ids                  []string
+		input                openlaneclient.UpdateRiskInput
 		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
 	}{
 		{
-			name: "happy path, update multiple risks with different fields",
-			request: []*openlaneclient.BulkUpdateRiskInput{
-				{
-					ID: risk1.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						Details:       lo.ToPtr("Updated details 1"),
-						StakeholderID: &stakeholderGroup.ID,
-						Impact:        &enums.RiskImpactModerate,
-					},
-				},
-				{
-					ID: risk2.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						Status:     &enums.RiskArchived,
-						Tags:       []string{"tag1", "tag2"},
-						Likelihood: &enums.RiskLikelihoodLow,
-					},
-				},
-				{
-					ID: risk3.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						Mitigation:    lo.ToPtr("Updated mitigation"),
-						DelegateID:    &delegateGroup.ID,
-						BusinessCosts: lo.ToPtr("Updated business costs"),
-					},
-				},
+			name: "happy path, update multiple risks with same fields",
+			ids:  []string{risk1.ID, risk2.ID, risk3.ID},
+			input: openlaneclient.UpdateRiskInput{
+				Details: lo.ToPtr("Updated details for all risks"),
+				Impact:  &enums.RiskImpactModerate,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
-			name: "happy path, additional field updates",
-			request: []*openlaneclient.BulkUpdateRiskInput{
-				{
-					ID: risk1.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						RiskType: lo.ToPtr("Financial"),
-					},
-				},
-				{
-					ID: risk2.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						Score: lo.ToPtr(int64(8)),
-					},
-				},
+			name: "happy path, update risk type and score",
+			ids:  []string{risk1.ID, risk2.ID},
+			input: openlaneclient.UpdateRiskInput{
+				RiskType: lo.ToPtr("Financial"),
+				Score:    lo.ToPtr(int64(8)),
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
-			name:        "empty input array",
-			request:     []*openlaneclient.BulkUpdateRiskInput{},
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateRiskInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "input is required",
+			expectedErr: "ids is required",
 		},
 		{
 			name: "mixed success and failure - some risks not authorized",
-			request: []*openlaneclient.BulkUpdateRiskInput{
-				{
-					ID: risk1.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						Status: &enums.RiskOpen,
-					},
-				},
-				{
-					ID: riskAnotherUser.ID, // this should fail authorization
-					Input: &openlaneclient.UpdateRiskInput{
-						Status: &enums.RiskArchived,
-					},
-				},
+			ids:  []string{risk1.ID, riskAnotherUser.ID}, // second risk should fail authorization
+			input: openlaneclient.UpdateRiskInput{
+				Status: &enums.RiskOpen,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -770,13 +727,9 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions to risks",
-			request: []*openlaneclient.BulkUpdateRiskInput{
-				{
-					ID: risk1.ID,
-					Input: &openlaneclient.UpdateRiskInput{
-						Status: &enums.RiskArchived,
-					},
-				},
+			ids:  []string{risk1.ID},
+			input: openlaneclient.UpdateRiskInput{
+				Status: &enums.RiskArchived,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser2.UserCtx,
@@ -786,7 +739,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateBulkRisk(tc.ctx, tc.request)
+			resp, err := tc.client.UpdateBulkRisk(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
@@ -805,63 +758,63 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 				riskMap[risk.ID] = risk
 			}
 
-			for _, requestInput := range tc.request {
-				responseRisk, found := riskMap[requestInput.ID]
+			for _, expectedID := range tc.ids {
+				responseRisk, found := riskMap[expectedID]
 				if !found {
 					continue
 				}
 
-				if requestInput.Input.Details != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.Details, responseRisk.Details))
+				if tc.input.Details != nil {
+					assert.Check(t, is.DeepEqual(tc.input.Details, responseRisk.Details))
 				}
 
-				if requestInput.Input.Status != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Status, *responseRisk.Status))
+				if tc.input.Status != nil {
+					assert.Check(t, is.Equal(*tc.input.Status, *responseRisk.Status))
 				}
 
-				if requestInput.Input.Tags != nil {
-					assert.Check(t, is.DeepEqual(requestInput.Input.Tags, responseRisk.Tags))
+				if tc.input.Tags != nil {
+					assert.Check(t, is.DeepEqual(tc.input.Tags, responseRisk.Tags))
 				}
 
-				if requestInput.Input.Impact != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Impact, *responseRisk.Impact))
+				if tc.input.Impact != nil {
+					assert.Check(t, is.Equal(*tc.input.Impact, *responseRisk.Impact))
 				}
 
-				if requestInput.Input.Likelihood != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Likelihood, *responseRisk.Likelihood))
+				if tc.input.Likelihood != nil {
+					assert.Check(t, is.Equal(*tc.input.Likelihood, *responseRisk.Likelihood))
 				}
 
-				if requestInput.Input.Mitigation != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Mitigation, *responseRisk.Mitigation))
+				if tc.input.Mitigation != nil {
+					assert.Check(t, is.Equal(*tc.input.Mitigation, *responseRisk.Mitigation))
 				}
 
-				if requestInput.Input.BusinessCosts != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.BusinessCosts, *responseRisk.BusinessCosts))
+				if tc.input.BusinessCosts != nil {
+					assert.Check(t, is.Equal(*tc.input.BusinessCosts, *responseRisk.BusinessCosts))
 				}
 
-				if requestInput.Input.Score != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.Score, *responseRisk.Score))
+				if tc.input.Score != nil {
+					assert.Check(t, is.Equal(*tc.input.Score, *responseRisk.Score))
 				}
 
-				if requestInput.Input.StakeholderID != nil {
+				if tc.input.StakeholderID != nil {
 					assert.Check(t, responseRisk.Stakeholder != nil)
-					assert.Check(t, is.Equal(*requestInput.Input.StakeholderID, responseRisk.Stakeholder.ID))
+					assert.Check(t, is.Equal(*tc.input.StakeholderID, responseRisk.Stakeholder.ID))
 				}
 
-				if requestInput.Input.DelegateID != nil {
+				if tc.input.DelegateID != nil {
 					assert.Check(t, responseRisk.Delegate != nil)
-					assert.Check(t, is.Equal(*requestInput.Input.DelegateID, responseRisk.Delegate.ID))
+					assert.Check(t, is.Equal(*tc.input.DelegateID, responseRisk.Delegate.ID))
 				}
 
-				if requestInput.Input.RiskType != nil {
-					assert.Check(t, is.Equal(*requestInput.Input.RiskType, *responseRisk.RiskType))
+				if tc.input.RiskType != nil {
+					assert.Check(t, is.Equal(*tc.input.RiskType, *responseRisk.RiskType))
 				}
 			}
 
 			for _, updatedID := range resp.UpdateBulkRisk.UpdatedIDs {
 				found := false
-				for _, requestInput := range tc.request {
-					if requestInput.ID == updatedID {
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
 						found = true
 						break
 					}

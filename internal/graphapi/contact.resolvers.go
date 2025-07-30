@@ -76,20 +76,12 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 }
 
 // UpdateBulkContact is the resolver for the updateBulkContact field.
-func (r *mutationResolver) UpdateBulkContact(ctx context.Context, input []*model.BulkUpdateContactInput) (*model.ContactBulkUpdatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
+func (r *mutationResolver) UpdateBulkContact(ctx context.Context, ids []string, input generated.UpdateContactInput) (*model.ContactBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkUpdateContact(ctx, input)
+	return r.bulkUpdateContact(ctx, ids, input)
 }
 
 // UpdateContact is the resolver for the updateContact field.
