@@ -79,7 +79,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
 	github.com/theopenlane/entx v0.11.2
-	github.com/theopenlane/gqlgen-plugins v0.6.4
+	github.com/theopenlane/gqlgen-plugins v0.7.0
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.14.3
 	github.com/theopenlane/newman v0.2.0
@@ -102,8 +102,6 @@ require (
 	gotest.tools/gotestsum v1.12.3
 	gotest.tools/v3 v3.5.2
 )
-
-replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0 // indirect
