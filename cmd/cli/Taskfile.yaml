@@ -48,6 +48,21 @@ tasks:
     cmds:
       - go run main.go org create -n {{ .ORG_NAME | default .DEFAULT_ORG_NAME }} -d "Test organization"
 
+  org:get:
+    output: true
+    silent: true
+    desc: a task to get the current organization
+    cmds:
+      - go run main.go org get -c -z json | jq -r '.organization.id'
+
+  user:setup:
+    desc: complete user setup with default privileges
+    cmds:
+      - task: user:register
+      - task: user:login
+      - task: org:create
+      - task: token:create
+
   # === Admin Setup (for Impersonation) ===
   admin:setup:
     desc: complete admin user setup with system admin privileges
@@ -61,17 +76,16 @@ tasks:
       - task: org:create
         vars:
           ORG_NAME: "admin-org"
-      - task: admin:token:create
+      - task: token:create
       - task: admin:grant:fga
 
-  admin:token:create:
+  token:create:
     desc: create PAT for admin user
-    internal: true
     cmds:
-      - go run main.go pat create -n "system-admin-token" -o {{.ORG_ID}}
+      - go run main.go pat create -n "generated-token" -o {{.ORG_ID}}
     vars:
       ORG_ID:
-        sh: go run main.go org get -z json | jq -r '.organizations.edges.[0].node.id'
+        sh: task org:get
 
   admin:grant:fga:
     desc: grant system admin FGA privileges
