@@ -649,3 +649,5 @@ require (
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/yaml.v3 v3.0.1
 )
+
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
