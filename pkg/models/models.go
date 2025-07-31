@@ -454,16 +454,12 @@ var ExampleResetPasswordSuccessResponse = ResetPasswordReply{
 // WebauthnRegistrationRequest is the request to begin a webauthn login
 type WebauthnRegistrationRequest struct {
 	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
-	Name  string `json:"name" description:"The name of the user" example:"Jon Snow"`
+	Name  string `json:"name,omitempty" description:"The name of the user" example:"Jon Snow"`
 }
 
 func (r *WebauthnRegistrationRequest) Validate() error {
 	if r.Email == "" {
 		return rout.NewMissingRequiredFieldError("email")
-	}
-
-	if r.Name == "" {
-		return rout.NewMissingRequiredFieldError("name")
 	}
 
 	return nil
@@ -514,7 +510,7 @@ type WebauthnRegistrationResponse struct {
 
 // WebauthnLoginRequest is the request to begin a webauthn login
 type WebauthnLoginRequest struct {
-	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
+	Email string `json:"email,omitempty" description:"The email address associated with the account" example:"jsnow@example.com"`
 }
 
 // ExampleWebauthnLoginRequest is an example WebAuthn login request for OpenAPI documentation
@@ -522,11 +518,9 @@ var ExampleWebauthnLoginRequest = WebauthnLoginRequest{
 	Email: "",
 }
 
+// Validate ensures the required fields are set on the WebauthnLoginRequest request
 func (r *WebauthnLoginRequest) Validate() error {
-	if r.Email == "" {
-		return rout.NewMissingRequiredFieldError("email")
-	}
-
+	// email is not required so there is not validation required here
 	return nil
 }
 
@@ -986,7 +980,7 @@ func (r *JobRunnerRegistrationRequest) Validate() error {
 	return nil
 }
 
-// JobRunnerRegistrationReply is the response to begin a webauthn login
+// JobRunnerRegistrationReply is the response to begin a job runner registration
 // this includes the credential creation options and the session token
 type JobRunnerRegistrationReply struct {
 	Reply   rout.Reply
