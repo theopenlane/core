@@ -77,6 +77,14 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceBulkCreatePayload_
 				return ec.fieldContext_TrustCenterCompliance_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterCompliance_tags(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterCompliance_standardID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterCompliance_trustCenterID(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_TrustCenterCompliance_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterCompliance_standard(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterCompliance", field.Name)
 		},
@@ -135,6 +143,14 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceCreatePayload_trus
 				return ec.fieldContext_TrustCenterCompliance_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterCompliance_tags(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterCompliance_standardID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterCompliance_trustCenterID(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_TrustCenterCompliance_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterCompliance_standard(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterCompliance", field.Name)
 		},
@@ -237,6 +253,14 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceUpdatePayload_trus
 				return ec.fieldContext_TrustCenterCompliance_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterCompliance_tags(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterCompliance_standardID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterCompliance_trustCenterID(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_TrustCenterCompliance_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterCompliance_standard(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterCompliance", field.Name)
 		},

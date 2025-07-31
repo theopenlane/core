@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -437,6 +438,21 @@ func (su *StandardUpdate) AddControls(c ...*Control) *StandardUpdate {
 	return su.AddControlIDs(ids...)
 }
 
+// AddTrustCenterComplianceIDs adds the "trust_center_compliances" edge to the TrustCenterCompliance entity by IDs.
+func (su *StandardUpdate) AddTrustCenterComplianceIDs(ids ...string) *StandardUpdate {
+	su.mutation.AddTrustCenterComplianceIDs(ids...)
+	return su
+}
+
+// AddTrustCenterCompliances adds the "trust_center_compliances" edges to the TrustCenterCompliance entity.
+func (su *StandardUpdate) AddTrustCenterCompliances(t ...*TrustCenterCompliance) *StandardUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return su.AddTrustCenterComplianceIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (su *StandardUpdate) Mutation() *StandardMutation {
 	return su.mutation
@@ -467,6 +483,27 @@ func (su *StandardUpdate) RemoveControls(c ...*Control) *StandardUpdate {
 		ids[i] = c[i].ID
 	}
 	return su.RemoveControlIDs(ids...)
+}
+
+// ClearTrustCenterCompliances clears all "trust_center_compliances" edges to the TrustCenterCompliance entity.
+func (su *StandardUpdate) ClearTrustCenterCompliances() *StandardUpdate {
+	su.mutation.ClearTrustCenterCompliances()
+	return su
+}
+
+// RemoveTrustCenterComplianceIDs removes the "trust_center_compliances" edge to TrustCenterCompliance entities by IDs.
+func (su *StandardUpdate) RemoveTrustCenterComplianceIDs(ids ...string) *StandardUpdate {
+	su.mutation.RemoveTrustCenterComplianceIDs(ids...)
+	return su
+}
+
+// RemoveTrustCenterCompliances removes "trust_center_compliances" edges to TrustCenterCompliance entities.
+func (su *StandardUpdate) RemoveTrustCenterCompliances(t ...*TrustCenterCompliance) *StandardUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return su.RemoveTrustCenterComplianceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -763,6 +800,54 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.TrustCenterCompliancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.TrustCenterCompliance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedTrustCenterCompliancesIDs(); len(nodes) > 0 && !su.mutation.TrustCenterCompliancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.TrustCenterCompliancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.TrustCenterCompliance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1194,6 +1279,21 @@ func (suo *StandardUpdateOne) AddControls(c ...*Control) *StandardUpdateOne {
 	return suo.AddControlIDs(ids...)
 }
 
+// AddTrustCenterComplianceIDs adds the "trust_center_compliances" edge to the TrustCenterCompliance entity by IDs.
+func (suo *StandardUpdateOne) AddTrustCenterComplianceIDs(ids ...string) *StandardUpdateOne {
+	suo.mutation.AddTrustCenterComplianceIDs(ids...)
+	return suo
+}
+
+// AddTrustCenterCompliances adds the "trust_center_compliances" edges to the TrustCenterCompliance entity.
+func (suo *StandardUpdateOne) AddTrustCenterCompliances(t ...*TrustCenterCompliance) *StandardUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return suo.AddTrustCenterComplianceIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (suo *StandardUpdateOne) Mutation() *StandardMutation {
 	return suo.mutation
@@ -1224,6 +1324,27 @@ func (suo *StandardUpdateOne) RemoveControls(c ...*Control) *StandardUpdateOne {
 		ids[i] = c[i].ID
 	}
 	return suo.RemoveControlIDs(ids...)
+}
+
+// ClearTrustCenterCompliances clears all "trust_center_compliances" edges to the TrustCenterCompliance entity.
+func (suo *StandardUpdateOne) ClearTrustCenterCompliances() *StandardUpdateOne {
+	suo.mutation.ClearTrustCenterCompliances()
+	return suo
+}
+
+// RemoveTrustCenterComplianceIDs removes the "trust_center_compliances" edge to TrustCenterCompliance entities by IDs.
+func (suo *StandardUpdateOne) RemoveTrustCenterComplianceIDs(ids ...string) *StandardUpdateOne {
+	suo.mutation.RemoveTrustCenterComplianceIDs(ids...)
+	return suo
+}
+
+// RemoveTrustCenterCompliances removes "trust_center_compliances" edges to TrustCenterCompliance entities.
+func (suo *StandardUpdateOne) RemoveTrustCenterCompliances(t ...*TrustCenterCompliance) *StandardUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return suo.RemoveTrustCenterComplianceIDs(ids...)
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
@@ -1550,6 +1671,54 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 			},
 		}
 		edge.Schema = suo.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.TrustCenterCompliancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.TrustCenterCompliance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedTrustCenterCompliancesIDs(); len(nodes) > 0 && !suo.mutation.TrustCenterCompliancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.TrustCenterCompliancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.TrustCenterCompliance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
