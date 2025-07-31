@@ -453,10 +453,11 @@ type standard
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent_viewer: member from parent
     define parent_editor: admin from parent or owner from parent
-    define viewer: [user, service] or editor
+    define viewer: [user, service] or editor or can_view from associated_with
     define editor: [user, service]
     # this is used for organization custom standards that are only available to the organization
     define parent: [organization]
+    define associated_with: [trust_center]
 
 type job_runner
   relations
@@ -494,7 +495,7 @@ type scheduled_job
 
 type trust_center
   relations
-    define can_view: [user, service] or parent_viewer
+    define can_view: [user:*, service:*] or parent_viewer
     define can_edit: [user, service] or parent_editor
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent
