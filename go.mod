@@ -61,7 +61,7 @@ require (
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.22
-	github.com/prometheus/client_golang v1.22.0
+	github.com/prometheus/client_golang v1.23.0
 	github.com/ravilushqa/otelgqlgen v0.18.0
 	github.com/redis/go-redis/v9 v9.11.0
 	github.com/riverqueue/river v0.23.1
@@ -582,7 +582,7 @@ require (
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
 	github.com/projectdiscovery/wappalyzergo v0.2.39
 	github.com/prometheus/client_model v0.6.2 // indirect
-	github.com/prometheus/common v0.63.0 // indirect
+	github.com/prometheus/common v0.65.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/pterm/pterm v0.12.81
 	github.com/resend/resend-go/v2 v2.21.0 // indirect
