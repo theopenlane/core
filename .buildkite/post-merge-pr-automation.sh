@@ -153,6 +153,7 @@ while IFS=':' read -r pr_number branch_name title; do
         new_title=$(gh pr view "$pr_number" --repo "$repo" --json title --jq '.title' | sed -E 's|^🚧 DRAFT: (.*)|🔄 \1|')
 
         # Add a comment about the conversion
+        core_pr_number=$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)
         conversion_comment=$(load_template "${template_dir}/github/pr-ready-comment.md" \
             "CORE_PR_NUMBER=${core_pr_number}")
 
@@ -161,7 +162,6 @@ while IFS=':' read -r pr_number branch_name title; do
         # Send Slack notification that PR is ready for review
         infra_pr_url=$(gh pr view "$pr_number" --repo "$repo" --json url --jq '.url')
         core_pr_url="https://github.com/theopenlane/core/pull/$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)"
-        core_pr_number=$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)
 
         send_pr_ready_notification "$infra_pr_url" "$core_pr_url" "$core_pr_number" "$change_summary"
 
