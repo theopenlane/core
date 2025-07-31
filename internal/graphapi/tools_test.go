@@ -137,7 +137,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		sessions.WithPersistence(rc),
 	)
 
-	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
 	otpMan := totp.NewOTP(otpOpts...)
 

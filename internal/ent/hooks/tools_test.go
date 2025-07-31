@@ -86,7 +86,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		sessions.WithPersistence(rc),
 	)
 
-	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
 	opts := []generated.Option{
 		generated.Authz(*fgaClient),

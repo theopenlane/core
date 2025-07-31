@@ -59,7 +59,7 @@ func NewPostgresClient(t *testing.T) *generated.Client {
 		sm,
 		sessions.WithPersistence(rc),
 	)
-	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
 	opts := []generated.Option{
 		generated.Authz(*fgaClient),
