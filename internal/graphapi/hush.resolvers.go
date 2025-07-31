@@ -52,6 +52,15 @@ func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.
 	return r.bulkCreateHush(ctx, data)
 }
 
+// UpdateBulkHush is the resolver for the updateBulkHush field.
+func (r *mutationResolver) UpdateBulkHush(ctx context.Context, ids []string, input generated.UpdateHushInput) (*model.HushBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateHush(ctx, ids, input)
+}
+
 // UpdateHush is the resolver for the updateHush field.
 func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)

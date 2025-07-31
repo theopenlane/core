@@ -10,6 +10,8 @@ extend type Query {
     ):  Hush!
 }
 
+
+
 extend type Mutation{
     """
     Create a new hush
@@ -38,6 +40,19 @@ extend type Mutation{
         """
         input: Upload!
     ): HushBulkCreatePayload!
+    """
+    Update multiple existing hushs
+    """
+    updateBulkHush(
+        """
+        IDs of the hushs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the hushs with
+        """
+        input: UpdateHushInput!
+    ): HushBulkUpdatePayload!
     """
     Update an existing hush
     """
@@ -100,4 +115,18 @@ type HushBulkCreatePayload {
     Created hushs
     """
     hushes: [Hush!]
+}
+
+"""
+Return response for updateBulkHush mutation
+"""
+type HushBulkUpdatePayload {
+    """
+    Updated hushs
+    """
+    hushes: [Hush!]
+    """
+    IDs of the updated hushs
+    """
+    updatedIDs: [ID!]
 }

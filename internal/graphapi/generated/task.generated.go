@@ -130,6 +130,148 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _TaskBulkUpdatePayload_tasks(ctx context.Context, field graphql.CollectedField, obj *model.TaskBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TaskBulkUpdatePayload_tasks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tasks, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.Task)
+	fc.Result = res
+	return ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TaskBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Task_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Task_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Task_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Task_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Task_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Task_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Task_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Task_ownerID(ctx, field)
+			case "title":
+				return ec.fieldContext_Task_title(ctx, field)
+			case "details":
+				return ec.fieldContext_Task_details(ctx, field)
+			case "status":
+				return ec.fieldContext_Task_status(ctx, field)
+			case "category":
+				return ec.fieldContext_Task_category(ctx, field)
+			case "due":
+				return ec.fieldContext_Task_due(ctx, field)
+			case "completed":
+				return ec.fieldContext_Task_completed(ctx, field)
+			case "assigneeID":
+				return ec.fieldContext_Task_assigneeID(ctx, field)
+			case "assignerID":
+				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Task_owner(ctx, field)
+			case "assigner":
+				return ec.fieldContext_Task_assigner(ctx, field)
+			case "assignee":
+				return ec.fieldContext_Task_assignee(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
+			case "groups":
+				return ec.fieldContext_Task_groups(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Task_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Task_procedures(ctx, field)
+			case "controls":
+				return ec.fieldContext_Task_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Task_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Task_controlObjectives(ctx, field)
+			case "programs":
+				return ec.fieldContext_Task_programs(ctx, field)
+			case "risks":
+				return ec.fieldContext_Task_risks(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Task_evidence(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TaskBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TaskBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TaskBulkUpdatePayload_updatedIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedIDs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TaskBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TaskCreatePayload_task(ctx context.Context, field graphql.CollectedField, obj *model.TaskCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TaskCreatePayload_task(ctx, field)
 	if err != nil {
@@ -430,6 +572,44 @@ func (ec *executionContext) _TaskBulkCreatePayload(ctx context.Context, sel ast.
 	return out
 }
 
+var taskBulkUpdatePayloadImplementors = []string{"TaskBulkUpdatePayload"}
+
+func (ec *executionContext) _TaskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TaskBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, taskBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TaskBulkUpdatePayload")
+		case "tasks":
+			out.Values[i] = ec._TaskBulkUpdatePayload_tasks(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._TaskBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var taskCreatePayloadImplementors = []string{"TaskCreatePayload"}
 
 func (ec *executionContext) _TaskCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TaskCreatePayload) graphql.Marshaler {
@@ -563,6 +743,20 @@ func (ec *executionContext) marshalNTaskBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._TaskBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTaskBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TaskBulkUpdatePayload) graphql.Marshaler {
+	return ec._TaskBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTaskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TaskBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TaskBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNTaskCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TaskCreatePayload) graphql.Marshaler {

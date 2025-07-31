@@ -1913,3 +1913,295 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(user1.UserCtx, t)
 }
+
+func TestMutationUpdateBulkControl(t *testing.T) {
+	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+
+	control1 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
+
+	subcontrol1 := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(testUser1.UserCtx, t)
+	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(testUser1.UserCtx, t)
+
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standardUpdate := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create control implementation to be associated with the control
+	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// add adminUser to the program so that they can update the control
+	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
+
+	// create another user and add them to the same organization and group as testUser1
+	// this will allow us to test the group editor permissions
+	anotherViewerUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(testUser1.UserCtx, t)
+
+	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	// ensure the user does not currently have access to update the control
+	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, openlaneclient.UpdateControlInput{
+		Status: lo.ToPtr(enums.ControlStatusPreparing),
+	})
+
+	assert.Assert(t, is.Nil(err))
+	// make sure nothing was updated
+	assert.Equal(t, len(res.UpdateBulkControl.Controls), 0)
+
+	testCases := []struct {
+		name                 string
+		ids                  []string
+		input                openlaneclient.UpdateControlInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedRefFramework map[string]string // control ID -> expected framework
+		expectedUpdatedCount int
+	}{
+		{
+			name: "happy path, update status on multiple controls",
+			ids:  []string{control1.ID, control2.ID, control3.ID},
+			input: openlaneclient.UpdateControlInput{
+				Status:     &enums.ControlStatusPreparing,
+				StandardID: &standard.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRefFramework: map[string]string{
+				control1.ID: standard.ShortName,
+				control2.ID: standard.ShortName,
+				control3.ID: standard.ShortName,
+			},
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "happy path, clear operations and editor permissions",
+			ids:  []string{control1.ID, control2.ID},
+			input: openlaneclient.UpdateControlInput{
+				ClearReferences:       lo.ToPtr(true),
+				ClearMappedCategories: lo.ToPtr(true),
+				AddEditorIDs:          []string{groupMember.GroupID},
+				StandardID:            &standardUpdate.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRefFramework: map[string]string{
+				control1.ID: standardUpdate.ShortName,
+				control2.ID: standardUpdate.ShortName,
+			},
+			expectedUpdatedCount: 2,
+		},
+		{
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateControlInput{Description: lo.ToPtr("test")},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "ids is required",
+		},
+		{
+			name: "mixed success and failure - some controls not authorized",
+			ids:  []string{control1.ID, controlAnotherUser.ID}, // second control should fail authorization
+			input: openlaneclient.UpdateControlInput{
+				Status: &enums.ControlStatusPreparing,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 1, // only control1 should be updated
+		},
+		{
+			name: "update allowed, user added to one of the programs",
+			ids:  []string{control1.ID, control2.ID},
+			input: openlaneclient.UpdateControlInput{
+				Status: &enums.ControlStatusApproved,
+			},
+			client:               suite.client.api,
+			ctx:                  adminUser.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+		{
+			name: "update not allowed, no permissions to controls",
+			ids:  []string{control1.ID},
+			input: openlaneclient.UpdateControlInput{
+				Status: &enums.ControlStatusPreparing,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedUpdatedCount: 0, // should not find any controls to update
+		},
+		{
+			name: "update control type and category on multiple controls",
+			ids:  []string{control1.ID, control2.ID, control3.ID},
+			input: openlaneclient.UpdateControlInput{
+				ControlType:    &enums.ControlTypeDetective,
+				Category:       lo.ToPtr("Availability"),
+				ControlOwnerID: &ownerGroup.ID,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "add programs and control implementations to multiple controls",
+			ids:  []string{control1.ID, control2.ID},
+			input: openlaneclient.UpdateControlInput{
+				AddProgramIDs:               []string{program2.ID},
+				AddControlImplementationIDs: []string{controlImplementation.ID},
+				Tags:                        []string{"bulk", "update"},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateBulkControl(tc.ctx, tc.ids, tc.input)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.UpdateBulkControl.Controls, tc.expectedUpdatedCount))
+			assert.Check(t, is.Len(resp.UpdateBulkControl.UpdatedIDs, tc.expectedUpdatedCount))
+
+			// verify all returned controls have the expected values from tc.input
+			for _, control := range resp.UpdateBulkControl.Controls {
+				if tc.input.Description != nil {
+					assert.Check(t, is.Equal(*tc.input.Description, *control.Description))
+				}
+
+				if tc.input.Status != nil {
+					assert.Check(t, is.Equal(*tc.input.Status, *control.Status))
+				}
+
+				if tc.input.Tags != nil {
+					assert.Check(t, is.DeepEqual(tc.input.Tags, control.Tags))
+				}
+
+				if tc.input.ControlType != nil {
+					assert.Check(t, is.Equal(*tc.input.ControlType, *control.ControlType))
+				}
+
+				if tc.input.Category != nil {
+					assert.Check(t, is.Equal(*tc.input.Category, *control.Category))
+				}
+
+				if tc.input.ControlOwnerID != nil {
+					assert.Check(t, control.ControlOwner != nil)
+					assert.Check(t, is.Equal(*tc.input.ControlOwnerID, control.ControlOwner.ID))
+				}
+
+				if tc.input.DelegateID != nil {
+					assert.Check(t, control.Delegate != nil)
+					assert.Check(t, is.Equal(*tc.input.DelegateID, control.Delegate.ID))
+				}
+
+				if tc.input.AppendReferences != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendReferences, control.References))
+				}
+
+				if tc.input.ClearReferences != nil && *tc.input.ClearReferences {
+					assert.Check(t, is.Len(control.References, 0))
+				}
+
+				if tc.input.AppendMappedCategories != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendMappedCategories, control.MappedCategories))
+				}
+
+				if tc.input.ClearMappedCategories != nil && *tc.input.ClearMappedCategories {
+					assert.Check(t, is.Len(control.MappedCategories, 0))
+				}
+
+				if tc.input.AppendControlQuestions != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendControlQuestions, control.ControlQuestions))
+				}
+
+				if tc.input.AppendAssessmentObjectives != nil {
+					assert.Check(t, is.DeepEqual(tc.input.AppendAssessmentObjectives, control.AssessmentObjectives))
+				}
+
+				if tc.input.AddControlImplementationIDs != nil {
+					assert.Check(t, is.Len(control.ControlImplementations.Edges, len(tc.input.AddControlImplementationIDs)))
+				}
+
+				if tc.input.StandardID != nil {
+					expectedFramework, exists := tc.expectedRefFramework[control.ID]
+					if exists {
+						assert.Check(t, is.Equal(expectedFramework, *control.ReferenceFramework))
+						assert.Check(t, is.Equal(*tc.input.StandardID, *control.StandardID))
+					}
+				}
+
+				// ensure the program is set
+				if len(tc.input.AddProgramIDs) > 0 {
+					foundPrograms := 0
+					for _, programID := range tc.input.AddProgramIDs {
+						for _, edge := range control.Programs.Edges {
+							if edge.Node.ID == programID {
+								foundPrograms++
+								break
+							}
+						}
+					}
+					assert.Check(t, foundPrograms > 0)
+				}
+
+				if len(tc.input.AddEditorIDs) > 0 {
+					found := false
+					for _, edge := range control.Editors.Edges {
+						for _, editorID := range tc.input.AddEditorIDs {
+							if edge.Node.ID == editorID {
+								found = true
+								break
+							}
+						}
+					}
+					assert.Check(t, found)
+
+					// ensure the user has access to the control now
+					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+						Tags: []string{"bulk-test-tag"},
+					})
+					assert.NilError(t, err)
+					assert.Check(t, res != nil)
+					assert.Check(t, is.Equal(control.ID, res.UpdateControl.Control.ID))
+					assert.Check(t, slices.Contains(res.UpdateControl.Control.Tags, "bulk-test-tag"))
+				}
+			}
+
+			// verify that the returned IDs match the ones that were actually updated
+			for _, updatedID := range resp.UpdateBulkControl.UpdatedIDs {
+				found := false
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID, standardUpdate.ID}}).MustDelete(testUser1.UserCtx, t)
+}

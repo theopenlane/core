@@ -76,6 +76,15 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 	return r.bulkCreateActionPlan(ctx, data)
 }
 
+// UpdateBulkActionPlan is the resolver for the updateBulkActionPlan field.
+func (r *mutationResolver) UpdateBulkActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateActionPlan(ctx, ids, input)
+}
+
 // UpdateActionPlan is the resolver for the updateActionPlan field.
 func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlan.Get(ctx, id)

@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVScan(ctx context.Context, input graphql.
 	return r.bulkCreateScan(ctx, data)
 }
 
+// UpdateBulkScan is the resolver for the updateBulkScan field.
+func (r *mutationResolver) UpdateBulkScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateScan(ctx, ids, input)
+}
+
 // UpdateScan is the resolver for the updateScan field.
 func (r *mutationResolver) UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput) (*model.ScanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Scan.Get(ctx, id)

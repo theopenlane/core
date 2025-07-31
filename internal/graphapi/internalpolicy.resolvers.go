@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 	return r.bulkCreateInternalPolicy(ctx, data)
 }
 
+// UpdateBulkInternalPolicy is the resolver for the updateBulkInternalPolicy field.
+func (r *mutationResolver) UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateInternalPolicy(ctx, ids, input)
+}
+
 // UpdateInternalPolicy is the resolver for the updateInternalPolicy field.
 func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Get(ctx, id)

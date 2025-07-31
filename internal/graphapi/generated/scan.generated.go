@@ -106,6 +106,124 @@ func (ec *executionContext) fieldContext_ScanBulkCreatePayload_scans(_ context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _ScanBulkUpdatePayload_scans(ctx context.Context, field graphql.CollectedField, obj *model.ScanBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ScanBulkUpdatePayload_scans(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Scans, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.Scan)
+	fc.Result = res
+	return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_scans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ScanBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Scan_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Scan_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Scan_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Scan_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Scan_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Scan_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Scan_ownerID(ctx, field)
+			case "target":
+				return ec.fieldContext_Scan_target(ctx, field)
+			case "scanType":
+				return ec.fieldContext_Scan_scanType(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Scan_metadata(ctx, field)
+			case "status":
+				return ec.fieldContext_Scan_status(ctx, field)
+			case "owner":
+				return ec.fieldContext_Scan_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Scan_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Scan_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Scan_viewers(ctx, field)
+			case "assets":
+				return ec.fieldContext_Scan_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Scan_entities(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ScanBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ScanBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ScanBulkUpdatePayload_updatedIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedIDs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ScanBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ScanCreatePayload_scan(ctx context.Context, field graphql.CollectedField, obj *model.ScanCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ScanCreatePayload_scan(ctx, field)
 	if err != nil {
@@ -358,6 +476,44 @@ func (ec *executionContext) _ScanBulkCreatePayload(ctx context.Context, sel ast.
 	return out
 }
 
+var scanBulkUpdatePayloadImplementors = []string{"ScanBulkUpdatePayload"}
+
+func (ec *executionContext) _ScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ScanBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, scanBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ScanBulkUpdatePayload")
+		case "scans":
+			out.Values[i] = ec._ScanBulkUpdatePayload_scans(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._ScanBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var scanCreatePayloadImplementors = []string{"ScanCreatePayload"}
 
 func (ec *executionContext) _ScanCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ScanCreatePayload) graphql.Marshaler {
@@ -491,6 +647,20 @@ func (ec *executionContext) marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._ScanBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNScanBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkUpdatePayload) graphql.Marshaler {
+	return ec._ScanBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ScanBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNScanCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanCreatePayload) graphql.Marshaler {

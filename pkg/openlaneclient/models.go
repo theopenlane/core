@@ -342,6 +342,14 @@ type ActionPlanBulkCreatePayload struct {
 	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
 }
 
+// Return response for updateBulkActionPlan mutation
+type ActionPlanBulkUpdatePayload struct {
+	// Updated actionPlans
+	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
+	// IDs of the updated actionPlans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ActionPlanConnection struct {
 	// A list of edges.
@@ -1624,6 +1632,14 @@ type ContactBulkCreatePayload struct {
 	Contacts []*Contact `json:"contacts,omitempty"`
 }
 
+// Return response for updateBulkContact mutation
+type ContactBulkUpdatePayload struct {
+	// Updated contacts
+	Contacts []*Contact `json:"contacts,omitempty"`
+	// IDs of the updated contacts
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ContactConnection struct {
 	// A list of edges.
@@ -2224,6 +2240,14 @@ func (Control) IsNode() {}
 type ControlBulkCreatePayload struct {
 	// Created controls
 	Controls []*Control `json:"controls,omitempty"`
+}
+
+// Return response for updateBulkControl mutation
+type ControlBulkUpdatePayload struct {
+	// Updated controls
+	Controls []*Control `json:"controls,omitempty"`
+	// IDs of the updated controls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 type ControlCategory struct {
@@ -11164,6 +11188,14 @@ type HushBulkCreatePayload struct {
 	Hushes []*Hush `json:"hushes,omitempty"`
 }
 
+// Return response for updateBulkHush mutation
+type HushBulkUpdatePayload struct {
+	// Updated hushs
+	Hushes []*Hush `json:"hushes,omitempty"`
+	// IDs of the updated hushs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type HushConnection struct {
 	// A list of edges.
@@ -12013,6 +12045,14 @@ func (InternalPolicy) IsNode() {}
 type InternalPolicyBulkCreatePayload struct {
 	// Created internalPolicys
 	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
+}
+
+// Return response for updateBulkInternalPolicy mutation
+type InternalPolicyBulkUpdatePayload struct {
+	// Updated internalPolicys
+	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
+	// IDs of the updated internalPolicys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -18662,6 +18702,14 @@ type ProcedureBulkCreatePayload struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 }
 
+// Return response for updateBulkProcedure mutation
+type ProcedureBulkUpdatePayload struct {
+	// Updated procedures
+	Procedures []*Procedure `json:"procedures,omitempty"`
+	// IDs of the updated procedures
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ProcedureConnection struct {
 	// A list of edges.
@@ -20435,6 +20483,14 @@ type RiskBulkCreatePayload struct {
 	Risks []*Risk `json:"risks,omitempty"`
 }
 
+// Return response for updateBulkRisk mutation
+type RiskBulkUpdatePayload struct {
+	// Updated risks
+	Risks []*Risk `json:"risks,omitempty"`
+	// IDs of the updated risks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type RiskConnection struct {
 	// A list of edges.
@@ -21180,6 +21236,14 @@ func (Scan) IsNode() {}
 type ScanBulkCreatePayload struct {
 	// Created scans
 	Scans []*Scan `json:"scans,omitempty"`
+}
+
+// Return response for updateBulkScan mutation
+type ScanBulkUpdatePayload struct {
+	// Updated scans
+	Scans []*Scan `json:"scans,omitempty"`
+	// IDs of the updated scans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -24779,6 +24843,14 @@ func (Task) IsNode() {}
 type TaskBulkCreatePayload struct {
 	// Created tasks
 	Tasks []*Task `json:"tasks,omitempty"`
+}
+
+// Return response for updateBulkTask mutation
+type TaskBulkUpdatePayload struct {
+	// Updated tasks
+	Tasks []*Task `json:"tasks,omitempty"`
+	// IDs of the updated tasks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

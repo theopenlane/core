@@ -16,6 +16,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"golang.org/x/exp/slices"
 )
 
 func TestQueryContact(t *testing.T) {
@@ -473,4 +474,178 @@ func TestMutationDeleteContact(t *testing.T) {
 			assert.Equal(t, tc.idToDelete, resp.DeleteContact.DeletedID)
 		})
 	}
+}
+
+func TestMutationUpdateBulkContact(t *testing.T) {
+	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact3 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	contactAnotherUser := (&ContactBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name                 string
+		ids                  []string
+		input                openlaneclient.UpdateContactInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedUpdatedCount int
+	}{
+		{
+			name: "happy path, clear tags on multiple contacts",
+			ids:  []string{contact1.ID, contact2.ID},
+			input: openlaneclient.UpdateContactInput{
+				ClearTags: lo.ToPtr(true),
+				Title:     lo.ToPtr("Cleared Title"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+		{
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateContactInput{FullName: lo.ToPtr("test")},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "ids is required",
+		},
+		{
+			name: "mixed success and failure - some contacts not authorized",
+			ids:  []string{contact1.ID, contactAnotherUser.ID}, // second contact should fail authorization
+			input: openlaneclient.UpdateContactInput{
+				FullName: lo.ToPtr("Updated by authorized user"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 1, // only contact1 should be updated
+		},
+		{
+			name: "update not allowed, view only user",
+			ids:  []string{contact1.ID},
+			input: openlaneclient.UpdateContactInput{
+				FullName: lo.ToPtr("Should not update"),
+			},
+			client:               suite.client.api,
+			ctx:                  viewOnlyUser.UserCtx,
+			expectedUpdatedCount: 0, // view only user cannot update
+		},
+		{
+			name: "update not allowed, no permissions to contacts",
+			ids:  []string{contact1.ID},
+			input: openlaneclient.UpdateContactInput{
+				FullName: lo.ToPtr("Should not update"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedUpdatedCount: 0, // should not find any contacts to update
+		},
+		{
+			name: "update status on multiple contacts",
+			ids:  []string{contact1.ID, contact2.ID, contact3.ID},
+			input: openlaneclient.UpdateContactInput{
+				Status: &enums.UserStatusInactive,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "update company on multiple contacts",
+			ids:  []string{contact1.ID, contact2.ID},
+			input: openlaneclient.UpdateContactInput{
+				Company: lo.ToPtr("Updated Company"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateBulkContact(tc.ctx, tc.ids, tc.input)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.UpdateBulkContact.Contacts, tc.expectedUpdatedCount))
+			assert.Check(t, is.Len(resp.UpdateBulkContact.UpdatedIDs, tc.expectedUpdatedCount))
+
+			// verify all returned contacts have the expected values
+			for _, contact := range resp.UpdateBulkContact.Contacts {
+				if tc.input.FullName != nil {
+					assert.Check(t, is.Equal(*tc.input.FullName, contact.FullName))
+				}
+
+				if tc.input.Email != nil {
+					assert.Check(t, contact.Email != nil)
+					assert.Check(t, is.Equal(*tc.input.Email, *contact.Email))
+				}
+
+				if tc.input.PhoneNumber != nil {
+					assert.Check(t, contact.PhoneNumber != nil)
+					assert.Check(t, is.Equal(*tc.input.PhoneNumber, *contact.PhoneNumber))
+				}
+
+				if tc.input.Title != nil {
+					assert.Check(t, contact.Title != nil)
+					assert.Check(t, is.Equal(*tc.input.Title, *contact.Title))
+				}
+
+				if tc.input.Company != nil {
+					assert.Check(t, contact.Company != nil)
+					assert.Check(t, is.Equal(*tc.input.Company, *contact.Company))
+				}
+
+				if tc.input.Address != nil {
+					assert.Check(t, contact.Address != nil)
+					assert.Check(t, is.Equal(*tc.input.Address, *contact.Address))
+				}
+
+				if tc.input.Status != nil {
+					assert.Check(t, contact.GetStatus() != nil)
+					assert.Check(t, is.Equal(*tc.input.Status, *contact.GetStatus()))
+				}
+
+				if tc.input.AppendTags != nil {
+					for _, tag := range tc.input.AppendTags {
+						assert.Check(t, slices.Contains(contact.Tags, tag))
+					}
+				}
+
+				if tc.input.ClearTags != nil && *tc.input.ClearTags {
+					assert.Check(t, is.Len(contact.Tags, 0))
+				}
+
+				// ensure the org owner has access to the contact that was updated
+				res, err := suite.client.api.GetContactByID(testUser1.UserCtx, contact.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(contact.ID, res.Contact.ID))
+			}
+
+			// verify that the returned IDs match the ones that were actually updated
+			for _, updatedID := range resp.UpdateBulkContact.UpdatedIDs {
+				found := false
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
+			}
+		})
+	}
+
+	// Cleanup created contacts
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: []string{contact1.ID, contact2.ID, contact3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contactAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
 }

@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 	return r.bulkCreateProcedure(ctx, data)
 }
 
+// UpdateBulkProcedure is the resolver for the updateBulkProcedure field.
+func (r *mutationResolver) UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateProcedure(ctx, ids, input)
+}
+
 // UpdateProcedure is the resolver for the updateProcedure field.
 func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)

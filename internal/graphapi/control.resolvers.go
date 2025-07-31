@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 	return r.bulkCreateControl(ctx, data)
 }
 
+// UpdateBulkControl is the resolver for the updateBulkControl field.
+func (r *mutationResolver) UpdateBulkControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateControl(ctx, ids, input)
+}
+
 // UpdateControl is the resolver for the updateControl field.
 func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)

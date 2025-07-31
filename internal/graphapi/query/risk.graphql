@@ -60,6 +60,38 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
   }
 }
 
+mutation UpdateBulkRisk($ids: [ID!]!, $input: UpdateRiskInput!) {
+  updateBulkRisk(ids: $ids, input: $input) {
+    risks {
+      businessCosts
+      createdAt
+      createdBy
+      details
+      id
+      displayID
+      impact
+      likelihood
+      mitigation
+      name
+      riskType
+      status
+      score
+      tags
+      updatedAt
+      updatedBy
+      stakeholder {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation CreateRisk($input: CreateRiskInput!) {
   createRisk(input: $input) {
     risk {

@@ -84,6 +84,50 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
   }
 }
 
+mutation UpdateBulkTask($ids: [ID!]!, $input: UpdateTaskInput!) {
+  updateBulkTask(ids: $ids, input: $input) {
+    tasks {
+      assignee {
+        id
+        firstName
+        lastName
+      }
+      assigner {
+        id
+        firstName
+        lastName
+      }
+      completed
+      createdAt
+      createdBy
+      details
+      category
+      comments {
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
+      }
+      due
+      id
+      displayID
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
 mutation CreateTask($input: CreateTaskInput!) {
   createTask(input: $input) {
     task {

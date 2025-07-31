@@ -10,6 +10,8 @@ extend type Query {
     ):  Control!
 }
 
+
+
 extend type Mutation{
     """
     Create a new control
@@ -38,6 +40,19 @@ extend type Mutation{
         """
         input: Upload!
     ): ControlBulkCreatePayload!
+    """
+    Update multiple existing controls
+    """
+    updateBulkControl(
+        """
+        IDs of the controls to update
+        """
+        ids: [ID!]!
+        """
+        values to update the controls with
+        """
+        input: UpdateControlInput!
+    ): ControlBulkUpdatePayload!
     """
     Update an existing control
     """
@@ -100,4 +115,18 @@ type ControlBulkCreatePayload {
     Created controls
     """
     controls: [Control!]
+}
+
+"""
+Return response for updateBulkControl mutation
+"""
+type ControlBulkUpdatePayload {
+    """
+    Updated controls
+    """
+    controls: [Control!]
+    """
+    IDs of the updated controls
+    """
+    updatedIDs: [ID!]
 }

@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 	return r.bulkCreateTask(ctx, data)
 }
 
+// UpdateBulkTask is the resolver for the updateBulkTask field.
+func (r *mutationResolver) UpdateBulkTask(ctx context.Context, ids []string, input generated.UpdateTaskInput) (*model.TaskBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateTask(ctx, ids, input)
+}
+
 // UpdateTask is the resolver for the updateTask field.
 func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)

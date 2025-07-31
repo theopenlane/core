@@ -10,6 +10,8 @@ extend type Query {
     ):  Task!
 }
 
+
+
 extend type Mutation{
     """
     Create a new task
@@ -38,6 +40,19 @@ extend type Mutation{
         """
         input: Upload!
     ): TaskBulkCreatePayload!
+    """
+    Update multiple existing tasks
+    """
+    updateBulkTask(
+        """
+        IDs of the tasks to update
+        """
+        ids: [ID!]!
+        """
+        values to update the tasks with
+        """
+        input: UpdateTaskInput!
+    ): TaskBulkUpdatePayload!
     """
     Update an existing task
     """
@@ -100,4 +115,18 @@ type TaskBulkCreatePayload {
     Created tasks
     """
     tasks: [Task!]
+}
+
+"""
+Return response for updateBulkTask mutation
+"""
+type TaskBulkUpdatePayload {
+    """
+    Updated tasks
+    """
+    tasks: [Task!]
+    """
+    IDs of the updated tasks
+    """
+    updatedIDs: [ID!]
 }

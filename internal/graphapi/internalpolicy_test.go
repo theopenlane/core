@@ -757,3 +757,185 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 		})
 	}
 }
+
+func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
+	// create internal policies to be updated
+	policy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	policy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	policy3 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create another user and add them to the same organization and group as testUser1
+	// this will allow us to test the group editor permissions
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+
+	policyAnotherUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	// ensure the user does not currently have access to update the policy
+	res, err := suite.client.api.UpdateBulkInternalPolicy(testUser2.UserCtx, []string{policy1.ID}, openlaneclient.UpdateInternalPolicyInput{
+		Status: lo.ToPtr(enums.DocumentPublished),
+	})
+
+	assert.Assert(t, is.Nil(err))
+	// make sure nothing was updated
+	assert.Equal(t, len(res.UpdateBulkInternalPolicy.InternalPolicies), 0)
+
+	testCases := []struct {
+		name                 string
+		ids                  []string
+		input                openlaneclient.UpdateInternalPolicyInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedUpdatedCount int
+	}{
+		{
+			name: "happy path, update status on multiple policies",
+			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Status:     &enums.DocumentPublished,
+				PolicyType: lo.ToPtr("Security"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "happy path, editor permissions and revision bump",
+			ids:  []string{policy1.ID, policy2.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				AddEditorIDs: []string{groupMember.GroupID},
+				RevisionBump: &models.Major,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+		{
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateInternalPolicyInput{Details: lo.ToPtr("test")},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "ids is required",
+		},
+		{
+			name: "mixed success and failure - some policies not authorized",
+			ids:  []string{policy1.ID, policyAnotherUser.ID}, // second policy should fail authorization
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Status: &enums.DocumentDraft,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 1, // only policy1 should be updated
+		},
+		{
+			name: "update not allowed, no permissions to policies",
+			ids:  []string{policy1.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Status: &enums.DocumentPublished,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedUpdatedCount: 0, // should not find any policies to update
+		},
+		{
+			name: "update multiple policies with controls and tasks",
+			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
+			input: openlaneclient.UpdateInternalPolicyInput{
+				Details:          lo.ToPtr("Updated details for all policies"),
+				AddControlIDs:    []string{control.ID},
+				AddSubcontrolIDs: []string{subcontrol.ID},
+				AddTaskIDs:       []string{task.ID},
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateBulkInternalPolicy(tc.ctx, tc.ids, tc.input)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.UpdateBulkInternalPolicy.InternalPolicies, tc.expectedUpdatedCount))
+			assert.Check(t, is.Len(resp.UpdateBulkInternalPolicy.UpdatedIDs, tc.expectedUpdatedCount))
+
+			// verify all returned policies have the expected values from tc.input
+			for _, policy := range resp.UpdateBulkInternalPolicy.InternalPolicies {
+				if tc.input.Name != nil {
+					assert.Check(t, is.Equal(*tc.input.Name, policy.Name))
+				}
+
+				if tc.input.Status != nil {
+					assert.Check(t, is.Equal(*tc.input.Status, *policy.Status))
+				}
+
+				if tc.input.Tags != nil {
+					assert.Check(t, is.DeepEqual(tc.input.Tags, policy.Tags))
+				}
+
+				if tc.input.PolicyType != nil {
+					assert.Check(t, is.Equal(*tc.input.PolicyType, *policy.PolicyType))
+				}
+
+				if tc.input.RevisionBump == &models.Minor {
+					assert.Check(t, is.Equal("v0.1.0", *policy.Revision))
+				}
+
+				if tc.input.RevisionBump == &models.Major {
+					assert.Check(t, is.Equal("v1.0.0", *policy.Revision))
+				}
+
+				if len(tc.input.AddEditorIDs) > 0 {
+					// ensure the user has access to the policy now
+					res, err := suite.client.api.UpdateInternalPolicy(anotherAdminUser.UserCtx, policy.ID, openlaneclient.UpdateInternalPolicyInput{
+						Tags: []string{"bulk-test-tag"},
+					})
+					assert.NilError(t, err)
+					assert.Check(t, res != nil)
+					assert.Check(t, is.Equal(policy.ID, res.UpdateInternalPolicy.InternalPolicy.ID))
+				}
+
+				// ensure the org owner has access to the policy that was updated
+				checkResp, err := suite.client.api.GetInternalPolicyByID(testUser1.UserCtx, policy.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(policy.ID, checkResp.InternalPolicy.ID))
+			}
+
+			// verify that the returned IDs match the ones that were actually updated
+			for _, updatedID := range resp.UpdateBulkInternalPolicy.UpdatedIDs {
+				found := false
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{policy1.ID, policy2.ID, policy3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policyAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(testUser1.UserCtx, t)
+}

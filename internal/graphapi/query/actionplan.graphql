@@ -47,6 +47,31 @@ mutation CreateBulkActionPlan($input: [CreateActionPlanInput!]) {
   }
 }
 
+mutation UpdateBulkActionPlan($ids: [ID!]!, $input: UpdateActionPlanInput!) {
+  updateBulkActionPlan(ids: $ids, input: $input) {
+    actionPlans {
+      actionPlanType
+      approvalRequired
+      createdAt
+      createdBy
+      details
+      dueDate
+      id
+      name
+      priority
+      reviewDue
+      reviewFrequency
+      revision
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
 mutation CreateActionPlan($input: CreateActionPlanInput!) {
   createActionPlan(input: $input) {
     actionPlan {

@@ -31,7 +31,7 @@ require (
 	github.com/go-webauthn/webauthn v0.13.4
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.18.0
-	github.com/golang-jwt/jwt/v5 v5.2.3
+	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/hashicorp/go-multierror v1.1.1
@@ -79,7 +79,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
 	github.com/theopenlane/entx v0.11.2
-	github.com/theopenlane/gqlgen-plugins v0.6.4
+	github.com/theopenlane/gqlgen-plugins v0.7.0
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.14.3
 	github.com/theopenlane/newman v0.2.0
@@ -89,7 +89,7 @@ require (
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/vektra/mockery/v3 v3.5.1
-	github.com/windmill-labs/windmill-go-client v1.514.0
+	github.com/windmill-labs/windmill-go-client v1.515.1
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
@@ -634,7 +634,7 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc // indirect
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
 	golang.org/x/mod v0.26.0
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sync v0.16.0

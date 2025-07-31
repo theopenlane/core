@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 	return r.bulkCreateContact(ctx, data)
 }
 
+// UpdateBulkContact is the resolver for the updateBulkContact field.
+func (r *mutationResolver) UpdateBulkContact(ctx context.Context, ids []string, input generated.UpdateContactInput) (*model.ContactBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateContact(ctx, ids, input)
+}
+
 // UpdateContact is the resolver for the updateContact field.
 func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)

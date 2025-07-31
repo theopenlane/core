@@ -10,6 +10,7 @@ extend type Query {
     ):  APIToken!
 }
 
+
 extend type Mutation{
     """
     Create a new apiToken
@@ -101,3 +102,4 @@ type APITokenBulkCreatePayload {
     """
     apiTokens: [APIToken!]
 }
+

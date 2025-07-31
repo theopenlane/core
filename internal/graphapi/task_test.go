@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"golang.org/x/exp/slices"
 )
 
 func TestQueryTask(t *testing.T) {
@@ -849,4 +850,165 @@ func TestMutationDeleteTask(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTask.DeletedID))
 		})
 	}
+}
+
+func TestMutationUpdateBulkTask(t *testing.T) {
+	testUser := suite.userBuilder(context.Background(), t)
+
+	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	task3 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	taskAnotherUser := (&TaskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	testCases := []struct {
+		name                 string
+		ids                  []string
+		input                openlaneclient.UpdateTaskInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedUpdatedCount int
+	}{
+		{
+			name: "happy path, clear tags on multiple tasks",
+			ids:  []string{task1.ID, task2.ID},
+			input: openlaneclient.UpdateTaskInput{
+				ClearTags: lo.ToPtr(true),
+				Details:   lo.ToPtr("Cleared all tags"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+		{
+			name:        "empty ids array",
+			ids:         []string{},
+			input:       openlaneclient.UpdateTaskInput{Title: lo.ToPtr("test")},
+			client:      suite.client.api,
+			ctx:         testUser.UserCtx,
+			expectedErr: "ids is required",
+		},
+		{
+			name: "mixed success and failure - some tasks not authorized",
+			ids:  []string{task1.ID, taskAnotherUser.ID}, // second task should fail authorization
+			input: openlaneclient.UpdateTaskInput{
+				Title: lo.ToPtr("Updated by authorized user"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser.UserCtx,
+			expectedUpdatedCount: 1, // only task1 should be updated
+		},
+		{
+			name: "update not allowed, no permissions to tasks",
+			ids:  []string{task1.ID},
+			input: openlaneclient.UpdateTaskInput{
+				Title: lo.ToPtr("Should not update"),
+			},
+			client:               suite.client.api,
+			ctx:                  testUser2.UserCtx,
+			expectedUpdatedCount: 0, // should not find any tasks to update
+		},
+		{
+			name: "update status on multiple tasks",
+			ids:  []string{task1.ID, task2.ID, task3.ID},
+			input: openlaneclient.UpdateTaskInput{
+				Status: &enums.TaskStatusInProgress,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser.UserCtx,
+			expectedUpdatedCount: 3,
+		},
+		{
+			name: "assign tasks to org member",
+			ids:  []string{task1.ID, task2.ID},
+			input: openlaneclient.UpdateTaskInput{
+				AssigneeID: &om.UserID,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser.UserCtx,
+			expectedUpdatedCount: 2,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateBulkTask(tc.ctx, tc.ids, tc.input)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.UpdateBulkTask.Tasks, tc.expectedUpdatedCount))
+			assert.Check(t, is.Len(resp.UpdateBulkTask.UpdatedIDs, tc.expectedUpdatedCount))
+
+			// verify all returned tasks have the expected values
+			for _, task := range resp.UpdateBulkTask.Tasks {
+				if tc.input.Title != nil {
+					assert.Check(t, is.Equal(*tc.input.Title, task.Title))
+				}
+
+				if tc.input.Details != nil {
+					assert.Check(t, is.Equal(*tc.input.Details, *task.Details))
+				}
+
+				if tc.input.Status != nil {
+					assert.Check(t, task.GetStatus() != nil)
+					assert.Check(t, is.Equal(*tc.input.Status, *task.GetStatus()))
+				}
+
+				if tc.input.Category != nil {
+					assert.Check(t, is.Equal(*tc.input.Category, *task.Category))
+				}
+
+				if tc.input.AssigneeID != nil {
+					assert.Check(t, task.Assignee != nil)
+					assert.Check(t, is.Equal(*tc.input.AssigneeID, task.Assignee.ID))
+				}
+
+				if tc.input.Due != nil {
+					assert.Check(t, task.Due != nil)
+				}
+
+				if tc.input.AppendTags != nil {
+					for _, tag := range tc.input.AppendTags {
+						assert.Check(t, slices.Contains(task.Tags, tag))
+					}
+				}
+
+				if tc.input.ClearTags != nil && *tc.input.ClearTags {
+					assert.Check(t, is.Len(task.Tags, 0))
+				}
+
+				// ensure the org owner has access to the task that was updated
+				res, err := suite.client.api.GetTaskByID(testUser.UserCtx, task.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(task.ID, res.Task.ID))
+			}
+
+			// verify that the returned IDs match the ones that were actually updated
+			for _, updatedID := range resp.UpdateBulkTask.UpdatedIDs {
+				found := false
+				for _, expectedID := range tc.ids {
+					if expectedID == updatedID {
+						found = true
+						break
+					}
+				}
+				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
+			}
+		})
+	}
+
+	// Cleanup created tasks
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task1.ID, task2.ID, task3.ID}}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser.UserCtx, t)
 }

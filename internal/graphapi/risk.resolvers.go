@@ -75,6 +75,15 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 	return r.bulkCreateRisk(ctx, data)
 }
 
+// UpdateBulkRisk is the resolver for the updateBulkRisk field.
+func (r *mutationResolver) UpdateBulkRisk(ctx context.Context, ids []string, input generated.UpdateRiskInput) (*model.RiskBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateRisk(ctx, ids, input)
+}
+
 // UpdateRisk is the resolver for the updateRisk field.
 func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Risk.Get(ctx, id)

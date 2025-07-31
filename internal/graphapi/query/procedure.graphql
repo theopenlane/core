@@ -61,6 +61,38 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
   }
 }
 
+mutation UpdateBulkProcedure($ids: [ID!]!, $input: UpdateProcedureInput!) {
+  updateBulkProcedure(ids: $ids, input: $input) {
+    procedures {
+      approvalRequired
+      createdAt
+      createdBy
+      details
+      displayID
+      id
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      tags
+      updatedAt
+      updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation CreateProcedure($input: CreateProcedureInput!) {
   createProcedure(input: $input) {
     procedure {
