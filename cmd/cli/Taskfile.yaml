@@ -95,7 +95,7 @@ tasks:
       STORE_ID:
         sh: fga store list --api-token={{ .FGA_API_TOKEN }} | jq -r '.stores.[].id'
       USER_ID:
-        sh: ../../openlane-cli user get -z json --host {{ .OPENLANE_API_HOST }} | jq -r '.self.id'
+        sh: go run main.go user get -z json --host {{ .OPENLANE_API_HOST }} | jq -r '.self.id'
     cmds:
       - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} system_admin system:openlane_core --api-token={{ .FGA_API_TOKEN }}
 
@@ -190,7 +190,6 @@ tasks:
     cmds:
       - rm -f .env-admin-token
 
-
   # === Legacy/Advanced (Hidden) ===
   generate:all:history:
     desc: generates cli commands for all history schemas
@@ -199,7 +198,7 @@ tasks:
       SCHEMAS:
         sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
     cmds:
-      - for: {var: SCHEMAS, as: SCHEMA}
+      - for: { var: SCHEMAS, as: SCHEMA }
         cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
 
   template:create:
@@ -209,5 +208,5 @@ tasks:
       MODELS:
         sh: ls -d ../../jsonschema/models/* | cut -f5 -d'/'
     cmds:
-      - for: {var: MODELS, as: MODEL}
+      - for: { var: MODELS, as: MODEL }
         cmd: go run main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"
