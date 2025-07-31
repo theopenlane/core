@@ -79,7 +79,7 @@ func init() {
 }
 
 // WebhookReceiverHandler handles incoming stripe webhook events for the supported event types
-func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
+func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	startTime := time.Now()
 
 	req := ctx.Request()
@@ -90,7 +90,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		webhookResponseCounter.WithLabelValues("payload_exceeded", "500").Inc()
 		log.Error().Err(err).Msg("failed to read request body")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), h.Entitlements.Config.StripeWebhookSecret)
@@ -98,7 +98,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		webhookResponseCounter.WithLabelValues("event_signature_failure", "400").Inc()
 		log.Error().Err(err).Msg("failed to construct event")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	webhookReceivedCounter.WithLabelValues(string(event.Type)).Inc()
@@ -118,7 +118,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 		webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 		log.Error().Err(err).Msg("failed to check for event ID")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	if !exists {
@@ -127,7 +127,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 			log.Error().Err(err).Msg("failed to create event")
 
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 
 		log.Debug().Msgf("internal event: %v", meowevent)
@@ -136,7 +136,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 			log.Error().Err(err).Msg("failed to handle event")
 
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 	}
 

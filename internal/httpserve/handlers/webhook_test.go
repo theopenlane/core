@@ -46,7 +46,9 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	suite.h.Entitlements = entitlements
 
 	// add handler
-	suite.e.POST("/webhook", suite.h.WebhookReceiverHandler)
+	// Create operation for WebhookReceiverHandler
+	operation := suite.createImpersonationOperation("WebhookReceiverHandler", "Webhook receiver handler")
+	suite.registerTestHandler("POST", "/webhook", operation, suite.h.WebhookReceiverHandler)
 
 	// setup payloads based on the mock customer
 	// update subscription payload

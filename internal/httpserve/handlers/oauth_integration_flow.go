@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
@@ -52,14 +51,10 @@ func wrapTokenError(operation, provider string, err error) error {
 }
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration
-func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
-	var in models.OAuthFlowRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOAuthFlowRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	userCtx := ctx.Request().Context()
@@ -67,7 +62,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
-		return h.Unauthorized(ctx, err)
+		return h.Unauthorized(ctx, err, openapi)
 	}
 
 	// Get user's current organization
@@ -78,7 +73,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 
 	provider, exists := providers[strings.ToLower(in.Provider)]
 	if !exists {
-		return h.BadRequest(ctx, ErrInvalidProvider)
+		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 	}
 
 	// Set up cookie config with SameSiteNoneMode for OAuth flow to work with external redirects
@@ -105,7 +100,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 	// Generate state parameter for security
 	state, err := h.generateOAuthState(orgID, in.Provider)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// Set the state as a cookie for validation in callback
@@ -136,25 +131,21 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 }
 
 // HandleOAuthCallback processes the OAuth callback and stores integration tokens
-func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
-	var in models.OAuthCallbackRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.OAuthCallbackRequest{}, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// Validate state matches what was set in the cookie
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "oauth_state")
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to get oauth_state cookie")
-		return h.BadRequest(ctx, ErrInvalidState)
+		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
 	if in.State != stateCookie.Value {
-		return h.BadRequest(ctx, ErrInvalidState)
+		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
 	// Get org ID and user ID from cookies
@@ -162,14 +153,14 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to get oauth_org_id cookie")
 
-		return h.BadRequest(ctx, ErrMissingOrganizationContext)
+		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapi)
 	}
 
 	orgID := orgCookie.Value
 
 	_, err = sessions.GetCookie(ctx.Request(), "oauth_user_id")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingUserContext)
+		return h.BadRequest(ctx, ErrMissingUserContext, openapi)
 	}
 
 	// Get the user from database to set authenticated context
@@ -181,7 +172,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	// Validate state and extract provider from state
 	_, provider, err := h.validateOAuthState(in.State)
 	if err != nil {
-		return h.BadRequest(ctx, ErrInvalidState)
+		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
 	// Set the provider from the state (GitHub doesn't send provider in callback)
@@ -192,7 +183,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 
 	providerConfig, exists := providers[provider]
 	if !exists {
-		return h.BadRequest(ctx, ErrInvalidProvider)
+		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 	}
 
 	// Exchange code for token
@@ -200,7 +191,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Msg("failed to exchange OAuth code for token")
 
-		return h.InternalServerError(ctx, ErrExchangeAuthCode)
+		return h.InternalServerError(ctx, ErrExchangeAuthCode, openapi)
 	}
 
 	// Validate token and get user info
@@ -208,7 +199,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Msg("failed to validate OAuth token")
 
-		return h.InternalServerError(ctx, ErrValidateToken)
+		return h.InternalServerError(ctx, ErrValidateToken, openapi)
 	}
 
 	// Store integration and tokens (use authenticated context)
@@ -216,7 +207,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// Clean up the OAuth cookies after successful completion (like SSO handler)
@@ -627,21 +618,17 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 }
 
 // RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens
-func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
-	var in models.RefreshIntegrationTokenRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// Get the authenticated user and organization
 	userCtx := ctx.Request().Context()
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
-		return h.Unauthorized(ctx, err)
+		return h.Unauthorized(ctx, err, openapi)
 	}
 
 	orgID := user.OrganizationID
@@ -652,7 +639,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 		if ent.IsNotFound(err) {
 			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", in.Provider, ErrIntegrationNotFound)))
 		}
-		return h.InternalServerError(ctx, wrapTokenError("refresh", in.Provider, err))
+		return h.InternalServerError(ctx, wrapTokenError("refresh", in.Provider, err), openapi)
 	}
 
 	out := models.IntegrationTokenResponse{
@@ -663,36 +650,4 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, out)
-}
-
-// BindStartOAuthFlowHandler binds the start OAuth flow handler to the OpenAPI schema
-func (h *Handler) BindStartOAuthFlowHandler() *openapi3.Operation {
-	startOAuthHandler := openapi3.NewOperation()
-	startOAuthHandler.Description = "Start OAuth integration flow for third-party providers"
-	startOAuthHandler.Tags = []string{"oauth", "integrations"}
-	startOAuthHandler.OperationID = "StartOAuthFlow"
-	startOAuthHandler.Security = AllSecurityRequirements()
-	h.AddRequestBody("OAuthFlowRequest", models.ExampleOAuthFlowRequest, startOAuthHandler)
-	h.AddResponse("OAuthFlowResponse", "success", models.ExampleOAuthFlowResponse, startOAuthHandler, http.StatusOK)
-	startOAuthHandler.AddResponse(http.StatusInternalServerError, internalServerError())
-	startOAuthHandler.AddResponse(http.StatusBadRequest, badRequest())
-	startOAuthHandler.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return startOAuthHandler
-}
-
-// BindHandleOAuthCallbackHandler binds the OAuth callback handler to the OpenAPI schema
-func (h *Handler) BindHandleOAuthCallbackHandler() *openapi3.Operation {
-	callbackHandler := openapi3.NewOperation()
-	callbackHandler.Description = "Handle OAuth callback and store integration tokens"
-	callbackHandler.Tags = []string{"oauth", "integrations"}
-	callbackHandler.OperationID = "HandleOAuthCallback"
-	callbackHandler.Security = AllSecurityRequirements()
-	h.AddRequestBody("OAuthCallbackRequest", models.ExampleOAuthCallbackRequest, callbackHandler)
-	h.AddResponse("OAuthCallbackResponse", "success", models.ExampleOAuthCallbackResponse, callbackHandler, http.StatusOK)
-	callbackHandler.AddResponse(http.StatusInternalServerError, internalServerError())
-	callbackHandler.AddResponse(http.StatusBadRequest, badRequest())
-	callbackHandler.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return callbackHandler
 }

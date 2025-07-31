@@ -1,10 +1,8 @@
 package handlers
 
 import (
-	"net/http"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -14,29 +12,10 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
-func (h *Handler) BindRegisterRunnerNode() *openapi3.Operation {
-	registerJobRunner := openapi3.NewOperation()
-	registerJobRunner.Description = "Register a new job runner node"
-	registerJobRunner.Tags = []string{"job-runners", "agents"}
-	registerJobRunner.OperationID = "RegisterRunnerNode"
-	registerJobRunner.Security = &openapi3.SecurityRequirements{}
-
-	h.AddRequestBody("JobRunnerRegistrationRequest", models.ExampleJobRunnerRegistrationRequest, registerJobRunner)
-	h.AddResponse("JobRunnerRegistrationReply", "success", models.ExampleJobRunnerRegistrationResponse, registerJobRunner, http.StatusOK)
-	registerJobRunner.AddResponse(http.StatusBadRequest, badRequest())
-	registerJobRunner.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return registerJobRunner
-}
-
-func (h *Handler) RegisterJobRunner(ctx echo.Context) error {
-	var r models.JobRunnerRegistrationRequest
-	if err := ctx.Bind(&r); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := r.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) RegisterJobRunner(ctx echo.Context, openapi *OpenAPIContext) error {
+	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleJobRunnerRegistrationRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -51,7 +30,7 @@ func (h *Handler) RegisterJobRunner(ctx echo.Context) error {
 
 		log.Error().Err(err).Msg("error retrieving job runner registration token")
 
-		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner)
+		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner, openapi)
 	}
 
 	if registrationToken.ExpiresAt.Before(time.Now()) {
@@ -64,14 +43,14 @@ func (h *Handler) RegisterJobRunner(ctx echo.Context) error {
 		OrganizationIDs: []string{registrationToken.OwnerID},
 	})
 
-	if err := h.createJobRunner(ctxWithToken, registrationToken, r); err != nil {
+	if err := h.createJobRunner(ctxWithToken, registrationToken, *r); err != nil {
 		log.Error().Err(err).Msg("could not create a new runner with your token")
 
 		if generated.IsConstraintError(err) {
-			return h.BadRequest(ctx, ErrJobRunnerAlreadyRegistered)
+			return h.BadRequest(ctx, ErrJobRunnerAlreadyRegistered, openapi)
 		}
 
-		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner)
+		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner, openapi)
 	}
 
 	out := &models.JobRunnerRegistrationReply{

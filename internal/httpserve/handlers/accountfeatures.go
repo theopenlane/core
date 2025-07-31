@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 
@@ -18,10 +15,10 @@ import (
 )
 
 // AccountFeaturesHandler lists all features the authenticated user has access to in relation to an organization
-func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
-	var in models.AccountFeaturesRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleAccountFeaturesRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -30,17 +27,12 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 	if err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	in.ID, err = h.getOrganizationID(in.ID, au)
 	if err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	// validate the input
-	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// TODO: get this from FGA instead of org subscriptions once that work is done
@@ -49,13 +41,13 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 	if err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting organization")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	if len(org.Edges.OrgSubscriptions) != 1 {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting organization subscription")
 
-		return h.BadRequest(ctx, ErrInvalidInput)
+		return h.BadRequest(ctx, ErrInvalidInput, openapi)
 	}
 
 	// get the features from the subscription
@@ -65,7 +57,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 		Reply:          rout.Reply{Success: true},
 		Features:       features,
 		OrganizationID: in.ID,
-	})
+	}, openapi)
 }
 
 // getOrganizationID returns the organization ID to use for the request based on the input and authenticated user
@@ -90,35 +82,4 @@ func (h *Handler) getOrganizationID(id string, au *auth.AuthenticatedUser) (stri
 	}
 
 	return "", nil
-}
-
-// BindAccountFeatures returns the OpenAPI3 operation for accepting an account features organization request
-func (h *Handler) BindAccountFeatures() *openapi3.Operation {
-	orgFeatures := openapi3.NewOperation()
-	orgFeatures.Description = "List features a subject has in relation to the authenticated organization"
-	orgFeatures.Tags = []string{"account"}
-	orgFeatures.OperationID = "AccountFeatures"
-	orgFeatures.Security = AllSecurityRequirements()
-
-	orgFeatures.AddResponse(http.StatusInternalServerError, internalServerError())
-	orgFeatures.AddResponse(http.StatusBadRequest, badRequest())
-	orgFeatures.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return orgFeatures
-}
-
-// BindAccountFeatures returns the OpenAPI3 operation for accepting an account features organization request
-func (h *Handler) BindAccountFeaturesByID() *openapi3.Operation {
-	orgFeatures := openapi3.NewOperation()
-	orgFeatures.Description = "List the features a subject has in relation to the organization ID provided"
-	orgFeatures.Tags = []string{"account"}
-	orgFeatures.OperationID = "AccountFeaturesByID"
-	orgFeatures.Security = AllSecurityRequirements()
-
-	h.AddResponse("AccountFeaturesReply", "success", models.ExampleAccountFeaturesReply, orgFeatures, http.StatusOK)
-	orgFeatures.AddResponse(http.StatusInternalServerError, internalServerError())
-	orgFeatures.AddResponse(http.StatusBadRequest, badRequest())
-	orgFeatures.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return orgFeatures
 }

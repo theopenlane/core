@@ -33,8 +33,8 @@ import (
 func (suite *HandlerTestSuite) TestLoginHandler() {
 	t := suite.T()
 
-	// add login handler
-	suite.e.POST("login", suite.h.LoginHandler)
+	// Register test handler with OpenAPI context
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 
@@ -264,8 +264,8 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	t := suite.T()
 
-	// add login handler
-	suite.e.POST("login", suite.h.LoginHandler)
+	// Register test handler with OpenAPI context
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -321,7 +321,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	t := suite.T()
 
-	suite.e.POST("login", suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)

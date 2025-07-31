@@ -10,7 +10,7 @@ import (
 )
 
 // FileUploadHandler is responsible for uploading files
-func (h *Handler) FileUploadHandler(ctx echo.Context) error {
+func (h *Handler) FileUploadHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	r := ctx.Request()
 
 	// create the output struct
@@ -21,7 +21,7 @@ func (h *Handler) FileUploadHandler(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("failed to get files from context")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// check if any files were uploaded

@@ -3,30 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerAccountRolesHandler registers the /account/roles handler
-func registerAccountRolesHandler(router *Router) (err error) {
-	path := "/account/roles"
-	method := http.MethodPost
-	name := "AccountRoles"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.AccountRolesHandler(c)
-		},
+func registerAccountRolesHandler(router *Router) error {
+	config := Config{
+		Path:        "/account/roles",
+		Method:      http.MethodPost,
+		Name:        "AccountRoles",
+		Description: "Retrieve a list of roles of the subject in the organization",
+		Tags:        []string{"account"},
+		OperationID: "AccountRoles",
+		Security:    handlers.AuthenticatedSecurity,
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.AccountRolesHandler,
 	}
 
-	rolesOperation := router.Handler.BindAccountRoles()
-
-	if err := router.AddV1Route(path, method, rolesOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

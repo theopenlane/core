@@ -3,41 +3,40 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerAccountFeaturesHandler registers the /account/features handler
-func registerAccountFeaturesHandler(router *Router) (err error) {
+func registerAccountFeaturesHandler(router *Router) error {
 	// add route without the path param
-	path := "/account/features"
-	method := http.MethodGet
-	name := "AccountFeatures"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.AccountFeaturesHandler(c)
-		},
+	config := Config{
+		Path:        "/account/features",
+		Method:      http.MethodGet,
+		Name:        "AccountFeatures",
+		Description: "List features a subject has in relation to the authenticated organization",
+		Tags:        []string{"account"},
+		OperationID: "AccountFeatures",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.AccountFeaturesHandler,
 	}
 
-	featuresOrganizationOperation := router.Handler.BindAccountFeatures()
-
-	if err := router.AddV1Route(route.Path, route.Method, featuresOrganizationOperation, route); err != nil {
+	if err := router.AddV1HandlerRoute(config); err != nil {
 		return err
 	}
 
 	// add an additional route with the path param
-	route.Path = "/account/features/:{id}"
-	route.Name = name + "ByID"
-
-	rolesOrganizationOperationByID := router.Handler.BindAccountFeaturesByID()
-
-	if err := router.AddV1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
-		return err
+	configByID := Config{
+		Path:        "/account/features/:id",
+		Method:      http.MethodGet,
+		Name:        "AccountFeaturesByID",
+		Description: "List the features a subject has in relation to the organization ID provided",
+		Tags:        []string{"account"},
+		OperationID: "AccountFeaturesByID",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.AccountFeaturesHandler,
 	}
 
-	return nil
+	return router.AddV1HandlerRoute(configByID)
 }

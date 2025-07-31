@@ -4,10 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"net/http"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
@@ -27,29 +25,25 @@ import (
 // set a new password - the password reset token needs to be set in the request
 // and not expired. If the request is successful, a confirmation of the reset is sent
 // to the user and a 204 no content is returned
-func (h *Handler) ResetPassword(ctx echo.Context) error {
-	var in models.ResetPasswordRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error {
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResetPasswordSuccessRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// setup viewer context
-	ctxWithToken := token.NewContextWithResetToken(ctx.Request().Context(), in.Token)
+	ctxWithToken := token.NewContextWithResetToken(ctx.Request().Context(), req.Token)
 
 	// lookup user from db based on provided token
-	entUser, err := h.getUserByResetToken(ctxWithToken, in.Token)
+	entUser, err := h.getUserByResetToken(ctxWithToken, req.Token)
 	if err != nil {
 		log.Error().Err(err).Msg("error retrieving user token")
 
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, ErrPassWordResetTokenInvalid)
+			return h.BadRequest(ctx, ErrPassWordResetTokenInvalid, openapi)
 		}
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	// ent user to &User for funcs
@@ -59,10 +53,10 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	// set tokens for request
-	if err := user.setResetTokens(entUser, in.Token); err != nil {
+	if err := user.setResetTokens(entUser, req.Token); err != nil {
 		log.Error().Err(err).Msg("unable to set reset tokens for request")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// Construct the user token from the database fields
@@ -80,7 +74,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	if token.ExpiresAt, err = user.GetPasswordResetExpires(); err != nil {
 		log.Error().Err(err).Msg("unable to parse expiration")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	// Verify the token is valid with the stored secret
@@ -88,39 +82,39 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 		if errors.Is(err, tokens.ErrTokenExpired) {
 			errMsg := "reset token is expired, please request a new token using forgot-password"
 
-			return h.BadRequest(ctx, fmt.Errorf("%w: %s", ErrPassWordResetTokenInvalid, errMsg))
+			return h.BadRequest(ctx, fmt.Errorf("%w: %s", ErrPassWordResetTokenInvalid, errMsg), openapi)
 		}
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// make sure its not the same password as current
 	// a user that previously authenticated with oauth and resets their password
 	// won't have a password originally so this will be nil
 	if entUser.Password != nil {
-		valid, err := passwd.VerifyDerivedKey(*entUser.Password, in.Password)
+		valid, err := passwd.VerifyDerivedKey(*entUser.Password, req.Password)
 		if err != nil || valid {
-			return h.BadRequest(ctx, ErrNonUniquePassword)
+			return h.BadRequest(ctx, ErrNonUniquePassword, openapi)
 		}
 	}
 
 	// set context for remaining request based on logged in user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
-	if err := h.updateUserPassword(userCtx, entUser.ID, in.Password); err != nil {
+	if err := h.updateUserPassword(userCtx, entUser.ID, req.Password); err != nil {
 		log.Error().Err(err).Msg("error updating user password")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	if err := h.expireAllResetTokensUserByEmail(userCtx, user.Email); err != nil {
 		log.Error().Err(err).Msg("error expiring existing tokens")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	if err := h.sendPasswordResetSuccessEmail(userCtx, user); err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	out := &models.ResetPasswordReply{
@@ -128,7 +122,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 		Message: "password has been re-set successfully",
 	}
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, out, openapi)
 }
 
 // setResetTokens sets the fields for the password reset
@@ -148,21 +142,4 @@ func (u *User) setResetTokens(user *generated.User, reqToken string) error {
 	// otherwise, since we get the user by the token, it should always
 	// be there
 	return ErrPassWordResetTokenInvalid
-}
-
-// BindResetPasswordHandler binds the reset password handler to the OpenAPI schema
-func (h *Handler) BindResetPasswordHandler() *openapi3.Operation {
-	resetPassword := openapi3.NewOperation()
-	resetPassword.Description = "ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned"
-	resetPassword.Tags = []string{"passwordReset"}
-	resetPassword.OperationID = "PasswordReset"
-	resetPassword.Security = &openapi3.SecurityRequirements{}
-
-	h.AddRequestBody("ResetPasswordRequest", models.ExampleResetPasswordSuccessRequest, resetPassword)
-	h.AddResponse("ResetPasswordReply", "success", models.ExampleResetPasswordSuccessResponse, resetPassword, http.StatusOK)
-	resetPassword.AddResponse(http.StatusInternalServerError, internalServerError())
-	resetPassword.AddResponse(http.StatusBadRequest, badRequest())
-	resetPassword.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return resetPassword
 }

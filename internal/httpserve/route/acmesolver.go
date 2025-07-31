@@ -3,28 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerAcmeSolverHandler registers the acme solver handler and route
-func registerAcmeSolverHandler(router *Router) (err error) {
-	path := "/.well-known/acme-challenge/:path"
-	method := http.MethodGet
-	name := "AcmeSolver"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: baseMW, // leaves off the additional middleware(including csrf)
-		Handler: func(c echo.Context) error {
-			return router.Handler.ACMESolverHandler(c)
-		},
+func registerAcmeSolverHandler(router *Router) error {
+	config := Config{
+		Path:        "/.well-known/acme-challenge/:path",
+		Method:      http.MethodGet,
+		Name:        "AcmeSolver",
+		Description: "ACME challenge solver for Let's Encrypt certificate validation",
+		Tags:        []string{"acme", "certificates"},
+		OperationID: "AcmeSolver",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		Handler:     router.Handler.ACMESolverHandler,
 	}
 
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

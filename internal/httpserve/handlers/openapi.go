@@ -1,72 +1,86 @@
 package handlers
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/getkin/kin-openapi/openapi3"
 
 	"github.com/theopenlane/httpsling"
 )
 
-// badRequest is a wrapper for openaAPI bad request response
+// Security Requirements for common authentication patterns
+var (
+	// AuthenticatedSecurity for endpoints requiring authentication
+	AuthenticatedSecurity = BearerSecurity()
+	// PublicSecurity for public endpoints with no authentication
+	PublicSecurity = &openapi3.SecurityRequirements{}
+	// AllAuthSecurity for endpoints accepting any authentication method
+	AllAuthSecurity = AllSecurityRequirements()
+)
+
+// Error Response Patterns for common error combinations
+var (
+	// StandardAuthErrors for typical authenticated endpoints
+	StandardAuthErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusInternalServerError}
+	// PublicEndpointErrors for public endpoints
+	PublicEndpointErrors = []int{http.StatusBadRequest, http.StatusInternalServerError}
+	// AdminOnlyErrors for admin-only endpoints
+	AdminOnlyErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusForbidden, http.StatusInternalServerError}
+)
+
+// AuthEndpointDesc creates a description for authenticated endpoints
+func AuthEndpointDesc(action, resource string) string {
+	return fmt.Sprintf("%s %s. Requires authentication.", action, resource)
+}
+
+func PublicEndpointDesc(action, resource string) string {
+	return fmt.Sprintf("%s %s. No authentication required.", action, resource)
+}
+
+func AdminEndpointDesc(action, resource string) string {
+	return fmt.Sprintf("%s %s. Requires admin privileges.", action, resource)
+}
+
+// commonResponse creates a response that references a common error schema
+func commonResponse(statusCode int) *openapi3.Response {
+	statusText := http.StatusText(statusCode)
+	// For now, just return a simple response without schema reference
+	// TODO: Add proper error schema references when StatusError schema is working
+	return openapi3.NewResponse().
+		WithDescription(statusText)
+}
+
+// Legacy wrapper functions for backward compatibility
+// These can be gradually replaced with commonResponse(statusCode) calls
+
+// badRequest is a wrapper for OpenAPI bad request response
 func badRequest() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Bad Request").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/BadRequest"}))
+	return commonResponse(http.StatusBadRequest)
 }
 
-// internalServerError is a wrapper for openaAPI internal server error response
+// internalServerError is a wrapper for OpenAPI internal server error response
 func internalServerError() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Internal Server Error").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/InternalServerError"}))
+	return commonResponse(http.StatusInternalServerError)
 }
 
-// notFound is a wrapper for openaAPI not found response
-func notFound() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Not Found").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/NotFound"}))
-}
-
-// created is a wrapper for openaAPI created response
-func created() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Created").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Created"}))
-}
-
-// conflict is a wrapper for openaAPI conflict response
-func conflict() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Conflict").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Conflict"}))
-}
-
-// unauthorized is a wrapper for openaAPI unauthorized response
+// unauthorized is a wrapper for OpenAPI unauthorized response
 func unauthorized() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Unauthorized").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Unauthorized"}))
+	return commonResponse(http.StatusUnauthorized)
 }
 
-// forbidden is a wrapper for openaAPI forbidden response
+// forbidden is a wrapper for OpenAPI forbidden response
 func forbidden() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Forbidden").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Forbidden"}))
+	return commonResponse(http.StatusForbidden)
 }
 
-// invalidInput is a wrapper for openaAPI invalidInput response
+// invalidInput is a wrapper for OpenAPI invalid input response
+// Note: This uses the InvalidInput component, not BadRequest
 func invalidInput() *openapi3.Response {
+	// For now, just return a simple response without schema reference
+	// TODO: Add proper error schema references when StatusError schema is working
 	return openapi3.NewResponse().
-		WithDescription("Invalid Input").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/InvalidInput"}))
-}
-
-// tooManyRequests is a wrapper for openaAPI too many requests response
-func tooManyRequests() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Too Many Requests").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/TooManyRequests"}))
+		WithDescription("Invalid Input")
 }
 
 // AddRequestBody is used to add a request body definition to the OpenAPI schema
@@ -158,5 +172,14 @@ func AllSecurityRequirements() *openapi3.SecurityRequirements {
 		openapi3.SecurityRequirement{
 			"apiKey": []string{},
 		},
+	}
+}
+
+// AddStandardResponses adds common error responses to an OpenAPI operation
+func AddStandardResponses(operation *openapi3.Operation) {
+	if operation != nil {
+		operation.AddResponse(http.StatusBadRequest, badRequest())
+		operation.AddResponse(http.StatusUnauthorized, unauthorized())
+		operation.AddResponse(http.StatusInternalServerError, internalServerError())
 	}
 }

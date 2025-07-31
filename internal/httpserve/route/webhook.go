@@ -3,28 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerWebhookHandler registers a webhook endpoint handler behind the /stripe/ path for handling inbound event receivers from stripe
 func registerWebhookHandler(router *Router) (err error) {
-	path := "/stripe/webhook"
-	method := http.MethodPost
-	name := "StripeWebhook"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: baseMW, // leaves off the additional middleware(including csrf)
-		Handler: func(c echo.Context) error {
-			return router.Handler.WebhookReceiverHandler(c)
-		},
+	config := Config{
+		Path:        "/stripe/webhook",
+		Method:      http.MethodPost,
+		Name:        "StripeWebhook",
+		Description: "Handle incoming webhook events from Stripe for subscription and payment processing",
+		Tags:        []string{"webhooks", "payments"},
+		OperationID: "StripeWebhook",
+		Security:    handlers.PublicSecurity,  // Stripe signs the request
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		Handler:     router.Handler.WebhookReceiverHandler,
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

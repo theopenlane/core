@@ -3,74 +3,56 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerIntegrationOAuthStartHandler registers the OAuth start handler for integrations
 func registerIntegrationOAuthStartHandler(router *Router) error {
-	path := "/integrations/oauth/start"
-	method := http.MethodPost
-	name := "StartIntegrationOAuth"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.StartOAuthFlow(c)
-		},
+	config := Config{
+		Path:        "/integrations/oauth/start",
+		Method:      http.MethodPost,
+		Name:        "StartIntegrationOAuth",
+		Description: "Start OAuth flow for integration",
+		Tags:        []string{"integrations"},
+		OperationID: "StartIntegrationOAuth",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.StartOAuthFlow,
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerIntegrationOAuthCallbackHandler registers the OAuth callback handler for integrations
 func registerIntegrationOAuthCallbackHandler(router *Router) error {
-	path := "/integrations/oauth/callback"
-	method := http.MethodGet
-	name := "IntegrationOAuthCallback"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw, // needs to not be authenticated as it is called by external oauth provider
-		Handler: func(c echo.Context) error {
-			return router.Handler.HandleOAuthCallback(c)
-		},
+	config := Config{
+		Path:        "/integrations/oauth/callback",
+		Method:      http.MethodGet,
+		Name:        "IntegrationOAuthCallback",
+		Description: "Handle OAuth callback for integration",
+		Tags:        []string{"integrations"},
+		OperationID: "IntegrationOAuthCallback",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		Handler:     router.Handler.HandleOAuthCallback,
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerRefreshIntegrationTokenHandler registers the handler to refresh integration tokens
 func registerRefreshIntegrationTokenHandler(router *Router) error {
-	path := "/integrations/:provider/refresh"
-	method := http.MethodPost
-	name := "RefreshIntegrationToken"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.RefreshIntegrationTokenHandler(c)
-		},
+	config := Config{
+		Path:        "/integrations/:provider/refresh",
+		Method:      http.MethodPost,
+		Name:        "RefreshIntegrationToken",
+		Description: "Refresh integration token",
+		Tags:        []string{"integrations"},
+		OperationID: "RefreshIntegrationToken",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.RefreshIntegrationTokenHandler,
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

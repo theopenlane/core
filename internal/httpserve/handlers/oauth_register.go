@@ -19,10 +19,10 @@ import (
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user
-func (h *Handler) OauthRegister(ctx echo.Context) error {
-	var in models.OauthTokenRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOauthTokenRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	ctxWithToken := token.NewContextWithOauthTooToken(ctx.Request().Context(), in.Email)
@@ -34,28 +34,28 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 
 	// verify the token provided to ensure the user is valid
 	if err := h.verifyClientToken(ctxWithToken, in.AuthProvider, tok, in.Email); err != nil {
-		return h.InvalidInput(ctx, err)
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// check if users exists and create if not, updates last seen of existing user
 	user, err := h.CheckAndCreateUser(ctxWithToken, in.Name, in.Email, enums.AuthProvider(strings.ToUpper(in.AuthProvider)), in.Image)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// set user to verified
 	if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
 		log.Error().Err(err).Msg("unable to set email as verified")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// create claims for verified user
-	auth, err := h.AuthManager.GenerateOauthAuthSession(ctx.Request().Context(), ctx.Response().Writer, user, in)
+	auth, err := h.AuthManager.GenerateOauthAuthSession(ctx.Request().Context(), ctx.Response().Writer, user, *in)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	out := models.LoginReply{
@@ -66,7 +66,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 	}
 
 	// Return the access token
-	return h.Success(ctx, out)
+	return h.Success(ctx, out, openapi)
 }
 
 // verifyClientToken verifies the provided access token from an external oauth2 provider is valid and matches the user's email

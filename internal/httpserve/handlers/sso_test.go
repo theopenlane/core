@@ -34,7 +34,9 @@ import (
 func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	t := suite.T()
 
-	suite.e.GET(".well-known/webfinger", suite.h.WebfingerHandler)
+	// Create operation for WebfingerHandler
+	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
+	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	ctx = ent.NewContext(ctx, suite.db)
@@ -75,7 +77,9 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 }
 
 func (suite *HandlerTestSuite) TestWebfingerHandlerNotFound() {
-	suite.e.GET(".well-known/webfinger", suite.h.WebfingerHandler)
+	// Create operation for WebfingerHandler
+	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
+	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
 
 	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+gofakeit.Email(), nil)
 	rec := httptest.NewRecorder()
@@ -249,8 +253,11 @@ func (m *mockOIDCServer) Close() { m.server.Close() }
 func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	t := suite.T()
 
-	suite.e.GET("v1/sso/login", suite.h.SSOLoginHandler)
-	suite.e.GET("v1/sso/callback", suite.h.SSOCallbackHandler)
+	// Create operations for SSO handlers
+	ssoLoginOp := suite.createImpersonationOperation("SSOLoginHandler", "SSO login handler")
+	ssoCallbackOp := suite.createImpersonationOperation("SSOCallbackHandler", "SSO callback handler")
+	suite.registerTestHandler("GET", "v1/sso/login", ssoLoginOp, suite.h.SSOLoginHandler)
+	suite.registerTestHandler("GET", "v1/sso/callback", ssoCallbackOp, suite.h.SSOCallbackHandler)
 
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),

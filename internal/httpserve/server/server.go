@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
@@ -27,6 +28,8 @@ type Server struct {
 	handlers []handler
 	// Router makes the router directly accessible on the Server struct
 	Router *route.Router
+	// SchemaRegistry manages OpenAPI schemas dynamically
+	SchemaRegistry *SchemaRegistry
 }
 
 // LogConfig is a struct that holds the configuration for logging in the echo server
@@ -93,9 +96,13 @@ func NewRouter(c LogConfig) (*route.Router, error) {
 		return nil, err
 	}
 
+	// Create schema registry for dynamic type registration
+	schemaRegistry := NewSchemaRegistry(oas, openapi3gen.UseAllExportedFields(), customizer)
+
 	return &route.Router{
-		Echo: ConfigureEcho(c),
-		OAS:  oas,
+		Echo:           ConfigureEcho(c),
+		OAS:            oas,
+		SchemaRegistry: schemaRegistry,
 	}, nil
 }
 

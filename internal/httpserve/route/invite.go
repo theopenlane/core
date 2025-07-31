@@ -3,30 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerInviteHandler registers the invite handler
-func registerInviteHandler(router *Router) (err error) {
-	path := "/invite"
-	method := http.MethodGet
-	name := "OrganizationInviteAccept"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.OrganizationInviteAccept(c)
-		},
+func registerInviteHandler(router *Router) error {
+	config := Config{
+		Path:        "/invite",
+		Method:      http.MethodGet,
+		Name:        "OrganizationInviteAccept",
+		Description: "Accept an organization invitation",
+		Tags:        []string{"organization"},
+		OperationID: "OrganizationInviteAccept",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.OrganizationInviteAccept,
 	}
 
-	inviteOperation := router.Handler.BindOrganizationInviteAccept()
-
-	if err := router.AddV1Route(path, method, inviteOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

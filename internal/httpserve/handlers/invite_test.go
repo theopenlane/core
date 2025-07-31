@@ -26,7 +26,9 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	t := suite.T()
 
 	// add handler
-	suite.e.GET("invite", suite.h.OrganizationInviteAccept)
+	// Create operation for OrganizationInviteAccept
+	operation := suite.createImpersonationOperation("OrganizationInviteAccept", "Accept organization invite")
+	suite.registerTestHandler("GET", "invite", operation, suite.h.OrganizationInviteAccept)
 
 	// bypass auth
 	ctx := context.Background()

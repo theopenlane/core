@@ -2,9 +2,7 @@ package handlers
 
 import (
 	"errors"
-	"net/http"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -16,14 +14,10 @@ import (
 )
 
 // ResendEmail will resend an email verification email if the provided email exists
-func (h *Handler) ResendEmail(ctx echo.Context) error {
-	var in models.ResendRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) ResendEmail(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResendEmailSuccessRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// set viewer context
@@ -40,19 +34,19 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 		if ent.IsNotFound(err) {
 			// return a 200 response even if user is not found to avoid
 			// exposing confidential information
-			return h.Success(ctx, out)
+			return h.Success(ctx, out, openapi)
 		}
 
 		log.Error().Err(err).Msg("error retrieving user email")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// check to see if user is already confirmed
 	if entUser.Edges.Setting.EmailConfirmed {
 		out.Message = "email is already confirmed"
 
-		return h.Success(ctx, out)
+		return h.Success(ctx, out, openapi)
 	}
 
 	// setup user context
@@ -73,26 +67,8 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 			return h.TooManyRequests(ctx, err)
 		}
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	return h.Success(ctx, out)
-}
-
-// BindResendEmailHandler binds the resend email verification endpoint to the OpenAPI schema
-func (h *Handler) BindResendEmailHandler() *openapi3.Operation {
-	resendEmail := openapi3.NewOperation()
-	resendEmail.Description = "ResendEmail accepts an email address via a POST request and always returns a 200 Status OK response, no matter the input or result of the processing. This is to ensure that no secure information is leaked from this unauthenticated endpoint. If the email address belongs to a user who has not been verified, another verification email is sent. If the post request contains an orgID and the user is invited to that organization but hasn't accepted the invite, then the invite is resent."
-	resendEmail.Tags = []string{"accountRegistration"}
-	resendEmail.OperationID = "ResendEmail"
-	resendEmail.Security = &openapi3.SecurityRequirements{}
-
-	h.AddRequestBody("ResendEmailRequest", models.ExampleResendEmailSuccessRequest, resendEmail)
-	h.AddResponse("ResendEmailReply", "success", models.ExampleResendEmailSuccessResponse, resendEmail, http.StatusOK)
-	resendEmail.AddResponse(http.StatusInternalServerError, internalServerError())
-	resendEmail.AddResponse(http.StatusBadRequest, badRequest())
-	resendEmail.AddResponse(http.StatusBadRequest, invalidInput())
-	resendEmail.AddResponse(http.StatusTooManyRequests, tooManyRequests())
-
-	return resendEmail
+	return h.Success(ctx, out, openapi)
 }

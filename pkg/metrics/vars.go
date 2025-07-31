@@ -7,52 +7,73 @@ import (
 // These variables are stubs for now ad will be added throughout the codebase
 var (
 	WorkerExecutions = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "worker_executions_count",
-		Help: "The number of worker executions completed",
+		Name: "openlane_worker_executions_total",
+		Help: "The total number of worker executions completed",
 	}, []string{"name"})
+
 	WorkerExecutionErrors = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "worker_execution_errors_count",
-		Help: "The number of worker execution errors",
+		Name: "openlane_worker_execution_errors_total",
+		Help: "The total number of worker execution errors",
 	}, []string{"name"})
+
 	Logins = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "logins_count",
-		Help: "The number of logins",
+		Name: "openlane_logins_total",
+		Help: "The total number of login attempts",
 	}, []string{"success"})
 
+	RequestValidations = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_request_validations_total",
+		Help: "The total number of request validations by type and success",
+	}, []string{"request", "success"})
+
+	HandlerErrors = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_handler_errors_total",
+		Help: "The total number of handler errors by function and status code",
+	}, []string{"function", "code"})
+
+	HandlerResults = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_handler_results_total",
+		Help: "The total number of handler results by request type and success",
+	}, []string{"request", "success"})
+
 	Registrations = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "registrations_count",
-		Help: "The number of registrations",
+		Name: "openlane_registrations_total",
+		Help: "The total number of user registrations",
 	})
+
 	QueueTasksPushed = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "queue_tasks_pushed_total",
-		Help: "The number of tasks pushed to queue",
+		Name: "openlane_queue_tasks_pushed_total",
+		Help: "The total number of tasks pushed to queue",
 	}, []string{"queue", "task"})
+
 	QueueTasksPushFailures = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "queue_tasks_pushed_failures_total",
-		Help: "The number of errors pushing a task to the queue",
+		Name: "openlane_queue_tasks_push_failures_total",
+		Help: "The total number of errors pushing a task to the queue",
 	}, []string{"queue", "task"})
 
 	QueueTasksProcessed = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "queue_tasks_processed_total",
-		Help: "The number of tasks processed by the consumer",
+		Name: "openlane_queue_tasks_processed_total",
+		Help: "The total number of tasks processed by the consumer",
 	}, []string{"task"})
+
 	QueueTasksProcessedErrors = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "queue_tasks_processed_errors_total",
-		Help: "The number of errors encountered by the consumer",
+		Name: "openlane_queue_tasks_process_errors_total",
+		Help: "The total number of errors encountered by the consumer",
 	}, []string{"task"})
+
 	QueueTasksProcessedDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
-		Name: "queue_tasks_processed_duration_seconds",
-		Help: "The length of time taken for a task to be processed in seconds",
+		Name: "openlane_queue_tasks_process_duration_seconds",
+		Help: "The duration of task processing in seconds",
 	}, []string{"task"})
 
 	GraphQLOperationTotal = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "graphql_operations_total",
-		Help: "The number of GraphQL operations processed",
+		Name: "openlane_graphql_operations_total",
+		Help: "The total number of GraphQL operations processed",
 	}, []string{"operation", "success"})
 
 	GraphQLOperationDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
-		Name:    "graphql_operation_duration_seconds",
-		Help:    "Duration of GraphQL operations in seconds",
+		Name:    "openlane_graphql_operation_duration_seconds",
+		Help:    "The duration of GraphQL operations in seconds",
 		Buckets: prometheus.DefBuckets,
 	}, []string{"operation"})
 
@@ -65,6 +86,9 @@ var (
 		QueueTasksPushFailures,
 		GraphQLOperationTotal,
 		GraphQLOperationDuration,
+		RequestValidations,
+		HandlerErrors,
+		HandlerResults,
 	}
 
 	QueueConsumerMetrics = []prometheus.Collector{

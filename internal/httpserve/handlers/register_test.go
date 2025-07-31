@@ -31,8 +31,8 @@ import (
 func (suite *HandlerTestSuite) TestRegisterHandler() {
 	t := suite.T()
 
-	// add handler
-	suite.e.POST("register", suite.h.RegisterHandler)
+	// Register test handler with OpenAPI context
+	suite.registerTestHandler("POST", "register", suite.createImpersonationOperation("RegisterHandler", "Test register"), suite.h.RegisterHandler)
 
 	var bonkers = "b!a!n!a!n!a!s!"
 

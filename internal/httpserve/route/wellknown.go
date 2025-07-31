@@ -5,53 +5,49 @@ import (
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
+
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 //go:embed webauthn
 var webauthn embed.FS
 
-// registerSecurityTxtHandler serves up the text output of the security.txt
+// registerWebAuthnWellKnownHandler serves up the webauthn well-known file
 func registerWebAuthnWellKnownHandler(router *Router) (err error) {
-	path := "/.well-known/webauthn"
-	method := http.MethodGet
-	name := "WebAuthn"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     echo.StaticFileHandler("webauthn", webauthn),
+	config := Config{
+		Path:        "/.well-known/webauthn",
+		Method:      http.MethodGet,
+		Name:        "WebAuthnWellKnown",
+		Description: "WebAuthn well-known configuration file",
+		Tags:        []string{"well-known", "webauthn"},
+		OperationID: "WebAuthnWellKnown",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return echo.StaticFileHandler("webauthn", webauthn)(ctx)
+		},
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerJwksWellKnownHandler supplies the JWKS endpoint
 func registerJwksWellKnownHandler(router *Router) (err error) {
-	path := "/.well-known/jwks.json"
-	method := http.MethodGet
-	name := "JWKS"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return c.JSON(http.StatusOK, router.Handler.JWTKeys)
+	config := Config{
+		Path:        "/.well-known/jwks.json",
+		Method:      http.MethodGet,
+		Name:        "JWKS",
+		Description: "JSON Web Key Set for JWT token validation",
+		Tags:        []string{"well-known", "authentication"},
+		OperationID: "JWKS",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return ctx.JSON(http.StatusOK, router.Handler.JWTKeys)
 		},
 	}
 
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 //go:embed security.txt
@@ -59,23 +55,21 @@ var securityTxt embed.FS
 
 // registerSecurityTxtHandler serves up the text output of the security.txt
 func registerSecurityTxtHandler(router *Router) (err error) {
-	path := "/.well-known/security.txt"
-	method := http.MethodGet
-	name := "SecurityTxt"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     echo.StaticFileHandler("security.txt", securityTxt),
+	config := Config{
+		Path:        "/.well-known/security.txt",
+		Method:      http.MethodGet,
+		Name:        "SecurityTxt",
+		Description: "Security contact information and vulnerability disclosure policy",
+		Tags:        []string{"well-known", "security"},
+		OperationID: "SecurityTxt",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return echo.StaticFileHandler("security.txt", securityTxt)(ctx)
+		},
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 //go:embed applemerchant
@@ -83,21 +77,19 @@ var applemerchant embed.FS
 
 // registerAppleMerchantHandler serves up the text output of the applemerchant file
 func registerAppleMerchantHandler(router *Router) (err error) {
-	path := "/.well-known/apple-developer-merchantid-domain-association"
-	method := http.MethodGet
-	name := "Applemerchant"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     echo.StaticFileHandler("applemerchant", applemerchant),
+	config := Config{
+		Path:        "/.well-known/apple-developer-merchantid-domain-association",
+		Method:      http.MethodGet,
+		Name:        "AppleMerchant",
+		Description: "Apple Developer Merchant ID domain association file",
+		Tags:        []string{"well-known", "payments"},
+		OperationID: "AppleMerchant",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return echo.StaticFileHandler("applemerchant", applemerchant)(ctx)
+		},
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

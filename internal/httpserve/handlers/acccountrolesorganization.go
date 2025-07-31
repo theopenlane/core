@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
@@ -18,10 +15,10 @@ import (
 )
 
 // AccountRolesOrganizationHandler lists roles a subject has in relation to an organization
-func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
-	var in models.AccountRolesOrganizationRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleAccountRolesOrganizationRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -30,17 +27,17 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 	if err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	in.ID, err = h.getOrganizationID(in.ID, au)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// validate the input
 	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	req := fgax.ListAccess{
@@ -55,43 +52,12 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 	if err != nil {
 		zerolog.Ctx(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	return h.Success(ctx, models.AccountRolesOrganizationReply{
 		Reply:          rout.Reply{Success: true},
 		Roles:          roles,
 		OrganizationID: req.ObjectID,
-	})
-}
-
-// BindAccountRolesOrganization returns the OpenAPI3 operation for accepting an account roles organization request
-func (h *Handler) BindAccountRolesOrganization() *openapi3.Operation {
-	orgRoles := openapi3.NewOperation()
-	orgRoles.Description = "List roles a subject has in relation to the authenticated organization"
-	orgRoles.Tags = []string{"account"}
-	orgRoles.OperationID = "AccountRolesOrganization"
-	orgRoles.Security = AllSecurityRequirements()
-
-	orgRoles.AddResponse(http.StatusInternalServerError, internalServerError())
-	orgRoles.AddResponse(http.StatusBadRequest, badRequest())
-	orgRoles.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return orgRoles
-}
-
-// BindAccountRolesOrganization returns the OpenAPI3 operation for accepting an account roles organization request
-func (h *Handler) BindAccountRolesOrganizationByID() *openapi3.Operation {
-	orgRoles := openapi3.NewOperation()
-	orgRoles.Description = "List roles a subject has in relation to the organization ID provided"
-	orgRoles.Tags = []string{"account"}
-	orgRoles.OperationID = "AccountRolesOrganizationByID"
-	orgRoles.Security = AllSecurityRequirements()
-
-	h.AddResponse("AccountRolesOrganizationReply", "success", models.ExampleAccountRolesOrganizationReply, orgRoles, http.StatusOK)
-	orgRoles.AddResponse(http.StatusInternalServerError, internalServerError())
-	orgRoles.AddResponse(http.StatusBadRequest, badRequest())
-	orgRoles.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return orgRoles
+	}, openapi)
 }

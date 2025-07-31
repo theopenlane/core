@@ -20,7 +20,9 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 	t := suite.T()
 
 	// add login handler
-	suite.e.POST("login", suite.h.LoginHandler)
+	// Create operation for LoginHandler
+	operation := suite.createImpersonationOperation("LoginHandler", "Login handler")
+	suite.registerTestHandler("POST", "login", operation, suite.h.LoginHandler)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 

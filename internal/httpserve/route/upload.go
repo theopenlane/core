@@ -3,28 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerFileUploadRoute registers the file upload route
 func registerFileUploadRoute(router *Router) (err error) { // nolint:unused
-	path := "/upload"
-	method := http.MethodPost
-	name := "FileUpload"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.FileUploadHandler(c)
-		},
+	config := Config{
+		Path:        "/upload",
+		Method:      http.MethodPost,
+		Name:        "FileUpload",
+		Description: "Upload files to the server storage",
+		Tags:        []string{"files"},
+		OperationID: "FileUpload",
+		Security:    handlers.AuthenticatedSecurity,
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.FileUploadHandler,
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
