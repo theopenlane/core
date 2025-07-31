@@ -145,6 +145,26 @@ func (tcchc *TrustCenterComplianceHistoryCreate) SetTags(s []string) *TrustCente
 	return tcchc
 }
 
+// SetStandardID sets the "standard_id" field.
+func (tcchc *TrustCenterComplianceHistoryCreate) SetStandardID(s string) *TrustCenterComplianceHistoryCreate {
+	tcchc.mutation.SetStandardID(s)
+	return tcchc
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcchc *TrustCenterComplianceHistoryCreate) SetTrustCenterID(s string) *TrustCenterComplianceHistoryCreate {
+	tcchc.mutation.SetTrustCenterID(s)
+	return tcchc
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcchc *TrustCenterComplianceHistoryCreate) SetNillableTrustCenterID(s *string) *TrustCenterComplianceHistoryCreate {
+	if s != nil {
+		tcchc.SetTrustCenterID(*s)
+	}
+	return tcchc
+}
+
 // SetID sets the "id" field.
 func (tcchc *TrustCenterComplianceHistoryCreate) SetID(s string) *TrustCenterComplianceHistoryCreate {
 	tcchc.mutation.SetID(s)
@@ -244,6 +264,9 @@ func (tcchc *TrustCenterComplianceHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterComplianceHistory.operation": %w`, err)}
 		}
 	}
+	if _, ok := tcchc.mutation.StandardID(); !ok {
+		return &ValidationError{Name: "standard_id", err: errors.New(`generated: missing required field "TrustCenterComplianceHistory.standard_id"`)}
+	}
 	return nil
 }
 
@@ -319,6 +342,14 @@ func (tcchc *TrustCenterComplianceHistoryCreate) createSpec() (*TrustCenterCompl
 	if value, ok := tcchc.mutation.Tags(); ok {
 		_spec.SetField(trustcentercompliancehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := tcchc.mutation.StandardID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
+		_node.StandardID = value
+	}
+	if value, ok := tcchc.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

@@ -38,8 +38,12 @@ type TrustCenterComplianceHistory struct {
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
-	selectValues sql.SelectValues
+	Tags []string `json:"tags,omitempty"`
+	// ID of the standard
+	StandardID string `json:"standard_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -51,7 +55,7 @@ func (*TrustCenterComplianceHistory) scanValues(columns []string) ([]any, error)
 			values[i] = new([]byte)
 		case trustcentercompliancehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentercompliancehistory.FieldID, trustcentercompliancehistory.FieldRef, trustcentercompliancehistory.FieldCreatedBy, trustcentercompliancehistory.FieldUpdatedBy, trustcentercompliancehistory.FieldDeletedBy:
+		case trustcentercompliancehistory.FieldID, trustcentercompliancehistory.FieldRef, trustcentercompliancehistory.FieldCreatedBy, trustcentercompliancehistory.FieldUpdatedBy, trustcentercompliancehistory.FieldDeletedBy, trustcentercompliancehistory.FieldStandardID, trustcentercompliancehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case trustcentercompliancehistory.FieldHistoryTime, trustcentercompliancehistory.FieldCreatedAt, trustcentercompliancehistory.FieldUpdatedAt, trustcentercompliancehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -138,6 +142,18 @@ func (tcch *TrustCenterComplianceHistory) assignValues(columns []string, values 
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case trustcentercompliancehistory.FieldStandardID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
+			} else if value.Valid {
+				tcch.StandardID = value.String
+			}
+		case trustcentercompliancehistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				tcch.TrustCenterID = value.String
+			}
 		default:
 			tcch.selectValues.Set(columns[i], values[i])
 		}
@@ -203,6 +219,12 @@ func (tcch *TrustCenterComplianceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", tcch.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("standard_id=")
+	builder.WriteString(tcch.StandardID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(tcch.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

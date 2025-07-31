@@ -2,7 +2,6 @@ package interceptors
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent"
 
@@ -63,7 +62,6 @@ func TraverseStandard() ent.Interceptor {
 			)
 		}
 
-		fmt.Println("DONE HERE")
 		return nil
 	})
 }

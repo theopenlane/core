@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 
@@ -34,9 +35,11 @@ type TrustCenterQuery struct {
 	withCustomDomain                  *CustomDomainQuery
 	withSetting                       *TrustCenterSettingQuery
 	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
+	withTrustCenterCompliances        *TrustCenterComplianceQuery
 	loadTotal                         []func(context.Context, []*TrustCenter) error
 	modifiers                         []func(*sql.Selector)
 	withNamedTrustCenterSubprocessors map[string]*TrustCenterSubprocessorQuery
+	withNamedTrustCenterCompliances   map[string]*TrustCenterComplianceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -167,6 +170,31 @@ func (tcq *TrustCenterQuery) QueryTrustCenterSubprocessors() *TrustCenterSubproc
 		schemaConfig := tcq.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterSubprocessor
 		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromU = sqlgraph.SetNeighbors(tcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenterCompliances chains the current query on the "trust_center_compliances" edge.
+func (tcq *TrustCenterQuery) QueryTrustCenterCompliances() *TrustCenterComplianceQuery {
+	query := (&TrustCenterComplianceClient{config: tcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(trustcentercompliance.Table, trustcentercompliance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterCompliancesTable, trustcenter.TrustCenterCompliancesColumn),
+		)
+		schemaConfig := tcq.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterCompliance
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
 		fromU = sqlgraph.SetNeighbors(tcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -369,6 +397,7 @@ func (tcq *TrustCenterQuery) Clone() *TrustCenterQuery {
 		withCustomDomain:             tcq.withCustomDomain.Clone(),
 		withSetting:                  tcq.withSetting.Clone(),
 		withTrustCenterSubprocessors: tcq.withTrustCenterSubprocessors.Clone(),
+		withTrustCenterCompliances:   tcq.withTrustCenterCompliances.Clone(),
 		// clone intermediate query.
 		sql:       tcq.sql.Clone(),
 		path:      tcq.path,
@@ -417,6 +446,17 @@ func (tcq *TrustCenterQuery) WithTrustCenterSubprocessors(opts ...func(*TrustCen
 		opt(query)
 	}
 	tcq.withTrustCenterSubprocessors = query
+	return tcq
+}
+
+// WithTrustCenterCompliances tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_compliances" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcq *TrustCenterQuery) WithTrustCenterCompliances(opts ...func(*TrustCenterComplianceQuery)) *TrustCenterQuery {
+	query := (&TrustCenterComplianceClient{config: tcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcq.withTrustCenterCompliances = query
 	return tcq
 }
 
@@ -504,11 +544,12 @@ func (tcq *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*TrustCenter{}
 		_spec       = tcq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			tcq.withOwner != nil,
 			tcq.withCustomDomain != nil,
 			tcq.withSetting != nil,
 			tcq.withTrustCenterSubprocessors != nil,
+			tcq.withTrustCenterCompliances != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -561,10 +602,26 @@ func (tcq *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := tcq.withTrustCenterCompliances; query != nil {
+		if err := tcq.loadTrustCenterCompliances(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.TrustCenterCompliances = []*TrustCenterCompliance{} },
+			func(n *TrustCenter, e *TrustCenterCompliance) {
+				n.Edges.TrustCenterCompliances = append(n.Edges.TrustCenterCompliances, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range tcq.withNamedTrustCenterSubprocessors {
 		if err := tcq.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterSubprocessors(name) },
 			func(n *TrustCenter, e *TrustCenterSubprocessor) { n.appendNamedTrustCenterSubprocessors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tcq.withNamedTrustCenterCompliances {
+		if err := tcq.loadTrustCenterCompliances(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedTrustCenterCompliances(name) },
+			func(n *TrustCenter, e *TrustCenterCompliance) { n.appendNamedTrustCenterCompliances(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -676,6 +733,36 @@ func (tcq *TrustCenterQuery) loadTrustCenterSubprocessors(ctx context.Context, q
 	}
 	query.Where(predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(trustcenter.TrustCenterSubprocessorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TrustCenterID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (tcq *TrustCenterQuery) loadTrustCenterCompliances(ctx context.Context, query *TrustCenterComplianceQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustCenterCompliance)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenter)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcentercompliance.FieldTrustCenterID)
+	}
+	query.Where(predicate.TrustCenterCompliance(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.TrustCenterCompliancesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -807,6 +894,20 @@ func (tcq *TrustCenterQuery) WithNamedTrustCenterSubprocessors(name string, opts
 		tcq.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery)
 	}
 	tcq.withNamedTrustCenterSubprocessors[name] = query
+	return tcq
+}
+
+// WithNamedTrustCenterCompliances tells the query-builder to eager-load the nodes that are connected to the "trust_center_compliances"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tcq *TrustCenterQuery) WithNamedTrustCenterCompliances(name string, opts ...func(*TrustCenterComplianceQuery)) *TrustCenterQuery {
+	query := (&TrustCenterComplianceClient{config: tcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tcq.withNamedTrustCenterCompliances == nil {
+		tcq.withNamedTrustCenterCompliances = make(map[string]*TrustCenterComplianceQuery)
+	}
+	tcq.withNamedTrustCenterCompliances[name] = query
 	return tcq
 }
 

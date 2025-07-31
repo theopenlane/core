@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -28,8 +29,30 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldStandardID holds the string denoting the standard_id field in the database.
+	FieldStandardID = "standard_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
+	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
+	EdgeTrustCenter = "trust_center"
+	// EdgeStandard holds the string denoting the standard edge name in mutations.
+	EdgeStandard = "standard"
 	// Table holds the table name of the trustcentercompliance in the database.
 	Table = "trust_center_compliances"
+	// TrustCenterTable is the table that holds the trust_center relation/edge.
+	TrustCenterTable = "trust_center_compliances"
+	// TrustCenterInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCenterInverseTable = "trust_centers"
+	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
+	TrustCenterColumn = "trust_center_id"
+	// StandardTable is the table that holds the standard relation/edge.
+	StandardTable = "trust_center_compliances"
+	// StandardInverseTable is the table name for the Standard entity.
+	// It exists in this package in order to avoid circular dependency with the "standard" package.
+	StandardInverseTable = "standards"
+	// StandardColumn is the table column denoting the standard relation/edge.
+	StandardColumn = "standard_id"
 )
 
 // Columns holds all SQL columns for trustcentercompliance fields.
@@ -42,6 +65,8 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldStandardID,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -60,8 +85,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [5]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -71,6 +96,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
+	StandardIDValidator func(string) error
+	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	TrustCenterIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -111,4 +140,42 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByStandardID orders the results by the standard_id field.
+func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
+// ByTrustCenterField orders the results by trust_center field.
+func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByStandardField orders the results by standard field.
+func ByStandardField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStandardStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newTrustCenterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+	)
+}
+func newStandardStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StandardInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, StandardTable, StandardColumn),
+	)
 }
