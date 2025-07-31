@@ -168,7 +168,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		sessions.WithPersistence(suite.sharedRedisClient),
 	)
 
-	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),

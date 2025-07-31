@@ -289,7 +289,7 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 		// In order for things to work in dev mode with localhost
 		// we need to se the debug cookie config
 		if s.Config.Settings.Server.Dev {
-			cc = &sessions.DebugOnlyCookieConfig
+			cc = sessions.DebugOnlyCookieConfig
 		} else {
 			cc.Name = sessions.DefaultCookieName
 		}

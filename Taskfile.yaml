@@ -74,7 +74,7 @@ tasks:
       - go-generate-fast ./...
       - task: tidy
 
-  generate:ci-fast:
+  generate:checksums:
     desc: Generate with checksum tracking for CI optimization
     cmds:
       - task: generate:ent:smart
@@ -92,11 +92,8 @@ tasks:
     generates:
       - internal/ent/generated/**/*.go
     method: checksum
-    env:
-      GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
     cmds:
-      - mkdir -p /tmp/go-generate-fast-cache
-      - go-generate-fast internal/ent/generate/generate.go
+      - go generate internal/ent/generate/generate.go
 
   generate:graphql:smart:
     internal: true
@@ -113,11 +110,8 @@ tasks:
       - pkg/openlaneclient/graphqlclient.go
       - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
-    env:
-      GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
     cmds:
-      - mkdir -p /tmp/go-generate-fast-cache
-      - go-generate-fast internal/graphapi/generate/generate.go
+      - go generate internal/graphapi/generate/generate.go
 
   generate:others:smart:
     internal: true
@@ -132,13 +126,10 @@ tasks:
       - pkg/corejobs/internal/cloudflare/mocks/mocks.go
       - pkg/objects/mocks/mocks.go
     method: checksum
-    env:
-      GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
     cmds:
-      - mkdir -p /tmp/go-generate-fast-cache
-      - go-generate-fast pkg/catalog/generate.go
-      - go-generate-fast pkg/corejobs/internal/generate.go
-      - go-generate-fast pkg/objects/objects.go
+      - go generate pkg/catalog/generate.go
+      - go generate pkg/corejobs/internal/generate.go
+      - go generate pkg/objects/objects.go
 
   # Buildkite automation tasks
   buildkite:draft-pr:
