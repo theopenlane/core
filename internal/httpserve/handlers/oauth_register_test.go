@@ -23,7 +23,9 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	t := suite.T()
 
 	// add login handler
-	suite.e.POST("oauth/register", suite.h.OauthRegister)
+	// Create operation for OauthRegister
+	operation := suite.createImpersonationOperation("OauthRegister", "OAuth register")
+	suite.registerTestHandler("POST", "oauth/register", operation, suite.h.OauthRegister)
 
 	type args struct {
 		name     string

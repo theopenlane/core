@@ -25,7 +25,9 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 	t := suite.T()
 
 	// add handler
-	suite.e.GET("verify", suite.h.VerifyEmail)
+	// Create operation for VerifyEmail
+	operation := suite.createImpersonationOperation("VerifyEmail", "Verify email address")
+	suite.registerTestHandler("GET", "verify", operation, suite.h.VerifyEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 

@@ -2,20 +2,145 @@ package route
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
+	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/utils/contextx"
 )
+
+// convertEchoPathToOpenAPI converts Echo's :param syntax to OpenAPI's {param} syntax
+func convertEchoPathToOpenAPI(echoPath string) string {
+	// Split the path into parts and convert :param to {param}
+	parts := strings.Split(echoPath, "/")
+	for i, part := range parts {
+		if strings.HasPrefix(part, ":") {
+			// Convert :param to {param}
+			parts[i] = "{" + part[1:] + "}"
+		}
+	}
+
+	return strings.Join(parts, "/")
+}
+
+// addPathParametersFromPattern extracts path parameters from Echo-style path and adds them to OpenAPI operation
+func (r *Router) addPathParametersFromPattern(path string, operation *openapi3.Operation) {
+	// Extract parameter names from Echo-style path (e.g., :id, :name)
+	parts := strings.Split(path, "/")
+	for _, part := range parts {
+		if strings.HasPrefix(part, ":") {
+			paramName := part[1:] // Remove the : prefix
+
+			// Check if parameter already exists (e.g., from struct tags)
+			exists := false
+			if operation.Parameters != nil {
+				for _, p := range operation.Parameters {
+					if p.Value != nil && p.Value.Name == paramName && p.Value.In == "path" {
+						exists = true
+						break
+					}
+				}
+			}
+
+			// Only add if it doesn't already exist
+			if !exists {
+				// Add path parameter to the operation
+				param := openapi3.NewPathParameter(paramName).
+					WithSchema(openapi3.NewStringSchema()).
+					WithDescription(fmt.Sprintf("Path parameter: %s", paramName))
+				operation.AddParameter(param)
+			}
+		}
+	}
+}
+
+// registerSuccessResponseSchemas registers success response schemas based on operation patterns
+func (r *Router) registerSuccessResponseSchemas(config Config, openAPIContext *handlers.OpenAPIContext) {
+	if openAPIContext.Registry == nil {
+		return
+	}
+
+	// Map of operation IDs to their corresponding reply models
+	var replyModel any
+
+	switch config.OperationID {
+	case "LoginHandler":
+		replyModel = models.ExampleLoginSuccessResponse
+	case "RefreshHandler":
+		replyModel = models.ExampleRefreshSuccessResponse
+	case "Register":
+		replyModel = models.ExampleRegisterSuccessResponse
+	case "VerifyEmail":
+		replyModel = models.ExampleVerifySuccessResponse
+	case "ResendEmail":
+		replyModel = models.ExampleResendEmailSuccessResponse
+	case "ForgotPassword":
+		replyModel = models.ExampleForgotPasswordSuccessResponse
+	case "ResetPassword":
+		replyModel = models.ExampleResetPasswordSuccessResponse
+	case "VerifySubscription":
+		replyModel = models.ExampleVerifySubscriptionResponse
+	case "TFAValidation":
+		replyModel = models.ExampleTFASSuccessResponse
+	case "OrganizationInviteAccept":
+		replyModel = models.ExampleInviteResponse
+	case "AgentNodeRegistration":
+		replyModel = models.ExampleJobRunnerRegistrationResponse
+	case "Switch":
+		replyModel = models.ExampleSwitchSuccessReply
+	case "AccountAccess":
+		replyModel = models.ExampleAccountAccessReply
+	case "AccountRoles":
+		replyModel = models.ExampleAccountRolesReply
+	case "AccountRolesOrganization", "AccountRolesOrganizationByID":
+		replyModel = models.ExampleAccountRolesOrganizationReply
+	case "AccountFeatures", "AccountFeaturesByID":
+		replyModel = models.ExampleAccountFeaturesReply
+	case "SSOLogin", "SSOCallback":
+		replyModel = models.ExampleSSOStatusReply
+	case "SSOTokenAuthorize", "SSOTokenCallback":
+		replyModel = models.ExampleSSOTokenAuthorizeReply
+	case "StartImpersonation":
+		replyModel = models.ExampleStartImpersonationReply
+	case "EndImpersonation":
+		replyModel = models.ExampleEndImpersonationReply
+	case "StartIntegrationOAuth":
+		replyModel = models.ExampleOAuthFlowResponse
+	case "IntegrationOAuthCallback":
+		replyModel = models.ExampleOAuthCallbackResponse
+	case "WebauthnRegistration":
+		replyModel = models.ExampleWebauthnBeginRegistrationResponse
+	case "FileUpload":
+		replyModel = models.ExampleUploadFilesSuccessResponse
+	default:
+		// For endpoints without specific reply models, don't register success response
+		return
+	}
+
+	// Register the success response schema
+	if schemaRef, err := openAPIContext.Registry.GetOrRegister(replyModel); err == nil {
+		response := openapi3.NewResponse().
+			WithDescription("Success").
+			WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+		openAPIContext.Operation.AddResponse(http.StatusOK, response)
+
+		// Add example
+		response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+		response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(replyModel)}
+	}
+}
 
 var (
 	// baseMW includes the basic middleware, which includes the transaction middleware and recovery middleware, most endpoints will not use this, but use `mw` instead
@@ -29,6 +154,18 @@ var (
 	restrictedRateLimit = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
 	// restrictedEndpointsMW is the middleware that is used on restricted endpoints, it includes the base middleware, additional middleware, and the rate limiter
 	restrictedEndpointsMW = []echo.MiddlewareFunc{}
+)
+
+// Middleware Semantic Names for better readability
+var (
+	// AuthenticatedEndpoint for endpoints requiring authentication
+	AuthenticatedEndpoint = &authMW
+	// PublicEndpoint for standard public endpoints
+	PublicEndpoint = &mw
+	// RestrictedEndpoint for rate-limited endpoints
+	RestrictedEndpoint = &restrictedEndpointsMW
+	// UnauthenticatedEndpoint for basic endpoints with minimal middleware
+	UnauthenticatedEndpoint = &baseMW
 )
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
@@ -111,7 +248,9 @@ func (r *Router) AddRoute(pattern, method string, op *openapi3.Operation, route 
 		return err
 	}
 
-	r.OAS.AddOperation(pattern, method, op)
+	// Convert Echo path syntax to OpenAPI syntax
+	openAPIPath := convertEchoPathToOpenAPI(pattern)
+	r.OAS.AddOperation(openAPIPath, method, op)
 
 	return nil
 }
@@ -125,7 +264,9 @@ func (r *Router) AddV1Route(pattern, method string, op *openapi3.Operation, rout
 		return err
 	}
 
-	r.OAS.AddOperation(pattern, method, op)
+	// Convert Echo path syntax to OpenAPI syntax
+	openAPIPath := convertEchoPathToOpenAPI(pattern)
+	r.OAS.AddOperation(openAPIPath, method, op)
 
 	return nil
 }
@@ -139,7 +280,9 @@ func (r *Router) AddUnversionedRoute(pattern, method string, op *openapi3.Operat
 		return err
 	}
 
-	r.OAS.AddOperation(pattern, method, op)
+	// Convert Echo path syntax to OpenAPI syntax
+	openAPIPath := convertEchoPathToOpenAPI(pattern)
+	r.OAS.AddOperation(openAPIPath, method, op)
 
 	return nil
 }
@@ -171,17 +314,18 @@ func (r *Router) Base() *echo.Group {
 	return r.Echo.Group("")
 }
 
-// RouteConfig holds the configuration for a route with automatic OpenAPI registration
-type RouteConfig struct {
-	Path        string
-	Method      string
-	Name        string
-	Description string
-	Tags        []string
-	OperationID string
-	Security    *openapi3.SecurityRequirements
-	Middlewares []echo.MiddlewareFunc
-	Handler     func(echo.Context, *handlers.OpenAPIContext) error
+// Config holds the configuration for a route with automatic OpenAPI registration
+type Config struct {
+	Path          string
+	Method        string
+	Name          string
+	Description   string
+	Tags          []string
+	OperationID   string
+	Security      *openapi3.SecurityRequirements
+	Middlewares   []echo.MiddlewareFunc
+	Handler       func(echo.Context, *handlers.OpenAPIContext) error
+	SimpleHandler func(echo.Context) error // For handlers that don't need OpenAPI context
 }
 
 // registrationContext is a special echo.Context implementation used during OpenAPI registration
@@ -204,16 +348,18 @@ func newRegistrationContext() *registrationContext {
 // Request returns a minimal request that won't panic when accessed
 func (rc *registrationContext) Request() *http.Request {
 	req, _ := http.NewRequestWithContext(rc.ctx, "POST", "/", nil)
+
 	return req
 }
 
 // AddV1HandlerRoute adds a route with automatic OpenAPI context injection
-func (r *Router) AddV1HandlerRoute(config RouteConfig) error {
-	// Create OpenAPI operation
+func (r *Router) AddV1HandlerRoute(config Config) error {
 	operation := openapi3.NewOperation()
+	operation.Summary = config.Description
 	operation.Description = config.Description
 	operation.Tags = config.Tags
 	operation.OperationID = config.OperationID
+
 	if config.Security != nil {
 		operation.Security = config.Security
 	}
@@ -226,19 +372,52 @@ func (r *Router) AddV1HandlerRoute(config RouteConfig) error {
 
 	// Call the handler with a registration context to trigger OpenAPI registration
 	// This allows handlers to register their request/response schemas at startup
-	// We ignore the error because we're just triggering schema registration
 	regCtx := newRegistrationContext()
-	_ = config.Handler(regCtx, openAPIContext)
+
+	// Try to call the handler - if it returns an error or panics, that's OK
+	// during registration. The important thing is that the handler had a chance
+	// to register its schemas via BindAndValidateWithAutoRegistry and response methods
+	func() {
+		defer func() {
+			// During registration, handlers might panic when accessing nil request fields
+			// This is expected and OK - the schemas should still be registered
+			_ = recover()
+		}()
+		if config.Handler != nil {
+			_ = config.Handler(regCtx, openAPIContext)
+		} else if config.SimpleHandler != nil {
+			_ = config.SimpleHandler(regCtx)
+		}
+	}()
+
+	// Ensure common error responses are registered for all endpoints
+	if openAPIContext.Operation != nil {
+		// Add standard error responses that all endpoints should have
+		handlers.AddStandardResponses(openAPIContext.Operation)
+
+		// Register success response schemas based on operation ID patterns
+		r.registerSuccessResponseSchemas(config, openAPIContext)
+
+		// Add path parameters from the path pattern if not already added by BindAndValidateWithAutoRegistry
+		r.addPathParametersFromPattern(config.Path, operation)
+	}
 
 	// Create echo route with automatic OpenAPI context injection
+	var routeHandler func(echo.Context) error
+	if config.Handler != nil {
+		routeHandler = func(c echo.Context) error {
+			return config.Handler(c, openAPIContext)
+		}
+	} else if config.SimpleHandler != nil {
+		routeHandler = config.SimpleHandler
+	}
+
 	route := echo.Route{
 		Name:        config.Name,
 		Method:      config.Method,
 		Path:        config.Path,
 		Middlewares: config.Middlewares,
-		Handler: func(c echo.Context) error {
-			return config.Handler(c, openAPIContext)
-		},
+		Handler:     routeHandler,
 	}
 
 	// Add route to echo router
@@ -248,8 +427,83 @@ func (r *Router) AddV1HandlerRoute(config RouteConfig) error {
 		return err
 	}
 
-	// Add operation to OpenAPI schema
-	r.OAS.AddOperation(config.Path, config.Method, operation)
+	// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
+	openAPIPath := convertEchoPathToOpenAPI(config.Path)
+	r.OAS.AddOperation(openAPIPath, config.Method, operation)
+
+	return nil
+}
+
+// AddUnversionedHandlerRoute adds an unversioned route with automatic OpenAPI context injection
+func (r *Router) AddUnversionedHandlerRoute(config Config) error {
+	operation := openapi3.NewOperation()
+	operation.Summary = config.Description
+	operation.Description = config.Description
+	operation.Tags = config.Tags
+	operation.OperationID = config.OperationID
+
+	if config.Security != nil {
+		operation.Security = config.Security
+	}
+
+	// Create OpenAPI context
+	openAPIContext := &handlers.OpenAPIContext{
+		Operation: operation,
+		Registry:  r.SchemaRegistry,
+	}
+
+	// Call the handler with a registration context to trigger OpenAPI registration
+	regCtx := newRegistrationContext()
+
+	func() {
+		defer func() {
+			// During registration, handlers might panic when accessing nil request fields
+			_ = recover()
+		}()
+		if config.Handler != nil {
+			_ = config.Handler(regCtx, openAPIContext)
+		} else if config.SimpleHandler != nil {
+			_ = config.SimpleHandler(regCtx)
+		}
+	}()
+
+	// Ensure common error responses are registered for all endpoints
+	if openAPIContext.Operation != nil {
+		handlers.AddStandardResponses(openAPIContext.Operation)
+		r.registerSuccessResponseSchemas(config, openAPIContext)
+
+		// Add path parameters from the path pattern if not already added by BindAndValidateWithAutoRegistry
+		r.addPathParametersFromPattern(config.Path, operation)
+	}
+
+	// Create echo route with automatic OpenAPI context injection
+	var routeHandler func(echo.Context) error
+	if config.Handler != nil {
+		routeHandler = func(c echo.Context) error {
+			return config.Handler(c, openAPIContext)
+		}
+	} else if config.SimpleHandler != nil {
+		routeHandler = config.SimpleHandler
+	}
+
+	route := echo.Route{
+		Name:        config.Name,
+		Method:      config.Method,
+		Path:        config.Path,
+		Middlewares: config.Middlewares,
+		Handler:     routeHandler,
+	}
+
+	// Add route to echo router
+	grp := r.Base()
+	_, err := grp.AddRoute(route)
+	if err != nil {
+		return err
+	}
+
+	// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
+	openAPIPath := convertEchoPathToOpenAPI(config.Path)
+	r.OAS.AddOperation(openAPIPath, config.Method, operation)
 
 	return nil
 }
@@ -266,7 +520,7 @@ func RegisterRoutes(router *Router) error {
 	mw = defaultMiddleware(router)
 
 	// routeHandlers that take the router and handler as input
-	routeHandlers := []interface{}{
+	routeHandlers := []any{
 		registerReadinessHandler,
 		registerForgotPasswordHandler,
 		registerVerifyHandler,

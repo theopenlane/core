@@ -3,11 +3,9 @@ package handlers
 import (
 	"context"
 	"errors"
-	"net/http"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
@@ -45,11 +43,10 @@ type InviteToken struct {
 // It receives a request with the user's invitation details, validates the request,
 // and creates organization membership for the user
 // On success, it returns a response with the organization information
-func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
-	// parse the token out of the context
-	in := new(models.InviteRequest)
-	if err := ctx.Bind(in); err != nil {
-		return h.BadRequest(ctx, err)
+func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleInviteRequest, openapi.Registry)
+	if err != nil {
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -59,17 +56,17 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	ctxWithToken, user, invitedUser, err := h.processInvitation(ctx, in.Token, user.Email)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// create new claims for the user
@@ -77,7 +74,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// reply with the relevant details
@@ -94,9 +91,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	return h.Created(ctx, out)
 }
 
-func (h *Handler) processInvitation(
-	ctx echo.Context, invitationToken, userEmail string,
-) (context.Context, *generated.User, *generated.Invite, error) {
+func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail string) (context.Context, *generated.User, *generated.Invite, error) {
 	inv := &Invite{
 		Token: invitationToken,
 	}
@@ -263,21 +258,4 @@ func updateInviteStatusAccepted(ctx context.Context, i *generated.Invite) error 
 // updateInviteStatusExpired updates the status of an invite to "Expired"
 func updateInviteStatusExpired(ctx context.Context, i *generated.Invite) error {
 	return transaction.FromContext(ctx).Invite.UpdateOneID(i.ID).SetStatus(enums.InvitationExpired).Exec(ctx)
-}
-
-// BindOrganizationInviteAccept returns the OpenAPI3 operation for accepting an organization invite
-func (h *Handler) BindOrganizationInviteAccept() *openapi3.Operation {
-	inviteAccept := openapi3.NewOperation()
-	inviteAccept.Description = "Accept an Organization Invite"
-	inviteAccept.Tags = []string{"invitations"}
-	inviteAccept.OperationID = "OrganizationInviteAccept"
-	inviteAccept.Security = AllSecurityRequirements()
-
-	h.AddRequestBody("InviteRequest", models.ExampleInviteRequest, inviteAccept)
-	h.AddResponse("InviteReply", "success", models.ExampleInviteResponse, inviteAccept, http.StatusCreated)
-	inviteAccept.AddResponse(http.StatusInternalServerError, internalServerError())
-	inviteAccept.AddResponse(http.StatusBadRequest, badRequest())
-	inviteAccept.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return inviteAccept
 }

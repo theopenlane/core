@@ -5,140 +5,122 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/httpsling"
 )
 
 // registerOAuthRegisterHandler registers the oauth register handler used by the UI to register
 // users logging in with an oauth provider
-func registerOAuthRegisterHandler(router *Router) (err error) {
-	path := "/oauth/register"
-	method := http.MethodPost
-	name := "OAuthRegister"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.OauthRegister(c)
-		},
+func registerOAuthRegisterHandler(router *Router) error {
+	config := Config{
+		Path:        "/oauth/register",
+		Method:      http.MethodPost,
+		Name:        "OAuthRegister",
+		Description: "Register a user via OAuth provider authentication",
+		Tags:        []string{"oauth", "authentication"},
+		OperationID: "OAuthRegister",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *PublicEndpoint,
+		Handler:     router.Handler.OauthRegister,
 	}
 
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerUserInfoHandler registers the userinfo handler
-func registerUserInfoHandler(router *Router) (err error) {
-	path := "/oauth/userinfo"
-	method := http.MethodGet
-	name := "UserInfo"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			c.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-
-			return router.Handler.UserInfo(c)
+func registerUserInfoHandler(router *Router) error {
+	config := Config{
+		Path:        "/oauth/userinfo",
+		Method:      http.MethodGet,
+		Name:        "UserInfo",
+		Description: "Get user information for OAuth authenticated user",
+		Tags:        []string{"oauth", "user"},
+		OperationID: "UserInfo",
+		Security:    handlers.AuthenticatedSecurity,
+		Middlewares: *AuthenticatedEndpoint,
+		Handler: func(ctx echo.Context, openapi *handlers.OpenAPIContext) error {
+			ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+			return router.Handler.UserInfo(ctx, openapi)
 		},
 	}
 
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerGithubLoginHandler registers the github login handler
-func registerGithubLoginHandler(router *Router) (err error) {
-	path := "/github/login"
-	method := http.MethodGet
-	name := "GitHubLogin"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     githubLogin(router),
+func registerGithubLoginHandler(router *Router) error {
+	config := Config{
+		Path:        "/github/login",
+		Method:      http.MethodGet,
+		Name:        "GitHubLogin",
+		Description: "Initiate GitHub OAuth login flow",
+		Tags:        []string{"oauth", "github"},
+		OperationID: "GitHubLogin",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *PublicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return githubLogin(router)(ctx)
+		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerGithubCallbackHandler registers the github callback handler
-func registerGithubCallbackHandler(router *Router) (err error) {
-	path := "/github/callback"
-	method := http.MethodGet
-	name := "GitHubCallback"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     githubCallback(router),
+func registerGithubCallbackHandler(router *Router) error {
+	config := Config{
+		Path:        "/github/callback",
+		Method:      http.MethodGet,
+		Name:        "GitHubCallback",
+		Description: "Handle GitHub OAuth callback",
+		Tags:        []string{"oauth", "github"},
+		OperationID: "GitHubCallback",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *PublicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return githubCallback(router)(ctx)
+		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerGoogleLoginHandler registers the google login handler
-func registerGoogleLoginHandler(router *Router) (err error) {
-	path := "/google/login"
-	method := http.MethodGet
-	name := "GoogleLogin"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     googleLogin(router),
+func registerGoogleLoginHandler(router *Router) error {
+	config := Config{
+		Path:        "/google/login",
+		Method:      http.MethodGet,
+		Name:        "GoogleLogin",
+		Description: "Initiate Google OAuth login flow",
+		Tags:        []string{"oauth", "google"},
+		OperationID: "GoogleLogin",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *PublicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return googleLogin(router)(ctx)
+		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerGoogleCallbackHandler registers the google callback handler
-func registerGoogleCallbackHandler(router *Router) (err error) {
-	path := "/google/callback"
-	method := http.MethodGet
-	name := "GoogleCallback"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     googleCallback(router),
+func registerGoogleCallbackHandler(router *Router) error {
+	config := Config{
+		Path:        "/google/callback",
+		Method:      http.MethodGet,
+		Name:        "GoogleCallback",
+		Description: "Handle Google OAuth callback",
+		Tags:        []string{"oauth", "google"},
+		OperationID: "GoogleCallback",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *PublicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			return googleCallback(router)(ctx)
+		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // githubLogin wraps getloginhandlers

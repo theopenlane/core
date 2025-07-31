@@ -8,7 +8,7 @@ import (
 )
 
 // UserInfo returns the user information for the authenticated user
-func (h *Handler) UserInfo(ctx echo.Context) error {
+func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
 	// setup view context
 	reqCtx := ctx.Request().Context()
 
@@ -16,7 +16,7 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// get user from database by subject
@@ -24,7 +24,7 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user by subject")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	return h.Success(ctx, user)

@@ -26,7 +26,9 @@ import (
 func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 	t := suite.T()
 
-	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+	// Create operation for StartOAuthFlow
+	startOp := suite.createImpersonationOperation("StartOAuthFlow", "Start OAuth flow")
+	suite.registerTestHandler("POST", "oauth/start", startOp, suite.h.StartOAuthFlow)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -169,7 +171,9 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 	t := suite.T()
 
-	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+	// Create operation for HandleOAuthCallback
+	callbackOp := suite.createImpersonationOperation("HandleOAuthCallback", "Handle OAuth callback")
+	suite.registerTestHandler("GET", "oauth/callback", callbackOp, suite.h.HandleOAuthCallback)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -285,7 +289,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallbackSuccess() {
 	t := suite.T()
 
-	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+	// Create operation for HandleOAuthCallback
+	callbackOp := suite.createImpersonationOperation("HandleOAuthCallback", "Handle OAuth callback")
+	suite.registerTestHandler("GET", "oauth/callback", callbackOp, suite.h.HandleOAuthCallback)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -330,7 +336,9 @@ func (suite *HandlerTestSuite) TestOAuthStateValidationEdgeCases() {
 	t := suite.T()
 
 	// Register the route once for the entire test
-	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+	// Create operation for HandleOAuthCallback
+	callbackOp := suite.createImpersonationOperation("HandleOAuthCallback", "Handle OAuth callback")
+	suite.registerTestHandler("GET", "oauth/callback", callbackOp, suite.h.HandleOAuthCallback)
 
 	t.Run("state validation with invalid base64", func(t *testing.T) {
 		orgID := "test-org-123"
@@ -376,7 +384,9 @@ func (suite *HandlerTestSuite) TestOAuthStateValidationEdgeCases() {
 func (suite *HandlerTestSuite) TestOAuthProviderConfiguration() {
 	t := suite.T()
 
-	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+	// Create operation for StartOAuthFlow
+	startOp := suite.createImpersonationOperation("StartOAuthFlow", "Start OAuth flow")
+	suite.registerTestHandler("POST", "oauth/start", startOp, suite.h.StartOAuthFlow)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -449,7 +459,9 @@ func (suite *HandlerTestSuite) TestOAuthProviderConfiguration() {
 func (suite *HandlerTestSuite) TestOAuthCookieConfiguration() {
 	t := suite.T()
 
-	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+	// Create operation for StartOAuthFlow
+	startOp := suite.createImpersonationOperation("StartOAuthFlow", "Start OAuth flow")
+	suite.registerTestHandler("POST", "oauth/start", startOp, suite.h.StartOAuthFlow)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -592,7 +604,9 @@ func (suite *HandlerTestSuite) createTestTokens(ctx context.Context, integration
 func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 	t := suite.T()
 
-	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+	// Create operation for StartOAuthFlow
+	startOp := suite.createImpersonationOperation("StartOAuthFlow", "Start OAuth flow")
+	suite.registerTestHandler("POST", "oauth/start", startOp, suite.h.StartOAuthFlow)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -712,7 +726,9 @@ func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
 func (suite *HandlerTestSuite) TestOAuthCallbackWithCookies() {
 	t := suite.T()
 
-	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+	// Create operation for HandleOAuthCallback
+	callbackOp := suite.createImpersonationOperation("HandleOAuthCallback", "Handle OAuth callback")
+	suite.registerTestHandler("GET", "oauth/callback", callbackOp, suite.h.HandleOAuthCallback)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)

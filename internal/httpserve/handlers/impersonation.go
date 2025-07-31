@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"time"
 
@@ -16,33 +15,9 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
-// Error definitions for impersonation operations
-var (
-	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
-	ErrAuthenticationRequired = errors.New("authentication required")
-	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session
-	ErrNoActiveImpersonationSession = errors.New("no active impersonation session")
-	// ErrInvalidSessionID indicates that the provided session ID is invalid
-	ErrInvalidSessionID = errors.New("invalid session ID")
-	// ErrInsufficientPermissionsSupport indicates that the user does not have permissions to perform support impersonation
-	ErrInsufficientPermissionsSupport = errors.New("insufficient permissions for support impersonation")
-	// ErrInsufficientPermissionsAdmin indicates that the user does not have permissions to perform admin impersonation
-	ErrInsufficientPermissionsAdmin = errors.New("insufficient permissions for admin impersonation")
-	// ErrJobImpersonationAdminOnly indicates that job impersonation is only allowed for system admins
-	ErrJobImpersonationAdminOnly = errors.New("job impersonation only allowed for system admins")
-	// ErrInvalidImpersonationType indicates that the provided impersonation type is invalid
-	ErrInvalidImpersonationType = errors.New("invalid impersonation type")
-	// ErrTargetUserNotFound indicates that the target user for impersonation was not found
-	ErrTargetUserNotFound = errors.New("target user not found")
-	// ErrTokenManagerNotConfigured indicates that the token manager is not configured
-	ErrTokenManagerNotConfigured = errors.New("token manager not configured")
-	// ErrFailedToExtractSessionID indicates that the session ID could not be extracted from the token
-	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
-)
-
 // StartImpersonation handles requests to start user impersonation
 func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry[models.StartImpersonationRequest](ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -93,7 +68,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 
 	// Use the TokenManager to create impersonation token
 	if h.TokenManager == nil {
-		return h.InternalServerError(ctx, ErrTokenManagerNotConfigured)
+		return h.InternalServerError(ctx, ErrTokenManagerNotConfigured, openapi)
 	}
 
 	// Create impersonation token with proper claims
@@ -119,7 +94,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		// but we have an issue with token parsing - this should not happen
 		log.Error().Err(err).Msg("failed to extract session ID from newly created impersonation token")
 
-		return h.InternalServerError(ctx, ErrFailedToExtractSessionID)
+		return h.InternalServerError(ctx, ErrFailedToExtractSessionID, openapi)
 	}
 
 	// Log impersonation start with enhanced context for system admin tokens
@@ -142,7 +117,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		log.Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
 	}
 
-	if err := h.logImpersonationEvent(ctx.Request().Context(), "start", auditLog); err != nil {
+	if err := h.logImpersonationEvent("start", auditLog); err != nil {
 		// Log the error but don't fail the request
 		log.Error().Err(err).Msg("failed to log impersonation event")
 	}
@@ -160,7 +135,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 
 // EndImpersonation handles requests to end an impersonation session
 func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry[models.EndImpersonationRequest](ctx, h, openapi.Operation, models.ExampleEndImpersonationRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleEndImpersonationRequest, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -177,7 +152,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 	}
 
 	// Log impersonation end
-	if err := h.logImpersonationEvent(ctx.Request().Context(), "end", &auth.ImpersonationAuditLog{
+	if err := h.logImpersonationEvent("end", &auth.ImpersonationAuditLog{
 		SessionID:         req.SessionID,
 		Type:              impUser.ImpersonationContext.Type,
 		ImpersonatorID:    impUser.ImpersonationContext.ImpersonatorID,
@@ -267,13 +242,12 @@ func (h *Handler) getDefaultScopes(impType string) []string {
 
 // logImpersonationEvent logs impersonation events for audit purposes
 // Currently logs to application logs only. Future enhancement will persist to database.
-func (h *Handler) logImpersonationEvent(_ context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
+func (h *Handler) logImpersonationEvent(action string, auditLog *auth.ImpersonationAuditLog) error {
 	log.Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
 	//TODO: Add ent schema to persist impersonation events to database for audit trail
 	return nil
 }
-
 
 // extractSessionIDFromToken parses an impersonation token to extract the session ID
 func (h *Handler) extractSessionIDFromToken(token string) (string, error) {

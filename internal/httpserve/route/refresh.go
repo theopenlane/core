@@ -3,30 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerRefreshHandler registers the refresh handler and route
-func registerRefreshHandler(router *Router) (err error) {
-	path := "/refresh"
-	method := http.MethodPost
-	name := "Refresh"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.RefreshHandler(c)
-		},
+func registerRefreshHandler(router *Router) error {
+	config := Config{
+		Path:        "/refresh",
+		Method:      http.MethodPost,
+		Name:        "Refresh",
+		Description: "The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.",
+		Tags:        []string{"refresh"},
+		OperationID: "RefreshHandler",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *PublicEndpoint,
+		Handler:     router.Handler.RefreshHandler,
 	}
 
-	refreshOperation := router.Handler.BindRefreshHandler()
-
-	if err := router.AddV1Route(path, method, refreshOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

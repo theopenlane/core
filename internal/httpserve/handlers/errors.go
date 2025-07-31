@@ -96,6 +96,26 @@ var (
 	ErrMissingSlugInPath = errors.New("slug is required in the path for default trust center domain")
 	// ErrTrustCenterNotFound is returned when the trust center is not found
 	ErrTrustCenterNotFound = errors.New("trust center not found")
+	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
+	ErrAuthenticationRequired = errors.New("authentication required")
+	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session
+	ErrNoActiveImpersonationSession = errors.New("no active impersonation session")
+	// ErrInvalidSessionID indicates that the provided session ID is invalid
+	ErrInvalidSessionID = errors.New("invalid session ID")
+	// ErrInsufficientPermissionsSupport indicates that the user does not have permissions to perform support impersonation
+	ErrInsufficientPermissionsSupport = errors.New("insufficient permissions for support impersonation")
+	// ErrInsufficientPermissionsAdmin indicates that the user does not have permissions to perform admin impersonation
+	ErrInsufficientPermissionsAdmin = errors.New("insufficient permissions for admin impersonation")
+	// ErrJobImpersonationAdminOnly indicates that job impersonation is only allowed for system admins
+	ErrJobImpersonationAdminOnly = errors.New("job impersonation only allowed for system admins")
+	// ErrInvalidImpersonationType indicates that the provided impersonation type is invalid
+	ErrInvalidImpersonationType = errors.New("invalid impersonation type")
+	// ErrTargetUserNotFound indicates that the target user for impersonation was not found
+	ErrTargetUserNotFound = errors.New("target user not found")
+	// ErrTokenManagerNotConfigured indicates that the token manager is not configured
+	ErrTokenManagerNotConfigured = errors.New("token manager not configured")
+	// ErrFailedToExtractSessionID indicates that the session ID could not be extracted from the token
+	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
 )
 
 var (

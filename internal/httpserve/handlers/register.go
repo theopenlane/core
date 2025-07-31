@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"context"
-	"net/http"
 	"strings"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -25,43 +23,39 @@ const (
 // RegisterHandler handles the registration of a new user, creating the user, personal organization
 // and sending an email verification to the email address in the request
 // the user will not be able to authenticate until the email is verified
-func (h *Handler) RegisterHandler(ctx echo.Context) error {
-	var in models.RegisterRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRegisterSuccessRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// create user
 	input := generated.CreateUserInput{
-		FirstName:         &in.FirstName,
-		LastName:          &in.LastName,
-		Email:             in.Email,
-		Password:          &in.Password,
+		FirstName:         &req.FirstName,
+		LastName:          &req.LastName,
+		Email:             req.Email,
+		Password:          &req.Password,
 		LastLoginProvider: &enums.AuthProviderCredentials,
 	}
 
 	// set viewer context
-	ctxWithToken := token.NewContextWithSignUpToken(ctx.Request().Context(), in.Email)
+	ctxWithToken := token.NewContextWithSignUpToken(ctx.Request().Context(), req.Email)
 
-	if in.Token != nil {
-		ctxWithToken = token.NewContextWithOrgInviteToken(ctxWithToken, *in.Token)
+	if req.Token != nil {
+		ctxWithToken = token.NewContextWithOrgInviteToken(ctxWithToken, *req.Token)
 
-		invitedUser, err := h.getUserByInviteToken(ctxWithToken, *in.Token)
+		invitedUser, err := h.getUserByInviteToken(ctxWithToken, *req.Token)
 		if err != nil {
 			log.Error().Err(err).Msg("error retrieving invite token")
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		if !strings.EqualFold(invitedUser.Recipient, input.Email) {
-			return h.BadRequest(ctx, ErrUnableToVerifyEmail)
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 
 		if invitedUser.Expires.Before(time.Now()) {
-			return h.BadRequest(ctx, ErrExpiredToken)
+			return h.BadRequest(ctx, ErrExpiredToken, openapi)
 		}
 	}
 
@@ -70,11 +64,11 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		log.Error().Err(err).Msg("error creating new user")
 
 		if IsUniqueConstraintError(err) {
-			return h.Conflict(ctx, "user already exists", UserExistsErrCode)
+			return h.Conflict(ctx, "user already exists", UserExistsErrCode, openapi)
 		}
 
 		if generated.IsValidationError(err) {
-			return h.InvalidInput(ctx, invalidInputError(err))
+			return h.InvalidInput(ctx, invalidInputError(err), openapi)
 		}
 
 		return err
@@ -83,16 +77,16 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	// setup user context
 	userCtx := setAuthenticatedContext(ctxWithToken, meowuser)
 
-	if in.Token != nil {
+	if req.Token != nil {
 		ctx.SetRequest(ctx.Request().WithContext(userCtx))
 
-		_, _, _, err := h.processInvitation(ctx, *in.Token, meowuser.Email)
+		_, _, _, err := h.processInvitation(ctx, *req.Token, meowuser.Email)
 		if err != nil {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		if err := h.setEmailConfirmed(userCtx, meowuser); err != nil {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 	}
 
@@ -103,12 +97,12 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		Message: "Welcome to Openlane!",
 	}
 
-	if in.Token == nil {
+	if req.Token == nil {
 		// create email verification token
 		user := &User{
-			FirstName: in.FirstName,
-			LastName:  in.LastName,
-			Email:     in.Email,
+			FirstName: req.FirstName,
+			LastName:  req.LastName,
+			Email:     req.Email,
 			ID:        meowuser.ID,
 		}
 
@@ -116,7 +110,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		if err != nil {
 			log.Error().Err(err).Msg("error storing email verification token")
 
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 
 		// only return the token in development
@@ -125,7 +119,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		}
 	}
 
-	return h.Created(ctx, out)
+	return h.Created(ctx, out, openapi)
 }
 
 func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *User) (*generated.EmailVerificationToken, error) {
@@ -161,22 +155,4 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 	}
 
 	return meowtoken, h.sendVerificationEmail(ctx, user, meowtoken.Token)
-}
-
-// BindRegisterHandler is used to bind the register endpoint to the OpenAPI schema
-func (h *Handler) BindRegisterHandler() *openapi3.Operation {
-	register := openapi3.NewOperation()
-	register.Description = "Register creates a new user in the database with the specified password, allowing the user to login to Openlane. This endpoint requires a 'strong' password and a valid register request, otherwise a 400 reply is returned. The password is stored in the database as an argon2 derived key so it is impossible for a hacker to get access to raw passwords. A personal organization is created for the user registering based on the organization data in the register request and the user is assigned the Owner role"
-	register.Tags = []string{"accountRegistration"}
-	register.OperationID = "RegisterHandler"
-	register.Security = &openapi3.SecurityRequirements{}
-
-	h.AddRequestBody("RegisterRequest", models.ExampleRegisterSuccessRequest, register)
-	h.AddResponse("RegisterReply", "success", models.ExampleRegisterSuccessResponse, register, http.StatusCreated)
-	register.AddResponse(http.StatusInternalServerError, internalServerError())
-	register.AddResponse(http.StatusBadRequest, badRequest())
-	register.AddResponse(http.StatusConflict, conflict())
-	register.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return register
 }

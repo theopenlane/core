@@ -41,6 +41,28 @@ import (
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 )
 
+// TestOperations consolidates all test operations for easier access
+type TestOperations struct {
+	Account struct {
+		Access   *openapi3.Operation
+		Roles    *openapi3.Operation
+		Features *openapi3.Operation
+	}
+	Auth struct {
+		Login    *openapi3.Operation
+		Register *openapi3.Operation
+		Refresh  *openapi3.Operation
+	}
+	Organization struct {
+		Switch *openapi3.Operation
+		Invite *openapi3.Operation
+	}
+	Email struct {
+		Verify *openapi3.Operation
+		Resend *openapi3.Operation
+	}
+}
+
 var (
 	// commonly used vars in tests
 	emptyResponse    = "null\n"
@@ -215,6 +237,7 @@ func (suite *HandlerTestSuite) createImpersonationOperation(operationID, descrip
 	operation.Security = handlers.BearerSecurity()
 	return operation
 }
+
 
 // registerTestHandler is a helper to register test handlers with OpenAPI context
 func (suite *HandlerTestSuite) registerTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {

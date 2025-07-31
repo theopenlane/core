@@ -3,81 +3,57 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/getkin/kin-openapi/openapi3"
 )
 
 // registerWebfingerHandler registers the /.well-known/webfinger handler
-func registerWebfingerHandler(router *Router) (err error) {
-	path := "/.well-known/webfinger"
-	method := http.MethodGet
-	name := "Webfinger"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.WebfingerHandler(c)
-		},
+func registerWebfingerHandler(router *Router) error {
+	config := Config{
+		Path:        "/.well-known/webfinger",
+		Method:      http.MethodGet,
+		Name:        "Webfinger",
+		Description: "WebFinger endpoint for federated identity",
+		Tags:        []string{"webfinger"},
+		OperationID: "Webfinger",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *PublicEndpoint,
+		Handler:     router.Handler.WebfingerHandler,
 	}
-
-	op := router.Handler.BindWebfingerHandler()
 
 	// unversioned because .well-known
-	if err := router.AddUnversionedRoute(path, method, op, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerSSOLoginHandler starts the OIDC login flow.
-func registerSSOLoginHandler(router *Router) (err error) {
-	path := "/sso/login"
-	method := http.MethodGet
-	name := "SSOLogin"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.SSOLoginHandler(c)
-		},
+func registerSSOLoginHandler(router *Router) error {
+	config := Config{
+		Path:        "/sso/login",
+		Method:      http.MethodGet,
+		Name:        "SSOLogin",
+		Description: "Initiate SSO login flow",
+		Tags:        []string{"sso"},
+		OperationID: "SSOLogin",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *PublicEndpoint,
+		Handler:     router.Handler.SSOLoginHandler,
 	}
 
-	op := router.Handler.BindSSOLoginHandler()
-
-	if err := router.AddV1Route(path, method, op, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerSSOCallbackHandler completes the OIDC login flow.
-func registerSSOCallbackHandler(router *Router) (err error) {
-	path := "/sso/callback"
-	method := http.MethodGet
-	name := "SSOCallback"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.SSOCallbackHandler(c)
-		},
+func registerSSOCallbackHandler(router *Router) error {
+	config := Config{
+		Path:        "/sso/callback",
+		Method:      http.MethodGet,
+		Name:        "SSOCallback",
+		Description: "Complete SSO login flow callback",
+		Tags:        []string{"sso"},
+		OperationID: "SSOCallback",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *PublicEndpoint,
+		Handler:     router.Handler.SSOCallbackHandler,
 	}
 
-	op := router.Handler.BindSSOCallbackHandler()
-
-	if err := router.AddV1Route(path, method, op, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

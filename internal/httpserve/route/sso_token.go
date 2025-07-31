@@ -3,50 +3,39 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerSSOTokenAuthorizeHandler registers the SSO token authorize endpoint.
 func registerSSOTokenAuthorizeHandler(router *Router) error {
-	path := "/sso/token/authorize"
-	method := http.MethodGet
-	name := "SSOTokenAuthorize"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.SSOTokenAuthorizeHandler(c)
-		},
+	config := Config{
+		Path:        "/sso/token/authorize",
+		Method:      http.MethodGet,
+		Name:        "SSOTokenAuthorize",
+		Description: "Authorize SSO token request",
+		Tags:        []string{"sso"},
+		OperationID: "SSOTokenAuthorize",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *AuthenticatedEndpoint,
+		Handler:     router.Handler.SSOTokenAuthorizeHandler,
 	}
 
-	op := router.Handler.BindSSOTokenAuthorizeHandler()
-
-	return router.AddV1Route(path, method, op, route)
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerSSOTokenCallbackHandler registers the SSO token callback endpoint.
 func registerSSOTokenCallbackHandler(router *Router) error {
-	path := "/sso/token/callback"
-	method := http.MethodGet
-	name := "SSOTokenCallback"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.SSOTokenCallbackHandler(c)
-		},
+	config := Config{
+		Path:        "/sso/token/callback",
+		Method:      http.MethodGet,
+		Name:        "SSOTokenCallback",
+		Description: "Handle SSO token callback",
+		Tags:        []string{"sso"},
+		OperationID: "SSOTokenCallback",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *PublicEndpoint,
+		Handler:     router.Handler.SSOTokenCallbackHandler,
 	}
 
-	op, err := router.Handler.BindSSOTokenCallbackHandlerWithRegistry(router.SchemaRegistry)
-	if err != nil {
-		return err
-	}
-
-	return router.AddV1Route(path, method, op, route)
+	return router.AddV1HandlerRoute(config)
 }

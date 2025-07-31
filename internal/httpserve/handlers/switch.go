@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -20,14 +19,10 @@ import (
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context
-func (h *Handler) SwitchHandler(ctx echo.Context) error {
-	var in models.SwitchOrganizationRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSwitchSuccessRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -36,12 +31,12 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	if err != nil {
 		log.Err(err).Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// ensure the user is not already in the target organization
 	if ac.OrganizationID == in.TargetOrganizationID {
-		return h.BadRequest(ctx, ErrAlreadySwitchedIntoOrg)
+		return h.BadRequest(ctx, ErrAlreadySwitchedIntoOrg, openapi)
 	}
 
 	// get user from database by subject
@@ -49,7 +44,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user by subject")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// Check if SSO is enforced for the target organization. If so, redirect
@@ -82,23 +77,5 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		AuthData: *authData,
 	}
 
-	return h.Success(ctx, out)
-}
-
-// BindSwitchHandler binds the reset password handler to the OpenAPI schema
-func (h *Handler) BindSwitchHandler() *openapi3.Operation {
-	switchHandler := openapi3.NewOperation()
-	switchHandler.Description = "Switch the user's organization context"
-	switchHandler.Tags = []string{"switchorganizations"}
-	switchHandler.OperationID = "OrganizationSwitch"
-	switchHandler.Security = AllSecurityRequirements()
-
-	h.AddRequestBody("SwitchOrganizationRequest", models.ExampleSwitchSuccessRequest, switchHandler)
-	h.AddResponse("SwitchOrganizationReply", "success", models.ExampleSwitchSuccessReply, switchHandler, http.StatusOK)
-	switchHandler.AddResponse(http.StatusInternalServerError, internalServerError())
-	switchHandler.AddResponse(http.StatusBadRequest, badRequest())
-	switchHandler.AddResponse(http.StatusUnauthorized, unauthorized())
-	switchHandler.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return switchHandler
+	return h.Success(ctx, out, openapi)
 }

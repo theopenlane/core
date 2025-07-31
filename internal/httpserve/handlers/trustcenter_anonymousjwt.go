@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
+func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenAPIContext) error {
 	referer := ctx.Request().URL.Query().Get("referer")
 
 	// 1. create the auth allowContext with the TrustCenterContext
@@ -26,17 +26,17 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 
 	// 2. parse the URL out of the `in`
 	if referer == "" {
-		return h.BadRequest(ctx, ErrMissingReferer)
+		return h.BadRequest(ctx, ErrMissingReferer, openapi)
 	}
 
 	parsedURL, err := url.Parse(referer)
 	if err != nil {
-		return h.BadRequest(ctx, ErrInvalidRefererURL)
+		return h.BadRequest(ctx, ErrInvalidRefererURL, openapi)
 	}
 
 	hostname := parsedURL.Hostname()
 	if hostname == "" {
-		return h.BadRequest(ctx, ErrInvalidRefererURL)
+		return h.BadRequest(ctx, ErrInvalidRefererURL, openapi)
 	}
 
 	var trustCenter *generated.TrustCenter
@@ -46,7 +46,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 		// 4. if we have the default trust center domain, then we require the PATH of the url to be the "slug"
 		pathSegments := strings.Split(strings.Trim(parsedURL.Path, "/"), "/")
 		if len(pathSegments) == 0 || pathSegments[0] == "" {
-			return h.BadRequest(ctx, ErrMissingSlugInPath)
+			return h.BadRequest(ctx, ErrMissingSlugInPath, openapi)
 		}
 		slug := pathSegments[0]
 
@@ -59,7 +59,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 			if generated.IsNotFound(err) {
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
 			}
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 	} else {
 		// 5. if not default trust center, all we care about is the hostname.
@@ -73,13 +73,13 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 			if generated.IsNotFound(err) {
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
 			}
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 	}
 
 	auth, err := h.AuthManager.GenerateAnonymousTrustCenterSession(reqCtx, ctx.Response().Writer, trustCenter.OwnerID, trustCenter.ID)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	response := models.CreateTrustCenterAnonymousJWTResponse{

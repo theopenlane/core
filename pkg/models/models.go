@@ -39,13 +39,13 @@ type AuthData struct {
 // LOGIN
 // =========
 
-// LoginRequest holds the login payload for the /login route
+// LoginRequest contains credentials for user authentication
 type LoginRequest struct {
 	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
 	Password string `json:"password" description:"The password associated with the account" example:"Wint3rIsC0ming123!"`
 }
 
-// LoginReply holds the response to LoginRequest
+// LoginReply contains authentication tokens and user information after successful login
 type LoginReply struct {
 	rout.Reply
 	AuthData
@@ -135,12 +135,12 @@ var ExampleLoginSuccessResponse = LoginReply{
 // REFRESH
 // =========
 
-// RefreshRequest holds the fields that should be included on a request to the `/refresh` endpoint
+// RefreshRequest contains the refresh token used to obtain new access tokens
 type RefreshRequest struct {
 	RefreshToken string `json:"refresh_token" description:"The token to be used to refresh the access token after expiration"`
 }
 
-// RefreshReply holds the fields that are sent on a response to the `/refresh` endpoint
+// RefreshReply contains new authentication tokens after successful refresh
 type RefreshReply struct {
 	rout.Reply
 	Message string `json:"message,omitempty"`
@@ -177,7 +177,7 @@ var ExampleRefreshSuccessResponse = RefreshReply{
 // REGISTER
 // =========
 
-// RegisterRequest holds the fields that should be included on a request to the `/register` endpoint
+// RegisterRequest contains user registration information for creating new accounts
 type RegisterRequest struct {
 	FirstName string  `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
 	LastName  string  `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
@@ -186,7 +186,7 @@ type RegisterRequest struct {
 	Token     *string `json:"token" description:"A newly invited user can use this to join a org as at the same time they are creating their account"`
 }
 
-// RegisterReply holds the fields that are sent on a response to the `/register` endpoint
+// RegisterReply contains authentication tokens and user information after successful registration
 type RegisterReply struct {
 	rout.Reply
 	ID      string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
@@ -282,7 +282,7 @@ var ExampleSwitchSuccessReply = SwitchOrganizationReply{
 // VERIFY EMAIL
 // =========
 
-// VerifyRequest holds the fields that should be included on a request to the `/verify` endpoint
+// VerifyRequest contains email verification token
 type VerifyRequest struct {
 	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
 }
@@ -486,11 +486,23 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 	Reply: rout.Reply{Success: true},
 	CredentialCreation: &protocol.CredentialCreation{
 		Response: protocol.PublicKeyCredentialCreationOptions{
-			RelyingParty: protocol.RelyingPartyEntity{},
-			User:         protocol.UserEntity{},
-			Challenge:    protocol.URLEncodedBase64{},
+			RelyingParty: protocol.RelyingPartyEntity{
+				CredentialEntity: protocol.CredentialEntity{
+					Name: "Openlane",
+				},
+				ID: "theopenlane.io",
+			},
+			User: protocol.UserEntity{
+				CredentialEntity: protocol.CredentialEntity{
+					Name: "Sarah Funk",
+				},
+				DisplayName: "sarahfunk",
+				ID:          []byte("user-id-12345"),
+			},
+			Challenge: protocol.URLEncodedBase64("cmFuZG9tLWNoYWxsZW5nZS1zdHJpbmc="),
+			Timeout:   60000, // nolint:mnd
 		}},
-	Session: "session",
+	Session: "example-session-id",
 }
 
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
@@ -503,6 +515,11 @@ type WebauthnRegistrationResponse struct {
 // WebauthnLoginRequest is the request to begin a webauthn login
 type WebauthnLoginRequest struct {
 	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
+}
+
+// ExampleWebauthnLoginRequest is an example WebAuthn login request for OpenAPI documentation
+var ExampleWebauthnLoginRequest = WebauthnLoginRequest{
+	Email: "",
 }
 
 func (r *WebauthnLoginRequest) Validate() error {
@@ -532,7 +549,7 @@ type WebauthnLoginResponse struct {
 // SUBSCRIBER VERIFY
 // =========
 
-// VerifySubscribeRequest holds the fields that should be included on a request to the `/subscribe/verify` endpoint
+// VerifySubscribeRequest contains subscription verification information
 type VerifySubscribeRequest struct {
 	Token string `query:"token" description:"The token to be used to verify the subscription, token is sent via email"`
 }
@@ -567,7 +584,7 @@ var ExampleVerifySubscriptionResponse = VerifySubscribeReply{
 // ORGANIZATION INVITE
 // =========
 
-// InviteRequest holds the fields that should be included on a request to the `/invite` endpoint
+// InviteRequest contains invitation token for organization membership
 type InviteRequest struct {
 	Token string `query:"token" description:"The token to be used to accept the invitation, token is sent via email"`
 }
@@ -628,11 +645,22 @@ type OauthTokenRequest struct {
 	Image            string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
 }
 
+// ExampleOauthTokenRequest is an example OAuth token request for OpenAPI documentation
+var ExampleOauthTokenRequest = OauthTokenRequest{
+	Name:             "Jon Snow",
+	Email:            "jsnow@example.com",
+	AuthProvider:     "google",
+	ExternalUserID:   "1234567890",
+	ExternalUserName: "jsnow",
+	ClientToken:      "example-client-token-12345",
+	Image:            "https://example.com/avatar.jpg",
+}
+
 // =========
 // ACCOUNT/ACCESS
 // =========
 
-// AccountAccessRequest holds the fields that should be included on a request to the `/account/access` endpoint
+// AccountAccessRequest contains organization ID for checking access permissions
 type AccountAccessRequest struct {
 	ObjectID    string `json:"object_id" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	ObjectType  string `json:"object_type" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
@@ -685,12 +713,12 @@ var ExampleAccountAccessReply = AccountAccessReply{
 // ACCOUNT/ROLES
 // =========
 
-// AccountRolesRequest holds the fields that should be included on a request to the `/account/roles` endpoint
+// AccountRolesRequest contains organization ID for retrieving user roles
 type AccountRolesRequest struct {
 	ObjectID    string   `json:"object_id" description:"The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	ObjectType  string   `json:"object_type" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
 	SubjectType string   `json:"subject_type,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
-	Relations   []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit" example:"can_view"`
+	Relations   []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit"`
 }
 
 // AccountRolesReply holds the fields that are sent on a response to the `/account/roles` endpoint
@@ -733,7 +761,7 @@ var ExampleAccountRolesReply = AccountRolesReply{
 // ACCOUNT/ROLES/ORGANIZATION
 // =========
 
-// AccountRolesOrganizationRequest holds the fields that should be included on a request to the `/account/roles/organization` endpoint
+// AccountRolesOrganizationRequest contains organization ID for retrieving organization-specific roles
 type AccountRolesOrganizationRequest struct {
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
@@ -741,16 +769,13 @@ type AccountRolesOrganizationRequest struct {
 // AccountRolesOrganizationReply holds the fields that are sent on a response to the `/account/roles/organization` endpoint
 type AccountRolesOrganizationReply struct {
 	rout.Reply
-	Roles          []string `json:"roles" description:"The roles the user has in the organization, e.g. can_view, can_edit" example:"can_view, can_edit"`
+	Roles          []string `json:"roles" description:"The roles the user has in the organization, e.g. can_view, can_edit"`
 	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // Validate ensures the required fields are set on the AccountRolesOrganizationRequest
 func (r *AccountRolesOrganizationRequest) Validate() error {
-	if r.ID == "" {
-		return rout.NewMissingRequiredFieldError("organization id")
-	}
-
+	// ID is optional - if empty, handler will get it from auth context
 	return nil
 }
 
@@ -770,7 +795,7 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 // ACCOUNT/FEATURES
 // =========
 
-// AccountFeaturesRequest holds the fields that should be included on a request to the `/account/features` endpoint
+// AccountFeaturesRequest contains organization ID for retrieving available features
 type AccountFeaturesRequest struct {
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
@@ -778,16 +803,13 @@ type AccountFeaturesRequest struct {
 // AccountFeaturesReply holds the fields that are sent on a response to the `/account/features` endpoint
 type AccountFeaturesReply struct {
 	rout.Reply
-	Features       []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module" example:"policy-and-procedure-module, centralized-audit-documentation, risk-management, compliance-module"`
+	Features       []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module"`
 	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // Validate ensures the required fields are set on the AccountFeaturesRequest
 func (r *AccountFeaturesRequest) Validate() error {
-	if r.ID == "" {
-		return rout.NewMissingRequiredFieldError("organization id")
-	}
-
+	// ID is optional - if empty, handler will get it from auth context
 	return nil
 }
 
@@ -798,8 +820,13 @@ var ExampleAccountFeaturesRequest = AccountFeaturesRequest{
 
 // ExampleAccountFeaturesReply is an example of a successful `/account/features` response for OpenAPI documentation
 var ExampleAccountFeaturesReply = AccountFeaturesReply{
-	Reply:          rout.Reply{Success: true},
-	Features:       []string{},
+	Reply: rout.Reply{Success: true},
+	Features: []string{
+		"policy-and-procedure-module",
+		"centralized-audit-documentation",
+		"risk-management",
+		"compliance-module",
+	},
 	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
@@ -807,7 +834,7 @@ var ExampleAccountFeaturesReply = AccountFeaturesReply{
 // FILES
 // =========
 
-// UploadFilesRequest holds the fields that should be included on a request to the `/upload` endpoint
+// UploadFilesRequest contains file upload data and metadata
 type UploadFilesRequest struct {
 	UploadFile multipart.FileHeader `form:"uploadFile" description:"The file to be uploaded"`
 }
@@ -985,6 +1012,11 @@ var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
 // AcmeSolverRequest is the request to solve an acme challenge
 type AcmeSolverRequest struct {
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// ExampleAcmeSolverRequest is an example ACME solver request for OpenAPI documentation
+var ExampleAcmeSolverRequest = AcmeSolverRequest{
+	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
 // =========
@@ -1346,6 +1378,11 @@ type RefreshIntegrationTokenRequest struct {
 	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 }
 
+// ExampleRefreshIntegrationTokenRequest is an example refresh integration token request for OpenAPI documentation
+var ExampleRefreshIntegrationTokenRequest = RefreshIntegrationTokenRequest{
+	Provider: "github",
+}
+
 // GetIntegrationStatusRequest is the request for checking integration status
 type GetIntegrationStatusRequest struct {
 	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
@@ -1395,7 +1432,7 @@ func (r *GetIntegrationStatusRequest) Validate() error {
 type OAuthFlowRequest struct {
 	Provider    string   `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 	RedirectURI string   `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
-	Scopes      []string `json:"scopes,omitempty" description:"Additional OAuth scopes to request" example:"repo,gist"`
+	Scopes      []string `json:"scopes,omitempty" description:"Additional OAuth scopes to request"` // example: ["repo", "gist"]
 }
 
 // Validate ensures the required fields are set on the OAuthFlowRequest
@@ -1431,7 +1468,7 @@ type OAuthFlowResponse struct {
 	AuthURL       string `json:"authUrl" description:"URL to redirect user to for OAuth authorization" example:"https://github.com/login/oauth/authorize?client_id=..."`
 	State         string `json:"state,omitempty" description:"OAuth state parameter for security" example:"eyJvcmdJRCI6IjAxSE..."`
 	Message       string `json:"message,omitempty" description:"Optional message (e.g., for authentication required)" example:"Authentication required. Please login first."`
-	RequiresLogin bool   `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow" example:"true"`
+	RequiresLogin bool   `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow"`
 }
 
 // OAuthCallbackRequest represents the OAuth callback data
@@ -1489,7 +1526,7 @@ var ExampleEndImpersonationReply = EndImpersonationReply{
 // OAuthCallbackResponse contains the result of OAuth callback processing
 type OAuthCallbackResponse struct {
 	rout.Reply
-	Success     bool   `json:"success" description:"Whether the OAuth callback was processed successfully" example:"true"`
+	Success     bool   `json:"success" description:"Whether the OAuth callback was processed successfully"`
 	Integration any    `json:"integration,omitempty" description:"The created/updated integration object"`
 	Message     string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
 }

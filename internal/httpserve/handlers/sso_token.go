@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
@@ -23,14 +22,10 @@ import (
 )
 
 // SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
-func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
-	var in models.SSOTokenAuthorizeRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOTokenAuthorizeRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
@@ -40,21 +35,21 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 		if _, err := h.DBClient.APIToken.Get(reqCtx, in.TokenID); err != nil {
 			log.Error().Err(err).Msg("unable to find api token for SSO")
 
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 	case "personal":
 		if _, err := h.DBClient.PersonalAccessToken.Get(reqCtx, in.TokenID); err != nil {
 			log.Error().Err(err).Msg("unable to find personal access token")
 
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 	default:
-		return h.BadRequest(ctx, errInvalidTokenType)
+		return h.BadRequest(ctx, errInvalidTokenType, openapi)
 	}
 
 	rpCfg, err := h.oidcConfig(reqCtx, in.OrganizationID)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	state := ulids.New().String()
@@ -81,14 +76,10 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 // SSOTokenCallbackHandler completes the SSO authorization flow for a token.
 // It validates the state and nonce, exchanges the code if required and updates
 // the token's SSO authorizations for the organization.
-func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
-	var in models.SSOTokenCallbackRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err)
+func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateQueryParams[models.SSOTokenCallbackRequest](ctx, openapi.Operation, models.ExampleSSOTokenCallbackRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	req := ctx.Request()
@@ -97,37 +88,37 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	// read cookies set during the authorize step
 	tokenIDCookie, err := sessions.GetCookie(req, "token_id")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField)
+		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	tokenTypeCookie, err := sessions.GetCookie(req, "token_type")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField)
+		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	orgCookie, err := sessions.GetCookie(req, "organization_id")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField)
+		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	stateCookie, err := sessions.GetCookie(req, "state")
 	if err != nil || in.State != stateCookie.Value {
-		return h.BadRequest(ctx, ErrStateMismatch)
+		return h.BadRequest(ctx, ErrStateMismatch, openapi)
 	}
 
 	nonceCookie, err := sessions.GetCookie(req, "nonce")
 	if err != nil {
-		return h.BadRequest(ctx, ErrNonceMissing)
+		return h.BadRequest(ctx, ErrNonceMissing, openapi)
 	}
 
 	rpCfg, err := h.oidcConfig(reqCtx, orgCookie.Value)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
 	if _, err = rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg); err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -137,7 +128,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	case "api":
 		tkn, err := h.DBClient.APIToken.Get(allowCtx, tokenIDCookie.Value)
 		if err != nil {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		if tkn.SSOAuthorizations == nil {
@@ -148,12 +139,12 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 
 		_, err = h.DBClient.APIToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
 		if err != nil {
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 	case "personal":
 		tkn, err := h.DBClient.PersonalAccessToken.Get(allowCtx, tokenIDCookie.Value)
 		if err != nil {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		if tkn.SSOAuthorizations == nil {
@@ -164,10 +155,10 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 
 		_, err = h.DBClient.PersonalAccessToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
 		if err != nil {
-			return h.InternalServerError(ctx, err)
+			return h.InternalServerError(ctx, err, openapi)
 		}
 	default:
-		return h.BadRequest(ctx, errInvalidTokenType)
+		return h.BadRequest(ctx, errInvalidTokenType, openapi)
 	}
 
 	// cleanup cookies
@@ -182,49 +173,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 		Message:        "authorized",
 	}
 
-	return h.Success(ctx, out)
-}
-
-// BindSSOTokenCallbackHandlerWithRegistry binds the SSO token callback endpoint using dynamic schema registry
-func (h *Handler) BindSSOTokenCallbackHandlerWithRegistry(registry interface {
-	GetOrRegister(any) (*openapi3.SchemaRef, error)
-}) (*openapi3.Operation, error) {
-	op := openapi3.NewOperation()
-	op.Description = "Complete token SSO authorization"
-	op.OperationID = "SSOTokenCallback"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("code", op)
-	h.AddQueryParameter("state", op)
-
-	// Use dynamic schema registration
-	if err := h.AddResponseWithRegistry("success", models.ExampleSSOTokenAuthorizeReply, op, http.StatusOK, registry); err != nil {
-		return nil, err
-	}
-
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
-
-	return op, nil
-}
-
-// BindSSOTokenAuthorizeHandler binds the SSO token authorization endpoint to the OpenAPI schema.
-func (h *Handler) BindSSOTokenAuthorizeHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Authorize a token for SSO with an organization"
-	op.OperationID = "SSOTokenAuthorize"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("organization_id", op)
-	h.AddQueryParameter("token_id", op)
-	h.AddQueryParameter("token_type", op)
-	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect"))
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
-
-	return op
+	return h.Success(ctx, out, openapi)
 }
 
 var errInvalidTokenType = errors.New("invalid token type")

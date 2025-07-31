@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/sessions"
@@ -41,14 +40,10 @@ func newCookieConfig(secure bool) sessions.CookieConfig {
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
 // see docs/SSO.md for more details on the SSO flow
-func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
-	var in models.SSOLoginRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err)
+func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOLoginRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	orgID := in.OrganizationID
@@ -72,7 +67,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	// build the OIDC config for the org
 	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	state := ulids.New().String()
@@ -92,38 +87,34 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 
 // SSOCallbackHandler completes the OIDC login flow after the user returns from the IdP
 // It validates state/nonce, exchanges the code for tokens, provisions the user if needed, and issues a session
-func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
+func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	reqCtx := ctx.Request().Context()
 
-	var in models.SSOCallbackRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.BadRequest(ctx, err)
+	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOCallbackRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	if in.OrganizationID == "" {
-		return h.BadRequest(ctx, ErrMissingField)
+		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	// Build the OIDC config for the org
 	rpCfg, err := h.oidcConfig(reqCtx, in.OrganizationID)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// Validate state matches what was set in the cookie
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
 	if err != nil || in.State != stateCookie.Value {
-		return h.BadRequest(ctx, ErrStateMismatch)
+		return h.BadRequest(ctx, ErrStateMismatch, openapi)
 	}
 
 	// Validate nonce exists in the cookie
 	nonceCookie, err := sessions.GetCookie(ctx.Request(), "nonce")
 	if err != nil {
-		return h.BadRequest(ctx, ErrNonceMissing)
+		return h.BadRequest(ctx, ErrNonceMissing, openapi)
 	}
 
 	// attach nonce to context for OIDC token validation
@@ -131,7 +122,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	// exchange the code for OIDC tokens
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// attach the OIDC email to the context for user provisioning
@@ -140,7 +131,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	// provision the user if they don't exist, or update if they do
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.Name, tokens.IDTokenClaims.Email, enums.AuthProviderOIDC, tokens.IDTokenClaims.Picture)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// set the context for the authenticated user
@@ -157,7 +148,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	// generate the session and auth data for the user
 	authData, err := h.AuthManager.GenerateOauthAuthSession(userCtx, ctx.Response().Writer, entUser, oauthReq)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
@@ -191,7 +182,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	// clean up the org ID cookie after successful login
 	sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, out, openapi)
 }
 
 // rpConfig holds the configuration for the relying party
@@ -355,55 +346,4 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 	}
 
 	return errInvalidTokenType
-}
-
-// BindWebfingerHandler documents the webfinger SSO status endpoint for OpenAPI.
-func (h *Handler) BindWebfingerHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Returns SSO enforcement status for an organization"
-	op.OperationID = "WebfingerHandler"
-	op.Tags = []string{"authentication"}
-
-	h.AddQueryParameter("resource", op)
-	h.AddResponse("SSOStatusReply", "success", models.ExampleSSOStatusReply, op, http.StatusOK)
-	op.AddResponse(http.StatusNotFound, notFound())
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
-
-	return op
-}
-
-// BindSSOCallbackHandler binds the SSO callback handler to the OpenAPI schema
-func (h *Handler) BindSSOCallbackHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Complete the OIDC login flow"
-	op.OperationID = "SSOCallbackHandler"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("code", op)
-	h.AddQueryParameter("state", op)
-	h.AddQueryParameter("organization_id", op)
-	h.AddResponse("LoginReply", "success", models.ExampleLoginSuccessResponse, op, http.StatusOK)
-	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to return URL"))
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
-
-	return op
-}
-
-// BindSSOLoginHandler binds the SSO login handler to the OpenAPI schema
-func (h *Handler) BindSSOLoginHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Initiate the SSO login flow"
-	op.OperationID = "SSOLoginHandler"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("organization_id", op)
-	h.AddQueryParameter("return", op)
-	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to IdP"))
-	op.AddResponse(http.StatusBadRequest, badRequest())
-
-	return op
 }

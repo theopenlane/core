@@ -1,13 +1,17 @@
 package server
 
 import (
+	"go/doc"
+	"go/parser"
+	"go/token"
+	"path/filepath"
 	"reflect"
+	"runtime"
+	"strings"
+	"sync"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
-
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/rout"
 )
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers
@@ -19,56 +23,9 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	securityschemes := make(openapi3.SecuritySchemes)
 	examples := make(openapi3.Examples)
 
-	// Schemas are now dynamically registered by handlers using the schema registry
-
-	errorResponse := &openapi3.SchemaRef{
-		Ref: "#/components/schemas/ErrorReply",
-	}
-
-	_, err := openapi3gen.NewSchemaRefForValue(&rout.StatusError{}, schemas)
-	if err != nil {
-		return nil, err
-	}
-
 	internalServerError := openapi3.NewResponse().
-		WithDescription("Internal Server Error").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
+		WithDescription("Internal Server Error")
 	responses["InternalServerError"] = &openapi3.ResponseRef{Value: internalServerError}
-
-	badRequest := openapi3.NewResponse().
-		WithDescription("Bad Request").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["BadRequest"] = &openapi3.ResponseRef{Value: badRequest}
-
-	unauthorized := openapi3.NewResponse().
-		WithDescription("Unauthorized").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["Unauthorized"] = &openapi3.ResponseRef{Value: unauthorized}
-
-	conflict := openapi3.NewResponse().
-		WithDescription("Conflict").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["Conflict"] = &openapi3.ResponseRef{Value: conflict}
-
-	notFound := openapi3.NewResponse().
-		WithDescription("Not Found").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["NotFound"] = &openapi3.ResponseRef{Value: notFound}
-
-	created := openapi3.NewResponse().
-		WithDescription("Created").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["Created"] = &openapi3.ResponseRef{Value: created}
-
-	invalidInput := openapi3.NewResponse().
-		WithDescription("Invalid Input").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["InvalidInput"] = &openapi3.ResponseRef{Value: invalidInput}
-
-	toomanyrequests := openapi3.NewResponse().
-		WithDescription("Too Many Requests").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(errorResponse))
-	responses["TooManyRequests"] = &openapi3.ResponseRef{Value: toomanyrequests}
 
 	securityschemes["bearer"] = &openapi3.SecuritySchemeRef{
 		Value: openapi3.NewSecurityScheme().
@@ -82,6 +39,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		Value: openapi3.NewSecurityScheme().
 			WithType("apiKey").
 			WithIn("header").
+			WithName("X-API-Key").
 			WithDescription("API Key authentication, the key must be a valid API key"),
 	}
 
@@ -152,7 +110,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 // customizer is a customizer function that allows for the modification of the generated schemas
 // this is used to ignore fields that are not required in the OAS specification
 // and to add additional metadata to the schema such as descriptions and examples
-var customizer = openapi3gen.SchemaCustomizer(func(_ string, _ reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
+var customizer = openapi3gen.SchemaCustomizer(func(name string, t reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
 	if tag.Get("exclude") != "" && tag.Get("exclude") == "true" {
 		return &openapi3gen.ExcludeSchemaSentinel{}
 	}
@@ -165,47 +123,15 @@ var customizer = openapi3gen.SchemaCustomizer(func(_ string, _ reflect.Type, tag
 		schema.Example = tag.Get("example")
 	}
 
+	// For top-level structs, try to extract description from Go doc comments
+	if (name == "_root" || tag == "") && schema.Description == "" && t.Kind() == reflect.Struct {
+		if desc := getTypeDescription(t); desc != "" {
+			schema.Description = desc
+		}
+	}
+
 	return nil
 })
-
-// openAPISchemas is a mapping of types to auto generate schemas for - these specifically live under the OAS "schema" type so that we can simply make schemaRef's to them and not have to define them all individually in the OAS paths
-var openAPISchemas = map[string]any{
-	"LoginRequest":                      &models.LoginRequest{},
-	"LoginReply":                        &models.LoginReply{},
-	"ForgotPasswordRequest":             &models.ForgotPasswordRequest{},
-	"ForgotPasswordReply":               &models.ForgotPasswordReply{},
-	"ResetPasswordRequest":              &models.ResetPasswordRequest{},
-	"ResetPasswordReply":                &models.ResetPasswordReply{},
-	"RefreshRequest":                    &models.RefreshRequest{},
-	"RefreshReply":                      &models.RefreshReply{},
-	"RegisterRequest":                   &models.RegisterRequest{},
-	"RegisterReply":                     &models.RegisterReply{},
-	"ResendEmailRequest":                &models.ResendRequest{},
-	"ResendEmailReply":                  &models.ResendReply{},
-	"VerifyRequest":                     &models.VerifyRequest{},
-	"VerifyReply":                       &models.VerifyReply{},
-	"SwitchOrganizationRequest":         &models.SwitchOrganizationRequest{},
-	"SwitchOrganizationReply":           &models.SwitchOrganizationReply{},
-	"VerifySubscriptionRequest":         &models.VerifySubscribeRequest{},
-	"VerifySubscriptionReply":           &models.VerifySubscribeReply{},
-	"InviteRequest":                     &models.InviteRequest{},
-	"InviteReply":                       &models.InviteReply{},
-	"ErrorReply":                        &rout.StatusError{},
-	"AccountAccessRequest":              &models.AccountAccessRequest{},
-	"AccountAccessReply":                &models.AccountAccessReply{},
-	"AccountRolesRequest":               &models.AccountRolesRequest{},
-	"AccountRolesReply":                 &models.AccountRolesReply{},
-	"AccountRolesOrganizationRequest":   &models.AccountRolesOrganizationRequest{},
-	"AccountRolesOrganizationReply":     &models.AccountRolesOrganizationReply{},
-	"AccountFeaturesReply":              &models.AccountFeaturesReply{},
-	"JobRunnerRegistrationRequest":      &models.JobRunnerRegistrationRequest{},
-	"JobRunnerRegistrationReply":        &models.JobRunnerRegistrationReply{},
-	"SSOStatusReply":                    &models.SSOStatusReply{},
-	"TFARequest":                        &models.TFARequest{},
-	"TFAReply":                          &models.TFAReply{},
-	"WebauthnRegistrationRequest":       &models.WebauthnRegistrationRequest{},
-	"WebauthnBeginRegistrationResponse": &models.WebauthnBeginRegistrationResponse{},
-}
 
 // OAuth2 is a struct that represents an OAuth2 security scheme
 type OAuth2 struct {
@@ -218,7 +144,8 @@ type OAuth2 struct {
 // Scheme returns the OAuth2 security scheme
 func (i *OAuth2) Scheme() *openapi3.SecurityScheme {
 	return &openapi3.SecurityScheme{
-		Type: "oauth2",
+		Type:        "oauth2",
+		Description: "OAuth 2.0 authorization code flow for secure API access",
 		Flows: &openapi3.OAuthFlows{
 			AuthorizationCode: &openapi3.OAuthFlow{
 				AuthorizationURL: i.AuthorizationURL,
@@ -239,6 +166,7 @@ type OpenID struct {
 func (i *OpenID) Scheme() *openapi3.SecurityScheme {
 	return &openapi3.SecurityScheme{
 		Type:             "openIdConnect",
+		Description:      "OpenID Connect authentication for secure API access",
 		OpenIdConnectUrl: i.ConnectURL,
 	}
 }
@@ -269,4 +197,82 @@ func (b *Basic) Scheme() *openapi3.SecurityScheme {
 		Type:   "http",
 		Scheme: "basic",
 	}
+}
+
+var (
+	docCache = make(map[string]string)
+	docMutex sync.RWMutex
+)
+
+// getTypeDescription extracts the Go doc comment for a given type
+func getTypeDescription(t reflect.Type) string {
+	if t.PkgPath() == "" {
+		return ""
+	}
+
+	// Create cache key
+	cacheKey := t.PkgPath() + "." + t.Name()
+
+	// Check cache first
+	docMutex.RLock()
+	if desc, exists := docCache[cacheKey]; exists {
+		docMutex.RUnlock()
+		return desc
+	}
+
+	docMutex.RUnlock()
+
+	// Get the source file path for this type
+	pkgPath := t.PkgPath()
+
+	// Find the Go source files for this package
+	fset := token.NewFileSet()
+
+	// Try to parse the package directory
+	pkgs, err := parser.ParseDir(fset, getPackageDir(pkgPath), nil, parser.ParseComments)
+	if err != nil {
+		return ""
+	}
+
+	// Look through all packages
+	for _, pkg := range pkgs {
+		// Create doc package
+		docPkg := doc.New(pkg, "./", 0)
+
+		// Look for the type in the package
+		for _, typ := range docPkg.Types {
+			if typ.Name == t.Name() {
+				// Cache and return the description
+				description := strings.TrimSpace(typ.Doc)
+				docMutex.Lock()
+				docCache[cacheKey] = description
+				docMutex.Unlock()
+
+				return description
+			}
+		}
+	}
+
+	return ""
+}
+
+// getPackageDir attempts to find the directory for a given package path
+func getPackageDir(pkgPath string) string {
+	// For local packages, try to find the source directory
+	if strings.Contains(pkgPath, "github.com/theopenlane/core") {
+		// Get the current file's directory
+		_, filename, _, ok := runtime.Caller(0)
+		if !ok {
+			return ""
+		}
+
+		// Navigate to the project root and then to the package
+		projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filename))) // Go up from server -> httpserve -> internal -> core
+
+		// Convert package path to file path
+		relativePath := strings.TrimPrefix(pkgPath, "github.com/theopenlane/core/")
+		return filepath.Join(projectRoot, relativePath)
+	}
+
+	return ""
 }

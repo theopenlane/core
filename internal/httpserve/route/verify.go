@@ -3,30 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/getkin/kin-openapi/openapi3"
 )
 
 // registerVerifyHandler registers the verify handler and route which handles email verification
-func registerVerifyHandler(router *Router) (err error) {
-	path := "/verify"
-	method := http.MethodGet
-	name := "VerifyEmail"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: restrictedEndpointsMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.VerifyEmail(c)
-		},
+func registerVerifyHandler(router *Router) error {
+	config := Config{
+		Path:        "/verify",
+		Method:      http.MethodGet,
+		Name:        "VerifyEmail",
+		Description: "Used to verify a user's email address - once clicked they will be redirected to the UI with a success or failure message",
+		Tags:        []string{"email"},
+		OperationID: "VerifyEmail",
+		Security:    &openapi3.SecurityRequirements{},
+		Middlewares: *RestrictedEndpoint,
+		Handler:     router.Handler.VerifyEmail,
 	}
 
-	verifyOperation := router.Handler.BindVerifyEmailHandler()
-
-	if err := router.AddV1Route(path, method, verifyOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

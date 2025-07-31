@@ -19,7 +19,9 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 	t := suite.T()
 
 	// add handler
-	suite.e.POST("account/roles", suite.h.AccountRolesHandler)
+	// Create operation for AccountRolesHandler
+	operation := suite.createImpersonationOperation("AccountRolesHandler", "Get account roles")
+	suite.registerTestHandler("POST", "account/roles", operation, suite.h.AccountRolesHandler)
 
 	testCases := []struct {
 		name          string

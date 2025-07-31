@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -16,37 +13,33 @@ import (
 )
 
 // RefreshHandler allows users to refresh their access token using their refresh token
-func (h *Handler) RefreshHandler(ctx echo.Context) error {
-	var in models.RefreshRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// verify the refresh token
-	claims, err := h.TokenManager.Verify(in.RefreshToken)
+	claims, err := h.TokenManager.Verify(req.RefreshToken)
 	if err != nil {
 		log.Error().Err(err).Msg("error verifying token")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// check user in the database, sub == claims subject and ensure only one record is returned
 	user, err := h.getUserDetailsByID(ctx.Request().Context(), claims.Subject)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, ErrNoAuthUser)
+			return h.NotFound(ctx, ErrNoAuthUser, openapi)
 		}
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// ensure the user is still active
 	if user.Edges.Setting.Status != "ACTIVE" {
-		return h.NotFound(ctx, ErrNoAuthUser)
+		return h.NotFound(ctx, ErrNoAuthUser, openapi)
 	}
 
 	// UserID is not on the refresh token, so we need to set it now
@@ -56,7 +49,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("error creating token pair")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// set cookies on request with the access and refresh token
@@ -78,23 +71,5 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 		},
 	}
 
-	return h.Success(ctx, out)
-}
-
-// BindRefreshHandler is used to bind the refresh endpoint to the OpenAPI schema
-func (h *Handler) BindRefreshHandler() *openapi3.Operation {
-	refresh := openapi3.NewOperation()
-	refresh.Description = "The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently."
-	refresh.Tags = []string{"refresh"}
-	refresh.OperationID = "RefreshHandler"
-	refresh.Security = AllSecurityRequirements()
-
-	h.AddRequestBody("RefreshRequest", models.ExampleRefreshRequest, refresh)
-	h.AddResponse("RefreshReply", "success", models.ExampleRefreshSuccessResponse, refresh, http.StatusOK)
-	refresh.AddResponse(http.StatusInternalServerError, internalServerError())
-	refresh.AddResponse(http.StatusBadRequest, badRequest())
-	refresh.AddResponse(http.StatusNotFound, notFound())
-	refresh.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return refresh
+	return h.Success(ctx, out, openapi)
 }

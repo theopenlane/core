@@ -20,14 +20,10 @@ import (
 // https://datatracker.ietf.org/doc/html/rfc7033
 // per the RFC, response codes should not always be 201 or similar, but 404, 200, etc.,
 // regular status codes should be used
-func (h *Handler) WebfingerHandler(ctx echo.Context) error {
-	var in models.SSOStatusRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOStatusRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -56,11 +52,11 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 			return h.NotFound(ctx, ErrNotFound)
 		}
 	default:
-		return h.BadRequest(ctx, ErrMissingField)
+		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	if orgID == "" {
-		return h.BadRequest(ctx, ErrMissingField)
+		return h.BadRequest(ctx, ErrMissingField, openapi)
 	}
 
 	out, err := h.fetchSSOStatus(reqCtx, orgID)
@@ -71,10 +67,10 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 			return h.NotFound(ctx, ErrNotFound)
 		}
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, out, openapi)
 }
 
 type nonce string

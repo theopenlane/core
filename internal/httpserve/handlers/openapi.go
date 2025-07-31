@@ -1,21 +1,54 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 
 	"github.com/theopenlane/httpsling"
 )
 
-// commonResponse creates a response that references a common component
+// Security Requirements for common authentication patterns
+var (
+	// AuthenticatedSecurity for endpoints requiring authentication
+	AuthenticatedSecurity = BearerSecurity()
+	// PublicSecurity for public endpoints with no authentication
+	PublicSecurity = &openapi3.SecurityRequirements{}
+	// AllAuthSecurity for endpoints accepting any authentication method
+	AllAuthSecurity = AllSecurityRequirements()
+)
+
+// Error Response Patterns for common error combinations
+var (
+	// StandardAuthErrors for typical authenticated endpoints
+	StandardAuthErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusInternalServerError}
+	// PublicEndpointErrors for public endpoints
+	PublicEndpointErrors = []int{http.StatusBadRequest, http.StatusInternalServerError}
+	// AdminOnlyErrors for admin-only endpoints
+	AdminOnlyErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusForbidden, http.StatusInternalServerError}
+)
+
+// AuthEndpointDesc creates a description for authenticated endpoints
+func AuthEndpointDesc(action, resource string) string {
+	return fmt.Sprintf("%s %s. Requires authentication.", action, resource)
+}
+
+func PublicEndpointDesc(action, resource string) string {
+	return fmt.Sprintf("%s %s. No authentication required.", action, resource)
+}
+
+func AdminEndpointDesc(action, resource string) string {
+	return fmt.Sprintf("%s %s. Requires admin privileges.", action, resource)
+}
+
+// commonResponse creates a response that references a common error schema
 func commonResponse(statusCode int) *openapi3.Response {
 	statusText := http.StatusText(statusCode)
-	componentName := strings.ReplaceAll(statusText, " ", "")
+	// For now, just return a simple response without schema reference
+	// TODO: Add proper error schema references when StatusError schema is working
 	return openapi3.NewResponse().
-		WithDescription(statusText).
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/" + componentName}))
+		WithDescription(statusText)
 }
 
 // Legacy wrapper functions for backward compatibility
@@ -31,21 +64,6 @@ func internalServerError() *openapi3.Response {
 	return commonResponse(http.StatusInternalServerError)
 }
 
-// notFound is a wrapper for OpenAPI not found response
-func notFound() *openapi3.Response {
-	return commonResponse(http.StatusNotFound)
-}
-
-// created is a wrapper for OpenAPI created response
-func created() *openapi3.Response {
-	return commonResponse(http.StatusCreated)
-}
-
-// conflict is a wrapper for OpenAPI conflict response
-func conflict() *openapi3.Response {
-	return commonResponse(http.StatusConflict)
-}
-
 // unauthorized is a wrapper for OpenAPI unauthorized response
 func unauthorized() *openapi3.Response {
 	return commonResponse(http.StatusUnauthorized)
@@ -59,14 +77,10 @@ func forbidden() *openapi3.Response {
 // invalidInput is a wrapper for OpenAPI invalid input response
 // Note: This uses the InvalidInput component, not BadRequest
 func invalidInput() *openapi3.Response {
+	// For now, just return a simple response without schema reference
+	// TODO: Add proper error schema references when StatusError schema is working
 	return openapi3.NewResponse().
-		WithDescription("Invalid Input").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/InvalidInput"}))
-}
-
-// tooManyRequests is a wrapper for OpenAPI too many requests response
-func tooManyRequests() *openapi3.Response {
-	return commonResponse(http.StatusTooManyRequests)
+		WithDescription("Invalid Input")
 }
 
 // AddRequestBody is used to add a request body definition to the OpenAPI schema
@@ -77,25 +91,6 @@ func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Ope
 
 	request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
 	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
-}
-
-// AddRequestBodyWithRegistry is used to add a request body definition to the OpenAPI schema with automatic type registration
-func (h *Handler) AddRequestBodyWithRegistry(body interface{}, op *openapi3.Operation, registry interface {
-	GetOrRegister(any) (*openapi3.SchemaRef, error)
-}) error {
-	schemaRef, err := registry.GetOrRegister(body)
-	if err != nil {
-		return err
-	}
-
-	request := openapi3.NewRequestBody().
-		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
-	op.RequestBody = &openapi3.RequestBodyRef{Value: request}
-
-	request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
-
-	return nil
 }
 
 // AddQueryParameter is used to add a query parameter definition to the OpenAPI schema (e.g ?name=value)
@@ -121,26 +116,6 @@ func (h *Handler) AddResponse(name string, description string, body interface{},
 
 	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
 	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
-}
-
-// AddResponseWithRegistry is used to add a response definition to the OpenAPI schema with automatic type registration
-func (h *Handler) AddResponseWithRegistry(description string, body interface{}, op *openapi3.Operation, status int, registry interface {
-	GetOrRegister(any) (*openapi3.SchemaRef, error)
-}) error {
-	schemaRef, err := registry.GetOrRegister(body)
-	if err != nil {
-		return err
-	}
-
-	response := openapi3.NewResponse().
-		WithDescription(description).
-		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
-	op.AddResponse(status, response)
-
-	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
-
-	return nil
 }
 
 // bearerSecurity is used to add a bearer security definition to the OpenAPI schema
@@ -197,5 +172,14 @@ func AllSecurityRequirements() *openapi3.SecurityRequirements {
 		openapi3.SecurityRequirement{
 			"apiKey": []string{},
 		},
+	}
+}
+
+// AddStandardResponses adds common error responses to an OpenAPI operation
+func AddStandardResponses(operation *openapi3.Operation) {
+	if operation != nil {
+		operation.AddResponse(http.StatusBadRequest, badRequest())
+		operation.AddResponse(http.StatusUnauthorized, unauthorized())
+		operation.AddResponse(http.StatusInternalServerError, internalServerError())
 	}
 }
