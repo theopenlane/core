@@ -99,7 +99,7 @@ func setupBenchmarkClient(b *testing.B) *benchmarkContext {
 		sessions.WithPersistence(rc),
 	)
 
-	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
 	// setup otp manager
 	otpOpts := []totp.ConfigOption{
