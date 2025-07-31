@@ -128,6 +128,10 @@ func (s Standard) Edges() []ent.Edge {
 			fromSchema: s,
 			edgeSchema: Control{},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: TrustCenterCompliance{},
+		}),
 	}
 }
 
@@ -138,6 +142,7 @@ func (s Standard) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
 				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.SystemOwnedMixin{},
 		},

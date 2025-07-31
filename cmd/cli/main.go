@@ -52,6 +52,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/task"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/template"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcenter"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcentercompliance"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/trustcentersubprocessors"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/user"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/usersetting"
