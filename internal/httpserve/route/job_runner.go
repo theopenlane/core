@@ -15,7 +15,7 @@ func registerJobRunnerRegistrationHandler(router *Router) error {
 		Tags:        []string{"runners"},
 		OperationID: "AgentNodeRegistration",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.RegisterJobRunner,
 	}
 

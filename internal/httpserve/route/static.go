@@ -20,7 +20,7 @@ func registerOpenAPIHandler(router *Router) (err error) {
 		Tags:        []string{"documentation"},
 		OperationID: "APIDocs",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return ctx.JSON(http.StatusOK, router.OAS)
 		},
@@ -42,7 +42,7 @@ func registerRobotsHandler(router *Router) (err error) {
 		Tags:        []string{"static"},
 		OperationID: "Robots",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("robots.txt", robotsTxt)(ctx)
 		},
@@ -64,7 +64,7 @@ func registerFaviconHandler(router *Router) (err error) {
 		Tags:        []string{"static"},
 		OperationID: "Favicon",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("assets/favicon.ico", assets)(ctx)
 		},
@@ -83,7 +83,7 @@ func registerExampleCSVHandler(router *Router) (err error) {
 		Tags:        []string{"files", "examples"},
 		OperationID: "ExampleCSV",
 		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler: func(ctx echo.Context, openapi *handlers.OpenAPIContext) error {
 			ctx.Response().Header().Set(httpsling.HeaderContentType, "text/csv")
 			return router.Handler.ExampleCSV(ctx, openapi)

@@ -20,7 +20,7 @@ func registerOAuthRegisterHandler(router *Router) error {
 		Tags:        []string{"oauth", "authentication"},
 		OperationID: "OAuthRegister",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.OauthRegister,
 	}
 
@@ -37,7 +37,7 @@ func registerUserInfoHandler(router *Router) error {
 		Tags:        []string{"oauth", "user"},
 		OperationID: "UserInfo",
 		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler: func(ctx echo.Context, openapi *handlers.OpenAPIContext) error {
 			ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 			return router.Handler.UserInfo(ctx, openapi)
@@ -57,7 +57,7 @@ func registerGithubLoginHandler(router *Router) error {
 		Tags:        []string{"oauth", "github"},
 		OperationID: "GitHubLogin",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return githubLogin(router)(ctx)
 		},
@@ -76,7 +76,7 @@ func registerGithubCallbackHandler(router *Router) error {
 		Tags:        []string{"oauth", "github"},
 		OperationID: "GitHubCallback",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return githubCallback(router)(ctx)
 		},
@@ -95,7 +95,7 @@ func registerGoogleLoginHandler(router *Router) error {
 		Tags:        []string{"oauth", "google"},
 		OperationID: "GoogleLogin",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return googleLogin(router)(ctx)
 		},
@@ -114,7 +114,7 @@ func registerGoogleCallbackHandler(router *Router) error {
 		Tags:        []string{"oauth", "google"},
 		OperationID: "GoogleCallback",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return googleCallback(router)(ctx)
 		},

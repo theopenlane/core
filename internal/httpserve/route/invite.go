@@ -16,7 +16,7 @@ func registerInviteHandler(router *Router) error {
 		Tags:        []string{"organization"},
 		OperationID: "OrganizationInviteAccept",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.OrganizationInviteAccept,
 	}
 

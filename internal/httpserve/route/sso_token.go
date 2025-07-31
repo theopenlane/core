@@ -16,7 +16,7 @@ func registerSSOTokenAuthorizeHandler(router *Router) error {
 		Tags:        []string{"sso"},
 		OperationID: "SSOTokenAuthorize",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.SSOTokenAuthorizeHandler,
 	}
 
@@ -33,7 +33,7 @@ func registerSSOTokenCallbackHandler(router *Router) error {
 		Tags:        []string{"sso"},
 		OperationID: "SSOTokenCallback",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.SSOTokenCallbackHandler,
 	}
 

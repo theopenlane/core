@@ -13,7 +13,7 @@ func registerLoginHandler(router *Router) error {
 		Tags:        []string{"authentication"},
 		OperationID: "LoginHandler",
 		Security:    handlers.BasicSecurity(),
-		Middlewares: *UnauthenticatedEndpoint, // leaves off the additional middleware (including csrf)
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware (including csrf)
 		Handler:     router.Handler.LoginHandler,
 	}
 

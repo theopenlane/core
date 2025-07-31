@@ -16,7 +16,7 @@ func registerSwitchRoute(router *Router) error {
 		Tags:        []string{"organization"},
 		OperationID: "Switch",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.SwitchHandler,
 	}
 

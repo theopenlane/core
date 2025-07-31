@@ -16,7 +16,7 @@ func registerAcmeSolverHandler(router *Router) error {
 		Tags:        []string{"acme", "certificates"},
 		OperationID: "AcmeSolver",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *UnauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
 		Handler:     router.Handler.ACMESolverHandler,
 	}
 

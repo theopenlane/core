@@ -17,7 +17,7 @@ func registerAccountRolesOrganizationHandler(router *Router) error {
 		Tags:        []string{"account"},
 		OperationID: "AccountRolesOrganization",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.AccountRolesOrganizationHandler,
 	}
 
@@ -34,7 +34,7 @@ func registerAccountRolesOrganizationHandler(router *Router) error {
 		Tags:        []string{"account"},
 		OperationID: "AccountRolesOrganizationByID",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.AccountRolesOrganizationHandler,
 	}
 

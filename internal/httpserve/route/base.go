@@ -18,7 +18,7 @@ func registerLivenessHandler(router *Router) (err error) {
 		Tags:        []string{"health"},
 		OperationID: "Livez",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			if entdb.IsShuttingDown() {
 				return ctx.JSON(http.StatusServiceUnavailable, echo.Map{"status": "shutting down"})
@@ -43,7 +43,7 @@ func registerReadinessHandler(router *Router) (err error) {
 		Tags:        []string{"health"},
 		OperationID: "Ready",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *UnauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
 		SimpleHandler: func(ctx echo.Context) error {
 			return router.Handler.ReadyChecks.ReadyHandler(ctx)
 		},

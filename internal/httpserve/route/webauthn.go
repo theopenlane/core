@@ -16,7 +16,7 @@ func registerWebauthnRegistrationHandler(router *Router) (err error) {
 		Tags:        []string{"webauthn", "authentication"},
 		OperationID: "WebauthnRegistration",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.BeginWebauthnRegistration,
 	}
 
@@ -33,7 +33,7 @@ func registerWebauthnVerificationsHandler(router *Router) (err error) {
 		Tags:        []string{"webauthn", "authentication"},
 		OperationID: "WebauthnRegistrationVerification",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.FinishWebauthnRegistration,
 	}
 
@@ -50,7 +50,7 @@ func registerWebauthnAuthenticationHandler(router *Router) (err error) {
 		Tags:        []string{"webauthn", "authentication"},
 		OperationID: "WebauthnAuthentication",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.BeginWebauthnLogin,
 	}
 
@@ -67,7 +67,7 @@ func registerWebauthnAuthVerificationHandler(router *Router) (err error) {
 		Tags:        []string{"webauthn", "authentication"},
 		OperationID: "WebauthnAuthenticationVerification",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.FinishWebauthnLogin,
 	}
 

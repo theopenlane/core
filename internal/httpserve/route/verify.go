@@ -16,7 +16,7 @@ func registerVerifyHandler(router *Router) error {
 		Tags:        []string{"email"},
 		OperationID: "VerifyEmail",
 		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *RestrictedEndpoint,
+		Middlewares: *restrictedEndpoint,
 		Handler:     router.Handler.VerifyEmail,
 	}
 

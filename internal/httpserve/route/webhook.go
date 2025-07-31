@@ -16,7 +16,7 @@ func registerWebhookHandler(router *Router) (err error) {
 		Tags:        []string{"webhooks", "payments"},
 		OperationID: "StripeWebhook",
 		Security:    handlers.PublicSecurity,  // Stripe signs the request
-		Middlewares: *UnauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
 		Handler:     router.Handler.WebhookReceiverHandler,
 	}
 

@@ -22,7 +22,7 @@ func registerWebAuthnWellKnownHandler(router *Router) (err error) {
 		Tags:        []string{"well-known", "webauthn"},
 		OperationID: "WebAuthnWellKnown",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("webauthn", webauthn)(ctx)
 		},
@@ -41,7 +41,7 @@ func registerJwksWellKnownHandler(router *Router) (err error) {
 		Tags:        []string{"well-known", "authentication"},
 		OperationID: "JWKS",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return ctx.JSON(http.StatusOK, router.Handler.JWTKeys)
 		},
@@ -63,7 +63,7 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 		Tags:        []string{"well-known", "security"},
 		OperationID: "SecurityTxt",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("security.txt", securityTxt)(ctx)
 		},
@@ -85,7 +85,7 @@ func registerAppleMerchantHandler(router *Router) (err error) {
 		Tags:        []string{"well-known", "payments"},
 		OperationID: "AppleMerchant",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("applemerchant", applemerchant)(ctx)
 		},

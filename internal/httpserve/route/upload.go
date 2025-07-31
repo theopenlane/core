@@ -16,7 +16,7 @@ func registerFileUploadRoute(router *Router) (err error) { // nolint:unused
 		Tags:        []string{"files"},
 		OperationID: "FileUpload",
 		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.FileUploadHandler,
 	}
 

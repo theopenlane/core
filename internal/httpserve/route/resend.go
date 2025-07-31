@@ -16,7 +16,7 @@ func registerResendEmailHandler(router *Router) error {
 		Tags:        []string{"resend"},
 		OperationID: "ResendEmail",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.ResendEmail,
 	}
 

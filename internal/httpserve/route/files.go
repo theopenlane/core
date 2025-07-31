@@ -23,7 +23,7 @@ func registerUploadsHandler(router *Router) (err error) {
 		Tags:        []string{"files"},
 		OperationID: "Files",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			fileSystem := os.DirFS(router.LocalFilePath)
 

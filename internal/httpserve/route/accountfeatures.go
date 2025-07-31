@@ -17,7 +17,7 @@ func registerAccountFeaturesHandler(router *Router) error {
 		Tags:        []string{"account"},
 		OperationID: "AccountFeatures",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.AccountFeaturesHandler,
 	}
 
@@ -34,7 +34,7 @@ func registerAccountFeaturesHandler(router *Router) error {
 		Tags:        []string{"account"},
 		OperationID: "AccountFeaturesByID",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.AccountFeaturesHandler,
 	}
 

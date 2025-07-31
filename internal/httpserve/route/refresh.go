@@ -16,7 +16,7 @@ func registerRefreshHandler(router *Router) error {
 		Tags:        []string{"refresh"},
 		OperationID: "RefreshHandler",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.RefreshHandler,
 	}
 

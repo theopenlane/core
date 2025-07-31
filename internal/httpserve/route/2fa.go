@@ -16,7 +16,7 @@ func register2faHandler(router *Router) error {
 		Tags:        []string{"tfa"},
 		OperationID: "TFAValidation",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.ValidateTOTP,
 	}
 

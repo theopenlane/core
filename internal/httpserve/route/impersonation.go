@@ -19,7 +19,7 @@ func registerStartImpersonationHandler(router *Router) error {
 		Tags:        []string{"impersonation"},
 		OperationID: "StartImpersonation",
 		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.StartImpersonation,
 	}
 
@@ -36,7 +36,7 @@ func registerEndImpersonationHandler(router *Router) error {
 		Tags:        []string{"impersonation"},
 		OperationID: "EndImpersonation",
 		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.EndImpersonation,
 	}
 

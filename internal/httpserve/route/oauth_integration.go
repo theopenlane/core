@@ -16,7 +16,7 @@ func registerIntegrationOAuthStartHandler(router *Router) error {
 		Tags:        []string{"integrations"},
 		OperationID: "StartIntegrationOAuth",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.StartOAuthFlow,
 	}
 
@@ -33,7 +33,7 @@ func registerIntegrationOAuthCallbackHandler(router *Router) error {
 		Tags:        []string{"integrations"},
 		OperationID: "IntegrationOAuthCallback",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.HandleOAuthCallback,
 	}
 
@@ -50,7 +50,7 @@ func registerRefreshIntegrationTokenHandler(router *Router) error {
 		Tags:        []string{"integrations"},
 		OperationID: "RefreshIntegrationToken",
 		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.RefreshIntegrationTokenHandler,
 	}
 

@@ -19,7 +19,7 @@ func registerCSRFHandler(router *Router) (err error) {
 		Tags:        []string{"security"},
 		OperationID: "CSRF",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
 			token := ctx.Get(middleware.DefaultCSRFConfig.ContextKey)
 

@@ -158,14 +158,14 @@ var (
 
 // Middleware Semantic Names for better readability
 var (
-	// AuthenticatedEndpoint for endpoints requiring authentication
-	AuthenticatedEndpoint = &authMW
-	// PublicEndpoint for standard public endpoints
-	PublicEndpoint = &mw
-	// RestrictedEndpoint for rate-limited endpoints
-	RestrictedEndpoint = &restrictedEndpointsMW
-	// UnauthenticatedEndpoint for basic endpoints with minimal middleware
-	UnauthenticatedEndpoint = &baseMW
+	// authenticatedEndpoint for endpoints requiring authentication
+	authenticatedEndpoint = &authMW
+	// publicEndpoint for standard public endpoints
+	publicEndpoint = &mw
+	// restrictedEndpoint for rate-limited endpoints
+	restrictedEndpoint = &restrictedEndpointsMW
+	// unauthenticatedEndpoint for basic endpoints with minimal middleware
+	unauthenticatedEndpoint = &baseMW
 )
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together

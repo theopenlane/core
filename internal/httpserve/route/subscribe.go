@@ -16,7 +16,7 @@ func registerVerifySubscribeHandler(router *Router) error {
 		Tags:        []string{"subscription"},
 		OperationID: "VerifySubscription",
 		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *RestrictedEndpoint,
+		Middlewares: *restrictedEndpoint,
 		Handler:     router.Handler.VerifySubscriptionHandler,
 	}
 

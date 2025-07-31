@@ -16,7 +16,7 @@ func registerTrustCenterAnonymousJWTHandler(router *Router) error {
 		Tags:        []string{"trustcenter", "authentication"},
 		OperationID: "TrustCenterAnonymousJWT",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.CreateTrustCenterAnonymousJWT,
 	}
 

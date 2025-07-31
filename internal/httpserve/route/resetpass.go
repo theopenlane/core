@@ -16,7 +16,7 @@ func registerResetPasswordHandler(router *Router) error {
 		Tags:        []string{"password-reset"},
 		OperationID: "ResetPassword",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *PublicEndpoint,
+		Middlewares: *publicEndpoint,
 		Handler:     router.Handler.ResetPassword,
 	}
 

@@ -16,7 +16,7 @@ func registerAccountAccessHandler(router *Router) error {
 		Tags:        []string{"account"},
 		OperationID: "AccountAccess",
 		Security:    handlers.AuthenticatedSecurity,
-		Middlewares: *AuthenticatedEndpoint,
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.AccountAccessHandler,
 	}
 

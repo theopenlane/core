@@ -16,7 +16,7 @@ func registerForgotPasswordHandler(router *Router) error {
 		Tags:        []string{"forgotpassword"},
 		OperationID: "ForgotPassword",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *RestrictedEndpoint,
+		Middlewares: *restrictedEndpoint,
 		Handler:     router.Handler.ForgotPassword,
 	}
 
