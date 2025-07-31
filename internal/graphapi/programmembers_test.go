@@ -156,6 +156,9 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 		}
 	}
 
+	// add an admin user to the program as member
+	(&ProgramMemberBuilder{client: suite.client, UserID: adminUser.ID, ProgramID: pm.ProgramID, Role: enums.RoleMember.String()}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name            string
 		programMemberID string
@@ -172,11 +175,18 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 			ctx:             testUser1.UserCtx,
 		},
 		{
-			name:            "update self from admin to member, not allowed",
+			name:            "update self from admin to member allowed because user is org owner",
 			programMemberID: testUser1ProgramMember,
 			role:            enums.RoleMember,
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
+		},
+		{
+			name:            "update self from member to admin of self not allowed",
+			programMemberID: testUser1ProgramMember,
+			role:            enums.RoleAdmin,
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
 			errMsg:          notAuthorizedErrorMsg,
 		},
 		{

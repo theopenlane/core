@@ -26366,6 +26366,18 @@ type GroupWhereInput struct {
 	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
 	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
 
+	// "entity_editors" edge predicates.
+	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
+	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
+
+	// "entity_blocked_groups" edge predicates.
+	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
+	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
+
+	// "entity_viewers" edge predicates.
+	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
+	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
+
 	// "procedure_editors" edge predicates.
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -27194,6 +27206,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasScanViewersWith(with...))
+	}
+	if i.HasEntityEditors != nil {
+		p := group.HasEntityEditors()
+		if !*i.HasEntityEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityEditorsWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityEditorsWith))
+		for _, w := range i.HasEntityEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityEditorsWith(with...))
+	}
+	if i.HasEntityBlockedGroups != nil {
+		p := group.HasEntityBlockedGroups()
+		if !*i.HasEntityBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityBlockedGroupsWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityBlockedGroupsWith))
+		for _, w := range i.HasEntityBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityBlockedGroupsWith(with...))
+	}
+	if i.HasEntityViewers != nil {
+		p := group.HasEntityViewers()
+		if !*i.HasEntityViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityViewersWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityViewersWith))
+		for _, w := range i.HasEntityViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityViewersWith(with...))
 	}
 	if i.HasProcedureEditors != nil {
 		p := group.HasProcedureEditors()

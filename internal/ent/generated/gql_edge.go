@@ -2402,6 +2402,69 @@ func (gr *Group) ScanViewers(
 	return gr.QueryScanViewers().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (gr *Group) EntityEditors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := gr.Edges.totalCount[19][alias]
+	if nodes, err := gr.NamedEntityEditors(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return gr.QueryEntityEditors().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (gr *Group) EntityBlockedGroups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := gr.Edges.totalCount[20][alias]
+	if nodes, err := gr.NamedEntityBlockedGroups(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return gr.QueryEntityBlockedGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (gr *Group) EntityViewers(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := gr.Edges.totalCount[21][alias]
+	if nodes, err := gr.NamedEntityViewers(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return gr.QueryEntityViewers().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (gr *Group) ProcedureEditors(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProcedureOrder, where *ProcedureWhereInput,
 ) (*ProcedureConnection, error) {
@@ -2410,7 +2473,7 @@ func (gr *Group) ProcedureEditors(
 		WithProcedureFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[19][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[22][alias]
 	if nodes, err := gr.NamedProcedureEditors(alias); err == nil || hasTotalCount {
 		pager, err := newProcedurePager(opts, last != nil)
 		if err != nil {
@@ -2431,7 +2494,7 @@ func (gr *Group) ProcedureBlockedGroups(
 		WithProcedureFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[20][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[23][alias]
 	if nodes, err := gr.NamedProcedureBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newProcedurePager(opts, last != nil)
 		if err != nil {
@@ -2452,7 +2515,7 @@ func (gr *Group) InternalPolicyEditors(
 		WithInternalPolicyFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[21][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[24][alias]
 	if nodes, err := gr.NamedInternalPolicyEditors(alias); err == nil || hasTotalCount {
 		pager, err := newInternalPolicyPager(opts, last != nil)
 		if err != nil {
@@ -2473,7 +2536,7 @@ func (gr *Group) InternalPolicyBlockedGroups(
 		WithInternalPolicyFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[22][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[25][alias]
 	if nodes, err := gr.NamedInternalPolicyBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newInternalPolicyPager(opts, last != nil)
 		if err != nil {
@@ -2494,7 +2557,7 @@ func (gr *Group) ControlEditors(
 		WithControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[23][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[26][alias]
 	if nodes, err := gr.NamedControlEditors(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
@@ -2515,7 +2578,7 @@ func (gr *Group) ControlBlockedGroups(
 		WithControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[24][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[27][alias]
 	if nodes, err := gr.NamedControlBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
@@ -2536,7 +2599,7 @@ func (gr *Group) MappedControlEditors(
 		WithMappedControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[25][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[28][alias]
 	if nodes, err := gr.NamedMappedControlEditors(alias); err == nil || hasTotalCount {
 		pager, err := newMappedControlPager(opts, last != nil)
 		if err != nil {
@@ -2557,7 +2620,7 @@ func (gr *Group) MappedControlBlockedGroups(
 		WithMappedControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[26][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[29][alias]
 	if nodes, err := gr.NamedMappedControlBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newMappedControlPager(opts, last != nil)
 		if err != nil {
@@ -2586,7 +2649,7 @@ func (gr *Group) Users(
 		WithUserFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[28][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[31][alias]
 	if nodes, err := gr.NamedUsers(alias); err == nil || hasTotalCount {
 		pager, err := newUserPager(opts, last != nil)
 		if err != nil {
@@ -2607,7 +2670,7 @@ func (gr *Group) Events(
 		WithEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[29][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[32][alias]
 	if nodes, err := gr.NamedEvents(alias); err == nil || hasTotalCount {
 		pager, err := newEventPager(opts, last != nil)
 		if err != nil {
@@ -2628,7 +2691,7 @@ func (gr *Group) Integrations(
 		WithIntegrationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[30][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[33][alias]
 	if nodes, err := gr.NamedIntegrations(alias); err == nil || hasTotalCount {
 		pager, err := newIntegrationPager(opts, last != nil)
 		if err != nil {
@@ -2649,7 +2712,7 @@ func (gr *Group) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[31][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[34][alias]
 	if nodes, err := gr.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {
@@ -2670,7 +2733,7 @@ func (gr *Group) Tasks(
 		WithTaskFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[32][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[35][alias]
 	if nodes, err := gr.NamedTasks(alias); err == nil || hasTotalCount {
 		pager, err := newTaskPager(opts, last != nil)
 		if err != nil {
@@ -2691,7 +2754,7 @@ func (gr *Group) Members(
 		WithGroupMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := gr.Edges.totalCount[33][alias]
+	totalCount, hasTotalCount := gr.Edges.totalCount[36][alias]
 	if nodes, err := gr.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newGroupMembershipPager(opts, last != nil)
 		if err != nil {

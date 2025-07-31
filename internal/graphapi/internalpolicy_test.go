@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -295,6 +294,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			},
 			client:                     suite.client.api,
 			ctx:                        testUser1.UserCtx,
+			expectedErr:                notAuthorizedErrorMsg,
 			controlEdgeShouldBeCreated: false, // user does not have edit access to the control, it is owned by the system
 		},
 		{
@@ -400,7 +400,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				assert.NilError(t, err)
 			}
 
-			log.Error().Str("control_id", systemControl.ID).Msg("system control id")
 			resp, err := tc.client.CreateInternalPolicy(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -467,7 +466,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 						}
 					}
 
-					assert.Check(t, is.Equal(controlFound, tc.controlEdgeShouldBeCreated), "control not found in edges")
+					assert.Check(t, is.Equal(controlFound, tc.controlEdgeShouldBeCreated))
 				}
 			}
 

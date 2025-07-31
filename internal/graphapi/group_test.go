@@ -219,8 +219,17 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// check groups available to admin user (private group created by testUser1 should not be returned)
+		// check groups available to admin user (private group created by testUser1 should be returned for admin)
 		resp, err = suite.client.api.GetAllGroups(adminUser.UserCtx)
+
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
+		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
+
+		// check groups available to admin user (private group created by testUser1 should not be returned for org member)
+		resp, err = suite.client.api.GetAllGroups(viewOnlyUser.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -508,12 +517,8 @@ func TestMutationCreateGroupWithMembers(t *testing.T) {
 			// ensure we can still set the visibility on the group when creating it
 			assert.Check(t, is.Equal(resp.CreateGroupWithMembers.Group.Setting.Visibility, enums.VisibilityPrivate))
 
-			// make sure there are three members, user who created the group, admin, and member
-			// except when using an api token
-			expectedLen := 3
-			if tc.client == suite.client.apiWithToken {
-				expectedLen = 2
-			}
+			// make sure there are two members admin and member added
+			expectedLen := 2
 
 			assert.Assert(t, is.Len(resp.CreateGroupWithMembers.Group.Members.Edges, expectedLen))
 
@@ -634,9 +639,8 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 			// the display id should be different
 			assert.Assert(t, group.DisplayID != resp.CreateGroupByClone.Group.DisplayID)
 
-			// make sure there are two members, user who created the group and the cloned member
-			// even when an api token is used, there will still be the original user (testUser1)
-			expectedLen := 1
+			// make sure there the is the member from the group we cloned
+			expectedLen := 0
 			if tc.groupMembersClone != nil {
 				expectedLen += 1
 			}
@@ -1008,11 +1012,9 @@ func TestMutationUpdateGroup(t *testing.T) {
 			}
 
 			if tc.updateInput.AddGroupMembers != nil && tc.groupID == group.ID {
-				// Adding a member to an group will make it 2 users, there is an admin
-				// assigned to the group automatically and a member added in the test case
-				assert.Check(t, is.Len(updatedGroup.Members.Edges, 3))
-				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.Role, updatedGroup.Members.Edges[2].Node.Role))
-				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.User.ID, updatedGroup.Members.Edges[2].Node.User.ID))
+				assert.Check(t, is.Len(updatedGroup.Members.Edges, 2))
+				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.Role, updatedGroup.Members.Edges[1].Node.Role))
+				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.User.ID, updatedGroup.Members.Edges[1].Node.User.ID))
 			}
 
 			if tc.updateInput.UpdateGroupSettings != nil {
@@ -1098,9 +1100,9 @@ func TestMutationDeleteGroup(t *testing.T) {
 		errorMsg string
 	}{
 		{
-			name:    "delete private group, happy path",
+			name:    "delete private group, happy path with admin user",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     adminUser.UserCtx,
 			groupID: privateGroup.ID,
 		},
 		{

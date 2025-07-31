@@ -334,6 +334,17 @@ func TestMutationCreateEvidence(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "no access to linked control",
+			request: openlaneclient.CreateEvidenceInput{
+				Name:        "Test Evidence",
+				Description: lo.ToPtr("This is a test Evidence"),
+				ControlIDs:  []string{control1.ID, control2.ID},
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
 			name: "missing required field",
 			request: openlaneclient.CreateEvidenceInput{
 				Description: lo.ToPtr("This is a test Evidence"),

@@ -4715,6 +4715,9 @@ type CreateGroupInput struct {
 	ScanEditorIDs                        []string                 `json:"scanEditorIDs,omitempty"`
 	ScanBlockedGroupIDs                  []string                 `json:"scanBlockedGroupIDs,omitempty"`
 	ScanViewerIDs                        []string                 `json:"scanViewerIDs,omitempty"`
+	EntityEditorIDs                      []string                 `json:"entityEditorIDs,omitempty"`
+	EntityBlockedGroupIDs                []string                 `json:"entityBlockedGroupIDs,omitempty"`
+	EntityViewerIDs                      []string                 `json:"entityViewerIDs,omitempty"`
 	ProcedureEditorIDs                   []string                 `json:"procedureEditorIDs,omitempty"`
 	ProcedureBlockedGroupIDs             []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalPolicyEditorIDs              []string                 `json:"internalPolicyEditorIDs,omitempty"`
@@ -9828,6 +9831,9 @@ type Group struct {
 	ScanEditors                        *ScanConnection                  `json:"scanEditors"`
 	ScanBlockedGroups                  *ScanConnection                  `json:"scanBlockedGroups"`
 	ScanViewers                        *ScanConnection                  `json:"scanViewers"`
+	EntityEditors                      *EntityConnection                `json:"entityEditors"`
+	EntityBlockedGroups                *EntityConnection                `json:"entityBlockedGroups"`
+	EntityViewers                      *EntityConnection                `json:"entityViewers"`
 	ProcedureEditors                   *ProcedureConnection             `json:"procedureEditors"`
 	ProcedureBlockedGroups             *ProcedureConnection             `json:"procedureBlockedGroups"`
 	InternalPolicyEditors              *InternalPolicyConnection        `json:"internalPolicyEditors"`
@@ -11112,6 +11118,15 @@ type GroupWhereInput struct {
 	// scan_viewers edge predicates
 	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
 	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
+	// entity_editors edge predicates
+	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
+	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
+	// entity_blocked_groups edge predicates
+	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
+	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
+	// entity_viewers edge predicates
+	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
+	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
 	// procedure_editors edge predicates
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -28551,6 +28566,15 @@ type UpdateGroupInput struct {
 	AddScanViewerIDs                           []string                      `json:"addScanViewerIDs,omitempty"`
 	RemoveScanViewerIDs                        []string                      `json:"removeScanViewerIDs,omitempty"`
 	ClearScanViewers                           *bool                         `json:"clearScanViewers,omitempty"`
+	AddEntityEditorIDs                         []string                      `json:"addEntityEditorIDs,omitempty"`
+	RemoveEntityEditorIDs                      []string                      `json:"removeEntityEditorIDs,omitempty"`
+	ClearEntityEditors                         *bool                         `json:"clearEntityEditors,omitempty"`
+	AddEntityBlockedGroupIDs                   []string                      `json:"addEntityBlockedGroupIDs,omitempty"`
+	RemoveEntityBlockedGroupIDs                []string                      `json:"removeEntityBlockedGroupIDs,omitempty"`
+	ClearEntityBlockedGroups                   *bool                         `json:"clearEntityBlockedGroups,omitempty"`
+	AddEntityViewerIDs                         []string                      `json:"addEntityViewerIDs,omitempty"`
+	RemoveEntityViewerIDs                      []string                      `json:"removeEntityViewerIDs,omitempty"`
+	ClearEntityViewers                         *bool                         `json:"clearEntityViewers,omitempty"`
 	AddProcedureEditorIDs                      []string                      `json:"addProcedureEditorIDs,omitempty"`
 	RemoveProcedureEditorIDs                   []string                      `json:"removeProcedureEditorIDs,omitempty"`
 	ClearProcedureEditors                      *bool                         `json:"clearProcedureEditors,omitempty"`

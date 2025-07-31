@@ -132,10 +132,11 @@ type group
     define member: [user]
     # parent inheritance
     define parent: [organization with public_group]
+    define parent_admin: [organization#admin, organization#owner]
     # permissions inherited from the organization
-    define parent_viewer: can_view from parent
-    define parent_editor: can_edit from parent
-    define parent_deleter: can_edit from parent
+    define parent_viewer: can_view from parent or parent_admin
+    define parent_editor: can_edit from parent or parent_admin
+    define parent_deleter: can_edit from parent or parent_admin
     # main permission sets based on roles
     define can_delete: [service] or admin or parent_deleter
     define can_edit: [service] or admin or parent_editor
@@ -274,7 +275,7 @@ type mapped_control
     define blocked: [user, group#member]
 # risks are associated with an organization but do not inherit access from the organization
 # the risk creator will be made the admin of the risk and all other access will be assigned via
-# a program or a group
+# a group
 type risk
   relations
     define can_view: [user, service] or can_edit or (viewer but not blocked)
@@ -291,7 +292,7 @@ type risk
     define delegate: [group#member]
 # narratives are associated with an organization but do not inherit access from the organization
 # the narrative creator will be made the admin of the narrative and all other access will be assigned via
-# a program or a group
+# a group
 type narrative
   relations
     define can_view: [user, service] or can_edit or (viewer but not blocked)
@@ -515,6 +516,18 @@ type export
     define can_edit: [service] or system_admin from system
     define can_delete: system_admin from system
     define system: [system]
+
+type custom_domain
+  relations
+    define can_view: [user, service] or viewer or parent_viewer
+    define can_edit: editor or parent_editor
+    define can_delete: editor or parent_editor
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent_viewer: member from parent
+    define parent_editor: admin from parent or owner from parent
+    define viewer: [user, service] or editor
+    define editor: [user, service]
+    define parent: [organization]
 
 type subprocessor
   relations

@@ -238,9 +238,9 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 }
 
 func TestMutationDeleteDNSVerification(t *testing.T) {
-	dnsVerification := (&DNSVerificationBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	dnsVerification2 := (&DNSVerificationBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	dnsVerification3 := (&DNSVerificationBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	dnsVerification2 := (&DNSVerificationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	dnsVerification3 := (&DNSVerificationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -351,18 +351,15 @@ func TestUpdateDNSVerification(t *testing.T) {
 func TestGetAllDNSVerifications(t *testing.T) {
 	// Create test DNS verifications with different users
 	dnsVerification1 := (&DNSVerificationBuilder{
-		client:  suite.client,
-		OwnerID: testUser1.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser1.UserCtx, t)
 
 	dnsVerification2 := (&DNSVerificationBuilder{
-		client:  suite.client,
-		OwnerID: testUser1.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser1.UserCtx, t)
 
 	dnsVerification3 := (&DNSVerificationBuilder{
-		client:  suite.client,
-		OwnerID: testUser2.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {

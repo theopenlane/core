@@ -119,7 +119,8 @@ func TestQueryControl(t *testing.T) {
 			assert.Check(t, len(resp.Control.RefCode) != 0)
 
 			if tc.programAccess {
-				assert.Check(t, is.Len(resp.Control.Programs.Edges, 1))
+				assert.Assert(t, resp.Control.Programs.Edges != nil)
+				assert.Assert(t, is.Len(resp.Control.Programs.Edges, 1))
 				assert.Check(t, len(resp.Control.Programs.Edges[0].Node.ID) != 0)
 			} else {
 				assert.Check(t, is.Len(resp.Control.Programs.Edges, 0))

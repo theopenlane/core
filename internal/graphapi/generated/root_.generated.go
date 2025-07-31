@@ -1399,6 +1399,9 @@ type ComplexityRoot struct {
 		Description                        func(childComplexity int) int
 		DisplayID                          func(childComplexity int) int
 		DisplayName                        func(childComplexity int) int
+		EntityBlockedGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityEditors                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityViewers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Events                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Files                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GravatarLogoURL                    func(childComplexity int) int
@@ -11511,6 +11514,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.DisplayName(childComplexity), true
+
+	case "Group.entityBlockedGroups":
+		if e.complexity.Group.EntityBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Group.entityEditors":
+		if e.complexity.Group.EntityEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Group.entityViewers":
+		if e.complexity.Group.EntityViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Group.events":
 		if e.complexity.Group.Events == nil {
@@ -43429,6 +43468,9 @@ input CreateGroupInput {
   scanEditorIDs: [ID!]
   scanBlockedGroupIDs: [ID!]
   scanViewerIDs: [ID!]
+  entityEditorIDs: [ID!]
+  entityBlockedGroupIDs: [ID!]
+  entityViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -51797,6 +51839,99 @@ type Group implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  entityEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -53767,6 +53902,21 @@ input GroupWhereInput {
   """
   hasScanViewers: Boolean
   hasScanViewersWith: [ScanWhereInput!]
+  """
+  entity_editors edge predicates
+  """
+  hasEntityEditors: Boolean
+  hasEntityEditorsWith: [EntityWhereInput!]
+  """
+  entity_blocked_groups edge predicates
+  """
+  hasEntityBlockedGroups: Boolean
+  hasEntityBlockedGroupsWith: [EntityWhereInput!]
+  """
+  entity_viewers edge predicates
+  """
+  hasEntityViewers: Boolean
+  hasEntityViewersWith: [EntityWhereInput!]
   """
   procedure_editors edge predicates
   """
@@ -84617,6 +84767,15 @@ input UpdateGroupInput {
   addScanViewerIDs: [ID!]
   removeScanViewerIDs: [ID!]
   clearScanViewers: Boolean
+  addEntityEditorIDs: [ID!]
+  removeEntityEditorIDs: [ID!]
+  clearEntityEditors: Boolean
+  addEntityBlockedGroupIDs: [ID!]
+  removeEntityBlockedGroupIDs: [ID!]
+  clearEntityBlockedGroups: Boolean
+  addEntityViewerIDs: [ID!]
+  removeEntityViewerIDs: [ID!]
+  clearEntityViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean

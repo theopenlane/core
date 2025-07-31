@@ -30,7 +30,7 @@ func TestQueryControlImplementation(t *testing.T) {
 	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(testUser1.UserCtx, t)
 	controlImplementation3 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control2.ID}, SubcontrolIDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustNew(testUser1.UserCtx, t)
 
-	// ensure viewonly user can access controlImplementation with associated controls
+	// ensure view only user can access controlImplementation with associated controls
 	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	controlImplementation4 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control3.ID}}).MustNew(testUser1.UserCtx, t)
 
@@ -87,14 +87,14 @@ func TestQueryControlImplementation(t *testing.T) {
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:               "happy path, controlImplementation with associated controls and group viewer",
+			name:               "happy path, controlImplementation with associated controls and group viewer by org owner",
 			queryID:            controlImplementation4.ID,
 			client:             suite.client.api,
 			ctx:                testUser1.UserCtx,
 			shouldHaveControls: true,
 		},
 		{
-			name:               "happy path, controlImplementation with associated controls and group viewer",
+			name:               "happy path, controlImplementation with associated controls and group viewer by view only user",
 			queryID:            controlImplementation4.ID,
 			client:             suite.client.api,
 			ctx:                viewOnlyUser.UserCtx,

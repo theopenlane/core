@@ -67,7 +67,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(p, withSkipForSystemAdmin(true)),
 			// add group edit permissions to the procedure
-			newGroupPermissionsMixin(withSkipViewPermissions()),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			// all procedures are documents
 			NewDocumentMixin(p),
 		},

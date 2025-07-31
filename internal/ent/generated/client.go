@@ -5472,11 +5472,11 @@ func (c *EntityClient) QueryBlockedGroups(e *Entity) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, entity.BlockedGroupsTable, entity.BlockedGroupsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.BlockedGroupsTable, entity.BlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityBlockedGroups
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5491,11 +5491,11 @@ func (c *EntityClient) QueryEditors(e *Entity) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, entity.EditorsTable, entity.EditorsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.EditorsTable, entity.EditorsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityEditors
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5510,11 +5510,11 @@ func (c *EntityClient) QueryViewers(e *Entity) *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, entity.ViewersTable, entity.ViewersColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.ViewersTable, entity.ViewersPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityViewers
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8080,6 +8080,63 @@ func (c *GroupClient) QueryScanViewers(gr *Group) *ScanQuery {
 		schemaConfig := gr.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.ScanViewers
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntityEditors queries the entity_editors edge of a Group.
+func (c *GroupClient) QueryEntityEditors(gr *Group) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityEditorsTable, group.EntityEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntityBlockedGroups queries the entity_blocked_groups edge of a Group.
+func (c *GroupClient) QueryEntityBlockedGroups(gr *Group) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityBlockedGroupsTable, group.EntityBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntityViewers queries the entity_viewers edge of a Group.
+func (c *GroupClient) QueryEntityViewers(gr *Group) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityViewersTable, group.EntityViewersPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityViewers
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
 	}

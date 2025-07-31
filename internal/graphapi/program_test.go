@@ -633,13 +633,12 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "remove program member, cannot remove self",
+			name: "remove program member, can remove self if org owner",
 			request: openlaneclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{testUserProgramMemberID},
 			},
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "add program member, cannot add self",
@@ -710,18 +709,18 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: openlaneclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure2.ID},
 			},
-			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
-			expectedEdgeCount: 0, // procedure is not visible to the user
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update edge - policy - not allowed to access procedure",
 			request: openlaneclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy2.ID},
 			},
-			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
-			expectedEdgeCount: 0, // policy is not visible to the user
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, not enough permissions",
@@ -860,32 +859,25 @@ func TestMutationUpdateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.AddProgramMembers) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 3))
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 2))
 
-				testUserFound := false
 				programUserFound := false
 				adminUserFound := false
 				for _, edge := range resp.UpdateProgram.Program.Members.Edges {
-					if edge.Node.User.ID == testUser1.ID {
-						testUserFound = true
-					} else if edge.Node.User.ID == programUser.ID {
+					if edge.Node.User.ID == programUser.ID {
 						programUserFound = true
 					} else if edge.Node.User.ID == adminUser.ID {
 						adminUserFound = true
 					}
 				}
-				assert.Check(t, testUserFound, "test user not found in program members")
 				// here originally, and then later re-added as an admin
 				assert.Check(t, programUserFound, "program user not found in program members")
 				assert.Check(t, adminUserFound, "admin user not found in program members")
 			}
 
-			// member was removed, ensure there are two members left
+			// member was removed, ensure there is only one member left
 			if len(tc.request.RemoveProgramMembers) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 2))
-
-				// it should have the owner and the admin user
-				assert.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 1))
 			}
 		})
 	}

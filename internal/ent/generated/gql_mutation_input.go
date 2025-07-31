@@ -3799,6 +3799,9 @@ type CreateGroupInput struct {
 	ScanEditorIDs                        []string
 	ScanBlockedGroupIDs                  []string
 	ScanViewerIDs                        []string
+	EntityEditorIDs                      []string
+	EntityBlockedGroupIDs                []string
+	EntityViewerIDs                      []string
 	ProcedureEditorIDs                   []string
 	ProcedureBlockedGroupIDs             []string
 	InternalPolicyEditorIDs              []string
@@ -3885,6 +3888,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ScanViewerIDs; len(v) > 0 {
 		m.AddScanViewerIDs(v...)
+	}
+	if v := i.EntityEditorIDs; len(v) > 0 {
+		m.AddEntityEditorIDs(v...)
+	}
+	if v := i.EntityBlockedGroupIDs; len(v) > 0 {
+		m.AddEntityBlockedGroupIDs(v...)
+	}
+	if v := i.EntityViewerIDs; len(v) > 0 {
+		m.AddEntityViewerIDs(v...)
 	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
@@ -4000,6 +4012,15 @@ type UpdateGroupInput struct {
 	ClearScanViewers                           bool
 	AddScanViewerIDs                           []string
 	RemoveScanViewerIDs                        []string
+	ClearEntityEditors                         bool
+	AddEntityEditorIDs                         []string
+	RemoveEntityEditorIDs                      []string
+	ClearEntityBlockedGroups                   bool
+	AddEntityBlockedGroupIDs                   []string
+	RemoveEntityBlockedGroupIDs                []string
+	ClearEntityViewers                         bool
+	AddEntityViewerIDs                         []string
+	RemoveEntityViewerIDs                      []string
 	ClearProcedureEditors                      bool
 	AddProcedureEditorIDs                      []string
 	RemoveProcedureEditorIDs                   []string
@@ -4236,6 +4257,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveScanViewerIDs; len(v) > 0 {
 		m.RemoveScanViewerIDs(v...)
+	}
+	if i.ClearEntityEditors {
+		m.ClearEntityEditors()
+	}
+	if v := i.AddEntityEditorIDs; len(v) > 0 {
+		m.AddEntityEditorIDs(v...)
+	}
+	if v := i.RemoveEntityEditorIDs; len(v) > 0 {
+		m.RemoveEntityEditorIDs(v...)
+	}
+	if i.ClearEntityBlockedGroups {
+		m.ClearEntityBlockedGroups()
+	}
+	if v := i.AddEntityBlockedGroupIDs; len(v) > 0 {
+		m.AddEntityBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveEntityBlockedGroupIDs; len(v) > 0 {
+		m.RemoveEntityBlockedGroupIDs(v...)
+	}
+	if i.ClearEntityViewers {
+		m.ClearEntityViewers()
+	}
+	if v := i.AddEntityViewerIDs; len(v) > 0 {
+		m.AddEntityViewerIDs(v...)
+	}
+	if v := i.RemoveEntityViewerIDs; len(v) > 0 {
+		m.RemoveEntityViewerIDs(v...)
 	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()

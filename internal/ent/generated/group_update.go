@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -522,6 +523,51 @@ func (gu *GroupUpdate) AddScanViewers(s ...*Scan) *GroupUpdate {
 		ids[i] = s[i].ID
 	}
 	return gu.AddScanViewerIDs(ids...)
+}
+
+// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
+func (gu *GroupUpdate) AddEntityEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddEntityEditorIDs(ids...)
+	return gu
+}
+
+// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
+func (gu *GroupUpdate) AddEntityEditors(e ...*Entity) *GroupUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gu.AddEntityEditorIDs(ids...)
+}
+
+// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
+func (gu *GroupUpdate) AddEntityBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddEntityBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
+func (gu *GroupUpdate) AddEntityBlockedGroups(e ...*Entity) *GroupUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gu.AddEntityBlockedGroupIDs(ids...)
+}
+
+// AddEntityViewerIDs adds the "entity_viewers" edge to the Entity entity by IDs.
+func (gu *GroupUpdate) AddEntityViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddEntityViewerIDs(ids...)
+	return gu
+}
+
+// AddEntityViewers adds the "entity_viewers" edges to the Entity entity.
+func (gu *GroupUpdate) AddEntityViewers(e ...*Entity) *GroupUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gu.AddEntityViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1155,6 +1201,69 @@ func (gu *GroupUpdate) RemoveScanViewers(s ...*Scan) *GroupUpdate {
 		ids[i] = s[i].ID
 	}
 	return gu.RemoveScanViewerIDs(ids...)
+}
+
+// ClearEntityEditors clears all "entity_editors" edges to the Entity entity.
+func (gu *GroupUpdate) ClearEntityEditors() *GroupUpdate {
+	gu.mutation.ClearEntityEditors()
+	return gu
+}
+
+// RemoveEntityEditorIDs removes the "entity_editors" edge to Entity entities by IDs.
+func (gu *GroupUpdate) RemoveEntityEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveEntityEditorIDs(ids...)
+	return gu
+}
+
+// RemoveEntityEditors removes "entity_editors" edges to Entity entities.
+func (gu *GroupUpdate) RemoveEntityEditors(e ...*Entity) *GroupUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gu.RemoveEntityEditorIDs(ids...)
+}
+
+// ClearEntityBlockedGroups clears all "entity_blocked_groups" edges to the Entity entity.
+func (gu *GroupUpdate) ClearEntityBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearEntityBlockedGroups()
+	return gu
+}
+
+// RemoveEntityBlockedGroupIDs removes the "entity_blocked_groups" edge to Entity entities by IDs.
+func (gu *GroupUpdate) RemoveEntityBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveEntityBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveEntityBlockedGroups removes "entity_blocked_groups" edges to Entity entities.
+func (gu *GroupUpdate) RemoveEntityBlockedGroups(e ...*Entity) *GroupUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gu.RemoveEntityBlockedGroupIDs(ids...)
+}
+
+// ClearEntityViewers clears all "entity_viewers" edges to the Entity entity.
+func (gu *GroupUpdate) ClearEntityViewers() *GroupUpdate {
+	gu.mutation.ClearEntityViewers()
+	return gu
+}
+
+// RemoveEntityViewerIDs removes the "entity_viewers" edge to Entity entities by IDs.
+func (gu *GroupUpdate) RemoveEntityViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveEntityViewerIDs(ids...)
+	return gu
+}
+
+// RemoveEntityViewers removes "entity_viewers" edges to Entity entities.
+func (gu *GroupUpdate) RemoveEntityViewers(e ...*Entity) *GroupUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gu.RemoveEntityViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -2531,6 +2640,150 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedEntityEditorsIDs(); len(nodes) > 0 && !gu.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.EntityEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedEntityBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.EntityViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedEntityViewersIDs(); len(nodes) > 0 && !gu.mutation.EntityViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.EntityViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.ProcedureEditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3800,6 +4053,51 @@ func (guo *GroupUpdateOne) AddScanViewers(s ...*Scan) *GroupUpdateOne {
 	return guo.AddScanViewerIDs(ids...)
 }
 
+// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
+func (guo *GroupUpdateOne) AddEntityEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddEntityEditorIDs(ids...)
+	return guo
+}
+
+// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
+func (guo *GroupUpdateOne) AddEntityEditors(e ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return guo.AddEntityEditorIDs(ids...)
+}
+
+// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
+func (guo *GroupUpdateOne) AddEntityBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddEntityBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
+func (guo *GroupUpdateOne) AddEntityBlockedGroups(e ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return guo.AddEntityBlockedGroupIDs(ids...)
+}
+
+// AddEntityViewerIDs adds the "entity_viewers" edge to the Entity entity by IDs.
+func (guo *GroupUpdateOne) AddEntityViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddEntityViewerIDs(ids...)
+	return guo
+}
+
+// AddEntityViewers adds the "entity_viewers" edges to the Entity entity.
+func (guo *GroupUpdateOne) AddEntityViewers(e ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return guo.AddEntityViewerIDs(ids...)
+}
+
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
 func (guo *GroupUpdateOne) AddProcedureEditorIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddProcedureEditorIDs(ids...)
@@ -4431,6 +4729,69 @@ func (guo *GroupUpdateOne) RemoveScanViewers(s ...*Scan) *GroupUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return guo.RemoveScanViewerIDs(ids...)
+}
+
+// ClearEntityEditors clears all "entity_editors" edges to the Entity entity.
+func (guo *GroupUpdateOne) ClearEntityEditors() *GroupUpdateOne {
+	guo.mutation.ClearEntityEditors()
+	return guo
+}
+
+// RemoveEntityEditorIDs removes the "entity_editors" edge to Entity entities by IDs.
+func (guo *GroupUpdateOne) RemoveEntityEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveEntityEditorIDs(ids...)
+	return guo
+}
+
+// RemoveEntityEditors removes "entity_editors" edges to Entity entities.
+func (guo *GroupUpdateOne) RemoveEntityEditors(e ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return guo.RemoveEntityEditorIDs(ids...)
+}
+
+// ClearEntityBlockedGroups clears all "entity_blocked_groups" edges to the Entity entity.
+func (guo *GroupUpdateOne) ClearEntityBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearEntityBlockedGroups()
+	return guo
+}
+
+// RemoveEntityBlockedGroupIDs removes the "entity_blocked_groups" edge to Entity entities by IDs.
+func (guo *GroupUpdateOne) RemoveEntityBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveEntityBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveEntityBlockedGroups removes "entity_blocked_groups" edges to Entity entities.
+func (guo *GroupUpdateOne) RemoveEntityBlockedGroups(e ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return guo.RemoveEntityBlockedGroupIDs(ids...)
+}
+
+// ClearEntityViewers clears all "entity_viewers" edges to the Entity entity.
+func (guo *GroupUpdateOne) ClearEntityViewers() *GroupUpdateOne {
+	guo.mutation.ClearEntityViewers()
+	return guo
+}
+
+// RemoveEntityViewerIDs removes the "entity_viewers" edge to Entity entities by IDs.
+func (guo *GroupUpdateOne) RemoveEntityViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveEntityViewerIDs(ids...)
+	return guo
+}
+
+// RemoveEntityViewers removes "entity_viewers" edges to Entity entities.
+func (guo *GroupUpdateOne) RemoveEntityViewers(e ...*Entity) *GroupUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return guo.RemoveEntityViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -5832,6 +6193,150 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedEntityEditorsIDs(); len(nodes) > 0 && !guo.mutation.EntityEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.EntityEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedEntityBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.EntityBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.EntityViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedEntityViewersIDs(); len(nodes) > 0 && !guo.mutation.EntityViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.EntityViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -8010,6 +8010,9 @@ input CreateGroupInput {
 	scanEditorIDs: [ID!]
 	scanBlockedGroupIDs: [ID!]
 	scanViewerIDs: [ID!]
+	entityEditorIDs: [ID!]
+	entityBlockedGroupIDs: [ID!]
+	entityViewerIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
 	internalPolicyEditorIDs: [ID!]
@@ -16705,6 +16708,99 @@ type Group implements Node {
 		"""
 		where: ScanWhereInput
 	): ScanConnection!
+	entityEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	entityBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	entityViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
 	procedureEditors(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -18955,6 +19051,21 @@ input GroupWhereInput {
 	"""
 	hasScanViewers: Boolean
 	hasScanViewersWith: [ScanWhereInput!]
+	"""
+	entity_editors edge predicates
+	"""
+	hasEntityEditors: Boolean
+	hasEntityEditorsWith: [EntityWhereInput!]
+	"""
+	entity_blocked_groups edge predicates
+	"""
+	hasEntityBlockedGroups: Boolean
+	hasEntityBlockedGroupsWith: [EntityWhereInput!]
+	"""
+	entity_viewers edge predicates
+	"""
+	hasEntityViewers: Boolean
+	hasEntityViewersWith: [EntityWhereInput!]
 	"""
 	procedure_editors edge predicates
 	"""
@@ -57065,6 +57176,15 @@ input UpdateGroupInput {
 	addScanViewerIDs: [ID!]
 	removeScanViewerIDs: [ID!]
 	clearScanViewers: Boolean
+	addEntityEditorIDs: [ID!]
+	removeEntityEditorIDs: [ID!]
+	clearEntityEditors: Boolean
+	addEntityBlockedGroupIDs: [ID!]
+	removeEntityBlockedGroupIDs: [ID!]
+	clearEntityBlockedGroups: Boolean
+	addEntityViewerIDs: [ID!]
+	removeEntityViewerIDs: [ID!]
+	clearEntityViewers: Boolean
 	addProcedureEditorIDs: [ID!]
 	removeProcedureEditorIDs: [ID!]
 	clearProcedureEditors: Boolean

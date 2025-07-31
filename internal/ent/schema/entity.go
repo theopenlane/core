@@ -95,6 +95,9 @@ func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e),
+			// TODO: this was added but there is no corresponding
+			// fga type for entity so its not actually used
+			// until that is added and the policy on the schema is updated
 			newGroupPermissionsMixin(),
 		},
 	}.getMixins(e)
