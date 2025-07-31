@@ -43,6 +43,8 @@ const (
 	EdgeSetting = "setting"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
 	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
+	// EdgeTrustCenterCompliances holds the string denoting the trust_center_compliances edge name in mutations.
+	EdgeTrustCenterCompliances = "trust_center_compliances"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -73,6 +75,13 @@ const (
 	TrustCenterSubprocessorsInverseTable = "trust_center_subprocessors"
 	// TrustCenterSubprocessorsColumn is the table column denoting the trust_center_subprocessors relation/edge.
 	TrustCenterSubprocessorsColumn = "trust_center_id"
+	// TrustCenterCompliancesTable is the table that holds the trust_center_compliances relation/edge.
+	TrustCenterCompliancesTable = "trust_center_compliances"
+	// TrustCenterCompliancesInverseTable is the table name for the TrustCenterCompliance entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentercompliance" package.
+	TrustCenterCompliancesInverseTable = "trust_center_compliances"
+	// TrustCenterCompliancesColumn is the table column denoting the trust_center_compliances relation/edge.
+	TrustCenterCompliancesColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -212,6 +221,20 @@ func ByTrustCenterSubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) Orde
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterCompliancesCount orders the results by trust_center_compliances count.
+func ByTrustCenterCompliancesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterCompliancesStep(), opts...)
+	}
+}
+
+// ByTrustCenterCompliances orders the results by trust_center_compliances terms.
+func ByTrustCenterCompliances(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterCompliancesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -238,5 +261,12 @@ func newTrustCenterSubprocessorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterSubprocessorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
+	)
+}
+func newTrustCenterCompliancesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterCompliancesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterCompliancesTable, TrustCenterCompliancesColumn),
 	)
 }

@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -122,9 +124,65 @@ func (tccu *TrustCenterComplianceUpdate) ClearTags() *TrustCenterComplianceUpdat
 	return tccu
 }
 
+// SetStandardID sets the "standard_id" field.
+func (tccu *TrustCenterComplianceUpdate) SetStandardID(s string) *TrustCenterComplianceUpdate {
+	tccu.mutation.SetStandardID(s)
+	return tccu
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (tccu *TrustCenterComplianceUpdate) SetNillableStandardID(s *string) *TrustCenterComplianceUpdate {
+	if s != nil {
+		tccu.SetStandardID(*s)
+	}
+	return tccu
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tccu *TrustCenterComplianceUpdate) SetTrustCenterID(s string) *TrustCenterComplianceUpdate {
+	tccu.mutation.SetTrustCenterID(s)
+	return tccu
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tccu *TrustCenterComplianceUpdate) SetNillableTrustCenterID(s *string) *TrustCenterComplianceUpdate {
+	if s != nil {
+		tccu.SetTrustCenterID(*s)
+	}
+	return tccu
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (tccu *TrustCenterComplianceUpdate) ClearTrustCenterID() *TrustCenterComplianceUpdate {
+	tccu.mutation.ClearTrustCenterID()
+	return tccu
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (tccu *TrustCenterComplianceUpdate) SetTrustCenter(t *TrustCenter) *TrustCenterComplianceUpdate {
+	return tccu.SetTrustCenterID(t.ID)
+}
+
+// SetStandard sets the "standard" edge to the Standard entity.
+func (tccu *TrustCenterComplianceUpdate) SetStandard(s *Standard) *TrustCenterComplianceUpdate {
+	return tccu.SetStandardID(s.ID)
+}
+
 // Mutation returns the TrustCenterComplianceMutation object of the builder.
 func (tccu *TrustCenterComplianceUpdate) Mutation() *TrustCenterComplianceMutation {
 	return tccu.mutation
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (tccu *TrustCenterComplianceUpdate) ClearTrustCenter() *TrustCenterComplianceUpdate {
+	tccu.mutation.ClearTrustCenter()
+	return tccu
+}
+
+// ClearStandard clears the "standard" edge to the Standard entity.
+func (tccu *TrustCenterComplianceUpdate) ClearStandard() *TrustCenterComplianceUpdate {
+	tccu.mutation.ClearStandard()
+	return tccu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -169,6 +227,24 @@ func (tccu *TrustCenterComplianceUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tccu *TrustCenterComplianceUpdate) check() error {
+	if v, ok := tccu.mutation.StandardID(); ok {
+		if err := trustcentercompliance.StandardIDValidator(v); err != nil {
+			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterCompliance.standard_id": %w`, err)}
+		}
+	}
+	if v, ok := tccu.mutation.TrustCenterID(); ok {
+		if err := trustcentercompliance.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterCompliance.trust_center_id": %w`, err)}
+		}
+	}
+	if tccu.mutation.StandardCleared() && len(tccu.mutation.StandardIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "TrustCenterCompliance.standard"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tccu *TrustCenterComplianceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterComplianceUpdate {
 	tccu.modifiers = append(tccu.modifiers, modifiers...)
@@ -176,6 +252,9 @@ func (tccu *TrustCenterComplianceUpdate) Modify(modifiers ...func(u *sql.UpdateB
 }
 
 func (tccu *TrustCenterComplianceUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := tccu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentercompliance.Table, trustcentercompliance.Columns, sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString))
 	if ps := tccu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -224,6 +303,68 @@ func (tccu *TrustCenterComplianceUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if tccu.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliance.FieldTags, field.TypeJSON)
+	}
+	if tccu.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.TrustCenterTable,
+			Columns: []string{trustcentercompliance.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccu.schemaConfig.TrustCenterCompliance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tccu.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.TrustCenterTable,
+			Columns: []string{trustcentercompliance.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccu.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tccu.mutation.StandardCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.StandardTable,
+			Columns: []string{trustcentercompliance.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccu.schemaConfig.TrustCenterCompliance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tccu.mutation.StandardIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.StandardTable,
+			Columns: []string{trustcentercompliance.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccu.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = tccu.schemaConfig.TrustCenterCompliance
 	ctx = internal.NewSchemaConfigContext(ctx, tccu.schemaConfig)
@@ -339,9 +480,65 @@ func (tccuo *TrustCenterComplianceUpdateOne) ClearTags() *TrustCenterComplianceU
 	return tccuo
 }
 
+// SetStandardID sets the "standard_id" field.
+func (tccuo *TrustCenterComplianceUpdateOne) SetStandardID(s string) *TrustCenterComplianceUpdateOne {
+	tccuo.mutation.SetStandardID(s)
+	return tccuo
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (tccuo *TrustCenterComplianceUpdateOne) SetNillableStandardID(s *string) *TrustCenterComplianceUpdateOne {
+	if s != nil {
+		tccuo.SetStandardID(*s)
+	}
+	return tccuo
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tccuo *TrustCenterComplianceUpdateOne) SetTrustCenterID(s string) *TrustCenterComplianceUpdateOne {
+	tccuo.mutation.SetTrustCenterID(s)
+	return tccuo
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tccuo *TrustCenterComplianceUpdateOne) SetNillableTrustCenterID(s *string) *TrustCenterComplianceUpdateOne {
+	if s != nil {
+		tccuo.SetTrustCenterID(*s)
+	}
+	return tccuo
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (tccuo *TrustCenterComplianceUpdateOne) ClearTrustCenterID() *TrustCenterComplianceUpdateOne {
+	tccuo.mutation.ClearTrustCenterID()
+	return tccuo
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (tccuo *TrustCenterComplianceUpdateOne) SetTrustCenter(t *TrustCenter) *TrustCenterComplianceUpdateOne {
+	return tccuo.SetTrustCenterID(t.ID)
+}
+
+// SetStandard sets the "standard" edge to the Standard entity.
+func (tccuo *TrustCenterComplianceUpdateOne) SetStandard(s *Standard) *TrustCenterComplianceUpdateOne {
+	return tccuo.SetStandardID(s.ID)
+}
+
 // Mutation returns the TrustCenterComplianceMutation object of the builder.
 func (tccuo *TrustCenterComplianceUpdateOne) Mutation() *TrustCenterComplianceMutation {
 	return tccuo.mutation
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (tccuo *TrustCenterComplianceUpdateOne) ClearTrustCenter() *TrustCenterComplianceUpdateOne {
+	tccuo.mutation.ClearTrustCenter()
+	return tccuo
+}
+
+// ClearStandard clears the "standard" edge to the Standard entity.
+func (tccuo *TrustCenterComplianceUpdateOne) ClearStandard() *TrustCenterComplianceUpdateOne {
+	tccuo.mutation.ClearStandard()
+	return tccuo
 }
 
 // Where appends a list predicates to the TrustCenterComplianceUpdate builder.
@@ -399,6 +596,24 @@ func (tccuo *TrustCenterComplianceUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tccuo *TrustCenterComplianceUpdateOne) check() error {
+	if v, ok := tccuo.mutation.StandardID(); ok {
+		if err := trustcentercompliance.StandardIDValidator(v); err != nil {
+			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterCompliance.standard_id": %w`, err)}
+		}
+	}
+	if v, ok := tccuo.mutation.TrustCenterID(); ok {
+		if err := trustcentercompliance.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterCompliance.trust_center_id": %w`, err)}
+		}
+	}
+	if tccuo.mutation.StandardCleared() && len(tccuo.mutation.StandardIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "TrustCenterCompliance.standard"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tccuo *TrustCenterComplianceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterComplianceUpdateOne {
 	tccuo.modifiers = append(tccuo.modifiers, modifiers...)
@@ -406,6 +621,9 @@ func (tccuo *TrustCenterComplianceUpdateOne) Modify(modifiers ...func(u *sql.Upd
 }
 
 func (tccuo *TrustCenterComplianceUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterCompliance, err error) {
+	if err := tccuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentercompliance.Table, trustcentercompliance.Columns, sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString))
 	id, ok := tccuo.mutation.ID()
 	if !ok {
@@ -471,6 +689,68 @@ func (tccuo *TrustCenterComplianceUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if tccuo.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliance.FieldTags, field.TypeJSON)
+	}
+	if tccuo.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.TrustCenterTable,
+			Columns: []string{trustcentercompliance.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccuo.schemaConfig.TrustCenterCompliance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tccuo.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.TrustCenterTable,
+			Columns: []string{trustcentercompliance.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccuo.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tccuo.mutation.StandardCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.StandardTable,
+			Columns: []string{trustcentercompliance.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccuo.schemaConfig.TrustCenterCompliance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tccuo.mutation.StandardIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentercompliance.StandardTable,
+			Columns: []string{trustcentercompliance.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tccuo.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = tccuo.schemaConfig.TrustCenterCompliance
 	ctx = internal.NewSchemaConfigContext(ctx, tccuo.schemaConfig)

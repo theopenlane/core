@@ -1741,6 +1741,44 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 	return trustCenterSetting
 }
 
+// TrustCenterComplianceBuilder is used to create trust center compliances
+type TrustCenterComplianceBuilder struct {
+	client *client
+
+	// Fields
+	StandardID    string
+	TrustCenterID string
+	Tags          []string
+}
+
+// MustNew trust center compliance builder is used to create, without authz checks, trust center compliances in the database
+func (tcc *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterCompliance {
+	ctx = setContext(ctx, tcc.client.db)
+
+	if tcc.StandardID == "" {
+		// Create a standard if not provided
+		standard := (&StandardBuilder{client: tcc.client}).MustNew(ctx, t)
+		tcc.StandardID = standard.ID
+	}
+
+	if len(tcc.Tags) == 0 {
+		tcc.Tags = []string{"test", "compliance"}
+	}
+
+	mutation := tcc.client.db.TrustCenterCompliance.Create().
+		SetStandardID(tcc.StandardID).
+		SetTags(tcc.Tags)
+
+	if tcc.TrustCenterID != "" {
+		mutation.SetTrustCenterID(tcc.TrustCenterID)
+	}
+
+	trustCenterCompliance, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return trustCenterCompliance
+}
+
 // IntegrationBuilder is used to create integrations
 type IntegrationBuilder struct {
 	client *client
