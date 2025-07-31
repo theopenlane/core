@@ -70,8 +70,8 @@ func TestMutationUpdateNote(t *testing.T) {
 				},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx, //wrong user
-			expectedErr: "task not found",
+			ctx:         viewOnlyUser.UserCtx, // wrong user
+			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 

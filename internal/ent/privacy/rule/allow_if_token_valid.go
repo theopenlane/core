@@ -81,17 +81,29 @@ func SkipTokenInContext(ctx context.Context, skipTypes []token.PrivacyToken) boo
 	for _, tokenType := range skipTypes {
 		switch reflect.TypeOf(tokenType) {
 		case reflect.TypeOf(&token.VerifyToken{}):
-			return ContextHasPrivacyTokenOfType[*token.VerifyToken](ctx)
+			if ContextHasPrivacyTokenOfType[*token.VerifyToken](ctx) {
+				return true
+			}
 		case reflect.TypeOf(&token.OrgInviteToken{}):
-			return ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx)
+			if ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx) {
+				return true
+			}
 		case reflect.TypeOf(&token.SignUpToken{}):
-			return ContextHasPrivacyTokenOfType[*token.SignUpToken](ctx)
+			if ContextHasPrivacyTokenOfType[*token.SignUpToken](ctx) {
+				return true
+			}
 		case reflect.TypeOf(&token.OauthTooToken{}):
-			return ContextHasPrivacyTokenOfType[*token.OauthTooToken](ctx)
+			if ContextHasPrivacyTokenOfType[*token.OauthTooToken](ctx) {
+				return true
+			}
 		case reflect.TypeOf(&token.ResetToken{}):
-			return ContextHasPrivacyTokenOfType[*token.ResetToken](ctx)
+			if ContextHasPrivacyTokenOfType[*token.ResetToken](ctx) {
+				return true
+			}
 		case reflect.TypeOf(&token.JobRunnerRegistrationToken{}):
-			return ContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](ctx)
+			if ContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](ctx) {
+				return true
+			}
 		}
 	}
 

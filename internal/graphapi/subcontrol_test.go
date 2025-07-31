@@ -370,6 +370,16 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			ctx:         testUser1.UserCtx,
 			expectedErr: "validator failed for field",
 		},
+		{
+			name: "invalid control ID",
+			request: openlaneclient.CreateSubcontrolInput{
+				RefCode:   "SC-1",
+				ControlID: "invalid-control-id",
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {

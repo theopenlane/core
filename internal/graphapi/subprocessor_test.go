@@ -262,9 +262,9 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 }
 
 func TestMutationDeleteSubprocessor(t *testing.T) {
-	subprocessor := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -321,7 +321,7 @@ func TestMutationDeleteSubprocessor(t *testing.T) {
 }
 
 func TestUpdateSubprocessor(t *testing.T) {
-	subprocessor := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	systemOwnedSubprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	testCases := []struct {
@@ -432,18 +432,15 @@ func TestGetAllSubprocessors(t *testing.T) {
 
 	// Create test subprocessors with different users
 	subprocessor1 := (&SubprocessorBuilder{
-		client:  suite.client,
-		OwnerID: testUser1.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser1.UserCtx, t)
 
 	subprocessor2 := (&SubprocessorBuilder{
-		client:  suite.client,
-		OwnerID: testUser1.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser1.UserCtx, t)
 
 	subprocessor3 := (&SubprocessorBuilder{
-		client:  suite.client,
-		OwnerID: testUser2.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser2.UserCtx, t)
 
 	subprocessor4 := (&SubprocessorBuilder{

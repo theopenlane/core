@@ -83,6 +83,12 @@ const (
 	EdgeScanBlockedGroups = "scan_blocked_groups"
 	// EdgeScanViewers holds the string denoting the scan_viewers edge name in mutations.
 	EdgeScanViewers = "scan_viewers"
+	// EdgeEntityEditors holds the string denoting the entity_editors edge name in mutations.
+	EdgeEntityEditors = "entity_editors"
+	// EdgeEntityBlockedGroups holds the string denoting the entity_blocked_groups edge name in mutations.
+	EdgeEntityBlockedGroups = "entity_blocked_groups"
+	// EdgeEntityViewers holds the string denoting the entity_viewers edge name in mutations.
+	EdgeEntityViewers = "entity_viewers"
 	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
 	EdgeProcedureEditors = "procedure_editors"
 	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
@@ -214,6 +220,21 @@ const (
 	// ScanViewersInverseTable is the table name for the Scan entity.
 	// It exists in this package in order to avoid circular dependency with the "scan" package.
 	ScanViewersInverseTable = "scans"
+	// EntityEditorsTable is the table that holds the entity_editors relation/edge. The primary key declared below.
+	EntityEditorsTable = "entity_editors"
+	// EntityEditorsInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntityEditorsInverseTable = "entities"
+	// EntityBlockedGroupsTable is the table that holds the entity_blocked_groups relation/edge. The primary key declared below.
+	EntityBlockedGroupsTable = "entity_blocked_groups"
+	// EntityBlockedGroupsInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntityBlockedGroupsInverseTable = "entities"
+	// EntityViewersTable is the table that holds the entity_viewers relation/edge. The primary key declared below.
+	EntityViewersTable = "entity_viewers"
+	// EntityViewersInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntityViewersInverseTable = "entities"
 	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
 	ProcedureEditorsTable = "procedure_editors"
 	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
@@ -328,9 +349,6 @@ var ForeignKeys = []string{
 	"asset_blocked_groups",
 	"asset_editors",
 	"asset_viewers",
-	"entity_blocked_groups",
-	"entity_editors",
-	"entity_viewers",
 	"organization_control_creators",
 	"organization_control_implementation_creators",
 	"organization_control_objective_creators",
@@ -402,6 +420,15 @@ var (
 	// ScanViewersPrimaryKey and ScanViewersColumn2 are the table columns denoting the
 	// primary key for the scan_viewers relation (M2M).
 	ScanViewersPrimaryKey = []string{"scan_id", "group_id"}
+	// EntityEditorsPrimaryKey and EntityEditorsColumn2 are the table columns denoting the
+	// primary key for the entity_editors relation (M2M).
+	EntityEditorsPrimaryKey = []string{"entity_id", "group_id"}
+	// EntityBlockedGroupsPrimaryKey and EntityBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the entity_blocked_groups relation (M2M).
+	EntityBlockedGroupsPrimaryKey = []string{"entity_id", "group_id"}
+	// EntityViewersPrimaryKey and EntityViewersColumn2 are the table columns denoting the
+	// primary key for the entity_viewers relation (M2M).
+	EntityViewersPrimaryKey = []string{"entity_id", "group_id"}
 	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
 	// primary key for the procedure_editors relation (M2M).
 	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
@@ -832,6 +859,48 @@ func ByScanViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByEntityEditorsCount orders the results by entity_editors count.
+func ByEntityEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntityEditorsStep(), opts...)
+	}
+}
+
+// ByEntityEditors orders the results by entity_editors terms.
+func ByEntityEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntityEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntityBlockedGroupsCount orders the results by entity_blocked_groups count.
+func ByEntityBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntityBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByEntityBlockedGroups orders the results by entity_blocked_groups terms.
+func ByEntityBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntityBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntityViewersCount orders the results by entity_viewers count.
+func ByEntityViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntityViewersStep(), opts...)
+	}
+}
+
+// ByEntityViewers orders the results by entity_viewers terms.
+func ByEntityViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntityViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProcedureEditorsCount orders the results by procedure_editors count.
 func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1179,6 +1248,27 @@ func newScanViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScanViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ScanViewersTable, ScanViewersPrimaryKey...),
+	)
+}
+func newEntityEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntityEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntityEditorsTable, EntityEditorsPrimaryKey...),
+	)
+}
+func newEntityBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntityBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntityBlockedGroupsTable, EntityBlockedGroupsPrimaryKey...),
+	)
+}
+func newEntityViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntityViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntityViewersTable, EntityViewersPrimaryKey...),
 	)
 }
 func newProcedureEditorsStep() *sqlgraph.Step {

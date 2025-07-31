@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -17,11 +18,7 @@ import (
 func TestQueryGroupMembers(t *testing.T) {
 	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
-
-	groupMember, err := group.QueryMembers().All(checkCtx)
-	assert.NilError(t, err)
-	assert.Assert(t, is.Len(groupMember, 1))
+	groupMember := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -36,21 +33,21 @@ func TestQueryGroupMembers(t *testing.T) {
 			queryID:  group.ID,
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			expected: groupMember[0],
+			expected: groupMember,
 		},
 		{
 			name:     "happy path, get group member by group id using api token",
 			queryID:  group.ID,
 			client:   suite.client.apiWithToken,
 			ctx:      context.Background(),
-			expected: groupMember[0],
+			expected: groupMember,
 		},
 		{
 			name:     "happy path, get group member by group id using personal access token",
 			queryID:  group.ID,
 			client:   suite.client.apiWithPAT,
 			ctx:      context.Background(),
-			expected: groupMember[0],
+			expected: groupMember,
 		},
 		{
 			name:        "get group member by group id, no access",
@@ -101,6 +98,10 @@ func TestQueryGroupMembers(t *testing.T) {
 
 	// delete created group
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete created group member
+	(&Cleanup[*generated.GroupMembershipDeleteOne]{client: suite.client.db.GroupMembership, ID: groupMember.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete org member
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{groupMember.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateGroupMembers(t *testing.T) {
@@ -110,7 +111,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 
 	groupMember, err := group1.QueryMembers().All(checkCtx)
 	assert.NilError(t, err)
-	assert.Assert(t, is.Len(groupMember, 1))
+	assert.Assert(t, is.Len(groupMember, 0))
 
 	orgMember1 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	orgMember2 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -134,6 +135,14 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 			ctx:     testUser1.UserCtx,
 		},
 		{
+			name:    "happy path, add self (owner) as admin",
+			groupID: group1.ID,
+			userID:  testUser1.ID,
+			role:    enums.RoleAdmin,
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+		},
+		{
 			name:    "happy path, add member using api token",
 			groupID: group1.ID,
 			userID:  orgMember2.UserID,
@@ -150,12 +159,12 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 			ctx:     context.Background(),
 		},
 		{
-			name:    "cannot add self to group",
+			name:    "cannot add self to group as org member",
 			groupID: group1.ID,
-			userID:  adminUser.UserInfo.ID,
+			userID:  viewOnlyUser.UserInfo.ID,
 			role:    enums.RoleAdmin,
 			client:  suite.client.api,
-			ctx:     adminUser.UserCtx,
+			ctx:     viewOnlyUser.UserCtx,
 			errMsg:  notAuthorizedErrorMsg,
 		},
 		{
@@ -246,21 +255,10 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 
 func TestMutationUpdateGroupMembers(t *testing.T) {
 	gm := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	// add self to group as admin
+	testUser1GroupMember := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID, UserID: testUser1.UserInfo.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
 
-	// get all group members so we know the id of the test user group member
-	groupMembers, err := suite.client.api.GetGroupMembersByGroupID(testUser1.UserCtx, &openlaneclient.GroupMembershipWhereInput{
-		GroupID: &testUser1.GroupID,
-	})
-
-	assert.NilError(t, err)
-
-	testUser1GroupMember := ""
-	for _, gm := range groupMembers.GroupMemberships.Edges {
-		if gm.Node.UserID == testUser1.UserInfo.ID {
-			testUser1GroupMember = gm.Node.ID
-			break
-		}
-	}
+	gmCtx := auth.NewTestContextWithOrgID(gm.UserID, testUser1.OrganizationID)
 
 	testCases := []struct {
 		name          string
@@ -278,11 +276,18 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 			ctx:           testUser1.UserCtx,
 		},
 		{
-			name:          "update self from admin to member, not allowed",
-			groupMemberID: testUser1GroupMember,
+			name:          "update self from admin to member ok",
+			groupMemberID: testUser1GroupMember.ID,
 			role:          enums.RoleMember,
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
+		},
+		{
+			name:          "update self from member to admin not allowed",
+			groupMemberID: gm.ID,
+			role:          enums.RoleMember,
+			client:        suite.client.api,
+			ctx:           gmCtx,
 			errMsg:        notAuthorizedErrorMsg,
 		},
 		{
@@ -345,24 +350,13 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 }
 
 func TestMutationDeleteGroupMembers(t *testing.T) {
-	gm1 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	gm2 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	gm3 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	gm1 := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
+	gm2 := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
+	gm3 := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
 
-	// get all group members so we know the id of the test user group member
-	groupMembers, err := suite.client.api.GetGroupMembersByGroupID(testUser1.UserCtx, &openlaneclient.GroupMembershipWhereInput{
-		GroupID: &testUser1.GroupID,
-	})
-
-	assert.NilError(t, err)
-
-	testUser1GroupMember := ""
-	for _, gm := range groupMembers.GroupMemberships.Edges {
-		if gm.Node.UserID == testUser1.UserInfo.ID {
-			testUser1GroupMember = gm.Node.ID
-			break
-		}
-	}
+	// add self to group as admin
+	testUser1GroupMember := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID, UserID: testUser1.UserInfo.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -379,11 +373,10 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:        "not allowed to delete self",
-			idToDelete:  testUser1GroupMember,
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			name:       "allowed to delete self as org admin",
+			idToDelete: testUser1GroupMember.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "not allowed to delete, not found",
@@ -444,4 +437,6 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 
 	// delete org members
 	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm1.Edges.Orgmembership.ID, gm2.Edges.Orgmembership.ID, gm3.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	// delete the group
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
 }

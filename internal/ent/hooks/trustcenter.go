@@ -13,19 +13,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
-
-// ErrMissingOrgID is returned when the organization ID is missing from the trust center mutation
-var ErrMissingOrgID = fmt.Errorf("missing organization id from trust center mutation")
 
 // HookTrustCenter runs on trust center create mutations
 func HookTrustCenter() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
-			orgID, ok := m.OwnerID()
-			if !ok {
-				return nil, ErrMissingOrgID
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return nil, err
 			}
 
 			org, err := m.Client().Organization.Query().

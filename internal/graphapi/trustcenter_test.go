@@ -212,10 +212,11 @@ func TestQueryTrustCenters(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenter(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	customDomainAnotherOrg := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// Create a trust center first to test the duplicate constraint
-	existingTrustCenter := (&TrustCenterBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	existingTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -225,18 +226,24 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name: "happy path for different organization",
-			request: openlaneclient.CreateTrustCenterInput{
-				OwnerID: lo.ToPtr(testUser2.OrganizationID),
-			},
-			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			name:    "happy path for different organization",
+			request: openlaneclient.CreateTrustCenterInput{},
+			client:  suite.client.api,
+			ctx:     testUser2.UserCtx,
 		},
 		{
-			name: "happy path with custom domain for different organization",
+			name: "custom domain for different organization should error",
+			request: openlaneclient.CreateTrustCenterInput{
+				CustomDomainID: &customDomainAnotherOrg.ID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name: "custom domain setting",
 			request: openlaneclient.CreateTrustCenterInput{
 				CustomDomainID: &customDomain.ID,
-				OwnerID:        lo.ToPtr(testUser2.OrganizationID),
 			},
 			client: suite.client.api,
 			ctx:    testUser2.UserCtx,
@@ -244,7 +251,6 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 		{
 			name: "happy path with settings for different organization",
 			request: openlaneclient.CreateTrustCenterInput{
-				OwnerID: lo.ToPtr(testUser2.OrganizationID),
 				CreateTrustCenterSetting: &openlaneclient.CreateTrustCenterSettingInput{
 					Title: lo.ToPtr(gofakeit.Name()),
 				},
@@ -253,19 +259,15 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			ctx:    testUser2.UserCtx,
 		},
 		{
-			name: "not authorized",
-			request: openlaneclient.CreateTrustCenterInput{
-				OwnerID: lo.ToPtr(testUser1.OrganizationID),
-			},
+			name:        "not authorized",
+			request:     openlaneclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "duplicate trust center for same organization",
-			request: openlaneclient.CreateTrustCenterInput{
-				OwnerID: lo.ToPtr(testUser1.OrganizationID),
-			},
+			name:        "duplicate trust center for same organization",
+			request:     openlaneclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "trustcenter already exists", // This will be the error when trying to create a duplicate
@@ -330,13 +332,11 @@ func TestGetAllTrustCenters(t *testing.T) {
 	// Create test trust centers with different users
 	// Each organization can only have one trust center
 	trustCenter1 := (&TrustCenterBuilder{
-		client:  suite.client,
-		OwnerID: testUser1.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser1.UserCtx, t)
 
 	trustCenter2 := (&TrustCenterBuilder{
-		client:  suite.client,
-		OwnerID: testUser2.OrganizationID,
+		client: suite.client,
 	}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
