@@ -4197,10 +4197,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"blocked_groups",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   entity.BlockedGroupsTable,
-			Columns: []string{entity.BlockedGroupsColumn},
+			Columns: entity.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -4209,10 +4209,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"editors",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   entity.EditorsTable,
-			Columns: []string{entity.EditorsColumn},
+			Columns: entity.EditorsPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -4221,10 +4221,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"viewers",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   entity.ViewersTable,
-			Columns: []string{entity.ViewersColumn},
+			Columns: entity.ViewersPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -4997,6 +4997,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Group",
 		"Scan",
+	)
+	graph.MustAddE(
+		"entity_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Entity",
+	)
+	graph.MustAddE(
+		"entity_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Entity",
+	)
+	graph.MustAddE(
+		"entity_viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Entity",
 	)
 	graph.MustAddE(
 		"procedure_editors",
@@ -14522,6 +14558,48 @@ func (f *GroupFilter) WhereHasScanViewers() {
 // WhereHasScanViewersWith applies a predicate to check if query has an edge scan_viewers with a given conditions (other predicates).
 func (f *GroupFilter) WhereHasScanViewersWith(preds ...predicate.Scan) {
 	f.Where(entql.HasEdgeWith("scan_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntityEditors applies a predicate to check if query has an edge entity_editors.
+func (f *GroupFilter) WhereHasEntityEditors() {
+	f.Where(entql.HasEdge("entity_editors"))
+}
+
+// WhereHasEntityEditorsWith applies a predicate to check if query has an edge entity_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasEntityEditorsWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntityBlockedGroups applies a predicate to check if query has an edge entity_blocked_groups.
+func (f *GroupFilter) WhereHasEntityBlockedGroups() {
+	f.Where(entql.HasEdge("entity_blocked_groups"))
+}
+
+// WhereHasEntityBlockedGroupsWith applies a predicate to check if query has an edge entity_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasEntityBlockedGroupsWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntityViewers applies a predicate to check if query has an edge entity_viewers.
+func (f *GroupFilter) WhereHasEntityViewers() {
+	f.Where(entql.HasEdge("entity_viewers"))
+}
+
+// WhereHasEntityViewersWith applies a predicate to check if query has an edge entity_viewers with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasEntityViewersWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

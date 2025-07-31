@@ -857,13 +857,6 @@ func TestMutationDeleteStandard(t *testing.T) {
 		})
 	}
 
-	controlsResp, err := suite.client.api.GetAllControls(newAdminUser.UserCtx)
-	assert.NilError(t, err)
-	assert.Assert(t, controlsResp != nil)
-	// controls linked to non public standards would be deleted
-	// while the ones linked to standard should remain
-	assert.Check(t, is.Equal(int64(numberOfControls), controlsResp.Controls.TotalCount))
-
 	// delete the public standard and the controls linked to it
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

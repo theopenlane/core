@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -64,6 +65,9 @@ type GroupQuery struct {
 	withScanEditors                             *ScanQuery
 	withScanBlockedGroups                       *ScanQuery
 	withScanViewers                             *ScanQuery
+	withEntityEditors                           *EntityQuery
+	withEntityBlockedGroups                     *EntityQuery
+	withEntityViewers                           *EntityQuery
 	withProcedureEditors                        *ProcedureQuery
 	withProcedureBlockedGroups                  *ProcedureQuery
 	withInternalPolicyEditors                   *InternalPolicyQuery
@@ -101,6 +105,9 @@ type GroupQuery struct {
 	withNamedScanEditors                        map[string]*ScanQuery
 	withNamedScanBlockedGroups                  map[string]*ScanQuery
 	withNamedScanViewers                        map[string]*ScanQuery
+	withNamedEntityEditors                      map[string]*EntityQuery
+	withNamedEntityBlockedGroups                map[string]*EntityQuery
+	withNamedEntityViewers                      map[string]*EntityQuery
 	withNamedProcedureEditors                   map[string]*ProcedureQuery
 	withNamedProcedureBlockedGroups             map[string]*ProcedureQuery
 	withNamedInternalPolicyEditors              map[string]*InternalPolicyQuery
@@ -621,6 +628,81 @@ func (gq *GroupQuery) QueryScanViewers() *ScanQuery {
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.ScanViewers
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntityEditors chains the current query on the "entity_editors" edge.
+func (gq *GroupQuery) QueryEntityEditors() *EntityQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityEditorsTable, group.EntityEditorsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityEditors
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntityBlockedGroups chains the current query on the "entity_blocked_groups" edge.
+func (gq *GroupQuery) QueryEntityBlockedGroups() *EntityQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityBlockedGroupsTable, group.EntityBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityBlockedGroups
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntityViewers chains the current query on the "entity_viewers" edge.
+func (gq *GroupQuery) QueryEntityViewers() *EntityQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityViewersTable, group.EntityViewersPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityViewers
 		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1238,6 +1320,9 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		withScanEditors:                        gq.withScanEditors.Clone(),
 		withScanBlockedGroups:                  gq.withScanBlockedGroups.Clone(),
 		withScanViewers:                        gq.withScanViewers.Clone(),
+		withEntityEditors:                      gq.withEntityEditors.Clone(),
+		withEntityBlockedGroups:                gq.withEntityBlockedGroups.Clone(),
+		withEntityViewers:                      gq.withEntityViewers.Clone(),
 		withProcedureEditors:                   gq.withProcedureEditors.Clone(),
 		withProcedureBlockedGroups:             gq.withProcedureBlockedGroups.Clone(),
 		withInternalPolicyEditors:              gq.withInternalPolicyEditors.Clone(),
@@ -1467,6 +1552,39 @@ func (gq *GroupQuery) WithScanViewers(opts ...func(*ScanQuery)) *GroupQuery {
 		opt(query)
 	}
 	gq.withScanViewers = query
+	return gq
+}
+
+// WithEntityEditors tells the query-builder to eager-load the nodes that are connected to
+// the "entity_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithEntityEditors(opts ...func(*EntityQuery)) *GroupQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withEntityEditors = query
+	return gq
+}
+
+// WithEntityBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "entity_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithEntityBlockedGroups(opts ...func(*EntityQuery)) *GroupQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withEntityBlockedGroups = query
+	return gq
+}
+
+// WithEntityViewers tells the query-builder to eager-load the nodes that are connected to
+// the "entity_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithEntityViewers(opts ...func(*EntityQuery)) *GroupQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withEntityViewers = query
 	return gq
 }
 
@@ -1731,7 +1849,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = gq.withFKs
 		_spec       = gq.querySpec()
-		loadedTypes = [35]bool{
+		loadedTypes = [38]bool{
 			gq.withOwner != nil,
 			gq.withProgramEditors != nil,
 			gq.withProgramBlockedGroups != nil,
@@ -1751,6 +1869,9 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			gq.withScanEditors != nil,
 			gq.withScanBlockedGroups != nil,
 			gq.withScanViewers != nil,
+			gq.withEntityEditors != nil,
+			gq.withEntityBlockedGroups != nil,
+			gq.withEntityViewers != nil,
 			gq.withProcedureEditors != nil,
 			gq.withProcedureBlockedGroups != nil,
 			gq.withInternalPolicyEditors != nil,
@@ -1938,6 +2059,27 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := gq.loadScanViewers(ctx, query, nodes,
 			func(n *Group) { n.Edges.ScanViewers = []*Scan{} },
 			func(n *Group, e *Scan) { n.Edges.ScanViewers = append(n.Edges.ScanViewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withEntityEditors; query != nil {
+		if err := gq.loadEntityEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.EntityEditors = []*Entity{} },
+			func(n *Group, e *Entity) { n.Edges.EntityEditors = append(n.Edges.EntityEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withEntityBlockedGroups; query != nil {
+		if err := gq.loadEntityBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.EntityBlockedGroups = []*Entity{} },
+			func(n *Group, e *Entity) { n.Edges.EntityBlockedGroups = append(n.Edges.EntityBlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withEntityViewers; query != nil {
+		if err := gq.loadEntityViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.EntityViewers = []*Entity{} },
+			func(n *Group, e *Entity) { n.Edges.EntityViewers = append(n.Edges.EntityViewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2185,6 +2327,27 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := gq.loadScanViewers(ctx, query, nodes,
 			func(n *Group) { n.appendNamedScanViewers(name) },
 			func(n *Group, e *Scan) { n.appendNamedScanViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedEntityEditors {
+		if err := gq.loadEntityEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedEntityEditors(name) },
+			func(n *Group, e *Entity) { n.appendNamedEntityEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedEntityBlockedGroups {
+		if err := gq.loadEntityBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedEntityBlockedGroups(name) },
+			func(n *Group, e *Entity) { n.appendNamedEntityBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedEntityViewers {
+		if err := gq.loadEntityViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedEntityViewers(name) },
+			func(n *Group, e *Entity) { n.appendNamedEntityViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3446,6 +3609,192 @@ func (gq *GroupQuery) loadScanViewers(ctx context.Context, query *ScanQuery, nod
 	}
 	return nil
 }
+func (gq *GroupQuery) loadEntityEditors(ctx context.Context, query *EntityQuery, nodes []*Group, init func(*Group), assign func(*Group, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.EntityEditorsTable)
+		joinT.Schema(gq.schemaConfig.EntityEditors)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(group.EntityEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.EntityEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.EntityEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entity_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadEntityBlockedGroups(ctx context.Context, query *EntityQuery, nodes []*Group, init func(*Group), assign func(*Group, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.EntityBlockedGroupsTable)
+		joinT.Schema(gq.schemaConfig.EntityBlockedGroups)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(group.EntityBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.EntityBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.EntityBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entity_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadEntityViewers(ctx context.Context, query *EntityQuery, nodes []*Group, init func(*Group), assign func(*Group, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.EntityViewersTable)
+		joinT.Schema(gq.schemaConfig.EntityViewers)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(group.EntityViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.EntityViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.EntityViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entity_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (gq *GroupQuery) loadProcedureEditors(ctx context.Context, query *ProcedureQuery, nodes []*Group, init func(*Group), assign func(*Group, *Procedure)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
@@ -4692,6 +5041,48 @@ func (gq *GroupQuery) WithNamedScanViewers(name string, opts ...func(*ScanQuery)
 		gq.withNamedScanViewers = make(map[string]*ScanQuery)
 	}
 	gq.withNamedScanViewers[name] = query
+	return gq
+}
+
+// WithNamedEntityEditors tells the query-builder to eager-load the nodes that are connected to the "entity_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedEntityEditors(name string, opts ...func(*EntityQuery)) *GroupQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedEntityEditors == nil {
+		gq.withNamedEntityEditors = make(map[string]*EntityQuery)
+	}
+	gq.withNamedEntityEditors[name] = query
+	return gq
+}
+
+// WithNamedEntityBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "entity_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedEntityBlockedGroups(name string, opts ...func(*EntityQuery)) *GroupQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedEntityBlockedGroups == nil {
+		gq.withNamedEntityBlockedGroups = make(map[string]*EntityQuery)
+	}
+	gq.withNamedEntityBlockedGroups[name] = query
+	return gq
+}
+
+// WithNamedEntityViewers tells the query-builder to eager-load the nodes that are connected to the "entity_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedEntityViewers(name string, opts ...func(*EntityQuery)) *GroupQuery {
+	query := (&EntityClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedEntityViewers == nil {
+		gq.withNamedEntityViewers = make(map[string]*EntityQuery)
+	}
+	gq.withNamedEntityViewers[name] = query
 	return gq
 }
 

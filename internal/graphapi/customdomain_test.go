@@ -243,9 +243,9 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 }
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	customDomain3 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain3 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -517,19 +517,16 @@ func TestGetAllCustomDomains(t *testing.T) {
 	customDomain1 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-		OwnerID:          testUser1.OrganizationID,
 	}).MustNew(testUser1.UserCtx, t)
 
 	customDomain2 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-		OwnerID:          testUser1.OrganizationID,
 	}).MustNew(testUser1.UserCtx, t)
 
 	customDomain3 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-		OwnerID:          testUser2.OrganizationID,
 	}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {

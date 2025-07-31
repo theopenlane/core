@@ -11,9 +11,14 @@ import (
 )
 
 func TestQueryJobRunnerTokens(t *testing.T) {
-	token1 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	token2 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	token3 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	newUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(newUser, t)
+
+	anotherUser := suite.userBuilder(context.Background(), t)
+
+	token1 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	token2 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	token3 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -26,19 +31,19 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 		{
 			name:          "happy path user",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           newUser.UserCtx,
 			expectedCount: 4, // we created 2 runners, by default, each runner has it's own token, then we make 2 more tokens
 		},
 		{
 			name:          "happy path, using personal access token",
-			client:        suite.client.apiWithPAT,
+			client:        patClient,
 			ctx:           context.Background(),
 			expectedCount: 4,
 		},
 		{
 			name:          "valid test user 2",
 			client:        suite.client.api,
-			ctx:           testUser2.UserCtx,
+			ctx:           anotherUser.UserCtx,
 			expectedCount: 2,
 		},
 		{
@@ -67,8 +72,8 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, IDs: []string{token1.ID, token2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, IDs: []string{token3.ID}}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, IDs: []string{token1.ID, token2.ID}}).MustDelete(newUser.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, IDs: []string{token3.ID}}).MustDelete(anotherUser.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunnerToken(t *testing.T) {

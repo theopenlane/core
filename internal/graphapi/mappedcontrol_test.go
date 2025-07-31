@@ -417,6 +417,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			controlNotAdded: true, // this control should not be added
+			expectedErr:     notAuthorizedErrorMsg,
 		},
 		{
 			name:      "update not allowed, not enough permissions",

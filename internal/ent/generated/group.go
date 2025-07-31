@@ -56,9 +56,6 @@ type Group struct {
 	asset_blocked_groups                         *string
 	asset_editors                                *string
 	asset_viewers                                *string
-	entity_blocked_groups                        *string
-	entity_editors                               *string
-	entity_viewers                               *string
 	organization_control_creators                *string
 	organization_control_implementation_creators *string
 	organization_control_objective_creators      *string
@@ -116,6 +113,12 @@ type GroupEdges struct {
 	ScanBlockedGroups []*Scan `json:"scan_blocked_groups,omitempty"`
 	// ScanViewers holds the value of the scan_viewers edge.
 	ScanViewers []*Scan `json:"scan_viewers,omitempty"`
+	// EntityEditors holds the value of the entity_editors edge.
+	EntityEditors []*Entity `json:"entity_editors,omitempty"`
+	// EntityBlockedGroups holds the value of the entity_blocked_groups edge.
+	EntityBlockedGroups []*Entity `json:"entity_blocked_groups,omitempty"`
+	// EntityViewers holds the value of the entity_viewers edge.
+	EntityViewers []*Entity `json:"entity_viewers,omitempty"`
 	// ProcedureEditors holds the value of the procedure_editors edge.
 	ProcedureEditors []*Procedure `json:"procedure_editors,omitempty"`
 	// ProcedureBlockedGroups holds the value of the procedure_blocked_groups edge.
@@ -150,9 +153,9 @@ type GroupEdges struct {
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [35]bool
+	loadedTypes [38]bool
 	// totalCount holds the count of the edges above.
-	totalCount [34]map[string]int
+	totalCount [37]map[string]int
 
 	namedProgramEditors                     map[string][]*Program
 	namedProgramBlockedGroups               map[string][]*Program
@@ -172,6 +175,9 @@ type GroupEdges struct {
 	namedScanEditors                        map[string][]*Scan
 	namedScanBlockedGroups                  map[string][]*Scan
 	namedScanViewers                        map[string][]*Scan
+	namedEntityEditors                      map[string][]*Entity
+	namedEntityBlockedGroups                map[string][]*Entity
+	namedEntityViewers                      map[string][]*Entity
 	namedProcedureEditors                   map[string][]*Procedure
 	namedProcedureBlockedGroups             map[string][]*Procedure
 	namedInternalPolicyEditors              map[string][]*InternalPolicy
@@ -362,10 +368,37 @@ func (e GroupEdges) ScanViewersOrErr() ([]*Scan, error) {
 	return nil, &NotLoadedError{edge: "scan_viewers"}
 }
 
+// EntityEditorsOrErr returns the EntityEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) EntityEditorsOrErr() ([]*Entity, error) {
+	if e.loadedTypes[19] {
+		return e.EntityEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "entity_editors"}
+}
+
+// EntityBlockedGroupsOrErr returns the EntityBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) EntityBlockedGroupsOrErr() ([]*Entity, error) {
+	if e.loadedTypes[20] {
+		return e.EntityBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "entity_blocked_groups"}
+}
+
+// EntityViewersOrErr returns the EntityViewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) EntityViewersOrErr() ([]*Entity, error) {
+	if e.loadedTypes[21] {
+		return e.EntityViewers, nil
+	}
+	return nil, &NotLoadedError{edge: "entity_viewers"}
+}
+
 // ProcedureEditorsOrErr returns the ProcedureEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[22] {
 		return e.ProcedureEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_editors"}
@@ -374,7 +407,7 @@ func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
 // ProcedureBlockedGroupsOrErr returns the ProcedureBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[23] {
 		return e.ProcedureBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_blocked_groups"}
@@ -383,7 +416,7 @@ func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
 // InternalPolicyEditorsOrErr returns the InternalPolicyEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[24] {
 		return e.InternalPolicyEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_editors"}
@@ -392,7 +425,7 @@ func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
 // InternalPolicyBlockedGroupsOrErr returns the InternalPolicyBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[25] {
 		return e.InternalPolicyBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_blocked_groups"}
@@ -401,7 +434,7 @@ func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error
 // ControlEditorsOrErr returns the ControlEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[26] {
 		return e.ControlEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_editors"}
@@ -410,7 +443,7 @@ func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
 // ControlBlockedGroupsOrErr returns the ControlBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[27] {
 		return e.ControlBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_blocked_groups"}
@@ -419,7 +452,7 @@ func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
 // MappedControlEditorsOrErr returns the MappedControlEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MappedControlEditorsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[28] {
 		return e.MappedControlEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_control_editors"}
@@ -428,7 +461,7 @@ func (e GroupEdges) MappedControlEditorsOrErr() ([]*MappedControl, error) {
 // MappedControlBlockedGroupsOrErr returns the MappedControlBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MappedControlBlockedGroupsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[29] {
 		return e.MappedControlBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_control_blocked_groups"}
@@ -439,7 +472,7 @@ func (e GroupEdges) MappedControlBlockedGroupsOrErr() ([]*MappedControl, error) 
 func (e GroupEdges) SettingOrErr() (*GroupSetting, error) {
 	if e.Setting != nil {
 		return e.Setting, nil
-	} else if e.loadedTypes[27] {
+	} else if e.loadedTypes[30] {
 		return nil, &NotFoundError{label: groupsetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "setting"}
@@ -448,7 +481,7 @@ func (e GroupEdges) SettingOrErr() (*GroupSetting, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[31] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -457,7 +490,7 @@ func (e GroupEdges) UsersOrErr() ([]*User, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[32] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -466,7 +499,7 @@ func (e GroupEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[33] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -475,7 +508,7 @@ func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[34] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -484,7 +517,7 @@ func (e GroupEdges) FilesOrErr() ([]*File, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[35] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -493,7 +526,7 @@ func (e GroupEdges) TasksOrErr() ([]*Task, error) {
 // InvitesOrErr returns the Invites value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[36] {
 		return e.Invites, nil
 	}
 	return nil, &NotLoadedError{edge: "invites"}
@@ -502,7 +535,7 @@ func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[37] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -527,39 +560,33 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[2]: // asset_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[3]: // entity_blocked_groups
+		case group.ForeignKeys[3]: // organization_control_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[4]: // entity_editors
+		case group.ForeignKeys[4]: // organization_control_implementation_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[5]: // entity_viewers
+		case group.ForeignKeys[5]: // organization_control_objective_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[6]: // organization_control_creators
+		case group.ForeignKeys[6]: // organization_evidence_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[7]: // organization_control_implementation_creators
+		case group.ForeignKeys[7]: // organization_group_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[8]: // organization_control_objective_creators
+		case group.ForeignKeys[8]: // organization_internal_policy_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[9]: // organization_evidence_creators
+		case group.ForeignKeys[9]: // organization_mapped_control_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[10]: // organization_group_creators
+		case group.ForeignKeys[10]: // organization_narrative_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[11]: // organization_internal_policy_creators
+		case group.ForeignKeys[11]: // organization_procedure_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[12]: // organization_mapped_control_creators
+		case group.ForeignKeys[12]: // organization_program_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[13]: // organization_narrative_creators
+		case group.ForeignKeys[13]: // organization_risk_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[14]: // organization_procedure_creators
+		case group.ForeignKeys[14]: // organization_scheduled_job_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[15]: // organization_program_creators
+		case group.ForeignKeys[15]: // organization_standard_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[16]: // organization_risk_creators
-			values[i] = new(sql.NullString)
-		case group.ForeignKeys[17]: // organization_scheduled_job_creators
-			values[i] = new(sql.NullString)
-		case group.ForeignKeys[18]: // organization_standard_creators
-			values[i] = new(sql.NullString)
-		case group.ForeignKeys[19]: // organization_template_creators
+		case group.ForeignKeys[16]: // organization_template_creators
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -697,117 +724,96 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field entity_blocked_groups", values[i])
-			} else if value.Valid {
-				gr.entity_blocked_groups = new(string)
-				*gr.entity_blocked_groups = value.String
-			}
-		case group.ForeignKeys[4]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field entity_editors", values[i])
-			} else if value.Valid {
-				gr.entity_editors = new(string)
-				*gr.entity_editors = value.String
-			}
-		case group.ForeignKeys[5]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field entity_viewers", values[i])
-			} else if value.Valid {
-				gr.entity_viewers = new(string)
-				*gr.entity_viewers = value.String
-			}
-		case group.ForeignKeys[6]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_control_creators", values[i])
 			} else if value.Valid {
 				gr.organization_control_creators = new(string)
 				*gr.organization_control_creators = value.String
 			}
-		case group.ForeignKeys[7]:
+		case group.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_control_implementation_creators", values[i])
 			} else if value.Valid {
 				gr.organization_control_implementation_creators = new(string)
 				*gr.organization_control_implementation_creators = value.String
 			}
-		case group.ForeignKeys[8]:
+		case group.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_control_objective_creators", values[i])
 			} else if value.Valid {
 				gr.organization_control_objective_creators = new(string)
 				*gr.organization_control_objective_creators = value.String
 			}
-		case group.ForeignKeys[9]:
+		case group.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_evidence_creators", values[i])
 			} else if value.Valid {
 				gr.organization_evidence_creators = new(string)
 				*gr.organization_evidence_creators = value.String
 			}
-		case group.ForeignKeys[10]:
+		case group.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_group_creators", values[i])
 			} else if value.Valid {
 				gr.organization_group_creators = new(string)
 				*gr.organization_group_creators = value.String
 			}
-		case group.ForeignKeys[11]:
+		case group.ForeignKeys[8]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_internal_policy_creators", values[i])
 			} else if value.Valid {
 				gr.organization_internal_policy_creators = new(string)
 				*gr.organization_internal_policy_creators = value.String
 			}
-		case group.ForeignKeys[12]:
+		case group.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_mapped_control_creators", values[i])
 			} else if value.Valid {
 				gr.organization_mapped_control_creators = new(string)
 				*gr.organization_mapped_control_creators = value.String
 			}
-		case group.ForeignKeys[13]:
+		case group.ForeignKeys[10]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_narrative_creators", values[i])
 			} else if value.Valid {
 				gr.organization_narrative_creators = new(string)
 				*gr.organization_narrative_creators = value.String
 			}
-		case group.ForeignKeys[14]:
+		case group.ForeignKeys[11]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_procedure_creators", values[i])
 			} else if value.Valid {
 				gr.organization_procedure_creators = new(string)
 				*gr.organization_procedure_creators = value.String
 			}
-		case group.ForeignKeys[15]:
+		case group.ForeignKeys[12]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_program_creators", values[i])
 			} else if value.Valid {
 				gr.organization_program_creators = new(string)
 				*gr.organization_program_creators = value.String
 			}
-		case group.ForeignKeys[16]:
+		case group.ForeignKeys[13]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_risk_creators", values[i])
 			} else if value.Valid {
 				gr.organization_risk_creators = new(string)
 				*gr.organization_risk_creators = value.String
 			}
-		case group.ForeignKeys[17]:
+		case group.ForeignKeys[14]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_scheduled_job_creators", values[i])
 			} else if value.Valid {
 				gr.organization_scheduled_job_creators = new(string)
 				*gr.organization_scheduled_job_creators = value.String
 			}
-		case group.ForeignKeys[18]:
+		case group.ForeignKeys[15]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_standard_creators", values[i])
 			} else if value.Valid {
 				gr.organization_standard_creators = new(string)
 				*gr.organization_standard_creators = value.String
 			}
-		case group.ForeignKeys[19]:
+		case group.ForeignKeys[16]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_template_creators", values[i])
 			} else if value.Valid {
@@ -920,6 +926,21 @@ func (gr *Group) QueryScanBlockedGroups() *ScanQuery {
 // QueryScanViewers queries the "scan_viewers" edge of the Group entity.
 func (gr *Group) QueryScanViewers() *ScanQuery {
 	return NewGroupClient(gr.config).QueryScanViewers(gr)
+}
+
+// QueryEntityEditors queries the "entity_editors" edge of the Group entity.
+func (gr *Group) QueryEntityEditors() *EntityQuery {
+	return NewGroupClient(gr.config).QueryEntityEditors(gr)
+}
+
+// QueryEntityBlockedGroups queries the "entity_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryEntityBlockedGroups() *EntityQuery {
+	return NewGroupClient(gr.config).QueryEntityBlockedGroups(gr)
+}
+
+// QueryEntityViewers queries the "entity_viewers" edge of the Group entity.
+func (gr *Group) QueryEntityViewers() *EntityQuery {
+	return NewGroupClient(gr.config).QueryEntityViewers(gr)
 }
 
 // QueryProcedureEditors queries the "procedure_editors" edge of the Group entity.
@@ -1502,6 +1523,78 @@ func (gr *Group) appendNamedScanViewers(name string, edges ...*Scan) {
 		gr.Edges.namedScanViewers[name] = []*Scan{}
 	} else {
 		gr.Edges.namedScanViewers[name] = append(gr.Edges.namedScanViewers[name], edges...)
+	}
+}
+
+// NamedEntityEditors returns the EntityEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedEntityEditors(name string) ([]*Entity, error) {
+	if gr.Edges.namedEntityEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedEntityEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedEntityEditors(name string, edges ...*Entity) {
+	if gr.Edges.namedEntityEditors == nil {
+		gr.Edges.namedEntityEditors = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedEntityEditors[name] = []*Entity{}
+	} else {
+		gr.Edges.namedEntityEditors[name] = append(gr.Edges.namedEntityEditors[name], edges...)
+	}
+}
+
+// NamedEntityBlockedGroups returns the EntityBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedEntityBlockedGroups(name string) ([]*Entity, error) {
+	if gr.Edges.namedEntityBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedEntityBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedEntityBlockedGroups(name string, edges ...*Entity) {
+	if gr.Edges.namedEntityBlockedGroups == nil {
+		gr.Edges.namedEntityBlockedGroups = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedEntityBlockedGroups[name] = []*Entity{}
+	} else {
+		gr.Edges.namedEntityBlockedGroups[name] = append(gr.Edges.namedEntityBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEntityViewers returns the EntityViewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedEntityViewers(name string) ([]*Entity, error) {
+	if gr.Edges.namedEntityViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedEntityViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedEntityViewers(name string, edges ...*Entity) {
+	if gr.Edges.namedEntityViewers == nil {
+		gr.Edges.namedEntityViewers = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedEntityViewers[name] = []*Entity{}
+	} else {
+		gr.Edges.namedEntityViewers[name] = append(gr.Edges.namedEntityViewers[name], edges...)
 	}
 }
 
