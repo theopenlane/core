@@ -4032,7 +4032,6 @@ func init() {
 	orgsubscription.Interceptors[1] = orgsubscriptionMixinInters2[0]
 	orgsubscription.Interceptors[2] = orgsubscriptionMixinInters5[0]
 	orgsubscription.Interceptors[3] = orgsubscriptionInters[0]
-	orgsubscription.Interceptors[4] = orgsubscriptionInters[1]
 	orgsubscriptionMixinFields0 := orgsubscriptionMixin[0].Fields()
 	_ = orgsubscriptionMixinFields0
 	orgsubscriptionMixinFields3 := orgsubscriptionMixin[3].Fields()

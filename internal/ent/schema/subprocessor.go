@@ -116,7 +116,7 @@ func (s Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
-			rule.DenyIfMissingAllFeatures(s.Features()...),
+			rule.DenyIfMissingAllFeatures("subprocessor", s.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -133,7 +133,7 @@ func (GroupMembership) Hooks() []ent.Hook {
 func (g GroupMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(g.Features()...),
+			rule.DenyIfMissingAllFeatures("groupmembership", g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),
 		),
 	)

@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -194,7 +194,6 @@ func (Risk) Features() []models.OrgModule {
 		models.CatalogRiskManagementAddon,
 		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
-		
 	}
 }
 
@@ -217,7 +216,7 @@ func (r Risk) Interceptors() []ent.Interceptor {
 func (r Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(r.Features()...),
+			rule.DenyIfMissingAllFeatures("risk", r.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.RiskMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.RiskMutation](),

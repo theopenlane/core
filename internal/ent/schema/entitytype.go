@@ -92,7 +92,7 @@ func (EntityType) Indexes() []ent.Index {
 func (e EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(e.Features()...),
+			rule.DenyIfMissingAllFeatures("entitytype", e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -156,7 +156,7 @@ func (Evidence) Hooks() []ent.Hook {
 func (e Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(e.Features()...),
+			rule.DenyIfMissingAllFeatures("evidence", e.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.EvidenceMutation](),
 		),

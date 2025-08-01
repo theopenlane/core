@@ -88,7 +88,7 @@ func (i Integration) Mixin() []ent.Mixin {
 func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(i.Features()...),
+			rule.DenyIfMissingAllFeatures("integration", i.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -4,9 +4,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -82,7 +82,6 @@ func (Procedure) Features() []models.OrgModule {
 		models.CatalogRiskManagementAddon,
 		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
-		
 	}
 }
 
@@ -117,7 +116,7 @@ func (p Procedure) Interceptors() []ent.Interceptor {
 func (p Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(p.Features()...),
+			rule.DenyIfMissingAllFeatures("procedure", p.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ProcedureMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProcedureMutation](),

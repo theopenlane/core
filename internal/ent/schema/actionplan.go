@@ -110,7 +110,7 @@ func (a ActionPlan) Interceptors() []ent.Interceptor {
 func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(a.Features()...),
+			rule.DenyIfMissingAllFeatures("actionplan", a.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),

@@ -114,7 +114,7 @@ func (GroupSetting) Mixin() []ent.Mixin {
 func (g GroupSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(g.Features()...),
+			rule.DenyIfMissingAllFeatures("groupsetting", g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
 		),
 	)

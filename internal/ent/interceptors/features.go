@@ -55,6 +55,10 @@ func interceptorRequireFeatures(schema string, requireAll bool, features ...mode
 			return nil
 		}
 
+		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
+			return nil
+		}
+
 		if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
 			return nil
 		}
@@ -95,8 +99,8 @@ func interceptorRequireFeatures(schema string, requireAll bool, features ...mode
 		}
 
 		if !ok {
-			org, _ := auth.GetOrganizationIDFromContext(ctx)
-			fmt.Println(schema, requireAll, org)
+			org, err := auth.GetOrganizationIDFromContext(ctx)
+			fmt.Println(schema, requireAll, org, features, err)
 			return ErrFeatureNotEnabled
 		}
 

@@ -87,7 +87,7 @@ func (m MappableDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
-			rule.DenyIfMissingAllFeatures(m.Features()...),
+			rule.DenyIfMissingAllFeatures("mappable_domain", m.Features()...),
 			privacy.AlwaysDenyRule(),
 		),
 	)

@@ -119,7 +119,7 @@ func (c CustomDomain) Policy() ent.Policy {
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
-			rule.DenyIfMissingAllFeatures(c.Features()...),
+			rule.DenyIfMissingAllFeatures("customdomain", c.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

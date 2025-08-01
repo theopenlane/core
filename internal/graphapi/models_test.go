@@ -18,17 +18,20 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 )
 
 type OrganizationBuilder struct {
 	client *client
+	UserID string
 
 	// Fields
 	Name           string
@@ -463,7 +466,55 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 		assert.NilError(t, err)
 	}
 
+	o.enableAllModules(ctx, t, org.ID)
+
 	return org
+}
+
+// enableAllModules enables all organization modules for the given organization
+func (o *OrganizationBuilder) enableAllModules(ctx context.Context, t *testing.T, orgID string) {
+	features := models.AllOrgModules
+
+	tuples := make([]fgax.TupleKey, 0, len(features))
+	for _, feature := range features {
+		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: generated.TypeOrganization,
+			ObjectID:    string(feature),
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	_, err := o.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
+	assert.NilError(t, err)
+
+	// create a context with the organization ID properly set for authentication
+	newCtx := auth.NewTestContextWithOrgID(o.UserID, orgID)
+
+	for _, feature := range features {
+		n, err := o.client.db.OrgModule.Update().
+			Where(
+				orgmodule.OwnerID(orgID),
+				orgmodule.Module(string(feature)),
+			).
+			SetActive(true).Save(newCtx)
+		assert.NilError(t, err)
+
+		// if no rows were updated, the module doesn't exist - create it
+		if n == 0 {
+			n, err := o.client.db.OrgModule.Create().
+				SetOwnerID(orgID).
+				SetModule(string(feature)).
+				SetActive(true).
+				SetPrice(models.Price{Amount: 0, Interval: "month"}).
+				Save(newCtx)
+			assert.NilError(t, err)
+			fmt.Println("created", orgID, n.OwnerID, n.Module)
+		}
+	}
+
+	fmt.Println("DONE", orgID, o.UserID)
 }
 
 // MustNew user builder is used to create, without authz checks, users in the database

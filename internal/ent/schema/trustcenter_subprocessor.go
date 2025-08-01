@@ -98,7 +98,7 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(t.Features()...),
+			rule.DenyIfMissingAllFeatures("trustcenter_subprocessor", t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
 		),
 	)

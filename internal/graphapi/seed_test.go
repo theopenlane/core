@@ -2,15 +2,16 @@ package graphapi_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/models"
@@ -78,17 +79,42 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 	testGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	testUser.GroupID = testGroup.ID
 
-	suite.enableAllModules(ctx, t, testUser.OrganizationID, features...)
+	suite.enableAllModules(ctx, t, testUser.ID, testUser.OrganizationID, features...)
 
 	return testUser
 }
 
-func (suite *GraphTestSuite) enableAllModules(ctx context.Context, t *testing.T, orgID string, features ...models.OrgModule) {
+type OrgModuleBuilder struct {
+	client *client
+
+	OwnerID string
+	Module  string
+	Active  bool
+}
+
+func (om *OrgModuleBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgModule {
+	ctx = setContext(ctx, om.client.db)
+
+	if om.Module == "" {
+		om.Module = "test_module"
+	}
+
+	orgModule, err := om.client.db.OrgModule.Create().
+		SetOwnerID(om.OwnerID).
+		SetModule(om.Module).
+		SetActive(om.Active).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return orgModule
+}
+
+func (suite *GraphTestSuite) enableAllModules(ctx context.Context, t *testing.T,
+	userID, orgID string, features ...models.OrgModule) {
+
 	if len(features) == 0 {
 		features = models.AllOrgModules
 	}
-
-	fmt.Println("enabled features", features)
 
 	tuples := make([]fgax.TupleKey, 0, len(features))
 	for _, feature := range features {
@@ -103,6 +129,23 @@ func (suite *GraphTestSuite) enableAllModules(ctx context.Context, t *testing.T,
 
 	_, err := suite.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
 	assert.NilError(t, err)
+
+	// create a context with the organization ID properly set for authentication
+	newCtx := auth.NewTestContextWithOrgID(userID, orgID)
+	newCtx = contextx.With(newCtx, auth.OrganizationCreationContextKey{})
+	newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
+
+	// update existing org modules to active state instead of creating new ones
+	for _, feature := range features {
+		err := suite.client.db.OrgModule.Update().
+			Where(
+				orgmodule.OwnerID(orgID),
+				orgmodule.Module(string(feature)),
+			).
+			SetActive(true).
+			Exec(newCtx)
+		assert.NilError(t, err)
+	}
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens

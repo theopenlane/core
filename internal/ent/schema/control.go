@@ -8,9 +8,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -168,7 +168,7 @@ func (c Control) Policy() ent.Policy {
 			// controls to unlink the standard that might belong to an organization
 			rule.AllowMutationIfSystemAdmin(),
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(c.Features()...),
+			rule.DenyIfMissingAllFeatures("control", c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
@@ -179,7 +179,6 @@ func (c Control) Policy() ent.Policy {
 func (Control) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		
 	}
 }
 

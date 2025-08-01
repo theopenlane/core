@@ -4,9 +4,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -115,7 +115,7 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 func (i InternalPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(i.Features()...),
+			rule.DenyIfMissingAllFeatures("internalpolicy", i.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.InternalPolicyMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),

@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -41,11 +41,11 @@ func TestHasFeature(t *testing.T) {
 func TestHasAnyFeature(t *testing.T) {
 	ctx := setupContext("org2", []string{"base_module", "compliance_module"})
 
-	ok, err := rule.HasAnyFeature(ctx, entx.ModuleBase, entx.ModuleEntityManagement)
+	ok, err := rule.HasAnyFeature(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAnyFeature(ctx, entx.ModuleEntityManagement)
+	ok, err = rule.HasAnyFeature(ctx, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.False(t, ok)
 }
@@ -53,31 +53,31 @@ func TestHasAnyFeature(t *testing.T) {
 func TestHasAllFeatures(t *testing.T) {
 	ctx := setupContext("org3", []string{"base_module", "compliance_module", "entity-management_module"})
 
-	ok, err := rule.HasAllFeatures(ctx, entx.ModuleBase, entx.ModuleCompliance)
+	ok, err := rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, entx.ModuleBase, entx.ModuleEntityManagement)
+	ok, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, entx.ModuleCompliance)
+	ok, err = rule.HasAllFeatures(ctx, models.CatalogComplianceModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, entx.ModuleAuditLog)
+	ok, err = rule.HasAllFeatures(ctx, models.CatalogTrustCenterModule)
 	require.NoError(t, err)
 	assert.False(t, ok)
 
-	ok, err = rule.HasAllFeatures(ctx, entx.ModuleBase, entx.ModuleCompliance, entx.ModuleEntityManagement)
+	ok, err = rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule)
 	require.NoError(t, err)
 	assert.True(t, ok)
 }
 
 func TestDenyIfMissingAllFeatures(t *testing.T) {
-	ctx := setupContext("org4", []string{"compliance_module", "audit-log_module"})
+	ctx := setupContext("org4", []string{"compliance_module", "trust_center_module"})
 
-	featureRule := rule.DenyIfMissingAllFeatures(entx.ModuleCompliance, entx.ModuleAuditLog)
+	featureRule := rule.DenyIfMissingAllFeatures("test_schema", models.CatalogComplianceModule, models.CatalogTrustCenterModule)
 	err := featureRule.EvalQuery(ctx, nil)
 
 	// When all features are present, the rule should return privacy.Skip to continue to next rule
@@ -85,7 +85,7 @@ func TestDenyIfMissingAllFeatures(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "skip rule")
 
-	ctx = setupContext("org5", []string{"compliance_module"}) // missing audit-log_module
+	ctx = setupContext("org5", []string{"compliance_module"}) // missing trust_center_module
 
 	err = featureRule.EvalQuery(ctx, nil)
 

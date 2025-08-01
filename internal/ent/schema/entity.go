@@ -139,7 +139,7 @@ func (Entity) Hooks() []ent.Hook {
 func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(e.Features()...),
+			rule.DenyIfMissingAllFeatures("entity", e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

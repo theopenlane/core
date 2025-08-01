@@ -138,7 +138,7 @@ func (t TFASetting) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfSelf(),
-			rule.DenyIfMissingAllFeatures(t.Features()...),
+			rule.DenyIfMissingAllFeatures("tfasetting", t.Features()...),
 		),
 	)
 }

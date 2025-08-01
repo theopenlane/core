@@ -141,7 +141,7 @@ func (e EmailVerificationToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
-			rule.DenyIfMissingAllFeatures(e.Features()...),
+			rule.DenyIfMissingAllFeatures("emailverificationtoken", e.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

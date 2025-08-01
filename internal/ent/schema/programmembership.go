@@ -131,7 +131,7 @@ func (ProgramMembership) Interceptors() []ent.Interceptor {
 func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(p.Features()...),
+			rule.DenyIfMissingAllFeatures("programmembership", p.Features()...),
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)

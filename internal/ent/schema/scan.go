@@ -68,7 +68,7 @@ func (s Scan) Edges() []ent.Edge {
 func (s Scan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(s.Features()...),
+			rule.DenyIfMissingAllFeatures("scan", s.Features()...),
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),
 		),

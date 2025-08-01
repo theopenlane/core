@@ -119,12 +119,6 @@ func (o OrgSubscription) Mixin() []ent.Mixin {
 	}.getMixins(o)
 }
 
-func (OrgSubscription) Features() []models.OrgModule {
-	return []models.OrgModule{
-		models.CatalogBaseModule,
-	}
-}
-
 // Annotations of the OrgSubscription
 func (o OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -137,7 +131,6 @@ func (o OrgSubscription) Annotations() []schema.Annotation {
 // Interceptors of the OrgSubscription
 func (o OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("orgsubscription", o.Features()...),
 		interceptors.InterceptorSubscriptionURL(),
 	}
 }

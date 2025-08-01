@@ -135,7 +135,7 @@ func (p PasswordResetToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
-			rule.DenyIfMissingAllFeatures(p.Features()...),
+			rule.DenyIfMissingAllFeatures("passwordresettoken", p.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

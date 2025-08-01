@@ -11,9 +11,9 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -216,7 +216,7 @@ func (p Program) Interceptors() []ent.Interceptor {
 func (p Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(p.Features()...),
+			rule.DenyIfMissingAllFeatures("program", p.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProgramMutation](),
 		),

@@ -142,7 +142,7 @@ func (f File) Annotations() []schema.Annotation {
 // Interceptors of the File
 func (f File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("file", f.Features()...),
+		interceptors.InterceptorRequireAllFeatures("file", f.Features()...),
 		interceptors.InterceptorPresignedURL(),
 		interceptors.InterceptorFile(), // filter on the organization id
 	}
@@ -157,7 +157,7 @@ func (f File) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.FileMutation](),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(f.Features()...),
+			rule.DenyIfMissingAllFeatures("file", f.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 	)

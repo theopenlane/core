@@ -8,10 +8,12 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
@@ -90,7 +92,7 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 	// try to fallback to the OrgModule
 	if len(feats) == 0 && client != nil {
 		modules, err := client.OrgModule.Query().
-			Select(orgmodule.FieldModule).
+			Select(orgmodule.FieldModule, orgmodule.FieldOwnerID, orgmodule.FieldActive).
 			Where(
 				orgmodule.OwnerID(au.OrganizationID),
 				orgmodule.Active(true),
@@ -100,6 +102,7 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 			return nil, err
 		}
 
+		fmt.Println("YYYY", len(modules), au.OrganizationID)
 		feats = make([]string, 0, len(modules))
 		for _, m := range modules {
 			feats = append(feats, m.Module)
@@ -113,6 +116,7 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		}
 	}
 
+	fmt.Println("XXX", feats)
 	return feats, nil
 }
 
@@ -154,8 +158,6 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 	}
 
 	enabledSet := make(map[string]struct{}, len(enabled))
-
-	fmt.Println(enabled)
 
 	for _, f := range enabled {
 		enabledSet[f] = struct{}{}
@@ -214,14 +216,59 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 }
 
 // DenyIfMissingAllFeatures acts as a prerequisite check - denies if features missing, skips if present
-func DenyIfMissingAllFeatures(features ...models.OrgModule) privacy.QueryMutationRule {
+func DenyIfMissingAllFeatures(schema string, features ...models.OrgModule) privacy.QueryMutationRule {
 	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
+
+		if len(features) == 0 {
+			return privacy.Skip
+		}
+
+		// check for bypass
+		// For unauthenticated users, this interceptor
+		// will still run when a query is done to fetch the data such as an api
+		// token or personal access token
+		// And would lead to a situation where the features cannot be
+		// retrieved from the database and a failure occurrs
+		if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
+			return privacy.Skip
+		}
+
+		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
+			return privacy.Skip
+		}
+
+		if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+			return privacy.Skip
+		}
+
+		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
+			return privacy.Skip
+		}
+
+		if tok := token.EmailSignUpTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		if tok := token.ResetTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		if tok := token.VerifyTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		if tok := token.JobRunnerRegistrationTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
 		ok, err := HasAllFeatures(ctx, features...)
 		if err != nil {
 			return err
 		}
 
 		if !ok {
+			org, _ := auth.GetOrganizationIDFromContext(ctx)
+			fmt.Println(schema, true, org, features)
 			return privacy.Denyf("features are not enabled", features)
 		}
 

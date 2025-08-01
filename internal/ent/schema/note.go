@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -102,7 +102,7 @@ func (n Note) Interceptors() []ent.Interceptor {
 func (n Note) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(n.Features()...),
+			rule.DenyIfMissingAllFeatures("note", n.Features()...),
 			entfga.CheckEditAccess[*generated.NoteMutation](),
 		),
 	)

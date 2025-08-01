@@ -144,7 +144,7 @@ func (MappedControl) Hooks() []ent.Hook {
 func (m MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(m.Features()...),
+			rule.DenyIfMissingAllFeatures("mappedcontrol", m.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),

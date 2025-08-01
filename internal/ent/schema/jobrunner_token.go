@@ -145,7 +145,7 @@ func (j JobRunnerToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.DenyIfMissingAllFeatures(j.Features()...),
+			rule.DenyIfMissingAllFeatures("jobrunner_token", j.Features()...),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),

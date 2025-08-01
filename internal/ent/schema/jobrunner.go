@@ -97,7 +97,6 @@ func (JobRunner) Indexes() []ent.Index {
 func (JobRunner) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
-		
 	}
 }
 
@@ -131,7 +130,7 @@ func (j JobRunner) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.DenyIfMissingAllFeatures(j.Features()...),
+			rule.DenyIfMissingAllFeatures("jobrunner", j.Features()...),
 			rule.SystemOwnedJobRunner(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),

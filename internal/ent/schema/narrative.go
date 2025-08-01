@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -117,7 +117,7 @@ func (n Narrative) Interceptors() []ent.Interceptor {
 func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(n.Features()...),
+			rule.DenyIfMissingAllFeatures("narrative", n.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.NarrativeMutation](),

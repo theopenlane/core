@@ -152,7 +152,7 @@ func (c ControlObjective) Interceptors() []ent.Interceptor {
 func (c ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(c.Features()...),
+			rule.DenyIfMissingAllFeatures("controlobjective", c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent),     // if mutation contains program_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ControlsParent),    // if mutation contains control_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access

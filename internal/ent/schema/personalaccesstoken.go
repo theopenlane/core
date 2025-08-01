@@ -187,7 +187,7 @@ func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(p.Features()...),
+			rule.DenyIfMissingAllFeatures("personalaccesstoken", p.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},

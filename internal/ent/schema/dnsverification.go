@@ -120,7 +120,7 @@ func (d DNSVerification) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
-			rule.DenyIfMissingAllFeatures(d.Features()...),
+			rule.DenyIfMissingAllFeatures("dnsverification", d.Features()...),
 		),
 	)
 }

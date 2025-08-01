@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -115,7 +115,7 @@ func (TrustCenter) Hooks() []ent.Hook {
 func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(t.Features()...),
+			rule.DenyIfMissingAllFeatures("trustcenter", t.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

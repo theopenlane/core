@@ -166,7 +166,7 @@ func (s Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
-			rule.DenyIfMissingAllFeatures(s.Features()...),
+			rule.DenyIfMissingAllFeatures("standard", s.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

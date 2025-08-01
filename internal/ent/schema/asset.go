@@ -78,7 +78,7 @@ func (a Asset) Edges() []ent.Edge {
 func (a Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(a.Features()...),
+			rule.DenyIfMissingAllFeatures("asset", a.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -99,7 +99,7 @@ func (d DocumentData) Interceptors() []ent.Interceptor {
 func (d DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(d.Features()...),
+			rule.DenyIfMissingAllFeatures("documentdata", d.Features()...),
 			entfga.CheckEditAccess[*generated.DocumentDataMutation](),
 		),
 	)

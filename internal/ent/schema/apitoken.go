@@ -164,7 +164,7 @@ func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures(a.Features()...),
+			rule.DenyIfMissingAllFeatures("apitoken", a.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

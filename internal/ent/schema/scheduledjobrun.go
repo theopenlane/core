@@ -138,7 +138,7 @@ func (s ScheduledJobRun) Interceptors() []ent.Interceptor {
 func (s ScheduledJobRun) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures(s.Features()...),
+			rule.DenyIfMissingAllFeatures("scheduledjobrun", s.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
