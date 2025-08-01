@@ -124,11 +124,6 @@ func (f File) Mixin() []ent.Mixin {
 func (File) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
-		models.CatalogComplianceModule,
-		models.CatalogPolicyManagementAddon,
-		models.CatalogRiskManagementAddon,
-		models.CatalogBaseModule,
-		models.CatalogEntityManagementModule,
 	}
 }
 
@@ -142,7 +137,7 @@ func (f File) Annotations() []schema.Annotation {
 // Interceptors of the File
 func (f File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("file", f.Features()...),
+		// interceptors.InterceptorRequireAllFeatures("file", f.Features()...),
 		interceptors.InterceptorPresignedURL(),
 		interceptors.InterceptorFile(), // filter on the organization id
 	}
