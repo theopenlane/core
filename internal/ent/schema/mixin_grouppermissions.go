@@ -169,8 +169,8 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 }
 
 // Interceptors of the GroupPermissionsMixin
-func (o GroupPermissionsMixin) Interceptors() []ent.Interceptor {
-	if !o.IncludeInterceptorFilter {
+func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
+	if !g.IncludeInterceptorFilter {
 		return []ent.Interceptor{}
 	}
 
@@ -202,7 +202,7 @@ func (o GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 
 		addBlockedGroupPredicate(q, groupIDs)
 
-		if o.ViewPermissions {
+		if g.ViewPermissions {
 			addViewGroupPredicate(q, groupIDs)
 		}
 
