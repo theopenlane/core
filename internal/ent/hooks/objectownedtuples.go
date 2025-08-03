@@ -15,11 +15,8 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
@@ -332,58 +329,7 @@ func mapEdgeToObjectType(schema, edge string) generated.EdgeAccess {
 	return edgeAccess
 }
 
-func mapEdgeToObjectTypeOld(edge string) (string, bool) {
-	// check the string matches first
-	switch edge {
-	case "owner", "organization", "parent", "setting", "assignee", "assigner", "mappable_domain", "user", "job_template", "job_runner", "org_subscription", "default_org":
-		// skip owner + organization and parent (parent org), default_org, this is checked based on permissions already
-		// skip setting, its checked via the parent object
-		// assignee and assigner are users that don't need to be checked
-		// mappable_domain is public to all users, so no need to check
-		// user is used for memberships so also need to skip
-		// job_template + job_runner if can be seen, can be attached to the scheduled job so no need to check here
-		// org_subscription is managed internally
-		return "", false
-	case "approver", "delegate", "stakeholder", "editors", "viewers", "blocked_groups", "control_owner":
-		return group.Label, true
-	case "standard", "dns_verification", "subprocessor", "custom_domain":
-		return organization.Label, true
-	default:
-		// now check suffixes for permissions edges
-		switch {
-		// membership edges checked via the parent object
-		case strings.HasSuffix(edge, "membership"):
-			return "", false
-			// these are the reverse edges for groups, and we need to check the object type
-			// the group is giving permissions to
-		case strings.HasSuffix(edge, "_editors"):
-			return strings.TrimSuffix(edge, "_editors"), true
-		case strings.HasSuffix(edge, "_viewers"):
-			return strings.TrimSuffix(edge, "_viewers"), true
-		case strings.HasSuffix(edge, "_blocked_groups"):
-			return strings.TrimSuffix(edge, "_blocked_groups"), true
-		case strings.HasSuffix(edge, "_creators"):
-			return group.Label, true
-		case strings.HasPrefix(edge, "from_"), strings.HasPrefix(edge, "to_"):
-			// these are controls and subcontrols
-			if strings.HasSuffix(edge, "_subcontrols") {
-				return subcontrol.Label, true
-			} else {
-				return control.Label, true
-			}
-		default:
-			// if we didn't match anything, we return as is, but the singular form
-			if strings.HasSuffix(edge, "s") {
-				return pluralize.NewClient().Singular(edge), true
-			}
-
-			return edge, true
-		}
-	}
-}
-
 func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string, objectID, orgID string) error {
-	log.Error().Str("edge", edge).Str("object_id", objectID).Str("org_id", orgID).Msg("ensuring object is in organization")
 	// also ensure the id is part of the organization
 	mut, ok := m.(GenericMutation)
 	if !ok {
@@ -395,17 +341,16 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 	if edge == organization.Label {
 		if err := rule.CheckCurrentOrgAccess(ctx, m, fgax.CanView); errors.Is(err, privacy.Allow) {
 			return nil
-		} else {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("user does not have access to the organization")
-
-			return privacy.Deny
 		}
+
+		zerolog.Ctx(ctx).Error().Msg("user does not have access to the organization")
+
+		return privacy.Deny
+
 	}
 
 	table := pluralize.NewClient().Plural(edge)
 	query := "SELECT EXISTS (SELECT 1 FROM " + table + " WHERE id = $1 and (owner_id = $2 or owner_id IS NULL))"
-
-	log.Error().Str("query", query).Str("object_id", objectID).Str("org_id", orgID).Msg("checking if object is in organization")
 
 	var rows sql.Rows
 	if err := mut.Client().Driver().Query(ctx, query, []any{objectID, orgID}, &rows); err != nil {

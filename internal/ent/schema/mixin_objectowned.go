@@ -410,7 +410,7 @@ func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
 	// otherwise we will use the filter query results interceptor
 	// which uses a batch check to filter the results
 	// this is usually faster for large datasets where the the user has access to many objects
-	customSkipperFunc := func(ctx context.Context) bool {
+	customSkipperFunc := func(_ context.Context) bool {
 		return false
 	}
 
@@ -420,9 +420,8 @@ func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
 		}
 
 	}
-	o.InterceptorFuncs = append(o.InterceptorFuncs, func(o ObjectOwnedMixin) ent.Interceptor {
+
+	o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
 		return interceptors.FilterQueryResults[V](customSkipperFunc)
 	})
-
-	return
 }
