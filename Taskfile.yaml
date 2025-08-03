@@ -38,7 +38,7 @@ env:
   ## generate env vars for caching
   GO_GENERATE_FAST_DEBUG: "false" # set to true to debug go-generate-fast
   GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
-  GO_GENERATE_FAST_DISABLE: "true" # set to true to disable cached entries
+  GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
   GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables

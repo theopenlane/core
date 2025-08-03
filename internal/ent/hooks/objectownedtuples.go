@@ -363,12 +363,13 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 
 	if rows.Next() {
 		var exists bool
-		if err := rows.Scan(&exists); err != nil || !exists {
-			return privacy.Deny
+		if err := rows.Scan(&exists); err == nil && exists {
+			return nil
 		}
 	}
 
-	return nil
+	// fall back to deny if the object is not in the organization
+	return privacy.Deny
 }
 
 // getTuplesForGroupEdgeChanges gets the tuples for a group edge based on the mutation
