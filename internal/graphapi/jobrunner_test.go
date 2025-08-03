@@ -74,9 +74,13 @@ func TestQueryJobRunners(t *testing.T) {
 }
 
 func TestMutationDeleteJobRunner(t *testing.T) {
+	newUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(newUser, t)
+	apiTokenClient := suite.setupAPITokenClient(newUser.UserCtx, t)
+
 	systemJob := (&JobRunnerBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-	firstJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	firstJob := (&JobRunnerBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -89,27 +93,27 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 		{
 			name:     "happy path user",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      newUser.UserCtx,
 			runnerID: firstJob.ID,
 		},
 		{
 			// the first test case should have deleted the runner
 			name:     "job runner already deleted",
-			client:   suite.client.apiWithPAT,
+			client:   patClient,
 			ctx:      context.Background(),
 			runnerID: firstJob.ID,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "happy path user with pat",
-			client:   suite.client.apiWithPAT,
+			client:   patClient,
 			ctx:      context.Background(),
 			runnerID: secondJob.ID,
 		},
 		{
 			name:     "happy path but cannot delete system runner",
-			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			client:   apiTokenClient,
+			ctx:      newUser.UserCtx,
 			runnerID: systemJob.ID,
 			errorMsg: notFoundErrorMsg,
 		},
