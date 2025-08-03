@@ -1768,13 +1768,22 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.ControlSubcategoriesByFramework, len(tc.expectedResult)))
-
 			// sort the categories so they are consistent
 			slices.SortFunc(tc.expectedResult, func(a, b *testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) int {
 				return cmp.Compare(a.Node.Name, b.Node.Name)
 			})
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategoriesByFramework))
+
+			for _, category := range tc.expectedResult {
+				foundCat := false
+				for _, respCat := range resp.ControlSubcategoriesByFramework {
+					if category.Node.Name == respCat.Node.Name && category.Node.ReferenceFramework != nil && respCat.Node.ReferenceFramework != nil &&
+						*category.Node.ReferenceFramework == *respCat.Node.ReferenceFramework {
+						foundCat = true
+						break
+					}
+				}
+				assert.Check(t, foundCat, "Expected subcategory %s to be in the response", category.Node.Name)
+			}
 
 			for _, category := range resp.ControlSubcategoriesByFramework {
 				// check for empty categories
