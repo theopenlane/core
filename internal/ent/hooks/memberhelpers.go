@@ -161,6 +161,11 @@ func checkMutation(ctx context.Context) bool {
 		return false
 	}
 
+	// Check if the mutation is a group creation with members
+	if strings.Contains(rootFieldCtx.Object, "createGroupWithMembers") {
+		return false
+	}
+
 	// Check if the mutation is a membership mutation
 	if strings.Contains(rootFieldCtx.Object, "Membership") {
 		return true

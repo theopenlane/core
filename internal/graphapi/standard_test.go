@@ -10,9 +10,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -38,7 +38,7 @@ func TestQueryStandard(t *testing.T) {
 		name                 string
 		queryID              string
 		expectedControlCount int64
-		client               *openlaneclient.OpenlaneClient
+		client               *testclient.TestClient
 		ctx                  context.Context
 		errorMsg             string
 	}{
@@ -211,7 +211,7 @@ func TestQueryStandards(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -292,14 +292,14 @@ func TestMutationCreateStandard(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateStandardInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateStandardInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name: "Super Awesome Standard",
 			},
 			client: suite.client.api,
@@ -307,7 +307,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "happy path, system admin - system owned with controls",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:       "Super Awesome Standard",
 				IsPublic:   lo.ToPtr(true),
 				ControlIDs: adminControlIDs,
@@ -317,7 +317,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "happy path, system admin - system owned using pat",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
@@ -326,7 +326,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "happy path, system admin - system owned and public",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
@@ -335,7 +335,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "happy path, all input by org admin",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:                 "Super Awesome Standard With Everything But Edges",
 				Tags:                 []string{"tag1", "tag2"},
 				Framework:            lo.ToPtr("Awesome Framework"),
@@ -355,7 +355,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:      "Greatness, Kitties, and Rainbows",
 				Tags:      []string{"uffo", "brax"},
 				Framework: lo.ToPtr("Meows Framework"),
@@ -366,7 +366,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:      "Greatness, Kitties, and Sherbet",
 				Tags:      []string{"kc", "eddy"},
 				Framework: lo.ToPtr("Meows Framework")},
@@ -375,7 +375,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "user not authorized to make a public standard",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
@@ -385,7 +385,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "user not authorized to make public standard",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
@@ -395,7 +395,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "user not authorized to free to use standard",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name:      "Super Awesome Standard",
 				FreeToUse: lo.ToPtr(true),
 			},
@@ -405,7 +405,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateStandardInput{
+			request: testclient.CreateStandardInput{
 				Name: "Oh noes",
 			},
 			client:      suite.client.api,
@@ -414,7 +414,7 @@ func TestMutationCreateStandard(t *testing.T) {
 		},
 		{
 			name:        "missing required field",
-			request:     openlaneclient.CreateStandardInput{},
+			request:     testclient.CreateStandardInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
@@ -549,15 +549,15 @@ func TestMutationUpdateStandard(t *testing.T) {
 	testCases := []struct {
 		name        string
 		id          string
-		request     openlaneclient.UpdateStandardInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateStandardInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field, org owned standard",
 			id:   standardOrgOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				Tags: []string{"new-tag-1", "new-tag-2"},
 			},
 			client: suite.client.api,
@@ -566,7 +566,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "happy path, update multiple fields, org owned standard",
 			id:   standardOrgOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				AppendTags:           []string{"new-tag"},
 				GoverningBodyLogoURL: lo.ToPtr("https://example.com/new-logo.png"),
 				GoverningBody:        lo.ToPtr("Cat Association"),
@@ -584,7 +584,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions",
 			id:   standardOrgOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
 			client:      suite.client.api,
@@ -594,7 +594,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "update not allowed, cannot update public field",
 			id:   standardOrgOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				IsPublic: lo.ToPtr(true),
 			},
 			client:      suite.client.api,
@@ -604,7 +604,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "bad request, invalid link",
 			id:   standardOrgOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				Link: lo.ToPtr("not a link"),
 			},
 			client:      suite.client.api,
@@ -614,7 +614,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			id:   standardOrgOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
 			client:      suite.client.api,
@@ -624,7 +624,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "happy path, update field, system owned standard",
 			id:   standardSystemOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				IsPublic: lo.ToPtr(true),
 			},
 			client: suite.client.api,
@@ -633,7 +633,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "happy path, update multiple fields, org owned standard",
 			id:   standardSystemOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				ClearTags:     lo.ToPtr(true),
 				AppendDomains: []string{"mice", "meows"},
 				Status:        lo.ToPtr(enums.StandardDraft),
@@ -646,7 +646,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			id:   standardSystemOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
 			client:      suite.client.api,
@@ -656,7 +656,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			id:   standardSystemOwned.ID,
-			request: openlaneclient.UpdateStandardInput{
+			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
 			client:      suite.client.api,
@@ -769,7 +769,7 @@ func TestMutationDeleteStandard(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

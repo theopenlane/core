@@ -114,7 +114,7 @@ func TestMapEdgeToObjectType(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotType, gotOk := mapEdgeToObjectType(tt.edge)
+			gotType, gotOk := mapEdgeToObjectTypeOld(tt.edge)
 			assert.Equal(t, tt.wantType, gotType)
 			assert.Equal(t, tt.wantOk, gotOk)
 		})

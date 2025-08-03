@@ -10,6 +10,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -89,6 +90,9 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "mappable_domain_id",
 			required:   true,
 			immutable:  true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: e,
@@ -96,6 +100,9 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "dns_verification_id",
 			required:   false,
 			immutable:  false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

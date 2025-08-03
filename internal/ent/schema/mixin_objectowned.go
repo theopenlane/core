@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -253,6 +254,9 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 				Field(o.OwnerFieldName).
 				Immutable().
 				Unique().
+				Annotations(
+					accessmap.EdgeNoAuthCheck(),
+				).
 				Ref(o.Ref))
 	}
 
@@ -265,6 +269,9 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 			From("owner", getType(o.Kind)).
 			Field(fieldName).
 			Ref(o.Ref).
+			Annotations(
+				accessmap.EdgeNoAuthCheck(),
+			).
 			Unique()
 
 		edges = append(edges, ownerEdge)

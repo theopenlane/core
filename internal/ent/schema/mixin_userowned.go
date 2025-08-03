@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -118,6 +119,7 @@ func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 		Ref(userOwned.Ref).
 		Annotations(
 			entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+			accessmap.EdgeNoAuthCheck(),
 		).
 		Unique()
 

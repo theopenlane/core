@@ -9,6 +9,8 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -83,6 +85,9 @@ func (t TrustCenter) Edges() []ent.Edge {
 			field:      "custom_domain_id",
 			required:   false,
 			immutable:  false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -90,6 +95,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			t:          TrustCenterSetting.Type,
 			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("TrustCenter"),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -97,6 +103,9 @@ func (t TrustCenter) Edges() []ent.Edge {
 			name:          "subprocessors",
 			edgeSchema:    TrustCenterSubprocessor{},
 			cascadeDelete: "TrustCenter",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }
@@ -105,7 +114,10 @@ func (t TrustCenter) Edges() []ent.Edge {
 func (TrustCenter) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenter(),
-		hooks.HookTrustCenterAuthz(),
+		hook.On(
+			hooks.OrgOwnedTuplesHook(),
+			ent.OpCreate,
+		),
 	}
 }
 

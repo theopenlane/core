@@ -1,0 +1,167 @@
+
+mutation CreateBulkCSVSubscriber($input: Upload!) {
+  createBulkCSVSubscriber(input: $input) {
+    subscribers {
+      active
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      phoneNumber
+      sendAttempts
+      tags
+      unsubscribed
+      updatedAt
+      updatedBy
+      verifiedEmail
+      verifiedPhone
+    }
+  }
+}
+
+mutation CreateBulkSubscriber($input: [CreateSubscriberInput!]) {
+  createBulkSubscriber(input: $input) {
+    subscribers {
+      active
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      phoneNumber
+      sendAttempts
+      tags
+      unsubscribed
+      updatedAt
+      updatedBy
+      verifiedEmail
+      verifiedPhone
+    }
+  }
+}
+
+mutation CreateSubscriber($input: CreateSubscriberInput!) {
+  createSubscriber(input: $input) {
+    subscriber {
+      active
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      phoneNumber
+      sendAttempts
+      tags
+      unsubscribed
+      updatedAt
+      updatedBy
+      verifiedEmail
+      verifiedPhone
+    }
+  }
+}
+
+mutation DeleteSubscriber($deleteSubscriberId: ID!) {
+  deleteSubscriber(id: $deleteSubscriberId) {
+    deletedID
+  }
+}
+
+query GetAllSubscribers {
+  subscribers {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        email
+        id
+        ownerID
+        phoneNumber
+        sendAttempts
+        tags
+        unsubscribed
+        updatedAt
+        updatedBy
+        verifiedEmail
+        verifiedPhone
+      }
+    }
+  }
+}
+query GetSubscriberByID($subscriberId: ID!) {
+  subscriber(id: $subscriberId) {
+    active
+    createdAt
+    createdBy
+    email
+    id
+    ownerID
+    phoneNumber
+    sendAttempts
+    tags
+    unsubscribed
+    updatedAt
+    updatedBy
+    verifiedEmail
+    verifiedPhone
+  }
+}
+
+query GetSubscribers($first: Int, $last: Int, $where: SubscriberWhereInput) {
+  subscribers(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        email
+        id
+        ownerID
+        phoneNumber
+        sendAttempts
+        tags
+        unsubscribed
+        updatedAt
+        updatedBy
+        verifiedEmail
+        verifiedPhone
+      }
+    }
+  }
+}
+mutation UpdateSubscriber($updateSubscriberId: ID!, $input: UpdateSubscriberInput!) {
+  updateSubscriber(id: $updateSubscriberId, input: $input) {
+    subscriber {
+      active
+      createdAt
+      createdBy
+      email
+      id
+      ownerID
+      phoneNumber
+      sendAttempts
+      tags
+      unsubscribed
+      updatedAt
+      updatedBy
+      verifiedEmail
+      verifiedPhone
+    }
+  }
+}

@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -134,6 +135,7 @@ func (o Organization) Edges() []ent.Edge {
 				entgql.QueryField(),
 				entgql.MultiOrder(),
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				accessmap.EdgeNoAuthCheck(),
 			).
 			From("parent").
 			Field("parent_organization_id").
@@ -141,6 +143,7 @@ func (o Organization) Edges() []ent.Edge {
 			Unique().
 			Annotations(
 				entx.CascadeAnnotationField("Child"),
+				accessmap.EdgeNoAuthCheck(),
 			),
 
 		uniqueEdgeTo(&edgeDefinition{
@@ -148,6 +151,9 @@ func (o Organization) Edges() []ent.Edge {
 			name:          "setting",
 			t:             OrganizationSetting.Type,
 			cascadeDelete: "Organization",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(o, PersonalAccessToken{}),
 		edgeToWithPagination(&edgeDefinition{
@@ -162,7 +168,9 @@ func (o Organization) Edges() []ent.Edge {
 			// this should be done via the members edge
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-				entgql.RelayConnection()).
+				entgql.RelayConnection(),
+				accessmap.EdgeNoAuthCheck(),
+			).
 			Through("members", OrgMembership.Type),
 
 		// files can be owned by an organization, but don't have to be
@@ -212,6 +220,7 @@ func (o Organization) Edges() []ent.Edge {
 		edge.To(OrgSubscription{}.PluralName(), OrgSubscription.Type).
 			Annotations(
 				entx.CascadeAnnotationField("Owner"),
+				accessmap.EdgeNoAuthCheck(),
 			),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,

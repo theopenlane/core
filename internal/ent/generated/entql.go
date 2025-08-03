@@ -3427,18 +3427,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
-		"users",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-		},
-		"ActionPlan",
-		"User",
-	)
-	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8541,10 +8529,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"action_plans",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   user.ActionPlansTable,
-			Columns: user.ActionPlansPrimaryKey,
+			Columns: []string{user.ActionPlansColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -9084,20 +9072,6 @@ func (f *ActionPlanFilter) WhereHasControls() {
 // WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasUsers applies a predicate to check if query has an edge users.
-func (f *ActionPlanFilter) WhereHasUsers() {
-	f.Where(entql.HasEdge("users"))
-}
-
-// WhereHasUsersWith applies a predicate to check if query has an edge users with a given conditions (other predicates).
-func (f *ActionPlanFilter) WhereHasUsersWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("users", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

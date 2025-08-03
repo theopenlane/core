@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -27,7 +28,7 @@ type OrgMembership struct {
 	ent.Schema
 }
 
-const SchemaOrgMembership = "orgmembership"
+const SchemaOrgMembership = "ormembership"
 
 func (OrgMembership) Name() string {
 	return SchemaOrgMembership
@@ -65,6 +66,9 @@ func (o OrgMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "organization_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: o,
@@ -72,6 +76,9 @@ func (o OrgMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "user_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(o, Event{}),
 	}

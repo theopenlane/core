@@ -9,9 +9,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -29,7 +29,7 @@ func TestQueryControlObjective(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -80,7 +80,7 @@ func TestQueryControlObjective(t *testing.T) {
 			// setup the control objective if it is not already created
 			if tc.queryID == "" {
 				resp, err := suite.client.api.CreateControlObjective(testUser1.UserCtx,
-					openlaneclient.CreateControlObjectiveInput{
+					testclient.CreateControlObjectiveInput{
 						Name:       "ControlObjective",
 						ProgramIDs: []string{program.ID},
 					})
@@ -127,7 +127,7 @@ func TestQueryControlObjectives(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -195,15 +195,15 @@ func TestMutationCreateControlObjective(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		request       openlaneclient.CreateControlObjectiveInput
+		request       testclient.CreateControlObjectiveInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name: "ControlObjective",
 			},
 			client: suite.client.api,
@@ -211,7 +211,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name:                 "Another ControlObjective",
 				Category:             lo.ToPtr("Category"),
 				Subcategory:          lo.ToPtr("Subcategory"),
@@ -226,7 +226,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "add groups",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name:            "Test Procedure",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
@@ -237,7 +237,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name:    "ControlObjective",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -246,7 +246,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "using api token",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name: "ControlObjective",
 			},
 			client: suite.client.apiWithToken,
@@ -254,7 +254,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name: "ControlObjective",
 			},
 			client:      suite.client.api,
@@ -263,7 +263,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "user now authorized, added to group with creator permissions",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name: "ControlObjective",
 			},
 			addGroupToOrg: true,
@@ -272,7 +272,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "user authorized, they were added to the program",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name:       "ControlObjective",
 				ProgramIDs: []string{program1.ID},
 			},
@@ -281,7 +281,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name: "user not authorized, user not authorized to one of the programs",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name:       "ControlObjective",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
@@ -291,14 +291,14 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		},
 		{
 			name:        "missing required name",
-			request:     openlaneclient.CreateControlObjectiveInput{},
+			request:     testclient.CreateControlObjectiveInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
 			name: "user not authorized, no permissions to one of the programs",
-			request: openlaneclient.CreateControlObjectiveInput{
+			request: testclient.CreateControlObjectiveInput{
 				Name:       "ControlObjective",
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
@@ -312,7 +312,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
-					openlaneclient.UpdateOrganizationInput{
+					testclient.UpdateOrganizationInput{
 						AddControlObjectiveCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				assert.NilError(t, err)
@@ -412,14 +412,14 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateControlObjectiveInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateControlObjectiveInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateControlObjectiveInput{
+			request: testclient.UpdateControlObjectiveInput{
 				DesiredOutcome: lo.ToPtr("Updated outcome"),
 				AddViewerIDs:   []string{groupMember.GroupID},
 			},
@@ -428,7 +428,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateControlObjectiveInput{
+			request: testclient.UpdateControlObjectiveInput{
 				Status:               &enums.ObjectiveActiveStatus,
 				Tags:                 []string{"tag1", "tag2"},
 				Category:             lo.ToPtr("Category Updated"),
@@ -443,7 +443,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		},
 		{
 			name: "happy path, revision bump",
-			request: openlaneclient.UpdateControlObjectiveInput{
+			request: testclient.UpdateControlObjectiveInput{
 				Status:       &enums.ObjectiveActiveStatus,
 				RevisionBump: &models.Major,
 			},
@@ -452,7 +452,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		},
 		{
 			name: "invalid revision",
-			request: openlaneclient.UpdateControlObjectiveInput{
+			request: testclient.UpdateControlObjectiveInput{
 				Revision: lo.ToPtr("1.1"),
 			},
 			client:      suite.client.api,
@@ -461,7 +461,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not permissions in same org",
-			request: openlaneclient.UpdateControlObjectiveInput{
+			request: testclient.UpdateControlObjectiveInput{
 				Status: &enums.ObjectiveActiveStatus,
 			},
 			client:      suite.client.api,
@@ -470,7 +470,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateControlObjectiveInput{
+			request: testclient.UpdateControlObjectiveInput{
 				DesiredOutcome: lo.ToPtr("update this"),
 			},
 			client:      suite.client.api,
@@ -561,7 +561,7 @@ func TestMutationDeleteControlObjective(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

@@ -1,0 +1,147 @@
+mutation CreateBulkCSVNarrative($input: Upload!) {
+  createBulkCSVNarrative(input: $input) {
+    narratives {
+      createdAt
+      createdBy
+      description
+      details
+      displayID
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
+  createBulkNarrative(input: $input) {
+    narratives {
+      createdAt
+      createdBy
+      description
+      details
+      displayID
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateNarrative($input: CreateNarrativeInput!) {
+  createNarrative(input: $input) {
+    narrative {
+      createdAt
+      createdBy
+      description
+      details
+      displayID
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteNarrative($deleteNarrativeId: ID!) {
+  deleteNarrative(id: $deleteNarrativeId) {
+    deletedID
+  }
+}
+
+query GetAllNarratives {
+  narratives {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        details
+        displayID
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetNarrativeByID($narrativeId: ID!) {
+  narrative(id: $narrativeId) {
+    createdAt
+    createdBy
+    description
+    details
+    displayID
+    id
+    name
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetNarratives($first: Int, $last: Int, $where: NarrativeWhereInput) {
+  narratives(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        details
+        displayID
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!) {
+  updateNarrative(id: $updateNarrativeId, input: $input) {
+    narrative {
+      createdAt
+      createdBy
+      description
+      details
+      displayID
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -93,6 +93,7 @@ var (
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_action_plans", Type: field.TypeString, Nullable: true},
+		{Name: "user_action_plans", Type: field.TypeString, Nullable: true},
 	}
 	// ActionPlansTable holds the schema information for the "action_plans" table.
 	ActionPlansTable = &schema.Table{
@@ -122,6 +123,12 @@ var (
 				Symbol:     "action_plans_subcontrols_action_plans",
 				Columns:    []*schema.Column{ActionPlansColumns[29]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_users_action_plans",
+				Columns:    []*schema.Column{ActionPlansColumns[30]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -7752,31 +7759,6 @@ var (
 			},
 		},
 	}
-	// UserActionPlansColumns holds the columns for the "user_action_plans" table.
-	UserActionPlansColumns = []*schema.Column{
-		{Name: "user_id", Type: field.TypeString},
-		{Name: "action_plan_id", Type: field.TypeString},
-	}
-	// UserActionPlansTable holds the schema information for the "user_action_plans" table.
-	UserActionPlansTable = &schema.Table{
-		Name:       "user_action_plans",
-		Columns:    UserActionPlansColumns,
-		PrimaryKey: []*schema.Column{UserActionPlansColumns[0], UserActionPlansColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_action_plans_user_id",
-				Columns:    []*schema.Column{UserActionPlansColumns[0]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_action_plans_action_plan_id",
-				Columns:    []*schema.Column{UserActionPlansColumns[1]},
-				RefColumns: []*schema.Column{ActionPlansColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
 	UserSettingFilesColumns = []*schema.Column{
 		{Name: "user_setting_id", Type: field.TypeString},
@@ -8022,7 +8004,6 @@ var (
 		TrustCenterSettingFilesTable,
 		UserFilesTable,
 		UserEventsTable,
-		UserActionPlansTable,
 		UserSettingFilesTable,
 	}
 )
@@ -8033,6 +8014,7 @@ func init() {
 	ActionPlansTable.ForeignKeys[1].RefTable = GroupsTable
 	ActionPlansTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ActionPlansTable.ForeignKeys[3].RefTable = SubcontrolsTable
+	ActionPlansTable.ForeignKeys[4].RefTable = UsersTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
@@ -8525,8 +8507,6 @@ func init() {
 	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
-	UserActionPlansTable.ForeignKeys[0].RefTable = UsersTable
-	UserActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 }

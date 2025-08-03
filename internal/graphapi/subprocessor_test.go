@@ -9,7 +9,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQuerySubprocessorByID(t *testing.T) {
@@ -20,7 +20,7 @@ func TestQuerySubprocessorByID(t *testing.T) {
 		name         string
 		expectedName string
 		queryID      string
-		client       *openlaneclient.OpenlaneClient
+		client       *testclient.TestClient
 		ctx          context.Context
 		errorMsg     string
 	}{
@@ -101,10 +101,10 @@ func TestQuerySubprocessors(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
-		where           *openlaneclient.SubprocessorWhereInput
+		where           *testclient.SubprocessorWhereInput
 	}{
 		{
 			name:            "return all",
@@ -122,7 +122,7 @@ func TestQuerySubprocessors(t *testing.T) {
 			name:   "query by name",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.SubprocessorWhereInput{
+			where: &testclient.SubprocessorWhereInput{
 				Name: &subprocessor1.Name,
 			},
 			expectedResults: 1,
@@ -131,7 +131,7 @@ func TestQuerySubprocessors(t *testing.T) {
 			name:   "query by name, not found",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.SubprocessorWhereInput{
+			where: &testclient.SubprocessorWhereInput{
 				Name: &nonExistentName,
 			},
 			expectedResults: 0,
@@ -166,15 +166,15 @@ func TestQuerySubprocessors(t *testing.T) {
 func TestMutationCreateSubprocessor(t *testing.T) {
 	testCases := []struct {
 		name            string
-		request         openlaneclient.CreateSubprocessorInput
-		client          *openlaneclient.OpenlaneClient
+		request         testclient.CreateSubprocessorInput
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedErr     string
 		expectedOwnerID *string
 	}{
 		{
 			name: "happy path",
-			request: openlaneclient.CreateSubprocessorInput{
+			request: testclient.CreateSubprocessorInput{
 				Name: "Test Subprocessor",
 			},
 			expectedOwnerID: lo.ToPtr(testUser1.OrganizationID),
@@ -183,7 +183,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 		},
 		{
 			name: "happy path with description",
-			request: openlaneclient.CreateSubprocessorInput{
+			request: testclient.CreateSubprocessorInput{
 				Name:        "Test Subprocessor with Description",
 				Description: lo.ToPtr("This is a test subprocessor"),
 			},
@@ -193,7 +193,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 		},
 		{
 			name: "happy path, adminUser",
-			request: openlaneclient.CreateSubprocessorInput{
+			request: testclient.CreateSubprocessorInput{
 				Name: "Admin Test Subprocessor",
 			},
 			expectedOwnerID: lo.ToPtr(testUser1.OrganizationID),
@@ -202,7 +202,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 		},
 		{
 			name: "not authorized",
-			request: openlaneclient.CreateSubprocessorInput{
+			request: testclient.CreateSubprocessorInput{
 				Name:    "Unauthorized Subprocessor",
 				OwnerID: lo.ToPtr(testUser1.OrganizationID),
 			},
@@ -212,7 +212,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 		},
 		{
 			name: "missing name",
-			request: openlaneclient.CreateSubprocessorInput{
+			request: testclient.CreateSubprocessorInput{
 				OwnerID: lo.ToPtr(testUser1.OrganizationID),
 			},
 			client:      suite.client.api,
@@ -221,7 +221,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 		},
 		{
 			name: "happy path, sysadmin",
-			request: openlaneclient.CreateSubprocessorInput{
+			request: testclient.CreateSubprocessorInput{
 				Name: "Sys Admin Test Subprocessor",
 			},
 			client:          suite.client.api,
@@ -270,7 +270,7 @@ func TestMutationDeleteSubprocessor(t *testing.T) {
 	testCases := []struct {
 		name        string
 		id          string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -327,17 +327,17 @@ func TestUpdateSubprocessor(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		errorMsg    string
-		updateInput openlaneclient.UpdateSubprocessorInput
+		updateInput testclient.UpdateSubprocessorInput
 	}{
 		{
 			name:    "happy path",
 			queryID: subprocessor.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			updateInput: openlaneclient.UpdateSubprocessorInput{
+			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"updated", "test"},
 			},
 		},
@@ -346,7 +346,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			queryID: subprocessor.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			updateInput: openlaneclient.UpdateSubprocessorInput{
+			updateInput: testclient.UpdateSubprocessorInput{
 				Name:        lo.ToPtr("Updated Subprocessor Name"),
 				Description: lo.ToPtr("Updated description"),
 			},
@@ -356,7 +356,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			queryID: systemOwnedSubprocessor.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
-			updateInput: openlaneclient.UpdateSubprocessorInput{
+			updateInput: testclient.UpdateSubprocessorInput{
 				Name:        lo.ToPtr("Updated System Owned Subprocessor Name"),
 				Description: lo.ToPtr("Updated system owned description"),
 			},
@@ -366,7 +366,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			queryID: subprocessor.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			updateInput: openlaneclient.UpdateSubprocessorInput{
+			updateInput: testclient.UpdateSubprocessorInput{
 				LogoRemoteURL: lo.ToPtr("https://example.com/new-logo.png"),
 			},
 		},
@@ -375,7 +375,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			queryID: subprocessor.ID,
 			client:  suite.client.api,
 			ctx:     viewOnlyUser.UserCtx,
-			updateInput: openlaneclient.UpdateSubprocessorInput{
+			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"unauthorized"},
 			},
 			errorMsg: notAuthorizedErrorMsg,
@@ -385,7 +385,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			queryID: systemOwnedSubprocessor.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			updateInput: openlaneclient.UpdateSubprocessorInput{
+			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"unauthorized"},
 			},
 			errorMsg: "attempted to set admin only field",
@@ -449,7 +449,7 @@ func TestGetAllSubprocessors(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
 		expectedErr     string

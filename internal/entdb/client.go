@@ -152,9 +152,8 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
 
-	log.Error().Msg("adding edge permissions hook")
+	// adds default hooks for all edge permissions
 	db.Use(hooks.HookEdgePermissions())
-	log.Error()
 
 	// add event emission for mutations
 	eventer := hooks.NewEventerPool(db)

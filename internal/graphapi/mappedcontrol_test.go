@@ -9,8 +9,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -27,7 +27,7 @@ func TestQueryMappedControl(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -106,7 +106,7 @@ func TestQueryMappedControls(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -167,14 +167,14 @@ func TestMutationCreateMappedControl(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateMappedControlInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateMappedControlInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				MappingType: &enums.MappingTypeEqual,
 			},
 			client: suite.client.api,
@@ -182,7 +182,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				MappingType:       &enums.MappingTypeEqual,
 				ToControlIDs:      []string{toControl.ID},
 				FromControlIDs:    []string{fromControl.ID},
@@ -197,7 +197,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				OwnerID:           &testUser1.OrganizationID,
 				MappingType:       &enums.MappingTypeSubset,
 				ToControlIDs:      []string{toControl.ID},
@@ -211,7 +211,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		},
 		{
 			name: "using pat, missing owner ID",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				MappingType:       &enums.MappingTypeSubset,
 				ToControlIDs:      []string{toControl.ID},
 				FromSubcontrolIDs: []string{fromSubcontrol.ID},
@@ -225,7 +225,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				MappingType:       &enums.MappingTypeSubset,
 				ToControlIDs:      []string{toControl.ID},
 				FromSubcontrolIDs: []string{fromSubcontrol.ID},
@@ -238,7 +238,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				MappingType:    &enums.MappingTypeEqual,
 				ToControlIDs:   []string{toControl.ID},
 				FromControlIDs: []string{fromControl.ID},
@@ -249,7 +249,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 		},
 		{
 			name: "invalid confidence, should be between 0 and 100",
-			request: openlaneclient.CreateMappedControlInput{
+			request: testclient.CreateMappedControlInput{
 				MappingType:    &enums.MappingTypeEqual,
 				ToControlIDs:   []string{toControl.ID},
 				FromControlIDs: []string{fromControl.ID},
@@ -295,7 +295,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			if tc.request.ToControlIDs != nil {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToControls.Edges, len(tc.request.ToControlIDs)))
 				for _, toControlID := range tc.request.ToControlIDs {
-					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToControls.Edges, func(edge *openlaneclient.CreateMappedControl_CreateMappedControl_MappedControl_ToControls_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToControls.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_ToControls_Edges) bool {
 						return edge.Node.ID == toControlID
 					}), "expected toControl with ID %s to be present in the response", toControlID)
 				}
@@ -306,7 +306,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			if tc.request.FromControlIDs != nil {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromControls.Edges, len(tc.request.FromControlIDs)))
 				for _, fromControlID := range tc.request.FromControlIDs {
-					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromControls.Edges, func(edge *openlaneclient.CreateMappedControl_CreateMappedControl_MappedControl_FromControls_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromControls.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromControls_Edges) bool {
 						return edge.Node.ID == fromControlID
 					}), "expected fromControl with ID %s to be present in the response", fromControlID)
 				}
@@ -317,7 +317,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			if tc.request.ToSubcontrolIDs != nil {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, len(tc.request.ToSubcontrolIDs)))
 				for _, toSubcontrolID := range tc.request.ToSubcontrolIDs {
-					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *openlaneclient.CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
 						return edge.Node.ID == toSubcontrolID
 					}), "expected toSubcontrol with ID %s to be present in the response", toSubcontrolID)
 				}
@@ -329,7 +329,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			if tc.request.FromSubcontrolIDs != nil {
 				assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, len(tc.request.FromSubcontrolIDs)))
 				for _, fromSubcontrolID := range tc.request.FromSubcontrolIDs {
-					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *openlaneclient.CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.CreateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.CreateMappedControl_CreateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
 						return edge.Node.ID == fromSubcontrolID
 					}), "expected fromSubcontrol with ID %s to be present in the response", fromSubcontrolID)
 				}
@@ -368,8 +368,8 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 	testCases := []struct {
 		name            string
 		requestID       string
-		request         openlaneclient.UpdateMappedControlInput
-		client          *openlaneclient.OpenlaneClient
+		request         testclient.UpdateMappedControlInput
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedErr     string
 		controlNotAdded bool // used to indicate if the control was not added to the mapped control
@@ -377,7 +377,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "happy path, update field",
 			requestID: mappedControl.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				MappingType: lo.ToPtr(enums.MappingTypeSubset),
 			},
 			client: suite.client.api,
@@ -386,7 +386,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "happy path, update multiple fields",
 			requestID: mappedControl.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				Relation:             lo.ToPtr("Updated relation"),
 				Confidence:           lo.ToPtr(int64(75)),
 				Tags:                 []string{"updated-tag1", "updated-tag2"},
@@ -399,7 +399,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "happy path, remove controls by org admin",
 			requestID: mappedControl.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				RemoveToControlIDs:      []string{controlA.ID},
 				RemoveFromSubcontrolIDs: []string{subcontrolA.ID},
 				AddFromControlIDs:       []string{controlB.ID},
@@ -411,7 +411,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "add controls from another org, not allowed",
 			requestID: mappedControl.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				AddFromControlIDs: []string{controlAnotherOrg.ID},
 			},
 			client:          suite.client.api,
@@ -422,7 +422,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "update not allowed, not enough permissions",
 			requestID: mappedControl.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				Relation: lo.ToPtr("Trying to update relation"),
 			},
 			client:      suite.client.api,
@@ -432,7 +432,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "update not allowed, owned by another org",
 			requestID: mappedControlAnotherOrg.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				Relation: lo.ToPtr("Trying to update relation"),
 			},
 			client:      suite.client.api,
@@ -442,7 +442,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		{
 			name:      "update not allowed, no permissions",
 			requestID: mappedControl.ID,
-			request: openlaneclient.UpdateMappedControlInput{
+			request: testclient.UpdateMappedControlInput{
 				Relation: lo.ToPtr("Trying to update relation"),
 			},
 			client:      suite.client.api,
@@ -478,7 +478,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.AddToControlIDs != nil {
 				for _, toControlID := range tc.request.AddToControlIDs {
-					assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToControls.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToControls_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToControls.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToControls_Edges) bool {
 						return edge.Node.ID == toControlID
 					}), "expected toControl with ID %s to be present in the response", toControlID)
 				}
@@ -487,12 +487,12 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 			if tc.request.AddFromControlIDs != nil {
 				for _, fromControlID := range tc.request.AddFromControlIDs {
 					if tc.controlNotAdded {
-						assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromControls.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls_Edges) bool {
+						assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromControls.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls_Edges) bool {
 							return edge.Node.ID == fromControlID
 						}), "expected fromControl with ID %s to not be present in the response", fromControlID)
 						continue
 					} else {
-						assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromControls.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls_Edges) bool {
+						assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromControls.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls_Edges) bool {
 							return edge.Node.ID == fromControlID
 						}), "expected fromControl with ID %s to be present in the response", fromControlID)
 					}
@@ -501,7 +501,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.AddToSubcontrolIDs != nil {
 				for _, toSubcontrolID := range tc.request.AddToSubcontrolIDs {
-					assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
 						return edge.Node.ID == toSubcontrolID
 					}), "expected toSubcontrol with ID %s to be present in the response", toSubcontrolID)
 				}
@@ -509,7 +509,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.AddFromSubcontrolIDs != nil {
 				for _, fromSubcontrolID := range tc.request.AddFromSubcontrolIDs {
-					assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
+					assert.Check(t, lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
 						return edge.Node.ID == fromSubcontrolID
 					}), "expected fromSubcontrol with ID %s to be present in the response", fromSubcontrolID)
 				}
@@ -517,7 +517,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.RemoveToControlIDs != nil {
 				for _, removedID := range tc.request.RemoveToControlIDs {
-					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToControls.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToControls_Edges) bool {
+					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToControls.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToControls_Edges) bool {
 						return edge.Node.ID == removedID
 					}), "expected toControl with ID %s to be removed from the response", removedID)
 				}
@@ -525,7 +525,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.RemoveFromControlIDs != nil {
 				for _, removedID := range tc.request.RemoveFromControlIDs {
-					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromControls.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls_Edges) bool {
+					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromControls.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromControls_Edges) bool {
 						return edge.Node.ID == removedID
 					}), "expected fromControl with ID %s to be removed from the response", removedID)
 				}
@@ -533,7 +533,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.RemoveToSubcontrolIDs != nil {
 				for _, removedID := range tc.request.RemoveToSubcontrolIDs {
-					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
+					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.ToSubcontrols.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_ToSubcontrols_Edges) bool {
 						return edge.Node.ID == removedID
 					}), "expected toSubcontrol with ID %s to be removed from the response", removedID)
 				}
@@ -541,7 +541,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 
 			if tc.request.RemoveFromSubcontrolIDs != nil {
 				for _, removedID := range tc.request.RemoveFromSubcontrolIDs {
-					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *openlaneclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
+					assert.Check(t, !lo.ContainsBy(resp.UpdateMappedControl.MappedControl.FromSubcontrols.Edges, func(edge *testclient.UpdateMappedControl_UpdateMappedControl_MappedControl_FromSubcontrols_Edges) bool {
 						return edge.Node.ID == removedID
 					}), "expected fromSubcontrol with ID %s to be removed from the response", removedID)
 				}
@@ -571,7 +571,7 @@ func TestMutationDeleteMappedControl(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

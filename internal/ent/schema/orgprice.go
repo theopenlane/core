@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
@@ -70,6 +71,9 @@ func (o OrgPrice) Edges() []ent.Edge {
 			edgeSchema: OrgSubscription{},
 			field:      "subscription_id",
 			ref:        "prices",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 	}
 }

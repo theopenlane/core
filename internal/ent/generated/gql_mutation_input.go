@@ -206,7 +206,6 @@ type CreateActionPlanInput struct {
 	OwnerID                         *string
 	RiskIDs                         []string
 	ControlIDs                      []string
-	UserIDs                         []string
 	ProgramIDs                      []string
 }
 
@@ -279,9 +278,6 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
@@ -349,9 +345,6 @@ type UpdateActionPlanInput struct {
 	ClearControls                         bool
 	AddControlIDs                         []string
 	RemoveControlIDs                      []string
-	ClearUsers                            bool
-	AddUserIDs                            []string
-	RemoveUserIDs                         []string
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
@@ -520,15 +513,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
-	}
-	if i.ClearUsers {
-		m.ClearUsers()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()

@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -34,8 +34,8 @@ func TestQueryOrgMembers(t *testing.T) {
 		name                string
 		queryID             string
 		deleteProgramMember bool
-		whereInput          *openlaneclient.OrgMembershipWhereInput
-		client              *openlaneclient.OpenlaneClient
+		whereInput          *testclient.OrgMembershipWhereInput
+		client              *testclient.TestClient
 		ctx                 context.Context
 		expectedLen         int
 		expectErr           bool
@@ -58,10 +58,10 @@ func TestQueryOrgMembers(t *testing.T) {
 			queryID: testOrgMemberUser.OrganizationID,
 			client:  suite.client.api,
 			ctx:     testOrgMemberUser.UserCtx,
-			whereInput: &openlaneclient.OrgMembershipWhereInput{
-				HasUserWith: []*openlaneclient.UserWhereInput{
+			whereInput: &testclient.OrgMembershipWhereInput{
+				HasUserWith: []*testclient.UserWhereInput{
 					{
-						HasProgramMembershipsWith: []*openlaneclient.ProgramMembershipWhereInput{
+						HasProgramMembershipsWith: []*testclient.ProgramMembershipWhereInput{
 							{
 								ProgramID: &pm.ProgramID,
 							},
@@ -76,11 +76,11 @@ func TestQueryOrgMembers(t *testing.T) {
 			queryID: testOrgMemberUser.OrganizationID,
 			client:  suite.client.api,
 			ctx:     testOrgMemberUser.UserCtx,
-			whereInput: &openlaneclient.OrgMembershipWhereInput{
-				Not: &openlaneclient.OrgMembershipWhereInput{
-					HasUserWith: []*openlaneclient.UserWhereInput{
+			whereInput: &testclient.OrgMembershipWhereInput{
+				Not: &testclient.OrgMembershipWhereInput{
+					HasUserWith: []*testclient.UserWhereInput{
 						{
-							HasProgramMembershipsWith: []*openlaneclient.ProgramMembershipWhereInput{
+							HasProgramMembershipsWith: []*testclient.ProgramMembershipWhereInput{
 								{
 									ProgramID: &pm.ProgramID,
 								},
@@ -97,10 +97,10 @@ func TestQueryOrgMembers(t *testing.T) {
 			queryID:             testOrgMemberUser.OrganizationID,
 			client:              suite.client.api,
 			ctx:                 testOrgMemberUser.UserCtx,
-			whereInput: &openlaneclient.OrgMembershipWhereInput{
-				HasUserWith: []*openlaneclient.UserWhereInput{
+			whereInput: &testclient.OrgMembershipWhereInput{
+				HasUserWith: []*testclient.UserWhereInput{
 					{
-						HasProgramMembershipsWith: []*openlaneclient.ProgramMembershipWhereInput{
+						HasProgramMembershipsWith: []*testclient.ProgramMembershipWhereInput{
 							{
 								ProgramID: &pm.ProgramID,
 							},
@@ -146,7 +146,7 @@ func TestQueryOrgMembers(t *testing.T) {
 			orgID := tc.queryID
 
 			if tc.whereInput == nil {
-				tc.whereInput = &openlaneclient.OrgMembershipWhereInput{}
+				tc.whereInput = &testclient.OrgMembershipWhereInput{}
 			}
 
 			if orgID != "" {
@@ -286,7 +286,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			input := openlaneclient.CreateOrgMembershipInput{
+			input := testclient.CreateOrgMembershipInput{
 				OrganizationID: tc.orgID,
 				UserID:         tc.userID,
 				Role:           &tc.role,
@@ -325,7 +325,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUserOrg.UserCtx, t)
 
-	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUserOrg.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUserOrg.UserCtx, &testclient.OrgMembershipWhereInput{
 		OrganizationID: &testUserOrg.OrganizationID,
 	})
 	assert.NilError(t, err)
@@ -376,7 +376,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			input := openlaneclient.UpdateOrgMembershipInput{
+			input := testclient.UpdateOrgMembershipInput{
 				Role: &tc.role,
 			}
 
@@ -419,7 +419,7 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	suite.assertDefaultOrgUpdate(testUser.UserCtx, t, om.UserID, om.OrganizationID, false)
 
 	// test re-adding the user to the org
-	_, err = suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, openlaneclient.CreateOrgMembershipInput{
+	_, err = suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, testclient.CreateOrgMembershipInput{
 		OrganizationID: om.OrganizationID,
 		UserID:         om.UserID,
 		Role:           &om.Role,
@@ -428,7 +428,7 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	assert.NilError(t, err)
 
 	// cant remove self from org and owners cannot be removed
-	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &testclient.OrgMembershipWhereInput{
 		OrganizationID: &testUser.OrganizationID,
 	})
 	assert.NilError(t, err)
@@ -454,7 +454,7 @@ func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *test
 	// we need to allow the request because this is not for the user making the request
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	where := openlaneclient.UserSettingWhereInput{
+	where := testclient.UserSettingWhereInput{
 		UserID: &userID,
 	}
 

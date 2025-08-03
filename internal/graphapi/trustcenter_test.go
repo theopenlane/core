@@ -12,9 +12,9 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -26,7 +26,7 @@ func TestQueryTrustCenterByID(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -98,10 +98,10 @@ func TestQueryTrustCenters(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
-		where           *openlaneclient.TrustCenterWhereInput
+		where           *testclient.TrustCenterWhereInput
 	}{
 		{
 			name:            "return all",
@@ -119,7 +119,7 @@ func TestQueryTrustCenters(t *testing.T) {
 			name:   "query by org ID",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.TrustCenterWhereInput{
+			where: &testclient.TrustCenterWhereInput{
 				OwnerID: &testUser1.OrganizationID,
 			},
 			expectedResults: 1,
@@ -128,7 +128,7 @@ func TestQueryTrustCenters(t *testing.T) {
 			name:   "query by slug",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.TrustCenterWhereInput{
+			where: &testclient.TrustCenterWhereInput{
 				Slug: &trustCenter1.Slug,
 			},
 			expectedResults: 1,
@@ -137,7 +137,7 @@ func TestQueryTrustCenters(t *testing.T) {
 			name:   "query by slug, not found",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.TrustCenterWhereInput{
+			where: &testclient.TrustCenterWhereInput{
 				Slug: &nonExistentSlug,
 			},
 			expectedResults: 0,
@@ -146,13 +146,13 @@ func TestQueryTrustCenters(t *testing.T) {
 			name:   "query by custom domain, slug",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.TrustCenterWhereInput{
-				And: []*openlaneclient.TrustCenterWhereInput{
+			where: &testclient.TrustCenterWhereInput{
+				And: []*testclient.TrustCenterWhereInput{
 					{
 						Slug: &trustCenter1.Slug,
 					},
 					{
-						HasCustomDomainWith: []*openlaneclient.CustomDomainWhereInput{
+						HasCustomDomainWith: []*testclient.CustomDomainWhereInput{
 							{
 								CnameRecord: &cnameRecord,
 							},
@@ -166,13 +166,13 @@ func TestQueryTrustCenters(t *testing.T) {
 			name:   "query by non existent custom domain, slug",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.TrustCenterWhereInput{
-				And: []*openlaneclient.TrustCenterWhereInput{
+			where: &testclient.TrustCenterWhereInput{
+				And: []*testclient.TrustCenterWhereInput{
 					{
 						Slug: &trustCenter1.Slug,
 					},
 					{
-						HasCustomDomainWith: []*openlaneclient.CustomDomainWhereInput{
+						HasCustomDomainWith: []*testclient.CustomDomainWhereInput{
 							{
 								CnameRecord: lo.ToPtr("non-existent-domain.com"),
 							},
@@ -220,20 +220,20 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateTrustCenterInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateTrustCenterInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:    "happy path for different organization",
-			request: openlaneclient.CreateTrustCenterInput{},
+			request: testclient.CreateTrustCenterInput{},
 			client:  suite.client.api,
 			ctx:     testUser2.UserCtx,
 		},
 		{
 			name: "custom domain for different organization should error",
-			request: openlaneclient.CreateTrustCenterInput{
+			request: testclient.CreateTrustCenterInput{
 				CustomDomainID: &customDomainAnotherOrg.ID,
 			},
 			client:      suite.client.api,
@@ -242,7 +242,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 		},
 		{
 			name: "custom domain setting",
-			request: openlaneclient.CreateTrustCenterInput{
+			request: testclient.CreateTrustCenterInput{
 				CustomDomainID: &customDomain.ID,
 			},
 			client: suite.client.api,
@@ -250,8 +250,8 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 		},
 		{
 			name: "happy path with settings for different organization",
-			request: openlaneclient.CreateTrustCenterInput{
-				CreateTrustCenterSetting: &openlaneclient.CreateTrustCenterSettingInput{
+			request: testclient.CreateTrustCenterInput{
+				CreateTrustCenterSetting: &testclient.CreateTrustCenterSettingInput{
 					Title: lo.ToPtr(gofakeit.Name()),
 				},
 			},
@@ -260,14 +260,14 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 		},
 		{
 			name:        "not authorized",
-			request:     openlaneclient.CreateTrustCenterInput{},
+			request:     testclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "duplicate trust center for same organization",
-			request:     openlaneclient.CreateTrustCenterInput{},
+			request:     testclient.CreateTrustCenterInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "trustcenter already exists", // This will be the error when trying to create a duplicate
@@ -341,7 +341,7 @@ func TestGetAllTrustCenters(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
 		expectedErr     string
@@ -427,15 +427,15 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 	testCases := []struct {
 		name          string
 		trustCenterID string
-		request       openlaneclient.UpdateTrustCenterInput
-		client        *openlaneclient.OpenlaneClient
+		request       testclient.UpdateTrustCenterInput
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
 	}{
 		{
 			name:          "happy path, update tags",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"updated", "test"},
 			},
 			client: suite.client.api,
@@ -444,7 +444,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "happy path, update custom domain",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				CustomDomainID: &customDomain.ID,
 			},
 			client: suite.client.api,
@@ -453,8 +453,8 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "happy path, update settings",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
-				UpdateTrustCenterSetting: &openlaneclient.UpdateTrustCenterSettingInput{
+			request: testclient.UpdateTrustCenterInput{
+				UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 					Title:        lo.ToPtr("Updated Trust Center Title"),
 					Overview:     lo.ToPtr("Updated Trust Center Overview"),
 					PrimaryColor: lo.ToPtr("#FF5733"),
@@ -466,7 +466,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "happy path, append tags",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				AppendTags: []string{"appended", "tag"},
 			},
 			client: suite.client.api,
@@ -475,7 +475,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "happy path, using admin user",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"admin", "update"},
 			},
 			client: suite.client.api,
@@ -484,7 +484,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "happy path, using personal access token",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"pat", "update"},
 			},
 			client: suite.client.apiWithPAT,
@@ -493,7 +493,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "not authorized, view only user",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"unauthorized"},
 			},
 			client:      suite.client.api,
@@ -503,7 +503,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "not authorized, different org user",
 			trustCenterID: trustCenter.ID,
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"unauthorized"},
 			},
 			client:      suite.client.api,
@@ -513,7 +513,7 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 		{
 			name:          "trust center not found",
 			trustCenterID: "non-existent-id",
-			request: openlaneclient.UpdateTrustCenterInput{
+			request: testclient.UpdateTrustCenterInput{
 				Tags: []string{"test"},
 			},
 			client:      suite.client.api,
@@ -571,7 +571,7 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -648,7 +648,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 		queryID        string
 		trustCenterID  string
 		organizationID string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		expectedErr    string
 		shouldSucceed  bool
 	}{
@@ -730,7 +730,7 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 		name           string
 		trustCenterID  string
 		organizationID string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		expectedCount  int
 	}{
 		{
@@ -783,8 +783,8 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		settingID   string
 		logoPath    string
 		invalidFile bool
-		updateInput openlaneclient.UpdateTrustCenterSettingInput
-		client      *openlaneclient.OpenlaneClient
+		updateInput testclient.UpdateTrustCenterSettingInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -792,7 +792,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:        "happy path - update logo",
 			settingID:   trustCenter.Edges.Setting.ID,
 			logoPath:    "testdata/uploads/logo.png",
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 		},
@@ -800,7 +800,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update logo with other fields",
 			settingID: trustCenter.Edges.Setting.ID,
 			logoPath:  "testdata/uploads/logo.png",
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				Title:        lo.ToPtr("Updated Title with Logo"),
 				PrimaryColor: lo.ToPtr("#FF5733"),
 			},
@@ -813,7 +813,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			settingID:   trustCenter.Edges.Setting.ID,
 			logoPath:    "testdata/uploads/hello.txt",
 			invalidFile: true,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "unsupported mime type uploaded: text/plain",
@@ -821,7 +821,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:        "not authorized - view only user",
 			settingID:   trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
@@ -829,7 +829,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:        "not authorized - different organization user",
 			settingID:   trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
@@ -837,7 +837,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:        "trust center setting not found",
 			settingID:   "non-existent-setting-id",
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			updateInput: testclient.UpdateTrustCenterSettingInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
@@ -846,7 +846,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "update without logo file - should work",
 			settingID: trustCenter.Edges.Setting.ID,
 			logoPath:  "", // No logo file
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				Title:        lo.ToPtr("Updated Title Only"),
 				Overview:     lo.ToPtr("Updated Overview"),
 				PrimaryColor: lo.ToPtr("#00FF00"),
@@ -857,7 +857,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update theme mode to EASY",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeEasy),
 			},
 			client: suite.client.api,
@@ -866,7 +866,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update theme mode to ADVANCED",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
 			},
 			client: suite.client.api,
@@ -875,7 +875,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update font",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				Font: lo.ToPtr("Arial, sans-serif"),
 			},
 			client: suite.client.api,
@@ -884,7 +884,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update foreground color",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				ForegroundColor: lo.ToPtr("#333333"),
 			},
 			client: suite.client.api,
@@ -893,7 +893,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update background color",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				BackgroundColor: lo.ToPtr("#FFFFFF"),
 			},
 			client: suite.client.api,
@@ -902,7 +902,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update accent color",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				AccentColor: lo.ToPtr("#007BFF"),
 			},
 			client: suite.client.api,
@@ -911,7 +911,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 		{
 			name:      "happy path - update all theme fields together",
 			settingID: trustCenter.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+			updateInput: testclient.UpdateTrustCenterSettingInput{
 				ThemeMode:       lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
 				PrimaryColor:    lo.ToPtr("#FF6B35"),
 				Font:            lo.ToPtr("Roboto, sans-serif"),

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryEntity(t *testing.T) {
@@ -21,7 +21,7 @@ func TestQueryEntity(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -88,7 +88,7 @@ func TestQueryEntities(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -138,14 +138,14 @@ func TestMutationCreateEntity(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateEntityInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateEntityInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("fraser fir"),
 			},
 			client: suite.client.api,
@@ -153,13 +153,13 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name:        lo.ToPtr("mitb"),
 				DisplayName: lo.ToPtr("fraser fir"),
 				Description: lo.ToPtr("the pine trees of appalachia"),
 				Domains:     []string{"https://appalachiatrees.com"},
 				Status:      lo.ToPtr("Onboarding"),
-				Note: &openlaneclient.CreateNoteInput{
+				Note: &testclient.CreateNoteInput{
 					Text:    "matt is the best",
 					OwnerID: &testUser1.OrganizationID,
 				},
@@ -169,7 +169,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("douglas fir"),
 			},
 			client: suite.client.apiWithToken,
@@ -177,7 +177,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name:    lo.ToPtr("blue spruce"),
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -186,7 +186,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "do not create if not allowed",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("test-entity"),
 			},
 			client:      suite.client.api,
@@ -195,7 +195,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "missing name, but display name provided",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				DisplayName: lo.ToPtr("fraser firs"),
 			},
 			client: suite.client.api,
@@ -203,7 +203,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "name already exists, different casing",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("Blue spruce"),
 			},
 			client:      suite.client.api,
@@ -212,7 +212,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		},
 		{
 			name: "invalid domain(s)",
-			request: openlaneclient.CreateEntityInput{
+			request: testclient.CreateEntityInput{
 				Name:    lo.ToPtr("stone pines"),
 				Domains: []string{"appalachiatrees"},
 			},
@@ -290,16 +290,16 @@ func TestMutationUpdateEntity(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateEntityInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateEntityInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update display name",
-			request: openlaneclient.UpdateEntityInput{
+			request: testclient.UpdateEntityInput{
 				DisplayName: lo.ToPtr("blue spruce"),
-				Note: &openlaneclient.CreateNoteInput{
+				Note: &testclient.CreateNoteInput{
 					Text: "the pine tree with blue-green colored needles",
 				},
 			},
@@ -308,7 +308,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		},
 		{
 			name: "update description using api token",
-			request: openlaneclient.UpdateEntityInput{
+			request: testclient.UpdateEntityInput{
 				Description: lo.ToPtr("the pine tree with blue-green colored needles"),
 			},
 			client: suite.client.apiWithToken,
@@ -316,8 +316,8 @@ func TestMutationUpdateEntity(t *testing.T) {
 		},
 		{
 			name: "update notes, domains using personal access token",
-			request: openlaneclient.UpdateEntityInput{
-				Note: &openlaneclient.CreateNoteInput{
+			request: testclient.UpdateEntityInput{
+				Note: &testclient.CreateNoteInput{
 					Text: "the pine tree with blue-green colored needles",
 				},
 				Domains: []string{"https://appalachiatrees.com"},
@@ -327,7 +327,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		},
 		{
 			name: "update status and domain",
-			request: openlaneclient.UpdateEntityInput{
+			request: testclient.UpdateEntityInput{
 				Status:        lo.ToPtr("Onboarding"),
 				AppendDomains: []string{"example.com"},
 			},
@@ -336,7 +336,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		},
 		{
 			name: "not allowed to update",
-			request: openlaneclient.UpdateEntityInput{
+			request: testclient.UpdateEntityInput{
 				Description: lo.ToPtr("pine trees of the west"),
 			},
 			client:      suite.client.api,
@@ -345,7 +345,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		},
 		{
 			name: "not allowed to update, no access to entity",
-			request: openlaneclient.UpdateEntityInput{
+			request: testclient.UpdateEntityInput{
 				Description: lo.ToPtr("pine trees of the west"),
 			},
 			client:      suite.client.api,
@@ -415,7 +415,7 @@ func TestMutationDeleteEntity(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

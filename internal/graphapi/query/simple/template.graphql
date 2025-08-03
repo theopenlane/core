@@ -1,0 +1,153 @@
+
+mutation CreateBulkCSVTemplate($input: Upload!) {
+  createBulkCSVTemplate(input: $input) {
+    templates {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
+  createBulkTemplate(input: $input) {
+    templates {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTemplate($input: CreateTemplateInput!) {
+  createTemplate(input: $input) {
+    template {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTemplate($deleteTemplateId: ID!) {
+  deleteTemplate(id: $deleteTemplateId) {
+    deletedID
+  }
+}
+
+query GetAllTemplates {
+  templates {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        jsonconfig
+        name
+        ownerID
+        tags
+        templateType
+        uischema
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTemplateByID($templateId: ID!) {
+  template(id: $templateId) {
+    createdAt
+    createdBy
+    description
+    id
+    jsonconfig
+    name
+    ownerID
+    tags
+    templateType
+    uischema
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTemplates($first: Int, $last: Int, $where: TemplateWhereInput) {
+  templates(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        jsonconfig
+        name
+        ownerID
+        tags
+        templateType
+        uischema
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
+  updateTemplate(id: $updateTemplateId, input: $input) {
+    template {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+    }
+  }
+}

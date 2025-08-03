@@ -146,7 +146,6 @@ type ComplexityRoot struct {
 		Tags                            func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
-		Users                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -5552,18 +5551,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.UpdatedBy(childComplexity), true
-
-	case "ActionPlan.users":
-		if e.complexity.ActionPlan.Users == nil {
-			break
-		}
-
-		args, err := ec.field_ActionPlan_users_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.ActionPlan.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -36432,37 +36419,6 @@ type ActionPlan implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
-  users(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Users returned from the connection.
-    """
-    orderBy: [UserOrder!]
-
-    """
-    Filtering options for Users returned from the connection.
-    """
-    where: UserWhereInput
-  ): UserConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -37403,11 +37359,6 @@ input ActionPlanWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
-  """
-  users edge predicates
-  """
-  hasUsers: Boolean
-  hasUsersWith: [UserWhereInput!]
   """
   programs edge predicates
   """
@@ -42834,7 +42785,6 @@ input CreateActionPlanInput {
   ownerID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
-  userIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -83823,9 +83773,6 @@ input UpdateActionPlanInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean

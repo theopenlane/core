@@ -6,8 +6,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -19,7 +19,7 @@ func TestQueryDNSVerificationByID(t *testing.T) {
 		name                 string
 		expectedCloudflareID string
 		queryID              string
-		client               *openlaneclient.OpenlaneClient
+		client               *testclient.TestClient
 		ctx                  context.Context
 		errorMsg             string
 	}{
@@ -90,10 +90,10 @@ func TestQueryDNSVerifications(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
-		where           *openlaneclient.DNSVerificationWhereInput
+		where           *testclient.DNSVerificationWhereInput
 	}{
 		{
 			name:            "return all",
@@ -111,7 +111,7 @@ func TestQueryDNSVerifications(t *testing.T) {
 			name:   "return all, sysadmin user",
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
-			where: &openlaneclient.DNSVerificationWhereInput{
+			where: &testclient.DNSVerificationWhereInput{
 				OwnerID: lo.ToPtr(testUser1.OrganizationID),
 			},
 			expectedResults: 2,
@@ -120,7 +120,7 @@ func TestQueryDNSVerifications(t *testing.T) {
 			name:   "query by cloudflare hostname ID",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.DNSVerificationWhereInput{
+			where: &testclient.DNSVerificationWhereInput{
 				CloudflareHostnameID: &dnsVerification1.CloudflareHostnameID,
 			},
 			expectedResults: 1,
@@ -129,7 +129,7 @@ func TestQueryDNSVerifications(t *testing.T) {
 			name:   "query by cloudflare hostname ID, not found",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.DNSVerificationWhereInput{
+			where: &testclient.DNSVerificationWhereInput{
 				CloudflareHostnameID: &nonExistentCloudflareID,
 			},
 			expectedResults: 0,
@@ -138,7 +138,7 @@ func TestQueryDNSVerifications(t *testing.T) {
 			name:   "query by DNS TXT record",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.DNSVerificationWhereInput{
+			where: &testclient.DNSVerificationWhereInput{
 				DNSTxtRecord: &dnsVerification2.DNSTxtRecord,
 			},
 			expectedResults: 1,
@@ -167,14 +167,14 @@ func TestQueryDNSVerifications(t *testing.T) {
 func TestMutationCreateDNSVerification(t *testing.T) {
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateDNSVerificationInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateDNSVerificationInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path",
-			request: openlaneclient.CreateDNSVerificationInput{
+			request: testclient.CreateDNSVerificationInput{
 				CloudflareHostnameID:       "test-cloudflare-id",
 				DNSTxtRecord:               "_openlane-challenge.example.com",
 				DNSTxtValue:                "test-dns-value",
@@ -187,7 +187,7 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 		},
 		{
 			name: "not authorized",
-			request: openlaneclient.CreateDNSVerificationInput{
+			request: testclient.CreateDNSVerificationInput{
 				CloudflareHostnameID:       "test-cloudflare-id-unauthorized",
 				DNSTxtRecord:               "_openlane-challenge.unauthorized.example.com",
 				DNSTxtValue:                "test-dns-value-unauthorized",
@@ -201,7 +201,7 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 		},
 		{
 			name: "missing cloudflare hostname ID",
-			request: openlaneclient.CreateDNSVerificationInput{
+			request: testclient.CreateDNSVerificationInput{
 				DNSTxtRecord:               "_openlane-challenge.missing.example.com",
 				DNSTxtValue:                "test-dns-value-missing",
 				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
@@ -246,7 +246,7 @@ func TestMutationDeleteDNSVerification(t *testing.T) {
 	testCases := []struct {
 		name        string
 		id          string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -301,17 +301,17 @@ func TestUpdateDNSVerification(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		errorMsg    string
-		updateInput openlaneclient.UpdateDNSVerificationInput
+		updateInput testclient.UpdateDNSVerificationInput
 	}{
 		{
 			name:    "happy path",
 			queryID: dnsVerification.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
-			updateInput: openlaneclient.UpdateDNSVerificationInput{
+			updateInput: testclient.UpdateDNSVerificationInput{
 				AcmeChallengeStatus:         lo.ToPtr(enums.SSLVerificationStatusActive),
 				DNSVerificationStatus:       lo.ToPtr(enums.DNSVerificationStatusActive),
 				AcmeChallengeStatusReason:   lo.ToPtr("all good!"),
@@ -324,7 +324,7 @@ func TestUpdateDNSVerification(t *testing.T) {
 			queryID: dnsVerification.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			updateInput: openlaneclient.UpdateDNSVerificationInput{
+			updateInput: testclient.UpdateDNSVerificationInput{
 				Tags: []string{"unauthorized"},
 			},
 			errorMsg: notFoundErrorMsg,
@@ -364,7 +364,7 @@ func TestGetAllDNSVerifications(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
 		expectedErr     string

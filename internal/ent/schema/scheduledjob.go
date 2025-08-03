@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -106,6 +107,9 @@ func (c ScheduledJob) Edges() []ent.Edge {
 			edgeSchema: JobTemplate{},
 			field:      "job_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(JobTemplate{}.Name()),
+			},
 		}),
 
 		defaultEdgeToWithPagination(c, Control{}),
@@ -116,6 +120,9 @@ func (c ScheduledJob) Edges() []ent.Edge {
 			edgeSchema: JobRunner{},
 			field:      "job_runner_id",
 			required:   false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

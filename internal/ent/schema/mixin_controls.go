@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
@@ -58,6 +59,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			comment:    "the group of users who are responsible for the control, will be assigned tasks, approval, etc.",
 			annotations: []schema.Annotation{
 				entgql.OrderField("CONTROL_OWNER_name"),
+				accessmap.EdgeAuthCheck(Group{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -66,6 +68,10 @@ func (m ControlMixin) Edges() []ent.Edge {
 			t:          Group.Type,
 			field:      "delegate_id",
 			comment:    "temporary delegate for the control, used for temporary control ownership",
+			annotations: []schema.Annotation{
+				entgql.OrderField("DELEGATE_name"),
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			},
 		}),
 	}
 }

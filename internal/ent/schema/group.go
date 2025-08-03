@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -108,6 +109,7 @@ func (g Group) Edges() []ent.Edge {
 			t:          GroupSetting.Type,
 			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("Group"),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		edge.From("users", User.Type).

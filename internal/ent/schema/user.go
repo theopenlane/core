@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -199,6 +200,7 @@ func (u User) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				accessmap.EdgeNoAuthCheck(), // memberhship edges are handled by the parent
 			).
 			Through("group_memberships", GroupMembership.Type),
 		edge.To("organizations", Organization.Type).
@@ -206,6 +208,7 @@ func (u User) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				accessmap.EdgeNoAuthCheck(), // memberhship edges are handled by the parent
 			).
 			Through("org_memberships", OrgMembership.Type),
 
@@ -241,7 +244,9 @@ func (u User) Edges() []ent.Edge {
 			Annotations(
 				entgql.RelayConnection(),
 				entgql.QueryField(),
-				entgql.MultiOrder()),
+				entgql.MultiOrder(),
+				accessmap.EdgeNoAuthCheck(), // membership edges are handled by the parent
+			),
 	}
 }
 

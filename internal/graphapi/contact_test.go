@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"strings"
 	"testing"
 
@@ -14,9 +15,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"golang.org/x/exp/slices"
 )
 
 func TestQueryContact(t *testing.T) {
@@ -25,7 +26,7 @@ func TestQueryContact(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		expected *ent.Contact
 		errorMsg string
@@ -88,7 +89,7 @@ func TestQueryContacts(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -141,14 +142,14 @@ func TestQueryContacts(t *testing.T) {
 func TestMutationCreateContact(t *testing.T) {
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateContactInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateContactInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateContactInput{
+			request: testclient.CreateContactInput{
 				FullName: "Aemond Targaryen",
 			},
 			client: suite.client.api,
@@ -156,7 +157,7 @@ func TestMutationCreateContact(t *testing.T) {
 		},
 		{
 			name: "view only user cannot create",
-			request: openlaneclient.CreateContactInput{
+			request: testclient.CreateContactInput{
 				FullName: "Aemond Targaryen",
 			},
 			client:      suite.client.api,
@@ -165,7 +166,7 @@ func TestMutationCreateContact(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateContactInput{
+			request: testclient.CreateContactInput{
 				FullName: "Rhaenys Targaryen",
 			},
 			client: suite.client.apiWithToken,
@@ -173,7 +174,7 @@ func TestMutationCreateContact(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateContactInput{
+			request: testclient.CreateContactInput{
 				FullName: "Aegon Targaryen",
 				OwnerID:  &testUser1.OrganizationID,
 			},
@@ -182,7 +183,7 @@ func TestMutationCreateContact(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateContactInput{
+			request: testclient.CreateContactInput{
 				FullName:    "Aemond Targaryen",
 				Email:       lo.ToPtr("Atargarygen@dragon.com"),
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
@@ -195,7 +196,7 @@ func TestMutationCreateContact(t *testing.T) {
 		},
 		{
 			name: "missing required field, name",
-			request: openlaneclient.CreateContactInput{
+			request: testclient.CreateContactInput{
 				Email: lo.ToPtr("atargarygen@dragon.com"),
 			},
 			client:      suite.client.api,
@@ -266,14 +267,14 @@ func TestMutationUpdateContact(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateContactInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateContactInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update name",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				FullName: lo.ToPtr("Alicent Hightower"),
 			},
 			client: suite.client.api,
@@ -281,7 +282,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "view only user cannot update",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
 			},
 			client:      suite.client.api,
@@ -290,7 +291,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "no access, cannot update",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
 			},
 			client:      suite.client.api,
@@ -299,7 +300,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update phone number, using api token",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
 			},
 			client: suite.client.apiWithToken,
@@ -307,7 +308,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update status, using personal access token",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				Status: &enums.UserStatusInactive,
 			},
 			client: suite.client.apiWithPAT,
@@ -315,7 +316,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update email",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				Email: lo.ToPtr("a.hightower@dragon.net"),
 			},
 			client: suite.client.api,
@@ -323,7 +324,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update phone number, invalid",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				PhoneNumber: lo.ToPtr("not a phone number"),
 			},
 			client:      suite.client.api,
@@ -332,7 +333,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update email, invalid",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				Email: lo.ToPtr("a.hightower"),
 			},
 			client:      suite.client.api,
@@ -341,7 +342,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update title",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				Title: lo.ToPtr("Queen of the Seven Kingdoms"),
 			},
 			client: suite.client.api,
@@ -349,7 +350,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		},
 		{
 			name: "update company",
-			request: openlaneclient.UpdateContactInput{
+			request: testclient.UpdateContactInput{
 				Company: lo.ToPtr("House Targaryen"),
 			},
 			client: suite.client.api,
@@ -407,7 +408,7 @@ func TestMutationDeleteContact(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -487,7 +488,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		name                 string
 		ids                  []string
 		input                openlaneclient.UpdateContactInput
-		client               *openlaneclient.OpenlaneClient
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int

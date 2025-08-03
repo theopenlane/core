@@ -9,6 +9,7 @@ import (
 	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -109,7 +110,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 	suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *openlaneclient.OpenlaneClient {
+func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *testclient.TestClient {
 	// setup client with a personal access token
 	pat := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{user.OrganizationID, user.PersonalOrgID}}).MustNew(user.UserCtx, t)
 
@@ -123,7 +124,7 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 	return apiClientPat
 }
 
-func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *openlaneclient.OpenlaneClient {
+func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *testclient.TestClient {
 	// setup client with an API token
 	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(ctx, t)
 

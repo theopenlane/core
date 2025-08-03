@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -17,7 +17,7 @@ func TestQueryMappableDomainByID(t *testing.T) {
 		name         string
 		expectedName string
 		queryID      string
-		client       *openlaneclient.OpenlaneClient
+		client       *testclient.TestClient
 		ctx          context.Context
 		errorMsg     string
 	}{
@@ -65,10 +65,10 @@ func TestQueryMappableDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
-		where           *openlaneclient.MappableDomainWhereInput
+		where           *testclient.MappableDomainWhereInput
 	}{
 		{
 			name:            "return all",
@@ -80,7 +80,7 @@ func TestQueryMappableDomains(t *testing.T) {
 			name:   "query by name",
 			client: suite.client.api,
 			ctx:    testUser2.UserCtx,
-			where: &openlaneclient.MappableDomainWhereInput{
+			where: &testclient.MappableDomainWhereInput{
 				Name: &mappableDomain1.Name,
 			},
 			expectedResults: 1,
@@ -89,7 +89,7 @@ func TestQueryMappableDomains(t *testing.T) {
 			name:   "query by name, does not exist",
 			client: suite.client.api,
 			ctx:    testUser2.UserCtx,
-			where: &openlaneclient.MappableDomainWhereInput{
+			where: &testclient.MappableDomainWhereInput{
 				Name: &bologneName,
 			},
 			expectedResults: 0,
@@ -114,14 +114,14 @@ func TestQueryMappableDomains(t *testing.T) {
 func TestMutationCreateMappableDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateMappableDomainInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateMappableDomainInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path",
-			request: openlaneclient.CreateMappableDomainInput{
+			request: testclient.CreateMappableDomainInput{
 				Name:   "trust.theopenlane.io",
 				ZoneID: "trust-zone-id",
 			},
@@ -130,7 +130,7 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 		},
 		{
 			name: "invalid domain",
-			request: openlaneclient.CreateMappableDomainInput{
+			request: testclient.CreateMappableDomainInput{
 				Name:   "!not-a-domain",
 				ZoneID: "trust-zone-id",
 			},
@@ -140,7 +140,7 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 		},
 		{
 			name: "not system admin, unauthorized",
-			request: openlaneclient.CreateMappableDomainInput{
+			request: testclient.CreateMappableDomainInput{
 				Name:   "trust.theopenlane.io",
 				ZoneID: "trust-zone-id",
 			},
@@ -172,15 +172,15 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 func TestMutationCreateBulkMappableDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
-		requests    []*openlaneclient.CreateMappableDomainInput
-		client      *openlaneclient.OpenlaneClient
+		requests    []*testclient.CreateMappableDomainInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 		numExpected int
 	}{
 		{
 			name: "happy path - multiple domains",
-			requests: []*openlaneclient.CreateMappableDomainInput{
+			requests: []*testclient.CreateMappableDomainInput{
 				{
 					Name:   "bulk1.theopenlane.io",
 					ZoneID: "bulk1-zone-id",
@@ -200,7 +200,7 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 		},
 		{
 			name: "happy path - single domain",
-			requests: []*openlaneclient.CreateMappableDomainInput{
+			requests: []*testclient.CreateMappableDomainInput{
 				{
 					Name:   "singlebulk.theopenlane.io",
 					ZoneID: "singlebulk-zone-id",
@@ -212,7 +212,7 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 		},
 		{
 			name: "invalid domain in batch",
-			requests: []*openlaneclient.CreateMappableDomainInput{
+			requests: []*testclient.CreateMappableDomainInput{
 				{
 					Name:   "valid.theopenlane.io",
 					ZoneID: "singlebulk-zone-id",
@@ -228,7 +228,7 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 		},
 		{
 			name: "not system admin, unauthorized",
-			requests: []*openlaneclient.CreateMappableDomainInput{
+			requests: []*testclient.CreateMappableDomainInput{
 				{
 					Name:   "unauthorized.theopenlane.io",
 					ZoneID: "singlebulk-zone-id",
@@ -240,7 +240,7 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 		},
 		{
 			name:        "empty input",
-			requests:    []*openlaneclient.CreateMappableDomainInput{},
+			requests:    []*testclient.CreateMappableDomainInput{},
 			client:      suite.client.api,
 			ctx:         systemAdminUser.UserCtx,
 			expectedErr: "input is required",
@@ -283,17 +283,17 @@ func TestUpdateMappableDomain(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
-		input    openlaneclient.UpdateMappableDomainInput
+		input    testclient.UpdateMappableDomainInput
 	}{
 		{
 			name:    "happy path",
 			queryID: mappableDomain.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
-			input: openlaneclient.UpdateMappableDomainInput{
+			input: testclient.UpdateMappableDomainInput{
 				Tags: []string{"hello"},
 			},
 		},
@@ -303,7 +303,7 @@ func TestUpdateMappableDomain(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      systemAdminUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
-			input: openlaneclient.UpdateMappableDomainInput{
+			input: testclient.UpdateMappableDomainInput{
 				Tags: []string{"hello"},
 			},
 		},
@@ -313,7 +313,7 @@ func TestUpdateMappableDomain(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
-			input: openlaneclient.UpdateMappableDomainInput{
+			input: testclient.UpdateMappableDomainInput{
 				Tags: []string{"hello"},
 			},
 		},
@@ -347,7 +347,7 @@ func TestGetAllMappableDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 		expectedErr     string

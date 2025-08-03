@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
@@ -155,10 +156,16 @@ func getApproverEdges(documentType string) []ent.Edge {
 		edge.To("approver", Group.Type).
 			Unique().
 			Field("approver_id").
+			Annotations(
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			).
 			Comment(fmt.Sprintf("the group of users who are responsible for approving the %s", documentType)),
 		edge.To("delegate", Group.Type).
 			Unique().
 			Field("delegate_id").
+			Annotations(
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			).
 			Comment(fmt.Sprintf("temporary delegates for the %s, used for temporary approval", documentType)),
 	}
 }

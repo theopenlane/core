@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
@@ -301,6 +302,8 @@ func basicEdgeTo(e *edgeDefinition, unique bool) ent.Edge {
 		edgeTo = edgeTo.Comment(e.comment)
 	}
 
+	addEdgeToAccessAnnotation(e)
+
 	return edgeTo
 }
 
@@ -343,6 +346,8 @@ func basicEdgeFrom(e *edgeDefinition, unique bool) ent.Edge {
 		edgeFrom.Comment(e.comment)
 	}
 
+	addEdgeFromAccessAnnotation(e)
+
 	return edgeFrom
 }
 
@@ -351,5 +356,47 @@ func basicEdgeFrom(e *edgeDefinition, unique bool) ent.Edge {
 func validateEdgeDefinition(e *edgeDefinition) {
 	if e.name == "" || e.t == nil {
 		log.Fatal().Str("schema", getName(e.fromSchema)).Msg("edge_definition: name and type must be set")
+	}
+}
+
+func addEdgeAccessAnnotation(e *edgeDefinition) bool {
+	// check for the existence of the edge auth check annotation
+	// and return if if already exists
+	for _, ann := range e.annotations {
+		if _, ok := ann.(accessmap.Annotations); ok {
+			return false
+		}
+	}
+
+	// return early if the edge schema is nil
+	if e.edgeSchema == nil {
+		return false
+	}
+
+	// we need to check the schema to determine if we should add the annotation
+	return true
+}
+
+func addEdgeToAccessAnnotation(e *edgeDefinition) {
+	if checkSchema := addEdgeAccessAnnotation(e); checkSchema {
+		toSchema := toSchemaFuncs(e.edgeSchema)
+
+		if e.name != toSchema.PluralName() {
+			e.annotations = append(e.annotations, accessmap.EdgeAuthCheck(toSchema.Name()))
+
+			return
+		}
+	}
+}
+
+func addEdgeFromAccessAnnotation(e *edgeDefinition) {
+	if checkSchema := addEdgeAccessAnnotation(e); checkSchema {
+		fromSchema := toSchemaFuncs(e.fromSchema)
+
+		if e.name != fromSchema.PluralName() {
+			e.annotations = append(e.annotations, accessmap.EdgeAuthCheck(fromSchema.Name()))
+
+			return
+		}
 	}
 }

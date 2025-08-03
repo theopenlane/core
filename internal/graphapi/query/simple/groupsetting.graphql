@@ -1,0 +1,139 @@
+
+mutation CreateBulkCSVGroupSetting($input: Upload!) {
+  createBulkCSVGroupSetting(input: $input) {
+    groupSettings {
+      createdAt
+      createdBy
+      groupID
+      id
+      joinPolicy
+      syncToGithub
+      syncToSlack
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}
+
+mutation CreateBulkGroupSetting($input: [CreateGroupSettingInput!]) {
+  createBulkGroupSetting(input: $input) {
+    groupSettings {
+      createdAt
+      createdBy
+      groupID
+      id
+      joinPolicy
+      syncToGithub
+      syncToSlack
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}
+
+mutation CreateGroupSetting($input: CreateGroupSettingInput!) {
+  createGroupSetting(input: $input) {
+    groupSetting {
+      createdAt
+      createdBy
+      groupID
+      id
+      joinPolicy
+      syncToGithub
+      syncToSlack
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}
+
+mutation DeleteGroupSetting($deleteGroupSettingId: ID!) {
+  deleteGroupSetting(id: $deleteGroupSettingId) {
+    deletedID
+  }
+}
+
+query GetAllGroupSettings {
+  groupSettings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        groupID
+        id
+        joinPolicy
+        syncToGithub
+        syncToSlack
+        updatedAt
+        updatedBy
+        visibility
+      }
+    }
+  }
+}
+query GetGroupSettingByID($groupSettingId: ID!) {
+  groupSetting(id: $groupSettingId) {
+    createdAt
+    createdBy
+    groupID
+    id
+    joinPolicy
+    syncToGithub
+    syncToSlack
+    updatedAt
+    updatedBy
+    visibility
+  }
+}
+
+query GetGroupSettings($first: Int, $last: Int, $where: GroupSettingWhereInput) {
+  groupSettings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        groupID
+        id
+        joinPolicy
+        syncToGithub
+        syncToSlack
+        updatedAt
+        updatedBy
+        visibility
+      }
+    }
+  }
+}
+mutation UpdateGroupSetting($updateGroupSettingId: ID!, $input: UpdateGroupSettingInput!) {
+  updateGroupSetting(id: $updateGroupSettingId, input: $input) {
+    groupSetting {
+      createdAt
+      createdBy
+      groupID
+      id
+      joinPolicy
+      syncToGithub
+      syncToSlack
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}

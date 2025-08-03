@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -23,7 +23,7 @@ func TestQueryGroupMembers(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expected    *ent.GroupMembership
 		errExpected bool
@@ -70,7 +70,7 @@ func TestQueryGroupMembers(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			groupID := tc.queryID
-			whereInput := openlaneclient.GroupMembershipWhereInput{
+			whereInput := testclient.GroupMembershipWhereInput{
 				GroupID: &groupID,
 			}
 			resp, err := tc.client.GetGroupMembersByGroupID(tc.ctx, &whereInput)
@@ -122,7 +122,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 		groupID string
 		userID  string
 		role    enums.Role
-		client  *openlaneclient.OpenlaneClient
+		client  *testclient.TestClient
 		ctx     context.Context
 		errMsg  string
 	}{
@@ -226,7 +226,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			role := tc.role
-			input := openlaneclient.CreateGroupMembershipInput{
+			input := testclient.CreateGroupMembershipInput{
 				GroupID: tc.groupID,
 				UserID:  tc.userID,
 				Role:    &role,
@@ -264,7 +264,7 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 		name          string
 		groupMemberID string
 		role          enums.Role
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		errMsg        string
 	}{
@@ -325,7 +325,7 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			role := tc.role
-			input := openlaneclient.UpdateGroupMembershipInput{
+			input := testclient.UpdateGroupMembershipInput{
 				Role: &role,
 			}
 
@@ -361,7 +361,7 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

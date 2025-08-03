@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -42,12 +43,13 @@ import (
 )
 
 const (
-	graphDir       = "./internal/graphapi/"
-	graphSchemaDir = graphDir + "schema/"
-	graphQueryDir  = graphDir + "query/"
-	schemaPath     = "./internal/ent/schema"
-	templateDir    = "./internal/ent/generate/templates/ent"
-	featureMapDir  = "./internal/entitlements/features/"
+	graphDir            = "./internal/graphapi/"
+	graphSchemaDir      = graphDir + "schema/"
+	graphQueryDir       = graphDir + "query/"
+	graphSimpleQueryDir = graphDir + "query/simple/"
+	schemaPath          = "./internal/ent/schema"
+	templateDir         = "./internal/ent/generate/templates/ent"
+	featureMapDir       = "./internal/entitlements/features/"
 )
 
 func main() {
@@ -81,6 +83,12 @@ func main() {
 		log.Fatal().Err(err).Msg("creating entgql extension")
 	}
 
+	log.Info().Msg("adding accessmap extension")
+
+	accessMapExt := accessmap.New(
+		accessmap.WithSchemaPath(schemaPath),
+	)
+
 	log.Info().Msg("running ent codegen with extensions")
 
 	if err := entc.Generate(schemaPath, &gen.Config{
@@ -88,8 +96,10 @@ func main() {
 		Hooks: []gen.Hook{
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
+			genhooks.GenQuery(graphSimpleQueryDir),
 			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
 			genhooks.GenFeatureMap(featureMapDir),
+			accessMapExt.Hook(),
 		},
 		Package: "github.com/theopenlane/core/internal/ent/generated",
 		Features: []gen.Feature{

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/mixin"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 )
@@ -66,6 +67,7 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				accessmap.EdgeAuthCheck(Group{}.Name()),
 			)
 
 		edges = append(edges, edge)

@@ -3597,8 +3597,6 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
-			case "users":
-				return ec.fieldContext_ActionPlan_users(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
 			}
@@ -3863,8 +3861,6 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
-			case "users":
-				return ec.fieldContext_ActionPlan_users(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
 			}
@@ -4021,8 +4017,6 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_risks(ctx, field)
 			case "controls":
 				return ec.fieldContext_ActionPlan_controls(ctx, field)
-			case "users":
-				return ec.fieldContext_ActionPlan_users(ctx, field)
 			case "programs":
 				return ec.fieldContext_ActionPlan_programs(ctx, field)
 			}

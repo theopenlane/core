@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -136,6 +137,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
+			accessmap.EdgeAuthCheck(Group{}.Name()),
 		)
 
 	editEdge := edge.To("editors", Group.Type).
@@ -144,6 +146,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
+			accessmap.EdgeAuthCheck(Group{}.Name()),
 		)
 
 	viewEdge := edge.To("viewers", Group.Type).
@@ -152,6 +155,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
+			accessmap.EdgeAuthCheck(Group{}.Name()),
 		)
 
 	edges := []ent.Edge{blockEdge, editEdge}
@@ -328,6 +332,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 					entgql.RelayConnection(),
 					entgql.QueryField(),
 					entgql.MultiOrder(),
+					accessmap.EdgeAuthCheck(sch.Name()),
 				),
 			edge.From(fmt.Sprintf("%s_blocked_groups", sch.Name()), sch.GetType()).
 				Ref("blocked_groups").
@@ -335,6 +340,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 					entgql.RelayConnection(),
 					entgql.QueryField(),
 					entgql.MultiOrder(),
+					accessmap.EdgeAuthCheck(sch.Name()),
 				),
 		}
 
@@ -348,6 +354,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 					entgql.RelayConnection(),
 					entgql.QueryField(),
 					entgql.MultiOrder(),
+					accessmap.EdgeAuthCheck(sch.Name()),
 				)
 
 			edges = append(edges, viewerEdge)

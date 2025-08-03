@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -23,7 +23,7 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 	testCases := []struct {
 		name          string
 		userID        string
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		errorMsg      string
 		expectedCount int
@@ -83,7 +83,7 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 	testCases := []struct {
 		name     string
 		userID   string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 		tokenID  string

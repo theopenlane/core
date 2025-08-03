@@ -20,10 +20,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryOrganization(t *testing.T) {
@@ -47,7 +47,7 @@ func TestQueryOrganization(t *testing.T) {
 	testCases := []struct {
 		name               string
 		queryID            string
-		client             *openlaneclient.OpenlaneClient
+		client             *testclient.TestClient
 		ctx                context.Context
 		orgMembersExpected int
 		errorMsg           string
@@ -190,8 +190,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 		orgDescription           string
 		parentOrgID              string
 		avatarFile               *graphql.Upload
-		settings                 *openlaneclient.CreateOrganizationSettingInput
-		client                   *openlaneclient.OpenlaneClient
+		settings                 *testclient.CreateOrganizationSettingInput
+		client                   *testclient.TestClient
 		ctx                      context.Context
 		expectedDefaultOrgUpdate bool
 		errorMsg                 string
@@ -217,7 +217,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				Size:        avatarFile.Size,
 				ContentType: avatarFile.ContentType,
 			},
-			settings: &openlaneclient.CreateOrganizationSettingInput{
+			settings: &testclient.CreateOrganizationSettingInput{
 				Domains:             []string{"meow.theopenlane.io"},
 				AllowedEmailDomains: []string{"theopenlane.io"},
 				BillingAddress: &models.Address{
@@ -387,7 +387,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:    "invalid allowed email domains ",
 			orgName: ulids.New().String(), // use ulid to ensure uniqueness
-			settings: &openlaneclient.CreateOrganizationSettingInput{
+			settings: &testclient.CreateOrganizationSettingInput{
 				AllowedEmailDomains: []string{"theopenlane"},
 			},
 			client:   suite.client.api,
@@ -397,7 +397,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		{
 			name:    "invalid domains",
 			orgName: ulids.New().String(), // use ulid to ensure uniqueness
-			settings: &openlaneclient.CreateOrganizationSettingInput{
+			settings: &testclient.CreateOrganizationSettingInput{
 				Domains: []string{"theopenlane"},
 			},
 			client:   suite.client.api,
@@ -416,7 +416,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				}
 			}
 
-			input := openlaneclient.CreateOrganizationInput{
+			input := testclient.CreateOrganizationInput{
 				Name:        tc.orgName,
 				Description: &tc.orgDescription,
 			}
@@ -493,7 +493,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			// ensure entity types are created
 			newCtx := auth.NewTestContextWithOrgID(orgUser.ID, resp.CreateOrganization.Organization.ID)
 
-			et, err := suite.client.api.GetEntityTypes(newCtx, &openlaneclient.EntityTypeWhereInput{
+			et, err := suite.client.api.GetEntityTypes(newCtx, &testclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
 			})
 			assert.NilError(t, err)
@@ -503,7 +503,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			assert.Check(t, is.Equal(resp.CreateOrganization.Organization.ID, *et.EntityTypes.Edges[0].Node.OwnerID))
 
 			// ensure managed groups are created
-			managedGroups, err := suite.client.api.GetGroups(newCtx, &openlaneclient.GroupWhereInput{
+			managedGroups, err := suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
 				IsManaged: lo.ToPtr(true),
 			})
 
@@ -557,22 +557,22 @@ func TestMutationUpdateOrganization(t *testing.T) {
 	testCases := []struct {
 		name        string
 		orgID       string
-		updateInput openlaneclient.UpdateOrganizationInput
+		updateInput testclient.UpdateOrganizationInput
 		avatarFile  *graphql.Upload
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
-		expectedRes openlaneclient.UpdateOrganization_UpdateOrganization_Organization
+		expectedRes testclient.UpdateOrganization_UpdateOrganization_Organization
 		errorMsg    string
 	}{
 		{
 			name:  "update name, happy path",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				Name: &nameUpdate,
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
@@ -582,8 +582,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "add member as admin",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
-				AddOrgMembers: []*openlaneclient.CreateOrgMembershipInput{
+			updateInput: testclient.UpdateOrganizationInput{
+				AddOrgMembers: []*testclient.CreateOrgMembershipInput{
 					{
 						UserID: user1.ID,
 						Role:   &enums.RoleAdmin,
@@ -592,15 +592,15 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
 				Description: &org.Description,
-				Members: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members{
-					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges{
+				Members: testclient.UpdateOrganization_UpdateOrganization_Organization_Members{
+					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges{
 						{
-							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node{
+							Node: &testclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges_Node{
 								Role:   enums.RoleAdmin,
 								UserID: user1.ID,
 							},
@@ -612,20 +612,20 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "add two program creators group",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				AddProgramCreatorIDs: []string{groupProgramCreators.ID, anotherGroupProgramCreators.ID},
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
 				Description: &org.Description,
-				ProgramCreators: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
-					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
+				ProgramCreators: testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
+					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
 						{
-							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
+							Node: &testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
 								ID:          groupProgramCreators.ID,
 								DisplayID:   groupProgramCreators.DisplayID,
 								Name:        groupProgramCreators.Name,
@@ -633,7 +633,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 							},
 						},
 						{
-							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
+							Node: &testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
 								ID:          anotherGroupProgramCreators.ID,
 								DisplayID:   anotherGroupProgramCreators.DisplayID,
 								Name:        anotherGroupProgramCreators.Name,
@@ -647,21 +647,21 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "remove one program creator group, add procedure creator group",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				RemoveProgramCreatorIDs: []string{groupProgramCreators.ID},
 				AddProcedureCreatorIDs:  []string{groupProcedureCreators.ID},
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
 				Description: &org.Description,
-				ProcedureCreators: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{
-					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges{
+				ProcedureCreators: testclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{
+					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges{
 						{
-							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{
+							Node: &testclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{
 								ID:          groupProcedureCreators.ID,
 								DisplayID:   groupProcedureCreators.DisplayID,
 								Name:        groupProcedureCreators.Name,
@@ -670,10 +670,10 @@ func TestMutationUpdateOrganization(t *testing.T) {
 						},
 					},
 				},
-				ProgramCreators: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
-					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
+				ProgramCreators: testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
+					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
 						{
-							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
+							Node: &testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
 								ID:          anotherGroupProgramCreators.ID,
 								DisplayID:   anotherGroupProgramCreators.DisplayID,
 								Name:        anotherGroupProgramCreators.Name,
@@ -687,7 +687,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "add program creator group, not allowed",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				AddProgramCreatorIDs: []string{groupProgramCreators.ID},
 			},
 			client:   suite.client.api,
@@ -697,7 +697,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "update description and avatar file, happy path",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				Description: &descriptionUpdate,
 			},
 			avatarFile: &graphql.Upload{
@@ -708,7 +708,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate, // this would have been updated on the prior test
 				DisplayName: org.DisplayName,
@@ -718,12 +718,12 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "update display name, happy path",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				DisplayName: &displayNameUpdate,
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate, // this would have been updated on the prior test
 				DisplayName: displayNameUpdate,
@@ -733,15 +733,15 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "update settings, happy path",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				Description: &descriptionUpdate,
-				UpdateOrgSettings: &openlaneclient.UpdateOrganizationSettingInput{
+				UpdateOrgSettings: &testclient.UpdateOrganizationSettingInput{
 					Domains: []string{"meow.theopenlane.io", "woof.theopenlane.io"},
 				},
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
-			expectedRes: openlaneclient.UpdateOrganization_UpdateOrganization_Organization{
+			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
 				Name:        nameUpdate,        // this would have been updated on the prior test
 				DisplayName: displayNameUpdate, // this would have been updated on the prior test
@@ -764,7 +764,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "update name, too long",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				Name: &nameUpdateLong,
 			},
 			client:   suite.client.api,
@@ -774,7 +774,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "update name, no access",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				Name: &nameUpdate,
 			},
 			client:   suite.client.api,
@@ -784,7 +784,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		{
 			name:  "update name, not found",
 			orgID: org.ID,
-			updateInput: openlaneclient.UpdateOrganizationInput{
+			updateInput: testclient.UpdateOrganizationInput{
 				Name: &nameUpdate,
 			},
 			client:   suite.client.api,
@@ -855,7 +855,7 @@ func TestMutationDeleteOrganization(t *testing.T) {
 	reqCtx := orgUser.UserCtx
 
 	setting, err := suite.client.api.UpdateUserSetting(reqCtx, orgUser.UserInfo.Edges.Setting.ID,
-		openlaneclient.UpdateUserSettingInput{
+		testclient.UpdateUserSettingInput{
 			DefaultOrgID: &orgUser.OrganizationID,
 		},
 	)

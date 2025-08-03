@@ -10,7 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestMutationCreateOnboarding(t *testing.T) {
@@ -25,14 +25,14 @@ func TestMutationCreateOnboarding(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateOnboardingInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateOnboardingInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateOnboardingInput{
+			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 			},
 			client: suite.client.api,
@@ -40,7 +40,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 		},
 		{
 			name: "happy path, all input, same name should not error due to retries",
-			request: openlaneclient.CreateOnboardingInput{
+			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 				Domains:     []string{gofakeit.DomainName(), gofakeit.DomainName()},
 				CompanyDetails: map[string]interface{}{
@@ -63,14 +63,14 @@ func TestMutationCreateOnboarding(t *testing.T) {
 		},
 		{
 			name:        "missing required field",
-			request:     openlaneclient.CreateOnboardingInput{},
+			request:     testclient.CreateOnboardingInput{},
 			client:      suite.client.api,
 			ctx:         onboardingUser.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
 			name: "not allowed with PAT",
-			request: openlaneclient.CreateOnboardingInput{
+			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 			},
 			client:      suite.client.apiWithPAT,
@@ -79,7 +79,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 		},
 		{
 			name: "not allowed with token",
-			request: openlaneclient.CreateOnboardingInput{
+			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 			},
 			client:      suite.client.apiWithToken,

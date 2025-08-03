@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -70,6 +71,9 @@ func (c Control) Edges() []ent.Edge {
 			fromSchema: c,
 			edgeSchema: Standard{},
 			field:      "standard_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeToWithPagination(c, Asset{}),

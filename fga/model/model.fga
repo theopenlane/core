@@ -132,7 +132,7 @@ type group
     define member: [user]
     # parent inheritance
     define parent: [organization with public_group]
-    define parent_admin: [organization#admin, organization#owner]
+    define parent_admin: [organization#owner]
     # permissions inherited from the organization
     define parent_viewer: can_view from parent or parent_admin
     define parent_editor: can_edit from parent or parent_admin
@@ -492,8 +492,8 @@ type scheduled_job
 
 type trust_center
   relations
-    define can_view: [user, service, organization#member] or parent_viewer
-    define can_edit: [user, service, organization#member] or parent_editor
+    define can_view: [user, service] or parent_viewer
+    define can_edit: [user, service] or parent_editor
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
@@ -502,8 +502,8 @@ type trust_center
 
 type trust_center_setting
   relations
-    define can_view: [user, service, organization#member] or parent_viewer
-    define can_edit: [user, service, organization#member] or parent_editor
+    define can_view: [user, service] or parent_viewer
+    define can_edit: [user, service] or parent_editor
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent

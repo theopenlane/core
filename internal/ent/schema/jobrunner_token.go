@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -104,6 +105,9 @@ func (j JobRunnerToken) Edges() []ent.Edge {
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: j,
 			edgeSchema: JobRunner{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

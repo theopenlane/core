@@ -188,25 +188,10 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 		return nil
 	}
 
-	// // create the admin group member if not using an API token (which is not associated with a user)
-	// if !auth.IsAPITokenAuthentication(ctx) {
-	// 	if err := createGroupMember(ctx, objID, m); err != nil {
-	// 		return err
-	// 	}
-	// } else {
 	if auth.IsAPITokenAuthentication(ctx) {
-
 		if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
 			return err
 		}
-		// }
-	}
-
-	// create the relationship tuple for the parent org
-	org, orgExists := m.OwnerID()
-	if !orgExists {
-		// skip if the owner is not set
-		return nil
 	}
 
 	// determine if the group is public
@@ -227,6 +212,11 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 		publicGroup = groupSetting.Visibility == enums.VisibilityPublic
 	}
 
+	org, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
+	}
+
 	groupTuples, err := createGroupParentTuple(org, objID, publicGroup)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get tuple key")
@@ -234,14 +224,12 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 		return err
 	}
 
-	if len(groupTuples) == 0 {
-		return nil
-	}
+	if len(groupTuples) > 0 {
+		if _, err := m.Authz.WriteTupleKeys(ctx, groupTuples, nil); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-	if _, err := m.Authz.WriteTupleKeys(ctx, groupTuples, nil); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
-		return ErrInternalServerError
+			return ErrInternalServerError
+		}
 	}
 
 	return nil
@@ -272,15 +260,6 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) ([]fgax.TupleK
 
 	tuples := []fgax.TupleKey{groupTuple}
 
-	reqAdmin := fgax.TupleRequest{
-		SubjectID:       orgID,
-		SubjectType:     generated.TypeOrganization,
-		SubjectRelation: fgax.AdminRelation,
-		ObjectID:        groupID,
-		ObjectType:      generated.TypeGroup,
-		Relation:        "parent_admin",
-	}
-
 	reqOwner := fgax.TupleRequest{
 		SubjectID:       orgID,
 		SubjectType:     generated.TypeOrganization,
@@ -290,51 +269,10 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) ([]fgax.TupleK
 		Relation:        "parent_admin",
 	}
 
-	tuples = append(tuples, fgax.GetTupleKey(reqAdmin), fgax.GetTupleKey(reqOwner))
+	tuples = append(tuples, fgax.GetTupleKey(reqOwner))
 
 	return tuples, nil
 }
-
-// // createGroupMember creates a group membership for the authorized user who triggered the group creation
-// func createGroupMember(ctx context.Context, gID string, m *generated.GroupMutation) error {
-// 	managed, _ := m.IsManaged()
-// 	groupName, _ := m.Name()
-
-// 	role := enums.RoleAdmin
-
-// 	if managed {
-// 		// do not add the owner to the Members group
-// 		if groupName == ViewersGroup {
-// 			return nil
-// 		}
-
-// 		// managed groups do not have owners, add them as a member
-// 		role = enums.RoleMember
-// 	}
-
-// 	// get userID from context
-// 	userID, err := auth.GetSubjectIDFromContext(ctx)
-// 	if err != nil {
-// 		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context, unable to add user to group")
-
-// 		return err
-// 	}
-
-// 	// Add user as admin of group
-// 	input := generated.CreateGroupMembershipInput{
-// 		UserID:  userID,
-// 		GroupID: gID,
-// 		Role:    &role,
-// 	}
-
-// 	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(ctx); err != nil {
-// 		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating group membership for admin")
-
-// 		return err
-// 	}
-
-// 	return nil
-// }
 
 // groupDeleteHook deletes all relationship tuples for a group on delete
 // with the exception of the user, those are handled by the cascade delete of the group membership

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -23,7 +23,7 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 		programID string
 		userID    string
 		role      enums.Role
-		client    *openlaneclient.OpenlaneClient
+		client    *testclient.TestClient
 		ctx       context.Context
 		errMsg    string
 	}{
@@ -111,7 +111,7 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			role := tc.role
-			input := openlaneclient.CreateProgramMembershipInput{
+			input := testclient.CreateProgramMembershipInput{
 				ProgramID: tc.programID,
 				UserID:    tc.userID,
 				Role:      &role,
@@ -143,7 +143,7 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// get all program members so we know the id of the test user program member
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
 		ProgramID: &pm.ProgramID,
 	})
 	assert.NilError(t, err)
@@ -163,7 +163,7 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 		name            string
 		programMemberID string
 		role            enums.Role
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		errMsg          string
 	}{
@@ -217,7 +217,7 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			role := tc.role
-			input := openlaneclient.UpdateProgramMembershipInput{
+			input := testclient.UpdateProgramMembershipInput{
 				Role: &role,
 			}
 

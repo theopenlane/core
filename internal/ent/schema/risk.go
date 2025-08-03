@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -137,6 +138,9 @@ func (r Risk) Edges() []ent.Edge {
 			t:          Group.Type,
 			field:      "stakeholder_id",
 			comment:    "the group of users who are responsible for risk oversight",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
@@ -144,6 +148,9 @@ func (r Risk) Edges() []ent.Edge {
 			t:          Group.Type,
 			field:      "delegate_id",
 			comment:    "temporary delegates for the risk, used for temporary ownership",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			},
 		}),
 	}
 }

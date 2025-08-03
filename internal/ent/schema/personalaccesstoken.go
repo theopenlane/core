@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/utils/keygen"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -128,6 +129,8 @@ func (p PersonalAccessToken) Edges() []ent.Edge {
 			fromSchema: p,
 			edgeSchema: Organization{},
 			comment:    "the organization(s) the token is associated with",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck()},
 		}),
 		defaultEdgeToWithPagination(p, Event{}),
 	}

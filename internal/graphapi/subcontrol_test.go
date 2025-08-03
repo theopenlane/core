@@ -9,9 +9,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -29,7 +29,7 @@ func TestQuerySubcontrol(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -74,7 +74,7 @@ func TestQuerySubcontrol(t *testing.T) {
 			if tc.queryID == "" {
 				// create the control first
 				control, err := suite.client.api.CreateControl(testUser1.UserCtx,
-					openlaneclient.CreateControlInput{
+					testclient.CreateControlInput{
 						RefCode:    "SC-" + ulids.New().String(),
 						ProgramIDs: []string{program.ID},
 					})
@@ -85,7 +85,7 @@ func TestQuerySubcontrol(t *testing.T) {
 				createdControlIDs = append(createdControlIDs, control.CreateControl.Control.ID)
 
 				resp, err := suite.client.api.CreateSubcontrol(testUser1.UserCtx,
-					openlaneclient.CreateSubcontrolInput{
+					testclient.CreateSubcontrolInput{
 						RefCode:   "SC-1" + ulids.New().String(),
 						ControlID: control.CreateControl.Control.ID,
 					})
@@ -134,7 +134,7 @@ func TestQuerySubcontrols(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -205,16 +205,16 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		request              openlaneclient.CreateSubcontrolInput
+		request              testclient.CreateSubcontrolInput
 		createParentControl  bool
-		client               *openlaneclient.OpenlaneClient
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedRefFramework *string
 		expectedErr          string
 	}{
 		{
 			name: "missing required ref code",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				Description: lo.ToPtr("A description of the Subcontrol"),
 				ControlID:   control1.ID,
 			},
@@ -224,7 +224,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
 			},
@@ -234,7 +234,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "happy path, parent control has owner",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-2-1",
 				ControlID: controlWithOwner.ID,
 			},
@@ -244,7 +244,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "happy path, parent control has owner, subcontrol should override it",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:        "SC-2-2",
 				ControlID:      controlWithOwner.ID,
 				ControlOwnerID: &anotherOwnerGroup.ID,
@@ -255,7 +255,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:     "Another Subcontrol",
 				Description: lo.ToPtr("A description of the Subcontrol"),
 				Status:      &enums.ControlStatusPreparing,
@@ -311,7 +311,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "Subcontrol",
 				ControlID: control1.ID,
 				OwnerID:   &testUser1.OrganizationID,
@@ -322,7 +322,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "using pat, missing owner ID",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
 			},
@@ -332,7 +332,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
 			},
@@ -342,7 +342,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "user authorized, they have access to the parent control via the program",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
 			},
@@ -353,7 +353,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "user not authorized to edit one of the controls",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control2.ID,
 			},
@@ -363,7 +363,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "missing required control ID",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode: "SC-1",
 			},
 			client:      suite.client.api,
@@ -372,7 +372,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "invalid control ID",
-			request: openlaneclient.CreateSubcontrolInput{
+			request: testclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: "invalid-control-id",
 			},
@@ -387,7 +387,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			if tc.createParentControl {
 				// create the control first
 				control, err := suite.client.api.CreateControl(testUser1.UserCtx,
-					openlaneclient.CreateControlInput{
+					testclient.CreateControlInput{
 						RefCode:    "SC",
 						ProgramIDs: []string{program.ID},
 					})
@@ -486,14 +486,14 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateSubcontrolInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateSubcontrolInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateSubcontrolInput{
+			request: testclient.UpdateSubcontrolInput{
 				Description: lo.ToPtr("Updated description"),
 			},
 			client: suite.client.api,
@@ -501,7 +501,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateSubcontrolInput{
+			request: testclient.UpdateSubcontrolInput{
 				Status:         &enums.ControlStatusPreparing,
 				Tags:           []string{"tag1", "tag2"},
 				Source:         lo.ToPtr(enums.ControlSourceFramework),
@@ -513,7 +513,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "update ref code to empty",
-			request: openlaneclient.UpdateSubcontrolInput{
+			request: testclient.UpdateSubcontrolInput{
 				RefCode: lo.ToPtr(""),
 			},
 			client:      suite.client.apiWithPAT,
@@ -522,7 +522,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions in same org",
-			request: openlaneclient.UpdateSubcontrolInput{
+			request: testclient.UpdateSubcontrolInput{
 				MappedCategories: []string{"Category1", "Category2"},
 			},
 			client:      suite.client.api,
@@ -531,7 +531,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateSubcontrolInput{
+			request: testclient.UpdateSubcontrolInput{
 				MappedCategories: []string{"Category1", "Category2"},
 			},
 			client:      suite.client.api,
@@ -604,7 +604,7 @@ func TestMutationDeleteSubcontrol(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

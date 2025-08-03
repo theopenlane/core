@@ -8,13 +8,11 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // HookTrustCenter runs on trust center create mutations
@@ -81,81 +79,3 @@ const defaultOverview = `
 
 This is the default overview for your trust center. You can customize this by editing the trust center settings.
 `
-
-// HookTrustCenterAuthz runs on trust center mutations to setup or remove relationship tuples
-func HookTrustCenterAuthz() ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (ent.Value, error) {
-			// do the mutation, and then create/delete the relationship
-			retValue, err := next.Mutate(ctx, m)
-			if err != nil {
-				// if we error, do not attempt to create the relationships
-				return retValue, err
-			}
-
-			if m.Op().Is(ent.OpCreate) {
-				// create the trust member admin and relationship tuple for parent org
-				err = trustCenterCreateHook(ctx, m)
-			} else if isDeleteOp(ctx, m) {
-				// delete all relationship tuples on delete, or soft delete (Update Op)
-				err = trustCenterDeleteHook(ctx, m)
-			}
-
-			return retValue, err
-		})
-	}
-}
-
-// trustCenterCreateHook creates the relationship tuples for the trust center
-func trustCenterCreateHook(ctx context.Context, m *generated.TrustCenterMutation) error {
-	objID, exists := m.ID()
-	org, orgExists := m.OwnerID()
-
-	if exists && orgExists {
-		req := fgax.TupleRequest{
-			SubjectID:   org,
-			SubjectType: generated.TypeOrganization,
-			ObjectID:    objID,
-			ObjectType:  GetObjectTypeFromEntMutation(m),
-		}
-
-		zerolog.Ctx(ctx).Debug().Interface("request", req).
-			Msg("creating parent relationship tuples")
-
-		orgTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
-		if err != nil {
-			return err
-		}
-
-		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
-			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
-			return ErrInternalServerError
-		}
-	}
-
-	return nil
-}
-
-// trustCenterDeleteHook deletes all relationship tuples for the trust center
-func trustCenterDeleteHook(ctx context.Context, m *generated.TrustCenterMutation) error {
-	objID, ok := m.ID()
-	if !ok {
-		return nil
-	}
-
-	objType := GetObjectTypeFromEntMutation(m)
-	object := fmt.Sprintf("%s:%s", objType, objID)
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
-
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object, userRoles); err != nil {
-		log.Error().Err(err).Msg("failed to delete relationship tuples")
-
-		return ErrInternalServerError
-	}
-
-	zerolog.Ctx(ctx).Debug().Str("object", object).Msg("deleted relationship tuples")
-
-	return nil
-}

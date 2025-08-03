@@ -330,7 +330,6 @@ type ActionPlan struct {
 	Owner    *Organization      `json:"owner,omitempty"`
 	Risks    *RiskConnection    `json:"risks"`
 	Controls *ControlConnection `json:"controls"`
-	Users    *UserConnection    `json:"users"`
 	Programs *ProgramConnection `json:"programs"`
 }
 
@@ -1013,9 +1012,6 @@ type ActionPlanWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
-	// users edge predicates
-	HasUsers     *bool             `json:"hasUsers,omitempty"`
-	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
@@ -4286,7 +4282,6 @@ type CreateActionPlanInput struct {
 	OwnerID    *string  `json:"ownerID,omitempty"`
 	RiskIDs    []string `json:"riskIDs,omitempty"`
 	ControlIDs []string `json:"controlIDs,omitempty"`
-	UserIDs    []string `json:"userIDs,omitempty"`
 	ProgramIDs []string `json:"programIDs,omitempty"`
 }
 
@@ -27832,9 +27827,6 @@ type UpdateActionPlanInput struct {
 	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
 	ClearControls    *bool               `json:"clearControls,omitempty"`
-	AddUserIDs       []string            `json:"addUserIDs,omitempty"`
-	RemoveUserIDs    []string            `json:"removeUserIDs,omitempty"`
-	ClearUsers       *bool               `json:"clearUsers,omitempty"`
 	AddProgramIDs    []string            `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs []string            `json:"removeProgramIDs,omitempty"`
 	ClearPrograms    *bool               `json:"clearPrograms,omitempty"`

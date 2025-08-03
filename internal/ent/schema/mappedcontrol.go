@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -76,24 +77,36 @@ func (m MappedControl) Edges() []ent.Edge {
 			t:          Control.Type,
 			name:       "from_controls",
 			comment:    "controls that map to another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Control{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Control.Type,
 			name:       "to_controls",
 			comment:    "controls that are being mapped from another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Control{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Subcontrol.Type,
 			name:       "from_subcontrols",
 			comment:    "subcontrols map to another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Subcontrol{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Subcontrol.Type,
 			name:       "to_subcontrols",
 			comment:    "subcontrols are being mapped from another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Subcontrol{}.Name()),
+			},
 		}),
 	}
 }

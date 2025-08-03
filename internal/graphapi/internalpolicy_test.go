@@ -11,9 +11,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryInternalPolicy(t *testing.T) {
@@ -31,7 +31,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name               string
 		queryID            string
-		client             *openlaneclient.OpenlaneClient
+		client             *testclient.TestClient
 		ctx                context.Context
 		errorMsg           string
 		updateBlockedGroup bool
@@ -101,7 +101,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 
 				if tc.updateBlockedGroup {
 					_, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, internalPolicy2.ID,
-						openlaneclient.UpdateInternalPolicyInput{
+						testclient.UpdateInternalPolicyInput{
 							RemoveBlockedGroupIDs: []string{blockedGroup.ID},
 						})
 					assert.NilError(t, err)
@@ -135,7 +135,7 @@ func TestQueryInternalPolicies(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		client             *openlaneclient.OpenlaneClient
+		client             *testclient.TestClient
 		ctx                context.Context
 		updateBlockedGroup bool
 		expectedResults    int
@@ -190,7 +190,7 @@ func TestQueryInternalPolicies(t *testing.T) {
 			if tc.updateBlockedGroup {
 				// do it the opposite, remove the policy from the group
 				_, err := suite.client.api.UpdateGroup(testUser1.UserCtx, blockedGroup.ID,
-					openlaneclient.UpdateGroupInput{
+					testclient.UpdateGroupInput{
 						RemoveInternalPolicyBlockedGroupIDs: []string{ip3.ID},
 					},
 				)
@@ -226,16 +226,16 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 
 	testCases := []struct {
 		name                       string
-		request                    openlaneclient.CreateInternalPolicyInput
+		request                    testclient.CreateInternalPolicyInput
 		addGroupToOrg              bool
 		controlEdgeShouldBeCreated bool
-		client                     *openlaneclient.OpenlaneClient
+		client                     *testclient.TestClient
 		ctx                        context.Context
 		expectedErr                string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
 			client: suite.client.api,
@@ -243,7 +243,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, all input except edges",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
 				PolicyType: lo.ToPtr("sop"),
@@ -257,7 +257,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, long details",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
 				PolicyType: lo.ToPtr("sop"),
@@ -271,7 +271,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, with control edges",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:          "Releasing a new version",
 				Status:        &enums.DocumentDraft,
 				PolicyType:    lo.ToPtr("sop"),
@@ -287,7 +287,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "should not be allowed to add system standard control",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
 				ControlIDs: []string{systemControl.ID},
@@ -299,7 +299,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, add editor group",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:      "Test Policy",
 				EditorIDs: []string{testUser1.GroupID},
 			},
@@ -308,7 +308,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, add same task to another policy",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:    "Test Policy",
 				TaskIDs: []string{task.ID},
 			},
@@ -317,7 +317,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, add same control to another policy",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:       "Test Policy",
 				ControlIDs: []string{control.ID},
 			},
@@ -327,7 +327,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, add same sub control to another policy",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:          "Test Policy",
 				SubcontrolIDs: []string{subcontrol.ID},
 			},
@@ -336,7 +336,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "add editor group, again - ensures the same group can be added to multiple policies",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:            "Test Policy",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{anotherGroup.ID},
@@ -346,7 +346,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name:    "Test Internal Policy",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -355,7 +355,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
 			client: suite.client.apiWithToken,
@@ -363,7 +363,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
 			client:      suite.client.api,
@@ -372,7 +372,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "user now authorized, added to group with creator permissions",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
 			addGroupToOrg: true,
@@ -381,7 +381,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		},
 		{
 			name: "missing required field",
-			request: openlaneclient.CreateInternalPolicyInput{
+			request: testclient.CreateInternalPolicyInput{
 				Details: lo.ToPtr("instructions on how to release a new version"),
 			},
 			client:      suite.client.api,
@@ -394,7 +394,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
-					openlaneclient.UpdateOrganizationInput{
+					testclient.UpdateOrganizationInput{
 						AddInternalPolicyCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				assert.NilError(t, err)
@@ -516,15 +516,15 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name        string
 		policyID    string
-		request     openlaneclient.UpdateInternalPolicyInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateInternalPolicyInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:     "happy path, update details field",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence(200)),
 			},
 			client: suite.client.api,
@@ -533,7 +533,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "happy path, update details field on policy created by another user",
 			policyID: internalPolicyAdminUser.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence(200)),
 			},
 			client: suite.client.api,
@@ -542,7 +542,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "happy path, update name field",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Name:         lo.ToPtr("Updated InternalPolicy Name"),
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for subsequent tests
 			},
@@ -552,7 +552,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "happy path, update multiple fields",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Status:           &enums.DocumentPublished,
 				Details:          lo.ToPtr("Updated details"),
 				RevisionBump:     &models.Major,
@@ -566,7 +566,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "update not allowed, not enough permissions",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated InternalPolicy Name"),
 			},
 			client:      suite.client.api,
@@ -576,7 +576,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "update allowed, user in editor group",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client: suite.client.api,
@@ -585,7 +585,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "member update allowed, user in editor group",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client: suite.client.api,
@@ -594,7 +594,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "happy path, block the group from editing",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				AddBlockedGroupIDs: []string{blockGroup.ID}, // block the group
 			},
 			client: suite.client.api,
@@ -603,7 +603,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "member update no longer allowed, user in blocked group",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client:      suite.client.api,
@@ -613,7 +613,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "happy path, remove the group",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				RemoveEditorIDs: []string{testUser1.GroupID}, // remove the group from the editor groups
 			},
 			client: suite.client.api,
@@ -622,7 +622,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "update not allowed, editor group was removed",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
 			client:      suite.client.api,
@@ -632,7 +632,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		{
 			name:     "update not allowed, no permissions",
 			policyID: internalPolicy.ID,
-			request: openlaneclient.UpdateInternalPolicyInput{
+			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr("Updated details"),
 			},
 			client:      suite.client.api,
@@ -701,7 +701,7 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

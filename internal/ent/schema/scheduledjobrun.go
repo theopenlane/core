@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
@@ -94,6 +95,9 @@ func (s ScheduledJobRun) Edges() []ent.Edge {
 			edgeSchema: JobRunner{},
 			field:      "job_runner_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

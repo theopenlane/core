@@ -11,8 +11,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -38,7 +38,7 @@ func TestQueryControlImplementation(t *testing.T) {
 	testCases := []struct {
 		name                  string
 		queryID               string
-		client                *openlaneclient.OpenlaneClient
+		client                *testclient.TestClient
 		ctx                   context.Context
 		shouldHaveControls    bool
 		shouldHaveSubcontrols bool
@@ -184,7 +184,7 @@ func TestQueryControlImplementations(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -264,14 +264,14 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateControlImplementationInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateControlImplementationInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:    "happy path, minimal input",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				// there are no required fields in the model, you can create a blank implementation
 			},
 			client: suite.client.api,
@@ -279,7 +279,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details:            lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 				Status:             &enums.DocumentNeedsApproval,
 				ImplementationDate: &yesterday,
@@ -294,7 +294,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -303,7 +303,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 			},
 			client: suite.client.apiWithToken,
@@ -311,7 +311,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 			},
 			client:      suite.client.api,
@@ -320,7 +320,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "user authorized because they have editor permissions to all the parent control",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 				ControlIDs: controlIDs,
 			},
@@ -329,7 +329,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions to one of the parent controls",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 				ControlIDs: allControlIDs,
 			},
@@ -339,7 +339,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "no access to linked control",
-			request: openlaneclient.CreateControlImplementationInput{
+			request: testclient.CreateControlImplementationInput{
 				Details:    lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 				ControlIDs: controlIDs,
 			},
@@ -462,15 +462,15 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateControlImplementationInput
+		request     testclient.UpdateControlImplementationInput
 		id          string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Details: lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
 			},
 			id:     controlImplementation1.ID,
@@ -479,7 +479,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				AddControlIDs:      controlIDs,
 				AddSubcontrolIDs:   subcontrolIDs,
 				Details:            lo.ToPtr(gofakeit.Paragraph(3, 5, 30, "<br />")),
@@ -494,7 +494,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path, update verification date",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				VerificationDate: &yesterday,
 			},
 			id:     controlImplementation1.ID,
@@ -503,7 +503,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "allowed because previous request added control IDs the user has access to ",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
 			id:     controlImplementation1.ID,
@@ -512,7 +512,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path remove control IDs",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				RemoveControlIDs: controlIDs,
 			},
 			id:     controlImplementation1.ID,
@@ -521,7 +521,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "no longer allowed because previous request removed control IDs the user has access to ",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
 			id:     controlImplementation1.ID,
@@ -530,7 +530,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not enough permissions, not found",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
 			id:          controlImplementation2.ID,
@@ -540,7 +540,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "happy path, add control IDs",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 				AddControlIDs: []string{
 					control.ID,
@@ -552,7 +552,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "update still not allowed, not enough permissions, no edit permissions to control either",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
 			id:          controlImplementation2.ID,
@@ -562,7 +562,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateControlImplementationInput{
+			request: testclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
 			id:          controlImplementation1.ID,
@@ -644,7 +644,7 @@ func TestMutationDeleteControlImplementation(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

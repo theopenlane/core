@@ -82,27 +82,6 @@ func (ap *ActionPlan) Controls(
 	return ap.QueryControls().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (ap *ActionPlan) Users(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*UserOrder, where *UserWhereInput,
-) (*UserConnection, error) {
-	opts := []UserPaginateOption{
-		WithUserOrder(orderBy),
-		WithUserFilter(where.Filter),
-	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := ap.Edges.totalCount[5][alias]
-	if nodes, err := ap.NamedUsers(alias); err == nil || hasTotalCount {
-		pager, err := newUserPager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &UserConnection{Edges: []*UserEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return ap.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
-}
-
 func (ap *ActionPlan) Programs(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProgramOrder, where *ProgramWhereInput,
 ) (*ProgramConnection, error) {
@@ -111,7 +90,7 @@ func (ap *ActionPlan) Programs(
 		WithProgramFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := ap.Edges.totalCount[6][alias]
+	totalCount, hasTotalCount := ap.Edges.totalCount[5][alias]
 	if nodes, err := ap.NamedPrograms(alias); err == nil || hasTotalCount {
 		pager, err := newProgramPager(opts, last != nil)
 		if err != nil {

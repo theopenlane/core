@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -66,6 +67,9 @@ func (o OrgProduct) Edges() []ent.Edge {
 			edgeSchema: OrgSubscription{},
 			field:      "subscription_id",
 			ref:        "products",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(o, OrgPrice{}),
 		defaultEdgeToWithPagination(o, OrgModule{}),

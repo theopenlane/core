@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryEntityType(t *testing.T) {
@@ -20,7 +20,7 @@ func TestQueryEntityType(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -78,7 +78,7 @@ func TestQueryEntityTypes(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -124,14 +124,14 @@ func TestQueryEntityTypes(t *testing.T) {
 func TestMutationCreateEntityType(t *testing.T) {
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateEntityTypeInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateEntityTypeInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateEntityTypeInput{
+			request: testclient.CreateEntityTypeInput{
 				Name: "cats",
 			},
 			client: suite.client.api,
@@ -139,7 +139,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 		},
 		{
 			name: "happy path, all input, using api token",
-			request: openlaneclient.CreateEntityTypeInput{
+			request: testclient.CreateEntityTypeInput{
 				Name: "horses",
 			},
 			client: suite.client.apiWithToken,
@@ -147,7 +147,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 		},
 		{
 			name: "happy path, all input, using pat",
-			request: openlaneclient.CreateEntityTypeInput{
+			request: testclient.CreateEntityTypeInput{
 				OwnerID: &testUser1.OrganizationID,
 				Name:    "bunnies",
 			},
@@ -156,7 +156,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 		},
 		{
 			name: "do not create if not allowed",
-			request: openlaneclient.CreateEntityTypeInput{
+			request: testclient.CreateEntityTypeInput{
 				Name: "dogs",
 			},
 			client:      suite.client.api,
@@ -165,7 +165,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 		},
 		{
 			name:        "missing required field, name",
-			request:     openlaneclient.CreateEntityTypeInput{},
+			request:     testclient.CreateEntityTypeInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
@@ -197,14 +197,14 @@ func TestMutationUpdateEntityType(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateEntityTypeInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateEntityTypeInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update name",
-			request: openlaneclient.UpdateEntityTypeInput{
+			request: testclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("maine coons"),
 			},
 			client: suite.client.api,
@@ -212,7 +212,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		},
 		{
 			name: "happy path, update name using api token",
-			request: openlaneclient.UpdateEntityTypeInput{
+			request: testclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("sphynx"),
 			},
 			client: suite.client.apiWithToken,
@@ -220,7 +220,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		},
 		{
 			name: "happy path, update name using personal access token",
-			request: openlaneclient.UpdateEntityTypeInput{
+			request: testclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("persian"),
 			},
 			client: suite.client.apiWithPAT,
@@ -228,7 +228,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		},
 		{
 			name: "not allowed to update",
-			request: openlaneclient.UpdateEntityTypeInput{
+			request: testclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("dogs"),
 			},
 			client:      suite.client.api,
@@ -264,7 +264,7 @@ func TestMutationDeleteEntityType(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

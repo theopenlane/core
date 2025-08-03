@@ -1683,25 +1683,6 @@ func (c *ActionPlanClient) QueryControls(ap *ActionPlan) *ControlQuery {
 	return query
 }
 
-// QueryUsers queries the users edge of a ActionPlan.
-func (c *ActionPlanClient) QueryUsers(ap *ActionPlan) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ap.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.UsersTable, actionplan.UsersPrimaryKey...),
-		)
-		schemaConfig := ap.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserActionPlans
-		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryPrograms queries the programs edge of a ActionPlan.
 func (c *ActionPlanClient) QueryPrograms(ap *ActionPlan) *ProgramQuery {
 	query := (&ProgramClient{config: c.config}).Query()
@@ -23687,11 +23668,11 @@ func (c *UserClient) QueryActionPlans(u *User) *ActionPlanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, user.ActionPlansTable, user.ActionPlansPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ActionPlansTable, user.ActionPlansColumn),
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.UserActionPlans
+		step.Edge.Schema = schemaConfig.ActionPlan
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}

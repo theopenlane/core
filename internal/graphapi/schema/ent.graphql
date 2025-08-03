@@ -472,37 +472,6 @@ type ActionPlan implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
-  users(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Users returned from the connection.
-    """
-    orderBy: [UserOrder!]
-
-    """
-    Filtering options for Users returned from the connection.
-    """
-    where: UserWhereInput
-  ): UserConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -1443,11 +1412,6 @@ input ActionPlanWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
-  """
-  users edge predicates
-  """
-  hasUsers: Boolean
-  hasUsersWith: [UserWhereInput!]
   """
   programs edge predicates
   """
@@ -6305,6 +6269,7 @@ enum ControlOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -6874,7 +6839,6 @@ input CreateActionPlanInput {
   ownerID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
-  userIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -42124,6 +42088,7 @@ enum SubcontrolOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -47863,9 +47828,6 @@ input UpdateActionPlanInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean

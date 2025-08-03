@@ -1,0 +1,167 @@
+
+mutation CreateBulkCSVJobRunnerToken($input: Upload!) {
+  createBulkCSVJobRunnerToken(input: $input) {
+    jobRunnerTokens {
+      createdAt
+      createdBy
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkJobRunnerToken($input: [CreateJobRunnerTokenInput!]) {
+  createBulkJobRunnerToken(input: $input) {
+    jobRunnerTokens {
+      createdAt
+      createdBy
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateJobRunnerToken($input: CreateJobRunnerTokenInput!) {
+  createJobRunnerToken(input: $input) {
+    jobRunnerToken {
+      createdAt
+      createdBy
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteJobRunnerToken($deleteJobRunnerTokenId: ID!) {
+  deleteJobRunnerToken(id: $deleteJobRunnerTokenId) {
+    deletedID
+  }
+}
+
+query GetAllJobRunnerTokens {
+  jobRunnerTokens {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        expiresAt
+        id
+        isActive
+        lastUsedAt
+        ownerID
+        revokedAt
+        revokedBy
+        revokedReason
+        tags
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetJobRunnerTokenByID($jobRunnerTokenId: ID!) {
+  jobRunnerToken(id: $jobRunnerTokenId) {
+    createdAt
+    createdBy
+    expiresAt
+    id
+    isActive
+    lastUsedAt
+    ownerID
+    revokedAt
+    revokedBy
+    revokedReason
+    tags
+    token
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetJobRunnerTokens($first: Int, $last: Int, $where: JobRunnerTokenWhereInput) {
+  jobRunnerTokens(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        expiresAt
+        id
+        isActive
+        lastUsedAt
+        ownerID
+        revokedAt
+        revokedBy
+        revokedReason
+        tags
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateJobRunnerToken($updateJobRunnerTokenId: ID!, $input: UpdateJobRunnerTokenInput!) {
+  updateJobRunnerToken(id: $updateJobRunnerTokenId, input: $input) {
+    jobRunnerToken {
+      createdAt
+      createdBy
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      ownerID
+      revokedAt
+      revokedBy
+      revokedReason
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
