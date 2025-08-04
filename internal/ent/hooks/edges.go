@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
+// HookEdgePermissions runs on edge mutations to ensure the user has access to the object they are trying to add for edges.
+// It uses the accessmap generated to get the object type and checks if the user has access to it.
 func HookEdgePermissions() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -27,6 +29,8 @@ func HookEdgePermissions() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
 
+// skipperEdgePermissionChecks checks if the current context should skip edge permission checks
+// this is used for internal requests made by the system or when the user is a system admin
 func skipperEdgePermissionChecks(ctx context.Context) bool {
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true

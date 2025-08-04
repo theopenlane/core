@@ -83,8 +83,6 @@ func main() {
 		log.Fatal().Err(err).Msg("creating entgql extension")
 	}
 
-	log.Info().Msg("adding accessmap extension")
-
 	accessMapExt := accessmap.New(
 		accessmap.WithSchemaPath(schemaPath),
 	)

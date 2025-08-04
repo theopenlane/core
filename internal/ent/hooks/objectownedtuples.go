@@ -272,7 +272,10 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				continue
 			}
 
-			if edgeMap.ObjectType == organization.Label && edge != "organizations" {
+			// If the object type of the edge to check is an organization, we need to ensure both that
+			// the object is in the organization and that the user has edit access
+			// to the organization
+			if edgeMap.ObjectType == organization.Label {
 				orgID, err := auth.GetOrganizationIDFromContext(ctx)
 				if err != nil {
 					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get organization id from context")
@@ -310,6 +313,8 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 	return nil
 }
 
+// mapEdgeToObjectType maps the edge to the object type and returns the EdgeAccess
+// based on the generated access map
 func mapEdgeToObjectType(schema, edge string) generated.EdgeAccess {
 	schemaType := strcase.SnakeCase(schema)
 
@@ -329,6 +334,7 @@ func mapEdgeToObjectType(schema, edge string) generated.EdgeAccess {
 	return edgeAccess
 }
 
+// ensureObjectInOrganization checks if the object is in the organization based on the requested edge
 func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string, objectID, orgID string) error {
 	// also ensure the id is part of the organization
 	mut, ok := m.(GenericMutation)
@@ -337,7 +343,7 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 		return privacy.Deny
 	}
 
-	// check view access to the organization instead
+	// check view access to the organization instead if the edge is an organization
 	if edge == organization.Label {
 		if err := rule.CheckCurrentOrgAccess(ctx, m, fgax.CanView); errors.Is(err, privacy.Allow) {
 			return nil
@@ -346,9 +352,9 @@ func ensureObjectInOrganization(ctx context.Context, m ent.Mutation, edge string
 		zerolog.Ctx(ctx).Error().Msg("user does not have access to the organization")
 
 		return privacy.Deny
-
 	}
 
+	// check if the object is in the organization
 	table := pluralize.NewClient().Plural(edge)
 	query := "SELECT EXISTS (SELECT 1 FROM " + table + " WHERE id = $1 and (owner_id = $2 or owner_id IS NULL))"
 

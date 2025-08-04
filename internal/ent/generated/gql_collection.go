@@ -117,18 +117,18 @@ import (
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (at *APITokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*APITokenQuery, error) {
+func (atq *APITokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*APITokenQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return at, nil
+		return atq, nil
 	}
-	if err := at.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := atq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return at, nil
+	return atq, nil
 }
 
-func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (atq *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -142,12 +142,12 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: at.config}).Query()
+				query = (&OrganizationClient{config: atq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			at.withOwner = query
+			atq.withOwner = query
 			if _, ok := fieldSeen[apitoken.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, apitoken.FieldOwnerID)
 				fieldSeen[apitoken.FieldOwnerID] = struct{}{}
@@ -244,7 +244,7 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 		}
 	}
 	if !unknownSeen {
-		at.Select(selectedFields...)
+		atq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -307,18 +307,18 @@ func newAPITokenPaginateArgs(rv map[string]any) *apitokenPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ap *ActionPlanQuery) CollectFields(ctx context.Context, satisfies ...string) (*ActionPlanQuery, error) {
+func (apq *ActionPlanQuery) CollectFields(ctx context.Context, satisfies ...string) (*ActionPlanQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ap, nil
+		return apq, nil
 	}
-	if err := ap.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := apq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ap, nil
+	return apq, nil
 }
 
-func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (apq *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -332,12 +332,12 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ap.config}).Query()
+				query = (&GroupClient{config: apq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			ap.withApprover = query
+			apq.withApprover = query
 			if _, ok := fieldSeen[actionplan.FieldApproverID]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldApproverID)
 				fieldSeen[actionplan.FieldApproverID] = struct{}{}
@@ -347,12 +347,12 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ap.config}).Query()
+				query = (&GroupClient{config: apq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			ap.withDelegate = query
+			apq.withDelegate = query
 			if _, ok := fieldSeen[actionplan.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldDelegateID)
 				fieldSeen[actionplan.FieldDelegateID] = struct{}{}
@@ -362,12 +362,12 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: ap.config}).Query()
+				query = (&OrganizationClient{config: apq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			ap.withOwner = query
+			apq.withOwner = query
 			if _, ok := fieldSeen[actionplan.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldOwnerID)
 				fieldSeen[actionplan.FieldOwnerID] = struct{}{}
@@ -377,7 +377,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: ap.config}).Query()
+				query = (&RiskClient{config: apq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -395,7 +395,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ap.loadTotal = append(ap.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+					apq.loadTotal = append(apq.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -428,7 +428,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						return nil
 					})
 				} else {
-					ap.loadTotal = append(ap.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
+					apq.loadTotal = append(apq.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -462,7 +462,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ap.WithNamedRisks(alias, func(wq *RiskQuery) {
+			apq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -470,7 +470,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: ap.config}).Query()
+				query = (&ControlClient{config: apq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -488,7 +488,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ap.loadTotal = append(ap.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+					apq.loadTotal = append(apq.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -521,7 +521,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						return nil
 					})
 				} else {
-					ap.loadTotal = append(ap.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
+					apq.loadTotal = append(apq.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -555,7 +555,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ap.WithNamedControls(alias, func(wq *ControlQuery) {
+			apq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -563,7 +563,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: ap.config}).Query()
+				query = (&ProgramClient{config: apq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -581,7 +581,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ap.loadTotal = append(ap.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+					apq.loadTotal = append(apq.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -614,7 +614,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						return nil
 					})
 				} else {
-					ap.loadTotal = append(ap.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
+					apq.loadTotal = append(apq.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -648,7 +648,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ap.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			apq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -788,7 +788,7 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 		}
 	}
 	if !unknownSeen {
-		ap.Select(selectedFields...)
+		apq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -851,18 +851,18 @@ func newActionPlanPaginateArgs(rv map[string]any) *actionplanPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (aph *ActionPlanHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ActionPlanHistoryQuery, error) {
+func (aphq *ActionPlanHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ActionPlanHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return aph, nil
+		return aphq, nil
 	}
-	if err := aph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := aphq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return aph, nil
+	return aphq, nil
 }
 
-func (aph *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (aphq *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -1023,7 +1023,7 @@ func (aph *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode boo
 		}
 	}
 	if !unknownSeen {
-		aph.Select(selectedFields...)
+		aphq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -1080,18 +1080,18 @@ func newActionPlanHistoryPaginateArgs(rv map[string]any) *actionplanhistoryPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (a *AssetQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssetQuery, error) {
+func (aq *AssetQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssetQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return a, nil
+		return aq, nil
 	}
-	if err := a.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := aq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return a, nil
+	return aq, nil
 }
 
-func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (aq *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -1105,12 +1105,12 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: a.config}).Query()
+				query = (&OrganizationClient{config: aq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			a.withOwner = query
+			aq.withOwner = query
 			if _, ok := fieldSeen[asset.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, asset.FieldOwnerID)
 				fieldSeen[asset.FieldOwnerID] = struct{}{}
@@ -1120,7 +1120,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: a.config}).Query()
+				query = (&GroupClient{config: aq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -1138,7 +1138,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					a.loadTotal = append(a.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(ctx context.Context, nodes []*Asset) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1167,7 +1167,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					a.loadTotal = append(a.loadTotal, func(_ context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -1201,7 +1201,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			a.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			aq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -1209,7 +1209,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: a.config}).Query()
+				query = (&GroupClient{config: aq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -1227,7 +1227,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					a.loadTotal = append(a.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(ctx context.Context, nodes []*Asset) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1256,7 +1256,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					a.loadTotal = append(a.loadTotal, func(_ context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -1290,7 +1290,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			a.WithNamedEditors(alias, func(wq *GroupQuery) {
+			aq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -1298,7 +1298,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: a.config}).Query()
+				query = (&GroupClient{config: aq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -1316,7 +1316,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					a.loadTotal = append(a.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(ctx context.Context, nodes []*Asset) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1345,7 +1345,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					a.loadTotal = append(a.loadTotal, func(_ context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -1379,7 +1379,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			a.WithNamedViewers(alias, func(wq *GroupQuery) {
+			aq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -1387,7 +1387,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: a.config}).Query()
+				query = (&ScanClient{config: aq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -1405,7 +1405,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					a.loadTotal = append(a.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(ctx context.Context, nodes []*Asset) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1438,7 +1438,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					a.loadTotal = append(a.loadTotal, func(_ context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Scans)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -1472,7 +1472,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			a.WithNamedScans(alias, func(wq *ScanQuery) {
+			aq.WithNamedScans(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -1480,7 +1480,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: a.config}).Query()
+				query = (&EntityClient{config: aq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -1498,7 +1498,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					a.loadTotal = append(a.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(ctx context.Context, nodes []*Asset) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1531,7 +1531,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					a.loadTotal = append(a.loadTotal, func(_ context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -1565,7 +1565,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			a.WithNamedEntities(alias, func(wq *EntityQuery) {
+			aq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -1573,7 +1573,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: a.config}).Query()
+				query = (&ControlClient{config: aq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -1591,7 +1591,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					a.loadTotal = append(a.loadTotal, func(ctx context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(ctx context.Context, nodes []*Asset) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -1624,7 +1624,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					a.loadTotal = append(a.loadTotal, func(_ context.Context, nodes []*Asset) error {
+					aq.loadTotal = append(aq.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -1658,7 +1658,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			a.WithNamedControls(alias, func(wq *ControlQuery) {
+			aq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -1733,7 +1733,7 @@ func (a *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 		}
 	}
 	if !unknownSeen {
-		a.Select(selectedFields...)
+		aq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -1796,18 +1796,18 @@ func newAssetPaginateArgs(rv map[string]any) *assetPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ah *AssetHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssetHistoryQuery, error) {
+func (ahq *AssetHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*AssetHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ah, nil
+		return ahq, nil
 	}
-	if err := ah.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ahq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ah, nil
+	return ahq, nil
 }
 
-func (ah *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ahq *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -1903,7 +1903,7 @@ func (ah *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 		}
 	}
 	if !unknownSeen {
-		ah.Select(selectedFields...)
+		ahq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -1960,18 +1960,18 @@ func newAssetHistoryPaginateArgs(rv map[string]any) *assethistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (c *ContactQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactQuery, error) {
+func (cq *ContactQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return c, nil
+		return cq, nil
 	}
-	if err := c.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := cq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return c, nil
+	return cq, nil
 }
 
-func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (cq *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -1985,12 +1985,12 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: c.config}).Query()
+				query = (&OrganizationClient{config: cq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			c.withOwner = query
+			cq.withOwner = query
 			if _, ok := fieldSeen[contact.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, contact.FieldOwnerID)
 				fieldSeen[contact.FieldOwnerID] = struct{}{}
@@ -2000,7 +2000,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: c.config}).Query()
+				query = (&EntityClient{config: cq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2018,7 +2018,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Contact) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2051,7 +2051,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Contact) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Contact) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -2085,7 +2085,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedEntities(alias, func(wq *EntityQuery) {
+			cq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -2093,7 +2093,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: c.config}).Query()
+				query = (&FileClient{config: cq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2111,7 +2111,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Contact) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Contact) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2144,7 +2144,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Contact) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Contact) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -2178,7 +2178,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedFiles(alias, func(wq *FileQuery) {
+			cq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -2253,7 +2253,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 		}
 	}
 	if !unknownSeen {
-		c.Select(selectedFields...)
+		cq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -2316,18 +2316,18 @@ func newContactPaginateArgs(rv map[string]any) *contactPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ch *ContactHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactHistoryQuery, error) {
+func (chq *ContactHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ch, nil
+		return chq, nil
 	}
-	if err := ch.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := chq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ch, nil
+	return chq, nil
 }
 
-func (ch *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (chq *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -2423,7 +2423,7 @@ func (ch *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 		}
 	}
 	if !unknownSeen {
-		ch.Select(selectedFields...)
+		chq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -2480,18 +2480,18 @@ func newContactHistoryPaginateArgs(rv map[string]any) *contacthistoryPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (c *ControlQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlQuery, error) {
+func (cq *ControlQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return c, nil
+		return cq, nil
 	}
-	if err := c.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := cq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return c, nil
+	return cq, nil
 }
 
-func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (cq *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -2505,7 +2505,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: c.config}).Query()
+				query = (&EvidenceClient{config: cq.config}).Query()
 			)
 			args := newEvidencePaginateArgs(fieldArgs(ctx, new(EvidenceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2523,7 +2523,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2556,7 +2556,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Evidence)
 							if nodes[i].Edges.totalCount[0] == nil {
@@ -2590,7 +2590,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			cq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -2598,7 +2598,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: c.config}).Query()
+				query = (&ControlObjectiveClient{config: cq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2616,7 +2616,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2649,7 +2649,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -2683,7 +2683,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			cq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -2691,7 +2691,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: c.config}).Query()
+				query = (&TaskClient{config: cq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2709,7 +2709,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2742,7 +2742,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -2776,7 +2776,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedTasks(alias, func(wq *TaskQuery) {
+			cq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -2784,7 +2784,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: c.config}).Query()
+				query = (&NarrativeClient{config: cq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2802,7 +2802,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2835,7 +2835,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -2869,7 +2869,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			cq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -2877,7 +2877,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: c.config}).Query()
+				query = (&RiskClient{config: cq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2895,7 +2895,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -2928,7 +2928,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -2962,7 +2962,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedRisks(alias, func(wq *RiskQuery) {
+			cq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -2970,7 +2970,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ActionPlanClient{config: c.config}).Query()
+				query = (&ActionPlanClient{config: cq.config}).Query()
 			)
 			args := newActionPlanPaginateArgs(fieldArgs(ctx, new(ActionPlanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -2988,7 +2988,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3021,7 +3021,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ActionPlans)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -3055,7 +3055,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+			cq.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -3063,7 +3063,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: c.config}).Query()
+				query = (&ProcedureClient{config: cq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3081,7 +3081,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3114,7 +3114,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -3148,7 +3148,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			cq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -3156,7 +3156,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: c.config}).Query()
+				query = (&InternalPolicyClient{config: cq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3174,7 +3174,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3207,7 +3207,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -3241,7 +3241,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			cq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -3249,12 +3249,12 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: c.config}).Query()
+				query = (&GroupClient{config: cq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			c.withControlOwner = query
+			cq.withControlOwner = query
 			if _, ok := fieldSeen[control.FieldControlOwnerID]; !ok {
 				selectedFields = append(selectedFields, control.FieldControlOwnerID)
 				fieldSeen[control.FieldControlOwnerID] = struct{}{}
@@ -3264,12 +3264,12 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: c.config}).Query()
+				query = (&GroupClient{config: cq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			c.withDelegate = query
+			cq.withDelegate = query
 			if _, ok := fieldSeen[control.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, control.FieldDelegateID)
 				fieldSeen[control.FieldDelegateID] = struct{}{}
@@ -3279,12 +3279,12 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: c.config}).Query()
+				query = (&OrganizationClient{config: cq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			c.withOwner = query
+			cq.withOwner = query
 			if _, ok := fieldSeen[control.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, control.FieldOwnerID)
 				fieldSeen[control.FieldOwnerID] = struct{}{}
@@ -3294,7 +3294,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: c.config}).Query()
+				query = (&GroupClient{config: cq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3312,7 +3312,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3345,7 +3345,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -3379,7 +3379,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			cq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -3387,7 +3387,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: c.config}).Query()
+				query = (&GroupClient{config: cq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3405,7 +3405,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3438,7 +3438,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -3472,7 +3472,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedEditors(alias, func(wq *GroupQuery) {
+			cq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -3480,12 +3480,12 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&StandardClient{config: c.config}).Query()
+				query = (&StandardClient{config: cq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
 				return err
 			}
-			c.withStandard = query
+			cq.withStandard = query
 			if _, ok := fieldSeen[control.FieldStandardID]; !ok {
 				selectedFields = append(selectedFields, control.FieldStandardID)
 				fieldSeen[control.FieldStandardID] = struct{}{}
@@ -3495,7 +3495,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: c.config}).Query()
+				query = (&ProgramClient{config: cq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3513,7 +3513,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3546,7 +3546,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[14] == nil {
@@ -3580,7 +3580,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			cq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -3588,7 +3588,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&AssetClient{config: c.config}).Query()
+				query = (&AssetClient{config: cq.config}).Query()
 			)
 			args := newAssetPaginateArgs(fieldArgs(ctx, new(AssetWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3606,7 +3606,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3639,7 +3639,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
 							if nodes[i].Edges.totalCount[15] == nil {
@@ -3673,7 +3673,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedAssets(alias, func(wq *AssetQuery) {
+			cq.WithNamedAssets(alias, func(wq *AssetQuery) {
 				*wq = *query
 			})
 
@@ -3681,7 +3681,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: c.config}).Query()
+				query = (&ScanClient{config: cq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3699,7 +3699,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3728,7 +3728,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Scans)
 							if nodes[i].Edges.totalCount[16] == nil {
@@ -3762,7 +3762,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedScans(alias, func(wq *ScanQuery) {
+			cq.WithNamedScans(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -3770,7 +3770,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlImplementationClient{config: c.config}).Query()
+				query = (&ControlImplementationClient{config: cq.config}).Query()
 			)
 			args := newControlImplementationPaginateArgs(fieldArgs(ctx, new(ControlImplementationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3788,7 +3788,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3821,7 +3821,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementations)
 							if nodes[i].Edges.totalCount[17] == nil {
@@ -3855,7 +3855,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
+			cq.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
 				*wq = *query
 			})
 
@@ -3863,7 +3863,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: c.config}).Query()
+				query = (&SubcontrolClient{config: cq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3881,7 +3881,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -3910,7 +3910,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[18] == nil {
@@ -3944,7 +3944,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			cq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -3952,7 +3952,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: c.config}).Query()
+				query = (&ScheduledJobClient{config: cq.config}).Query()
 			)
 			args := newScheduledJobPaginateArgs(fieldArgs(ctx, new(ScheduledJobWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -3970,7 +3970,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					c.loadTotal = append(c.loadTotal, func(ctx context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(ctx context.Context, nodes []*Control) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4003,7 +4003,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						return nil
 					})
 				} else {
-					c.loadTotal = append(c.loadTotal, func(_ context.Context, nodes []*Control) error {
+					cq.loadTotal = append(cq.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobs)
 							if nodes[i].Edges.totalCount[19] == nil {
@@ -4037,7 +4037,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			} else {
 				query = pager.applyOrder(query)
 			}
-			c.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
+			cq.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -4187,7 +4187,7 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 		}
 	}
 	if !unknownSeen {
-		c.Select(selectedFields...)
+		cq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -4250,18 +4250,18 @@ func newControlPaginateArgs(rv map[string]any) *controlPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ch *ControlHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlHistoryQuery, error) {
+func (chq *ControlHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ch, nil
+		return chq, nil
 	}
-	if err := ch.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := chq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ch, nil
+	return chq, nil
 }
 
-func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (chq *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -4432,7 +4432,7 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 		}
 	}
 	if !unknownSeen {
-		ch.Select(selectedFields...)
+		chq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -4489,18 +4489,18 @@ func newControlHistoryPaginateArgs(rv map[string]any) *controlhistoryPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ci *ControlImplementationQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlImplementationQuery, error) {
+func (ciq *ControlImplementationQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlImplementationQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ci, nil
+		return ciq, nil
 	}
-	if err := ci.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ciq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ci, nil
+	return ciq, nil
 }
 
-func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ciq *ControlImplementationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -4514,12 +4514,12 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: ci.config}).Query()
+				query = (&OrganizationClient{config: ciq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			ci.withOwner = query
+			ciq.withOwner = query
 			if _, ok := fieldSeen[controlimplementation.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, controlimplementation.FieldOwnerID)
 				fieldSeen[controlimplementation.FieldOwnerID] = struct{}{}
@@ -4529,7 +4529,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ci.config}).Query()
+				query = (&GroupClient{config: ciq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -4547,7 +4547,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ci.loadTotal = append(ci.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4580,7 +4580,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 						return nil
 					})
 				} else {
-					ci.loadTotal = append(ci.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -4614,7 +4614,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ci.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			ciq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -4622,7 +4622,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ci.config}).Query()
+				query = (&GroupClient{config: ciq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -4640,7 +4640,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ci.loadTotal = append(ci.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4673,7 +4673,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 						return nil
 					})
 				} else {
-					ci.loadTotal = append(ci.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -4707,7 +4707,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ci.WithNamedEditors(alias, func(wq *GroupQuery) {
+			ciq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -4715,7 +4715,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ci.config}).Query()
+				query = (&GroupClient{config: ciq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -4733,7 +4733,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ci.loadTotal = append(ci.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4766,7 +4766,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 						return nil
 					})
 				} else {
-					ci.loadTotal = append(ci.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -4800,7 +4800,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ci.WithNamedViewers(alias, func(wq *GroupQuery) {
+			ciq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -4808,7 +4808,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: ci.config}).Query()
+				query = (&ControlClient{config: ciq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -4826,7 +4826,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ci.loadTotal = append(ci.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4859,7 +4859,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 						return nil
 					})
 				} else {
-					ci.loadTotal = append(ci.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -4893,7 +4893,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ci.WithNamedControls(alias, func(wq *ControlQuery) {
+			ciq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -4901,7 +4901,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: ci.config}).Query()
+				query = (&SubcontrolClient{config: ciq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -4919,7 +4919,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ci.loadTotal = append(ci.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(ctx context.Context, nodes []*ControlImplementation) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -4952,7 +4952,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 						return nil
 					})
 				} else {
-					ci.loadTotal = append(ci.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
+					ciq.loadTotal = append(ciq.loadTotal, func(_ context.Context, nodes []*ControlImplementation) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -4986,7 +4986,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ci.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			ciq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -5051,7 +5051,7 @@ func (ci *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 		}
 	}
 	if !unknownSeen {
-		ci.Select(selectedFields...)
+		ciq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -5114,18 +5114,18 @@ func newControlImplementationPaginateArgs(rv map[string]any) *controlimplementat
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (cih *ControlImplementationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlImplementationHistoryQuery, error) {
+func (cihq *ControlImplementationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlImplementationHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return cih, nil
+		return cihq, nil
 	}
-	if err := cih.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := cihq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return cih, nil
+	return cihq, nil
 }
 
-func (cih *ControlImplementationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (cihq *ControlImplementationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -5211,7 +5211,7 @@ func (cih *ControlImplementationHistoryQuery) collectField(ctx context.Context, 
 		}
 	}
 	if !unknownSeen {
-		cih.Select(selectedFields...)
+		cihq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -5268,18 +5268,18 @@ func newControlImplementationHistoryPaginateArgs(rv map[string]any) *controlimpl
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (co *ControlObjectiveQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlObjectiveQuery, error) {
+func (coq *ControlObjectiveQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlObjectiveQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return co, nil
+		return coq, nil
 	}
-	if err := co.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := coq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return co, nil
+	return coq, nil
 }
 
-func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (coq *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -5293,12 +5293,12 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: co.config}).Query()
+				query = (&OrganizationClient{config: coq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			co.withOwner = query
+			coq.withOwner = query
 			if _, ok := fieldSeen[controlobjective.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldOwnerID)
 				fieldSeen[controlobjective.FieldOwnerID] = struct{}{}
@@ -5308,7 +5308,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: co.config}).Query()
+				query = (&GroupClient{config: coq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5326,7 +5326,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5359,7 +5359,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -5393,7 +5393,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			coq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -5401,7 +5401,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: co.config}).Query()
+				query = (&GroupClient{config: coq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5419,7 +5419,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5452,7 +5452,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -5486,7 +5486,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedEditors(alias, func(wq *GroupQuery) {
+			coq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -5494,7 +5494,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: co.config}).Query()
+				query = (&GroupClient{config: coq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5512,7 +5512,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5545,7 +5545,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -5579,7 +5579,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedViewers(alias, func(wq *GroupQuery) {
+			coq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -5587,7 +5587,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: co.config}).Query()
+				query = (&ProgramClient{config: coq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5605,7 +5605,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5638,7 +5638,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -5672,7 +5672,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			coq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -5680,7 +5680,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: co.config}).Query()
+				query = (&EvidenceClient{config: coq.config}).Query()
 			)
 			args := newEvidencePaginateArgs(fieldArgs(ctx, new(EvidenceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5698,7 +5698,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5731,7 +5731,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Evidence)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -5765,7 +5765,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			coq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -5773,7 +5773,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: co.config}).Query()
+				query = (&ControlClient{config: coq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5791,7 +5791,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5824,7 +5824,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -5858,7 +5858,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedControls(alias, func(wq *ControlQuery) {
+			coq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -5866,7 +5866,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: co.config}).Query()
+				query = (&SubcontrolClient{config: coq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5884,7 +5884,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -5917,7 +5917,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -5951,7 +5951,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			coq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -5959,7 +5959,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: co.config}).Query()
+				query = (&InternalPolicyClient{config: coq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -5977,7 +5977,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6010,7 +6010,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -6044,7 +6044,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			coq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -6052,7 +6052,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: co.config}).Query()
+				query = (&ProcedureClient{config: coq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -6070,7 +6070,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6099,7 +6099,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -6133,7 +6133,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			coq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -6141,7 +6141,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: co.config}).Query()
+				query = (&RiskClient{config: coq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -6159,7 +6159,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6188,7 +6188,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -6222,7 +6222,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedRisks(alias, func(wq *RiskQuery) {
+			coq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -6230,7 +6230,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: co.config}).Query()
+				query = (&NarrativeClient{config: coq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -6248,7 +6248,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6277,7 +6277,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -6311,7 +6311,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			coq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -6319,7 +6319,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: co.config}).Query()
+				query = (&TaskClient{config: coq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -6337,7 +6337,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					co.loadTotal = append(co.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(ctx context.Context, nodes []*ControlObjective) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -6370,7 +6370,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 						return nil
 					})
 				} else {
-					co.loadTotal = append(co.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
+					coq.loadTotal = append(coq.loadTotal, func(_ context.Context, nodes []*ControlObjective) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -6404,7 +6404,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			} else {
 				query = pager.applyOrder(query)
 			}
-			co.WithNamedTasks(alias, func(wq *TaskQuery) {
+			coq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -6489,7 +6489,7 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 		}
 	}
 	if !unknownSeen {
-		co.Select(selectedFields...)
+		coq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -6552,18 +6552,18 @@ func newControlObjectivePaginateArgs(rv map[string]any) *controlobjectivePaginat
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (coh *ControlObjectiveHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlObjectiveHistoryQuery, error) {
+func (cohq *ControlObjectiveHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlObjectiveHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return coh, nil
+		return cohq, nil
 	}
-	if err := coh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := cohq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return coh, nil
+	return cohq, nil
 }
 
-func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (cohq *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -6669,7 +6669,7 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 		}
 	}
 	if !unknownSeen {
-		coh.Select(selectedFields...)
+		cohq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -6726,18 +6726,18 @@ func newControlObjectiveHistoryPaginateArgs(rv map[string]any) *controlobjective
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (cd *CustomDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*CustomDomainQuery, error) {
+func (cdq *CustomDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*CustomDomainQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return cd, nil
+		return cdq, nil
 	}
-	if err := cd.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := cdq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return cd, nil
+	return cdq, nil
 }
 
-func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (cdq *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -6751,12 +6751,12 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: cd.config}).Query()
+				query = (&OrganizationClient{config: cdq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			cd.withOwner = query
+			cdq.withOwner = query
 			if _, ok := fieldSeen[customdomain.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, customdomain.FieldOwnerID)
 				fieldSeen[customdomain.FieldOwnerID] = struct{}{}
@@ -6766,12 +6766,12 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&MappableDomainClient{config: cd.config}).Query()
+				query = (&MappableDomainClient{config: cdq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, mappabledomainImplementors)...); err != nil {
 				return err
 			}
-			cd.withMappableDomain = query
+			cdq.withMappableDomain = query
 			if _, ok := fieldSeen[customdomain.FieldMappableDomainID]; !ok {
 				selectedFields = append(selectedFields, customdomain.FieldMappableDomainID)
 				fieldSeen[customdomain.FieldMappableDomainID] = struct{}{}
@@ -6781,12 +6781,12 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DNSVerificationClient{config: cd.config}).Query()
+				query = (&DNSVerificationClient{config: cdq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, dnsverificationImplementors)...); err != nil {
 				return err
 			}
-			cd.withDNSVerification = query
+			cdq.withDNSVerification = query
 			if _, ok := fieldSeen[customdomain.FieldDNSVerificationID]; !ok {
 				selectedFields = append(selectedFields, customdomain.FieldDNSVerificationID)
 				fieldSeen[customdomain.FieldDNSVerificationID] = struct{}{}
@@ -6843,7 +6843,7 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 		}
 	}
 	if !unknownSeen {
-		cd.Select(selectedFields...)
+		cdq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -6906,18 +6906,18 @@ func newCustomDomainPaginateArgs(rv map[string]any) *customdomainPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (cdh *CustomDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*CustomDomainHistoryQuery, error) {
+func (cdhq *CustomDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*CustomDomainHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return cdh, nil
+		return cdhq, nil
 	}
-	if err := cdh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := cdhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return cdh, nil
+	return cdhq, nil
 }
 
-func (cdh *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (cdhq *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -6993,7 +6993,7 @@ func (cdh *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode b
 		}
 	}
 	if !unknownSeen {
-		cdh.Select(selectedFields...)
+		cdhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -7050,18 +7050,18 @@ func newCustomDomainHistoryPaginateArgs(rv map[string]any) *customdomainhistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (dv *DNSVerificationQuery) CollectFields(ctx context.Context, satisfies ...string) (*DNSVerificationQuery, error) {
+func (dvq *DNSVerificationQuery) CollectFields(ctx context.Context, satisfies ...string) (*DNSVerificationQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return dv, nil
+		return dvq, nil
 	}
-	if err := dv.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := dvq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return dv, nil
+	return dvq, nil
 }
 
-func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (dvq *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -7075,12 +7075,12 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: dv.config}).Query()
+				query = (&OrganizationClient{config: dvq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			dv.withOwner = query
+			dvq.withOwner = query
 			if _, ok := fieldSeen[dnsverification.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, dnsverification.FieldOwnerID)
 				fieldSeen[dnsverification.FieldOwnerID] = struct{}{}
@@ -7090,7 +7090,7 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&CustomDomainClient{config: dv.config}).Query()
+				query = (&CustomDomainClient{config: dvq.config}).Query()
 			)
 			args := newCustomDomainPaginateArgs(fieldArgs(ctx, new(CustomDomainWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -7108,7 +7108,7 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					dv.loadTotal = append(dv.loadTotal, func(ctx context.Context, nodes []*DNSVerification) error {
+					dvq.loadTotal = append(dvq.loadTotal, func(ctx context.Context, nodes []*DNSVerification) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7137,7 +7137,7 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 						return nil
 					})
 				} else {
-					dv.loadTotal = append(dv.loadTotal, func(_ context.Context, nodes []*DNSVerification) error {
+					dvq.loadTotal = append(dvq.loadTotal, func(_ context.Context, nodes []*DNSVerification) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.CustomDomains)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -7171,7 +7171,7 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			dv.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
+			dvq.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -7256,7 +7256,7 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		dv.Select(selectedFields...)
+		dvq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -7319,18 +7319,18 @@ func newDNSVerificationPaginateArgs(rv map[string]any) *dnsverificationPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (dvh *DNSVerificationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DNSVerificationHistoryQuery, error) {
+func (dvhq *DNSVerificationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DNSVerificationHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return dvh, nil
+		return dvhq, nil
 	}
-	if err := dvh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := dvhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return dvh, nil
+	return dvhq, nil
 }
 
-func (dvh *DNSVerificationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (dvhq *DNSVerificationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -7436,7 +7436,7 @@ func (dvh *DNSVerificationHistoryQuery) collectField(ctx context.Context, oneNod
 		}
 	}
 	if !unknownSeen {
-		dvh.Select(selectedFields...)
+		dvhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -7493,18 +7493,18 @@ func newDNSVerificationHistoryPaginateArgs(rv map[string]any) *dnsverificationhi
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (dd *DocumentDataQuery) CollectFields(ctx context.Context, satisfies ...string) (*DocumentDataQuery, error) {
+func (ddq *DocumentDataQuery) CollectFields(ctx context.Context, satisfies ...string) (*DocumentDataQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return dd, nil
+		return ddq, nil
 	}
-	if err := dd.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ddq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return dd, nil
+	return ddq, nil
 }
 
-func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ddq *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -7518,12 +7518,12 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: dd.config}).Query()
+				query = (&OrganizationClient{config: ddq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			dd.withOwner = query
+			ddq.withOwner = query
 			if _, ok := fieldSeen[documentdata.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, documentdata.FieldOwnerID)
 				fieldSeen[documentdata.FieldOwnerID] = struct{}{}
@@ -7533,12 +7533,12 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TemplateClient{config: dd.config}).Query()
+				query = (&TemplateClient{config: ddq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
 				return err
 			}
-			dd.withTemplate = query
+			ddq.withTemplate = query
 			if _, ok := fieldSeen[documentdata.FieldTemplateID]; !ok {
 				selectedFields = append(selectedFields, documentdata.FieldTemplateID)
 				fieldSeen[documentdata.FieldTemplateID] = struct{}{}
@@ -7548,7 +7548,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: dd.config}).Query()
+				query = (&EntityClient{config: ddq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -7566,7 +7566,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					dd.loadTotal = append(dd.loadTotal, func(ctx context.Context, nodes []*DocumentData) error {
+					ddq.loadTotal = append(ddq.loadTotal, func(ctx context.Context, nodes []*DocumentData) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7599,7 +7599,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 						return nil
 					})
 				} else {
-					dd.loadTotal = append(dd.loadTotal, func(_ context.Context, nodes []*DocumentData) error {
+					ddq.loadTotal = append(ddq.loadTotal, func(_ context.Context, nodes []*DocumentData) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -7633,7 +7633,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			} else {
 				query = pager.applyOrder(query)
 			}
-			dd.WithNamedEntities(alias, func(wq *EntityQuery) {
+			ddq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -7641,7 +7641,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: dd.config}).Query()
+				query = (&FileClient{config: ddq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -7659,7 +7659,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					dd.loadTotal = append(dd.loadTotal, func(ctx context.Context, nodes []*DocumentData) error {
+					ddq.loadTotal = append(ddq.loadTotal, func(ctx context.Context, nodes []*DocumentData) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -7692,7 +7692,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 						return nil
 					})
 				} else {
-					dd.loadTotal = append(dd.loadTotal, func(_ context.Context, nodes []*DocumentData) error {
+					ddq.loadTotal = append(ddq.loadTotal, func(_ context.Context, nodes []*DocumentData) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -7726,7 +7726,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 			} else {
 				query = pager.applyOrder(query)
 			}
-			dd.WithNamedFiles(alias, func(wq *FileQuery) {
+			ddq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -7776,7 +7776,7 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 		}
 	}
 	if !unknownSeen {
-		dd.Select(selectedFields...)
+		ddq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -7839,18 +7839,18 @@ func newDocumentDataPaginateArgs(rv map[string]any) *documentdataPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ddh *DocumentDataHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DocumentDataHistoryQuery, error) {
+func (ddhq *DocumentDataHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DocumentDataHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ddh, nil
+		return ddhq, nil
 	}
-	if err := ddh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ddhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ddh, nil
+	return ddhq, nil
 }
 
-func (ddh *DocumentDataHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ddhq *DocumentDataHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -7921,7 +7921,7 @@ func (ddh *DocumentDataHistoryQuery) collectField(ctx context.Context, oneNode b
 		}
 	}
 	if !unknownSeen {
-		ddh.Select(selectedFields...)
+		ddhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -7978,18 +7978,18 @@ func newDocumentDataHistoryPaginateArgs(rv map[string]any) *documentdatahistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (e *EntityQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityQuery, error) {
+func (eq *EntityQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return e, nil
+		return eq, nil
 	}
-	if err := e.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := eq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return e, nil
+	return eq, nil
 }
 
-func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (eq *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -8003,12 +8003,12 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: e.config}).Query()
+				query = (&OrganizationClient{config: eq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			e.withOwner = query
+			eq.withOwner = query
 			if _, ok := fieldSeen[entity.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, entity.FieldOwnerID)
 				fieldSeen[entity.FieldOwnerID] = struct{}{}
@@ -8018,7 +8018,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: e.config}).Query()
+				query = (&GroupClient{config: eq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8036,7 +8036,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8069,7 +8069,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -8103,7 +8103,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			eq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -8111,7 +8111,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: e.config}).Query()
+				query = (&GroupClient{config: eq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8129,7 +8129,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8162,7 +8162,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -8196,7 +8196,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedEditors(alias, func(wq *GroupQuery) {
+			eq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -8204,7 +8204,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: e.config}).Query()
+				query = (&GroupClient{config: eq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8222,7 +8222,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8255,7 +8255,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -8289,7 +8289,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedViewers(alias, func(wq *GroupQuery) {
+			eq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -8297,7 +8297,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ContactClient{config: e.config}).Query()
+				query = (&ContactClient{config: eq.config}).Query()
 			)
 			args := newContactPaginateArgs(fieldArgs(ctx, new(ContactWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8315,7 +8315,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8348,7 +8348,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Contacts)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -8382,7 +8382,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedContacts(alias, func(wq *ContactQuery) {
+			eq.WithNamedContacts(alias, func(wq *ContactQuery) {
 				*wq = *query
 			})
 
@@ -8390,7 +8390,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DocumentDataClient{config: e.config}).Query()
+				query = (&DocumentDataClient{config: eq.config}).Query()
 			)
 			args := newDocumentDataPaginateArgs(fieldArgs(ctx, new(DocumentDataWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8408,7 +8408,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8441,7 +8441,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Documents)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -8475,7 +8475,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
+			eq.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
 				*wq = *query
 			})
 
@@ -8483,7 +8483,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NoteClient{config: e.config}).Query()
+				query = (&NoteClient{config: eq.config}).Query()
 			)
 			args := newNotePaginateArgs(fieldArgs(ctx, new(NoteWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8501,7 +8501,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8530,7 +8530,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Notes)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -8564,7 +8564,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedNotes(alias, func(wq *NoteQuery) {
+			eq.WithNamedNotes(alias, func(wq *NoteQuery) {
 				*wq = *query
 			})
 
@@ -8572,7 +8572,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: e.config}).Query()
+				query = (&FileClient{config: eq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8590,7 +8590,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8623,7 +8623,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -8657,7 +8657,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedFiles(alias, func(wq *FileQuery) {
+			eq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -8665,7 +8665,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&AssetClient{config: e.config}).Query()
+				query = (&AssetClient{config: eq.config}).Query()
 			)
 			args := newAssetPaginateArgs(fieldArgs(ctx, new(AssetWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8683,7 +8683,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8716,7 +8716,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -8750,7 +8750,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedAssets(alias, func(wq *AssetQuery) {
+			eq.WithNamedAssets(alias, func(wq *AssetQuery) {
 				*wq = *query
 			})
 
@@ -8758,7 +8758,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: e.config}).Query()
+				query = (&ScanClient{config: eq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -8776,7 +8776,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Entity) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -8805,7 +8805,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Entity) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Scans)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -8839,7 +8839,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedScans(alias, func(wq *ScanQuery) {
+			eq.WithNamedScans(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -8847,12 +8847,12 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityTypeClient{config: e.config}).Query()
+				query = (&EntityTypeClient{config: eq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, entitytypeImplementors)...); err != nil {
 				return err
 			}
-			e.withEntityType = query
+			eq.withEntityType = query
 			if _, ok := fieldSeen[entity.FieldEntityTypeID]; !ok {
 				selectedFields = append(selectedFields, entity.FieldEntityTypeID)
 				fieldSeen[entity.FieldEntityTypeID] = struct{}{}
@@ -8924,7 +8924,7 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 		}
 	}
 	if !unknownSeen {
-		e.Select(selectedFields...)
+		eq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -8987,18 +8987,18 @@ func newEntityPaginateArgs(rv map[string]any) *entityPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (eh *EntityHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityHistoryQuery, error) {
+func (ehq *EntityHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return eh, nil
+		return ehq, nil
 	}
-	if err := eh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ehq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return eh, nil
+	return ehq, nil
 }
 
-func (eh *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ehq *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -9089,7 +9089,7 @@ func (eh *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 		}
 	}
 	if !unknownSeen {
-		eh.Select(selectedFields...)
+		ehq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -9146,18 +9146,18 @@ func newEntityHistoryPaginateArgs(rv map[string]any) *entityhistoryPaginateArgs 
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (et *EntityTypeQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityTypeQuery, error) {
+func (etq *EntityTypeQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityTypeQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return et, nil
+		return etq, nil
 	}
-	if err := et.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := etq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return et, nil
+	return etq, nil
 }
 
-func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (etq *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -9171,12 +9171,12 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: et.config}).Query()
+				query = (&OrganizationClient{config: etq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			et.withOwner = query
+			etq.withOwner = query
 			if _, ok := fieldSeen[entitytype.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, entitytype.FieldOwnerID)
 				fieldSeen[entitytype.FieldOwnerID] = struct{}{}
@@ -9186,7 +9186,7 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: et.config}).Query()
+				query = (&EntityClient{config: etq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -9204,7 +9204,7 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					et.loadTotal = append(et.loadTotal, func(ctx context.Context, nodes []*EntityType) error {
+					etq.loadTotal = append(etq.loadTotal, func(ctx context.Context, nodes []*EntityType) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9233,7 +9233,7 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						return nil
 					})
 				} else {
-					et.loadTotal = append(et.loadTotal, func(_ context.Context, nodes []*EntityType) error {
+					etq.loadTotal = append(etq.loadTotal, func(_ context.Context, nodes []*EntityType) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -9267,7 +9267,7 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			} else {
 				query = pager.applyOrder(query)
 			}
-			et.WithNamedEntities(alias, func(wq *EntityQuery) {
+			etq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -9312,7 +9312,7 @@ func (et *EntityTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx
 		}
 	}
 	if !unknownSeen {
-		et.Select(selectedFields...)
+		etq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -9375,18 +9375,18 @@ func newEntityTypePaginateArgs(rv map[string]any) *entitytypePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (eth *EntityTypeHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityTypeHistoryQuery, error) {
+func (ethq *EntityTypeHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EntityTypeHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return eth, nil
+		return ethq, nil
 	}
-	if err := eth.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ethq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return eth, nil
+	return ethq, nil
 }
 
-func (eth *EntityTypeHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ethq *EntityTypeHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -9452,7 +9452,7 @@ func (eth *EntityTypeHistoryQuery) collectField(ctx context.Context, oneNode boo
 		}
 	}
 	if !unknownSeen {
-		eth.Select(selectedFields...)
+		ethq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -9509,18 +9509,18 @@ func newEntityTypeHistoryPaginateArgs(rv map[string]any) *entitytypehistoryPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (e *EventQuery) CollectFields(ctx context.Context, satisfies ...string) (*EventQuery, error) {
+func (eq *EventQuery) CollectFields(ctx context.Context, satisfies ...string) (*EventQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return e, nil
+		return eq, nil
 	}
-	if err := e.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := eq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return e, nil
+	return eq, nil
 }
 
-func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (eq *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -9534,7 +9534,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: e.config}).Query()
+				query = (&UserClient{config: eq.config}).Query()
 			)
 			args := newUserPaginateArgs(fieldArgs(ctx, new(UserWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -9552,7 +9552,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9585,7 +9585,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Users)
 							if nodes[i].Edges.totalCount[0] == nil {
@@ -9619,7 +9619,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedUsers(alias, func(wq *UserQuery) {
+			eq.WithNamedUsers(alias, func(wq *UserQuery) {
 				*wq = *query
 			})
 
@@ -9627,7 +9627,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: e.config}).Query()
+				query = (&GroupClient{config: eq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -9645,7 +9645,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9678,7 +9678,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -9712,7 +9712,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedGroups(alias, func(wq *GroupQuery) {
+			eq.WithNamedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -9720,7 +9720,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&IntegrationClient{config: e.config}).Query()
+				query = (&IntegrationClient{config: eq.config}).Query()
 			)
 			args := newIntegrationPaginateArgs(fieldArgs(ctx, new(IntegrationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -9738,7 +9738,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9771,7 +9771,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Integrations)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -9805,7 +9805,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+			eq.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
 				*wq = *query
 			})
 
@@ -9813,7 +9813,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: e.config}).Query()
+				query = (&OrganizationClient{config: eq.config}).Query()
 			)
 			args := newOrganizationPaginateArgs(fieldArgs(ctx, new(OrganizationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -9831,7 +9831,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9864,7 +9864,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Organizations)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -9898,7 +9898,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
+			eq.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
 				*wq = *query
 			})
 
@@ -9906,7 +9906,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InviteClient{config: e.config}).Query()
+				query = (&InviteClient{config: eq.config}).Query()
 			)
 			args := newInvitePaginateArgs(fieldArgs(ctx, new(InviteWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -9924,7 +9924,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -9957,7 +9957,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Invites)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -9991,7 +9991,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedInvites(alias, func(wq *InviteQuery) {
+			eq.WithNamedInvites(alias, func(wq *InviteQuery) {
 				*wq = *query
 			})
 
@@ -9999,7 +9999,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalAccessTokenClient{config: e.config}).Query()
+				query = (&PersonalAccessTokenClient{config: eq.config}).Query()
 			)
 			args := newPersonalAccessTokenPaginateArgs(fieldArgs(ctx, new(PersonalAccessTokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10017,7 +10017,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10050,7 +10050,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.PersonalAccessTokens)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -10084,7 +10084,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedPersonalAccessTokens(alias, func(wq *PersonalAccessTokenQuery) {
+			eq.WithNamedPersonalAccessTokens(alias, func(wq *PersonalAccessTokenQuery) {
 				*wq = *query
 			})
 
@@ -10092,7 +10092,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&HushClient{config: e.config}).Query()
+				query = (&HushClient{config: eq.config}).Query()
 			)
 			args := newHushPaginateArgs(fieldArgs(ctx, new(HushWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10110,7 +10110,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10143,7 +10143,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Secrets)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -10177,7 +10177,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedSecrets(alias, func(wq *HushQuery) {
+			eq.WithNamedSecrets(alias, func(wq *HushQuery) {
 				*wq = *query
 			})
 
@@ -10185,7 +10185,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrgMembershipClient{config: e.config}).Query()
+				query = (&OrgMembershipClient{config: eq.config}).Query()
 			)
 			args := newOrgMembershipPaginateArgs(fieldArgs(ctx, new(OrgMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10203,7 +10203,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10236,7 +10236,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.OrgMemberships)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -10270,7 +10270,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedOrgMemberships(alias, func(wq *OrgMembershipQuery) {
+			eq.WithNamedOrgMemberships(alias, func(wq *OrgMembershipQuery) {
 				*wq = *query
 			})
 
@@ -10278,7 +10278,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupMembershipClient{config: e.config}).Query()
+				query = (&GroupMembershipClient{config: eq.config}).Query()
 			)
 			args := newGroupMembershipPaginateArgs(fieldArgs(ctx, new(GroupMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10296,7 +10296,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10329,7 +10329,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.GroupMemberships)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -10363,7 +10363,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedGroupMemberships(alias, func(wq *GroupMembershipQuery) {
+			eq.WithNamedGroupMemberships(alias, func(wq *GroupMembershipQuery) {
 				*wq = *query
 			})
 
@@ -10371,7 +10371,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubscriberClient{config: e.config}).Query()
+				query = (&SubscriberClient{config: eq.config}).Query()
 			)
 			args := newSubscriberPaginateArgs(fieldArgs(ctx, new(SubscriberWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10389,7 +10389,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10422,7 +10422,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subscribers)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -10456,7 +10456,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedSubscribers(alias, func(wq *SubscriberQuery) {
+			eq.WithNamedSubscribers(alias, func(wq *SubscriberQuery) {
 				*wq = *query
 			})
 
@@ -10464,7 +10464,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: e.config}).Query()
+				query = (&FileClient{config: eq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10482,7 +10482,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10515,7 +10515,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -10549,7 +10549,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedFiles(alias, func(wq *FileQuery) {
+			eq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -10557,7 +10557,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrgSubscriptionClient{config: e.config}).Query()
+				query = (&OrgSubscriptionClient{config: eq.config}).Query()
 			)
 			args := newOrgSubscriptionPaginateArgs(fieldArgs(ctx, new(OrgSubscriptionWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10575,7 +10575,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Event) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10608,7 +10608,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.OrgSubscriptions)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -10642,7 +10642,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
+			eq.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -10697,7 +10697,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 		}
 	}
 	if !unknownSeen {
-		e.Select(selectedFields...)
+		eq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -10760,18 +10760,18 @@ func newEventPaginateArgs(rv map[string]any) *eventPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (e *EvidenceQuery) CollectFields(ctx context.Context, satisfies ...string) (*EvidenceQuery, error) {
+func (eq *EvidenceQuery) CollectFields(ctx context.Context, satisfies ...string) (*EvidenceQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return e, nil
+		return eq, nil
 	}
-	if err := e.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := eq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return e, nil
+	return eq, nil
 }
 
-func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (eq *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -10785,12 +10785,12 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: e.config}).Query()
+				query = (&OrganizationClient{config: eq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			e.withOwner = query
+			eq.withOwner = query
 			if _, ok := fieldSeen[evidence.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, evidence.FieldOwnerID)
 				fieldSeen[evidence.FieldOwnerID] = struct{}{}
@@ -10800,7 +10800,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: e.config}).Query()
+				query = (&ControlObjectiveClient{config: eq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10818,7 +10818,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10851,7 +10851,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Evidence) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -10885,7 +10885,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			eq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -10893,7 +10893,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: e.config}).Query()
+				query = (&ControlClient{config: eq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -10911,7 +10911,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -10944,7 +10944,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Evidence) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -10978,7 +10978,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedControls(alias, func(wq *ControlQuery) {
+			eq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -10986,7 +10986,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: e.config}).Query()
+				query = (&SubcontrolClient{config: eq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -11004,7 +11004,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11037,7 +11037,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Evidence) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -11071,7 +11071,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			eq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -11079,7 +11079,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: e.config}).Query()
+				query = (&FileClient{config: eq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -11097,7 +11097,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11130,7 +11130,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Evidence) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -11164,7 +11164,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedFiles(alias, func(wq *FileQuery) {
+			eq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -11172,7 +11172,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: e.config}).Query()
+				query = (&ProgramClient{config: eq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -11190,7 +11190,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11223,7 +11223,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Evidence) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -11257,7 +11257,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			eq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -11265,7 +11265,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: e.config}).Query()
+				query = (&TaskClient{config: eq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -11283,7 +11283,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11316,7 +11316,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Evidence) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -11350,7 +11350,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedTasks(alias, func(wq *TaskQuery) {
+			eq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -11440,7 +11440,7 @@ func (e *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 		}
 	}
 	if !unknownSeen {
-		e.Select(selectedFields...)
+		eq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -11503,18 +11503,18 @@ func newEvidencePaginateArgs(rv map[string]any) *evidencePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (eh *EvidenceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EvidenceHistoryQuery, error) {
+func (ehq *EvidenceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EvidenceHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return eh, nil
+		return ehq, nil
 	}
-	if err := eh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ehq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return eh, nil
+	return ehq, nil
 }
 
-func (eh *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ehq *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -11625,7 +11625,7 @@ func (eh *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		eh.Select(selectedFields...)
+		ehq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -11682,18 +11682,18 @@ func newEvidenceHistoryPaginateArgs(rv map[string]any) *evidencehistoryPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (e *ExportQuery) CollectFields(ctx context.Context, satisfies ...string) (*ExportQuery, error) {
+func (eq *ExportQuery) CollectFields(ctx context.Context, satisfies ...string) (*ExportQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return e, nil
+		return eq, nil
 	}
-	if err := e.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := eq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return e, nil
+	return eq, nil
 }
 
-func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (eq *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -11707,12 +11707,12 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: e.config}).Query()
+				query = (&OrganizationClient{config: eq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			e.withOwner = query
+			eq.withOwner = query
 			if _, ok := fieldSeen[export.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, export.FieldOwnerID)
 				fieldSeen[export.FieldOwnerID] = struct{}{}
@@ -11722,7 +11722,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: e.config}).Query()
+				query = (&EventClient{config: eq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -11740,7 +11740,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Export) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Export) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11769,7 +11769,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Export) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Export) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -11803,7 +11803,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedEvents(alias, func(wq *EventQuery) {
+			eq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 
@@ -11811,7 +11811,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: e.config}).Query()
+				query = (&FileClient{config: eq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -11829,7 +11829,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					e.loadTotal = append(e.loadTotal, func(ctx context.Context, nodes []*Export) error {
+					eq.loadTotal = append(eq.loadTotal, func(ctx context.Context, nodes []*Export) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -11858,7 +11858,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Export) error {
+					eq.loadTotal = append(eq.loadTotal, func(_ context.Context, nodes []*Export) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -11892,7 +11892,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedFiles(alias, func(wq *FileQuery) {
+			eq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -11962,7 +11962,7 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 		}
 	}
 	if !unknownSeen {
-		e.Select(selectedFields...)
+		eq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -12025,18 +12025,18 @@ func newExportPaginateArgs(rv map[string]any) *exportPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (f *FileQuery) CollectFields(ctx context.Context, satisfies ...string) (*FileQuery, error) {
+func (fq *FileQuery) CollectFields(ctx context.Context, satisfies ...string) (*FileQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return f, nil
+		return fq, nil
 	}
-	if err := f.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := fq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return f, nil
+	return fq, nil
 }
 
-func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (fq *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -12050,12 +12050,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: f.config}).Query()
+				query = (&UserClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedUser(alias, func(wq *UserQuery) {
+			fq.WithNamedUser(alias, func(wq *UserQuery) {
 				*wq = *query
 			})
 
@@ -12063,12 +12063,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: f.config}).Query()
+				query = (&OrganizationClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
+			fq.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
 				*wq = *query
 			})
 
@@ -12076,7 +12076,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: f.config}).Query()
+				query = (&GroupClient{config: fq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -12094,7 +12094,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					f.loadTotal = append(f.loadTotal, func(ctx context.Context, nodes []*File) error {
+					fq.loadTotal = append(fq.loadTotal, func(ctx context.Context, nodes []*File) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12127,7 +12127,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					f.loadTotal = append(f.loadTotal, func(_ context.Context, nodes []*File) error {
+					fq.loadTotal = append(fq.loadTotal, func(_ context.Context, nodes []*File) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -12161,7 +12161,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			f.WithNamedGroups(alias, func(wq *GroupQuery) {
+			fq.WithNamedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -12169,12 +12169,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ContactClient{config: f.config}).Query()
+				query = (&ContactClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedContact(alias, func(wq *ContactQuery) {
+			fq.WithNamedContact(alias, func(wq *ContactQuery) {
 				*wq = *query
 			})
 
@@ -12182,12 +12182,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: f.config}).Query()
+				query = (&EntityClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, entityImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedEntity(alias, func(wq *EntityQuery) {
+			fq.WithNamedEntity(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -12195,12 +12195,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserSettingClient{config: f.config}).Query()
+				query = (&UserSettingClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, usersettingImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedUserSetting(alias, func(wq *UserSettingQuery) {
+			fq.WithNamedUserSetting(alias, func(wq *UserSettingQuery) {
 				*wq = *query
 			})
 
@@ -12208,12 +12208,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationSettingClient{config: f.config}).Query()
+				query = (&OrganizationSettingClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationsettingImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedOrganizationSetting(alias, func(wq *OrganizationSettingQuery) {
+			fq.WithNamedOrganizationSetting(alias, func(wq *OrganizationSettingQuery) {
 				*wq = *query
 			})
 
@@ -12221,12 +12221,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TemplateClient{config: f.config}).Query()
+				query = (&TemplateClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedTemplate(alias, func(wq *TemplateQuery) {
+			fq.WithNamedTemplate(alias, func(wq *TemplateQuery) {
 				*wq = *query
 			})
 
@@ -12234,12 +12234,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DocumentDataClient{config: f.config}).Query()
+				query = (&DocumentDataClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedDocument(alias, func(wq *DocumentDataQuery) {
+			fq.WithNamedDocument(alias, func(wq *DocumentDataQuery) {
 				*wq = *query
 			})
 
@@ -12247,12 +12247,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: f.config}).Query()
+				query = (&ProgramClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedProgram(alias, func(wq *ProgramQuery) {
+			fq.WithNamedProgram(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -12260,12 +12260,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: f.config}).Query()
+				query = (&EvidenceClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			fq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -12273,7 +12273,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: f.config}).Query()
+				query = (&EventClient{config: fq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -12291,7 +12291,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					f.loadTotal = append(f.loadTotal, func(ctx context.Context, nodes []*File) error {
+					fq.loadTotal = append(fq.loadTotal, func(ctx context.Context, nodes []*File) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12324,7 +12324,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					f.loadTotal = append(f.loadTotal, func(_ context.Context, nodes []*File) error {
+					fq.loadTotal = append(fq.loadTotal, func(_ context.Context, nodes []*File) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -12358,7 +12358,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			f.WithNamedEvents(alias, func(wq *EventQuery) {
+			fq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 
@@ -12366,12 +12366,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterSettingClient{config: f.config}).Query()
+				query = (&TrustCenterSettingClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, trustcentersettingImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedTrustCenterSetting(alias, func(wq *TrustCenterSettingQuery) {
+			fq.WithNamedTrustCenterSetting(alias, func(wq *TrustCenterSettingQuery) {
 				*wq = *query
 			})
 
@@ -12379,12 +12379,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubprocessorClient{config: f.config}).Query()
+				query = (&SubprocessorClient{config: fq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subprocessorImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedSubprocessor(alias, func(wq *SubprocessorQuery) {
+			fq.WithNamedSubprocessor(alias, func(wq *SubprocessorQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -12484,7 +12484,7 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		f.Select(selectedFields...)
+		fq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -12547,18 +12547,18 @@ func newFilePaginateArgs(rv map[string]any) *filePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (fh *FileHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*FileHistoryQuery, error) {
+func (fhq *FileHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*FileHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return fh, nil
+		return fhq, nil
 	}
-	if err := fh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := fhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return fh, nil
+	return fhq, nil
 }
 
-func (fh *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (fhq *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -12679,7 +12679,7 @@ func (fh *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		fh.Select(selectedFields...)
+		fhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -12736,18 +12736,18 @@ func newFileHistoryPaginateArgs(rv map[string]any) *filehistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (gr *GroupQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupQuery, error) {
+func (gq *GroupQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return gr, nil
+		return gq, nil
 	}
-	if err := gr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := gq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return gr, nil
+	return gq, nil
 }
 
-func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (gq *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -12761,12 +12761,12 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: gr.config}).Query()
+				query = (&OrganizationClient{config: gq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			gr.withOwner = query
+			gq.withOwner = query
 			if _, ok := fieldSeen[group.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, group.FieldOwnerID)
 				fieldSeen[group.FieldOwnerID] = struct{}{}
@@ -12776,7 +12776,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: gr.config}).Query()
+				query = (&ProgramClient{config: gq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -12794,7 +12794,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12827,7 +12827,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProgramEditors)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -12861,7 +12861,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedProgramEditors(alias, func(wq *ProgramQuery) {
+			gq.WithNamedProgramEditors(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -12869,7 +12869,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: gr.config}).Query()
+				query = (&ProgramClient{config: gq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -12887,7 +12887,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -12920,7 +12920,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProgramBlockedGroups)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -12954,7 +12954,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedProgramBlockedGroups(alias, func(wq *ProgramQuery) {
+			gq.WithNamedProgramBlockedGroups(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -12962,7 +12962,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: gr.config}).Query()
+				query = (&ProgramClient{config: gq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -12980,7 +12980,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13013,7 +13013,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProgramViewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -13047,7 +13047,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedProgramViewers(alias, func(wq *ProgramQuery) {
+			gq.WithNamedProgramViewers(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -13055,7 +13055,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: gr.config}).Query()
+				query = (&RiskClient{config: gq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13073,7 +13073,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13106,7 +13106,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.RiskEditors)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -13140,7 +13140,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedRiskEditors(alias, func(wq *RiskQuery) {
+			gq.WithNamedRiskEditors(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -13148,7 +13148,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: gr.config}).Query()
+				query = (&RiskClient{config: gq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13166,7 +13166,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13199,7 +13199,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.RiskBlockedGroups)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -13233,7 +13233,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedRiskBlockedGroups(alias, func(wq *RiskQuery) {
+			gq.WithNamedRiskBlockedGroups(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -13241,7 +13241,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: gr.config}).Query()
+				query = (&RiskClient{config: gq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13259,7 +13259,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13292,7 +13292,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.RiskViewers)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -13326,7 +13326,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedRiskViewers(alias, func(wq *RiskQuery) {
+			gq.WithNamedRiskViewers(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -13334,7 +13334,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: gr.config}).Query()
+				query = (&ControlObjectiveClient{config: gq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13352,7 +13352,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13385,7 +13385,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectiveEditors)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -13419,7 +13419,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlObjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
+			gq.WithNamedControlObjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -13427,7 +13427,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: gr.config}).Query()
+				query = (&ControlObjectiveClient{config: gq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13445,7 +13445,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13478,7 +13478,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectiveBlockedGroups)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -13512,7 +13512,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlObjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
+			gq.WithNamedControlObjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -13520,7 +13520,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: gr.config}).Query()
+				query = (&ControlObjectiveClient{config: gq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13538,7 +13538,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13571,7 +13571,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectiveViewers)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -13605,7 +13605,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlObjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
+			gq.WithNamedControlObjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -13613,7 +13613,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: gr.config}).Query()
+				query = (&NarrativeClient{config: gq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13631,7 +13631,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13664,7 +13664,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.NarrativeEditors)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -13698,7 +13698,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedNarrativeEditors(alias, func(wq *NarrativeQuery) {
+			gq.WithNamedNarrativeEditors(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -13706,7 +13706,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: gr.config}).Query()
+				query = (&NarrativeClient{config: gq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13724,7 +13724,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13757,7 +13757,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.NarrativeBlockedGroups)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -13791,7 +13791,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedNarrativeBlockedGroups(alias, func(wq *NarrativeQuery) {
+			gq.WithNamedNarrativeBlockedGroups(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -13799,7 +13799,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: gr.config}).Query()
+				query = (&NarrativeClient{config: gq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13817,7 +13817,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13850,7 +13850,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.NarrativeViewers)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -13884,7 +13884,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedNarrativeViewers(alias, func(wq *NarrativeQuery) {
+			gq.WithNamedNarrativeViewers(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -13892,7 +13892,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlImplementationClient{config: gr.config}).Query()
+				query = (&ControlImplementationClient{config: gq.config}).Query()
 			)
 			args := newControlImplementationPaginateArgs(fieldArgs(ctx, new(ControlImplementationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -13910,7 +13910,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -13943,7 +13943,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementationEditors)
 							if nodes[i].Edges.totalCount[13] == nil {
@@ -13977,7 +13977,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlImplementationEditors(alias, func(wq *ControlImplementationQuery) {
+			gq.WithNamedControlImplementationEditors(alias, func(wq *ControlImplementationQuery) {
 				*wq = *query
 			})
 
@@ -13985,7 +13985,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlImplementationClient{config: gr.config}).Query()
+				query = (&ControlImplementationClient{config: gq.config}).Query()
 			)
 			args := newControlImplementationPaginateArgs(fieldArgs(ctx, new(ControlImplementationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14003,7 +14003,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14036,7 +14036,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementationBlockedGroups)
 							if nodes[i].Edges.totalCount[14] == nil {
@@ -14070,7 +14070,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlImplementationBlockedGroups(alias, func(wq *ControlImplementationQuery) {
+			gq.WithNamedControlImplementationBlockedGroups(alias, func(wq *ControlImplementationQuery) {
 				*wq = *query
 			})
 
@@ -14078,7 +14078,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlImplementationClient{config: gr.config}).Query()
+				query = (&ControlImplementationClient{config: gq.config}).Query()
 			)
 			args := newControlImplementationPaginateArgs(fieldArgs(ctx, new(ControlImplementationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14096,7 +14096,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14129,7 +14129,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementationViewers)
 							if nodes[i].Edges.totalCount[15] == nil {
@@ -14163,7 +14163,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlImplementationViewers(alias, func(wq *ControlImplementationQuery) {
+			gq.WithNamedControlImplementationViewers(alias, func(wq *ControlImplementationQuery) {
 				*wq = *query
 			})
 
@@ -14171,7 +14171,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: gr.config}).Query()
+				query = (&ScanClient{config: gq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14189,7 +14189,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14222,7 +14222,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScanEditors)
 							if nodes[i].Edges.totalCount[16] == nil {
@@ -14256,7 +14256,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedScanEditors(alias, func(wq *ScanQuery) {
+			gq.WithNamedScanEditors(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -14264,7 +14264,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: gr.config}).Query()
+				query = (&ScanClient{config: gq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14282,7 +14282,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14315,7 +14315,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScanBlockedGroups)
 							if nodes[i].Edges.totalCount[17] == nil {
@@ -14349,7 +14349,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedScanBlockedGroups(alias, func(wq *ScanQuery) {
+			gq.WithNamedScanBlockedGroups(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -14357,7 +14357,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: gr.config}).Query()
+				query = (&ScanClient{config: gq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14375,7 +14375,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14408,7 +14408,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScanViewers)
 							if nodes[i].Edges.totalCount[18] == nil {
@@ -14442,7 +14442,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedScanViewers(alias, func(wq *ScanQuery) {
+			gq.WithNamedScanViewers(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -14450,7 +14450,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: gr.config}).Query()
+				query = (&EntityClient{config: gq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14468,7 +14468,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14501,7 +14501,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EntityEditors)
 							if nodes[i].Edges.totalCount[19] == nil {
@@ -14535,7 +14535,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedEntityEditors(alias, func(wq *EntityQuery) {
+			gq.WithNamedEntityEditors(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -14543,7 +14543,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: gr.config}).Query()
+				query = (&EntityClient{config: gq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14561,7 +14561,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14594,7 +14594,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EntityBlockedGroups)
 							if nodes[i].Edges.totalCount[20] == nil {
@@ -14628,7 +14628,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedEntityBlockedGroups(alias, func(wq *EntityQuery) {
+			gq.WithNamedEntityBlockedGroups(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -14636,7 +14636,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: gr.config}).Query()
+				query = (&EntityClient{config: gq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14654,7 +14654,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14687,7 +14687,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EntityViewers)
 							if nodes[i].Edges.totalCount[21] == nil {
@@ -14721,7 +14721,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedEntityViewers(alias, func(wq *EntityQuery) {
+			gq.WithNamedEntityViewers(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -14729,7 +14729,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: gr.config}).Query()
+				query = (&ProcedureClient{config: gq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14747,7 +14747,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14780,7 +14780,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProcedureEditors)
 							if nodes[i].Edges.totalCount[22] == nil {
@@ -14814,7 +14814,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
+			gq.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -14822,7 +14822,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: gr.config}).Query()
+				query = (&ProcedureClient{config: gq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14840,7 +14840,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14873,7 +14873,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProcedureBlockedGroups)
 							if nodes[i].Edges.totalCount[23] == nil {
@@ -14907,7 +14907,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
+			gq.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -14915,7 +14915,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: gr.config}).Query()
+				query = (&InternalPolicyClient{config: gq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -14933,7 +14933,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -14966,7 +14966,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicyEditors)
 							if nodes[i].Edges.totalCount[24] == nil {
@@ -15000,7 +15000,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedInternalPolicyEditors(alias, func(wq *InternalPolicyQuery) {
+			gq.WithNamedInternalPolicyEditors(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -15008,7 +15008,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: gr.config}).Query()
+				query = (&InternalPolicyClient{config: gq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15026,7 +15026,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15059,7 +15059,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicyBlockedGroups)
 							if nodes[i].Edges.totalCount[25] == nil {
@@ -15093,7 +15093,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedInternalPolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
+			gq.WithNamedInternalPolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -15101,7 +15101,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: gr.config}).Query()
+				query = (&ControlClient{config: gq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15119,7 +15119,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15152,7 +15152,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlEditors)
 							if nodes[i].Edges.totalCount[26] == nil {
@@ -15186,7 +15186,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlEditors(alias, func(wq *ControlQuery) {
+			gq.WithNamedControlEditors(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -15194,7 +15194,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: gr.config}).Query()
+				query = (&ControlClient{config: gq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15212,7 +15212,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15245,7 +15245,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlBlockedGroups)
 							if nodes[i].Edges.totalCount[27] == nil {
@@ -15279,7 +15279,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedControlBlockedGroups(alias, func(wq *ControlQuery) {
+			gq.WithNamedControlBlockedGroups(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -15287,7 +15287,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&MappedControlClient{config: gr.config}).Query()
+				query = (&MappedControlClient{config: gq.config}).Query()
 			)
 			args := newMappedControlPaginateArgs(fieldArgs(ctx, new(MappedControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15305,7 +15305,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15338,7 +15338,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.MappedControlEditors)
 							if nodes[i].Edges.totalCount[28] == nil {
@@ -15372,7 +15372,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedMappedControlEditors(alias, func(wq *MappedControlQuery) {
+			gq.WithNamedMappedControlEditors(alias, func(wq *MappedControlQuery) {
 				*wq = *query
 			})
 
@@ -15380,7 +15380,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&MappedControlClient{config: gr.config}).Query()
+				query = (&MappedControlClient{config: gq.config}).Query()
 			)
 			args := newMappedControlPaginateArgs(fieldArgs(ctx, new(MappedControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15398,7 +15398,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15431,7 +15431,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.MappedControlBlockedGroups)
 							if nodes[i].Edges.totalCount[29] == nil {
@@ -15465,7 +15465,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedMappedControlBlockedGroups(alias, func(wq *MappedControlQuery) {
+			gq.WithNamedMappedControlBlockedGroups(alias, func(wq *MappedControlQuery) {
 				*wq = *query
 			})
 
@@ -15473,18 +15473,18 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupSettingClient{config: gr.config}).Query()
+				query = (&GroupSettingClient{config: gq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupsettingImplementors)...); err != nil {
 				return err
 			}
-			gr.withSetting = query
+			gq.withSetting = query
 
 		case "users":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gr.config}).Query()
+				query = (&UserClient{config: gq.config}).Query()
 			)
 			args := newUserPaginateArgs(fieldArgs(ctx, new(UserWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15502,7 +15502,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15535,7 +15535,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Users)
 							if nodes[i].Edges.totalCount[31] == nil {
@@ -15569,7 +15569,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedUsers(alias, func(wq *UserQuery) {
+			gq.WithNamedUsers(alias, func(wq *UserQuery) {
 				*wq = *query
 			})
 
@@ -15577,7 +15577,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: gr.config}).Query()
+				query = (&EventClient{config: gq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15595,7 +15595,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15628,7 +15628,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[32] == nil {
@@ -15662,7 +15662,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedEvents(alias, func(wq *EventQuery) {
+			gq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 
@@ -15670,7 +15670,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&IntegrationClient{config: gr.config}).Query()
+				query = (&IntegrationClient{config: gq.config}).Query()
 			)
 			args := newIntegrationPaginateArgs(fieldArgs(ctx, new(IntegrationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15688,7 +15688,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15717,7 +15717,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Integrations)
 							if nodes[i].Edges.totalCount[33] == nil {
@@ -15751,7 +15751,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+			gq.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
 				*wq = *query
 			})
 
@@ -15759,7 +15759,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: gr.config}).Query()
+				query = (&FileClient{config: gq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15777,7 +15777,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15810,7 +15810,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[34] == nil {
@@ -15844,7 +15844,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedFiles(alias, func(wq *FileQuery) {
+			gq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -15852,7 +15852,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: gr.config}).Query()
+				query = (&TaskClient{config: gq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15870,7 +15870,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15903,7 +15903,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[35] == nil {
@@ -15937,7 +15937,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedTasks(alias, func(wq *TaskQuery) {
+			gq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -15945,7 +15945,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupMembershipClient{config: gr.config}).Query()
+				query = (&GroupMembershipClient{config: gq.config}).Query()
 			)
 			args := newGroupMembershipPaginateArgs(fieldArgs(ctx, new(GroupMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -15963,7 +15963,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gr.loadTotal = append(gr.loadTotal, func(ctx context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(ctx context.Context, nodes []*Group) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -15992,7 +15992,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					gr.loadTotal = append(gr.loadTotal, func(_ context.Context, nodes []*Group) error {
+					gq.loadTotal = append(gq.loadTotal, func(_ context.Context, nodes []*Group) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
 							if nodes[i].Edges.totalCount[36] == nil {
@@ -16026,7 +16026,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gr.WithNamedMembers(alias, func(wq *GroupMembershipQuery) {
+			gq.WithNamedMembers(alias, func(wq *GroupMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -16101,7 +16101,7 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 		}
 	}
 	if !unknownSeen {
-		gr.Select(selectedFields...)
+		gq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -16164,18 +16164,18 @@ func newGroupPaginateArgs(rv map[string]any) *groupPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (gh *GroupHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupHistoryQuery, error) {
+func (ghq *GroupHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return gh, nil
+		return ghq, nil
 	}
-	if err := gh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ghq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return gh, nil
+	return ghq, nil
 }
 
-func (gh *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ghq *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -16271,7 +16271,7 @@ func (gh *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 		}
 	}
 	if !unknownSeen {
-		gh.Select(selectedFields...)
+		ghq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -16328,18 +16328,18 @@ func newGroupHistoryPaginateArgs(rv map[string]any) *grouphistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (gm *GroupMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupMembershipQuery, error) {
+func (gmq *GroupMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupMembershipQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return gm, nil
+		return gmq, nil
 	}
-	if err := gm.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := gmq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return gm, nil
+	return gmq, nil
 }
 
-func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (gmq *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -16353,12 +16353,12 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: gm.config}).Query()
+				query = (&GroupClient{config: gmq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			gm.withGroup = query
+			gmq.withGroup = query
 			if _, ok := fieldSeen[groupmembership.FieldGroupID]; !ok {
 				selectedFields = append(selectedFields, groupmembership.FieldGroupID)
 				fieldSeen[groupmembership.FieldGroupID] = struct{}{}
@@ -16368,12 +16368,12 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: gm.config}).Query()
+				query = (&UserClient{config: gmq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			gm.withUser = query
+			gmq.withUser = query
 			if _, ok := fieldSeen[groupmembership.FieldUserID]; !ok {
 				selectedFields = append(selectedFields, groupmembership.FieldUserID)
 				fieldSeen[groupmembership.FieldUserID] = struct{}{}
@@ -16383,7 +16383,7 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: gm.config}).Query()
+				query = (&EventClient{config: gmq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -16401,7 +16401,7 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					gm.loadTotal = append(gm.loadTotal, func(ctx context.Context, nodes []*GroupMembership) error {
+					gmq.loadTotal = append(gmq.loadTotal, func(ctx context.Context, nodes []*GroupMembership) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -16434,7 +16434,7 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 						return nil
 					})
 				} else {
-					gm.loadTotal = append(gm.loadTotal, func(_ context.Context, nodes []*GroupMembership) error {
+					gmq.loadTotal = append(gmq.loadTotal, func(_ context.Context, nodes []*GroupMembership) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -16468,7 +16468,7 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			gm.WithNamedEvents(alias, func(wq *EventQuery) {
+			gmq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -16513,7 +16513,7 @@ func (gm *GroupMembershipQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		gm.Select(selectedFields...)
+		gmq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -16576,18 +16576,18 @@ func newGroupMembershipPaginateArgs(rv map[string]any) *groupmembershipPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (gmh *GroupMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupMembershipHistoryQuery, error) {
+func (gmhq *GroupMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupMembershipHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return gmh, nil
+		return gmhq, nil
 	}
-	if err := gmh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := gmhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return gmh, nil
+	return gmhq, nil
 }
 
-func (gmh *GroupMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (gmhq *GroupMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -16653,7 +16653,7 @@ func (gmh *GroupMembershipHistoryQuery) collectField(ctx context.Context, oneNod
 		}
 	}
 	if !unknownSeen {
-		gmh.Select(selectedFields...)
+		gmhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -16710,18 +16710,18 @@ func newGroupMembershipHistoryPaginateArgs(rv map[string]any) *groupmembershiphi
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (gs *GroupSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupSettingQuery, error) {
+func (gsq *GroupSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupSettingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return gs, nil
+		return gsq, nil
 	}
-	if err := gs.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := gsq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return gs, nil
+	return gsq, nil
 }
 
-func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (gsq *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -16735,12 +16735,12 @@ func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: gs.config}).Query()
+				query = (&GroupClient{config: gsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			gs.withGroup = query
+			gsq.withGroup = query
 			if _, ok := fieldSeen[groupsetting.FieldGroupID]; !ok {
 				selectedFields = append(selectedFields, groupsetting.FieldGroupID)
 				fieldSeen[groupsetting.FieldGroupID] = struct{}{}
@@ -16797,7 +16797,7 @@ func (gs *GroupSettingQuery) collectField(ctx context.Context, oneNode bool, opC
 		}
 	}
 	if !unknownSeen {
-		gs.Select(selectedFields...)
+		gsq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -16860,18 +16860,18 @@ func newGroupSettingPaginateArgs(rv map[string]any) *groupsettingPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (gsh *GroupSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupSettingHistoryQuery, error) {
+func (gshq *GroupSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupSettingHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return gsh, nil
+		return gshq, nil
 	}
-	if err := gsh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := gshq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return gsh, nil
+	return gshq, nil
 }
 
-func (gsh *GroupSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (gshq *GroupSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -16947,7 +16947,7 @@ func (gsh *GroupSettingHistoryQuery) collectField(ctx context.Context, oneNode b
 		}
 	}
 	if !unknownSeen {
-		gsh.Select(selectedFields...)
+		gshq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -17004,18 +17004,18 @@ func newGroupSettingHistoryPaginateArgs(rv map[string]any) *groupsettinghistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (h *HushQuery) CollectFields(ctx context.Context, satisfies ...string) (*HushQuery, error) {
+func (hq *HushQuery) CollectFields(ctx context.Context, satisfies ...string) (*HushQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return h, nil
+		return hq, nil
 	}
-	if err := h.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := hq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return h, nil
+	return hq, nil
 }
 
-func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (hq *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -17029,12 +17029,12 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: h.config}).Query()
+				query = (&OrganizationClient{config: hq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			h.withOwner = query
+			hq.withOwner = query
 			if _, ok := fieldSeen[hush.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, hush.FieldOwnerID)
 				fieldSeen[hush.FieldOwnerID] = struct{}{}
@@ -17044,7 +17044,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&IntegrationClient{config: h.config}).Query()
+				query = (&IntegrationClient{config: hq.config}).Query()
 			)
 			args := newIntegrationPaginateArgs(fieldArgs(ctx, new(IntegrationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -17062,7 +17062,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					h.loadTotal = append(h.loadTotal, func(ctx context.Context, nodes []*Hush) error {
+					hq.loadTotal = append(hq.loadTotal, func(ctx context.Context, nodes []*Hush) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17095,7 +17095,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					h.loadTotal = append(h.loadTotal, func(_ context.Context, nodes []*Hush) error {
+					hq.loadTotal = append(hq.loadTotal, func(_ context.Context, nodes []*Hush) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Integrations)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -17129,7 +17129,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			h.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+			hq.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
 				*wq = *query
 			})
 
@@ -17137,7 +17137,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: h.config}).Query()
+				query = (&EventClient{config: hq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -17155,7 +17155,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					h.loadTotal = append(h.loadTotal, func(ctx context.Context, nodes []*Hush) error {
+					hq.loadTotal = append(hq.loadTotal, func(ctx context.Context, nodes []*Hush) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17188,7 +17188,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					h.loadTotal = append(h.loadTotal, func(_ context.Context, nodes []*Hush) error {
+					hq.loadTotal = append(hq.loadTotal, func(_ context.Context, nodes []*Hush) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -17222,7 +17222,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			h.WithNamedEvents(alias, func(wq *EventQuery) {
+			hq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -17277,7 +17277,7 @@ func (h *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		h.Select(selectedFields...)
+		hq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -17340,18 +17340,18 @@ func newHushPaginateArgs(rv map[string]any) *hushPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (hh *HushHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*HushHistoryQuery, error) {
+func (hhq *HushHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*HushHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return hh, nil
+		return hhq, nil
 	}
-	if err := hh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := hhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return hh, nil
+	return hhq, nil
 }
 
-func (hh *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (hhq *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -17427,7 +17427,7 @@ func (hh *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		hh.Select(selectedFields...)
+		hhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -17484,18 +17484,18 @@ func newHushHistoryPaginateArgs(rv map[string]any) *hushhistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (i *IntegrationQuery) CollectFields(ctx context.Context, satisfies ...string) (*IntegrationQuery, error) {
+func (iq *IntegrationQuery) CollectFields(ctx context.Context, satisfies ...string) (*IntegrationQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return i, nil
+		return iq, nil
 	}
-	if err := i.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := iq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return i, nil
+	return iq, nil
 }
 
-func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (iq *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -17509,12 +17509,12 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: i.config}).Query()
+				query = (&OrganizationClient{config: iq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			i.withOwner = query
+			iq.withOwner = query
 			if _, ok := fieldSeen[integration.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, integration.FieldOwnerID)
 				fieldSeen[integration.FieldOwnerID] = struct{}{}
@@ -17524,7 +17524,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&HushClient{config: i.config}).Query()
+				query = (&HushClient{config: iq.config}).Query()
 			)
 			args := newHushPaginateArgs(fieldArgs(ctx, new(HushWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -17542,7 +17542,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					i.loadTotal = append(i.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+					iq.loadTotal = append(iq.loadTotal, func(ctx context.Context, nodes []*Integration) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17575,7 +17575,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						return nil
 					})
 				} else {
-					i.loadTotal = append(i.loadTotal, func(_ context.Context, nodes []*Integration) error {
+					iq.loadTotal = append(iq.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Secrets)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -17609,7 +17609,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			} else {
 				query = pager.applyOrder(query)
 			}
-			i.WithNamedSecrets(alias, func(wq *HushQuery) {
+			iq.WithNamedSecrets(alias, func(wq *HushQuery) {
 				*wq = *query
 			})
 
@@ -17617,7 +17617,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: i.config}).Query()
+				query = (&EventClient{config: iq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -17635,7 +17635,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					i.loadTotal = append(i.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+					iq.loadTotal = append(iq.loadTotal, func(ctx context.Context, nodes []*Integration) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -17668,7 +17668,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						return nil
 					})
 				} else {
-					i.loadTotal = append(i.loadTotal, func(_ context.Context, nodes []*Integration) error {
+					iq.loadTotal = append(iq.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -17702,7 +17702,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			} else {
 				query = pager.applyOrder(query)
 			}
-			i.WithNamedEvents(alias, func(wq *EventQuery) {
+			iq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -17757,7 +17757,7 @@ func (i *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCtx
 		}
 	}
 	if !unknownSeen {
-		i.Select(selectedFields...)
+		iq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -17820,18 +17820,18 @@ func newIntegrationPaginateArgs(rv map[string]any) *integrationPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ih *IntegrationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*IntegrationHistoryQuery, error) {
+func (ihq *IntegrationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*IntegrationHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ih, nil
+		return ihq, nil
 	}
-	if err := ih.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ihq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ih, nil
+	return ihq, nil
 }
 
-func (ih *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ihq *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -17907,7 +17907,7 @@ func (ih *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 		}
 	}
 	if !unknownSeen {
-		ih.Select(selectedFields...)
+		ihq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -17964,18 +17964,18 @@ func newIntegrationHistoryPaginateArgs(rv map[string]any) *integrationhistoryPag
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ip *InternalPolicyQuery) CollectFields(ctx context.Context, satisfies ...string) (*InternalPolicyQuery, error) {
+func (ipq *InternalPolicyQuery) CollectFields(ctx context.Context, satisfies ...string) (*InternalPolicyQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ip, nil
+		return ipq, nil
 	}
-	if err := ip.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ipq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ip, nil
+	return ipq, nil
 }
 
-func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ipq *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -17989,12 +17989,12 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: ip.config}).Query()
+				query = (&OrganizationClient{config: ipq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			ip.withOwner = query
+			ipq.withOwner = query
 			if _, ok := fieldSeen[internalpolicy.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldOwnerID)
 				fieldSeen[internalpolicy.FieldOwnerID] = struct{}{}
@@ -18004,7 +18004,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ip.config}).Query()
+				query = (&GroupClient{config: ipq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18022,7 +18022,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18055,7 +18055,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -18089,7 +18089,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			ipq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -18097,7 +18097,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ip.config}).Query()
+				query = (&GroupClient{config: ipq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18115,7 +18115,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18148,7 +18148,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -18182,7 +18182,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedEditors(alias, func(wq *GroupQuery) {
+			ipq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -18190,12 +18190,12 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ip.config}).Query()
+				query = (&GroupClient{config: ipq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			ip.withApprover = query
+			ipq.withApprover = query
 			if _, ok := fieldSeen[internalpolicy.FieldApproverID]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldApproverID)
 				fieldSeen[internalpolicy.FieldApproverID] = struct{}{}
@@ -18205,12 +18205,12 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: ip.config}).Query()
+				query = (&GroupClient{config: ipq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			ip.withDelegate = query
+			ipq.withDelegate = query
 			if _, ok := fieldSeen[internalpolicy.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldDelegateID)
 				fieldSeen[internalpolicy.FieldDelegateID] = struct{}{}
@@ -18220,7 +18220,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: ip.config}).Query()
+				query = (&ControlObjectiveClient{config: ipq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18238,7 +18238,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18271,7 +18271,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -18305,7 +18305,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			ipq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -18313,7 +18313,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: ip.config}).Query()
+				query = (&ControlClient{config: ipq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18331,7 +18331,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18364,7 +18364,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -18398,7 +18398,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedControls(alias, func(wq *ControlQuery) {
+			ipq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -18406,7 +18406,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: ip.config}).Query()
+				query = (&SubcontrolClient{config: ipq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18424,7 +18424,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18457,7 +18457,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -18491,7 +18491,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			ipq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -18499,7 +18499,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: ip.config}).Query()
+				query = (&ProcedureClient{config: ipq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18517,7 +18517,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18550,7 +18550,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -18584,7 +18584,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			ipq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -18592,7 +18592,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: ip.config}).Query()
+				query = (&NarrativeClient{config: ipq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18610,7 +18610,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18643,7 +18643,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -18677,7 +18677,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			ipq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -18685,7 +18685,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: ip.config}).Query()
+				query = (&TaskClient{config: ipq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18703,7 +18703,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18736,7 +18736,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -18770,7 +18770,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedTasks(alias, func(wq *TaskQuery) {
+			ipq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -18778,7 +18778,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: ip.config}).Query()
+				query = (&RiskClient{config: ipq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18796,7 +18796,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18829,7 +18829,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -18863,7 +18863,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedRisks(alias, func(wq *RiskQuery) {
+			ipq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -18871,7 +18871,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: ip.config}).Query()
+				query = (&ProgramClient{config: ipq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -18889,7 +18889,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					ip.loadTotal = append(ip.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -18922,7 +18922,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					ip.loadTotal = append(ip.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+					ipq.loadTotal = append(ipq.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -18956,7 +18956,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			ip.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			ipq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -19086,7 +19086,7 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 		}
 	}
 	if !unknownSeen {
-		ip.Select(selectedFields...)
+		ipq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -19149,18 +19149,18 @@ func newInternalPolicyPaginateArgs(rv map[string]any) *internalpolicyPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (iph *InternalPolicyHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*InternalPolicyHistoryQuery, error) {
+func (iphq *InternalPolicyHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*InternalPolicyHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return iph, nil
+		return iphq, nil
 	}
-	if err := iph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := iphq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return iph, nil
+	return iphq, nil
 }
 
-func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (iphq *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -19311,7 +19311,7 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 		}
 	}
 	if !unknownSeen {
-		iph.Select(selectedFields...)
+		iphq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -19368,18 +19368,18 @@ func newInternalPolicyHistoryPaginateArgs(rv map[string]any) *internalpolicyhist
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (i *InviteQuery) CollectFields(ctx context.Context, satisfies ...string) (*InviteQuery, error) {
+func (iq *InviteQuery) CollectFields(ctx context.Context, satisfies ...string) (*InviteQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return i, nil
+		return iq, nil
 	}
-	if err := i.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := iq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return i, nil
+	return iq, nil
 }
 
-func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (iq *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -19393,12 +19393,12 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: i.config}).Query()
+				query = (&OrganizationClient{config: iq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			i.withOwner = query
+			iq.withOwner = query
 			if _, ok := fieldSeen[invite.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, invite.FieldOwnerID)
 				fieldSeen[invite.FieldOwnerID] = struct{}{}
@@ -19408,7 +19408,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: i.config}).Query()
+				query = (&EventClient{config: iq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -19426,7 +19426,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					i.loadTotal = append(i.loadTotal, func(ctx context.Context, nodes []*Invite) error {
+					iq.loadTotal = append(iq.loadTotal, func(ctx context.Context, nodes []*Invite) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19459,7 +19459,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					i.loadTotal = append(i.loadTotal, func(_ context.Context, nodes []*Invite) error {
+					iq.loadTotal = append(iq.loadTotal, func(_ context.Context, nodes []*Invite) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -19493,7 +19493,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			i.WithNamedEvents(alias, func(wq *EventQuery) {
+			iq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 
@@ -19501,7 +19501,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: i.config}).Query()
+				query = (&GroupClient{config: iq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -19519,7 +19519,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					i.loadTotal = append(i.loadTotal, func(ctx context.Context, nodes []*Invite) error {
+					iq.loadTotal = append(iq.loadTotal, func(ctx context.Context, nodes []*Invite) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19552,7 +19552,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						return nil
 					})
 				} else {
-					i.loadTotal = append(i.loadTotal, func(_ context.Context, nodes []*Invite) error {
+					iq.loadTotal = append(iq.loadTotal, func(_ context.Context, nodes []*Invite) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -19586,7 +19586,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			} else {
 				query = pager.applyOrder(query)
 			}
-			i.WithNamedGroups(alias, func(wq *GroupQuery) {
+			iq.WithNamedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -19651,7 +19651,7 @@ func (i *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 		}
 	}
 	if !unknownSeen {
-		i.Select(selectedFields...)
+		iq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -19714,18 +19714,18 @@ func newInvitePaginateArgs(rv map[string]any) *invitePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (jr *JobResultQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobResultQuery, error) {
+func (jrq *JobResultQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobResultQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return jr, nil
+		return jrq, nil
 	}
-	if err := jr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := jrq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return jr, nil
+	return jrq, nil
 }
 
-func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (jrq *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -19739,12 +19739,12 @@ func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: jr.config}).Query()
+				query = (&OrganizationClient{config: jrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			jr.withOwner = query
+			jrq.withOwner = query
 			if _, ok := fieldSeen[jobresult.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, jobresult.FieldOwnerID)
 				fieldSeen[jobresult.FieldOwnerID] = struct{}{}
@@ -19754,12 +19754,12 @@ func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: jr.config}).Query()
+				query = (&ScheduledJobClient{config: jrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, scheduledjobImplementors)...); err != nil {
 				return err
 			}
-			jr.withScheduledJob = query
+			jrq.withScheduledJob = query
 			if _, ok := fieldSeen[jobresult.FieldScheduledJobID]; !ok {
 				selectedFields = append(selectedFields, jobresult.FieldScheduledJobID)
 				fieldSeen[jobresult.FieldScheduledJobID] = struct{}{}
@@ -19769,12 +19769,12 @@ func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: jr.config}).Query()
+				query = (&FileClient{config: jrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			jr.withFile = query
+			jrq.withFile = query
 			if _, ok := fieldSeen[jobresult.FieldFileID]; !ok {
 				selectedFields = append(selectedFields, jobresult.FieldFileID)
 				fieldSeen[jobresult.FieldFileID] = struct{}{}
@@ -19841,7 +19841,7 @@ func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 		}
 	}
 	if !unknownSeen {
-		jr.Select(selectedFields...)
+		jrq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -19904,18 +19904,18 @@ func newJobResultPaginateArgs(rv map[string]any) *jobresultPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (jr *JobRunnerQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerQuery, error) {
+func (jrq *JobRunnerQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return jr, nil
+		return jrq, nil
 	}
-	if err := jr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := jrq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return jr, nil
+	return jrq, nil
 }
 
-func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (jrq *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -19929,12 +19929,12 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: jr.config}).Query()
+				query = (&OrganizationClient{config: jrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			jr.withOwner = query
+			jrq.withOwner = query
 			if _, ok := fieldSeen[jobrunner.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, jobrunner.FieldOwnerID)
 				fieldSeen[jobrunner.FieldOwnerID] = struct{}{}
@@ -19944,7 +19944,7 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerTokenClient{config: jr.config}).Query()
+				query = (&JobRunnerTokenClient{config: jrq.config}).Query()
 			)
 			args := newJobRunnerTokenPaginateArgs(fieldArgs(ctx, new(JobRunnerTokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -19962,7 +19962,7 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					jr.loadTotal = append(jr.loadTotal, func(ctx context.Context, nodes []*JobRunner) error {
+					jrq.loadTotal = append(jrq.loadTotal, func(ctx context.Context, nodes []*JobRunner) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -19995,7 +19995,7 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					jr.loadTotal = append(jr.loadTotal, func(_ context.Context, nodes []*JobRunner) error {
+					jrq.loadTotal = append(jrq.loadTotal, func(_ context.Context, nodes []*JobRunner) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobRunnerTokens)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -20029,7 +20029,7 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			jr.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
+			jrq.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -20094,7 +20094,7 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 		}
 	}
 	if !unknownSeen {
-		jr.Select(selectedFields...)
+		jrq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -20157,18 +20157,18 @@ func newJobRunnerPaginateArgs(rv map[string]any) *jobrunnerPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (jrrt *JobRunnerRegistrationTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerRegistrationTokenQuery, error) {
+func (jrrtq *JobRunnerRegistrationTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerRegistrationTokenQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return jrrt, nil
+		return jrrtq, nil
 	}
-	if err := jrrt.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := jrrtq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return jrrt, nil
+	return jrrtq, nil
 }
 
-func (jrrt *JobRunnerRegistrationTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (jrrtq *JobRunnerRegistrationTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -20182,12 +20182,12 @@ func (jrrt *JobRunnerRegistrationTokenQuery) collectField(ctx context.Context, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: jrrt.config}).Query()
+				query = (&OrganizationClient{config: jrrtq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			jrrt.withOwner = query
+			jrrtq.withOwner = query
 			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldOwnerID)
 				fieldSeen[jobrunnerregistrationtoken.FieldOwnerID] = struct{}{}
@@ -20197,12 +20197,12 @@ func (jrrt *JobRunnerRegistrationTokenQuery) collectField(ctx context.Context, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerClient{config: jrrt.config}).Query()
+				query = (&JobRunnerClient{config: jrrtq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
 				return err
 			}
-			jrrt.withJobRunner = query
+			jrrtq.withJobRunner = query
 			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldJobRunnerID]; !ok {
 				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldJobRunnerID)
 				fieldSeen[jobrunnerregistrationtoken.FieldJobRunnerID] = struct{}{}
@@ -20264,7 +20264,7 @@ func (jrrt *JobRunnerRegistrationTokenQuery) collectField(ctx context.Context, o
 		}
 	}
 	if !unknownSeen {
-		jrrt.Select(selectedFields...)
+		jrrtq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -20327,18 +20327,18 @@ func newJobRunnerRegistrationTokenPaginateArgs(rv map[string]any) *jobrunnerregi
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (jrt *JobRunnerTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerTokenQuery, error) {
+func (jrtq *JobRunnerTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerTokenQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return jrt, nil
+		return jrtq, nil
 	}
-	if err := jrt.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := jrtq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return jrt, nil
+	return jrtq, nil
 }
 
-func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (jrtq *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -20352,12 +20352,12 @@ func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: jrt.config}).Query()
+				query = (&OrganizationClient{config: jrtq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			jrt.withOwner = query
+			jrtq.withOwner = query
 			if _, ok := fieldSeen[jobrunnertoken.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, jobrunnertoken.FieldOwnerID)
 				fieldSeen[jobrunnertoken.FieldOwnerID] = struct{}{}
@@ -20367,7 +20367,7 @@ func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerClient{config: jrt.config}).Query()
+				query = (&JobRunnerClient{config: jrtq.config}).Query()
 			)
 			args := newJobRunnerPaginateArgs(fieldArgs(ctx, new(JobRunnerWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -20385,7 +20385,7 @@ func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					jrt.loadTotal = append(jrt.loadTotal, func(ctx context.Context, nodes []*JobRunnerToken) error {
+					jrtq.loadTotal = append(jrtq.loadTotal, func(ctx context.Context, nodes []*JobRunnerToken) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20418,7 +20418,7 @@ func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, 
 						return nil
 					})
 				} else {
-					jrt.loadTotal = append(jrt.loadTotal, func(_ context.Context, nodes []*JobRunnerToken) error {
+					jrtq.loadTotal = append(jrtq.loadTotal, func(_ context.Context, nodes []*JobRunnerToken) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobRunners)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -20452,7 +20452,7 @@ func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			jrt.WithNamedJobRunners(alias, func(wq *JobRunnerQuery) {
+			jrtq.WithNamedJobRunners(alias, func(wq *JobRunnerQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -20527,7 +20527,7 @@ func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		jrt.Select(selectedFields...)
+		jrtq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -20590,18 +20590,18 @@ func newJobRunnerTokenPaginateArgs(rv map[string]any) *jobrunnertokenPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (jt *JobTemplateQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateQuery, error) {
+func (jtq *JobTemplateQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return jt, nil
+		return jtq, nil
 	}
-	if err := jt.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := jtq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return jt, nil
+	return jtq, nil
 }
 
-func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (jtq *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -20615,12 +20615,12 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: jt.config}).Query()
+				query = (&OrganizationClient{config: jtq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			jt.withOwner = query
+			jtq.withOwner = query
 			if _, ok := fieldSeen[jobtemplate.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, jobtemplate.FieldOwnerID)
 				fieldSeen[jobtemplate.FieldOwnerID] = struct{}{}
@@ -20630,7 +20630,7 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: jt.config}).Query()
+				query = (&ScheduledJobClient{config: jtq.config}).Query()
 			)
 			args := newScheduledJobPaginateArgs(fieldArgs(ctx, new(ScheduledJobWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -20648,7 +20648,7 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					jt.loadTotal = append(jt.loadTotal, func(ctx context.Context, nodes []*JobTemplate) error {
+					jtq.loadTotal = append(jtq.loadTotal, func(ctx context.Context, nodes []*JobTemplate) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -20677,7 +20677,7 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					jt.loadTotal = append(jt.loadTotal, func(_ context.Context, nodes []*JobTemplate) error {
+					jtq.loadTotal = append(jtq.loadTotal, func(_ context.Context, nodes []*JobTemplate) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobs)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -20711,7 +20711,7 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			jt.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
+			jtq.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -20791,7 +20791,7 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		jt.Select(selectedFields...)
+		jtq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -20854,18 +20854,18 @@ func newJobTemplatePaginateArgs(rv map[string]any) *jobtemplatePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (jth *JobTemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateHistoryQuery, error) {
+func (jthq *JobTemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return jth, nil
+		return jthq, nil
 	}
-	if err := jth.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := jthq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return jth, nil
+	return jthq, nil
 }
 
-func (jth *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (jthq *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -20966,7 +20966,7 @@ func (jth *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		jth.Select(selectedFields...)
+		jthq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -21023,18 +21023,18 @@ func newJobTemplateHistoryPaginateArgs(rv map[string]any) *jobtemplatehistoryPag
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (md *MappableDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainQuery, error) {
+func (mdq *MappableDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return md, nil
+		return mdq, nil
 	}
-	if err := md.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := mdq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return md, nil
+	return mdq, nil
 }
 
-func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (mdq *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -21048,7 +21048,7 @@ func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&CustomDomainClient{config: md.config}).Query()
+				query = (&CustomDomainClient{config: mdq.config}).Query()
 			)
 			args := newCustomDomainPaginateArgs(fieldArgs(ctx, new(CustomDomainWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21066,7 +21066,7 @@ func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					md.loadTotal = append(md.loadTotal, func(ctx context.Context, nodes []*MappableDomain) error {
+					mdq.loadTotal = append(mdq.loadTotal, func(ctx context.Context, nodes []*MappableDomain) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21095,7 +21095,7 @@ func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 						return nil
 					})
 				} else {
-					md.loadTotal = append(md.loadTotal, func(_ context.Context, nodes []*MappableDomain) error {
+					mdq.loadTotal = append(mdq.loadTotal, func(_ context.Context, nodes []*MappableDomain) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.CustomDomains)
 							if nodes[i].Edges.totalCount[0] == nil {
@@ -21129,7 +21129,7 @@ func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 			} else {
 				query = pager.applyOrder(query)
 			}
-			md.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
+			mdq.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -21174,7 +21174,7 @@ func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 		}
 	}
 	if !unknownSeen {
-		md.Select(selectedFields...)
+		mdq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -21237,18 +21237,18 @@ func newMappableDomainPaginateArgs(rv map[string]any) *mappabledomainPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (mdh *MappableDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainHistoryQuery, error) {
+func (mdhq *MappableDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return mdh, nil
+		return mdhq, nil
 	}
-	if err := mdh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := mdhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return mdh, nil
+	return mdhq, nil
 }
 
-func (mdh *MappableDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (mdhq *MappableDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -21314,7 +21314,7 @@ func (mdh *MappableDomainHistoryQuery) collectField(ctx context.Context, oneNode
 		}
 	}
 	if !unknownSeen {
-		mdh.Select(selectedFields...)
+		mdhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -21371,18 +21371,18 @@ func newMappableDomainHistoryPaginateArgs(rv map[string]any) *mappabledomainhist
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (mc *MappedControlQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlQuery, error) {
+func (mcq *MappedControlQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return mc, nil
+		return mcq, nil
 	}
-	if err := mc.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := mcq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return mc, nil
+	return mcq, nil
 }
 
-func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (mcq *MappedControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -21396,12 +21396,12 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: mc.config}).Query()
+				query = (&OrganizationClient{config: mcq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			mc.withOwner = query
+			mcq.withOwner = query
 			if _, ok := fieldSeen[mappedcontrol.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, mappedcontrol.FieldOwnerID)
 				fieldSeen[mappedcontrol.FieldOwnerID] = struct{}{}
@@ -21411,7 +21411,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: mc.config}).Query()
+				query = (&GroupClient{config: mcq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21429,7 +21429,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					mc.loadTotal = append(mc.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21462,7 +21462,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -21496,7 +21496,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			mcq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -21504,7 +21504,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: mc.config}).Query()
+				query = (&GroupClient{config: mcq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21522,7 +21522,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					mc.loadTotal = append(mc.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21555,7 +21555,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -21589,7 +21589,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedEditors(alias, func(wq *GroupQuery) {
+			mcq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -21597,7 +21597,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: mc.config}).Query()
+				query = (&ControlClient{config: mcq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21615,7 +21615,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					mc.loadTotal = append(mc.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21648,7 +21648,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.FromControls)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -21682,7 +21682,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedFromControls(alias, func(wq *ControlQuery) {
+			mcq.WithNamedFromControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -21690,7 +21690,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: mc.config}).Query()
+				query = (&ControlClient{config: mcq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21708,7 +21708,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					mc.loadTotal = append(mc.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21741,7 +21741,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ToControls)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -21775,7 +21775,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedToControls(alias, func(wq *ControlQuery) {
+			mcq.WithNamedToControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -21783,7 +21783,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: mc.config}).Query()
+				query = (&SubcontrolClient{config: mcq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21801,7 +21801,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					mc.loadTotal = append(mc.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21834,7 +21834,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.FromSubcontrols)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -21868,7 +21868,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedFromSubcontrols(alias, func(wq *SubcontrolQuery) {
+			mcq.WithNamedFromSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -21876,7 +21876,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: mc.config}).Query()
+				query = (&SubcontrolClient{config: mcq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -21894,7 +21894,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					mc.loadTotal = append(mc.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(ctx context.Context, nodes []*MappedControl) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -21927,7 +21927,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
+					mcq.loadTotal = append(mcq.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ToSubcontrols)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -21961,7 +21961,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedToSubcontrols(alias, func(wq *SubcontrolQuery) {
+			mcq.WithNamedToSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -22021,7 +22021,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 		}
 	}
 	if !unknownSeen {
-		mc.Select(selectedFields...)
+		mcq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -22084,18 +22084,18 @@ func newMappedControlPaginateArgs(rv map[string]any) *mappedcontrolPaginateArgs 
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (mch *MappedControlHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlHistoryQuery, error) {
+func (mchq *MappedControlHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return mch, nil
+		return mchq, nil
 	}
-	if err := mch.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := mchq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return mch, nil
+	return mchq, nil
 }
 
-func (mch *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (mchq *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -22176,7 +22176,7 @@ func (mch *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode 
 		}
 	}
 	if !unknownSeen {
-		mch.Select(selectedFields...)
+		mchq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -22233,18 +22233,18 @@ func newMappedControlHistoryPaginateArgs(rv map[string]any) *mappedcontrolhistor
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (n *NarrativeQuery) CollectFields(ctx context.Context, satisfies ...string) (*NarrativeQuery, error) {
+func (nq *NarrativeQuery) CollectFields(ctx context.Context, satisfies ...string) (*NarrativeQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return n, nil
+		return nq, nil
 	}
-	if err := n.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := nq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return n, nil
+	return nq, nil
 }
 
-func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (nq *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -22258,12 +22258,12 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: n.config}).Query()
+				query = (&OrganizationClient{config: nq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			n.withOwner = query
+			nq.withOwner = query
 			if _, ok := fieldSeen[narrative.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldOwnerID)
 				fieldSeen[narrative.FieldOwnerID] = struct{}{}
@@ -22273,7 +22273,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: n.config}).Query()
+				query = (&GroupClient{config: nq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22291,7 +22291,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22324,7 +22324,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -22358,7 +22358,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			nq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -22366,7 +22366,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: n.config}).Query()
+				query = (&GroupClient{config: nq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22384,7 +22384,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22417,7 +22417,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -22451,7 +22451,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedEditors(alias, func(wq *GroupQuery) {
+			nq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -22459,7 +22459,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: n.config}).Query()
+				query = (&GroupClient{config: nq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22477,7 +22477,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22510,7 +22510,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -22544,7 +22544,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedViewers(alias, func(wq *GroupQuery) {
+			nq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -22552,7 +22552,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: n.config}).Query()
+				query = (&ControlClient{config: nq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22570,7 +22570,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22603,7 +22603,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Satisfies)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -22637,7 +22637,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedSatisfies(alias, func(wq *ControlQuery) {
+			nq.WithNamedSatisfies(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -22645,7 +22645,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: n.config}).Query()
+				query = (&ProgramClient{config: nq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22663,7 +22663,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22696,7 +22696,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -22730,7 +22730,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			nq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -22738,7 +22738,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: n.config}).Query()
+				query = (&InternalPolicyClient{config: nq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22756,7 +22756,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22789,7 +22789,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -22823,7 +22823,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			nq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -22831,7 +22831,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: n.config}).Query()
+				query = (&ProcedureClient{config: nq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -22849,7 +22849,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Narrative) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -22882,7 +22882,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Narrative) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Narrative) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -22916,7 +22916,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			nq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -22976,7 +22976,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 		}
 	}
 	if !unknownSeen {
-		n.Select(selectedFields...)
+		nq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -23039,18 +23039,18 @@ func newNarrativePaginateArgs(rv map[string]any) *narrativePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (nh *NarrativeHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*NarrativeHistoryQuery, error) {
+func (nhq *NarrativeHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*NarrativeHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return nh, nil
+		return nhq, nil
 	}
-	if err := nh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := nhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return nh, nil
+	return nhq, nil
 }
 
-func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (nhq *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -23131,7 +23131,7 @@ func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 		}
 	}
 	if !unknownSeen {
-		nh.Select(selectedFields...)
+		nhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -23188,18 +23188,18 @@ func newNarrativeHistoryPaginateArgs(rv map[string]any) *narrativehistoryPaginat
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (n *NoteQuery) CollectFields(ctx context.Context, satisfies ...string) (*NoteQuery, error) {
+func (nq *NoteQuery) CollectFields(ctx context.Context, satisfies ...string) (*NoteQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return n, nil
+		return nq, nil
 	}
-	if err := n.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := nq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return n, nil
+	return nq, nil
 }
 
-func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (nq *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -23213,12 +23213,12 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: n.config}).Query()
+				query = (&OrganizationClient{config: nq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			n.withOwner = query
+			nq.withOwner = query
 			if _, ok := fieldSeen[note.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, note.FieldOwnerID)
 				fieldSeen[note.FieldOwnerID] = struct{}{}
@@ -23228,18 +23228,18 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: n.config}).Query()
+				query = (&TaskClient{config: nq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
 				return err
 			}
-			n.withTask = query
+			nq.withTask = query
 
 		case "files":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: n.config}).Query()
+				query = (&FileClient{config: nq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -23257,7 +23257,7 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					n.loadTotal = append(n.loadTotal, func(ctx context.Context, nodes []*Note) error {
+					nq.loadTotal = append(nq.loadTotal, func(ctx context.Context, nodes []*Note) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23286,7 +23286,7 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					n.loadTotal = append(n.loadTotal, func(_ context.Context, nodes []*Note) error {
+					nq.loadTotal = append(nq.loadTotal, func(_ context.Context, nodes []*Note) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -23320,7 +23320,7 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			n.WithNamedFiles(alias, func(wq *FileQuery) {
+			nq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -23365,7 +23365,7 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		n.Select(selectedFields...)
+		nq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -23428,18 +23428,18 @@ func newNotePaginateArgs(rv map[string]any) *notePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (nh *NoteHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*NoteHistoryQuery, error) {
+func (nhq *NoteHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*NoteHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return nh, nil
+		return nhq, nil
 	}
-	if err := nh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := nhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return nh, nil
+	return nhq, nil
 }
 
-func (nh *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (nhq *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -23505,7 +23505,7 @@ func (nh *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		nh.Select(selectedFields...)
+		nhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -23562,18 +23562,18 @@ func newNoteHistoryPaginateArgs(rv map[string]any) *notehistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (o *OnboardingQuery) CollectFields(ctx context.Context, satisfies ...string) (*OnboardingQuery, error) {
+func (oq *OnboardingQuery) CollectFields(ctx context.Context, satisfies ...string) (*OnboardingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return o, nil
+		return oq, nil
 	}
-	if err := o.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := oq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return o, nil
+	return oq, nil
 }
 
-func (o *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (oq *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -23587,12 +23587,12 @@ func (o *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: o.config}).Query()
+				query = (&OrganizationClient{config: oq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			o.withOrganization = query
+			oq.withOrganization = query
 			if _, ok := fieldSeen[onboarding.FieldOrganizationID]; !ok {
 				selectedFields = append(selectedFields, onboarding.FieldOrganizationID)
 				fieldSeen[onboarding.FieldOrganizationID] = struct{}{}
@@ -23634,7 +23634,7 @@ func (o *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 		}
 	}
 	if !unknownSeen {
-		o.Select(selectedFields...)
+		oq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -23669,18 +23669,18 @@ func newOnboardingPaginateArgs(rv map[string]any) *onboardingPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (om *OrgMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgMembershipQuery, error) {
+func (omq *OrgMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgMembershipQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return om, nil
+		return omq, nil
 	}
-	if err := om.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := omq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return om, nil
+	return omq, nil
 }
 
-func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (omq *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -23694,12 +23694,12 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: om.config}).Query()
+				query = (&OrganizationClient{config: omq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			om.withOrganization = query
+			omq.withOrganization = query
 			if _, ok := fieldSeen[orgmembership.FieldOrganizationID]; !ok {
 				selectedFields = append(selectedFields, orgmembership.FieldOrganizationID)
 				fieldSeen[orgmembership.FieldOrganizationID] = struct{}{}
@@ -23709,12 +23709,12 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: om.config}).Query()
+				query = (&UserClient{config: omq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			om.withUser = query
+			omq.withUser = query
 			if _, ok := fieldSeen[orgmembership.FieldUserID]; !ok {
 				selectedFields = append(selectedFields, orgmembership.FieldUserID)
 				fieldSeen[orgmembership.FieldUserID] = struct{}{}
@@ -23724,7 +23724,7 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: om.config}).Query()
+				query = (&EventClient{config: omq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -23742,7 +23742,7 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					om.loadTotal = append(om.loadTotal, func(ctx context.Context, nodes []*OrgMembership) error {
+					omq.loadTotal = append(omq.loadTotal, func(ctx context.Context, nodes []*OrgMembership) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -23775,7 +23775,7 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 						return nil
 					})
 				} else {
-					om.loadTotal = append(om.loadTotal, func(_ context.Context, nodes []*OrgMembership) error {
+					omq.loadTotal = append(omq.loadTotal, func(_ context.Context, nodes []*OrgMembership) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -23809,7 +23809,7 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 			} else {
 				query = pager.applyOrder(query)
 			}
-			om.WithNamedEvents(alias, func(wq *EventQuery) {
+			omq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -23854,7 +23854,7 @@ func (om *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 		}
 	}
 	if !unknownSeen {
-		om.Select(selectedFields...)
+		omq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -23917,18 +23917,18 @@ func newOrgMembershipPaginateArgs(rv map[string]any) *orgmembershipPaginateArgs 
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (omh *OrgMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgMembershipHistoryQuery, error) {
+func (omhq *OrgMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgMembershipHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return omh, nil
+		return omhq, nil
 	}
-	if err := omh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := omhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return omh, nil
+	return omhq, nil
 }
 
-func (omh *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (omhq *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -23994,7 +23994,7 @@ func (omh *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode 
 		}
 	}
 	if !unknownSeen {
-		omh.Select(selectedFields...)
+		omhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -24051,18 +24051,18 @@ func newOrgMembershipHistoryPaginateArgs(rv map[string]any) *orgmembershiphistor
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (os *OrgSubscriptionQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgSubscriptionQuery, error) {
+func (osq *OrgSubscriptionQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgSubscriptionQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return os, nil
+		return osq, nil
 	}
-	if err := os.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := osq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return os, nil
+	return osq, nil
 }
 
-func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (osq *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -24076,12 +24076,12 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: os.config}).Query()
+				query = (&OrganizationClient{config: osq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			os.withOwner = query
+			osq.withOwner = query
 			if _, ok := fieldSeen[orgsubscription.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, orgsubscription.FieldOwnerID)
 				fieldSeen[orgsubscription.FieldOwnerID] = struct{}{}
@@ -24091,7 +24091,7 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: os.config}).Query()
+				query = (&EventClient{config: osq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -24109,7 +24109,7 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					os.loadTotal = append(os.loadTotal, func(ctx context.Context, nodes []*OrgSubscription) error {
+					osq.loadTotal = append(osq.loadTotal, func(ctx context.Context, nodes []*OrgSubscription) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24142,7 +24142,7 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 						return nil
 					})
 				} else {
-					os.loadTotal = append(os.loadTotal, func(_ context.Context, nodes []*OrgSubscription) error {
+					osq.loadTotal = append(osq.loadTotal, func(_ context.Context, nodes []*OrgSubscription) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -24176,7 +24176,7 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			os.WithNamedEvents(alias, func(wq *EventQuery) {
+			osq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -24281,7 +24281,7 @@ func (os *OrgSubscriptionQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		os.Select(selectedFields...)
+		osq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -24338,18 +24338,18 @@ func newOrgSubscriptionPaginateArgs(rv map[string]any) *orgsubscriptionPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (osh *OrgSubscriptionHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgSubscriptionHistoryQuery, error) {
+func (oshq *OrgSubscriptionHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrgSubscriptionHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return osh, nil
+		return oshq, nil
 	}
-	if err := osh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := oshq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return osh, nil
+	return oshq, nil
 }
 
-func (osh *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (oshq *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -24475,7 +24475,7 @@ func (osh *OrgSubscriptionHistoryQuery) collectField(ctx context.Context, oneNod
 		}
 	}
 	if !unknownSeen {
-		osh.Select(selectedFields...)
+		oshq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -24532,18 +24532,18 @@ func newOrgSubscriptionHistoryPaginateArgs(rv map[string]any) *orgsubscriptionhi
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (o *OrganizationQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationQuery, error) {
+func (oq *OrganizationQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return o, nil
+		return oq, nil
 	}
-	if err := o.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := oq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return o, nil
+	return oq, nil
 }
 
-func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (oq *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -24557,7 +24557,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -24575,7 +24575,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24604,7 +24604,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlCreators)
 							if nodes[i].Edges.totalCount[0] == nil {
@@ -24638,7 +24638,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedControlCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedControlCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -24646,7 +24646,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -24664,7 +24664,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24693,7 +24693,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementationCreators)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -24727,7 +24727,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedControlImplementationCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedControlImplementationCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -24735,7 +24735,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -24753,7 +24753,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24782,7 +24782,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectiveCreators)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -24816,7 +24816,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedControlObjectiveCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedControlObjectiveCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -24824,7 +24824,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -24842,7 +24842,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24871,7 +24871,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EvidenceCreators)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -24905,7 +24905,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedEvidenceCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedEvidenceCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -24913,7 +24913,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -24931,7 +24931,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -24960,7 +24960,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.GroupCreators)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -24994,7 +24994,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedGroupCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedGroupCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25002,7 +25002,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25020,7 +25020,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25049,7 +25049,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicyCreators)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -25083,7 +25083,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedInternalPolicyCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedInternalPolicyCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25091,7 +25091,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25109,7 +25109,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25138,7 +25138,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.MappedControlCreators)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -25172,7 +25172,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedMappedControlCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedMappedControlCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25180,7 +25180,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25198,7 +25198,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25227,7 +25227,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.NarrativeCreators)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -25261,7 +25261,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedNarrativeCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedNarrativeCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25269,7 +25269,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25287,7 +25287,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25316,7 +25316,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProcedureCreators)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -25350,7 +25350,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedProcedureCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedProcedureCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25358,7 +25358,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25376,7 +25376,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25405,7 +25405,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProgramCreators)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -25439,7 +25439,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedProgramCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedProgramCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25447,7 +25447,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25465,7 +25465,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25494,7 +25494,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.RiskCreators)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -25528,7 +25528,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedRiskCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedRiskCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25536,7 +25536,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25554,7 +25554,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25583,7 +25583,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobCreators)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -25617,7 +25617,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedScheduledJobCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedScheduledJobCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25625,7 +25625,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25643,7 +25643,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25672,7 +25672,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.StandardCreators)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -25706,7 +25706,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedStandardCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedStandardCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25714,7 +25714,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25732,7 +25732,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25761,7 +25761,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TemplateCreators)
 							if nodes[i].Edges.totalCount[13] == nil {
@@ -25795,7 +25795,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedTemplateCreators(alias, func(wq *GroupQuery) {
+			oq.WithNamedTemplateCreators(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -25803,12 +25803,12 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: o.config}).Query()
+				query = (&OrganizationClient{config: oq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			o.withParent = query
+			oq.withParent = query
 			if _, ok := fieldSeen[organization.FieldParentOrganizationID]; !ok {
 				selectedFields = append(selectedFields, organization.FieldParentOrganizationID)
 				fieldSeen[organization.FieldParentOrganizationID] = struct{}{}
@@ -25818,7 +25818,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: o.config}).Query()
+				query = (&OrganizationClient{config: oq.config}).Query()
 			)
 			args := newOrganizationPaginateArgs(fieldArgs(ctx, new(OrganizationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25836,7 +25836,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25865,7 +25865,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Children)
 							if nodes[i].Edges.totalCount[15] == nil {
@@ -25899,7 +25899,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedChildren(alias, func(wq *OrganizationQuery) {
+			oq.WithNamedChildren(alias, func(wq *OrganizationQuery) {
 				*wq = *query
 			})
 
@@ -25907,18 +25907,18 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationSettingClient{config: o.config}).Query()
+				query = (&OrganizationSettingClient{config: oq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationsettingImplementors)...); err != nil {
 				return err
 			}
-			o.withSetting = query
+			oq.withSetting = query
 
 		case "personalAccessTokens":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalAccessTokenClient{config: o.config}).Query()
+				query = (&PersonalAccessTokenClient{config: oq.config}).Query()
 			)
 			args := newPersonalAccessTokenPaginateArgs(fieldArgs(ctx, new(PersonalAccessTokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -25936,7 +25936,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -25969,7 +25969,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.PersonalAccessTokens)
 							if nodes[i].Edges.totalCount[17] == nil {
@@ -26003,7 +26003,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedPersonalAccessTokens(alias, func(wq *PersonalAccessTokenQuery) {
+			oq.WithNamedPersonalAccessTokens(alias, func(wq *PersonalAccessTokenQuery) {
 				*wq = *query
 			})
 
@@ -26011,7 +26011,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&APITokenClient{config: o.config}).Query()
+				query = (&APITokenClient{config: oq.config}).Query()
 			)
 			args := newAPITokenPaginateArgs(fieldArgs(ctx, new(APITokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26029,7 +26029,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26058,7 +26058,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.APITokens)
 							if nodes[i].Edges.totalCount[18] == nil {
@@ -26092,7 +26092,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedAPITokens(alias, func(wq *APITokenQuery) {
+			oq.WithNamedAPITokens(alias, func(wq *APITokenQuery) {
 				*wq = *query
 			})
 
@@ -26100,7 +26100,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: o.config}).Query()
+				query = (&UserClient{config: oq.config}).Query()
 			)
 			args := newUserPaginateArgs(fieldArgs(ctx, new(UserWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26118,7 +26118,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26151,7 +26151,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Users)
 							if nodes[i].Edges.totalCount[19] == nil {
@@ -26185,7 +26185,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedUsers(alias, func(wq *UserQuery) {
+			oq.WithNamedUsers(alias, func(wq *UserQuery) {
 				*wq = *query
 			})
 
@@ -26193,7 +26193,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: o.config}).Query()
+				query = (&FileClient{config: oq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26211,7 +26211,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26244,7 +26244,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[20] == nil {
@@ -26278,7 +26278,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedFiles(alias, func(wq *FileQuery) {
+			oq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -26286,7 +26286,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: o.config}).Query()
+				query = (&EventClient{config: oq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26304,7 +26304,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26337,7 +26337,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[21] == nil {
@@ -26371,7 +26371,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedEvents(alias, func(wq *EventQuery) {
+			oq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 
@@ -26379,7 +26379,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&HushClient{config: o.config}).Query()
+				query = (&HushClient{config: oq.config}).Query()
 			)
 			args := newHushPaginateArgs(fieldArgs(ctx, new(HushWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26397,7 +26397,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26426,7 +26426,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Secrets)
 							if nodes[i].Edges.totalCount[22] == nil {
@@ -26460,7 +26460,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedSecrets(alias, func(wq *HushQuery) {
+			oq.WithNamedSecrets(alias, func(wq *HushQuery) {
 				*wq = *query
 			})
 
@@ -26468,12 +26468,12 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: o.config}).Query()
+				query = (&FileClient{config: oq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			o.withAvatarFile = query
+			oq.withAvatarFile = query
 			if _, ok := fieldSeen[organization.FieldAvatarLocalFileID]; !ok {
 				selectedFields = append(selectedFields, organization.FieldAvatarLocalFileID)
 				fieldSeen[organization.FieldAvatarLocalFileID] = struct{}{}
@@ -26483,7 +26483,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: o.config}).Query()
+				query = (&GroupClient{config: oq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26501,7 +26501,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26530,7 +26530,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
 							if nodes[i].Edges.totalCount[24] == nil {
@@ -26564,7 +26564,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedGroups(alias, func(wq *GroupQuery) {
+			oq.WithNamedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -26572,7 +26572,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TemplateClient{config: o.config}).Query()
+				query = (&TemplateClient{config: oq.config}).Query()
 			)
 			args := newTemplatePaginateArgs(fieldArgs(ctx, new(TemplateWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26590,7 +26590,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26619,7 +26619,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Templates)
 							if nodes[i].Edges.totalCount[25] == nil {
@@ -26653,7 +26653,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedTemplates(alias, func(wq *TemplateQuery) {
+			oq.WithNamedTemplates(alias, func(wq *TemplateQuery) {
 				*wq = *query
 			})
 
@@ -26661,7 +26661,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&IntegrationClient{config: o.config}).Query()
+				query = (&IntegrationClient{config: oq.config}).Query()
 			)
 			args := newIntegrationPaginateArgs(fieldArgs(ctx, new(IntegrationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26679,7 +26679,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26708,7 +26708,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Integrations)
 							if nodes[i].Edges.totalCount[26] == nil {
@@ -26742,7 +26742,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+			oq.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
 				*wq = *query
 			})
 
@@ -26750,7 +26750,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DocumentDataClient{config: o.config}).Query()
+				query = (&DocumentDataClient{config: oq.config}).Query()
 			)
 			args := newDocumentDataPaginateArgs(fieldArgs(ctx, new(DocumentDataWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26768,7 +26768,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26797,7 +26797,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Documents)
 							if nodes[i].Edges.totalCount[27] == nil {
@@ -26831,7 +26831,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
+			oq.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
 				*wq = *query
 			})
 
@@ -26839,12 +26839,12 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrgSubscriptionClient{config: o.config}).Query()
+				query = (&OrgSubscriptionClient{config: oq.config}).Query()
 			)
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, orgsubscriptionImplementors)...); err != nil {
 				return err
 			}
-			o.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
+			oq.WithNamedOrgSubscriptions(alias, func(wq *OrgSubscriptionQuery) {
 				*wq = *query
 			})
 
@@ -26852,7 +26852,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InviteClient{config: o.config}).Query()
+				query = (&InviteClient{config: oq.config}).Query()
 			)
 			args := newInvitePaginateArgs(fieldArgs(ctx, new(InviteWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26870,7 +26870,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26899,7 +26899,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Invites)
 							if nodes[i].Edges.totalCount[29] == nil {
@@ -26933,7 +26933,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedInvites(alias, func(wq *InviteQuery) {
+			oq.WithNamedInvites(alias, func(wq *InviteQuery) {
 				*wq = *query
 			})
 
@@ -26941,7 +26941,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubscriberClient{config: o.config}).Query()
+				query = (&SubscriberClient{config: oq.config}).Query()
 			)
 			args := newSubscriberPaginateArgs(fieldArgs(ctx, new(SubscriberWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -26959,7 +26959,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -26988,7 +26988,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subscribers)
 							if nodes[i].Edges.totalCount[30] == nil {
@@ -27022,7 +27022,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedSubscribers(alias, func(wq *SubscriberQuery) {
+			oq.WithNamedSubscribers(alias, func(wq *SubscriberQuery) {
 				*wq = *query
 			})
 
@@ -27030,7 +27030,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: o.config}).Query()
+				query = (&EntityClient{config: oq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27048,7 +27048,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27077,7 +27077,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[31] == nil {
@@ -27111,7 +27111,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedEntities(alias, func(wq *EntityQuery) {
+			oq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -27119,7 +27119,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityTypeClient{config: o.config}).Query()
+				query = (&EntityTypeClient{config: oq.config}).Query()
 			)
 			args := newEntityTypePaginateArgs(fieldArgs(ctx, new(EntityTypeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27137,7 +27137,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27166,7 +27166,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EntityTypes)
 							if nodes[i].Edges.totalCount[32] == nil {
@@ -27200,7 +27200,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedEntityTypes(alias, func(wq *EntityTypeQuery) {
+			oq.WithNamedEntityTypes(alias, func(wq *EntityTypeQuery) {
 				*wq = *query
 			})
 
@@ -27208,7 +27208,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ContactClient{config: o.config}).Query()
+				query = (&ContactClient{config: oq.config}).Query()
 			)
 			args := newContactPaginateArgs(fieldArgs(ctx, new(ContactWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27226,7 +27226,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27255,7 +27255,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Contacts)
 							if nodes[i].Edges.totalCount[33] == nil {
@@ -27289,7 +27289,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedContacts(alias, func(wq *ContactQuery) {
+			oq.WithNamedContacts(alias, func(wq *ContactQuery) {
 				*wq = *query
 			})
 
@@ -27297,7 +27297,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NoteClient{config: o.config}).Query()
+				query = (&NoteClient{config: oq.config}).Query()
 			)
 			args := newNotePaginateArgs(fieldArgs(ctx, new(NoteWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27315,7 +27315,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27344,7 +27344,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Notes)
 							if nodes[i].Edges.totalCount[34] == nil {
@@ -27378,7 +27378,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedNotes(alias, func(wq *NoteQuery) {
+			oq.WithNamedNotes(alias, func(wq *NoteQuery) {
 				*wq = *query
 			})
 
@@ -27386,7 +27386,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: o.config}).Query()
+				query = (&TaskClient{config: oq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27404,7 +27404,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27433,7 +27433,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[35] == nil {
@@ -27467,7 +27467,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedTasks(alias, func(wq *TaskQuery) {
+			oq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -27475,7 +27475,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: o.config}).Query()
+				query = (&ProgramClient{config: oq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27493,7 +27493,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27522,7 +27522,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[36] == nil {
@@ -27556,7 +27556,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			oq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -27564,7 +27564,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: o.config}).Query()
+				query = (&ProcedureClient{config: oq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27582,7 +27582,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27611,7 +27611,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[37] == nil {
@@ -27645,7 +27645,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			oq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -27653,7 +27653,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: o.config}).Query()
+				query = (&InternalPolicyClient{config: oq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27671,7 +27671,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27700,7 +27700,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[38] == nil {
@@ -27734,7 +27734,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			oq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -27742,7 +27742,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: o.config}).Query()
+				query = (&RiskClient{config: oq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27760,7 +27760,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27789,7 +27789,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[39] == nil {
@@ -27823,7 +27823,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedRisks(alias, func(wq *RiskQuery) {
+			oq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -27831,7 +27831,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: o.config}).Query()
+				query = (&ControlObjectiveClient{config: oq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27849,7 +27849,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27878,7 +27878,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[40] == nil {
@@ -27912,7 +27912,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			oq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -27920,7 +27920,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: o.config}).Query()
+				query = (&NarrativeClient{config: oq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -27938,7 +27938,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -27967,7 +27967,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[41] == nil {
@@ -28001,7 +28001,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			oq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -28009,7 +28009,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: o.config}).Query()
+				query = (&ControlClient{config: oq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28027,7 +28027,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28056,7 +28056,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[42] == nil {
@@ -28090,7 +28090,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedControls(alias, func(wq *ControlQuery) {
+			oq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -28098,7 +28098,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: o.config}).Query()
+				query = (&SubcontrolClient{config: oq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28116,7 +28116,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28145,7 +28145,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[43] == nil {
@@ -28179,7 +28179,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			oq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -28187,7 +28187,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlImplementationClient{config: o.config}).Query()
+				query = (&ControlImplementationClient{config: oq.config}).Query()
 			)
 			args := newControlImplementationPaginateArgs(fieldArgs(ctx, new(ControlImplementationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28205,7 +28205,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28234,7 +28234,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementations)
 							if nodes[i].Edges.totalCount[44] == nil {
@@ -28268,7 +28268,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
+			oq.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
 				*wq = *query
 			})
 
@@ -28276,7 +28276,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&MappedControlClient{config: o.config}).Query()
+				query = (&MappedControlClient{config: oq.config}).Query()
 			)
 			args := newMappedControlPaginateArgs(fieldArgs(ctx, new(MappedControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28294,7 +28294,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28323,7 +28323,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.MappedControls)
 							if nodes[i].Edges.totalCount[45] == nil {
@@ -28357,7 +28357,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedMappedControls(alias, func(wq *MappedControlQuery) {
+			oq.WithNamedMappedControls(alias, func(wq *MappedControlQuery) {
 				*wq = *query
 			})
 
@@ -28365,7 +28365,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: o.config}).Query()
+				query = (&EvidenceClient{config: oq.config}).Query()
 			)
 			args := newEvidencePaginateArgs(fieldArgs(ctx, new(EvidenceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28383,7 +28383,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28412,7 +28412,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Evidence)
 							if nodes[i].Edges.totalCount[46] == nil {
@@ -28446,7 +28446,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			oq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -28454,7 +28454,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&StandardClient{config: o.config}).Query()
+				query = (&StandardClient{config: oq.config}).Query()
 			)
 			args := newStandardPaginateArgs(fieldArgs(ctx, new(StandardWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28472,7 +28472,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28501,7 +28501,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Standards)
 							if nodes[i].Edges.totalCount[47] == nil {
@@ -28535,7 +28535,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedStandards(alias, func(wq *StandardQuery) {
+			oq.WithNamedStandards(alias, func(wq *StandardQuery) {
 				*wq = *query
 			})
 
@@ -28543,7 +28543,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ActionPlanClient{config: o.config}).Query()
+				query = (&ActionPlanClient{config: oq.config}).Query()
 			)
 			args := newActionPlanPaginateArgs(fieldArgs(ctx, new(ActionPlanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28561,7 +28561,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28590,7 +28590,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ActionPlans)
 							if nodes[i].Edges.totalCount[48] == nil {
@@ -28624,7 +28624,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+			oq.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -28632,7 +28632,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&CustomDomainClient{config: o.config}).Query()
+				query = (&CustomDomainClient{config: oq.config}).Query()
 			)
 			args := newCustomDomainPaginateArgs(fieldArgs(ctx, new(CustomDomainWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28650,7 +28650,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28679,7 +28679,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.CustomDomains)
 							if nodes[i].Edges.totalCount[49] == nil {
@@ -28713,7 +28713,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
+			oq.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
 				*wq = *query
 			})
 
@@ -28721,7 +28721,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerClient{config: o.config}).Query()
+				query = (&JobRunnerClient{config: oq.config}).Query()
 			)
 			args := newJobRunnerPaginateArgs(fieldArgs(ctx, new(JobRunnerWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28739,7 +28739,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28768,7 +28768,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobRunners)
 							if nodes[i].Edges.totalCount[50] == nil {
@@ -28802,7 +28802,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedJobRunners(alias, func(wq *JobRunnerQuery) {
+			oq.WithNamedJobRunners(alias, func(wq *JobRunnerQuery) {
 				*wq = *query
 			})
 
@@ -28810,7 +28810,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerTokenClient{config: o.config}).Query()
+				query = (&JobRunnerTokenClient{config: oq.config}).Query()
 			)
 			args := newJobRunnerTokenPaginateArgs(fieldArgs(ctx, new(JobRunnerTokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28828,7 +28828,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28857,7 +28857,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobRunnerTokens)
 							if nodes[i].Edges.totalCount[51] == nil {
@@ -28891,7 +28891,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
+			oq.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
 				*wq = *query
 			})
 
@@ -28899,7 +28899,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerRegistrationTokenClient{config: o.config}).Query()
+				query = (&JobRunnerRegistrationTokenClient{config: oq.config}).Query()
 			)
 			args := newJobRunnerRegistrationTokenPaginateArgs(fieldArgs(ctx, new(JobRunnerRegistrationTokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -28917,7 +28917,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -28946,7 +28946,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobRunnerRegistrationTokens)
 							if nodes[i].Edges.totalCount[52] == nil {
@@ -28980,7 +28980,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedJobRunnerRegistrationTokens(alias, func(wq *JobRunnerRegistrationTokenQuery) {
+			oq.WithNamedJobRunnerRegistrationTokens(alias, func(wq *JobRunnerRegistrationTokenQuery) {
 				*wq = *query
 			})
 
@@ -28988,7 +28988,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DNSVerificationClient{config: o.config}).Query()
+				query = (&DNSVerificationClient{config: oq.config}).Query()
 			)
 			args := newDNSVerificationPaginateArgs(fieldArgs(ctx, new(DNSVerificationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29006,7 +29006,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29035,7 +29035,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.DNSVerifications)
 							if nodes[i].Edges.totalCount[53] == nil {
@@ -29069,7 +29069,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedDNSVerifications(alias, func(wq *DNSVerificationQuery) {
+			oq.WithNamedDNSVerifications(alias, func(wq *DNSVerificationQuery) {
 				*wq = *query
 			})
 
@@ -29077,7 +29077,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobTemplateClient{config: o.config}).Query()
+				query = (&JobTemplateClient{config: oq.config}).Query()
 			)
 			args := newJobTemplatePaginateArgs(fieldArgs(ctx, new(JobTemplateWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29095,7 +29095,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29124,7 +29124,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobTemplates)
 							if nodes[i].Edges.totalCount[54] == nil {
@@ -29158,7 +29158,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedJobTemplates(alias, func(wq *JobTemplateQuery) {
+			oq.WithNamedJobTemplates(alias, func(wq *JobTemplateQuery) {
 				*wq = *query
 			})
 
@@ -29166,7 +29166,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: o.config}).Query()
+				query = (&ScheduledJobClient{config: oq.config}).Query()
 			)
 			args := newScheduledJobPaginateArgs(fieldArgs(ctx, new(ScheduledJobWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29184,7 +29184,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29213,7 +29213,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobs)
 							if nodes[i].Edges.totalCount[55] == nil {
@@ -29247,7 +29247,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
+			oq.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
 				*wq = *query
 			})
 
@@ -29255,7 +29255,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobResultClient{config: o.config}).Query()
+				query = (&JobResultClient{config: oq.config}).Query()
 			)
 			args := newJobResultPaginateArgs(fieldArgs(ctx, new(JobResultWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29273,7 +29273,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29302,7 +29302,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.JobResults)
 							if nodes[i].Edges.totalCount[56] == nil {
@@ -29336,7 +29336,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedJobResults(alias, func(wq *JobResultQuery) {
+			oq.WithNamedJobResults(alias, func(wq *JobResultQuery) {
 				*wq = *query
 			})
 
@@ -29344,7 +29344,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobRunClient{config: o.config}).Query()
+				query = (&ScheduledJobRunClient{config: oq.config}).Query()
 			)
 			args := newScheduledJobRunPaginateArgs(fieldArgs(ctx, new(ScheduledJobRunWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29362,7 +29362,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29391,7 +29391,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobRuns)
 							if nodes[i].Edges.totalCount[57] == nil {
@@ -29425,7 +29425,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedScheduledJobRuns(alias, func(wq *ScheduledJobRunQuery) {
+			oq.WithNamedScheduledJobRuns(alias, func(wq *ScheduledJobRunQuery) {
 				*wq = *query
 			})
 
@@ -29433,7 +29433,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterClient{config: o.config}).Query()
+				query = (&TrustCenterClient{config: oq.config}).Query()
 			)
 			args := newTrustCenterPaginateArgs(fieldArgs(ctx, new(TrustCenterWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29451,7 +29451,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29480,7 +29480,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenters)
 							if nodes[i].Edges.totalCount[58] == nil {
@@ -29514,7 +29514,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedTrustCenters(alias, func(wq *TrustCenterQuery) {
+			oq.WithNamedTrustCenters(alias, func(wq *TrustCenterQuery) {
 				*wq = *query
 			})
 
@@ -29522,7 +29522,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&AssetClient{config: o.config}).Query()
+				query = (&AssetClient{config: oq.config}).Query()
 			)
 			args := newAssetPaginateArgs(fieldArgs(ctx, new(AssetWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29540,7 +29540,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29569,7 +29569,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
 							if nodes[i].Edges.totalCount[59] == nil {
@@ -29603,7 +29603,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedAssets(alias, func(wq *AssetQuery) {
+			oq.WithNamedAssets(alias, func(wq *AssetQuery) {
 				*wq = *query
 			})
 
@@ -29611,7 +29611,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: o.config}).Query()
+				query = (&ScanClient{config: oq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29629,7 +29629,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29658,7 +29658,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Scans)
 							if nodes[i].Edges.totalCount[60] == nil {
@@ -29692,7 +29692,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedScans(alias, func(wq *ScanQuery) {
+			oq.WithNamedScans(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -29700,7 +29700,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubprocessorClient{config: o.config}).Query()
+				query = (&SubprocessorClient{config: oq.config}).Query()
 			)
 			args := newSubprocessorPaginateArgs(fieldArgs(ctx, new(SubprocessorWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29718,7 +29718,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29747,7 +29747,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subprocessors)
 							if nodes[i].Edges.totalCount[61] == nil {
@@ -29781,7 +29781,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedSubprocessors(alias, func(wq *SubprocessorQuery) {
+			oq.WithNamedSubprocessors(alias, func(wq *SubprocessorQuery) {
 				*wq = *query
 			})
 
@@ -29789,7 +29789,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ExportClient{config: o.config}).Query()
+				query = (&ExportClient{config: oq.config}).Query()
 			)
 			args := newExportPaginateArgs(fieldArgs(ctx, new(ExportWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29807,7 +29807,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29836,7 +29836,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Exports)
 							if nodes[i].Edges.totalCount[62] == nil {
@@ -29870,7 +29870,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedExports(alias, func(wq *ExportQuery) {
+			oq.WithNamedExports(alias, func(wq *ExportQuery) {
 				*wq = *query
 			})
 
@@ -29878,7 +29878,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrgMembershipClient{config: o.config}).Query()
+				query = (&OrgMembershipClient{config: oq.config}).Query()
 			)
 			args := newOrgMembershipPaginateArgs(fieldArgs(ctx, new(OrgMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -29896,7 +29896,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(ctx context.Context, nodes []*Organization) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -29925,7 +29925,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+					oq.loadTotal = append(oq.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
 							if nodes[i].Edges.totalCount[63] == nil {
@@ -29959,7 +29959,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedMembers(alias, func(wq *OrgMembershipQuery) {
+			oq.WithNamedMembers(alias, func(wq *OrgMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -30034,7 +30034,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		o.Select(selectedFields...)
+		oq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -30097,18 +30097,18 @@ func newOrganizationPaginateArgs(rv map[string]any) *organizationPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (oh *OrganizationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationHistoryQuery, error) {
+func (ohq *OrganizationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return oh, nil
+		return ohq, nil
 	}
-	if err := oh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ohq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return oh, nil
+	return ohq, nil
 }
 
-func (oh *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ohq *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -30204,7 +30204,7 @@ func (oh *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		oh.Select(selectedFields...)
+		ohq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -30261,18 +30261,18 @@ func newOrganizationHistoryPaginateArgs(rv map[string]any) *organizationhistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (os *OrganizationSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationSettingQuery, error) {
+func (osq *OrganizationSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationSettingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return os, nil
+		return osq, nil
 	}
-	if err := os.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := osq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return os, nil
+	return osq, nil
 }
 
-func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (osq *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -30286,12 +30286,12 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: os.config}).Query()
+				query = (&OrganizationClient{config: osq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			os.withOrganization = query
+			osq.withOrganization = query
 			if _, ok := fieldSeen[organizationsetting.FieldOrganizationID]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldOrganizationID)
 				fieldSeen[organizationsetting.FieldOrganizationID] = struct{}{}
@@ -30301,7 +30301,7 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: os.config}).Query()
+				query = (&FileClient{config: osq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -30319,7 +30319,7 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					os.loadTotal = append(os.loadTotal, func(ctx context.Context, nodes []*OrganizationSetting) error {
+					osq.loadTotal = append(osq.loadTotal, func(ctx context.Context, nodes []*OrganizationSetting) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30352,7 +30352,7 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 						return nil
 					})
 				} else {
-					os.loadTotal = append(os.loadTotal, func(_ context.Context, nodes []*OrganizationSetting) error {
+					osq.loadTotal = append(osq.loadTotal, func(_ context.Context, nodes []*OrganizationSetting) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -30386,7 +30386,7 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			} else {
 				query = pager.applyOrder(query)
 			}
-			os.WithNamedFiles(alias, func(wq *FileQuery) {
+			osq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -30511,7 +30511,7 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		os.Select(selectedFields...)
+		osq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -30574,18 +30574,18 @@ func newOrganizationSettingPaginateArgs(rv map[string]any) *organizationsettingP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (osh *OrganizationSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationSettingHistoryQuery, error) {
+func (oshq *OrganizationSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationSettingHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return osh, nil
+		return oshq, nil
 	}
-	if err := osh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := oshq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return osh, nil
+	return oshq, nil
 }
 
-func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (oshq *OrganizationSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -30731,7 +30731,7 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 		}
 	}
 	if !unknownSeen {
-		osh.Select(selectedFields...)
+		oshq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -30788,18 +30788,18 @@ func newOrganizationSettingHistoryPaginateArgs(rv map[string]any) *organizations
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pat *PersonalAccessTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*PersonalAccessTokenQuery, error) {
+func (patq *PersonalAccessTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*PersonalAccessTokenQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pat, nil
+		return patq, nil
 	}
-	if err := pat.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := patq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return pat, nil
+	return patq, nil
 }
 
-func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (patq *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -30813,12 +30813,12 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pat.config}).Query()
+				query = (&UserClient{config: patq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pat.withOwner = query
+			patq.withOwner = query
 			if _, ok := fieldSeen[personalaccesstoken.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, personalaccesstoken.FieldOwnerID)
 				fieldSeen[personalaccesstoken.FieldOwnerID] = struct{}{}
@@ -30828,7 +30828,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: pat.config}).Query()
+				query = (&OrganizationClient{config: patq.config}).Query()
 			)
 			args := newOrganizationPaginateArgs(fieldArgs(ctx, new(OrganizationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -30846,7 +30846,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pat.loadTotal = append(pat.loadTotal, func(ctx context.Context, nodes []*PersonalAccessToken) error {
+					patq.loadTotal = append(patq.loadTotal, func(ctx context.Context, nodes []*PersonalAccessToken) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30879,7 +30879,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 						return nil
 					})
 				} else {
-					pat.loadTotal = append(pat.loadTotal, func(_ context.Context, nodes []*PersonalAccessToken) error {
+					patq.loadTotal = append(patq.loadTotal, func(_ context.Context, nodes []*PersonalAccessToken) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Organizations)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -30913,7 +30913,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pat.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
+			patq.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
 				*wq = *query
 			})
 
@@ -30921,7 +30921,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: pat.config}).Query()
+				query = (&EventClient{config: patq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -30939,7 +30939,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pat.loadTotal = append(pat.loadTotal, func(ctx context.Context, nodes []*PersonalAccessToken) error {
+					patq.loadTotal = append(patq.loadTotal, func(ctx context.Context, nodes []*PersonalAccessToken) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -30972,7 +30972,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 						return nil
 					})
 				} else {
-					pat.loadTotal = append(pat.loadTotal, func(_ context.Context, nodes []*PersonalAccessToken) error {
+					patq.loadTotal = append(patq.loadTotal, func(_ context.Context, nodes []*PersonalAccessToken) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -31006,7 +31006,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pat.WithNamedEvents(alias, func(wq *EventQuery) {
+			patq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -31096,7 +31096,7 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 		}
 	}
 	if !unknownSeen {
-		pat.Select(selectedFields...)
+		patq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -31159,18 +31159,18 @@ func newPersonalAccessTokenPaginateArgs(rv map[string]any) *personalaccesstokenP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pr *ProcedureQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProcedureQuery, error) {
+func (pq *ProcedureQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProcedureQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pr, nil
+		return pq, nil
 	}
-	if err := pr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := pq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return pr, nil
+	return pq, nil
 }
 
-func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (pq *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -31184,12 +31184,12 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: pr.config}).Query()
+				query = (&OrganizationClient{config: pq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			pr.withOwner = query
+			pq.withOwner = query
 			if _, ok := fieldSeen[procedure.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldOwnerID)
 				fieldSeen[procedure.FieldOwnerID] = struct{}{}
@@ -31199,7 +31199,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31217,7 +31217,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31250,7 +31250,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -31284,7 +31284,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			pq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -31292,7 +31292,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31310,7 +31310,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31343,7 +31343,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -31377,7 +31377,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
+			pq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -31385,12 +31385,12 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			pr.withApprover = query
+			pq.withApprover = query
 			if _, ok := fieldSeen[procedure.FieldApproverID]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldApproverID)
 				fieldSeen[procedure.FieldApproverID] = struct{}{}
@@ -31400,12 +31400,12 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			pr.withDelegate = query
+			pq.withDelegate = query
 			if _, ok := fieldSeen[procedure.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldDelegateID)
 				fieldSeen[procedure.FieldDelegateID] = struct{}{}
@@ -31415,7 +31415,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: pr.config}).Query()
+				query = (&ControlClient{config: pq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31433,7 +31433,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31466,7 +31466,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -31500,7 +31500,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedControls(alias, func(wq *ControlQuery) {
+			pq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -31508,7 +31508,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: pr.config}).Query()
+				query = (&SubcontrolClient{config: pq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31526,7 +31526,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31559,7 +31559,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -31593,7 +31593,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			pq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -31601,7 +31601,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: pr.config}).Query()
+				query = (&InternalPolicyClient{config: pq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31619,7 +31619,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31652,7 +31652,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -31686,7 +31686,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			pq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -31694,7 +31694,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: pr.config}).Query()
+				query = (&ProgramClient{config: pq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31712,7 +31712,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31745,7 +31745,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -31779,7 +31779,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			pq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -31787,7 +31787,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: pr.config}).Query()
+				query = (&NarrativeClient{config: pq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31805,7 +31805,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31838,7 +31838,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -31872,7 +31872,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			pq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -31880,7 +31880,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: pr.config}).Query()
+				query = (&RiskClient{config: pq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31898,7 +31898,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -31931,7 +31931,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -31965,7 +31965,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedRisks(alias, func(wq *RiskQuery) {
+			pq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -31973,7 +31973,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: pr.config}).Query()
+				query = (&TaskClient{config: pq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -31991,7 +31991,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32024,7 +32024,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Procedure) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -32058,7 +32058,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedTasks(alias, func(wq *TaskQuery) {
+			pq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -32188,7 +32188,7 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 		}
 	}
 	if !unknownSeen {
-		pr.Select(selectedFields...)
+		pq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -32251,18 +32251,18 @@ func newProcedurePaginateArgs(rv map[string]any) *procedurePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ph *ProcedureHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProcedureHistoryQuery, error) {
+func (phq *ProcedureHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProcedureHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ph, nil
+		return phq, nil
 	}
-	if err := ph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := phq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ph, nil
+	return phq, nil
 }
 
-func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (phq *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -32413,7 +32413,7 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 		}
 	}
 	if !unknownSeen {
-		ph.Select(selectedFields...)
+		phq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -32470,18 +32470,18 @@ func newProcedureHistoryPaginateArgs(rv map[string]any) *procedurehistoryPaginat
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pr *ProgramQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramQuery, error) {
+func (pq *ProgramQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pr, nil
+		return pq, nil
 	}
-	if err := pr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := pq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return pr, nil
+	return pq, nil
 }
 
-func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (pq *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -32495,12 +32495,12 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: pr.config}).Query()
+				query = (&OrganizationClient{config: pq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			pr.withOwner = query
+			pq.withOwner = query
 			if _, ok := fieldSeen[program.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, program.FieldOwnerID)
 				fieldSeen[program.FieldOwnerID] = struct{}{}
@@ -32510,7 +32510,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -32528,7 +32528,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32561,7 +32561,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -32595,7 +32595,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			pq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -32603,7 +32603,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -32621,7 +32621,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32654,7 +32654,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -32688,7 +32688,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
+			pq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -32696,7 +32696,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
+				query = (&GroupClient{config: pq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -32714,7 +32714,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32747,7 +32747,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -32781,7 +32781,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedViewers(alias, func(wq *GroupQuery) {
+			pq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -32789,7 +32789,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: pr.config}).Query()
+				query = (&ControlClient{config: pq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -32807,7 +32807,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32840,7 +32840,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -32874,7 +32874,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedControls(alias, func(wq *ControlQuery) {
+			pq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -32882,7 +32882,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: pr.config}).Query()
+				query = (&SubcontrolClient{config: pq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -32900,7 +32900,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -32929,7 +32929,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -32963,7 +32963,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			pq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -32971,7 +32971,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: pr.config}).Query()
+				query = (&ControlObjectiveClient{config: pq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -32989,7 +32989,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33022,7 +33022,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -33056,7 +33056,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			pq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -33064,7 +33064,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: pr.config}).Query()
+				query = (&InternalPolicyClient{config: pq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33082,7 +33082,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33115,7 +33115,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -33149,7 +33149,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			pq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -33157,7 +33157,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: pr.config}).Query()
+				query = (&ProcedureClient{config: pq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33175,7 +33175,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33208,7 +33208,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -33242,7 +33242,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			pq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -33250,7 +33250,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: pr.config}).Query()
+				query = (&RiskClient{config: pq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33268,7 +33268,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33301,7 +33301,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -33335,7 +33335,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedRisks(alias, func(wq *RiskQuery) {
+			pq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -33343,7 +33343,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: pr.config}).Query()
+				query = (&TaskClient{config: pq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33361,7 +33361,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33394,7 +33394,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -33428,7 +33428,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedTasks(alias, func(wq *TaskQuery) {
+			pq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -33436,7 +33436,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NoteClient{config: pr.config}).Query()
+				query = (&NoteClient{config: pq.config}).Query()
 			)
 			args := newNotePaginateArgs(fieldArgs(ctx, new(NoteWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33454,7 +33454,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33483,7 +33483,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Notes)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -33517,7 +33517,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedNotes(alias, func(wq *NoteQuery) {
+			pq.WithNamedNotes(alias, func(wq *NoteQuery) {
 				*wq = *query
 			})
 
@@ -33525,7 +33525,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: pr.config}).Query()
+				query = (&FileClient{config: pq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33543,7 +33543,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33576,7 +33576,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -33610,7 +33610,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedFiles(alias, func(wq *FileQuery) {
+			pq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -33618,7 +33618,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: pr.config}).Query()
+				query = (&EvidenceClient{config: pq.config}).Query()
 			)
 			args := newEvidencePaginateArgs(fieldArgs(ctx, new(EvidenceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33636,7 +33636,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33669,7 +33669,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Evidence)
 							if nodes[i].Edges.totalCount[13] == nil {
@@ -33703,7 +33703,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			pq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -33711,7 +33711,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: pr.config}).Query()
+				query = (&NarrativeClient{config: pq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33729,7 +33729,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33762,7 +33762,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[14] == nil {
@@ -33796,7 +33796,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			pq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -33804,7 +33804,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ActionPlanClient{config: pr.config}).Query()
+				query = (&ActionPlanClient{config: pq.config}).Query()
 			)
 			args := newActionPlanPaginateArgs(fieldArgs(ctx, new(ActionPlanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33822,7 +33822,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33855,7 +33855,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ActionPlans)
 							if nodes[i].Edges.totalCount[15] == nil {
@@ -33889,7 +33889,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+			pq.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -33897,7 +33897,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pr.config}).Query()
+				query = (&UserClient{config: pq.config}).Query()
 			)
 			args := newUserPaginateArgs(fieldArgs(ctx, new(UserWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -33915,7 +33915,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -33948,7 +33948,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Users)
 							if nodes[i].Edges.totalCount[16] == nil {
@@ -33982,7 +33982,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedUsers(alias, func(wq *UserQuery) {
+			pq.WithNamedUsers(alias, func(wq *UserQuery) {
 				*wq = *query
 			})
 
@@ -33990,7 +33990,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramMembershipClient{config: pr.config}).Query()
+				query = (&ProgramMembershipClient{config: pq.config}).Query()
 			)
 			args := newProgramMembershipPaginateArgs(fieldArgs(ctx, new(ProgramMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -34008,7 +34008,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(ctx context.Context, nodes []*Program) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34037,7 +34037,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Program) error {
+					pq.loadTotal = append(pq.loadTotal, func(_ context.Context, nodes []*Program) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
 							if nodes[i].Edges.totalCount[17] == nil {
@@ -34071,7 +34071,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			pr.WithNamedMembers(alias, func(wq *ProgramMembershipQuery) {
+			pq.WithNamedMembers(alias, func(wq *ProgramMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -34181,7 +34181,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 		}
 	}
 	if !unknownSeen {
-		pr.Select(selectedFields...)
+		pq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -34244,18 +34244,18 @@ func newProgramPaginateArgs(rv map[string]any) *programPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ph *ProgramHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramHistoryQuery, error) {
+func (phq *ProgramHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ph, nil
+		return phq, nil
 	}
-	if err := ph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := phq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ph, nil
+	return phq, nil
 }
 
-func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (phq *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -34386,7 +34386,7 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 		}
 	}
 	if !unknownSeen {
-		ph.Select(selectedFields...)
+		phq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -34443,18 +34443,18 @@ func newProgramHistoryPaginateArgs(rv map[string]any) *programhistoryPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pm *ProgramMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramMembershipQuery, error) {
+func (pmq *ProgramMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramMembershipQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pm, nil
+		return pmq, nil
 	}
-	if err := pm.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := pmq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return pm, nil
+	return pmq, nil
 }
 
-func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (pmq *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -34468,12 +34468,12 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: pm.config}).Query()
+				query = (&ProgramClient{config: pmq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
 				return err
 			}
-			pm.withProgram = query
+			pmq.withProgram = query
 			if _, ok := fieldSeen[programmembership.FieldProgramID]; !ok {
 				selectedFields = append(selectedFields, programmembership.FieldProgramID)
 				fieldSeen[programmembership.FieldProgramID] = struct{}{}
@@ -34483,12 +34483,12 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: pm.config}).Query()
+				query = (&UserClient{config: pmq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			pm.withUser = query
+			pmq.withUser = query
 			if _, ok := fieldSeen[programmembership.FieldUserID]; !ok {
 				selectedFields = append(selectedFields, programmembership.FieldUserID)
 				fieldSeen[programmembership.FieldUserID] = struct{}{}
@@ -34535,7 +34535,7 @@ func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool
 		}
 	}
 	if !unknownSeen {
-		pm.Select(selectedFields...)
+		pmq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -34598,18 +34598,18 @@ func newProgramMembershipPaginateArgs(rv map[string]any) *programmembershipPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pmh *ProgramMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramMembershipHistoryQuery, error) {
+func (pmhq *ProgramMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramMembershipHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pmh, nil
+		return pmhq, nil
 	}
-	if err := pmh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := pmhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return pmh, nil
+	return pmhq, nil
 }
 
-func (pmh *ProgramMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (pmhq *ProgramMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -34675,7 +34675,7 @@ func (pmh *ProgramMembershipHistoryQuery) collectField(ctx context.Context, oneN
 		}
 	}
 	if !unknownSeen {
-		pmh.Select(selectedFields...)
+		pmhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -34732,18 +34732,18 @@ func newProgramMembershipHistoryPaginateArgs(rv map[string]any) *programmembersh
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (r *RiskQuery) CollectFields(ctx context.Context, satisfies ...string) (*RiskQuery, error) {
+func (rq *RiskQuery) CollectFields(ctx context.Context, satisfies ...string) (*RiskQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return r, nil
+		return rq, nil
 	}
-	if err := r.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := rq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return r, nil
+	return rq, nil
 }
 
-func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (rq *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -34757,12 +34757,12 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: r.config}).Query()
+				query = (&OrganizationClient{config: rq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			r.withOwner = query
+			rq.withOwner = query
 			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldOwnerID)
 				fieldSeen[risk.FieldOwnerID] = struct{}{}
@@ -34772,7 +34772,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
+				query = (&GroupClient{config: rq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -34790,7 +34790,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34823,7 +34823,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -34857,7 +34857,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			rq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -34865,7 +34865,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
+				query = (&GroupClient{config: rq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -34883,7 +34883,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -34916,7 +34916,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -34950,7 +34950,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedEditors(alias, func(wq *GroupQuery) {
+			rq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -34958,7 +34958,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
+				query = (&GroupClient{config: rq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -34976,7 +34976,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35009,7 +35009,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -35043,7 +35043,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedViewers(alias, func(wq *GroupQuery) {
+			rq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -35051,7 +35051,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: r.config}).Query()
+				query = (&ControlClient{config: rq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35069,7 +35069,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35102,7 +35102,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -35136,7 +35136,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedControls(alias, func(wq *ControlQuery) {
+			rq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -35144,7 +35144,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: r.config}).Query()
+				query = (&SubcontrolClient{config: rq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35162,7 +35162,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35195,7 +35195,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -35229,7 +35229,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			rq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -35237,7 +35237,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: r.config}).Query()
+				query = (&ProcedureClient{config: rq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35255,7 +35255,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35288,7 +35288,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -35322,7 +35322,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			rq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -35330,7 +35330,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: r.config}).Query()
+				query = (&InternalPolicyClient{config: rq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35348,7 +35348,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35381,7 +35381,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -35415,7 +35415,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			rq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -35423,7 +35423,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: r.config}).Query()
+				query = (&ProgramClient{config: rq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35441,7 +35441,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35474,7 +35474,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -35508,7 +35508,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			rq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -35516,7 +35516,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ActionPlanClient{config: r.config}).Query()
+				query = (&ActionPlanClient{config: rq.config}).Query()
 			)
 			args := newActionPlanPaginateArgs(fieldArgs(ctx, new(ActionPlanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35534,7 +35534,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35567,7 +35567,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ActionPlans)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -35601,7 +35601,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+			rq.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -35609,7 +35609,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: r.config}).Query()
+				query = (&TaskClient{config: rq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35627,7 +35627,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35660,7 +35660,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -35694,7 +35694,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedTasks(alias, func(wq *TaskQuery) {
+			rq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -35702,7 +35702,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&AssetClient{config: r.config}).Query()
+				query = (&AssetClient{config: rq.config}).Query()
 			)
 			args := newAssetPaginateArgs(fieldArgs(ctx, new(AssetWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35720,7 +35720,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35749,7 +35749,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -35783,7 +35783,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedAssets(alias, func(wq *AssetQuery) {
+			rq.WithNamedAssets(alias, func(wq *AssetQuery) {
 				*wq = *query
 			})
 
@@ -35791,7 +35791,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: r.config}).Query()
+				query = (&EntityClient{config: rq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35809,7 +35809,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35838,7 +35838,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -35872,7 +35872,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedEntities(alias, func(wq *EntityQuery) {
+			rq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 
@@ -35880,7 +35880,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScanClient{config: r.config}).Query()
+				query = (&ScanClient{config: rq.config}).Query()
 			)
 			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -35898,7 +35898,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(ctx context.Context, nodes []*Risk) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -35927,7 +35927,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Risk) error {
+					rq.loadTotal = append(rq.loadTotal, func(_ context.Context, nodes []*Risk) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Scans)
 							if nodes[i].Edges.totalCount[13] == nil {
@@ -35961,7 +35961,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			r.WithNamedScans(alias, func(wq *ScanQuery) {
+			rq.WithNamedScans(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -35969,12 +35969,12 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
+				query = (&GroupClient{config: rq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			r.withStakeholder = query
+			rq.withStakeholder = query
 			if _, ok := fieldSeen[risk.FieldStakeholderID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldStakeholderID)
 				fieldSeen[risk.FieldStakeholderID] = struct{}{}
@@ -35984,12 +35984,12 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
+				query = (&GroupClient{config: rq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			r.withDelegate = query
+			rq.withDelegate = query
 			if _, ok := fieldSeen[risk.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldDelegateID)
 				fieldSeen[risk.FieldDelegateID] = struct{}{}
@@ -36096,7 +36096,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		r.Select(selectedFields...)
+		rq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -36159,18 +36159,18 @@ func newRiskPaginateArgs(rv map[string]any) *riskPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (rh *RiskHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*RiskHistoryQuery, error) {
+func (rhq *RiskHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*RiskHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return rh, nil
+		return rhq, nil
 	}
-	if err := rh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := rhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return rh, nil
+	return rhq, nil
 }
 
-func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (rhq *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -36296,7 +36296,7 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		rh.Select(selectedFields...)
+		rhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -36353,18 +36353,18 @@ func newRiskHistoryPaginateArgs(rv map[string]any) *riskhistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (s *ScanQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScanQuery, error) {
+func (sq *ScanQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScanQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return s, nil
+		return sq, nil
 	}
-	if err := s.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return s, nil
+	return sq, nil
 }
 
-func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sq *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -36378,12 +36378,12 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: s.config}).Query()
+				query = (&OrganizationClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			s.withOwner = query
+			sq.withOwner = query
 			if _, ok := fieldSeen[scan.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, scan.FieldOwnerID)
 				fieldSeen[scan.FieldOwnerID] = struct{}{}
@@ -36393,7 +36393,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: s.config}).Query()
+				query = (&GroupClient{config: sq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -36411,7 +36411,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Scan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36444,7 +36444,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Scan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -36478,7 +36478,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			sq.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -36486,7 +36486,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: s.config}).Query()
+				query = (&GroupClient{config: sq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -36504,7 +36504,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Scan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36537,7 +36537,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Scan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -36571,7 +36571,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedEditors(alias, func(wq *GroupQuery) {
+			sq.WithNamedEditors(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -36579,7 +36579,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: s.config}).Query()
+				query = (&GroupClient{config: sq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -36597,7 +36597,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Scan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36630,7 +36630,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Scan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -36664,7 +36664,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedViewers(alias, func(wq *GroupQuery) {
+			sq.WithNamedViewers(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -36672,7 +36672,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&AssetClient{config: s.config}).Query()
+				query = (&AssetClient{config: sq.config}).Query()
 			)
 			args := newAssetPaginateArgs(fieldArgs(ctx, new(AssetWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -36690,7 +36690,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Scan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36723,7 +36723,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Scan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -36757,7 +36757,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedAssets(alias, func(wq *AssetQuery) {
+			sq.WithNamedAssets(alias, func(wq *AssetQuery) {
 				*wq = *query
 			})
 
@@ -36765,7 +36765,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EntityClient{config: s.config}).Query()
+				query = (&EntityClient{config: sq.config}).Query()
 			)
 			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -36783,7 +36783,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Scan) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -36812,7 +36812,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Scan) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Scan) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -36846,7 +36846,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedEntities(alias, func(wq *EntityQuery) {
+			sq.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -36906,7 +36906,7 @@ func (s *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		s.Select(selectedFields...)
+		sq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -36969,18 +36969,18 @@ func newScanPaginateArgs(rv map[string]any) *scanPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sh *ScanHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScanHistoryQuery, error) {
+func (shq *ScanHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScanHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sh, nil
+		return shq, nil
 	}
-	if err := sh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := shq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sh, nil
+	return shq, nil
 }
 
-func (sh *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (shq *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -37061,7 +37061,7 @@ func (sh *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		sh.Select(selectedFields...)
+		shq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -37118,18 +37118,18 @@ func newScanHistoryPaginateArgs(rv map[string]any) *scanhistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sj *ScheduledJobQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobQuery, error) {
+func (sjq *ScheduledJobQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sj, nil
+		return sjq, nil
 	}
-	if err := sj.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sjq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sj, nil
+	return sjq, nil
 }
 
-func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sjq *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -37143,12 +37143,12 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: sj.config}).Query()
+				query = (&OrganizationClient{config: sjq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			sj.withOwner = query
+			sjq.withOwner = query
 			if _, ok := fieldSeen[scheduledjob.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldOwnerID)
 				fieldSeen[scheduledjob.FieldOwnerID] = struct{}{}
@@ -37158,12 +37158,12 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobTemplateClient{config: sj.config}).Query()
+				query = (&JobTemplateClient{config: sjq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobtemplateImplementors)...); err != nil {
 				return err
 			}
-			sj.withJobTemplate = query
+			sjq.withJobTemplate = query
 			if _, ok := fieldSeen[scheduledjob.FieldJobID]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldJobID)
 				fieldSeen[scheduledjob.FieldJobID] = struct{}{}
@@ -37173,7 +37173,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: sj.config}).Query()
+				query = (&ControlClient{config: sjq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -37191,7 +37191,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					sj.loadTotal = append(sj.loadTotal, func(ctx context.Context, nodes []*ScheduledJob) error {
+					sjq.loadTotal = append(sjq.loadTotal, func(ctx context.Context, nodes []*ScheduledJob) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37224,7 +37224,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 						return nil
 					})
 				} else {
-					sj.loadTotal = append(sj.loadTotal, func(_ context.Context, nodes []*ScheduledJob) error {
+					sjq.loadTotal = append(sjq.loadTotal, func(_ context.Context, nodes []*ScheduledJob) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -37258,7 +37258,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			} else {
 				query = pager.applyOrder(query)
 			}
-			sj.WithNamedControls(alias, func(wq *ControlQuery) {
+			sjq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -37266,7 +37266,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: sj.config}).Query()
+				query = (&SubcontrolClient{config: sjq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -37284,7 +37284,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					sj.loadTotal = append(sj.loadTotal, func(ctx context.Context, nodes []*ScheduledJob) error {
+					sjq.loadTotal = append(sjq.loadTotal, func(ctx context.Context, nodes []*ScheduledJob) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37317,7 +37317,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 						return nil
 					})
 				} else {
-					sj.loadTotal = append(sj.loadTotal, func(_ context.Context, nodes []*ScheduledJob) error {
+					sjq.loadTotal = append(sjq.loadTotal, func(_ context.Context, nodes []*ScheduledJob) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -37351,7 +37351,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			} else {
 				query = pager.applyOrder(query)
 			}
-			sj.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			sjq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -37359,12 +37359,12 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerClient{config: sj.config}).Query()
+				query = (&JobRunnerClient{config: sjq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
 				return err
 			}
-			sj.withJobRunner = query
+			sjq.withJobRunner = query
 			if _, ok := fieldSeen[scheduledjob.FieldJobRunnerID]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldJobRunnerID)
 				fieldSeen[scheduledjob.FieldJobRunnerID] = struct{}{}
@@ -37431,7 +37431,7 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 		}
 	}
 	if !unknownSeen {
-		sj.Select(selectedFields...)
+		sjq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -37494,18 +37494,18 @@ func newScheduledJobPaginateArgs(rv map[string]any) *scheduledjobPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sjh *ScheduledJobHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobHistoryQuery, error) {
+func (sjhq *ScheduledJobHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sjh, nil
+		return sjhq, nil
 	}
-	if err := sjh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sjhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sjh, nil
+	return sjhq, nil
 }
 
-func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sjhq *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -37591,7 +37591,7 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 		}
 	}
 	if !unknownSeen {
-		sjh.Select(selectedFields...)
+		sjhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -37648,18 +37648,18 @@ func newScheduledJobHistoryPaginateArgs(rv map[string]any) *scheduledjobhistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sjr *ScheduledJobRunQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobRunQuery, error) {
+func (sjrq *ScheduledJobRunQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobRunQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sjr, nil
+		return sjrq, nil
 	}
-	if err := sjr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sjrq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sjr, nil
+	return sjrq, nil
 }
 
-func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sjrq *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -37673,12 +37673,12 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: sjr.config}).Query()
+				query = (&OrganizationClient{config: sjrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			sjr.withOwner = query
+			sjrq.withOwner = query
 			if _, ok := fieldSeen[scheduledjobrun.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobrun.FieldOwnerID)
 				fieldSeen[scheduledjobrun.FieldOwnerID] = struct{}{}
@@ -37688,12 +37688,12 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: sjr.config}).Query()
+				query = (&ScheduledJobClient{config: sjrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, scheduledjobImplementors)...); err != nil {
 				return err
 			}
-			sjr.withScheduledJob = query
+			sjrq.withScheduledJob = query
 			if _, ok := fieldSeen[scheduledjobrun.FieldScheduledJobID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobrun.FieldScheduledJobID)
 				fieldSeen[scheduledjobrun.FieldScheduledJobID] = struct{}{}
@@ -37703,12 +37703,12 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&JobRunnerClient{config: sjr.config}).Query()
+				query = (&JobRunnerClient{config: sjrq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
 				return err
 			}
-			sjr.withJobRunner = query
+			sjrq.withJobRunner = query
 			if _, ok := fieldSeen[scheduledjobrun.FieldJobRunnerID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobrun.FieldJobRunnerID)
 				fieldSeen[scheduledjobrun.FieldJobRunnerID] = struct{}{}
@@ -37770,7 +37770,7 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 		}
 	}
 	if !unknownSeen {
-		sjr.Select(selectedFields...)
+		sjrq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -37833,18 +37833,18 @@ func newScheduledJobRunPaginateArgs(rv map[string]any) *scheduledjobrunPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (s *StandardQuery) CollectFields(ctx context.Context, satisfies ...string) (*StandardQuery, error) {
+func (sq *StandardQuery) CollectFields(ctx context.Context, satisfies ...string) (*StandardQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return s, nil
+		return sq, nil
 	}
-	if err := s.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return s, nil
+	return sq, nil
 }
 
-func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sq *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -37858,12 +37858,12 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: s.config}).Query()
+				query = (&OrganizationClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			s.withOwner = query
+			sq.withOwner = query
 			if _, ok := fieldSeen[standard.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, standard.FieldOwnerID)
 				fieldSeen[standard.FieldOwnerID] = struct{}{}
@@ -37873,7 +37873,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: s.config}).Query()
+				query = (&ControlClient{config: sq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -37891,7 +37891,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Standard) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -37920,7 +37920,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Standard) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Standard) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -37954,7 +37954,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedControls(alias, func(wq *ControlQuery) {
+			sq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -38069,7 +38069,7 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 		}
 	}
 	if !unknownSeen {
-		s.Select(selectedFields...)
+		sq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -38132,18 +38132,18 @@ func newStandardPaginateArgs(rv map[string]any) *standardPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sh *StandardHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*StandardHistoryQuery, error) {
+func (shq *StandardHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*StandardHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sh, nil
+		return shq, nil
 	}
-	if err := sh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := shq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sh, nil
+	return shq, nil
 }
 
-func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (shq *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -38279,7 +38279,7 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		sh.Select(selectedFields...)
+		shq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -38336,18 +38336,18 @@ func newStandardHistoryPaginateArgs(rv map[string]any) *standardhistoryPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (s *SubcontrolQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubcontrolQuery, error) {
+func (sq *SubcontrolQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubcontrolQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return s, nil
+		return sq, nil
 	}
-	if err := s.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return s, nil
+	return sq, nil
 }
 
-func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sq *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -38361,7 +38361,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: s.config}).Query()
+				query = (&EvidenceClient{config: sq.config}).Query()
 			)
 			args := newEvidencePaginateArgs(fieldArgs(ctx, new(EvidenceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38379,7 +38379,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38412,7 +38412,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Evidence)
 							if nodes[i].Edges.totalCount[0] == nil {
@@ -38446,7 +38446,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			sq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 
@@ -38454,7 +38454,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: s.config}).Query()
+				query = (&ControlObjectiveClient{config: sq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38472,7 +38472,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38505,7 +38505,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -38539,7 +38539,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			sq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -38547,7 +38547,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: s.config}).Query()
+				query = (&TaskClient{config: sq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38565,7 +38565,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38598,7 +38598,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Tasks)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -38632,7 +38632,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedTasks(alias, func(wq *TaskQuery) {
+			sq.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -38640,7 +38640,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NarrativeClient{config: s.config}).Query()
+				query = (&NarrativeClient{config: sq.config}).Query()
 			)
 			args := newNarrativePaginateArgs(fieldArgs(ctx, new(NarrativeWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38658,7 +38658,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38687,7 +38687,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Narratives)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -38721,7 +38721,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+			sq.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -38729,7 +38729,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: s.config}).Query()
+				query = (&RiskClient{config: sq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38747,7 +38747,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38780,7 +38780,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -38814,7 +38814,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedRisks(alias, func(wq *RiskQuery) {
+			sq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -38822,7 +38822,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ActionPlanClient{config: s.config}).Query()
+				query = (&ActionPlanClient{config: sq.config}).Query()
 			)
 			args := newActionPlanPaginateArgs(fieldArgs(ctx, new(ActionPlanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38840,7 +38840,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38869,7 +38869,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ActionPlans)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -38903,7 +38903,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+			sq.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -38911,7 +38911,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: s.config}).Query()
+				query = (&ProcedureClient{config: sq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38929,7 +38929,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38962,7 +38962,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -38996,7 +38996,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			sq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -39004,7 +39004,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: s.config}).Query()
+				query = (&InternalPolicyClient{config: sq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -39022,7 +39022,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39055,7 +39055,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -39089,7 +39089,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			sq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -39097,12 +39097,12 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: s.config}).Query()
+				query = (&GroupClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			s.withControlOwner = query
+			sq.withControlOwner = query
 			if _, ok := fieldSeen[subcontrol.FieldControlOwnerID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldControlOwnerID)
 				fieldSeen[subcontrol.FieldControlOwnerID] = struct{}{}
@@ -39112,12 +39112,12 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: s.config}).Query()
+				query = (&GroupClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
 				return err
 			}
-			s.withDelegate = query
+			sq.withDelegate = query
 			if _, ok := fieldSeen[subcontrol.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldDelegateID)
 				fieldSeen[subcontrol.FieldDelegateID] = struct{}{}
@@ -39127,12 +39127,12 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: s.config}).Query()
+				query = (&OrganizationClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			s.withOwner = query
+			sq.withOwner = query
 			if _, ok := fieldSeen[subcontrol.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldOwnerID)
 				fieldSeen[subcontrol.FieldOwnerID] = struct{}{}
@@ -39142,12 +39142,12 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: s.config}).Query()
+				query = (&ControlClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
 				return err
 			}
-			s.withControl = query
+			sq.withControl = query
 			if _, ok := fieldSeen[subcontrol.FieldControlID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldControlID)
 				fieldSeen[subcontrol.FieldControlID] = struct{}{}
@@ -39157,7 +39157,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlImplementationClient{config: s.config}).Query()
+				query = (&ControlImplementationClient{config: sq.config}).Query()
 			)
 			args := newControlImplementationPaginateArgs(fieldArgs(ctx, new(ControlImplementationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -39175,7 +39175,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39208,7 +39208,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementations)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -39242,7 +39242,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
+			sq.WithNamedControlImplementations(alias, func(wq *ControlImplementationQuery) {
 				*wq = *query
 			})
 
@@ -39250,7 +39250,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: s.config}).Query()
+				query = (&ScheduledJobClient{config: sq.config}).Query()
 			)
 			args := newScheduledJobPaginateArgs(fieldArgs(ctx, new(ScheduledJobWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -39268,7 +39268,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39301,7 +39301,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobs)
 							if nodes[i].Edges.totalCount[13] == nil {
@@ -39335,7 +39335,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
+			sq.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -39485,7 +39485,7 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 		}
 	}
 	if !unknownSeen {
-		s.Select(selectedFields...)
+		sq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -39548,18 +39548,18 @@ func newSubcontrolPaginateArgs(rv map[string]any) *subcontrolPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sh *SubcontrolHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubcontrolHistoryQuery, error) {
+func (shq *SubcontrolHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubcontrolHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sh, nil
+		return shq, nil
 	}
-	if err := sh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := shq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sh, nil
+	return shq, nil
 }
 
-func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (shq *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -39730,7 +39730,7 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 		}
 	}
 	if !unknownSeen {
-		sh.Select(selectedFields...)
+		shq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -39787,18 +39787,18 @@ func newSubcontrolHistoryPaginateArgs(rv map[string]any) *subcontrolhistoryPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (s *SubprocessorQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubprocessorQuery, error) {
+func (sq *SubprocessorQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubprocessorQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return s, nil
+		return sq, nil
 	}
-	if err := s.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return s, nil
+	return sq, nil
 }
 
-func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sq *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -39812,12 +39812,12 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: s.config}).Query()
+				query = (&OrganizationClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			s.withOwner = query
+			sq.withOwner = query
 			if _, ok := fieldSeen[subprocessor.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, subprocessor.FieldOwnerID)
 				fieldSeen[subprocessor.FieldOwnerID] = struct{}{}
@@ -39827,7 +39827,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: s.config}).Query()
+				query = (&FileClient{config: sq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -39845,7 +39845,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39878,7 +39878,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subprocessor) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subprocessor) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -39912,7 +39912,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedFiles(alias, func(wq *FileQuery) {
+			sq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -39920,12 +39920,12 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: s.config}).Query()
+				query = (&FileClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			s.withLogoFile = query
+			sq.withLogoFile = query
 			if _, ok := fieldSeen[subprocessor.FieldLogoLocalFileID]; !ok {
 				selectedFields = append(selectedFields, subprocessor.FieldLogoLocalFileID)
 				fieldSeen[subprocessor.FieldLogoLocalFileID] = struct{}{}
@@ -39935,7 +39935,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterSubprocessorClient{config: s.config}).Query()
+				query = (&TrustCenterSubprocessorClient{config: sq.config}).Query()
 			)
 			args := newTrustCenterSubprocessorPaginateArgs(fieldArgs(ctx, new(TrustCenterSubprocessorWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -39953,7 +39953,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -39982,7 +39982,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subprocessor) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subprocessor) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterSubprocessors)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -40016,7 +40016,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
+			sq.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -40081,7 +40081,7 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		s.Select(selectedFields...)
+		sq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -40144,18 +40144,18 @@ func newSubprocessorPaginateArgs(rv map[string]any) *subprocessorPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sh *SubprocessorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubprocessorHistoryQuery, error) {
+func (shq *SubprocessorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubprocessorHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return sh, nil
+		return shq, nil
 	}
-	if err := sh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := shq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return sh, nil
+	return shq, nil
 }
 
-func (sh *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (shq *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -40241,7 +40241,7 @@ func (sh *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		sh.Select(selectedFields...)
+		shq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -40298,18 +40298,18 @@ func newSubprocessorHistoryPaginateArgs(rv map[string]any) *subprocessorhistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (s *SubscriberQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubscriberQuery, error) {
+func (sq *SubscriberQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubscriberQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return s, nil
+		return sq, nil
 	}
-	if err := s.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := sq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return s, nil
+	return sq, nil
 }
 
-func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (sq *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -40323,12 +40323,12 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: s.config}).Query()
+				query = (&OrganizationClient{config: sq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			s.withOwner = query
+			sq.withOwner = query
 			if _, ok := fieldSeen[subscriber.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, subscriber.FieldOwnerID)
 				fieldSeen[subscriber.FieldOwnerID] = struct{}{}
@@ -40338,7 +40338,7 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: s.config}).Query()
+				query = (&EventClient{config: sq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -40356,7 +40356,7 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subscriber) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Subscriber) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40389,7 +40389,7 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subscriber) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Subscriber) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -40423,7 +40423,7 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedEvents(alias, func(wq *EventQuery) {
+			sq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -40498,7 +40498,7 @@ func (s *SubscriberQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 		}
 	}
 	if !unknownSeen {
-		s.Select(selectedFields...)
+		sq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -40561,18 +40561,18 @@ func newSubscriberPaginateArgs(rv map[string]any) *subscriberPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ts *TFASettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*TFASettingQuery, error) {
+func (tsq *TFASettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*TFASettingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ts, nil
+		return tsq, nil
 	}
-	if err := ts.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tsq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ts, nil
+	return tsq, nil
 }
 
-func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tsq *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -40586,12 +40586,12 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: ts.config}).Query()
+				query = (&UserClient{config: tsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			ts.withOwner = query
+			tsq.withOwner = query
 			if _, ok := fieldSeen[tfasetting.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, tfasetting.FieldOwnerID)
 				fieldSeen[tfasetting.FieldOwnerID] = struct{}{}
@@ -40633,7 +40633,7 @@ func (ts *TFASettingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 		}
 	}
 	if !unknownSeen {
-		ts.Select(selectedFields...)
+		tsq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -40696,18 +40696,18 @@ func newTFASettingPaginateArgs(rv map[string]any) *tfasettingPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (t *TaskQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskQuery, error) {
+func (tq *TaskQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return t, nil
+		return tq, nil
 	}
-	if err := t.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return t, nil
+	return tq, nil
 }
 
-func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tq *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -40721,12 +40721,12 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: t.config}).Query()
+				query = (&OrganizationClient{config: tq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			t.withOwner = query
+			tq.withOwner = query
 			if _, ok := fieldSeen[task.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, task.FieldOwnerID)
 				fieldSeen[task.FieldOwnerID] = struct{}{}
@@ -40736,12 +40736,12 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: t.config}).Query()
+				query = (&UserClient{config: tq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withAssigner = query
+			tq.withAssigner = query
 			if _, ok := fieldSeen[task.FieldAssignerID]; !ok {
 				selectedFields = append(selectedFields, task.FieldAssignerID)
 				fieldSeen[task.FieldAssignerID] = struct{}{}
@@ -40751,12 +40751,12 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: t.config}).Query()
+				query = (&UserClient{config: tq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withAssignee = query
+			tq.withAssignee = query
 			if _, ok := fieldSeen[task.FieldAssigneeID]; !ok {
 				selectedFields = append(selectedFields, task.FieldAssigneeID)
 				fieldSeen[task.FieldAssigneeID] = struct{}{}
@@ -40766,7 +40766,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&NoteClient{config: t.config}).Query()
+				query = (&NoteClient{config: tq.config}).Query()
 			)
 			args := newNotePaginateArgs(fieldArgs(ctx, new(NoteWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -40784,7 +40784,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40813,7 +40813,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Comments)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -40847,7 +40847,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedComments(alias, func(wq *NoteQuery) {
+			tq.WithNamedComments(alias, func(wq *NoteQuery) {
 				*wq = *query
 			})
 
@@ -40855,7 +40855,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: t.config}).Query()
+				query = (&GroupClient{config: tq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -40873,7 +40873,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40906,7 +40906,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -40940,7 +40940,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedGroups(alias, func(wq *GroupQuery) {
+			tq.WithNamedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -40948,7 +40948,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: t.config}).Query()
+				query = (&InternalPolicyClient{config: tq.config}).Query()
 			)
 			args := newInternalPolicyPaginateArgs(fieldArgs(ctx, new(InternalPolicyWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -40966,7 +40966,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -40999,7 +40999,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -41033,7 +41033,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
+			tq.WithNamedInternalPolicies(alias, func(wq *InternalPolicyQuery) {
 				*wq = *query
 			})
 
@@ -41041,7 +41041,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProcedureClient{config: t.config}).Query()
+				query = (&ProcedureClient{config: tq.config}).Query()
 			)
 			args := newProcedurePaginateArgs(fieldArgs(ctx, new(ProcedureWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41059,7 +41059,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41092,7 +41092,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Procedures)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -41126,7 +41126,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+			tq.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
 				*wq = *query
 			})
 
@@ -41134,7 +41134,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlClient{config: t.config}).Query()
+				query = (&ControlClient{config: tq.config}).Query()
 			)
 			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41152,7 +41152,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41185,7 +41185,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Controls)
 							if nodes[i].Edges.totalCount[7] == nil {
@@ -41219,7 +41219,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedControls(alias, func(wq *ControlQuery) {
+			tq.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -41227,7 +41227,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: t.config}).Query()
+				query = (&SubcontrolClient{config: tq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41245,7 +41245,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41278,7 +41278,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -41312,7 +41312,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			tq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -41320,7 +41320,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: t.config}).Query()
+				query = (&ControlObjectiveClient{config: tq.config}).Query()
 			)
 			args := newControlObjectivePaginateArgs(fieldArgs(ctx, new(ControlObjectiveWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41338,7 +41338,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41371,7 +41371,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlObjectives)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -41405,7 +41405,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
+			tq.WithNamedControlObjectives(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
 
@@ -41413,7 +41413,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: t.config}).Query()
+				query = (&ProgramClient{config: tq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41431,7 +41431,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41464,7 +41464,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -41498,7 +41498,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			tq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -41506,7 +41506,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&RiskClient{config: t.config}).Query()
+				query = (&RiskClient{config: tq.config}).Query()
 			)
 			args := newRiskPaginateArgs(fieldArgs(ctx, new(RiskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41524,7 +41524,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41557,7 +41557,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Risks)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -41591,7 +41591,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedRisks(alias, func(wq *RiskQuery) {
+			tq.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
 
@@ -41599,7 +41599,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EvidenceClient{config: t.config}).Query()
+				query = (&EvidenceClient{config: tq.config}).Query()
 			)
 			args := newEvidencePaginateArgs(fieldArgs(ctx, new(EvidenceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -41617,7 +41617,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Task) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -41650,7 +41650,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Task) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Task) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Evidence)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -41684,7 +41684,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
+			tq.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -41769,7 +41769,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		t.Select(selectedFields...)
+		tq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -41832,18 +41832,18 @@ func newTaskPaginateArgs(rv map[string]any) *taskPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (th *TaskHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskHistoryQuery, error) {
+func (thq *TaskHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return th, nil
+		return thq, nil
 	}
-	if err := th.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := thq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return th, nil
+	return thq, nil
 }
 
-func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (thq *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -41949,7 +41949,7 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		th.Select(selectedFields...)
+		thq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -42006,18 +42006,18 @@ func newTaskHistoryPaginateArgs(rv map[string]any) *taskhistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (t *TemplateQuery) CollectFields(ctx context.Context, satisfies ...string) (*TemplateQuery, error) {
+func (tq *TemplateQuery) CollectFields(ctx context.Context, satisfies ...string) (*TemplateQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return t, nil
+		return tq, nil
 	}
-	if err := t.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return t, nil
+	return tq, nil
 }
 
-func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tq *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -42031,12 +42031,12 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: t.config}).Query()
+				query = (&OrganizationClient{config: tq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			t.withOwner = query
+			tq.withOwner = query
 			if _, ok := fieldSeen[template.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, template.FieldOwnerID)
 				fieldSeen[template.FieldOwnerID] = struct{}{}
@@ -42046,7 +42046,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DocumentDataClient{config: t.config}).Query()
+				query = (&DocumentDataClient{config: tq.config}).Query()
 			)
 			args := newDocumentDataPaginateArgs(fieldArgs(ctx, new(DocumentDataWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -42064,7 +42064,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Template) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Template) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42093,7 +42093,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Template) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Template) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Documents)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -42127,7 +42127,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
+			tq.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
 				*wq = *query
 			})
 
@@ -42135,7 +42135,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: t.config}).Query()
+				query = (&FileClient{config: tq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -42153,7 +42153,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					t.loadTotal = append(t.loadTotal, func(ctx context.Context, nodes []*Template) error {
+					tq.loadTotal = append(tq.loadTotal, func(ctx context.Context, nodes []*Template) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42186,7 +42186,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						return nil
 					})
 				} else {
-					t.loadTotal = append(t.loadTotal, func(_ context.Context, nodes []*Template) error {
+					tq.loadTotal = append(tq.loadTotal, func(_ context.Context, nodes []*Template) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -42220,7 +42220,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			} else {
 				query = pager.applyOrder(query)
 			}
-			t.WithNamedFiles(alias, func(wq *FileQuery) {
+			tq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -42285,7 +42285,7 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 		}
 	}
 	if !unknownSeen {
-		t.Select(selectedFields...)
+		tq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -42348,18 +42348,18 @@ func newTemplatePaginateArgs(rv map[string]any) *templatePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (th *TemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TemplateHistoryQuery, error) {
+func (thq *TemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TemplateHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return th, nil
+		return thq, nil
 	}
-	if err := th.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := thq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return th, nil
+	return thq, nil
 }
 
-func (th *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (thq *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -42445,7 +42445,7 @@ func (th *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 		}
 	}
 	if !unknownSeen {
-		th.Select(selectedFields...)
+		thq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -42502,18 +42502,18 @@ func newTemplateHistoryPaginateArgs(rv map[string]any) *templatehistoryPaginateA
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tc *TrustCenterQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterQuery, error) {
+func (tcq *TrustCenterQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tc, nil
+		return tcq, nil
 	}
-	if err := tc.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tcq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tc, nil
+	return tcq, nil
 }
 
-func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tcq *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -42527,12 +42527,12 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: tc.config}).Query()
+				query = (&OrganizationClient{config: tcq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			tc.withOwner = query
+			tcq.withOwner = query
 			if _, ok := fieldSeen[trustcenter.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldOwnerID)
 				fieldSeen[trustcenter.FieldOwnerID] = struct{}{}
@@ -42542,12 +42542,12 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&CustomDomainClient{config: tc.config}).Query()
+				query = (&CustomDomainClient{config: tcq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customdomainImplementors)...); err != nil {
 				return err
 			}
-			tc.withCustomDomain = query
+			tcq.withCustomDomain = query
 			if _, ok := fieldSeen[trustcenter.FieldCustomDomainID]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldCustomDomainID)
 				fieldSeen[trustcenter.FieldCustomDomainID] = struct{}{}
@@ -42557,18 +42557,18 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterSettingClient{config: tc.config}).Query()
+				query = (&TrustCenterSettingClient{config: tcq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcentersettingImplementors)...); err != nil {
 				return err
 			}
-			tc.withSetting = query
+			tcq.withSetting = query
 
 		case "trustCenterSubprocessors":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterSubprocessorClient{config: tc.config}).Query()
+				query = (&TrustCenterSubprocessorClient{config: tcq.config}).Query()
 			)
 			args := newTrustCenterSubprocessorPaginateArgs(fieldArgs(ctx, new(TrustCenterSubprocessorWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -42586,7 +42586,7 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					tc.loadTotal = append(tc.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+					tcq.loadTotal = append(tcq.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42615,7 +42615,7 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					tc.loadTotal = append(tc.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+					tcq.loadTotal = append(tcq.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterSubprocessors)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -42649,7 +42649,7 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			tc.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
+			tcq.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -42699,7 +42699,7 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		tc.Select(selectedFields...)
+		tcq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -42762,18 +42762,18 @@ func newTrustCenterPaginateArgs(rv map[string]any) *trustcenterPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tcc *TrustCenterComplianceQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterComplianceQuery, error) {
+func (tccq *TrustCenterComplianceQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterComplianceQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tcc, nil
+		return tccq, nil
 	}
-	if err := tcc.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tccq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tcc, nil
+	return tccq, nil
 }
 
-func (tcc *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tccq *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -42814,7 +42814,7 @@ func (tcc *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNode
 		}
 	}
 	if !unknownSeen {
-		tcc.Select(selectedFields...)
+		tccq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -42877,18 +42877,18 @@ func newTrustCenterCompliancePaginateArgs(rv map[string]any) *trustcentercomplia
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tcch *TrustCenterComplianceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterComplianceHistoryQuery, error) {
+func (tcchq *TrustCenterComplianceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterComplianceHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tcch, nil
+		return tcchq, nil
 	}
-	if err := tcch.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tcchq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tcch, nil
+	return tcchq, nil
 }
 
-func (tcch *TrustCenterComplianceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tcchq *TrustCenterComplianceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -42944,7 +42944,7 @@ func (tcch *TrustCenterComplianceHistoryQuery) collectField(ctx context.Context,
 		}
 	}
 	if !unknownSeen {
-		tcch.Select(selectedFields...)
+		tcchq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -43001,18 +43001,18 @@ func newTrustCenterComplianceHistoryPaginateArgs(rv map[string]any) *trustcenter
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tch *TrustCenterHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterHistoryQuery, error) {
+func (tchq *TrustCenterHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tch, nil
+		return tchq, nil
 	}
-	if err := tch.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tchq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tch, nil
+	return tchq, nil
 }
 
-func (tch *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tchq *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -43083,7 +43083,7 @@ func (tch *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		tch.Select(selectedFields...)
+		tchq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -43140,18 +43140,18 @@ func newTrustCenterHistoryPaginateArgs(rv map[string]any) *trustcenterhistoryPag
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tcs *TrustCenterSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSettingQuery, error) {
+func (tcsq *TrustCenterSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSettingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tcs, nil
+		return tcsq, nil
 	}
-	if err := tcs.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tcsq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tcs, nil
+	return tcsq, nil
 }
 
-func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tcsq *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -43165,12 +43165,12 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterClient{config: tcs.config}).Query()
+				query = (&TrustCenterClient{config: tcsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
 				return err
 			}
-			tcs.withTrustCenter = query
+			tcsq.withTrustCenter = query
 			if _, ok := fieldSeen[trustcentersetting.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldTrustCenterID)
 				fieldSeen[trustcentersetting.FieldTrustCenterID] = struct{}{}
@@ -43180,7 +43180,7 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: tcs.config}).Query()
+				query = (&FileClient{config: tcsq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -43198,7 +43198,7 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					tcs.loadTotal = append(tcs.loadTotal, func(ctx context.Context, nodes []*TrustCenterSetting) error {
+					tcsq.loadTotal = append(tcsq.loadTotal, func(ctx context.Context, nodes []*TrustCenterSetting) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -43231,7 +43231,7 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 						return nil
 					})
 				} else {
-					tcs.loadTotal = append(tcs.loadTotal, func(_ context.Context, nodes []*TrustCenterSetting) error {
+					tcsq.loadTotal = append(tcsq.loadTotal, func(_ context.Context, nodes []*TrustCenterSetting) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -43265,7 +43265,7 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			} else {
 				query = pager.applyOrder(query)
 			}
-			tcs.WithNamedFiles(alias, func(wq *FileQuery) {
+			tcsq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -43273,12 +43273,12 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: tcs.config}).Query()
+				query = (&FileClient{config: tcsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			tcs.withLogoFile = query
+			tcsq.withLogoFile = query
 			if _, ok := fieldSeen[trustcentersetting.FieldLogoLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldLogoLocalFileID)
 				fieldSeen[trustcentersetting.FieldLogoLocalFileID] = struct{}{}
@@ -43288,12 +43288,12 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: tcs.config}).Query()
+				query = (&FileClient{config: tcsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			tcs.withFaviconFile = query
+			tcsq.withFaviconFile = query
 			if _, ok := fieldSeen[trustcentersetting.FieldFaviconLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
@@ -43390,7 +43390,7 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		tcs.Select(selectedFields...)
+		tcsq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -43453,18 +43453,18 @@ func newTrustCenterSettingPaginateArgs(rv map[string]any) *trustcentersettingPag
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tcsh *TrustCenterSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSettingHistoryQuery, error) {
+func (tcshq *TrustCenterSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSettingHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tcsh, nil
+		return tcshq, nil
 	}
-	if err := tcsh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tcshq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tcsh, nil
+	return tcshq, nil
 }
 
-func (tcsh *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tcshq *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -43580,7 +43580,7 @@ func (tcsh *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, on
 		}
 	}
 	if !unknownSeen {
-		tcsh.Select(selectedFields...)
+		tcshq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -43637,18 +43637,18 @@ func newTrustCenterSettingHistoryPaginateArgs(rv map[string]any) *trustcenterset
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tcs *TrustCenterSubprocessorQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSubprocessorQuery, error) {
+func (tcsq *TrustCenterSubprocessorQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSubprocessorQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tcs, nil
+		return tcsq, nil
 	}
-	if err := tcs.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tcsq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tcs, nil
+	return tcsq, nil
 }
 
-func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tcsq *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -43662,12 +43662,12 @@ func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterClient{config: tcs.config}).Query()
+				query = (&TrustCenterClient{config: tcsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
 				return err
 			}
-			tcs.withTrustCenter = query
+			tcsq.withTrustCenter = query
 			if _, ok := fieldSeen[trustcentersubprocessor.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTrustCenterID)
 				fieldSeen[trustcentersubprocessor.FieldTrustCenterID] = struct{}{}
@@ -43677,12 +43677,12 @@ func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNo
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubprocessorClient{config: tcs.config}).Query()
+				query = (&SubprocessorClient{config: tcsq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, subprocessorImplementors)...); err != nil {
 				return err
 			}
-			tcs.withSubprocessor = query
+			tcsq.withSubprocessor = query
 			if _, ok := fieldSeen[trustcentersubprocessor.FieldSubprocessorID]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldSubprocessorID)
 				fieldSeen[trustcentersubprocessor.FieldSubprocessorID] = struct{}{}
@@ -43734,7 +43734,7 @@ func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNo
 		}
 	}
 	if !unknownSeen {
-		tcs.Select(selectedFields...)
+		tcsq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -43797,18 +43797,18 @@ func newTrustCenterSubprocessorPaginateArgs(rv map[string]any) *trustcentersubpr
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (tcsh *TrustCenterSubprocessorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSubprocessorHistoryQuery, error) {
+func (tcshq *TrustCenterSubprocessorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSubprocessorHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return tcsh, nil
+		return tcshq, nil
 	}
-	if err := tcsh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := tcshq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return tcsh, nil
+	return tcshq, nil
 }
 
-func (tcsh *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (tcshq *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -43879,7 +43879,7 @@ func (tcsh *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Contex
 		}
 	}
 	if !unknownSeen {
-		tcsh.Select(selectedFields...)
+		tcshq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -43936,18 +43936,18 @@ func newTrustCenterSubprocessorHistoryPaginateArgs(rv map[string]any) *trustcent
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (u *UserQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserQuery, error) {
+func (uq *UserQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return u, nil
+		return uq, nil
 	}
-	if err := u.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := uq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return u, nil
+	return uq, nil
 }
 
-func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (uq *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -43961,7 +43961,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalAccessTokenClient{config: u.config}).Query()
+				query = (&PersonalAccessTokenClient{config: uq.config}).Query()
 			)
 			args := newPersonalAccessTokenPaginateArgs(fieldArgs(ctx, new(PersonalAccessTokenWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -43979,7 +43979,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44008,7 +44008,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.PersonalAccessTokens)
 							if nodes[i].Edges.totalCount[0] == nil {
@@ -44042,7 +44042,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedPersonalAccessTokens(alias, func(wq *PersonalAccessTokenQuery) {
+			uq.WithNamedPersonalAccessTokens(alias, func(wq *PersonalAccessTokenQuery) {
 				*wq = *query
 			})
 
@@ -44050,7 +44050,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TFASettingClient{config: u.config}).Query()
+				query = (&TFASettingClient{config: uq.config}).Query()
 			)
 			args := newTFASettingPaginateArgs(fieldArgs(ctx, new(TFASettingWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44068,7 +44068,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44097,7 +44097,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TfaSettings)
 							if nodes[i].Edges.totalCount[1] == nil {
@@ -44131,7 +44131,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedTfaSettings(alias, func(wq *TFASettingQuery) {
+			uq.WithNamedTfaSettings(alias, func(wq *TFASettingQuery) {
 				*wq = *query
 			})
 
@@ -44139,18 +44139,18 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserSettingClient{config: u.config}).Query()
+				query = (&UserSettingClient{config: uq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, usersettingImplementors)...); err != nil {
 				return err
 			}
-			u.withSetting = query
+			uq.withSetting = query
 
 		case "groups":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: u.config}).Query()
+				query = (&GroupClient{config: uq.config}).Query()
 			)
 			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44168,7 +44168,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44201,7 +44201,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
 							if nodes[i].Edges.totalCount[3] == nil {
@@ -44235,7 +44235,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedGroups(alias, func(wq *GroupQuery) {
+			uq.WithNamedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -44243,7 +44243,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: u.config}).Query()
+				query = (&OrganizationClient{config: uq.config}).Query()
 			)
 			args := newOrganizationPaginateArgs(fieldArgs(ctx, new(OrganizationWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44261,7 +44261,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44294,7 +44294,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Organizations)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -44328,7 +44328,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
+			uq.WithNamedOrganizations(alias, func(wq *OrganizationQuery) {
 				*wq = *query
 			})
 
@@ -44336,7 +44336,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&WebauthnClient{config: u.config}).Query()
+				query = (&WebauthnClient{config: uq.config}).Query()
 			)
 			args := newWebauthnPaginateArgs(fieldArgs(ctx, new(WebauthnWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44354,7 +44354,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44383,7 +44383,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Webauthns)
 							if nodes[i].Edges.totalCount[5] == nil {
@@ -44417,7 +44417,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedWebauthns(alias, func(wq *WebauthnQuery) {
+			uq.WithNamedWebauthns(alias, func(wq *WebauthnQuery) {
 				*wq = *query
 			})
 
@@ -44425,7 +44425,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: u.config}).Query()
+				query = (&FileClient{config: uq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44443,7 +44443,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44476,7 +44476,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[6] == nil {
@@ -44510,7 +44510,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedFiles(alias, func(wq *FileQuery) {
+			uq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 
@@ -44518,12 +44518,12 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: u.config}).Query()
+				query = (&FileClient{config: uq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
 				return err
 			}
-			u.withAvatarFile = query
+			uq.withAvatarFile = query
 			if _, ok := fieldSeen[user.FieldAvatarLocalFileID]; !ok {
 				selectedFields = append(selectedFields, user.FieldAvatarLocalFileID)
 				fieldSeen[user.FieldAvatarLocalFileID] = struct{}{}
@@ -44533,7 +44533,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&EventClient{config: u.config}).Query()
+				query = (&EventClient{config: uq.config}).Query()
 			)
 			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44551,7 +44551,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44584,7 +44584,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
 							if nodes[i].Edges.totalCount[8] == nil {
@@ -44618,7 +44618,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedEvents(alias, func(wq *EventQuery) {
+			uq.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 
@@ -44626,7 +44626,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ActionPlanClient{config: u.config}).Query()
+				query = (&ActionPlanClient{config: uq.config}).Query()
 			)
 			args := newActionPlanPaginateArgs(fieldArgs(ctx, new(ActionPlanWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44644,7 +44644,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44673,7 +44673,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ActionPlans)
 							if nodes[i].Edges.totalCount[9] == nil {
@@ -44707,7 +44707,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
+			uq.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
 
@@ -44715,7 +44715,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&SubcontrolClient{config: u.config}).Query()
+				query = (&SubcontrolClient{config: uq.config}).Query()
 			)
 			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44733,7 +44733,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44762,7 +44762,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
 							if nodes[i].Edges.totalCount[10] == nil {
@@ -44796,7 +44796,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+			uq.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
@@ -44804,7 +44804,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: u.config}).Query()
+				query = (&TaskClient{config: uq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44822,7 +44822,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44851,7 +44851,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.AssignerTasks)
 							if nodes[i].Edges.totalCount[11] == nil {
@@ -44885,7 +44885,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedAssignerTasks(alias, func(wq *TaskQuery) {
+			uq.WithNamedAssignerTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -44893,7 +44893,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TaskClient{config: u.config}).Query()
+				query = (&TaskClient{config: uq.config}).Query()
 			)
 			args := newTaskPaginateArgs(fieldArgs(ctx, new(TaskWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -44911,7 +44911,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -44940,7 +44940,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.AssigneeTasks)
 							if nodes[i].Edges.totalCount[12] == nil {
@@ -44974,7 +44974,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedAssigneeTasks(alias, func(wq *TaskQuery) {
+			uq.WithNamedAssigneeTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 
@@ -44982,7 +44982,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramClient{config: u.config}).Query()
+				query = (&ProgramClient{config: uq.config}).Query()
 			)
 			args := newProgramPaginateArgs(fieldArgs(ctx, new(ProgramWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -45000,7 +45000,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45033,7 +45033,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
 							if nodes[i].Edges.totalCount[13] == nil {
@@ -45067,7 +45067,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+			uq.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 
@@ -45075,7 +45075,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupMembershipClient{config: u.config}).Query()
+				query = (&GroupMembershipClient{config: uq.config}).Query()
 			)
 			args := newGroupMembershipPaginateArgs(fieldArgs(ctx, new(GroupMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -45093,7 +45093,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45122,7 +45122,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.GroupMemberships)
 							if nodes[i].Edges.totalCount[14] == nil {
@@ -45156,7 +45156,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedGroupMemberships(alias, func(wq *GroupMembershipQuery) {
+			uq.WithNamedGroupMemberships(alias, func(wq *GroupMembershipQuery) {
 				*wq = *query
 			})
 
@@ -45164,7 +45164,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrgMembershipClient{config: u.config}).Query()
+				query = (&OrgMembershipClient{config: uq.config}).Query()
 			)
 			args := newOrgMembershipPaginateArgs(fieldArgs(ctx, new(OrgMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -45182,7 +45182,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45211,7 +45211,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.OrgMemberships)
 							if nodes[i].Edges.totalCount[15] == nil {
@@ -45245,7 +45245,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedOrgMemberships(alias, func(wq *OrgMembershipQuery) {
+			uq.WithNamedOrgMemberships(alias, func(wq *OrgMembershipQuery) {
 				*wq = *query
 			})
 
@@ -45253,7 +45253,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProgramMembershipClient{config: u.config}).Query()
+				query = (&ProgramMembershipClient{config: uq.config}).Query()
 			)
 			args := newProgramMembershipPaginateArgs(fieldArgs(ctx, new(ProgramMembershipWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -45271,7 +45271,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					u.loadTotal = append(u.loadTotal, func(ctx context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(ctx context.Context, nodes []*User) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45300,7 +45300,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						return nil
 					})
 				} else {
-					u.loadTotal = append(u.loadTotal, func(_ context.Context, nodes []*User) error {
+					uq.loadTotal = append(uq.loadTotal, func(_ context.Context, nodes []*User) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ProgramMemberships)
 							if nodes[i].Edges.totalCount[16] == nil {
@@ -45334,7 +45334,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			} else {
 				query = pager.applyOrder(query)
 			}
-			u.WithNamedProgramMemberships(alias, func(wq *ProgramMembershipQuery) {
+			uq.WithNamedProgramMemberships(alias, func(wq *ProgramMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -45434,7 +45434,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 		}
 	}
 	if !unknownSeen {
-		u.Select(selectedFields...)
+		uq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -45497,18 +45497,18 @@ func newUserPaginateArgs(rv map[string]any) *userPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (uh *UserHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserHistoryQuery, error) {
+func (uhq *UserHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return uh, nil
+		return uhq, nil
 	}
-	if err := uh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := uhq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return uh, nil
+	return uhq, nil
 }
 
-func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (uhq *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -45629,7 +45629,7 @@ func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		uh.Select(selectedFields...)
+		uhq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -45686,18 +45686,18 @@ func newUserHistoryPaginateArgs(rv map[string]any) *userhistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (us *UserSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserSettingQuery, error) {
+func (usq *UserSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserSettingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return us, nil
+		return usq, nil
 	}
-	if err := us.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := usq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return us, nil
+	return usq, nil
 }
 
-func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (usq *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -45711,12 +45711,12 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: us.config}).Query()
+				query = (&UserClient{config: usq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			us.withUser = query
+			usq.withUser = query
 			if _, ok := fieldSeen[usersetting.FieldUserID]; !ok {
 				selectedFields = append(selectedFields, usersetting.FieldUserID)
 				fieldSeen[usersetting.FieldUserID] = struct{}{}
@@ -45726,18 +45726,18 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&OrganizationClient{config: us.config}).Query()
+				query = (&OrganizationClient{config: usq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			us.withDefaultOrg = query
+			usq.withDefaultOrg = query
 
 		case "files":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: us.config}).Query()
+				query = (&FileClient{config: usq.config}).Query()
 			)
 			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -45755,7 +45755,7 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					us.loadTotal = append(us.loadTotal, func(ctx context.Context, nodes []*UserSetting) error {
+					usq.loadTotal = append(usq.loadTotal, func(ctx context.Context, nodes []*UserSetting) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -45788,7 +45788,7 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 						return nil
 					})
 				} else {
-					us.loadTotal = append(us.loadTotal, func(_ context.Context, nodes []*UserSetting) error {
+					usq.loadTotal = append(usq.loadTotal, func(_ context.Context, nodes []*UserSetting) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -45822,7 +45822,7 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 			} else {
 				query = pager.applyOrder(query)
 			}
-			us.WithNamedFiles(alias, func(wq *FileQuery) {
+			usq.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -45897,7 +45897,7 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 		}
 	}
 	if !unknownSeen {
-		us.Select(selectedFields...)
+		usq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -45960,18 +45960,18 @@ func newUserSettingPaginateArgs(rv map[string]any) *usersettingPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (ush *UserSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserSettingHistoryQuery, error) {
+func (ushq *UserSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserSettingHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return ush, nil
+		return ushq, nil
 	}
-	if err := ush.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ushq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return ush, nil
+	return ushq, nil
 }
 
-func (ush *UserSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ushq *UserSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -46067,7 +46067,7 @@ func (ush *UserSettingHistoryQuery) collectField(ctx context.Context, oneNode bo
 		}
 	}
 	if !unknownSeen {
-		ush.Select(selectedFields...)
+		ushq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -46124,18 +46124,18 @@ func newUserSettingHistoryPaginateArgs(rv map[string]any) *usersettinghistoryPag
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (w *WebauthnQuery) CollectFields(ctx context.Context, satisfies ...string) (*WebauthnQuery, error) {
+func (wq *WebauthnQuery) CollectFields(ctx context.Context, satisfies ...string) (*WebauthnQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return w, nil
+		return wq, nil
 	}
-	if err := w.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := wq.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return w, nil
+	return wq, nil
 }
 
-func (w *WebauthnQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (wq *WebauthnQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -46149,12 +46149,12 @@ func (w *WebauthnQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&UserClient{config: w.config}).Query()
+				query = (&UserClient{config: wq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			w.withOwner = query
+			wq.withOwner = query
 			if _, ok := fieldSeen[webauthn.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, webauthn.FieldOwnerID)
 				fieldSeen[webauthn.FieldOwnerID] = struct{}{}
@@ -46206,7 +46206,7 @@ func (w *WebauthnQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 		}
 	}
 	if !unknownSeen {
-		w.Select(selectedFields...)
+		wq.Select(selectedFields...)
 	}
 	return nil
 }
@@ -46287,7 +46287,7 @@ func fieldArgs(ctx context.Context, whereInput any, path ...string) map[string]a
 func unmarshalArgs(ctx context.Context, whereInput any, args map[string]any) map[string]any {
 	for _, k := range []string{firstField, lastField} {
 		v, ok := args[k]
-		if !ok {
+		if !ok || v == nil {
 			continue
 		}
 		i, err := graphql.UnmarshalInt(v)

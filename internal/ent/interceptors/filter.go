@@ -155,12 +155,6 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		return nil, err
 	}
 
-	// // convert the query to an intercept query
-	// q, err := intercept.NewQuery(query)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	ctxQuery := ent.QueryFromContext(ctx)
 
 	switch ctxQuery.Op {
