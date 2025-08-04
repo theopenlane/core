@@ -135,12 +135,12 @@ type group
     define parent_admin: [organization#owner]
     # permissions inherited from the organization
     define parent_viewer: can_view from parent or parent_admin
-    define parent_editor: can_edit from parent or parent_admin
-    define parent_deleter: can_edit from parent or parent_admin
+    define parent_editor: parent_admin
+    define parent_deleter: parent_admin
     # main permission sets based on roles
     define can_delete: [service] or admin or parent_deleter
     define can_edit: [service] or admin or parent_editor
-    define can_view: [service] or member or can_edit or parent_editor or parent_viewer
+    define can_view: [service] or member or parent_viewer
     # additional fine-grained permissions
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
 
