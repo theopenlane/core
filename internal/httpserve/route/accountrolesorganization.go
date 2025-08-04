@@ -3,41 +3,40 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerAccountRolesOrganizationHandler registers the /account/roles/organization handler
-func registerAccountRolesOrganizationHandler(router *Router) (err error) {
+func registerAccountRolesOrganizationHandler(router *Router) error {
 	// add route without the path param
-	path := "/account/roles/organization"
-	method := http.MethodGet
-	name := "AccountRolesOrganization"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.AccountRolesOrganizationHandler(c)
-		},
+	config := Config{
+		Path:        "/account/roles/organization",
+		Method:      http.MethodGet,
+		Name:        "AccountRolesOrganization",
+		Description: "Retrieve a list of roles of the subject in the organization",
+		Tags:        []string{"account"},
+		OperationID: "AccountRolesOrganization",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.AccountRolesOrganizationHandler,
 	}
 
-	rolesOrganizationOperation := router.Handler.BindAccountRolesOrganization()
-
-	if err := router.AddV1Route(route.Path, route.Method, rolesOrganizationOperation, route); err != nil {
+	if err := router.AddV1HandlerRoute(config); err != nil {
 		return err
 	}
 
 	// add an additional route with the path param
-	route.Path = "/account/roles/organization/:{id}"
-	route.Name = name + "ByID"
-
-	rolesOrganizationOperationByID := router.Handler.BindAccountRolesOrganizationByID()
-
-	if err := router.AddV1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
-		return err
+	configByID := Config{
+		Path:        "/account/roles/organization/:id",
+		Method:      http.MethodGet,
+		Name:        "AccountRolesOrganizationByID",
+		Description: "Retrieve a list of roles of the subject in the organization ID provided",
+		Tags:        []string{"account"},
+		OperationID: "AccountRolesOrganizationByID",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.AccountRolesOrganizationHandler,
 	}
 
-	return nil
+	return router.AddV1HandlerRoute(configByID)
 }

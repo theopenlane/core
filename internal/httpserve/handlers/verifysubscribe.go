@@ -3,11 +3,9 @@ package handlers
 import (
 	"context"
 	"errors"
-	"net/http"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -22,14 +20,10 @@ import (
 )
 
 // VerifySubscriptionHandler is the handler for the subscription verification endpoint
-func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
-	var in models.VerifySubscribeRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleVerifySubscriptionSuccessRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// setup viewer context
@@ -38,12 +32,12 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 	entSubscriber, err := h.getSubscriberByToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		log.Error().Err(err).Msg("error retrieving subscriber")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	// add org to the authenticated context
@@ -67,7 +61,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 
 			log.Error().Err(err).Msg("error verifying subscriber token")
 
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 
 		input := generated.UpdateSubscriberInput{
@@ -77,7 +71,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 		if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, input); err != nil {
 			log.Error().Err(err).Msg("error updating subscriber")
 
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 	}
 
@@ -86,7 +80,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 		Message: "Subscription confirmed, looking forward to sending you updates!",
 	}
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, out, openapi)
 }
 
 // verifySubscriberToken checks the token provided by the user and verifies it against the database
@@ -146,22 +140,4 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 	}
 
 	return nil
-}
-
-// BindVerifySubscriberHandler creates the openapi operation for the subscription verification endpoint
-func (h *Handler) BindVerifySubscriberHandler() *openapi3.Operation {
-	verify := openapi3.NewOperation()
-	verify.Description = "Verify an email address for a subscription"
-	verify.Tags = []string{"subscribe"}
-	verify.OperationID = "VerifySubscriberEmail"
-	verify.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("token", verify)
-	h.AddResponse("VerifySubscriptionReply", "success", models.ExampleVerifySubscriptionResponse, verify, http.StatusOK)
-	verify.AddResponse(http.StatusInternalServerError, internalServerError())
-	verify.AddResponse(http.StatusBadRequest, badRequest())
-	verify.AddResponse(http.StatusBadRequest, invalidInput())
-	verify.AddResponse(http.StatusCreated, created())
-
-	return verify
 }

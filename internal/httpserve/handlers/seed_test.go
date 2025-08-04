@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 var (
@@ -114,7 +115,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	require.NoError(t, err)
 
 	testOrg, err := suite.db.Organization.Create().
-		SetName(gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun()).
+		SetName(gofakeit.Name() + " " + ulids.New().String()).
 		SetSettingID(orgSetting.ID).
 		Save(userCtx)
 

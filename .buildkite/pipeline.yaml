@@ -32,7 +32,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "generate:ci-fast"]
+              command: ["task", "generate:checksums"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE

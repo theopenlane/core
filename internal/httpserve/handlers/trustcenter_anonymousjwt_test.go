@@ -21,7 +21,9 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 	t := suite.T()
 
 	// setup handler
-	suite.e.POST("trustcenter/auth/anonymous", suite.h.CreateTrustCenterAnonymousJWT)
+	// Create operation for CreateTrustCenterAnonymousJWT
+	operation := suite.createImpersonationOperation("CreateTrustCenterAnonymousJWT", "Create trust center anonymous JWT")
+	suite.registerTestHandler("POST", "trustcenter/auth/anonymous", operation, suite.h.CreateTrustCenterAnonymousJWT)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)

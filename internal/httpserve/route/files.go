@@ -7,36 +7,32 @@ import (
 	"strings"
 
 	echo "github.com/theopenlane/echox"
+
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerUploadsHandler serves up static files from the upload directory
 // this is used for development without saving files to S3
 // it is *ONLY* registered when the disk mode object storage is used
 func registerUploadsHandler(router *Router) (err error) {
-	path := "/files/:name"
-	method := http.MethodGet
-	name := "files"
-
-	route := echo.Route{
-		Name:   name,
-		Method: method,
-		Path:   path,
-		// this route is not protected with auth middleware
-		// it is only used for development
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
+	config := Config{
+		Path:        "/files/:name",
+		Method:      http.MethodGet,
+		Name:        "Files",
+		Description: "Serve uploaded files from local storage (development only)",
+		Tags:        []string{"files"},
+		OperationID: "Files",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
 			fileSystem := os.DirFS(router.LocalFilePath)
 
-			p := c.PathParam("name")
+			p := ctx.PathParam("name")
 			name := filepath.ToSlash(filepath.Clean(strings.TrimPrefix(p, "/")))
 
-			return c.FileFS(name, fileSystem)
+			return ctx.FileFS(name, fileSystem)
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

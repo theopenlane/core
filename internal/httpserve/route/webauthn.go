@@ -3,97 +3,73 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerWebauthnRegistrationHandler registers the webauthn registration handler
 func registerWebauthnRegistrationHandler(router *Router) (err error) {
-	path := "/registration/options"
-	method := http.MethodPost
-	name := "WebauthnRegistration"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.BeginWebauthnRegistration(c)
-		},
+	config := Config{
+		Path:        "/registration/options",
+		Method:      http.MethodPost,
+		Name:        "WebauthnRegistration",
+		Description: "Begin WebAuthn registration process and return credential creation options",
+		Tags:        []string{"webauthn", "authentication"},
+		OperationID: "WebauthnRegistration",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		Handler:     router.Handler.BeginWebauthnRegistration,
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerWebauthnVerificationsHandler registers the webauthn registration verification handler
 func registerWebauthnVerificationsHandler(router *Router) (err error) {
-	path := "/registration/verification"
-	method := http.MethodPost
-	name := "WebauthnRegistrationVerification"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.FinishWebauthnRegistration(c)
-		},
+	config := Config{
+		Path:        "/registration/verification",
+		Method:      http.MethodPost,
+		Name:        "WebauthnRegistrationVerification",
+		Description: "Complete WebAuthn registration process by verifying the credential creation response",
+		Tags:        []string{"webauthn", "authentication"},
+		OperationID: "WebauthnRegistrationVerification",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		Handler:     router.Handler.FinishWebauthnRegistration,
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerWebauthnAuthenticationHandler registers the webauthn authentication handler
 func registerWebauthnAuthenticationHandler(router *Router) (err error) {
-	path := "/authentication/options"
-	method := http.MethodPost
-	name := "WebauthnAuthentication"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.BeginWebauthnLogin(c)
-		},
+	config := Config{
+		Path:        "/authentication/options",
+		Method:      http.MethodPost,
+		Name:        "WebauthnAuthentication",
+		Description: "Begin WebAuthn authentication process and return credential request options",
+		Tags:        []string{"webauthn", "authentication"},
+		OperationID: "WebauthnAuthentication",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		Handler:     router.Handler.BeginWebauthnLogin,
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerWebauthnAuthVerificationHandler registers the webauthn authentication verification handler
 func registerWebauthnAuthVerificationHandler(router *Router) (err error) {
-	path := "/authentication/verification"
-	method := http.MethodPost
-	name := "WebauthnAuthenticationVerification"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			return router.Handler.FinishWebauthnLogin(c)
-		},
+	config := Config{
+		Path:        "/authentication/verification",
+		Method:      http.MethodPost,
+		Name:        "WebauthnAuthenticationVerification",
+		Description: "Complete WebAuthn authentication process by verifying the authentication response",
+		Tags:        []string{"webauthn", "authentication"},
+		OperationID: "WebauthnAuthenticationVerification",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		Handler:     router.Handler.FinishWebauthnLogin,
 	}
 
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

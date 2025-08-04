@@ -4,55 +4,50 @@ import (
 	"net/http"
 
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 	echo "github.com/theopenlane/echox"
 )
 
 // registerLivenessHandler registers the liveness handler
 func registerLivenessHandler(router *Router) (err error) {
-	path := "/livez"
-	method := http.MethodGet
-
-	route := echo.Route{
+	config := Config{
+		Path:        "/livez",
+		Method:      http.MethodGet,
 		Name:        "Livez",
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
+		Description: "Health check endpoint to verify the service is alive",
+		Tags:        []string{"health"},
+		OperationID: "Livez",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
 			if entdb.IsShuttingDown() {
-				return c.JSON(http.StatusServiceUnavailable, echo.Map{"status": "shutting down"})
+				return ctx.JSON(http.StatusServiceUnavailable, echo.Map{"status": "shutting down"})
 			}
 
-			return c.JSON(http.StatusOK, echo.Map{
+			return ctx.JSON(http.StatusOK, echo.Map{
 				"status": "UP",
 			})
 		},
 	}
 
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }
 
 // registerReadinessHandler registers the readiness handler
 func registerReadinessHandler(router *Router) (err error) {
-	path := "/ready"
-	method := http.MethodGet
-
-	route := echo.Route{
+	config := Config{
+		Path:        "/ready",
+		Method:      http.MethodGet,
 		Name:        "Ready",
-		Method:      method,
-		Path:        path,
-		Middlewares: baseMW, // leaves off the additional middleware(including csrf)
-		Handler: func(c echo.Context) error {
-			return router.Handler.ReadyChecks.ReadyHandler(c)
+		Description: "Readiness check endpoint to verify the service is ready to accept traffic",
+		Tags:        []string{"health"},
+		OperationID: "Ready",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		SimpleHandler: func(ctx echo.Context) error {
+			return router.Handler.ReadyChecks.ReadyHandler(ctx)
 		},
 	}
 
-	if err := router.AddUnversionedRoute(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

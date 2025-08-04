@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -22,54 +21,49 @@ import (
 
 // LoginHandler validates the user credentials and returns a valid cookie
 // this handler only supports username password login
-func (h *Handler) LoginHandler(ctx echo.Context) error {
-	var in models.LoginRequest
-	if err := ctx.Bind(&in); err != nil {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.InvalidInput(ctx, err)
+func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleLoginSuccessRequest, openapi.Registry)
+	if err != nil {
+		metrics.RecordLogin(false)
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	reqCtx := ctx.Request().Context()
 
 	// check user in the database, username == email and ensure only one record is returned
-	user, err := h.getUserByEmail(reqCtx, in.Username)
+	user, err := h.getUserByEmail(reqCtx, req.Username)
 	if err != nil {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	if user.Edges.Setting.Status != enums.UserStatusActive {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	if orgID, ok := h.ssoOrgForUser(allowCtx, in.Username); ok {
-		metrics.Logins.WithLabelValues("false").Inc()
+	if orgID, ok := h.ssoOrgForUser(allowCtx, req.Username); ok {
+		metrics.RecordLogin(false)
 		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgID))
 	}
 
 	if user.Password == nil {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.BadRequest(ctx, rout.ErrInvalidCredentials)
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
 	}
 
 	// verify the password is correct
-	valid, err := passwd.VerifyDerivedKey(*user.Password, in.Password)
+	valid, err := passwd.VerifyDerivedKey(*user.Password, req.Password)
 	if err != nil || !valid {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.BadRequest(ctx, rout.ErrInvalidCredentials)
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
 	}
 
 	if !user.Edges.Setting.EmailConfirmed {
-		metrics.Logins.WithLabelValues("false").Inc()
-		return h.BadRequest(ctx, auth.ErrUnverifiedUser)
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, auth.ErrUnverifiedUser, openapi)
 	}
 
 	// set context for remaining request based on logged in user
@@ -80,13 +74,13 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
 		log.Error().Err(err).Msg("unable to update last seen")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	out := models.LoginReply{
@@ -96,24 +90,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		AuthData:   *auth,
 	}
 
-	metrics.Logins.WithLabelValues("true").Inc()
+	metrics.RecordLogin(true)
 
-	return h.Success(ctx, out)
-}
-
-// BindLoginHandler binds the login request to the OpenAPI schema
-func (h *Handler) BindLoginHandler() *openapi3.Operation {
-	login := openapi3.NewOperation()
-	login.Description = "Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to our systems. The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid"
-	login.Tags = []string{"authentication"}
-	login.OperationID = "LoginHandler"
-	login.Security = BasicSecurity()
-
-	h.AddRequestBody("LoginRequest", models.ExampleLoginSuccessRequest, login)
-	h.AddResponse("LoginReply", "success", models.ExampleLoginSuccessResponse, login, http.StatusOK)
-	login.AddResponse(http.StatusInternalServerError, internalServerError())
-	login.AddResponse(http.StatusBadRequest, badRequest())
-	login.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return login
+	return h.Success(ctx, out, openapi)
 }

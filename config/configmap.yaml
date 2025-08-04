@@ -223,17 +223,77 @@ data:
   CORE_EMAIL_COMPANYADDRESS: {{ .Values.openlane.coreConfiguration.email.companyAddress }}
   CORE_EMAIL_CORPORATION: {{ .Values.openlane.coreConfiguration.email.corporation }}
   CORE_EMAIL_YEAR: {{ .Values.openlane.coreConfiguration.email.year }}
+{{- if .Values.openlane.coreConfiguration.email.fromEmail }}
   CORE_EMAIL_FROMEMAIL: {{ .Values.openlane.coreConfiguration.email.fromEmail }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_FROMEMAIL: "no-reply@mail.{{ .Values.domain }}"
+{{- else }}
+  CORE_EMAIL_FROMEMAIL: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.supportEmail }}
   CORE_EMAIL_SUPPORTEMAIL: {{ .Values.openlane.coreConfiguration.email.supportEmail }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_SUPPORTEMAIL: "support@.{{ .Values.domain }}"
+{{- else }}
+  CORE_EMAIL_SUPPORTEMAIL: ""
+{{- end }}
   CORE_EMAIL_LOGOURL: {{ .Values.openlane.coreConfiguration.email.logoURL }}
+{{- if .Values.openlane.coreConfiguration.email.urls.root }}
   CORE_EMAIL_URLS_ROOT: {{ .Values.openlane.coreConfiguration.email.urls.root }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_ROOT: "https://www.{{ .Values.domain }}"
+{{- else }}
+  CORE_EMAIL_URLS_ROOT: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.product }}
   CORE_EMAIL_URLS_PRODUCT: {{ .Values.openlane.coreConfiguration.email.urls.product }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_PRODUCT: "https://console.{{ .Values.domain }}"
+{{- else }}
+  CORE_EMAIL_URLS_PRODUCT: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.docs }}
   CORE_EMAIL_URLS_DOCS: {{ .Values.openlane.coreConfiguration.email.urls.docs }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_DOCS: "https://docs.{{ .Values.domain }}"
+{{- else }}
+  CORE_EMAIL_URLS_DOCS: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.verify }}
   CORE_EMAIL_URLS_VERIFY: {{ .Values.openlane.coreConfiguration.email.urls.verify }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_VERIFY: "https://console.{{ .Values.domain }}/verify"
+{{- else }}
+  CORE_EMAIL_URLS_VERIFY: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.invite }}
   CORE_EMAIL_URLS_INVITE: {{ .Values.openlane.coreConfiguration.email.urls.invite }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_INVITE: "https://console.{{ .Values.domain }}/invite"
+{{- else }}
+  CORE_EMAIL_URLS_INVITE: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.reset }}
   CORE_EMAIL_URLS_RESET: {{ .Values.openlane.coreConfiguration.email.urls.reset }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_RESET: "https://console.{{ .Values.domain }}/password-reset"
+{{- else }}
+  CORE_EMAIL_URLS_RESET: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.verifySubscriber }}
   CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.openlane.coreConfiguration.email.urls.verifySubscriber }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: "https://console.{{ .Values.domain }}/subscriber-verify"
+{{- else }}
+  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: ""
+{{- end }}
+{{- if .Values.openlane.coreConfiguration.email.urls.verifyBilling }}
   CORE_EMAIL_URLS_VERIFYBILLING: {{ .Values.openlane.coreConfiguration.email.urls.verifyBilling }}
+{{- else if .Values.domain }}
+  CORE_EMAIL_URLS_VERIFYBILLING: "https://console.{{ .Values.domain }}/verify-billing"
+{{- else }}
+  CORE_EMAIL_URLS_VERIFYBILLING: ""
+{{- end }}
   CORE_EMAIL_TEMPLATESPATH: {{ .Values.openlane.coreConfiguration.email.templatesPath }}
   CORE_SESSIONS_SIGNINGKEY: {{ .Values.openlane.coreConfiguration.sessions.signingKey | default "my-signing-secret" }}
   CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.openlane.coreConfiguration.sessions.encryptionKey | default "encryptionsecret" }}

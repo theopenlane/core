@@ -23,7 +23,9 @@ import (
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	t := suite.T()
 
-	suite.e.POST("switch", suite.h.SwitchHandler)
+	// Create operation for SwitchHandler
+	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
+	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)

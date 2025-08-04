@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"errors"
-	"net/http"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -20,14 +18,10 @@ import (
 )
 
 // VerifyEmail is the handler for the email verification endpoint
-func (h *Handler) VerifyEmail(ctx echo.Context) error {
-	var in models.VerifyRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleVerifySuccessRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// setup viewer context
@@ -36,12 +30,12 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 	entUser, err := h.getUserByEVToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		log.Error().Err(err).Msg("error retrieving user token")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	// create email verification
@@ -58,7 +52,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		if err := user.setUserTokens(entUser, in.Token); err != nil {
 			log.Error().Err(err).Msg("unable to set user tokens for request")
 
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		// Construct the user token from the database fields
@@ -69,7 +63,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
 			log.Error().Err(err).Msg("unable to parse expiration")
 
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 
 		// Verify the token with the stored secret
@@ -81,7 +75,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 				if err != nil {
 					log.Error().Err(err).Msg("unable to resend verification token")
 
-					return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
+					return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 				}
 
 				out := &models.VerifyReply{
@@ -94,11 +88,11 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 				return h.Created(ctx, out)
 			}
 
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 
 		if err := h.setEmailConfirmed(userCtx, entUser); err != nil {
-			return h.BadRequest(ctx, err)
+			return h.BadRequest(ctx, err, openapi)
 		}
 	}
 
@@ -107,7 +101,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 	if err != nil {
 		log.Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	out := &models.VerifyReply{
@@ -118,7 +112,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		AuthData: *auth,
 	}
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, out, openapi)
 }
 
 // setUserTokens sets the fields to verify the email
@@ -135,22 +129,4 @@ func (u *User) setUserTokens(user *generated.User, reqToken string) error {
 	}
 
 	return ErrNotFound
-}
-
-// BindVerifyEmailHandler binds the verify email verification endpoint to the OpenAPI schema
-func (h *Handler) BindVerifyEmailHandler() *openapi3.Operation {
-	verify := openapi3.NewOperation()
-	verify.Description = "VerifyEmail verifies a user's email address by validating the token in the request and setting the user's validated field in the database to true. This endpoint is intended to be called by frontend applications after the user has followed the link in the verification email"
-	verify.Tags = []string{"accountRegistration"}
-	verify.OperationID = "VerifyEmail"
-	verify.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("token", verify)
-	h.AddResponse("VerifyReply", "success", models.ExampleVerifySuccessResponse, verify, http.StatusOK)
-	verify.AddResponse(http.StatusInternalServerError, internalServerError())
-	verify.AddResponse(http.StatusBadRequest, badRequest())
-	verify.AddResponse(http.StatusCreated, created())
-	verify.AddResponse(http.StatusBadRequest, invalidInput())
-
-	return verify
 }

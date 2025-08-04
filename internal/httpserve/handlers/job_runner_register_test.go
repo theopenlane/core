@@ -20,7 +20,9 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner() {
 	t := suite.T()
 
 	// add handler
-	suite.e.POST("/v1/runners", suite.h.RegisterJobRunner)
+	// Create operation for RegisterJobRunner
+	operation := suite.createImpersonationOperation("RegisterJobRunner", "Register job runner")
+	suite.registerTestHandler("POST", "/v1/runners", operation, suite.h.RegisterJobRunner)
 
 	// Create a valid registration token
 	ctx := context.Background()
@@ -107,7 +109,9 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner_ExpiredToken() {
 	t := suite.T()
 
 	// add handler
-	suite.e.POST("/v1/runners", suite.h.RegisterJobRunner)
+	// Create operation for RegisterJobRunner
+	operation := suite.createImpersonationOperation("RegisterJobRunner", "Register job runner")
+	suite.registerTestHandler("POST", "/v1/runners", operation, suite.h.RegisterJobRunner)
 
 	// Create a valid registration token
 	ctx := context.Background()

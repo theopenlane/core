@@ -5,30 +5,29 @@ import (
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
+
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerCSRFHandler serves up the csrf token for the UI to use
 func registerCSRFHandler(router *Router) (err error) {
-	path := "/csrf"
-	method := http.MethodGet
-	name := "CSRF"
+	config := Config{
+		Path:        "/csrf",
+		Method:      http.MethodGet,
+		Name:        "CSRF",
+		Description: "Get CSRF token for form submissions",
+		Tags:        []string{"security"},
+		OperationID: "CSRF",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		SimpleHandler: func(ctx echo.Context) error {
+			token := ctx.Get(middleware.DefaultCSRFConfig.ContextKey)
 
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler: func(c echo.Context) error {
-			token := c.Get(middleware.DefaultCSRFConfig.ContextKey)
-
-			return c.JSON(http.StatusOK, echo.Map{
+			return ctx.JSON(http.StatusOK, echo.Map{
 				"csrf": token,
 			})
-		}}
-
-	if err := router.AddEchoOnlyRoute(route); err != nil {
-		return err
+		},
 	}
 
-	return nil
+	return router.AddUnversionedHandlerRoute(config)
 }

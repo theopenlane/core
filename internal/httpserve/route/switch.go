@@ -3,30 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerSwitchRoute registers the switch route to switch the user's logged in organization context
-func registerSwitchRoute(router *Router) (err error) {
-	path := "/switch"
-	method := http.MethodPost
-	name := "Switch"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.SwitchHandler(c)
-		},
+func registerSwitchRoute(router *Router) error {
+	config := Config{
+		Path:        "/switch",
+		Method:      http.MethodPost,
+		Name:        "Switch",
+		Description: "Switch the user's organization context",
+		Tags:        []string{"organization"},
+		OperationID: "Switch",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.SwitchHandler,
 	}
 
-	switchOperation := router.Handler.BindSwitchHandler()
-
-	if err := router.AddV1Route(path, method, switchOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }

@@ -186,8 +186,7 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, 
 }
 
 // getUserByID returns the ent user with the user settings based on the email in the request
-func (h *Handler) getUserByID(ctx context.Context, id string) (
-	*ent.User, context.Context, error) {
+func (h *Handler) getUserByID(ctx context.Context, id string) (*ent.User, context.Context, error) {
 	user, err := transaction.FromContext(ctx).User.Query().WithSetting().
 		Where(user.ID(id)).
 		Only(ctx)
@@ -563,8 +562,7 @@ func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token 
 	return registrationToken, nil
 }
 
-func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken,
-	req models.JobRunnerRegistrationRequest) error {
+func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken, req models.JobRunnerRegistrationRequest) error {
 	input := ent.CreateJobRunnerInput{
 		IPAddress: req.IPAddress,
 		Name:      req.Name,

@@ -25,8 +25,8 @@ import (
 func (suite *HandlerTestSuite) TestStartImpersonation() {
 	t := suite.T()
 
-	// add handler
-	suite.e.POST("impersonation/start", suite.h.StartImpersonation)
+	// Register test handler
+	suite.registerTestHandler("POST", "impersonation/start", suite.startImpersonationOp, suite.h.StartImpersonation)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -205,8 +205,8 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 func (suite *HandlerTestSuite) TestEndImpersonation() {
 	t := suite.T()
 
-	// add handler
-	suite.e.POST("impersonation/end", suite.h.EndImpersonation)
+	// Register test handler
+	suite.registerTestHandler("POST", "impersonation/end", suite.endImpersonationOp, suite.h.EndImpersonation)
 
 	testCases := []struct {
 		name           string
@@ -326,8 +326,8 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	t := suite.T()
 
-	// add handler
-	suite.e.POST("impersonation/start", suite.h.StartImpersonation)
+	// Register test handler
+	suite.registerTestHandler("POST", "impersonation/start", suite.startImpersonationOp, suite.h.StartImpersonation)
 
 	// Create a valid impersonation token using the real TokenManager
 	opts := tokens.CreateImpersonationTokenOptions{

@@ -3,31 +3,22 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
-// register2faHandler registers the 2FA validation handler
-// which is used to verify the TOTP code of a user
-func register2faHandler(router *Router) (err error) {
-	path := "/2fa/validate"
-	method := http.MethodPost
-	name := "2FA Validate"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.ValidateTOTP(c)
-		},
+// register2faHandler registers the 2FA validation handler which is used to verify the TOTP code of a user
+func register2faHandler(router *Router) error {
+	config := Config{
+		Path:        "/2fa/validate",
+		Method:      http.MethodPost,
+		Name:        "TFAValidation",
+		Description: "Validate a user's TOTP code",
+		Tags:        []string{"tfa"},
+		OperationID: "TFAValidation",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.ValidateTOTP,
 	}
 
-	tfaOperation := router.Handler.BindTFAHandler()
-
-	if err := router.AddV1Route(path, method, tfaOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
