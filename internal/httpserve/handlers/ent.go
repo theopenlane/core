@@ -564,10 +564,9 @@ func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token 
 
 func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken, req models.JobRunnerRegistrationRequest) error {
 	input := ent.CreateJobRunnerInput{
-		IPAddress: req.IPAddress,
-		Name:      req.Name,
-		Tags:      req.Tags,
-		OwnerID:   &token.OwnerID,
+		Name:    req.Name,
+		Tags:    req.Tags,
+		OwnerID: &token.OwnerID,
 	}
 
 	err := transaction.FromContext(ctx).JobRunner.Create().

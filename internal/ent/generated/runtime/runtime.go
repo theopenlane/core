@@ -2992,10 +2992,6 @@ func init() {
 	jobrunnerDescSystemOwned := jobrunnerMixinFields7[0].Descriptor()
 	// jobrunner.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	jobrunner.DefaultSystemOwned = jobrunnerDescSystemOwned.Default.(bool)
-	// jobrunnerDescIPAddress is the schema descriptor for ip_address field.
-	jobrunnerDescIPAddress := jobrunnerFields[2].Descriptor()
-	// jobrunner.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
-	jobrunner.IPAddressValidator = jobrunnerDescIPAddress.Validators[0].(func(string) error)
 	// jobrunnerDescID is the schema descriptor for id field.
 	jobrunnerDescID := jobrunnerMixinFields3[0].Descriptor()
 	// jobrunner.DefaultID holds the default value on creation for the id field.

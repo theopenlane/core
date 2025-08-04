@@ -36087,6 +36087,23 @@ type JobResultWhereInput struct {
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 
+	// "log" field predicates.
+	Log             *string  `json:"log,omitempty"`
+	LogNEQ          *string  `json:"logNEQ,omitempty"`
+	LogIn           []string `json:"logIn,omitempty"`
+	LogNotIn        []string `json:"logNotIn,omitempty"`
+	LogGT           *string  `json:"logGT,omitempty"`
+	LogGTE          *string  `json:"logGTE,omitempty"`
+	LogLT           *string  `json:"logLT,omitempty"`
+	LogLTE          *string  `json:"logLTE,omitempty"`
+	LogContains     *string  `json:"logContains,omitempty"`
+	LogHasPrefix    *string  `json:"logHasPrefix,omitempty"`
+	LogHasSuffix    *string  `json:"logHasSuffix,omitempty"`
+	LogIsNil        bool     `json:"logIsNil,omitempty"`
+	LogNotNil       bool     `json:"logNotNil,omitempty"`
+	LogEqualFold    *string  `json:"logEqualFold,omitempty"`
+	LogContainsFold *string  `json:"logContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -36558,6 +36575,51 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 	if i.FileIDContainsFold != nil {
 		predicates = append(predicates, jobresult.FileIDContainsFold(*i.FileIDContainsFold))
 	}
+	if i.Log != nil {
+		predicates = append(predicates, jobresult.LogEQ(*i.Log))
+	}
+	if i.LogNEQ != nil {
+		predicates = append(predicates, jobresult.LogNEQ(*i.LogNEQ))
+	}
+	if len(i.LogIn) > 0 {
+		predicates = append(predicates, jobresult.LogIn(i.LogIn...))
+	}
+	if len(i.LogNotIn) > 0 {
+		predicates = append(predicates, jobresult.LogNotIn(i.LogNotIn...))
+	}
+	if i.LogGT != nil {
+		predicates = append(predicates, jobresult.LogGT(*i.LogGT))
+	}
+	if i.LogGTE != nil {
+		predicates = append(predicates, jobresult.LogGTE(*i.LogGTE))
+	}
+	if i.LogLT != nil {
+		predicates = append(predicates, jobresult.LogLT(*i.LogLT))
+	}
+	if i.LogLTE != nil {
+		predicates = append(predicates, jobresult.LogLTE(*i.LogLTE))
+	}
+	if i.LogContains != nil {
+		predicates = append(predicates, jobresult.LogContains(*i.LogContains))
+	}
+	if i.LogHasPrefix != nil {
+		predicates = append(predicates, jobresult.LogHasPrefix(*i.LogHasPrefix))
+	}
+	if i.LogHasSuffix != nil {
+		predicates = append(predicates, jobresult.LogHasSuffix(*i.LogHasSuffix))
+	}
+	if i.LogIsNil {
+		predicates = append(predicates, jobresult.LogIsNil())
+	}
+	if i.LogNotNil {
+		predicates = append(predicates, jobresult.LogNotNil())
+	}
+	if i.LogEqualFold != nil {
+		predicates = append(predicates, jobresult.LogEqualFold(*i.LogEqualFold))
+	}
+	if i.LogContainsFold != nil {
+		predicates = append(predicates, jobresult.LogContainsFold(*i.LogContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := jobresult.HasOwner()
@@ -36771,8 +36833,56 @@ type JobRunnerWhereInput struct {
 	IPAddressContains     *string  `json:"ipAddressContains,omitempty"`
 	IPAddressHasPrefix    *string  `json:"ipAddressHasPrefix,omitempty"`
 	IPAddressHasSuffix    *string  `json:"ipAddressHasSuffix,omitempty"`
+	IPAddressIsNil        bool     `json:"ipAddressIsNil,omitempty"`
+	IPAddressNotNil       bool     `json:"ipAddressNotNil,omitempty"`
 	IPAddressEqualFold    *string  `json:"ipAddressEqualFold,omitempty"`
 	IPAddressContainsFold *string  `json:"ipAddressContainsFold,omitempty"`
+
+	// "last_seen" field predicates.
+	LastSeen       *time.Time  `json:"lastSeen,omitempty"`
+	LastSeenNEQ    *time.Time  `json:"lastSeenNEQ,omitempty"`
+	LastSeenIn     []time.Time `json:"lastSeenIn,omitempty"`
+	LastSeenNotIn  []time.Time `json:"lastSeenNotIn,omitempty"`
+	LastSeenGT     *time.Time  `json:"lastSeenGT,omitempty"`
+	LastSeenGTE    *time.Time  `json:"lastSeenGTE,omitempty"`
+	LastSeenLT     *time.Time  `json:"lastSeenLT,omitempty"`
+	LastSeenLTE    *time.Time  `json:"lastSeenLTE,omitempty"`
+	LastSeenIsNil  bool        `json:"lastSeenIsNil,omitempty"`
+	LastSeenNotNil bool        `json:"lastSeenNotNil,omitempty"`
+
+	// "version" field predicates.
+	Version             *string  `json:"version,omitempty"`
+	VersionNEQ          *string  `json:"versionNEQ,omitempty"`
+	VersionIn           []string `json:"versionIn,omitempty"`
+	VersionNotIn        []string `json:"versionNotIn,omitempty"`
+	VersionGT           *string  `json:"versionGT,omitempty"`
+	VersionGTE          *string  `json:"versionGTE,omitempty"`
+	VersionLT           *string  `json:"versionLT,omitempty"`
+	VersionLTE          *string  `json:"versionLTE,omitempty"`
+	VersionContains     *string  `json:"versionContains,omitempty"`
+	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
+	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
+	VersionIsNil        bool     `json:"versionIsNil,omitempty"`
+	VersionNotNil       bool     `json:"versionNotNil,omitempty"`
+	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
+	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+
+	// "os" field predicates.
+	Os             *string  `json:"os,omitempty"`
+	OsNEQ          *string  `json:"osNEQ,omitempty"`
+	OsIn           []string `json:"osIn,omitempty"`
+	OsNotIn        []string `json:"osNotIn,omitempty"`
+	OsGT           *string  `json:"osGT,omitempty"`
+	OsGTE          *string  `json:"osGTE,omitempty"`
+	OsLT           *string  `json:"osLT,omitempty"`
+	OsLTE          *string  `json:"osLTE,omitempty"`
+	OsContains     *string  `json:"osContains,omitempty"`
+	OsHasPrefix    *string  `json:"osHasPrefix,omitempty"`
+	OsHasSuffix    *string  `json:"osHasSuffix,omitempty"`
+	OsIsNil        bool     `json:"osIsNil,omitempty"`
+	OsNotNil       bool     `json:"osNotNil,omitempty"`
+	OsEqualFold    *string  `json:"osEqualFold,omitempty"`
+	OsContainsFold *string  `json:"osContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -37214,11 +37324,137 @@ func (i *JobRunnerWhereInput) P() (predicate.JobRunner, error) {
 	if i.IPAddressHasSuffix != nil {
 		predicates = append(predicates, jobrunner.IPAddressHasSuffix(*i.IPAddressHasSuffix))
 	}
+	if i.IPAddressIsNil {
+		predicates = append(predicates, jobrunner.IPAddressIsNil())
+	}
+	if i.IPAddressNotNil {
+		predicates = append(predicates, jobrunner.IPAddressNotNil())
+	}
 	if i.IPAddressEqualFold != nil {
 		predicates = append(predicates, jobrunner.IPAddressEqualFold(*i.IPAddressEqualFold))
 	}
 	if i.IPAddressContainsFold != nil {
 		predicates = append(predicates, jobrunner.IPAddressContainsFold(*i.IPAddressContainsFold))
+	}
+	if i.LastSeen != nil {
+		predicates = append(predicates, jobrunner.LastSeenEQ(*i.LastSeen))
+	}
+	if i.LastSeenNEQ != nil {
+		predicates = append(predicates, jobrunner.LastSeenNEQ(*i.LastSeenNEQ))
+	}
+	if len(i.LastSeenIn) > 0 {
+		predicates = append(predicates, jobrunner.LastSeenIn(i.LastSeenIn...))
+	}
+	if len(i.LastSeenNotIn) > 0 {
+		predicates = append(predicates, jobrunner.LastSeenNotIn(i.LastSeenNotIn...))
+	}
+	if i.LastSeenGT != nil {
+		predicates = append(predicates, jobrunner.LastSeenGT(*i.LastSeenGT))
+	}
+	if i.LastSeenGTE != nil {
+		predicates = append(predicates, jobrunner.LastSeenGTE(*i.LastSeenGTE))
+	}
+	if i.LastSeenLT != nil {
+		predicates = append(predicates, jobrunner.LastSeenLT(*i.LastSeenLT))
+	}
+	if i.LastSeenLTE != nil {
+		predicates = append(predicates, jobrunner.LastSeenLTE(*i.LastSeenLTE))
+	}
+	if i.LastSeenIsNil {
+		predicates = append(predicates, jobrunner.LastSeenIsNil())
+	}
+	if i.LastSeenNotNil {
+		predicates = append(predicates, jobrunner.LastSeenNotNil())
+	}
+	if i.Version != nil {
+		predicates = append(predicates, jobrunner.VersionEQ(*i.Version))
+	}
+	if i.VersionNEQ != nil {
+		predicates = append(predicates, jobrunner.VersionNEQ(*i.VersionNEQ))
+	}
+	if len(i.VersionIn) > 0 {
+		predicates = append(predicates, jobrunner.VersionIn(i.VersionIn...))
+	}
+	if len(i.VersionNotIn) > 0 {
+		predicates = append(predicates, jobrunner.VersionNotIn(i.VersionNotIn...))
+	}
+	if i.VersionGT != nil {
+		predicates = append(predicates, jobrunner.VersionGT(*i.VersionGT))
+	}
+	if i.VersionGTE != nil {
+		predicates = append(predicates, jobrunner.VersionGTE(*i.VersionGTE))
+	}
+	if i.VersionLT != nil {
+		predicates = append(predicates, jobrunner.VersionLT(*i.VersionLT))
+	}
+	if i.VersionLTE != nil {
+		predicates = append(predicates, jobrunner.VersionLTE(*i.VersionLTE))
+	}
+	if i.VersionContains != nil {
+		predicates = append(predicates, jobrunner.VersionContains(*i.VersionContains))
+	}
+	if i.VersionHasPrefix != nil {
+		predicates = append(predicates, jobrunner.VersionHasPrefix(*i.VersionHasPrefix))
+	}
+	if i.VersionHasSuffix != nil {
+		predicates = append(predicates, jobrunner.VersionHasSuffix(*i.VersionHasSuffix))
+	}
+	if i.VersionIsNil {
+		predicates = append(predicates, jobrunner.VersionIsNil())
+	}
+	if i.VersionNotNil {
+		predicates = append(predicates, jobrunner.VersionNotNil())
+	}
+	if i.VersionEqualFold != nil {
+		predicates = append(predicates, jobrunner.VersionEqualFold(*i.VersionEqualFold))
+	}
+	if i.VersionContainsFold != nil {
+		predicates = append(predicates, jobrunner.VersionContainsFold(*i.VersionContainsFold))
+	}
+	if i.Os != nil {
+		predicates = append(predicates, jobrunner.OsEQ(*i.Os))
+	}
+	if i.OsNEQ != nil {
+		predicates = append(predicates, jobrunner.OsNEQ(*i.OsNEQ))
+	}
+	if len(i.OsIn) > 0 {
+		predicates = append(predicates, jobrunner.OsIn(i.OsIn...))
+	}
+	if len(i.OsNotIn) > 0 {
+		predicates = append(predicates, jobrunner.OsNotIn(i.OsNotIn...))
+	}
+	if i.OsGT != nil {
+		predicates = append(predicates, jobrunner.OsGT(*i.OsGT))
+	}
+	if i.OsGTE != nil {
+		predicates = append(predicates, jobrunner.OsGTE(*i.OsGTE))
+	}
+	if i.OsLT != nil {
+		predicates = append(predicates, jobrunner.OsLT(*i.OsLT))
+	}
+	if i.OsLTE != nil {
+		predicates = append(predicates, jobrunner.OsLTE(*i.OsLTE))
+	}
+	if i.OsContains != nil {
+		predicates = append(predicates, jobrunner.OsContains(*i.OsContains))
+	}
+	if i.OsHasPrefix != nil {
+		predicates = append(predicates, jobrunner.OsHasPrefix(*i.OsHasPrefix))
+	}
+	if i.OsHasSuffix != nil {
+		predicates = append(predicates, jobrunner.OsHasSuffix(*i.OsHasSuffix))
+	}
+	if i.OsIsNil {
+		predicates = append(predicates, jobrunner.OsIsNil())
+	}
+	if i.OsNotNil {
+		predicates = append(predicates, jobrunner.OsNotNil())
+	}
+	if i.OsEqualFold != nil {
+		predicates = append(predicates, jobrunner.OsEqualFold(*i.OsEqualFold))
+	}
+	if i.OsContainsFold != nil {
+		predicates = append(predicates, jobrunner.OsContainsFold(*i.OsContainsFold))
 	}
 
 	if i.HasOwner != nil {

@@ -434,6 +434,8 @@ query AdminSearch($query: String!) {
           ownerID
           name
           ipAddress
+          version
+          os
         }
       }
     }

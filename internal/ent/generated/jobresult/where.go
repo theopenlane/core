@@ -128,6 +128,11 @@ func FileID(v string) predicate.JobResult {
 	return predicate.JobResult(sql.FieldEQ(FieldFileID, v))
 }
 
+// Log applies equality check predicate on the "log" field. It's identical to LogEQ.
+func Log(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEQ(FieldLog, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.JobResult {
 	return predicate.JobResult(sql.FieldEQ(FieldCreatedAt, v))
@@ -856,6 +861,81 @@ func FileIDEqualFold(v string) predicate.JobResult {
 // FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
 func FileIDContainsFold(v string) predicate.JobResult {
 	return predicate.JobResult(sql.FieldContainsFold(FieldFileID, v))
+}
+
+// LogEQ applies the EQ predicate on the "log" field.
+func LogEQ(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEQ(FieldLog, v))
+}
+
+// LogNEQ applies the NEQ predicate on the "log" field.
+func LogNEQ(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldNEQ(FieldLog, v))
+}
+
+// LogIn applies the In predicate on the "log" field.
+func LogIn(vs ...string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldIn(FieldLog, vs...))
+}
+
+// LogNotIn applies the NotIn predicate on the "log" field.
+func LogNotIn(vs ...string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotIn(FieldLog, vs...))
+}
+
+// LogGT applies the GT predicate on the "log" field.
+func LogGT(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldGT(FieldLog, v))
+}
+
+// LogGTE applies the GTE predicate on the "log" field.
+func LogGTE(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldGTE(FieldLog, v))
+}
+
+// LogLT applies the LT predicate on the "log" field.
+func LogLT(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldLT(FieldLog, v))
+}
+
+// LogLTE applies the LTE predicate on the "log" field.
+func LogLTE(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldLTE(FieldLog, v))
+}
+
+// LogContains applies the Contains predicate on the "log" field.
+func LogContains(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldContains(FieldLog, v))
+}
+
+// LogHasPrefix applies the HasPrefix predicate on the "log" field.
+func LogHasPrefix(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldHasPrefix(FieldLog, v))
+}
+
+// LogHasSuffix applies the HasSuffix predicate on the "log" field.
+func LogHasSuffix(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldHasSuffix(FieldLog, v))
+}
+
+// LogIsNil applies the IsNil predicate on the "log" field.
+func LogIsNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldIsNull(FieldLog))
+}
+
+// LogNotNil applies the NotNil predicate on the "log" field.
+func LogNotNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotNull(FieldLog))
+}
+
+// LogEqualFold applies the EqualFold predicate on the "log" field.
+func LogEqualFold(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEqualFold(FieldLog, v))
+}
+
+// LogContainsFold applies the ContainsFold predicate on the "log" field.
+func LogContainsFold(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldContainsFold(FieldLog, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

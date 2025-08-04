@@ -1951,6 +1951,7 @@ type ComplexityRoot struct {
 		FileID         func(childComplexity int) int
 		FinishedAt     func(childComplexity int) int
 		ID             func(childComplexity int) int
+		Log            func(childComplexity int) int
 		Owner          func(childComplexity int) int
 		OwnerID        func(childComplexity int) int
 		ScheduledJob   func(childComplexity int) int
@@ -1991,7 +1992,9 @@ type ComplexityRoot struct {
 		ID              func(childComplexity int) int
 		IPAddress       func(childComplexity int) int
 		JobRunnerTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		LastSeen        func(childComplexity int) int
 		Name            func(childComplexity int) int
+		Os              func(childComplexity int) int
 		Owner           func(childComplexity int) int
 		OwnerID         func(childComplexity int) int
 		Status          func(childComplexity int) int
@@ -1999,6 +2002,7 @@ type ComplexityRoot struct {
 		Tags            func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
 		UpdatedBy       func(childComplexity int) int
+		Version         func(childComplexity int) int
 	}
 
 	JobRunnerConnection struct {
@@ -14149,6 +14153,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResult.ID(childComplexity), true
 
+	case "JobResult.log":
+		if e.complexity.JobResult.Log == nil {
+			break
+		}
+
+		return e.complexity.JobResult.Log(childComplexity), true
+
 	case "JobResult.owner":
 		if e.complexity.JobResult.Owner == nil {
 			break
@@ -14308,12 +14319,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunner.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
 
+	case "JobRunner.lastSeen":
+		if e.complexity.JobRunner.LastSeen == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.LastSeen(childComplexity), true
+
 	case "JobRunner.name":
 		if e.complexity.JobRunner.Name == nil {
 			break
 		}
 
 		return e.complexity.JobRunner.Name(childComplexity), true
+
+	case "JobRunner.os":
+		if e.complexity.JobRunner.Os == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Os(childComplexity), true
 
 	case "JobRunner.owner":
 		if e.complexity.JobRunner.Owner == nil {
@@ -14363,6 +14388,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunner.UpdatedBy(childComplexity), true
+
+	case "JobRunner.version":
+		if e.complexity.JobRunner.Version == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Version(childComplexity), true
 
 	case "JobRunnerConnection.edges":
 		if e.complexity.JobRunnerConnection.Edges == nil {
@@ -43628,6 +43660,10 @@ input CreateJobResultInput {
   The time the job started it's execution. This is different from the db insertion time
   """
   startedAt: Time
+  """
+  the log output from the job
+  """
+  log: String
   ownerID: ID
   scheduledJobID: ID!
   fileID: ID!
@@ -43648,7 +43684,19 @@ input CreateJobRunnerInput {
   """
   the IP address of this runner
   """
-  ipAddress: String!
+  ipAddress: String
+  """
+  the last time this runner was seen
+  """
+  lastSeen: Time
+  """
+  the version of the runner
+  """
+  version: String
+  """
+  the operating system of the runner
+  """
+  os: String
   ownerID: ID
   jobRunnerTokenIDs: [ID!]
 }
@@ -56746,6 +56794,10 @@ type JobResult implements Node {
   """
   startedAt: Time!
   fileID: ID!
+  """
+  the log output from the job
+  """
+  log: String
   owner: Organization
   scheduledJob: ScheduledJob!
   file: File!
@@ -56987,6 +57039,24 @@ input JobResultWhereInput {
   fileIDEqualFold: ID
   fileIDContainsFold: ID
   """
+  log field predicates
+  """
+  log: String
+  logNEQ: String
+  logIn: [String!]
+  logNotIn: [String!]
+  logGT: String
+  logGTE: String
+  logLT: String
+  logLTE: String
+  logContains: String
+  logHasPrefix: String
+  logHasSuffix: String
+  logIsNil: Boolean
+  logNotNil: Boolean
+  logEqualFold: String
+  logContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -57035,7 +57105,19 @@ type JobRunner implements Node {
   """
   the IP address of this runner
   """
-  ipAddress: String!
+  ipAddress: String
+  """
+  the last time this runner was seen
+  """
+  lastSeen: Time
+  """
+  the version of the runner
+  """
+  version: String
+  """
+  the operating system of the runner
+  """
+  os: String
   owner: Organization
   jobRunnerTokens(
     """
@@ -57824,8 +57906,59 @@ input JobRunnerWhereInput {
   ipAddressContains: String
   ipAddressHasPrefix: String
   ipAddressHasSuffix: String
+  ipAddressIsNil: Boolean
+  ipAddressNotNil: Boolean
   ipAddressEqualFold: String
   ipAddressContainsFold: String
+  """
+  last_seen field predicates
+  """
+  lastSeen: Time
+  lastSeenNEQ: Time
+  lastSeenIn: [Time!]
+  lastSeenNotIn: [Time!]
+  lastSeenGT: Time
+  lastSeenGTE: Time
+  lastSeenLT: Time
+  lastSeenLTE: Time
+  lastSeenIsNil: Boolean
+  lastSeenNotNil: Boolean
+  """
+  version field predicates
+  """
+  version: String
+  versionNEQ: String
+  versionIn: [String!]
+  versionNotIn: [String!]
+  versionGT: String
+  versionGTE: String
+  versionLT: String
+  versionLTE: String
+  versionContains: String
+  versionHasPrefix: String
+  versionHasSuffix: String
+  versionIsNil: Boolean
+  versionNotNil: Boolean
+  versionEqualFold: String
+  versionContainsFold: String
+  """
+  os field predicates
+  """
+  os: String
+  osNEQ: String
+  osIn: [String!]
+  osNotIn: [String!]
+  osGT: String
+  osGTE: String
+  osLT: String
+  osLTE: String
+  osContains: String
+  osHasPrefix: String
+  osHasSuffix: String
+  osIsNil: Boolean
+  osNotNil: Boolean
+  osEqualFold: String
+  osContainsFold: String
   """
   owner edge predicates
   """
@@ -84988,6 +85121,11 @@ input UpdateJobResultInput {
   the status of this job. did it fail? did it succeed?
   """
   status: JobResultJobExecutionStatus
+  """
+  the log output from the job
+  """
+  log: String
+  clearLog: Boolean
   ownerID: ID
   clearOwner: Boolean
   scheduledJobID: ID
@@ -85008,6 +85146,26 @@ input UpdateJobRunnerInput {
   the name of the runner
   """
   name: String
+  """
+  the IP address of this runner
+  """
+  ipAddress: String
+  clearIPAddress: Boolean
+  """
+  the last time this runner was seen
+  """
+  lastSeen: Time
+  clearLastSeen: Boolean
+  """
+  the version of the runner
+  """
+  version: String
+  clearVersion: Boolean
+  """
+  the operating system of the runner
+  """
+  os: String
+  clearOs: Boolean
   ownerID: ID
   clearOwner: Boolean
   addJobRunnerTokenIDs: [ID!]

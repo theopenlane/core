@@ -8184,6 +8184,10 @@ input CreateJobResultInput {
 	The time the job started it's execution. This is different from the db insertion time
 	"""
 	startedAt: Time
+	"""
+	the log output from the job
+	"""
+	log: String
 	ownerID: ID
 	scheduledJobID: ID!
 	fileID: ID!
@@ -8204,7 +8208,19 @@ input CreateJobRunnerInput {
 	"""
 	the IP address of this runner
 	"""
-	ipAddress: String!
+	ipAddress: String
+	"""
+	the last time this runner was seen
+	"""
+	lastSeen: Time
+	"""
+	the version of the runner
+	"""
+	version: String
+	"""
+	the operating system of the runner
+	"""
+	os: String
 	ownerID: ID
 	jobRunnerTokenIDs: [ID!]
 }
@@ -22063,6 +22079,10 @@ type JobResult implements Node {
 	"""
 	startedAt: Time!
 	fileID: ID!
+	"""
+	the log output from the job
+	"""
+	log: String
 	owner: Organization
 	scheduledJob: ScheduledJob!
 	file: File!
@@ -22331,6 +22351,24 @@ input JobResultWhereInput {
 	fileIDEqualFold: ID
 	fileIDContainsFold: ID
 	"""
+	log field predicates
+	"""
+	log: String
+	logNEQ: String
+	logIn: [String!]
+	logNotIn: [String!]
+	logGT: String
+	logGTE: String
+	logLT: String
+	logLTE: String
+	logContains: String
+	logHasPrefix: String
+	logHasSuffix: String
+	logIsNil: Boolean
+	logNotNil: Boolean
+	logEqualFold: String
+	logContainsFold: String
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -22379,7 +22417,19 @@ type JobRunner implements Node {
 	"""
 	the IP address of this runner
 	"""
-	ipAddress: String!
+	ipAddress: String
+	"""
+	the last time this runner was seen
+	"""
+	lastSeen: Time
+	"""
+	the version of the runner
+	"""
+	version: String
+	"""
+	the operating system of the runner
+	"""
+	os: String
 	owner: Organization
 	jobRunnerTokens(
 		"""
@@ -23249,8 +23299,59 @@ input JobRunnerWhereInput {
 	ipAddressContains: String
 	ipAddressHasPrefix: String
 	ipAddressHasSuffix: String
+	ipAddressIsNil: Boolean
+	ipAddressNotNil: Boolean
 	ipAddressEqualFold: String
 	ipAddressContainsFold: String
+	"""
+	last_seen field predicates
+	"""
+	lastSeen: Time
+	lastSeenNEQ: Time
+	lastSeenIn: [Time!]
+	lastSeenNotIn: [Time!]
+	lastSeenGT: Time
+	lastSeenGTE: Time
+	lastSeenLT: Time
+	lastSeenLTE: Time
+	lastSeenIsNil: Boolean
+	lastSeenNotNil: Boolean
+	"""
+	version field predicates
+	"""
+	version: String
+	versionNEQ: String
+	versionIn: [String!]
+	versionNotIn: [String!]
+	versionGT: String
+	versionGTE: String
+	versionLT: String
+	versionLTE: String
+	versionContains: String
+	versionHasPrefix: String
+	versionHasSuffix: String
+	versionIsNil: Boolean
+	versionNotNil: Boolean
+	versionEqualFold: String
+	versionContainsFold: String
+	"""
+	os field predicates
+	"""
+	os: String
+	osNEQ: String
+	osIn: [String!]
+	osNotIn: [String!]
+	osGT: String
+	osGTE: String
+	osLT: String
+	osLTE: String
+	osContains: String
+	osHasPrefix: String
+	osHasSuffix: String
+	osIsNil: Boolean
+	osNotNil: Boolean
+	osEqualFold: String
+	osContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -57419,6 +57520,11 @@ input UpdateJobResultInput {
 	the status of this job. did it fail? did it succeed?
 	"""
 	status: JobResultJobExecutionStatus
+	"""
+	the log output from the job
+	"""
+	log: String
+	clearLog: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	scheduledJobID: ID
@@ -57439,6 +57545,26 @@ input UpdateJobRunnerInput {
 	the name of the runner
 	"""
 	name: String
+	"""
+	the IP address of this runner
+	"""
+	ipAddress: String
+	clearIPAddress: Boolean
+	"""
+	the last time this runner was seen
+	"""
+	lastSeen: Time
+	clearLastSeen: Boolean
+	"""
+	the version of the runner
+	"""
+	version: String
+	clearVersion: Boolean
+	"""
+	the operating system of the runner
+	"""
+	os: String
+	clearOs: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addJobRunnerTokenIDs: [ID!]

@@ -1431,6 +1431,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobresult.FieldFinishedAt:     {Type: field.TypeTime, Column: jobresult.FieldFinishedAt},
 			jobresult.FieldStartedAt:      {Type: field.TypeTime, Column: jobresult.FieldStartedAt},
 			jobresult.FieldFileID:         {Type: field.TypeString, Column: jobresult.FieldFileID},
+			jobresult.FieldLog:            {Type: field.TypeString, Column: jobresult.FieldLog},
 		},
 	}
 	graph.Nodes[44] = &sqlgraph.Node{
@@ -1457,6 +1458,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunner.FieldName:        {Type: field.TypeString, Column: jobrunner.FieldName},
 			jobrunner.FieldStatus:      {Type: field.TypeEnum, Column: jobrunner.FieldStatus},
 			jobrunner.FieldIPAddress:   {Type: field.TypeString, Column: jobrunner.FieldIPAddress},
+			jobrunner.FieldLastSeen:    {Type: field.TypeTime, Column: jobrunner.FieldLastSeen},
+			jobrunner.FieldVersion:     {Type: field.TypeString, Column: jobrunner.FieldVersion},
+			jobrunner.FieldOs:          {Type: field.TypeString, Column: jobrunner.FieldOs},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -16677,6 +16681,11 @@ func (f *JobResultFilter) WhereFileID(p entql.StringP) {
 	f.Where(p.Field(jobresult.FieldFileID))
 }
 
+// WhereLog applies the entql string predicate on the log field.
+func (f *JobResultFilter) WhereLog(p entql.StringP) {
+	f.Where(p.Field(jobresult.FieldLog))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *JobResultFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -16822,6 +16831,21 @@ func (f *JobRunnerFilter) WhereStatus(p entql.StringP) {
 // WhereIPAddress applies the entql string predicate on the ip_address field.
 func (f *JobRunnerFilter) WhereIPAddress(p entql.StringP) {
 	f.Where(p.Field(jobrunner.FieldIPAddress))
+}
+
+// WhereLastSeen applies the entql time.Time predicate on the last_seen field.
+func (f *JobRunnerFilter) WhereLastSeen(p entql.TimeP) {
+	f.Where(p.Field(jobrunner.FieldLastSeen))
+}
+
+// WhereVersion applies the entql string predicate on the version field.
+func (f *JobRunnerFilter) WhereVersion(p entql.StringP) {
+	f.Where(p.Field(jobrunner.FieldVersion))
+}
+
+// WhereOs applies the entql string predicate on the os field.
+func (f *JobRunnerFilter) WhereOs(p entql.StringP) {
+	f.Where(p.Field(jobrunner.FieldOs))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

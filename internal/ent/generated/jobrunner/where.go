@@ -123,6 +123,21 @@ func IPAddress(v string) predicate.JobRunner {
 	return predicate.JobRunner(sql.FieldEQ(FieldIPAddress, v))
 }
 
+// LastSeen applies equality check predicate on the "last_seen" field. It's identical to LastSeenEQ.
+func LastSeen(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEQ(FieldLastSeen, v))
+}
+
+// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
+func Version(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEQ(FieldVersion, v))
+}
+
+// Os applies equality check predicate on the "os" field. It's identical to OsEQ.
+func Os(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEQ(FieldOs, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.JobRunner {
 	return predicate.JobRunner(sql.FieldEQ(FieldCreatedAt, v))
@@ -818,6 +833,16 @@ func IPAddressHasSuffix(v string) predicate.JobRunner {
 	return predicate.JobRunner(sql.FieldHasSuffix(FieldIPAddress, v))
 }
 
+// IPAddressIsNil applies the IsNil predicate on the "ip_address" field.
+func IPAddressIsNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIsNull(FieldIPAddress))
+}
+
+// IPAddressNotNil applies the NotNil predicate on the "ip_address" field.
+func IPAddressNotNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotNull(FieldIPAddress))
+}
+
 // IPAddressEqualFold applies the EqualFold predicate on the "ip_address" field.
 func IPAddressEqualFold(v string) predicate.JobRunner {
 	return predicate.JobRunner(sql.FieldEqualFold(FieldIPAddress, v))
@@ -826,6 +851,206 @@ func IPAddressEqualFold(v string) predicate.JobRunner {
 // IPAddressContainsFold applies the ContainsFold predicate on the "ip_address" field.
 func IPAddressContainsFold(v string) predicate.JobRunner {
 	return predicate.JobRunner(sql.FieldContainsFold(FieldIPAddress, v))
+}
+
+// LastSeenEQ applies the EQ predicate on the "last_seen" field.
+func LastSeenEQ(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEQ(FieldLastSeen, v))
+}
+
+// LastSeenNEQ applies the NEQ predicate on the "last_seen" field.
+func LastSeenNEQ(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNEQ(FieldLastSeen, v))
+}
+
+// LastSeenIn applies the In predicate on the "last_seen" field.
+func LastSeenIn(vs ...time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIn(FieldLastSeen, vs...))
+}
+
+// LastSeenNotIn applies the NotIn predicate on the "last_seen" field.
+func LastSeenNotIn(vs ...time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotIn(FieldLastSeen, vs...))
+}
+
+// LastSeenGT applies the GT predicate on the "last_seen" field.
+func LastSeenGT(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldGT(FieldLastSeen, v))
+}
+
+// LastSeenGTE applies the GTE predicate on the "last_seen" field.
+func LastSeenGTE(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldGTE(FieldLastSeen, v))
+}
+
+// LastSeenLT applies the LT predicate on the "last_seen" field.
+func LastSeenLT(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldLT(FieldLastSeen, v))
+}
+
+// LastSeenLTE applies the LTE predicate on the "last_seen" field.
+func LastSeenLTE(v time.Time) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldLTE(FieldLastSeen, v))
+}
+
+// LastSeenIsNil applies the IsNil predicate on the "last_seen" field.
+func LastSeenIsNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIsNull(FieldLastSeen))
+}
+
+// LastSeenNotNil applies the NotNil predicate on the "last_seen" field.
+func LastSeenNotNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotNull(FieldLastSeen))
+}
+
+// VersionEQ applies the EQ predicate on the "version" field.
+func VersionEQ(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEQ(FieldVersion, v))
+}
+
+// VersionNEQ applies the NEQ predicate on the "version" field.
+func VersionNEQ(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNEQ(FieldVersion, v))
+}
+
+// VersionIn applies the In predicate on the "version" field.
+func VersionIn(vs ...string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIn(FieldVersion, vs...))
+}
+
+// VersionNotIn applies the NotIn predicate on the "version" field.
+func VersionNotIn(vs ...string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotIn(FieldVersion, vs...))
+}
+
+// VersionGT applies the GT predicate on the "version" field.
+func VersionGT(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldGT(FieldVersion, v))
+}
+
+// VersionGTE applies the GTE predicate on the "version" field.
+func VersionGTE(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldGTE(FieldVersion, v))
+}
+
+// VersionLT applies the LT predicate on the "version" field.
+func VersionLT(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldLT(FieldVersion, v))
+}
+
+// VersionLTE applies the LTE predicate on the "version" field.
+func VersionLTE(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldLTE(FieldVersion, v))
+}
+
+// VersionContains applies the Contains predicate on the "version" field.
+func VersionContains(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldContains(FieldVersion, v))
+}
+
+// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
+func VersionHasPrefix(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldHasPrefix(FieldVersion, v))
+}
+
+// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
+func VersionHasSuffix(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldHasSuffix(FieldVersion, v))
+}
+
+// VersionIsNil applies the IsNil predicate on the "version" field.
+func VersionIsNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIsNull(FieldVersion))
+}
+
+// VersionNotNil applies the NotNil predicate on the "version" field.
+func VersionNotNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotNull(FieldVersion))
+}
+
+// VersionEqualFold applies the EqualFold predicate on the "version" field.
+func VersionEqualFold(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEqualFold(FieldVersion, v))
+}
+
+// VersionContainsFold applies the ContainsFold predicate on the "version" field.
+func VersionContainsFold(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldContainsFold(FieldVersion, v))
+}
+
+// OsEQ applies the EQ predicate on the "os" field.
+func OsEQ(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEQ(FieldOs, v))
+}
+
+// OsNEQ applies the NEQ predicate on the "os" field.
+func OsNEQ(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNEQ(FieldOs, v))
+}
+
+// OsIn applies the In predicate on the "os" field.
+func OsIn(vs ...string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIn(FieldOs, vs...))
+}
+
+// OsNotIn applies the NotIn predicate on the "os" field.
+func OsNotIn(vs ...string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotIn(FieldOs, vs...))
+}
+
+// OsGT applies the GT predicate on the "os" field.
+func OsGT(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldGT(FieldOs, v))
+}
+
+// OsGTE applies the GTE predicate on the "os" field.
+func OsGTE(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldGTE(FieldOs, v))
+}
+
+// OsLT applies the LT predicate on the "os" field.
+func OsLT(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldLT(FieldOs, v))
+}
+
+// OsLTE applies the LTE predicate on the "os" field.
+func OsLTE(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldLTE(FieldOs, v))
+}
+
+// OsContains applies the Contains predicate on the "os" field.
+func OsContains(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldContains(FieldOs, v))
+}
+
+// OsHasPrefix applies the HasPrefix predicate on the "os" field.
+func OsHasPrefix(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldHasPrefix(FieldOs, v))
+}
+
+// OsHasSuffix applies the HasSuffix predicate on the "os" field.
+func OsHasSuffix(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldHasSuffix(FieldOs, v))
+}
+
+// OsIsNil applies the IsNil predicate on the "os" field.
+func OsIsNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIsNull(FieldOs))
+}
+
+// OsNotNil applies the NotNil predicate on the "os" field.
+func OsNotNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotNull(FieldOs))
+}
+
+// OsEqualFold applies the EqualFold predicate on the "os" field.
+func OsEqualFold(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldEqualFold(FieldOs, v))
+}
+
+// OsContainsFold applies the ContainsFold predicate on the "os" field.
+func OsContainsFold(v string) predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldContainsFold(FieldOs, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

@@ -47,6 +47,8 @@ type JobResult struct {
 	StartedAt time.Time `json:"started_at,omitempty"`
 	// FileID holds the value of the "file_id" field.
 	FileID string `json:"file_id,omitempty"`
+	// the log output from the job
+	Log *string `json:"log,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the JobResultQuery when eager-loading is set.
 	Edges        JobResultEdges `json:"edges"`
@@ -108,7 +110,7 @@ func (*JobResult) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case jobresult.FieldExitCode:
 			values[i] = new(sql.NullInt64)
-		case jobresult.FieldID, jobresult.FieldCreatedBy, jobresult.FieldUpdatedBy, jobresult.FieldDeletedBy, jobresult.FieldOwnerID, jobresult.FieldScheduledJobID, jobresult.FieldStatus, jobresult.FieldFileID:
+		case jobresult.FieldID, jobresult.FieldCreatedBy, jobresult.FieldUpdatedBy, jobresult.FieldDeletedBy, jobresult.FieldOwnerID, jobresult.FieldScheduledJobID, jobresult.FieldStatus, jobresult.FieldFileID, jobresult.FieldLog:
 			values[i] = new(sql.NullString)
 		case jobresult.FieldCreatedAt, jobresult.FieldUpdatedAt, jobresult.FieldDeletedAt, jobresult.FieldFinishedAt, jobresult.FieldStartedAt:
 			values[i] = new(sql.NullTime)
@@ -212,6 +214,13 @@ func (jr *JobResult) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				jr.FileID = value.String
 			}
+		case jobresult.FieldLog:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field log", values[i])
+			} else if value.Valid {
+				jr.Log = new(string)
+				*jr.Log = value.String
+			}
 		default:
 			jr.selectValues.Set(columns[i], values[i])
 		}
@@ -303,6 +312,11 @@ func (jr *JobResult) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
 	builder.WriteString(jr.FileID)
+	builder.WriteString(", ")
+	if v := jr.Log; v != nil {
+		builder.WriteString("log=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
