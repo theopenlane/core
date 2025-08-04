@@ -32,7 +32,7 @@ type GroupMembershipQuery struct {
 	predicates        []predicate.GroupMembership
 	withGroup         *GroupQuery
 	withUser          *UserQuery
-	withOrgmembership *OrgMembershipQuery
+	withOrgMembership *OrgMembershipQuery
 	withEvents        *EventQuery
 	withFKs           bool
 	loadTotal         []func(context.Context, []*GroupMembership) error
@@ -124,8 +124,8 @@ func (gmq *GroupMembershipQuery) QueryUser() *UserQuery {
 	return query
 }
 
-// QueryOrgmembership chains the current query on the "orgmembership" edge.
-func (gmq *GroupMembershipQuery) QueryOrgmembership() *OrgMembershipQuery {
+// QueryOrgMembership chains the current query on the "org_membership" edge.
+func (gmq *GroupMembershipQuery) QueryOrgMembership() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: gmq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := gmq.prepareQuery(ctx); err != nil {
@@ -138,7 +138,7 @@ func (gmq *GroupMembershipQuery) QueryOrgmembership() *OrgMembershipQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, selector),
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgmembershipTable, groupmembership.OrgmembershipColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgMembershipTable, groupmembership.OrgMembershipColumn),
 		)
 		schemaConfig := gmq.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
@@ -368,7 +368,7 @@ func (gmq *GroupMembershipQuery) Clone() *GroupMembershipQuery {
 		predicates:        append([]predicate.GroupMembership{}, gmq.predicates...),
 		withGroup:         gmq.withGroup.Clone(),
 		withUser:          gmq.withUser.Clone(),
-		withOrgmembership: gmq.withOrgmembership.Clone(),
+		withOrgMembership: gmq.withOrgMembership.Clone(),
 		withEvents:        gmq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       gmq.sql.Clone(),
@@ -399,14 +399,14 @@ func (gmq *GroupMembershipQuery) WithUser(opts ...func(*UserQuery)) *GroupMember
 	return gmq
 }
 
-// WithOrgmembership tells the query-builder to eager-load the nodes that are connected to
-// the "orgmembership" edge. The optional arguments are used to configure the query builder of the edge.
-func (gmq *GroupMembershipQuery) WithOrgmembership(opts ...func(*OrgMembershipQuery)) *GroupMembershipQuery {
+// WithOrgMembership tells the query-builder to eager-load the nodes that are connected to
+// the "org_membership" edge. The optional arguments are used to configure the query builder of the edge.
+func (gmq *GroupMembershipQuery) WithOrgMembership(opts ...func(*OrgMembershipQuery)) *GroupMembershipQuery {
 	query := (&OrgMembershipClient{config: gmq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gmq.withOrgmembership = query
+	gmq.withOrgMembership = query
 	return gmq
 }
 
@@ -509,11 +509,11 @@ func (gmq *GroupMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		loadedTypes = [4]bool{
 			gmq.withGroup != nil,
 			gmq.withUser != nil,
-			gmq.withOrgmembership != nil,
+			gmq.withOrgMembership != nil,
 			gmq.withEvents != nil,
 		}
 	)
-	if gmq.withOrgmembership != nil {
+	if gmq.withOrgMembership != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -554,9 +554,9 @@ func (gmq *GroupMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			return nil, err
 		}
 	}
-	if query := gmq.withOrgmembership; query != nil {
-		if err := gmq.loadOrgmembership(ctx, query, nodes, nil,
-			func(n *GroupMembership, e *OrgMembership) { n.Edges.Orgmembership = e }); err != nil {
+	if query := gmq.withOrgMembership; query != nil {
+		if err := gmq.loadOrgMembership(ctx, query, nodes, nil,
+			func(n *GroupMembership, e *OrgMembership) { n.Edges.OrgMembership = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -640,14 +640,14 @@ func (gmq *GroupMembershipQuery) loadUser(ctx context.Context, query *UserQuery,
 	}
 	return nil
 }
-func (gmq *GroupMembershipQuery) loadOrgmembership(ctx context.Context, query *OrgMembershipQuery, nodes []*GroupMembership, init func(*GroupMembership), assign func(*GroupMembership, *OrgMembership)) error {
+func (gmq *GroupMembershipQuery) loadOrgMembership(ctx context.Context, query *OrgMembershipQuery, nodes []*GroupMembership, init func(*GroupMembership), assign func(*GroupMembership, *OrgMembership)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*GroupMembership)
 	for i := range nodes {
-		if nodes[i].group_membership_orgmembership == nil {
+		if nodes[i].group_membership_org_membership == nil {
 			continue
 		}
-		fk := *nodes[i].group_membership_orgmembership
+		fk := *nodes[i].group_membership_org_membership
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -664,7 +664,7 @@ func (gmq *GroupMembershipQuery) loadOrgmembership(ctx context.Context, query *O
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "group_membership_orgmembership" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "group_membership_org_membership" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

@@ -55,7 +55,11 @@ func main() {
 		log.Fatal().Msg("failed to load the ATLAS_POSTGRES_DB_URI env var")
 	}
 
-	maxConnections := 10
+	// if you ever see this error:
+	// "connected database is not clean: found table"
+	// it means it's likely hitting a connection limit issue and you need
+	// to increase the max connections
+	maxConnections := 20
 
 	tf, err := testutils.GetPostgresDockerTest(pgDBURI, 5*time.Minute, maxConnections)
 	if err != nil {

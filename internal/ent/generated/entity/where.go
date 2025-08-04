@@ -1006,11 +1006,11 @@ func HasBlockedGroups() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityBlockedGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1021,7 +1021,7 @@ func HasBlockedGroupsWith(preds ...predicate.Group) predicate.Entity {
 		step := newBlockedGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityBlockedGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1035,11 +1035,11 @@ func HasEditors() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityEditors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1050,7 +1050,7 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Entity {
 		step := newEditorsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityEditors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1064,11 +1064,11 @@ func HasViewers() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityViewers
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1079,7 +1079,7 @@ func HasViewersWith(preds ...predicate.Group) predicate.Entity {
 		step := newViewersStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.EntityViewers
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

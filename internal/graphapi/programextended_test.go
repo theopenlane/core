@@ -6,8 +6,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -21,7 +21,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 	member := (&OrgMemberBuilder{client: suite.client}).MustNew(user.UserCtx, t)
 	admin := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleAdmin.String()}).MustNew(user.UserCtx, t)
 
-	members := []*openlaneclient.CreateMemberWithProgramInput{
+	members := []*testclient.CreateMemberWithProgramInput{
 		{
 			UserID: member.UserID,
 			Role:   &enums.RoleMember,
@@ -43,15 +43,15 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateProgramWithMembersInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateProgramWithMembersInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input with standard id",
-			request: openlaneclient.CreateProgramWithMembersInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramWithMembersInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "mitb program",
 				},
 				Members:    members,
@@ -62,8 +62,8 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 		},
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateProgramWithMembersInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramWithMembersInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "mitb program",
 				},
 				Members: members,
@@ -73,8 +73,8 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 		},
 		{
 			name: "happy path, minimal input, no member should work",
-			request: openlaneclient.CreateProgramWithMembersInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramWithMembersInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "MITB Assessment - 2025",
 				},
 			},
@@ -83,8 +83,8 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 		},
 		{
 			name: "happy path, minimal input, nil members should work",
-			request: openlaneclient.CreateProgramWithMembersInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramWithMembersInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "MITB Assessment - 2025",
 				},
 				Members: nil,
@@ -135,7 +135,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	resp, err := suite.client.api.CreateStandard(user.UserCtx, openlaneclient.CreateStandardInput{
+	resp, err := suite.client.api.CreateStandard(user.UserCtx, testclient.CreateStandardInput{
 		Name:       "Super Awesome Standard",
 		ControlIDs: controlIDs,
 	})
@@ -152,7 +152,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
-	members := []*openlaneclient.CreateMemberWithProgramInput{
+	members := []*testclient.CreateMemberWithProgramInput{
 		{
 			UserID: member.UserID,
 			Role:   &enums.RoleMember,
@@ -165,16 +165,16 @@ func TestMutationCreateFullProgram(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		request              openlaneclient.CreateFullProgramInput
-		client               *openlaneclient.OpenlaneClient
+		request              testclient.CreateFullProgramInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedControlCount int
 		expectedErr          string
 	}{
 		{
 			name: "happy path, system standard id",
-			request: openlaneclient.CreateFullProgramInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateFullProgramInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "test program",
 				},
 				Members:    members,
@@ -186,8 +186,8 @@ func TestMutationCreateFullProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, standard id",
-			request: openlaneclient.CreateFullProgramInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateFullProgramInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "test program",
 				},
 				Members:    members,
@@ -199,18 +199,18 @@ func TestMutationCreateFullProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, all the fields",
-			request: openlaneclient.CreateFullProgramInput{
-				Program: &openlaneclient.CreateProgramInput{
+			request: testclient.CreateFullProgramInput{
+				Program: &testclient.CreateProgramInput{
 					Name: "mitb program",
 				},
 				Members: members,
-				Controls: []*openlaneclient.CreateControlWithSubcontrolsInput{
+				Controls: []*testclient.CreateControlWithSubcontrolsInput{
 					{
-						Control: &openlaneclient.CreateControlInput{
+						Control: &testclient.CreateControlInput{
 							RefCode: "control-1",
 						},
 
-						Subcontrols: []*openlaneclient.CreateSubcontrolInput{
+						Subcontrols: []*testclient.CreateSubcontrolInput{
 							{
 								RefCode: "sc-1",
 							},
@@ -220,22 +220,22 @@ func TestMutationCreateFullProgram(t *testing.T) {
 						},
 					},
 					{
-						Control: &openlaneclient.CreateControlInput{
+						Control: &testclient.CreateControlInput{
 							RefCode: "control 2",
 						},
 					},
 				},
-				Risks: []*openlaneclient.CreateRiskInput{
+				Risks: []*testclient.CreateRiskInput{
 					{
 						Name: "risk 1",
 					},
 				},
-				InternalPolicies: []*openlaneclient.CreateInternalPolicyInput{
+				InternalPolicies: []*testclient.CreateInternalPolicyInput{
 					{
 						Name: "policy 1",
 					},
 				},
-				Procedures: []*openlaneclient.CreateProcedureInput{
+				Procedures: []*testclient.CreateProcedureInput{
 					{
 						Name: "procedure 1",
 					},

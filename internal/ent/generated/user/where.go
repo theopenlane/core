@@ -1717,11 +1717,11 @@ func HasActionPlans() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.UserActionPlans
+		step.Edge.Schema = schemaConfig.ActionPlan
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1732,7 +1732,7 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.User {
 		step := newActionPlansStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.UserActionPlans
+		step.Edge.Schema = schemaConfig.ActionPlan
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

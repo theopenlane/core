@@ -6,7 +6,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -18,19 +18,19 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// Create subprocessors for testing
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser2.OrganizationID}).MustNew(testUser2.UserCtx, t)
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateTrustCenterSubprocessorInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateTrustCenterSubprocessorInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path - org owner can create trust center subprocessor",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor1.ID,
 				TrustCenterID:  &trustCenter.ID,
 				Category:       "Data Processing",
@@ -41,7 +41,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 		},
 		{
 			name: "not authorized - view only user cannot create trust center subprocessor",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor1.ID,
 				TrustCenterID:  &trustCenter.ID,
 				Category:       "Data Warehouse",
@@ -53,7 +53,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 		},
 		{
 			name: "not authorized - different org user cannot create trust center subprocessor",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor2.ID,
 				TrustCenterID:  &trustCenter.ID,
 				Category:       "Analytics",
@@ -61,11 +61,11 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "trust center not found",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor1.ID,
 				TrustCenterID:  lo.ToPtr("non-existent-trust-center-id"),
 				Category:       "Data Processing",
@@ -73,11 +73,11 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "subprocessor not found",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: "non-existent-subprocessor-id",
 				TrustCenterID:  &trustCenter.ID,
 				Category:       "Data Processing",
@@ -85,11 +85,11 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "constraint failed",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "missing required fields - category",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor1.ID,
 				TrustCenterID:  &trustCenter.ID,
 				Countries:      []string{"US"},
@@ -141,19 +141,19 @@ func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create a subprocessor for testing
-	subprocessor := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser.OrganizationID}).MustNew(testUser.UserCtx, t)
+	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	testCases := []struct {
 		name           string
-		request        openlaneclient.CreateTrustCenterSubprocessorInput
+		request        testclient.CreateTrustCenterSubprocessorInput
 		trustCenterID  string
 		organizationID string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		expectedErr    string
 	}{
 		{
 			name: "anonymous user cannot create trust center subprocessor",
-			request: openlaneclient.CreateTrustCenterSubprocessorInput{
+			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor.ID,
 				TrustCenterID:  &trustCenter.ID,
 				Category:       "Data Processing",
@@ -186,10 +186,10 @@ func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
 func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 	// Create test data
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// Create a trust center subprocessor using GraphQL mutation
-	createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Data Processing",
@@ -200,8 +200,8 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 
 	// Create another trust center subprocessor for different org
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser2.OrganizationID}).MustNew(testUser2.UserCtx, t)
-	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser2.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser2.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor2.ID,
 		TrustCenterID:  &trustCenter2.ID,
 		Category:       "Analytics",
@@ -213,7 +213,7 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 	testCases := []struct {
 		name             string
 		queryID          string
-		client           *openlaneclient.OpenlaneClient
+		client           *testclient.TestClient
 		ctx              context.Context
 		expectedCategory string
 		errorMsg         string
@@ -292,17 +292,17 @@ func TestQueryTrustCenterSubprocessorByID(t *testing.T) {
 func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 	// Create test data
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor4 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor5 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	subprocessor6 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor4 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor5 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subprocessor6 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// Create another trust center subprocessor for different org
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	subprocessorOtherOrg := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser2.OrganizationID}).MustNew(testUser2.UserCtx, t)
-	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser2.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	subprocessorOtherOrg := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser2.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessorOtherOrg.ID,
 		TrustCenterID:  &trustCenter2.ID,
 		Category:       "Analytics",
@@ -317,15 +317,15 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 	testCases := []struct {
 		name        string
 		setupFunc   func() string // Function to create and return the ID of the trust center subprocessor
-		request     openlaneclient.UpdateTrustCenterSubprocessorInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateTrustCenterSubprocessorInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path - update category and countries",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor1.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -334,7 +334,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				Category:  &newCategory,
 				Countries: newCountries,
 			},
@@ -344,7 +344,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "happy path - update subprocessor",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor2.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -353,7 +353,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				SubprocessorID: &subprocessor3.ID,
 			},
 			client: suite.client.api,
@@ -362,7 +362,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "happy path - append countries",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor4.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -371,7 +371,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				AppendCountries: []string{"MX"},
 			},
 			client: suite.client.api,
@@ -380,7 +380,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "happy path - clear countries",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor5.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -389,7 +389,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				ClearCountries: lo.ToPtr(true),
 			},
 			client: suite.client.api,
@@ -398,7 +398,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "not authorized - view only user cannot update",
 			setupFunc: func() string {
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor6.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -407,7 +407,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
@@ -417,8 +417,8 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name: "not authorized - anon user cannot update",
 			setupFunc: func() string {
-				subprocessoranon := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				subprocessoranon := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessoranon.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -427,7 +427,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
@@ -438,8 +438,8 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 			name: "not authorized - different org user cannot update",
 			setupFunc: func() string {
 				// Create a separate subprocessor for this test to avoid conflicts
-				subprocessor7 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+				subprocessor7 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor7.ID,
 					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
@@ -448,7 +448,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
@@ -458,7 +458,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 		{
 			name:      "not found - non-existent ID",
 			setupFunc: func() string { return "non-existent-id" },
-			request: openlaneclient.UpdateTrustCenterSubprocessorInput{
+			request: testclient.UpdateTrustCenterSubprocessorInput{
 				Category: &newCategory,
 			},
 			client:      suite.client.api,
@@ -520,11 +520,11 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser.OrganizationID}).MustNew(testUser.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUser.OrganizationID}).MustNew(testUser.UserCtx, t)
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create trust center subprocessors to delete
-	createResp1, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	createResp1, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor1.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Data Processing",
@@ -533,7 +533,7 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 	assert.NilError(t, err)
 	tcSubprocessor1 := createResp1.CreateTrustCenterSubprocessor.TrustCenterSubprocessor
 
-	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor2.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Analytics",
@@ -545,8 +545,8 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 	// Create another trust center subprocessor for different org
 	testUserAnother := suite.userBuilder(context.Background(), t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUserAnother.OrganizationID}).MustNew(testUserAnother.UserCtx, t)
-	createResp3, err := suite.client.api.CreateTrustCenterSubprocessor(testUserAnother.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
+	createResp3, err := suite.client.api.CreateTrustCenterSubprocessor(testUserAnother.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor3.ID,
 		TrustCenterID:  &trustCenter2.ID,
 		Category:       "Infrastructure",
@@ -558,7 +558,7 @@ func TestMutationDeleteTrustCenterSubprocessor(t *testing.T) {
 	testCases := []struct {
 		name        string
 		id          string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -630,7 +630,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create trust center subprocessors
-	createResp1, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	createResp1, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor1.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Data Processing",
@@ -639,7 +639,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	assert.NilError(t, err)
 	tcSubprocessor1 := createResp1.CreateTrustCenterSubprocessor.TrustCenterSubprocessor
 
-	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor2.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Analytics",
@@ -651,8 +651,8 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	// Create another trust center subprocessor for different org
 	testUserAnother := suite.userBuilder(context.Background(), t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client, OwnerID: testUserAnother.OrganizationID}).MustNew(testUserAnother.UserCtx, t)
-	createResp3, err := suite.client.api.CreateTrustCenterSubprocessor(testUserAnother.UserCtx, openlaneclient.CreateTrustCenterSubprocessorInput{
+	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
+	createResp3, err := suite.client.api.CreateTrustCenterSubprocessor(testUserAnother.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 		SubprocessorID: subprocessor3.ID,
 		TrustCenterID:  &trustCenter2.ID,
 		Category:       "Infrastructure",
@@ -663,10 +663,10 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
-		where           *openlaneclient.TrustCenterSubprocessorWhereInput
+		where           *testclient.TrustCenterSubprocessorWhereInput
 	}{
 		{
 			name:            "get all trust center subprocessors for user1",
@@ -696,7 +696,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 			name:   "filter by category",
 			client: suite.client.api,
 			ctx:    testUser.UserCtx,
-			where: &openlaneclient.TrustCenterSubprocessorWhereInput{
+			where: &testclient.TrustCenterSubprocessorWhereInput{
 				Category: lo.ToPtr("Data Processing"),
 			},
 			expectedResults: 1,
@@ -705,7 +705,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 			name:   "filter by trust center ID",
 			client: suite.client.api,
 			ctx:    testUser.UserCtx,
-			where: &openlaneclient.TrustCenterSubprocessorWhereInput{
+			where: &testclient.TrustCenterSubprocessorWhereInput{
 				TrustCenterID: &trustCenter.ID,
 			},
 			expectedResults: 2,
@@ -714,7 +714,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 			name:   "filter by non-existent category",
 			client: suite.client.api,
 			ctx:    testUser.UserCtx,
-			where: &openlaneclient.TrustCenterSubprocessorWhereInput{
+			where: &testclient.TrustCenterSubprocessorWhereInput{
 				Category: lo.ToPtr("Non-existent"),
 			},
 			expectedResults: 0,

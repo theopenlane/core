@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // GroupMembership holds the schema definition for the GroupMembership entity
@@ -26,7 +27,7 @@ type GroupMembership struct {
 }
 
 // SchemaGroupMembership is the name of the GroupMembership schema.
-const SchemaGroupMembership = "groupmembership"
+const SchemaGroupMembership = "group_membership"
 
 // Name returns the name of the GroupMembership schema.
 func (GroupMembership) Name() string {
@@ -66,6 +67,10 @@ func (g GroupMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "group_id",
+			annotations: []schema.Annotation{
+				// this is checked via it's own membership check
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: g,
@@ -73,6 +78,9 @@ func (g GroupMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "user_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: g,

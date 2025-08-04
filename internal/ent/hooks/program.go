@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -97,7 +98,9 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 		Role:      &enums.RoleAdmin,
 	}
 
-	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(ctx); err != nil {
+	// allow before the permissions have been added for the program itself
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	if err := m.Client().ProgramMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating program membership for admin")
 
 		return err

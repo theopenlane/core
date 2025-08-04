@@ -14,7 +14,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // CustomDomain holds the schema definition for the CustomDomain
@@ -89,6 +91,9 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "mappable_domain_id",
 			required:   true,
 			immutable:  true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: e,
@@ -96,6 +101,9 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "dns_verification_id",
 			required:   false,
 			immutable:  false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

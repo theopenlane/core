@@ -10,10 +10,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryProcedure(t *testing.T) {
@@ -25,7 +27,7 @@ func TestQueryProcedure(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -104,7 +106,7 @@ func TestQueryProcedures(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -166,15 +168,15 @@ func TestMutationCreateProcedure(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		request       openlaneclient.CreateProcedureInput
+		request       testclient.CreateProcedureInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
 			client: suite.client.api,
@@ -182,7 +184,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path, all input except edges",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name:          "Releasing a new version",
 				Details:       lo.ToPtr("instructions on how to release a new version"),
 				Status:        &enums.DocumentDraft,
@@ -196,7 +198,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "add editor group",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name:            "Test Procedure",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{anotherGroup.ID},
@@ -206,7 +208,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "add editor group, again - ensures the same group can be added to multiple procedures",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name:            "Test Procedure",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{anotherGroup.ID},
@@ -216,7 +218,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name:    "Test Procedure",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -225,7 +227,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path with details, using pat",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name:    "Test Procedure",
 				OwnerID: &testUser1.OrganizationID,
 				Details: lo.ToPtr(gofakeit.Sentence(1000)),
@@ -235,7 +237,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
 			client: suite.client.apiWithToken,
@@ -243,7 +245,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
 			client:      suite.client.api,
@@ -252,7 +254,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "user now authorized, add group to org first",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
 			addGroupToOrg: true,
@@ -261,7 +263,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		},
 		{
 			name: "missing required field",
-			request: openlaneclient.CreateProcedureInput{
+			request: testclient.CreateProcedureInput{
 				Details: lo.ToPtr("instructions on how to release a new version"),
 			},
 			client:      suite.client.api,
@@ -274,7 +276,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
-					openlaneclient.UpdateOrganizationInput{
+					testclient.UpdateOrganizationInput{
 						AddProcedureCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				assert.NilError(t, err)
@@ -387,16 +389,19 @@ func TestMutationUpdateProcedure(t *testing.T) {
 	anotherApproverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	anotherDelegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	log.Error().Msg("starting test cases")
+	log.Error().Str("procedureID", procedure.ID).Str("revision", procedure.Revision).Msg("Procedure created for testing")
+
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateProcedureInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateProcedureInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update name field, and add group",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name:         lo.ToPtr("Updated Procedure Name"),
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for subsequent tests
 				ApproverID:   &approverGroup.ID,
@@ -407,19 +412,19 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Status:       &enums.DocumentPublished,
 				Details:      lo.ToPtr("Updated description"),
 				RevisionBump: &models.Minor,
 				ApproverID:   &anotherApproverGroup.ID,
 				DelegateID:   &anotherDelegateGroup.ID,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name"),
 			},
 			client:      suite.client.api,
@@ -428,7 +433,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not enough permissions",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Meow"),
 			},
 			client:      suite.client.api,
@@ -437,7 +442,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "update allowed, details updated",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Details: lo.ToPtr(gofakeit.Sentence(1000)),
 			},
 			client: suite.client.api,
@@ -445,7 +450,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "update allowed, user in editor group",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client: suite.client.api,
@@ -453,7 +458,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "member update allowed, user in editor group",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client: suite.client.api,
@@ -461,7 +466,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path, block the group from editing",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				AddBlockedGroupIDs: []string{blockGroup.ID}, // block the group
 			},
 			client: suite.client.api,
@@ -469,7 +474,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "member update no longer allowed, user in blocked group",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client:      suite.client.api,
@@ -478,7 +483,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "happy path, remove the group",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				RemoveEditorIDs: []string{testUser1.GroupID}, // remove the group from the editor groups
 			},
 			client: suite.client.api,
@@ -486,7 +491,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "update not allowed, editor group was removed",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
 			client:      suite.client.api,
@@ -495,7 +500,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateProcedureInput{
+			request: testclient.UpdateProcedureInput{
 				Details: lo.ToPtr("Updated details"),
 			},
 			client:      suite.client.api,
@@ -506,6 +511,8 @@ func TestMutationUpdateProcedure(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
+			tc.ctx = resetContext(tc.ctx, t)
+
 			resp, err := tc.client.UpdateProcedure(tc.ctx, procedure.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -567,7 +574,7 @@ func TestMutationDeleteProcedure(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -624,25 +631,26 @@ func TestMutationDeleteProcedure(t *testing.T) {
 }
 
 func TestMutationUpdateBulkProcedure(t *testing.T) {
+	newUser := suite.userBuilder(context.Background(), t)
 	// create procedures to be updated
-	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	procedure3 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	procedure3 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
 
-	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
 
 	// create another user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
 	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(newUser.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, newUser.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(newUser.UserCtx, t)
 
 	procedureAnotherUser := (&ProcedureBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the procedure
-	res, err := suite.client.api.UpdateBulkProcedure(testUser2.UserCtx, []string{procedure1.ID}, openlaneclient.UpdateProcedureInput{
+	res, err := suite.client.api.UpdateBulkProcedure(testUser2.UserCtx, []string{procedure1.ID}, testclient.UpdateProcedureInput{
 		Status: lo.ToPtr(enums.DocumentPublished),
 	})
 
@@ -653,8 +661,8 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateProcedureInput
-		client               *openlaneclient.OpenlaneClient
+		input                testclient.UpdateProcedureInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
@@ -662,48 +670,48 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 		{
 			name: "happy path, update multiple procedures",
 			ids:  []string{procedure1.ID, procedure2.ID, procedure3.ID},
-			input: openlaneclient.UpdateProcedureInput{
+			input: testclient.UpdateProcedureInput{
 				Status:       &enums.DocumentPublished,
 				ApproverID:   &approverGroup.ID,
 				RevisionBump: &models.Minor,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
 			name: "happy path, editor permissions",
 			ids:  []string{procedure1.ID, procedure2.ID},
-			input: openlaneclient.UpdateProcedureInput{
+			input: testclient.UpdateProcedureInput{
 				AddEditorIDs: []string{groupMember.GroupID},
 				RevisionBump: &models.Major,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateProcedureInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateProcedureInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newUser.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
 			name: "mixed success and failure - some procedures not authorized",
 			ids:  []string{procedure1.ID, procedureAnotherUser.ID}, // second should fail authorization
-			input: openlaneclient.UpdateProcedureInput{
+			input: testclient.UpdateProcedureInput{
 				Status: &enums.DocumentDraft,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 1, // only procedure1 should be updated
 		},
 		{
 			name: "update not allowed, no permissions to procedures",
 			ids:  []string{procedure1.ID},
-			input: openlaneclient.UpdateProcedureInput{
+			input: testclient.UpdateProcedureInput{
 				Status: &enums.DocumentPublished,
 			},
 			client:               suite.client.api,
@@ -714,6 +722,8 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			tc.ctx = resetContext(tc.ctx, t)
+
 			resp, err := tc.client.UpdateBulkProcedure(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -728,7 +738,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			assert.Check(t, is.Len(resp.UpdateBulkProcedure.Procedures, tc.expectedUpdatedCount))
 			assert.Check(t, is.Len(resp.UpdateBulkProcedure.UpdatedIDs, tc.expectedUpdatedCount))
 
-			procedureMap := make(map[string]*openlaneclient.UpdateBulkProcedure_UpdateBulkProcedure_Procedures)
+			procedureMap := make(map[string]*testclient.UpdateBulkProcedure_UpdateBulkProcedure_Procedures)
 			for _, procedure := range resp.UpdateBulkProcedure.Procedures {
 				procedureMap[procedure.ID] = procedure
 			}
@@ -779,7 +789,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 
 				if len(tc.input.AddEditorIDs) > 0 {
 					// ensure the user has access to the procedure now
-					res, err := suite.client.api.UpdateProcedure(anotherAdminUser.UserCtx, responseProcedure.ID, openlaneclient.UpdateProcedureInput{
+					res, err := suite.client.api.UpdateProcedure(anotherAdminUser.UserCtx, responseProcedure.ID, testclient.UpdateProcedureInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)
@@ -801,7 +811,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID, procedure3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID, procedure3.ID}}).MustDelete(newUser.UserCtx, t)
 	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedureAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{approverGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{approverGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(newUser.UserCtx, t)
 }

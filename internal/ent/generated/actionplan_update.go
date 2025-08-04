@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -576,21 +575,6 @@ func (apu *ActionPlanUpdate) AddControls(c ...*Control) *ActionPlanUpdate {
 	return apu.AddControlIDs(ids...)
 }
 
-// AddUserIDs adds the "users" edge to the User entity by IDs.
-func (apu *ActionPlanUpdate) AddUserIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.AddUserIDs(ids...)
-	return apu
-}
-
-// AddUsers adds the "users" edges to the User entity.
-func (apu *ActionPlanUpdate) AddUsers(u ...*User) *ActionPlanUpdate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
-	}
-	return apu.AddUserIDs(ids...)
-}
-
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (apu *ActionPlanUpdate) AddProgramIDs(ids ...string) *ActionPlanUpdate {
 	apu.mutation.AddProgramIDs(ids...)
@@ -669,27 +653,6 @@ func (apu *ActionPlanUpdate) RemoveControls(c ...*Control) *ActionPlanUpdate {
 		ids[i] = c[i].ID
 	}
 	return apu.RemoveControlIDs(ids...)
-}
-
-// ClearUsers clears all "users" edges to the User entity.
-func (apu *ActionPlanUpdate) ClearUsers() *ActionPlanUpdate {
-	apu.mutation.ClearUsers()
-	return apu
-}
-
-// RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (apu *ActionPlanUpdate) RemoveUserIDs(ids ...string) *ActionPlanUpdate {
-	apu.mutation.RemoveUserIDs(ids...)
-	return apu
-}
-
-// RemoveUsers removes "users" edges to User entities.
-func (apu *ActionPlanUpdate) RemoveUsers(u ...*User) *ActionPlanUpdate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
-	}
-	return apu.RemoveUserIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -1168,54 +1131,6 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = apu.schemaConfig.ControlActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if apu.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apu.schemaConfig.UserActionPlans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !apu.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apu.schemaConfig.UserActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apu.mutation.UsersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apu.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1830,21 +1745,6 @@ func (apuo *ActionPlanUpdateOne) AddControls(c ...*Control) *ActionPlanUpdateOne
 	return apuo.AddControlIDs(ids...)
 }
 
-// AddUserIDs adds the "users" edge to the User entity by IDs.
-func (apuo *ActionPlanUpdateOne) AddUserIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.AddUserIDs(ids...)
-	return apuo
-}
-
-// AddUsers adds the "users" edges to the User entity.
-func (apuo *ActionPlanUpdateOne) AddUsers(u ...*User) *ActionPlanUpdateOne {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
-	}
-	return apuo.AddUserIDs(ids...)
-}
-
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (apuo *ActionPlanUpdateOne) AddProgramIDs(ids ...string) *ActionPlanUpdateOne {
 	apuo.mutation.AddProgramIDs(ids...)
@@ -1923,27 +1823,6 @@ func (apuo *ActionPlanUpdateOne) RemoveControls(c ...*Control) *ActionPlanUpdate
 		ids[i] = c[i].ID
 	}
 	return apuo.RemoveControlIDs(ids...)
-}
-
-// ClearUsers clears all "users" edges to the User entity.
-func (apuo *ActionPlanUpdateOne) ClearUsers() *ActionPlanUpdateOne {
-	apuo.mutation.ClearUsers()
-	return apuo
-}
-
-// RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (apuo *ActionPlanUpdateOne) RemoveUserIDs(ids ...string) *ActionPlanUpdateOne {
-	apuo.mutation.RemoveUserIDs(ids...)
-	return apuo
-}
-
-// RemoveUsers removes "users" edges to User entities.
-func (apuo *ActionPlanUpdateOne) RemoveUsers(u ...*User) *ActionPlanUpdateOne {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
-	}
-	return apuo.RemoveUserIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -2452,54 +2331,6 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 			},
 		}
 		edge.Schema = apuo.schemaConfig.ControlActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if apuo.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apuo.schemaConfig.UserActionPlans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apuo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !apuo.mutation.UsersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apuo.schemaConfig.UserActionPlans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := apuo.mutation.UsersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = apuo.schemaConfig.UserActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

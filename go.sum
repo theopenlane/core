@@ -72,8 +72,8 @@ cloud.google.com/go/vertexai v0.12.0/go.mod h1:8u+d0TsvBfAAd2x5R6GMgbYhsLgo3J7lm
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
 dario.cat/mergo v1.0.2/go.mod h1:E/hbnu0NxMFBjpMIE34DRGLWqDy0g5FuKDhCb31ngxA=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
-entgo.io/contrib v0.6.0 h1:xfo4TbJE7sJZWx7BV7YrpSz7IPFvS8MzL3fnfzZjKvQ=
-entgo.io/contrib v0.6.0/go.mod h1:3qWIseJ/9Wx2Hu5zVh15FDzv7d/UvKNcYKdViywWCQg=
+entgo.io/contrib v0.7.0 h1:4Ghx8O0rqSMmca3FIJ6QyZbQAoLvdzWqLMl1MbHFEEw=
+entgo.io/contrib v0.7.0/go.mod h1:zbPSUrbn+6dfyv8S9HWEvn1MyGpO95ik2lUNgaqWTt4=
 entgo.io/ent v0.14.4 h1:/DhDraSLXIkBhyiVoJeSshr4ZYi7femzhj6/TckzZuI=
 entgo.io/ent v0.14.4/go.mod h1:aDPE/OziPEu8+OWbzy4UlvWmD2/kbRuWfK2A40hcxJM=
 github.com/4meepo/tagalign v1.4.2 h1:0hcLHPGMjDyM1gHG58cS73aQF8J4TdVR96TZViorO9E=
@@ -1309,8 +1309,8 @@ github.com/theopenlane/echox v0.2.4 h1:bocz1Dfs7d2fkNa8foQqdmeTtkMTQNwe1v20bIGID
 github.com/theopenlane/echox v0.2.4/go.mod h1:0cPOHe4SSQHmqP0/n2LsIEzRSogkxSX653bE+PIOVZ8=
 github.com/theopenlane/emailtemplates v0.2.4 h1:xmTp0woiTuMrypnY6Spu63VPPdVjK18+zPJ/CdwXUMc=
 github.com/theopenlane/emailtemplates v0.2.4/go.mod h1:vjIIpb1Okb4BMs1Zv319gy8z9KbljD+JZ1Srh6VPEiw=
-github.com/theopenlane/entx v0.11.2 h1:FgJ5WZYjH0oI0I1bvsWhkWBKwqGlA+TZ2fz/47u7eHM=
-github.com/theopenlane/entx v0.11.2/go.mod h1:LEE0v15vn5Ck8W60bDi6BZz6NldMAl+rC0Uj2RhVNMY=
+github.com/theopenlane/entx v0.12.1 h1:oICAGznwwKFxtf5o9P0CA7pQ8cJIY5JSAYHhlO/oZSU=
+github.com/theopenlane/entx v0.12.1/go.mod h1:QX9ot8kQXK1bVdKyZHyFJsObj8mnLSxrQ8CDxpF8tXs=
 github.com/theopenlane/gqlgen-plugins v0.7.0 h1:BmE7Z+HkshEewCXgp6G6HDr7AYZPRrJPHhhgSw7rgT8=
 github.com/theopenlane/gqlgen-plugins v0.7.0/go.mod h1:DTp+YuBA6jlCwIyZxEVL4JD3F0ZiD737Ck8THH42i94=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=

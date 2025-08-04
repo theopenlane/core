@@ -3427,18 +3427,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
-		"users",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   actionplan.UsersTable,
-			Columns: actionplan.UsersPrimaryKey,
-			Bidi:    false,
-		},
-		"ActionPlan",
-		"User",
-	)
-	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4197,10 +4185,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"blocked_groups",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   entity.BlockedGroupsTable,
-			Columns: []string{entity.BlockedGroupsColumn},
+			Columns: entity.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -4209,10 +4197,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"editors",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   entity.EditorsTable,
-			Columns: []string{entity.EditorsColumn},
+			Columns: entity.EditorsPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -4221,10 +4209,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"viewers",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   entity.ViewersTable,
-			Columns: []string{entity.ViewersColumn},
+			Columns: entity.ViewersPrimaryKey,
 			Bidi:    false,
 		},
 		"Entity",
@@ -4423,24 +4411,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Hush",
 	)
 	graph.MustAddE(
-		"orgmemberships",
+		"org_memberships",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 		},
 		"Event",
 		"OrgMembership",
 	)
 	graph.MustAddE(
-		"groupmemberships",
+		"group_memberships",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 		},
 		"Event",
@@ -4999,6 +4987,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Scan",
 	)
 	graph.MustAddE(
+		"entity_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Entity",
+	)
+	graph.MustAddE(
+		"entity_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Entity",
+	)
+	graph.MustAddE(
+		"entity_viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Entity",
+	)
+	graph.MustAddE(
 		"procedure_editors",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5215,12 +5239,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
-		"orgmembership",
+		"org_membership",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   groupmembership.OrgmembershipTable,
-			Columns: []string{groupmembership.OrgmembershipColumn},
+			Table:   groupmembership.OrgMembershipTable,
+			Columns: []string{groupmembership.OrgMembershipColumn},
 			Bidi:    false,
 		},
 		"GroupMembership",
@@ -7387,12 +7411,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
-		"orgmembership",
+		"org_membership",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   programmembership.OrgmembershipTable,
-			Columns: []string{programmembership.OrgmembershipColumn},
+			Table:   programmembership.OrgMembershipTable,
+			Columns: []string{programmembership.OrgMembershipColumn},
 			Bidi:    false,
 		},
 		"ProgramMembership",
@@ -8505,10 +8529,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"action_plans",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   user.ActionPlansTable,
-			Columns: user.ActionPlansPrimaryKey,
+			Columns: []string{user.ActionPlansColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -9048,20 +9072,6 @@ func (f *ActionPlanFilter) WhereHasControls() {
 // WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasUsers applies a predicate to check if query has an edge users.
-func (f *ActionPlanFilter) WhereHasUsers() {
-	f.Where(entql.HasEdge("users"))
-}
-
-// WhereHasUsersWith applies a predicate to check if query has an edge users with a given conditions (other predicates).
-func (f *ActionPlanFilter) WhereHasUsersWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("users", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -13051,28 +13061,28 @@ func (f *EventFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
 	})))
 }
 
-// WhereHasOrgmemberships applies a predicate to check if query has an edge orgmemberships.
-func (f *EventFilter) WhereHasOrgmemberships() {
-	f.Where(entql.HasEdge("orgmemberships"))
+// WhereHasOrgMemberships applies a predicate to check if query has an edge org_memberships.
+func (f *EventFilter) WhereHasOrgMemberships() {
+	f.Where(entql.HasEdge("org_memberships"))
 }
 
-// WhereHasOrgmembershipsWith applies a predicate to check if query has an edge orgmemberships with a given conditions (other predicates).
-func (f *EventFilter) WhereHasOrgmembershipsWith(preds ...predicate.OrgMembership) {
-	f.Where(entql.HasEdgeWith("orgmemberships", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOrgMembershipsWith applies a predicate to check if query has an edge org_memberships with a given conditions (other predicates).
+func (f *EventFilter) WhereHasOrgMembershipsWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("org_memberships", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasGroupmemberships applies a predicate to check if query has an edge groupmemberships.
-func (f *EventFilter) WhereHasGroupmemberships() {
-	f.Where(entql.HasEdge("groupmemberships"))
+// WhereHasGroupMemberships applies a predicate to check if query has an edge group_memberships.
+func (f *EventFilter) WhereHasGroupMemberships() {
+	f.Where(entql.HasEdge("group_memberships"))
 }
 
-// WhereHasGroupmembershipsWith applies a predicate to check if query has an edge groupmemberships with a given conditions (other predicates).
-func (f *EventFilter) WhereHasGroupmembershipsWith(preds ...predicate.GroupMembership) {
-	f.Where(entql.HasEdgeWith("groupmemberships", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasGroupMembershipsWith applies a predicate to check if query has an edge group_memberships with a given conditions (other predicates).
+func (f *EventFilter) WhereHasGroupMembershipsWith(preds ...predicate.GroupMembership) {
+	f.Where(entql.HasEdgeWith("group_memberships", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14528,6 +14538,48 @@ func (f *GroupFilter) WhereHasScanViewersWith(preds ...predicate.Scan) {
 	})))
 }
 
+// WhereHasEntityEditors applies a predicate to check if query has an edge entity_editors.
+func (f *GroupFilter) WhereHasEntityEditors() {
+	f.Where(entql.HasEdge("entity_editors"))
+}
+
+// WhereHasEntityEditorsWith applies a predicate to check if query has an edge entity_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasEntityEditorsWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntityBlockedGroups applies a predicate to check if query has an edge entity_blocked_groups.
+func (f *GroupFilter) WhereHasEntityBlockedGroups() {
+	f.Where(entql.HasEdge("entity_blocked_groups"))
+}
+
+// WhereHasEntityBlockedGroupsWith applies a predicate to check if query has an edge entity_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasEntityBlockedGroupsWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntityViewers applies a predicate to check if query has an edge entity_viewers.
+func (f *GroupFilter) WhereHasEntityViewers() {
+	f.Where(entql.HasEdge("entity_viewers"))
+}
+
+// WhereHasEntityViewersWith applies a predicate to check if query has an edge entity_viewers with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasEntityViewersWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasProcedureEditors applies a predicate to check if query has an edge procedure_editors.
 func (f *GroupFilter) WhereHasProcedureEditors() {
 	f.Where(entql.HasEdge("procedure_editors"))
@@ -14985,14 +15037,14 @@ func (f *GroupMembershipFilter) WhereHasUserWith(preds ...predicate.User) {
 	})))
 }
 
-// WhereHasOrgmembership applies a predicate to check if query has an edge orgmembership.
-func (f *GroupMembershipFilter) WhereHasOrgmembership() {
-	f.Where(entql.HasEdge("orgmembership"))
+// WhereHasOrgMembership applies a predicate to check if query has an edge org_membership.
+func (f *GroupMembershipFilter) WhereHasOrgMembership() {
+	f.Where(entql.HasEdge("org_membership"))
 }
 
-// WhereHasOrgmembershipWith applies a predicate to check if query has an edge orgmembership with a given conditions (other predicates).
-func (f *GroupMembershipFilter) WhereHasOrgmembershipWith(preds ...predicate.OrgMembership) {
-	f.Where(entql.HasEdgeWith("orgmembership", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOrgMembershipWith applies a predicate to check if query has an edge org_membership with a given conditions (other predicates).
+func (f *GroupMembershipFilter) WhereHasOrgMembershipWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("org_membership", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -22664,14 +22716,14 @@ func (f *ProgramMembershipFilter) WhereHasUserWith(preds ...predicate.User) {
 	})))
 }
 
-// WhereHasOrgmembership applies a predicate to check if query has an edge orgmembership.
-func (f *ProgramMembershipFilter) WhereHasOrgmembership() {
-	f.Where(entql.HasEdge("orgmembership"))
+// WhereHasOrgMembership applies a predicate to check if query has an edge org_membership.
+func (f *ProgramMembershipFilter) WhereHasOrgMembership() {
+	f.Where(entql.HasEdge("org_membership"))
 }
 
-// WhereHasOrgmembershipWith applies a predicate to check if query has an edge orgmembership with a given conditions (other predicates).
-func (f *ProgramMembershipFilter) WhereHasOrgmembershipWith(preds ...predicate.OrgMembership) {
-	f.Where(entql.HasEdgeWith("orgmembership", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOrgMembershipWith applies a predicate to check if query has an edge org_membership with a given conditions (other predicates).
+func (f *ProgramMembershipFilter) WhereHasOrgMembershipWith(preds ...predicate.OrgMembership) {
+	f.Where(entql.HasEdgeWith("org_membership", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

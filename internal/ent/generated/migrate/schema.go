@@ -93,6 +93,7 @@ var (
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_action_plans", Type: field.TypeString, Nullable: true},
+		{Name: "user_action_plans", Type: field.TypeString, Nullable: true},
 	}
 	// ActionPlansTable holds the schema information for the "action_plans" table.
 	ActionPlansTable = &schema.Table{
@@ -122,6 +123,12 @@ var (
 				Symbol:     "action_plans_subcontrols_action_plans",
 				Columns:    []*schema.Column{ActionPlansColumns[29]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "action_plans_users_action_plans",
+				Columns:    []*schema.Column{ActionPlansColumns[30]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1435,9 +1442,6 @@ var (
 		{Name: "asset_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "asset_editors", Type: field.TypeString, Nullable: true},
 		{Name: "asset_viewers", Type: field.TypeString, Nullable: true},
-		{Name: "entity_blocked_groups", Type: field.TypeString, Nullable: true},
-		{Name: "entity_editors", Type: field.TypeString, Nullable: true},
-		{Name: "entity_viewers", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_implementation_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_objective_creators", Type: field.TypeString, Nullable: true},
@@ -1479,110 +1483,92 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_entities_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[18]},
-				RefColumns: []*schema.Column{EntitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_entities_editors",
-				Columns:    []*schema.Column{GroupsColumns[19]},
-				RefColumns: []*schema.Column{EntitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_entities_viewers",
-				Columns:    []*schema.Column{GroupsColumns[20]},
-				RefColumns: []*schema.Column{EntitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "groups_organizations_control_creators",
-				Columns:    []*schema.Column{GroupsColumns[21]},
+				Columns:    []*schema.Column{GroupsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_control_implementation_creators",
-				Columns:    []*schema.Column{GroupsColumns[22]},
+				Columns:    []*schema.Column{GroupsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_control_objective_creators",
-				Columns:    []*schema.Column{GroupsColumns[23]},
+				Columns:    []*schema.Column{GroupsColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_evidence_creators",
-				Columns:    []*schema.Column{GroupsColumns[24]},
+				Columns:    []*schema.Column{GroupsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_group_creators",
-				Columns:    []*schema.Column{GroupsColumns[25]},
+				Columns:    []*schema.Column{GroupsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_internal_policy_creators",
-				Columns:    []*schema.Column{GroupsColumns[26]},
+				Columns:    []*schema.Column{GroupsColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_mapped_control_creators",
-				Columns:    []*schema.Column{GroupsColumns[27]},
+				Columns:    []*schema.Column{GroupsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_narrative_creators",
-				Columns:    []*schema.Column{GroupsColumns[28]},
+				Columns:    []*schema.Column{GroupsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_procedure_creators",
-				Columns:    []*schema.Column{GroupsColumns[29]},
+				Columns:    []*schema.Column{GroupsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_program_creators",
-				Columns:    []*schema.Column{GroupsColumns[30]},
+				Columns:    []*schema.Column{GroupsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_risk_creators",
-				Columns:    []*schema.Column{GroupsColumns[31]},
+				Columns:    []*schema.Column{GroupsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_scheduled_job_creators",
-				Columns:    []*schema.Column{GroupsColumns[32]},
+				Columns:    []*schema.Column{GroupsColumns[29]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_standard_creators",
-				Columns:    []*schema.Column{GroupsColumns[33]},
+				Columns:    []*schema.Column{GroupsColumns[30]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_template_creators",
-				Columns:    []*schema.Column{GroupsColumns[34]},
+				Columns:    []*schema.Column{GroupsColumns[31]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_groups",
-				Columns:    []*schema.Column{GroupsColumns[35]},
+				Columns:    []*schema.Column{GroupsColumns[32]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1591,12 +1577,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[35]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[32]},
 			},
 			{
 				Name:    "group_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[35]},
+				Columns: []*schema.Column{GroupsColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1604,7 +1590,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[35]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1656,7 +1642,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
-		{Name: "group_membership_orgmembership", Type: field.TypeString, Nullable: true},
+		{Name: "group_membership_org_membership", Type: field.TypeString, Nullable: true},
 	}
 	// GroupMembershipsTable holds the schema information for the "group_memberships" table.
 	GroupMembershipsTable = &schema.Table{
@@ -1677,7 +1663,7 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "group_memberships_org_memberships_orgmembership",
+				Symbol:     "group_memberships_org_memberships_org_membership",
 				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -3518,7 +3504,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
-		{Name: "program_membership_orgmembership", Type: field.TypeString, Nullable: true},
+		{Name: "program_membership_org_membership", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramMembershipsTable holds the schema information for the "program_memberships" table.
 	ProgramMembershipsTable = &schema.Table{
@@ -3539,7 +3525,7 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "program_memberships_org_memberships_orgmembership",
+				Symbol:     "program_memberships_org_memberships_org_membership",
 				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -5519,6 +5505,81 @@ var (
 				Symbol:     "document_data_files_file_id",
 				Columns:    []*schema.Column{DocumentDataFilesColumns[1]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EntityBlockedGroupsColumns holds the columns for the "entity_blocked_groups" table.
+	EntityBlockedGroupsColumns = []*schema.Column{
+		{Name: "entity_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// EntityBlockedGroupsTable holds the schema information for the "entity_blocked_groups" table.
+	EntityBlockedGroupsTable = &schema.Table{
+		Name:       "entity_blocked_groups",
+		Columns:    EntityBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{EntityBlockedGroupsColumns[0], EntityBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entity_blocked_groups_entity_id",
+				Columns:    []*schema.Column{EntityBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "entity_blocked_groups_group_id",
+				Columns:    []*schema.Column{EntityBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EntityEditorsColumns holds the columns for the "entity_editors" table.
+	EntityEditorsColumns = []*schema.Column{
+		{Name: "entity_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// EntityEditorsTable holds the schema information for the "entity_editors" table.
+	EntityEditorsTable = &schema.Table{
+		Name:       "entity_editors",
+		Columns:    EntityEditorsColumns,
+		PrimaryKey: []*schema.Column{EntityEditorsColumns[0], EntityEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entity_editors_entity_id",
+				Columns:    []*schema.Column{EntityEditorsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "entity_editors_group_id",
+				Columns:    []*schema.Column{EntityEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EntityViewersColumns holds the columns for the "entity_viewers" table.
+	EntityViewersColumns = []*schema.Column{
+		{Name: "entity_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// EntityViewersTable holds the schema information for the "entity_viewers" table.
+	EntityViewersTable = &schema.Table{
+		Name:       "entity_viewers",
+		Columns:    EntityViewersColumns,
+		PrimaryKey: []*schema.Column{EntityViewersColumns[0], EntityViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entity_viewers_entity_id",
+				Columns:    []*schema.Column{EntityViewersColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "entity_viewers_group_id",
+				Columns:    []*schema.Column{EntityViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -7698,31 +7759,6 @@ var (
 			},
 		},
 	}
-	// UserActionPlansColumns holds the columns for the "user_action_plans" table.
-	UserActionPlansColumns = []*schema.Column{
-		{Name: "user_id", Type: field.TypeString},
-		{Name: "action_plan_id", Type: field.TypeString},
-	}
-	// UserActionPlansTable holds the schema information for the "user_action_plans" table.
-	UserActionPlansTable = &schema.Table{
-		Name:       "user_action_plans",
-		Columns:    UserActionPlansColumns,
-		PrimaryKey: []*schema.Column{UserActionPlansColumns[0], UserActionPlansColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_action_plans_user_id",
-				Columns:    []*schema.Column{UserActionPlansColumns[0]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_action_plans_action_plan_id",
-				Columns:    []*schema.Column{UserActionPlansColumns[1]},
-				RefColumns: []*schema.Column{ActionPlansColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
 	UserSettingFilesColumns = []*schema.Column{
 		{Name: "user_setting_id", Type: field.TypeString},
@@ -7878,6 +7914,9 @@ var (
 		ControlObjectiveViewersTable,
 		ControlObjectiveTasksTable,
 		DocumentDataFilesTable,
+		EntityBlockedGroupsTable,
+		EntityEditorsTable,
+		EntityViewersTable,
 		EntityContactsTable,
 		EntityDocumentsTable,
 		EntityFilesTable,
@@ -7965,7 +8004,6 @@ var (
 		TrustCenterSettingFilesTable,
 		UserFilesTable,
 		UserEventsTable,
-		UserActionPlansTable,
 		UserSettingFilesTable,
 	}
 )
@@ -7976,6 +8014,7 @@ func init() {
 	ActionPlansTable.ForeignKeys[1].RefTable = GroupsTable
 	ActionPlansTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ActionPlansTable.ForeignKeys[3].RefTable = SubcontrolsTable
+	ActionPlansTable.ForeignKeys[4].RefTable = UsersTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
@@ -8047,9 +8086,9 @@ func init() {
 	GroupsTable.ForeignKeys[0].RefTable = AssetsTable
 	GroupsTable.ForeignKeys[1].RefTable = AssetsTable
 	GroupsTable.ForeignKeys[2].RefTable = AssetsTable
-	GroupsTable.ForeignKeys[3].RefTable = EntitiesTable
-	GroupsTable.ForeignKeys[4].RefTable = EntitiesTable
-	GroupsTable.ForeignKeys[5].RefTable = EntitiesTable
+	GroupsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[5].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[6].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[7].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[8].RefTable = OrganizationsTable
@@ -8062,9 +8101,6 @@ func init() {
 	GroupsTable.ForeignKeys[15].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[16].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[17].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[18].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[19].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[20].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
@@ -8291,6 +8327,12 @@ func init() {
 	ControlObjectiveTasksTable.ForeignKeys[1].RefTable = TasksTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
 	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
+	EntityBlockedGroupsTable.ForeignKeys[0].RefTable = EntitiesTable
+	EntityBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	EntityEditorsTable.ForeignKeys[0].RefTable = EntitiesTable
+	EntityEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	EntityViewersTable.ForeignKeys[0].RefTable = EntitiesTable
+	EntityViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	EntityContactsTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityContactsTable.ForeignKeys[1].RefTable = ContactsTable
 	EntityDocumentsTable.ForeignKeys[0].RefTable = EntitiesTable
@@ -8465,8 +8507,6 @@ func init() {
 	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
-	UserActionPlansTable.ForeignKeys[0].RefTable = UsersTable
-	UserActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 }

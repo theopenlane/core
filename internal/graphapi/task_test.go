@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 	"time"
 
@@ -14,11 +15,10 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
-	"golang.org/x/exp/slices"
 )
 
 func TestQueryTask(t *testing.T) {
@@ -31,7 +31,7 @@ func TestQueryTask(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -123,8 +123,8 @@ func TestQueryTasks(t *testing.T) {
 	first := 10
 	testCases := []struct {
 		name            string
-		orderBy         []*openlaneclient.TaskOrder
-		client          *openlaneclient.OpenlaneClient
+		orderBy         []*testclient.TaskOrder
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 		setCursor       bool
@@ -140,7 +140,7 @@ func TestQueryTasks(t *testing.T) {
 		},
 		{
 			name:            "happy path, with order by due date, page 1",
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: first,
@@ -150,7 +150,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, with order by due date and cursor, page 2",
 			useCursor:       true,
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: first,
@@ -160,7 +160,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, with order by due date and cursor, page 3",
 			useCursor:       true,
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: first,
@@ -170,7 +170,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, with order by due date and cursor, page 4",
 			useCursor:       true,
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: 1,
@@ -178,7 +178,7 @@ func TestQueryTasks(t *testing.T) {
 		},
 		{
 			name:            "happy path, with order by created date, page 1",
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: first,
@@ -188,7 +188,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, with order by created date and cursor, page 2",
 			useCursor:       true,
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: first,
@@ -198,7 +198,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, with order by created date and cursor, page 3",
 			useCursor:       true,
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: first,
@@ -208,7 +208,7 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, with order by created date and cursor, page 4",
 			useCursor:       true,
-			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: 1,
@@ -252,9 +252,9 @@ func TestQueryTasks(t *testing.T) {
 
 			if tc.useCursor {
 				switch tc.orderBy[0].Field {
-				case openlaneclient.TaskOrderFieldDue:
+				case testclient.TaskOrderFieldDue:
 					after = startCursorDue
-				case openlaneclient.TaskOrderFieldCreatedAt:
+				case testclient.TaskOrderFieldCreatedAt:
 					after = startCursorCreated
 				}
 			}
@@ -272,9 +272,9 @@ func TestQueryTasks(t *testing.T) {
 				assert.Assert(t, resp.Tasks.PageInfo.EndCursor != nil)
 
 				switch tc.orderBy[0].Field {
-				case openlaneclient.TaskOrderFieldDue:
+				case testclient.TaskOrderFieldDue:
 					startCursorDue = resp.Tasks.PageInfo.EndCursor
-				case openlaneclient.TaskOrderFieldCreatedAt:
+				case testclient.TaskOrderFieldCreatedAt:
 					startCursorCreated = resp.Tasks.PageInfo.EndCursor
 				}
 			} else if tc.useCursor {
@@ -306,14 +306,14 @@ func TestMutationCreateTask(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateTaskInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateTaskInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateTaskInput{
+			request: testclient.CreateTaskInput{
 				Title: "test-task",
 			},
 			client: suite.client.api,
@@ -321,7 +321,7 @@ func TestMutationCreateTask(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateTaskInput{
+			request: testclient.CreateTaskInput{
 				Title:      "test-task",
 				Details:    lo.ToPtr("test details of the task"),
 				Status:     &enums.TaskStatusInProgress,
@@ -334,7 +334,7 @@ func TestMutationCreateTask(t *testing.T) {
 		},
 		{
 			name: "create with assignee not in org should fail",
-			request: openlaneclient.CreateTaskInput{
+			request: testclient.CreateTaskInput{
 				Title:      "test-task",
 				AssigneeID: &testUser2.ID,
 			},
@@ -344,7 +344,7 @@ func TestMutationCreateTask(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateTaskInput{
+			request: testclient.CreateTaskInput{
 				Title:   "test-task",
 				OwnerID: &testUser.OrganizationID,
 			},
@@ -353,7 +353,7 @@ func TestMutationCreateTask(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateTaskInput{
+			request: testclient.CreateTaskInput{
 				Title: "test-task",
 			},
 			client: apiClient,
@@ -361,7 +361,7 @@ func TestMutationCreateTask(t *testing.T) {
 		},
 		{
 			name: "missing title, but display name provided",
-			request: openlaneclient.CreateTaskInput{
+			request: testclient.CreateTaskInput{
 				Details: lo.ToPtr("makin' a list, checkin' it twice"),
 			},
 			client:      suite.client.api,
@@ -459,7 +459,7 @@ func TestMutationCreateTask(t *testing.T) {
 
 func TestMutationUpdateTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	group := (&GroupBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	group := (&GroupMemberBuilder{client: suite.client, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(adminUser.UserCtx, t)
 
 	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
@@ -496,17 +496,17 @@ func TestMutationUpdateTask(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		taskID               string
-		request              *openlaneclient.UpdateTaskInput
-		updateCommentRequest *openlaneclient.UpdateNoteInput
+		request              *testclient.UpdateTaskInput
+		updateCommentRequest *testclient.UpdateNoteInput
 		files                []*graphql.Upload
-		client               *openlaneclient.OpenlaneClient
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 	}{
 		{
 			name:   "happy path, update details",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				Details:    lo.ToPtr(("makin' a list, checkin' it twice")),
 				AssigneeID: &adminUser.ID,
 			},
@@ -516,8 +516,8 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "happy path, add comment",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
-				AddComment: &openlaneclient.CreateNoteInput{
+			request: &testclient.UpdateTaskInput{
+				AddComment: &testclient.CreateNoteInput{
 					Text: "matt is the best",
 				},
 			},
@@ -527,7 +527,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "happy path, update comment with files",
 			taskID: task.ID,
-			updateCommentRequest: &openlaneclient.UpdateNoteInput{
+			updateCommentRequest: &testclient.UpdateNoteInput{
 				Text: lo.ToPtr("sarah is better"),
 			},
 			files: []*graphql.Upload{
@@ -544,7 +544,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "happy path, update comment with file using PAT",
 			taskID: task.ID,
-			updateCommentRequest: &openlaneclient.UpdateNoteInput{
+			updateCommentRequest: &testclient.UpdateNoteInput{
 				Text: lo.ToPtr("sarah is still better"),
 			},
 			files: []*graphql.Upload{
@@ -561,7 +561,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "happy path, delete comment",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				DeleteComment: &taskCommentID,
 			},
 			client: suite.client.api,
@@ -570,7 +570,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "happy path, add risk",
 			taskID: taskRisk.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				AddRiskIDs: []string{risk.ID},
 			},
 			client: suite.client.api,
@@ -579,7 +579,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "update category using pat of owner",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				Category: lo.ToPtr("risk review"),
 			},
 			client: suite.client.apiWithPAT,
@@ -588,7 +588,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "update assignee to user not in org should fail",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(testUser2.ID),
 			},
 			client:      suite.client.api,
@@ -598,7 +598,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "update assignee to view only user",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(assignee.ID),
 			},
 			client: suite.client.api,
@@ -607,7 +607,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "update assignee to same user, should not error",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(assignee.ID),
 			},
 			client: suite.client.api,
@@ -616,7 +616,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "update status and details",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				Status:  &enums.TaskStatusInProgress,
 				Details: lo.ToPtr("do all the things for the thing"),
 			},
@@ -626,8 +626,8 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "add to group",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
-				AddGroupIDs: []string{group.ID},
+			request: &testclient.UpdateTaskInput{
+				AddGroupIDs: []string{group.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -635,7 +635,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "update assigner to another org member, this user should still be able to see it because they originally created it",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				AssignerID: lo.ToPtr(viewOnlyUser2.ID),
 			},
 			client: suite.client.api,
@@ -644,7 +644,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "clear assignee",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				ClearAssignee: lo.ToPtr(true),
 			},
 			client: suite.client.api,
@@ -653,7 +653,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		{
 			name:   "clear assigner",
 			taskID: task.ID,
-			request: &openlaneclient.UpdateTaskInput{
+			request: &testclient.UpdateTaskInput{
 				ClearAssigner: lo.ToPtr(true),
 			},
 			client: suite.client.api,
@@ -665,8 +665,8 @@ func TestMutationUpdateTask(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			var (
 				err         error
-				resp        *openlaneclient.UpdateTask
-				commentResp *openlaneclient.UpdateTaskComment
+				resp        *testclient.UpdateTask
+				commentResp *testclient.UpdateTaskComment
 			)
 
 			if tc.request != nil {
@@ -784,7 +784,7 @@ func TestMutationUpdateTask(t *testing.T) {
 
 	// cleanup
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.GroupID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTask(t *testing.T) {
@@ -796,7 +796,7 @@ func TestMutationDeleteTask(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -866,8 +866,8 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateTaskInput
-		client               *openlaneclient.OpenlaneClient
+		input                testclient.UpdateTaskInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
@@ -875,7 +875,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "happy path, clear tags on multiple tasks",
 			ids:  []string{task1.ID, task2.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				ClearTags: lo.ToPtr(true),
 				Details:   lo.ToPtr("Cleared all tags"),
 			},
@@ -886,7 +886,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateTaskInput{Title: lo.ToPtr("test")},
+			input:       testclient.UpdateTaskInput{Title: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
 			expectedErr: "ids is required",
@@ -894,7 +894,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "mixed success and failure - some tasks not authorized",
 			ids:  []string{task1.ID, taskAnotherUser.ID}, // second task should fail authorization
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				Title: lo.ToPtr("Updated by authorized user"),
 			},
 			client:               suite.client.api,
@@ -904,7 +904,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to tasks",
 			ids:  []string{task1.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				Title: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
@@ -914,7 +914,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "update status on multiple tasks",
 			ids:  []string{task1.ID, task2.ID, task3.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				Status: &enums.TaskStatusInProgress,
 			},
 			client:               suite.client.api,
@@ -924,7 +924,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "assign tasks to org member",
 			ids:  []string{task1.ID, task2.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				AssigneeID: &om.UserID,
 			},
 			client:               suite.client.api,

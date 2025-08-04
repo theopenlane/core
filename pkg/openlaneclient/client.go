@@ -54,7 +54,7 @@ func New(config Config, opts ...ClientOption) (*OpenlaneClient, error) {
 	// use api.Config instead of config because some fields are updated in NewRestClient
 	graphClient := NewClient(
 		api.Requester.HTTPClient(),
-		graphRequestPath(api.Config),
+		GraphRequestPath(api.Config),
 		&api.Config.Clientv2Options,
 		api.Config.Interceptors...,
 	)

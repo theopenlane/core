@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // ProgramMembership holds the schema definition for the ProgramMembership entity
@@ -26,7 +27,7 @@ type ProgramMembership struct {
 }
 
 // SchemaProgramMembership is the name of the ProgramMembership schema.
-const SchemaProgramMembership = "programmembership"
+const SchemaProgramMembership = "program_membership"
 
 // Name returns the name of the ProgramMembership schema.
 func (ProgramMembership) Name() string {
@@ -73,6 +74,9 @@ func (p ProgramMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "user_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: p,

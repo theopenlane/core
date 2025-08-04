@@ -7,8 +7,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -23,7 +23,7 @@ func TestQueryProgram(t *testing.T) {
 	testCases := []struct {
 		name           string
 		queryID        string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		ctx            context.Context
 		expectedResult *generated.Program
 		errorMsg       string
@@ -123,7 +123,7 @@ func TestQueryPrograms(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 		errorMsg        string
@@ -239,15 +239,15 @@ func TestMutationCreateProgram(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		request       openlaneclient.CreateProgramInput
+		request       testclient.CreateProgramInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name: "mitb program",
 			},
 			client: suite.client.api,
@@ -255,7 +255,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, all basic input",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:                 "mitb program",
 				Description:          lo.ToPtr("being the best"),
 				ProgramType:          &enums.ProgramTypeFramework,
@@ -275,7 +275,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, edges",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:              "mitb program",
 				ProcedureIDs:      []string{procedure.ID},
 				InternalPolicyIDs: []string{policy.ID},
@@ -285,7 +285,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "add editor group",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:            "Test Program MITB",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
@@ -296,7 +296,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "add editor group, no access to group",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:      "Test Program Meow",
 				EditorIDs: []string{anotherGroup.ID},
 			},
@@ -306,7 +306,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:        "mitb program",
 				Description: lo.ToPtr("being the best"),
 				ProgramType: &enums.ProgramTypeGapAnalysis,
@@ -317,7 +317,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:        "mitb program",
 				Description: lo.ToPtr("being the best"),
 			},
@@ -326,7 +326,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name: "mitb program",
 			},
 			client:      suite.client.api,
@@ -335,7 +335,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "user now authorized, added to group with creator permissions",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name: "mitb program",
 			},
 			addGroupToOrg: true,
@@ -344,7 +344,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "user not authorized, no permissions, owner id set to correct org",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:    "mitb program",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -353,7 +353,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "missing required field",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Description: lo.ToPtr("soc2 2024"),
 			},
 			client:      suite.client.api,
@@ -362,7 +362,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		},
 		{
 			name: "invalid auditor email",
-			request: openlaneclient.CreateProgramInput{
+			request: testclient.CreateProgramInput{
 				Name:         "mitb program",
 				AuditorEmail: lo.ToPtr("invalid email"),
 			},
@@ -376,7 +376,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
-					openlaneclient.UpdateOrganizationInput{
+					testclient.UpdateOrganizationInput{
 						AddProgramCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				assert.NilError(t, err)
@@ -537,7 +537,7 @@ func TestMutationCreateProgram(t *testing.T) {
 func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{})
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &testclient.ProgramMembershipWhereInput{})
 	assert.NilError(t, err)
 
 	testUserProgramMemberID := ""
@@ -598,15 +598,15 @@ func TestMutationUpdateProgram(t *testing.T) {
 
 	testCases := []struct {
 		name              string
-		request           openlaneclient.UpdateProgramInput
-		client            *openlaneclient.OpenlaneClient
+		request           testclient.UpdateProgramInput
+		client            *testclient.TestClient
 		ctx               context.Context
 		expectedErr       string
 		expectedEdgeCount int
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				Description:  lo.ToPtr("new description"),
 				ProgramType:  &enums.ProgramTypeRiskAssessment,
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for the subsequent tests
@@ -617,7 +617,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields using pat",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				Status:               &enums.ProgramStatusReadyForAuditor,
 				ProgramType:          &enums.ProgramTypeFramework,
 				FrameworkName:        lo.ToPtr("SOC 2"),
@@ -633,18 +633,17 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "remove program member, cannot remove self",
-			request: openlaneclient.UpdateProgramInput{
+			name: "remove program member, can remove self if org owner",
+			request: testclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{testUserProgramMemberID},
 			},
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "add program member, cannot add self",
-			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
+			request: testclient.UpdateProgramInput{
+				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
 						UserID: adminUser.ID,
 					},
@@ -656,8 +655,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "add program member, can add another user",
-			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
+			request: testclient.UpdateProgramInput{
+				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
 						UserID: adminUser.ID,
 					},
@@ -668,7 +667,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, remove program member",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{pm.ID},
 			},
 			client: suite.client.apiWithPAT,
@@ -676,8 +675,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, re-add program member as editor",
-			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
+			request: testclient.UpdateProgramInput{
+				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
 						UserID: pm.UserID,
 						Role:   &enums.RoleAdmin,
@@ -689,7 +688,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, update edge - procedure",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure1.ID},
 			},
 			client:            suite.client.api,
@@ -698,7 +697,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "happy path, update edge - policy",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy1.ID},
 			},
 			client:            suite.client.api,
@@ -707,25 +706,25 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "update edge - procedure - not allowed to access procedure",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure2.ID},
 			},
-			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
-			expectedEdgeCount: 0, // procedure is not visible to the user
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update edge - policy - not allowed to access procedure",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy2.ID},
 			},
-			client:            suite.client.api,
-			ctx:               testUser1.UserCtx,
-			expectedEdgeCount: 0, // policy is not visible to the user
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, not enough permissions",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
 			client:      suite.client.api,
@@ -734,7 +733,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
 			client:      suite.client.api,
@@ -743,7 +742,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		},
 		{
 			name: "update allowed, user in editor group",
-			request: openlaneclient.UpdateProgramInput{
+			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("soc2 2024"),
 			},
 			client: suite.client.api,
@@ -860,32 +859,25 @@ func TestMutationUpdateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.AddProgramMembers) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 3))
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 2))
 
-				testUserFound := false
 				programUserFound := false
 				adminUserFound := false
 				for _, edge := range resp.UpdateProgram.Program.Members.Edges {
-					if edge.Node.User.ID == testUser1.ID {
-						testUserFound = true
-					} else if edge.Node.User.ID == programUser.ID {
+					if edge.Node.User.ID == programUser.ID {
 						programUserFound = true
 					} else if edge.Node.User.ID == adminUser.ID {
 						adminUserFound = true
 					}
 				}
-				assert.Check(t, testUserFound, "test user not found in program members")
 				// here originally, and then later re-added as an admin
 				assert.Check(t, programUserFound, "program user not found in program members")
 				assert.Check(t, adminUserFound, "admin user not found in program members")
 			}
 
-			// member was removed, ensure there are two members left
+			// member was removed, ensure there is only one member left
 			if len(tc.request.RemoveProgramMembers) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 2))
-
-				// it should have the owner and the admin user
-				assert.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 1))
 			}
 		})
 	}
@@ -900,7 +892,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 	// cleanup group
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 	// org member cleanup
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm1.Edges.Orgmembership.ID, gm2.Edges.Orgmembership.ID, gm3.Edges.Orgmembership.ID, gm4.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID, gm4.Edges.OrgMembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteProgram(t *testing.T) {
@@ -911,7 +903,7 @@ func TestMutationDeleteProgram(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

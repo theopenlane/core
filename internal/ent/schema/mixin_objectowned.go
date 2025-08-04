@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // ObjectOwnedMixin is a mixin for object owned entities
@@ -38,9 +39,12 @@ type ObjectOwnedMixin struct {
 	OwnerRelation string
 	// AllowEmptyForSystemAdmin allows the owner id field to be empty for system admins
 	AllowEmptyForSystemAdmin bool
-	// SkipInterceptor skips the interceptor for that schema for all queries, or specific types,
+	// SkipOrgInterceptorType skips the org interceptor for that schema for all queries, or specific types,
 	// this is useful for tokens, etc
-	SkipInterceptor interceptors.SkipMode
+	SkipOrgInterceptorType interceptors.SkipMode
+	// SkipListFilterInterceptor skips the the filter for list queries, this can be used to bypass fga checks
+	// when permissions can be determined solely based on the organization filter and group permissions
+	SkipListFilterInterceptor interceptors.SkipMode
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
 	// IncludeOrganizationOwner adds the organization owner_id field and hooks to the schema
@@ -88,15 +92,8 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if WithOrganizationOwner is false")
 	}
 
-	if o.UseListObjectsFilter {
-		o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
-			return interceptors.FilterListQuery()
-		})
-	} else {
-		o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
-			return interceptors.FilterQueryResults[V]()
-		})
-	}
+	// setup the correct interceptor
+	getObjectInterceptor[V](&o)
 
 	return o
 }
@@ -183,6 +180,19 @@ func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:u
 	}
 }
 
+// withSkipFilterInterceptor allows to skip the filter interceptor for the object owned mixin
+// WARNING: this will bypass all batch or list objects checks from FGA; results will only be filtered
+// based on other interceptors on the schema. For example, if a schema is object owned and has
+// the group permissions mixins, the results will be filtered based on the organization and group memberships
+// but no further checks will be applied.
+// It is recommended to only use this on list requests to ensure single checks are
+// explicitly checked via FGA.
+func withSkipFilterInterceptor(mode interceptors.SkipMode) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.SkipListFilterInterceptor = mode
+	}
+}
+
 // Indexes of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Indexes() []ent.Index {
 	// add the organization owner index if the flag is set or the field name is included
@@ -244,6 +254,9 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 				Field(o.OwnerFieldName).
 				Immutable().
 				Unique().
+				Annotations(
+					accessmap.EdgeNoAuthCheck(),
+				).
 				Ref(o.Ref))
 	}
 
@@ -256,6 +269,9 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 			From("owner", getType(o.Kind)).
 			Field(fieldName).
 			Ref(o.Ref).
+			Annotations(
+				accessmap.EdgeNoAuthCheck(),
+			).
 			Unique()
 
 		edges = append(edges, ownerEdge)
@@ -339,4 +355,73 @@ func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context) (bool, error
 	}
 
 	return false, nil
+}
+
+// skipQueryModeCheck checks if the query should be skipped based on the provided mode
+// of the interceptor
+func skipQueryModeCheck(ctx context.Context, mode interceptors.SkipMode) bool {
+	if interceptors.SkipNone == mode {
+		return false
+	}
+
+	if interceptors.SkipAll == mode {
+		return true
+	}
+
+	ctxQuery := ent.QueryFromContext(ctx)
+
+	switch ctxQuery.Op {
+	case interceptors.AllOperation:
+		if mode&interceptors.SkipAllQuery != 0 {
+			return true
+		}
+	case interceptors.OnlyOperation:
+		if mode&interceptors.SkipOnlyQuery != 0 {
+			return true
+		}
+	case interceptors.ExistOperation:
+		if mode&interceptors.SkipExistsQuery != 0 {
+			return true
+		}
+	case interceptors.IDsOperation:
+		if mode&interceptors.SkipIDsQuery != 0 {
+			return true
+		}
+	default:
+		return false
+	}
+
+	return false
+}
+
+// getObjectInterceptor adds the interceptor for the object owned mixin
+// based on the settings configured in the mixin
+func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
+	// if the list objects filter is chosen, we will use the filter list objects interceptor
+	// this is not recommend for large datasets as the query can be slow and expensive
+	if o.UseListObjectsFilter {
+		o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
+			return interceptors.FilterListQuery()
+		})
+
+		return
+	}
+
+	// otherwise we will use the filter query results interceptor
+	// which uses a batch check to filter the results
+	// this is usually faster for large datasets where the the user has access to many objects
+	customSkipperFunc := func(_ context.Context) bool {
+		return false
+	}
+
+	if o.SkipListFilterInterceptor != interceptors.SkipNone {
+		customSkipperFunc = func(ctx context.Context) bool {
+			return skipQueryModeCheck(ctx, o.SkipListFilterInterceptor)
+		}
+
+	}
+
+	o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
+		return interceptors.FilterQueryResults[V](customSkipperFunc)
+	})
 }

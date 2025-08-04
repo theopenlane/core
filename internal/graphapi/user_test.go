@@ -14,8 +14,8 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryUser(t *testing.T) {
@@ -109,13 +109,13 @@ func TestMutationCreateUser(t *testing.T) {
 
 	testCases := []struct {
 		name       string
-		userInput  openlaneclient.CreateUserInput
+		userInput  testclient.CreateUserInput
 		avatarFile *graphql.Upload
 		errorMsg   string
 	}{
 		{
 			name: "no auth create user",
-			userInput: openlaneclient.CreateUserInput{
+			userInput: testclient.CreateUserInput{
 				FirstName:   lo.ToPtr(gofakeit.FirstName()),
 				LastName:    lo.ToPtr(gofakeit.LastName()),
 				DisplayName: gofakeit.LetterN(50),
@@ -188,17 +188,17 @@ func TestMutationUpdateUser(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		updateInput openlaneclient.UpdateUserInput
+		updateInput testclient.UpdateUserInput
 		avatarFile  *graphql.Upload
-		expectedRes openlaneclient.UpdateUser_UpdateUser_User
+		expectedRes testclient.UpdateUser_UpdateUser_User
 		errorMsg    string
 	}{
 		{
 			name: "update first name and password, happy path",
-			updateInput: openlaneclient.UpdateUserInput{
+			updateInput: testclient.UpdateUserInput{
 				FirstName: &firstNameUpdate,
 			},
-			expectedRes: openlaneclient.UpdateUser_UpdateUser_User{
+			expectedRes: testclient.UpdateUser_UpdateUser_User{
 				ID:          user.ID,
 				FirstName:   &firstNameUpdate,
 				LastName:    &user.LastName,
@@ -214,7 +214,7 @@ func TestMutationUpdateUser(t *testing.T) {
 				Size:        avatarFile.Size,
 				ContentType: avatarFile.ContentType,
 			},
-			expectedRes: openlaneclient.UpdateUser_UpdateUser_User{
+			expectedRes: testclient.UpdateUser_UpdateUser_User{
 				ID:          user.ID,
 				FirstName:   &firstNameUpdate,
 				LastName:    &user.LastName,
@@ -234,10 +234,10 @@ func TestMutationUpdateUser(t *testing.T) {
 		},
 		{
 			name: "update last name, happy path",
-			updateInput: openlaneclient.UpdateUserInput{
+			updateInput: testclient.UpdateUserInput{
 				LastName: &lastNameUpdate,
 			},
-			expectedRes: openlaneclient.UpdateUser_UpdateUser_User{
+			expectedRes: testclient.UpdateUser_UpdateUser_User{
 				ID:          user.ID,
 				FirstName:   &firstNameUpdate, // this would have been updated on the prior test
 				LastName:    &lastNameUpdate,
@@ -247,10 +247,10 @@ func TestMutationUpdateUser(t *testing.T) {
 		},
 		{
 			name: "update email, happy path",
-			updateInput: openlaneclient.UpdateUserInput{
+			updateInput: testclient.UpdateUserInput{
 				Email: &emailUpdate,
 			},
-			expectedRes: openlaneclient.UpdateUser_UpdateUser_User{
+			expectedRes: testclient.UpdateUser_UpdateUser_User{
 				ID:          user.ID,
 				FirstName:   &firstNameUpdate,
 				LastName:    &lastNameUpdate, // this would have been updated on the prior test
@@ -260,10 +260,10 @@ func TestMutationUpdateUser(t *testing.T) {
 		},
 		{
 			name: "update display name, happy path",
-			updateInput: openlaneclient.UpdateUserInput{
+			updateInput: testclient.UpdateUserInput{
 				DisplayName: &displayNameUpdate,
 			},
-			expectedRes: openlaneclient.UpdateUser_UpdateUser_User{
+			expectedRes: testclient.UpdateUser_UpdateUser_User{
 				ID:          user.ID,
 				FirstName:   &firstNameUpdate,
 				LastName:    &lastNameUpdate,
@@ -273,14 +273,14 @@ func TestMutationUpdateUser(t *testing.T) {
 		},
 		{
 			name: "update name, too long",
-			updateInput: openlaneclient.UpdateUserInput{
+			updateInput: testclient.UpdateUserInput{
 				FirstName: &nameUpdateLong,
 			},
 			errorMsg: "value is greater than the required length",
 		},
 		{
 			name: "update with weak password",
-			updateInput: openlaneclient.UpdateUserInput{
+			updateInput: testclient.UpdateUserInput{
 				Password: &weakPassword,
 			},
 			errorMsg: auth.ErrPasswordTooWeak.Error(),

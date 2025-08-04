@@ -265,34 +265,34 @@ func (eu *EventUpdate) AddSecrets(h ...*Hush) *EventUpdate {
 	return eu.AddSecretIDs(ids...)
 }
 
-// AddOrgmembershipIDs adds the "orgmemberships" edge to the OrgMembership entity by IDs.
-func (eu *EventUpdate) AddOrgmembershipIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddOrgmembershipIDs(ids...)
+// AddOrgMembershipIDs adds the "org_memberships" edge to the OrgMembership entity by IDs.
+func (eu *EventUpdate) AddOrgMembershipIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddOrgMembershipIDs(ids...)
 	return eu
 }
 
-// AddOrgmemberships adds the "orgmemberships" edges to the OrgMembership entity.
-func (eu *EventUpdate) AddOrgmemberships(o ...*OrgMembership) *EventUpdate {
+// AddOrgMemberships adds the "org_memberships" edges to the OrgMembership entity.
+func (eu *EventUpdate) AddOrgMemberships(o ...*OrgMembership) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return eu.AddOrgmembershipIDs(ids...)
+	return eu.AddOrgMembershipIDs(ids...)
 }
 
-// AddGroupmembershipIDs adds the "groupmemberships" edge to the GroupMembership entity by IDs.
-func (eu *EventUpdate) AddGroupmembershipIDs(ids ...string) *EventUpdate {
-	eu.mutation.AddGroupmembershipIDs(ids...)
+// AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
+func (eu *EventUpdate) AddGroupMembershipIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddGroupMembershipIDs(ids...)
 	return eu
 }
 
-// AddGroupmemberships adds the "groupmemberships" edges to the GroupMembership entity.
-func (eu *EventUpdate) AddGroupmemberships(g ...*GroupMembership) *EventUpdate {
+// AddGroupMemberships adds the "group_memberships" edges to the GroupMembership entity.
+func (eu *EventUpdate) AddGroupMemberships(g ...*GroupMembership) *EventUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
 	}
-	return eu.AddGroupmembershipIDs(ids...)
+	return eu.AddGroupMembershipIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
@@ -492,46 +492,46 @@ func (eu *EventUpdate) RemoveSecrets(h ...*Hush) *EventUpdate {
 	return eu.RemoveSecretIDs(ids...)
 }
 
-// ClearOrgmemberships clears all "orgmemberships" edges to the OrgMembership entity.
-func (eu *EventUpdate) ClearOrgmemberships() *EventUpdate {
-	eu.mutation.ClearOrgmemberships()
+// ClearOrgMemberships clears all "org_memberships" edges to the OrgMembership entity.
+func (eu *EventUpdate) ClearOrgMemberships() *EventUpdate {
+	eu.mutation.ClearOrgMemberships()
 	return eu
 }
 
-// RemoveOrgmembershipIDs removes the "orgmemberships" edge to OrgMembership entities by IDs.
-func (eu *EventUpdate) RemoveOrgmembershipIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveOrgmembershipIDs(ids...)
+// RemoveOrgMembershipIDs removes the "org_memberships" edge to OrgMembership entities by IDs.
+func (eu *EventUpdate) RemoveOrgMembershipIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveOrgMembershipIDs(ids...)
 	return eu
 }
 
-// RemoveOrgmemberships removes "orgmemberships" edges to OrgMembership entities.
-func (eu *EventUpdate) RemoveOrgmemberships(o ...*OrgMembership) *EventUpdate {
+// RemoveOrgMemberships removes "org_memberships" edges to OrgMembership entities.
+func (eu *EventUpdate) RemoveOrgMemberships(o ...*OrgMembership) *EventUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return eu.RemoveOrgmembershipIDs(ids...)
+	return eu.RemoveOrgMembershipIDs(ids...)
 }
 
-// ClearGroupmemberships clears all "groupmemberships" edges to the GroupMembership entity.
-func (eu *EventUpdate) ClearGroupmemberships() *EventUpdate {
-	eu.mutation.ClearGroupmemberships()
+// ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
+func (eu *EventUpdate) ClearGroupMemberships() *EventUpdate {
+	eu.mutation.ClearGroupMemberships()
 	return eu
 }
 
-// RemoveGroupmembershipIDs removes the "groupmemberships" edge to GroupMembership entities by IDs.
-func (eu *EventUpdate) RemoveGroupmembershipIDs(ids ...string) *EventUpdate {
-	eu.mutation.RemoveGroupmembershipIDs(ids...)
+// RemoveGroupMembershipIDs removes the "group_memberships" edge to GroupMembership entities by IDs.
+func (eu *EventUpdate) RemoveGroupMembershipIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveGroupMembershipIDs(ids...)
 	return eu
 }
 
-// RemoveGroupmemberships removes "groupmemberships" edges to GroupMembership entities.
-func (eu *EventUpdate) RemoveGroupmemberships(g ...*GroupMembership) *EventUpdate {
+// RemoveGroupMemberships removes "group_memberships" edges to GroupMembership entities.
+func (eu *EventUpdate) RemoveGroupMemberships(g ...*GroupMembership) *EventUpdate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
 	}
-	return eu.RemoveGroupmembershipIDs(ids...)
+	return eu.RemoveGroupMembershipIDs(ids...)
 }
 
 // ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
@@ -1040,12 +1040,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.OrgmembershipsCleared() {
+	if eu.mutation.OrgMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -1054,12 +1054,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.OrgMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedOrgmembershipsIDs(); len(nodes) > 0 && !eu.mutation.OrgmembershipsCleared() {
+	if nodes := eu.mutation.RemovedOrgMembershipsIDs(); len(nodes) > 0 && !eu.mutation.OrgMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -1071,12 +1071,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.OrgmembershipsIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.OrgMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -1088,12 +1088,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.GroupmembershipsCleared() {
+	if eu.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -1102,12 +1102,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = eu.schemaConfig.GroupMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedGroupmembershipsIDs(); len(nodes) > 0 && !eu.mutation.GroupmembershipsCleared() {
+	if nodes := eu.mutation.RemovedGroupMembershipsIDs(); len(nodes) > 0 && !eu.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -1119,12 +1119,12 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.GroupmembershipsIDs(); len(nodes) > 0 {
+	if nodes := eu.mutation.GroupMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -1525,34 +1525,34 @@ func (euo *EventUpdateOne) AddSecrets(h ...*Hush) *EventUpdateOne {
 	return euo.AddSecretIDs(ids...)
 }
 
-// AddOrgmembershipIDs adds the "orgmemberships" edge to the OrgMembership entity by IDs.
-func (euo *EventUpdateOne) AddOrgmembershipIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddOrgmembershipIDs(ids...)
+// AddOrgMembershipIDs adds the "org_memberships" edge to the OrgMembership entity by IDs.
+func (euo *EventUpdateOne) AddOrgMembershipIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddOrgMembershipIDs(ids...)
 	return euo
 }
 
-// AddOrgmemberships adds the "orgmemberships" edges to the OrgMembership entity.
-func (euo *EventUpdateOne) AddOrgmemberships(o ...*OrgMembership) *EventUpdateOne {
+// AddOrgMemberships adds the "org_memberships" edges to the OrgMembership entity.
+func (euo *EventUpdateOne) AddOrgMemberships(o ...*OrgMembership) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return euo.AddOrgmembershipIDs(ids...)
+	return euo.AddOrgMembershipIDs(ids...)
 }
 
-// AddGroupmembershipIDs adds the "groupmemberships" edge to the GroupMembership entity by IDs.
-func (euo *EventUpdateOne) AddGroupmembershipIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.AddGroupmembershipIDs(ids...)
+// AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
+func (euo *EventUpdateOne) AddGroupMembershipIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddGroupMembershipIDs(ids...)
 	return euo
 }
 
-// AddGroupmemberships adds the "groupmemberships" edges to the GroupMembership entity.
-func (euo *EventUpdateOne) AddGroupmemberships(g ...*GroupMembership) *EventUpdateOne {
+// AddGroupMemberships adds the "group_memberships" edges to the GroupMembership entity.
+func (euo *EventUpdateOne) AddGroupMemberships(g ...*GroupMembership) *EventUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
 	}
-	return euo.AddGroupmembershipIDs(ids...)
+	return euo.AddGroupMembershipIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
@@ -1752,46 +1752,46 @@ func (euo *EventUpdateOne) RemoveSecrets(h ...*Hush) *EventUpdateOne {
 	return euo.RemoveSecretIDs(ids...)
 }
 
-// ClearOrgmemberships clears all "orgmemberships" edges to the OrgMembership entity.
-func (euo *EventUpdateOne) ClearOrgmemberships() *EventUpdateOne {
-	euo.mutation.ClearOrgmemberships()
+// ClearOrgMemberships clears all "org_memberships" edges to the OrgMembership entity.
+func (euo *EventUpdateOne) ClearOrgMemberships() *EventUpdateOne {
+	euo.mutation.ClearOrgMemberships()
 	return euo
 }
 
-// RemoveOrgmembershipIDs removes the "orgmemberships" edge to OrgMembership entities by IDs.
-func (euo *EventUpdateOne) RemoveOrgmembershipIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveOrgmembershipIDs(ids...)
+// RemoveOrgMembershipIDs removes the "org_memberships" edge to OrgMembership entities by IDs.
+func (euo *EventUpdateOne) RemoveOrgMembershipIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveOrgMembershipIDs(ids...)
 	return euo
 }
 
-// RemoveOrgmemberships removes "orgmemberships" edges to OrgMembership entities.
-func (euo *EventUpdateOne) RemoveOrgmemberships(o ...*OrgMembership) *EventUpdateOne {
+// RemoveOrgMemberships removes "org_memberships" edges to OrgMembership entities.
+func (euo *EventUpdateOne) RemoveOrgMemberships(o ...*OrgMembership) *EventUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return euo.RemoveOrgmembershipIDs(ids...)
+	return euo.RemoveOrgMembershipIDs(ids...)
 }
 
-// ClearGroupmemberships clears all "groupmemberships" edges to the GroupMembership entity.
-func (euo *EventUpdateOne) ClearGroupmemberships() *EventUpdateOne {
-	euo.mutation.ClearGroupmemberships()
+// ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
+func (euo *EventUpdateOne) ClearGroupMemberships() *EventUpdateOne {
+	euo.mutation.ClearGroupMemberships()
 	return euo
 }
 
-// RemoveGroupmembershipIDs removes the "groupmemberships" edge to GroupMembership entities by IDs.
-func (euo *EventUpdateOne) RemoveGroupmembershipIDs(ids ...string) *EventUpdateOne {
-	euo.mutation.RemoveGroupmembershipIDs(ids...)
+// RemoveGroupMembershipIDs removes the "group_memberships" edge to GroupMembership entities by IDs.
+func (euo *EventUpdateOne) RemoveGroupMembershipIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveGroupMembershipIDs(ids...)
 	return euo
 }
 
-// RemoveGroupmemberships removes "groupmemberships" edges to GroupMembership entities.
-func (euo *EventUpdateOne) RemoveGroupmemberships(g ...*GroupMembership) *EventUpdateOne {
+// RemoveGroupMemberships removes "group_memberships" edges to GroupMembership entities.
+func (euo *EventUpdateOne) RemoveGroupMemberships(g ...*GroupMembership) *EventUpdateOne {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
 	}
-	return euo.RemoveGroupmembershipIDs(ids...)
+	return euo.RemoveGroupMembershipIDs(ids...)
 }
 
 // ClearSubscribers clears all "subscribers" edges to the Subscriber entity.
@@ -2330,12 +2330,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.OrgmembershipsCleared() {
+	if euo.mutation.OrgMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -2344,12 +2344,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.OrgMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedOrgmembershipsIDs(); len(nodes) > 0 && !euo.mutation.OrgmembershipsCleared() {
+	if nodes := euo.mutation.RemovedOrgMembershipsIDs(); len(nodes) > 0 && !euo.mutation.OrgMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -2361,12 +2361,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.OrgmembershipsIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.OrgMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -2378,12 +2378,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.GroupmembershipsCleared() {
+	if euo.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -2392,12 +2392,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		edge.Schema = euo.schemaConfig.GroupMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedGroupmembershipsIDs(); len(nodes) > 0 && !euo.mutation.GroupmembershipsCleared() {
+	if nodes := euo.mutation.RemovedGroupMembershipsIDs(); len(nodes) > 0 && !euo.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
@@ -2409,12 +2409,12 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.GroupmembershipsIDs(); len(nodes) > 0 {
+	if nodes := euo.mutation.GroupMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),

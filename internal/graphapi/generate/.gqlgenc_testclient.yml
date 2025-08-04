@@ -1,0 +1,59 @@
+model:
+  package: testclient
+  filename: internal/graphapi/testclient/models.go
+client:
+  package: testclient
+  filename: internal/graphapi/testclient/graphclient.go
+models:
+  Int:
+    model: github.com/99designs/gqlgen/graphql.Int64
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model:
+      - github.com/theopenlane/entx.RawMessage
+      - github.com/theopenlane/core/internal/ent/customtypes.JSONObject
+  Address:
+    model:
+      - github.com/theopenlane/core/pkg/models.Address
+  Price:
+    model:
+      - github.com/theopenlane/core/pkg/models.Price
+  AssessmentObjective:
+    model:
+      - github.com/theopenlane/core/pkg/models.AssessmentObjective
+  AssessmentMethod:
+    model:
+      - github.com/theopenlane/core/pkg/models.AssessmentMethod
+  Reference:
+    model:
+      - github.com/theopenlane/core/pkg/models.Reference
+  ImplementationGuidance:
+    model:
+      - github.com/theopenlane/core/pkg/models.ImplementationGuidance
+  ExampleEvidence:
+    model:
+      - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  VersionBump:
+    model:
+      - github.com/theopenlane/core/pkg/models.VersionBump
+  DateTime:
+    model: github.com/theopenlane/core/pkg/models.DateTime
+  AAGUID:
+    model: github.com/theopenlane/core/pkg/models.AAGUID
+  JobConfiguration:
+    model: github.com/theopenlane/core/pkg/models.JobConfiguration
+  JobCadence:
+    model: github.com/theopenlane/core/pkg/models.JobCadence
+  Change:
+    model: github.com/theopenlane/core/pkg/models.Change
+  AuditLogOrderField:
+    model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
+schema: ["internal/graphapi/clientschema/schema.graphql"]
+query: ["internal/graphapi/query/*.graphql"]
+generate:
+  clientV2: true
+  clientInterfaceName: "TestGraphClient"
+  query: false
+  mutation: false

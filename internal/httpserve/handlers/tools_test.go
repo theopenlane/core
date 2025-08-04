@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
@@ -34,7 +35,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
@@ -83,7 +83,7 @@ type HandlerTestSuite struct {
 	suite.Suite
 	e                    *echo.Echo
 	db                   *ent.Client
-	api                  *openlaneclient.OpenlaneClient
+	api                  *testclient.TestClient
 	h                    *handlers.Handler
 	router               *route.Router
 	fga                  *fgax.Client

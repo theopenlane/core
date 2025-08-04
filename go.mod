@@ -7,7 +7,7 @@ replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-gener
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.2
-	entgo.io/contrib v0.6.0
+	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.4
 	github.com/99designs/gqlgen v0.17.78
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
@@ -78,7 +78,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
-	github.com/theopenlane/entx v0.11.2
+	github.com/theopenlane/entx v0.12.1
 	github.com/theopenlane/gqlgen-plugins v0.7.0
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.15.0
@@ -635,7 +635,7 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
 	golang.org/x/mod v0.26.0
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sync v0.16.0

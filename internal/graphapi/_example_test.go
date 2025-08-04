@@ -9,7 +9,7 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 // This file provides examples for testing the basic CRUD operations for the Openlane API for a given object
@@ -63,7 +63,7 @@ func TestQueryOBJECT(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -132,7 +132,7 @@ func TestQueryOBJECTs(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -184,14 +184,14 @@ func TestQueryOBJECTs(t *testing.T) {
 func TestMutationCreateOBJECT(t *testing.T) {
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateOBJECTInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateOBJECTInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:    "happy path, minimal input",
-			request: openlaneclient.CreateOBJECTInput{
+			request: testclient.CreateOBJECTInput{
 				// add minimal input for the OBJECT
 			},
 			client: suite.client.api,
@@ -199,7 +199,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		},
 		{
 			name:    "happy path, all input",
-			request: openlaneclient.CreateOBJECTInput{
+			request: testclient.CreateOBJECTInput{
 				// add all input for the OBJECT
 			},
 			client: suite.client.api,
@@ -207,7 +207,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		},
 		{
 			name:    "happy path, using pat",
-			request: openlaneclient.CreateOBJECTInput{
+			request: testclient.CreateOBJECTInput{
 				// add input for the OBJECT
 			},
 			client: suite.client.apiWithPAT,
@@ -215,7 +215,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		},
 		{
 			name:    "happy path, using api token",
-			request: openlaneclient.CreateOBJECTInput{
+			request: testclient.CreateOBJECTInput{
 				// add input for the OBJECT
 			},
 			client: suite.client.apiWithToken,
@@ -223,7 +223,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		},
 		{
 			name:    "user not authorized, not enough permissions",
-			request: openlaneclient.CreateOBJECTInput{
+			request: testclient.CreateOBJECTInput{
 				// add all input for the OBJECT
 			},
 			client:      suite.client.api,
@@ -235,7 +235,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		//   - add test cases for invalid input
 		{
 			name:        "missing required field",
-			request:     openlaneclient.CreateOBJECTInput{},
+			request:     testclient.CreateOBJECTInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
@@ -270,14 +270,14 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateOBJECTInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateOBJECTInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:    "happy path, update field",
-			request: openlaneclient.UpdateOBJECTInput{
+			request: testclient.UpdateOBJECTInput{
 				// add field to update
 			},
 			client: suite.client.api,
@@ -285,7 +285,7 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 		},
 		{
 			name:    "happy path, update multiple fields",
-			request: openlaneclient.UpdateOBJECTInput{
+			request: testclient.UpdateOBJECTInput{
 				// add fields to update
 			},
 			client: suite.client.apiWithPAT,
@@ -294,7 +294,7 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 		// add additional test update cases for the OBJECT
 		{
 			name:    "update not allowed, not enough permissions",
-			request: openlaneclient.UpdateOBJECTInput{
+			request: testclient.UpdateOBJECTInput{
 				// add field to update
 			},
 			client:      suite.client.api,
@@ -303,7 +303,7 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 		},
 		{
 			name:    "update not allowed, no permissions",
-			request: openlaneclient.UpdateOBJECTInput{
+			request: testclient.UpdateOBJECTInput{
 				// add field to update
 			},
 			client:      suite.client.api,
@@ -340,7 +340,7 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

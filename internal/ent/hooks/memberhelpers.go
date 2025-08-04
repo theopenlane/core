@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"slices"
 	"strings"
 
@@ -9,11 +10,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // MutationMember is an interface that can be implemented by a member mutation to get IDs
@@ -42,28 +44,34 @@ func HookMembershipSelf(table string) ent.Hook {
 			}
 
 			// check if group member is the authenticated user
-			userID, err := auth.GetSubjectIDFromContext(ctx)
+			au, err := auth.GetAuthenticatedUserFromContext(ctx)
 			if err != nil {
 				return nil, err
 			}
 
+			// if the user is an org owner, skip the check
+			if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+				// ensure this is not an org membership mutation, owners cannot update their own membership
+				// in the organization, it must be done via a transfer
+				if m.Type() != generated.TypeOrgMembership {
+					return next.Mutate(ctx, m)
+				}
+			}
+
 			if m.Op().Is(ent.OpCreate) {
 				// Only run this hook on membership mutations
-				// you can create a group/program/etc with yourself as a member
 				if !checkMutation(ctx) {
 					return next.Mutate(ctx, m)
 				}
 
-				if err := createMembershipCheck(mutationMember, userID); err != nil {
+				if err := createMembershipCheck(mutationMember, au.SubjectID); err != nil {
 					zerolog.Ctx(ctx).Error().Msg("cannot create membership")
 
 					return nil, err
 				}
-
-				return next.Mutate(ctx, m)
 			}
 
-			if err := updateMembershipCheck(ctx, mutationMember, table, userID); err != nil {
+			if err := updateMembershipCheck(ctx, mutationMember, table, au.SubjectID); err != nil {
 				return nil, err
 			}
 
@@ -95,11 +103,6 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
 	memberIDs := getMutationMemberIDs(ctx, m)
 	if len(memberIDs) == 0 {
-		return nil
-	}
-
-	// only deletes allowed by a user on the org_memberships table
-	if table == migrate.OrgMembershipsTable.Name && (m.Op().Is(ent.OpDelete | ent.OpDeleteOne)) {
 		return nil
 	}
 
@@ -155,6 +158,11 @@ func checkMutation(ctx context.Context) bool {
 
 	// skip if not a graphql mutation
 	if rootFieldCtx == nil {
+		return false
+	}
+
+	// Check if the mutation is a group creation with members
+	if strings.Contains(rootFieldCtx.Object, "createGroupWithMembers") {
 		return false
 	}
 

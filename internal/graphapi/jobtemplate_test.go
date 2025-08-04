@@ -9,8 +9,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -22,7 +22,7 @@ func TestQueryJobTemplate(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -89,7 +89,7 @@ func TestQueryJobTemplates(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -142,14 +142,14 @@ func TestQueryJobTemplates(t *testing.T) {
 func TestMutationCreateJobTemplate(t *testing.T) {
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateJobTemplateInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateJobTemplateInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
@@ -159,7 +159,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Description: lo.ToPtr("Test Description"),
 				Cron:        lo.ToPtr("0 0 * * * *"),
@@ -171,7 +171,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
@@ -182,7 +182,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
@@ -192,7 +192,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
@@ -203,7 +203,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "missing required field, title",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
 			},
@@ -213,7 +213,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "missing required field, platform",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				DownloadURL: testScriptURL,
 			},
@@ -223,7 +223,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "missing required field, download url",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:    "Test Job Template",
 				Platform: enums.JobPlatformTypeGo,
 			},
@@ -232,7 +232,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "invalid cron",
-			request: openlaneclient.CreateJobTemplateInput{
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
@@ -282,14 +282,14 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateJobTemplateInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateJobTemplateInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateJobTemplateInput{
+			request: testclient.UpdateJobTemplateInput{
 				Description: lo.ToPtr("Test Description Updated"),
 			},
 			client: suite.client.api,
@@ -297,7 +297,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateJobTemplateInput{
+			request: testclient.UpdateJobTemplateInput{
 				DownloadURL: lo.ToPtr(testScriptURL),
 				Cron:        lo.ToPtr("0 0 * * * *"),
 			},
@@ -306,7 +306,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not enough permissions",
-			request: openlaneclient.UpdateJobTemplateInput{
+			request: testclient.UpdateJobTemplateInput{
 				Description: lo.ToPtr("Test Description Updated not allowed"),
 			},
 			client:      suite.client.api,
@@ -315,7 +315,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateJobTemplateInput{
+			request: testclient.UpdateJobTemplateInput{
 				Description: lo.ToPtr("Test Description Updated not allowed"),
 			},
 			client:      suite.client.api,
@@ -365,7 +365,7 @@ func TestMutationDeleteJobTemplate(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

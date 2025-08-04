@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // PersonalAccessToken holds the schema definition for the PersonalAccessToken entity.
@@ -128,6 +129,8 @@ func (p PersonalAccessToken) Edges() []ent.Edge {
 			fromSchema: p,
 			edgeSchema: Organization{},
 			comment:    "the organization(s) the token is associated with",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck()},
 		}),
 		defaultEdgeToWithPagination(p, Event{}),
 	}

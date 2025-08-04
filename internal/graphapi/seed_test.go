@@ -4,11 +4,13 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -109,7 +111,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 	suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *openlaneclient.OpenlaneClient {
+func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *testclient.TestClient {
 	// setup client with a personal access token
 	pat := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{user.OrganizationID, user.PersonalOrgID}}).MustNew(user.UserCtx, t)
 
@@ -123,7 +125,7 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 	return apiClientPat
 }
 
-func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *openlaneclient.OpenlaneClient {
+func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *testclient.TestClient {
 	// setup client with an API token
 	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(ctx, t)
 
@@ -168,4 +170,23 @@ func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.
 	newUser.UserCtx = auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID)
 
 	return newUser
+}
+
+// resetContext resets the context to ensure it has not additional data that could conflict with the test
+// if the context is the background context, it returns the same context
+// because the context is used with a test client and we are not passing in the client here
+func resetContext(ctx context.Context, t *testing.T) context.Context {
+	if ctx == context.Background() {
+		return ctx
+	}
+
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	require.NoError(t, err)
+
+	// ensure system admin context is kept in the new context
+	if au.IsSystemAdmin {
+		return auth.NewTestContextForSystemAdmin(au.SubjectID, au.OrganizationID)
+	}
+
+	return auth.NewTestContextWithOrgID(au.SubjectID, au.OrganizationID)
 }

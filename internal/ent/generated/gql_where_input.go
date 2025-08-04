@@ -1148,10 +1148,6 @@ type ActionPlanWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
-	// "users" edge predicates.
-	HasUsers     *bool             `json:"hasUsers,omitempty"`
-	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
-
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
@@ -1978,24 +1974,6 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, actionplan.HasControlsWith(with...))
-	}
-	if i.HasUsers != nil {
-		p := actionplan.HasUsers()
-		if !*i.HasUsers {
-			p = actionplan.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasUsersWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUsersWith))
-		for _, w := range i.HasUsersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasUsersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, actionplan.HasUsersWith(with...))
 	}
 	if i.HasPrograms != nil {
 		p := actionplan.HasPrograms()
@@ -20199,13 +20177,13 @@ type EventWhereInput struct {
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 
-	// "orgmemberships" edge predicates.
-	HasOrgmemberships     *bool                      `json:"hasOrgmemberships,omitempty"`
-	HasOrgmembershipsWith []*OrgMembershipWhereInput `json:"hasOrgmembershipsWith,omitempty"`
+	// "org_memberships" edge predicates.
+	HasOrgMemberships     *bool                      `json:"hasOrgMemberships,omitempty"`
+	HasOrgMembershipsWith []*OrgMembershipWhereInput `json:"hasOrgMembershipsWith,omitempty"`
 
-	// "groupmemberships" edge predicates.
-	HasGroupmemberships     *bool                        `json:"hasGroupmemberships,omitempty"`
-	HasGroupmembershipsWith []*GroupMembershipWhereInput `json:"hasGroupmembershipsWith,omitempty"`
+	// "group_memberships" edge predicates.
+	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
+	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
 
 	// "subscribers" edge predicates.
 	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
@@ -20727,41 +20705,41 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 		}
 		predicates = append(predicates, event.HasSecretsWith(with...))
 	}
-	if i.HasOrgmemberships != nil {
-		p := event.HasOrgmemberships()
-		if !*i.HasOrgmemberships {
+	if i.HasOrgMemberships != nil {
+		p := event.HasOrgMemberships()
+		if !*i.HasOrgMemberships {
 			p = event.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasOrgmembershipsWith) > 0 {
-		with := make([]predicate.OrgMembership, 0, len(i.HasOrgmembershipsWith))
-		for _, w := range i.HasOrgmembershipsWith {
+	if len(i.HasOrgMembershipsWith) > 0 {
+		with := make([]predicate.OrgMembership, 0, len(i.HasOrgMembershipsWith))
+		for _, w := range i.HasOrgMembershipsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrgmembershipsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasOrgMembershipsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, event.HasOrgmembershipsWith(with...))
+		predicates = append(predicates, event.HasOrgMembershipsWith(with...))
 	}
-	if i.HasGroupmemberships != nil {
-		p := event.HasGroupmemberships()
-		if !*i.HasGroupmemberships {
+	if i.HasGroupMemberships != nil {
+		p := event.HasGroupMemberships()
+		if !*i.HasGroupMemberships {
 			p = event.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasGroupmembershipsWith) > 0 {
-		with := make([]predicate.GroupMembership, 0, len(i.HasGroupmembershipsWith))
-		for _, w := range i.HasGroupmembershipsWith {
+	if len(i.HasGroupMembershipsWith) > 0 {
+		with := make([]predicate.GroupMembership, 0, len(i.HasGroupMembershipsWith))
+		for _, w := range i.HasGroupMembershipsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasGroupmembershipsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasGroupMembershipsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, event.HasGroupmembershipsWith(with...))
+		predicates = append(predicates, event.HasGroupMembershipsWith(with...))
 	}
 	if i.HasSubscribers != nil {
 		p := event.HasSubscribers()
@@ -26366,6 +26344,18 @@ type GroupWhereInput struct {
 	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
 	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
 
+	// "entity_editors" edge predicates.
+	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
+	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
+
+	// "entity_blocked_groups" edge predicates.
+	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
+	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
+
+	// "entity_viewers" edge predicates.
+	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
+	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
+
 	// "procedure_editors" edge predicates.
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -27194,6 +27184,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasScanViewersWith(with...))
+	}
+	if i.HasEntityEditors != nil {
+		p := group.HasEntityEditors()
+		if !*i.HasEntityEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityEditorsWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityEditorsWith))
+		for _, w := range i.HasEntityEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityEditorsWith(with...))
+	}
+	if i.HasEntityBlockedGroups != nil {
+		p := group.HasEntityBlockedGroups()
+		if !*i.HasEntityBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityBlockedGroupsWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityBlockedGroupsWith))
+		for _, w := range i.HasEntityBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityBlockedGroupsWith(with...))
+	}
+	if i.HasEntityViewers != nil {
+		p := group.HasEntityViewers()
+		if !*i.HasEntityViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityViewersWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityViewersWith))
+		for _, w := range i.HasEntityViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityViewersWith(with...))
 	}
 	if i.HasProcedureEditors != nil {
 		p := group.HasProcedureEditors()

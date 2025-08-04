@@ -1653,35 +1653,6 @@ func HasControlsWith(preds ...predicate.Control) predicate.ActionPlan {
 	})
 }
 
-// HasUsers applies the HasEdge predicate on the "users" edge.
-func HasUsers() predicate.ActionPlan {
-	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserActionPlans
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasUsersWith applies the HasEdge predicate on the "users" edge with a given conditions (other predicates).
-func HasUsersWith(preds ...predicate.User) predicate.ActionPlan {
-	return predicate.ActionPlan(func(s *sql.Selector) {
-		step := newUsersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserActionPlans
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasPrograms applies the HasEdge predicate on the "programs" edge.
 func HasPrograms() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {

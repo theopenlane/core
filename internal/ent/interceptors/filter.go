@@ -122,34 +122,35 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	return objectIDs, nil
 }
 
+type skipperFunc func(ctx context.Context) bool
+
 // FilterQueryResults filters the results of a query to only include the objects that the user has access to
 // This is automatically added to all schemas using the ObjectOwnedMixin, so should not be added
 // directly if that mixin is used
 // This function is intended to filter results after the query is run using the BatchCheck in FGA
 // which is more performant than the ListObjectsRequest, especially for large lists
-func FilterQueryResults[V any]() ent.InterceptFunc {
+func FilterQueryResults[V any](skipperFunc ...skipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
-			return filterQueryResults[V](ctx, query, next)
+			return filterQueryResults[V](ctx, query, next, skipperFunc...)
 		})
 	}
 }
 
 // filterQueryResults filters the results of a query to only include the objects that the user has access to
 // using the BatchCheck in FGA and returns the filtered results as the ent.Value based on the provided type
-func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier) (ent.Value, error) {
+func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, skipperFunc ...skipperFunc) (ent.Value, error) {
 	// by pass checks on invite or pre-allowed request
-	if skipFilter(ctx) {
+	// convert the query to an intercept query
+	q, err := intercept.NewQuery(query)
+	if err != nil {
+		return nil, err
+	}
+	if skipFilter(ctx, skipperFunc...) {
 		return next.Query(ctx, query)
 	}
 
 	v, err := next.Query(ctx, query)
-	if err != nil {
-		return nil, err
-	}
-
-	// convert the query to an intercept query
-	q, err := intercept.NewQuery(query)
 	if err != nil {
 		return nil, err
 	}
@@ -194,7 +195,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	}
 }
 
-func skipFilter(ctx context.Context) bool {
+func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow {
 		return true
@@ -203,6 +204,13 @@ func skipFilter(ctx context.Context) bool {
 	if ok := history.IsHistoryRequest(ctx); ok {
 		// skip filtering for history requests
 		return true
+	}
+
+	// if the custom skipper function is set and returns true, skip the filter
+	for _, f := range customSkipperFunc {
+		if f(ctx) {
+			return true
+		}
 	}
 
 	return false

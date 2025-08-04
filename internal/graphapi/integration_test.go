@@ -9,7 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestIntegrationBuilder(t *testing.T) {
@@ -133,15 +133,14 @@ func TestIntegrationWithSecretsRelationship(t *testing.T) {
 		}
 
 		expectedNames := []string{"github_access_token", "github_refresh_token", "github_expires_at"}
-		// Simple check that we have the expected count (ElementsMatch is hard with gotest.tools)
-		assert.Check(t, is.Len(secretNames, len(expectedNames)))
+		assert.Check(t, is.DeepEqual(secretNames, expectedNames))
 	})
 
 	t.Run("Secrets can query their integration", func(t *testing.T) {
 		// Query integration from secret
 		integrationFromSecret, err := suite.client.db.Hush.QueryIntegrations(accessToken).Only(ctx)
 		assert.NilError(t, err)
-		assert.Check(t, is.DeepEqual(integration.ID, integrationFromSecret.ID))
+		assert.Check(t, is.Equal(integration.ID, integrationFromSecret.ID))
 	})
 
 	// Clean up
@@ -164,7 +163,7 @@ func TestMutationDeleteIntegration(t *testing.T) {
 	testCases := []struct {
 		name          string
 		integrationID string
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		errorMsg      string
 	}{
@@ -232,7 +231,7 @@ func TestQueryIntegration(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -323,7 +322,7 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -399,7 +398,7 @@ func TestListIntegrations(t *testing.T) {
 	// add test cases for querying the Integration
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{

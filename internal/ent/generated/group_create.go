@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -512,6 +513,51 @@ func (gc *GroupCreate) AddScanViewers(s ...*Scan) *GroupCreate {
 		ids[i] = s[i].ID
 	}
 	return gc.AddScanViewerIDs(ids...)
+}
+
+// AddEntityEditorIDs adds the "entity_editors" edge to the Entity entity by IDs.
+func (gc *GroupCreate) AddEntityEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddEntityEditorIDs(ids...)
+	return gc
+}
+
+// AddEntityEditors adds the "entity_editors" edges to the Entity entity.
+func (gc *GroupCreate) AddEntityEditors(e ...*Entity) *GroupCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gc.AddEntityEditorIDs(ids...)
+}
+
+// AddEntityBlockedGroupIDs adds the "entity_blocked_groups" edge to the Entity entity by IDs.
+func (gc *GroupCreate) AddEntityBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddEntityBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddEntityBlockedGroups adds the "entity_blocked_groups" edges to the Entity entity.
+func (gc *GroupCreate) AddEntityBlockedGroups(e ...*Entity) *GroupCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gc.AddEntityBlockedGroupIDs(ids...)
+}
+
+// AddEntityViewerIDs adds the "entity_viewers" edge to the Entity entity by IDs.
+func (gc *GroupCreate) AddEntityViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddEntityViewerIDs(ids...)
+	return gc
+}
+
+// AddEntityViewers adds the "entity_viewers" edges to the Entity entity.
+func (gc *GroupCreate) AddEntityViewers(e ...*Entity) *GroupCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return gc.AddEntityViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1283,6 +1329,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.EntityEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityEditorsTable,
+			Columns: group.EntityEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.EntityEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.EntityBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityBlockedGroupsTable,
+			Columns: group.EntityBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.EntityBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.EntityViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.EntityViewersTable,
+			Columns: group.EntityViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

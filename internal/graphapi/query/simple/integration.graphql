@@ -1,0 +1,139 @@
+
+mutation CreateBulkCSVIntegration($input: Upload!) {
+  createBulkCSVIntegration(input: $input) {
+    integrations {
+      createdAt
+      createdBy
+      description
+      id
+      kind
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkIntegration($input: [CreateIntegrationInput!]) {
+  createBulkIntegration(input: $input) {
+    integrations {
+      createdAt
+      createdBy
+      description
+      id
+      kind
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateIntegration($input: CreateIntegrationInput!) {
+  createIntegration(input: $input) {
+    integration {
+      createdAt
+      createdBy
+      description
+      id
+      kind
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteIntegration($deleteIntegrationId: ID!) {
+  deleteIntegration(id: $deleteIntegrationId) {
+    deletedID
+  }
+}
+
+query GetAllIntegrations {
+  integrations {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        kind
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetIntegrationByID($integrationId: ID!) {
+  integration(id: $integrationId) {
+    createdAt
+    createdBy
+    description
+    id
+    kind
+    name
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetIntegrations($first: Int, $last: Int, $where: IntegrationWhereInput) {
+  integrations(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        kind
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationInput!) {
+  updateIntegration(id: $updateIntegrationId, input: $input) {
+    integration {
+      createdAt
+      createdBy
+      description
+      id
+      kind
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

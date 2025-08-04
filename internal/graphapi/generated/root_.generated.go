@@ -146,7 +146,6 @@ type ComplexityRoot struct {
 		Tags                            func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
-		Users                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -1114,15 +1113,15 @@ type ComplexityRoot struct {
 		EventID              func(childComplexity int) int
 		EventType            func(childComplexity int) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Groupmemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		GroupMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Groups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                   func(childComplexity int) int
 		Integrations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		Invites              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		Metadata             func(childComplexity int) int
+		OrgMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscriptions     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
 		Organizations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Orgmemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		Secrets              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Subscribers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
@@ -1399,6 +1398,9 @@ type ComplexityRoot struct {
 		Description                        func(childComplexity int) int
 		DisplayID                          func(childComplexity int) int
 		DisplayName                        func(childComplexity int) int
+		EntityBlockedGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityEditors                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityViewers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Events                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Files                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GravatarLogoURL                    func(childComplexity int) int
@@ -5549,18 +5551,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.UpdatedBy(childComplexity), true
-
-	case "ActionPlan.users":
-		if e.complexity.ActionPlan.Users == nil {
-			break
-		}
-
-		args, err := ec.field_ActionPlan_users_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.ActionPlan.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -10044,17 +10034,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Event.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
-	case "Event.groupmemberships":
-		if e.complexity.Event.Groupmemberships == nil {
+	case "Event.groupMemberships":
+		if e.complexity.Event.GroupMemberships == nil {
 			break
 		}
 
-		args, err := ec.field_Event_groupmemberships_args(ctx, rawArgs)
+		args, err := ec.field_Event_groupMemberships_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Event.Groupmemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
+		return e.complexity.Event.GroupMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
 
 	case "Event.groups":
 		if e.complexity.Event.Groups == nil {
@@ -10106,6 +10096,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Event.Metadata(childComplexity), true
 
+	case "Event.orgMemberships":
+		if e.complexity.Event.OrgMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Event_orgMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.OrgMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
+
 	case "Event.orgSubscriptions":
 		if e.complexity.Event.OrgSubscriptions == nil {
 			break
@@ -10129,18 +10131,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Event.Organizations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
-
-	case "Event.orgmemberships":
-		if e.complexity.Event.Orgmemberships == nil {
-			break
-		}
-
-		args, err := ec.field_Event_orgmemberships_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Event.Orgmemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
 
 	case "Event.personalAccessTokens":
 		if e.complexity.Event.PersonalAccessTokens == nil {
@@ -11511,6 +11501,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.DisplayName(childComplexity), true
+
+	case "Group.entityBlockedGroups":
+		if e.complexity.Group.EntityBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Group.entityEditors":
+		if e.complexity.Group.EntityEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Group.entityViewers":
+		if e.complexity.Group.EntityViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Group.events":
 		if e.complexity.Group.Events == nil {
@@ -36393,37 +36419,6 @@ type ActionPlan implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
-  users(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Users returned from the connection.
-    """
-    orderBy: [UserOrder!]
-
-    """
-    Filtering options for Users returned from the connection.
-    """
-    where: UserWhereInput
-  ): UserConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -37364,11 +37359,6 @@ input ActionPlanWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
-  """
-  users edge predicates
-  """
-  hasUsers: Boolean
-  hasUsersWith: [UserWhereInput!]
   """
   programs edge predicates
   """
@@ -42226,6 +42216,7 @@ enum ControlOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -42795,7 +42786,6 @@ input CreateActionPlanInput {
   ownerID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
-  userIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -43429,6 +43419,9 @@ input CreateGroupInput {
   scanEditorIDs: [ID!]
   scanBlockedGroupIDs: [ID!]
   scanViewerIDs: [ID!]
+  entityEditorIDs: [ID!]
+  entityBlockedGroupIDs: [ID!]
+  entityViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -48400,7 +48393,7 @@ type Event implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
-  orgmemberships(
+  orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48431,7 +48424,7 @@ type Event implements Node {
     """
     where: OrgMembershipWhereInput
   ): OrgMembershipConnection!
-  groupmemberships(
+  groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48777,15 +48770,15 @@ input EventWhereInput {
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
   """
-  orgmemberships edge predicates
+  org_memberships edge predicates
   """
-  hasOrgmemberships: Boolean
-  hasOrgmembershipsWith: [OrgMembershipWhereInput!]
+  hasOrgMemberships: Boolean
+  hasOrgMembershipsWith: [OrgMembershipWhereInput!]
   """
-  groupmemberships edge predicates
+  group_memberships edge predicates
   """
-  hasGroupmemberships: Boolean
-  hasGroupmembershipsWith: [GroupMembershipWhereInput!]
+  hasGroupMemberships: Boolean
+  hasGroupMembershipsWith: [GroupMembershipWhereInput!]
   """
   subscribers edge predicates
   """
@@ -51797,6 +51790,99 @@ type Group implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  entityEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -53767,6 +53853,21 @@ input GroupWhereInput {
   """
   hasScanViewers: Boolean
   hasScanViewersWith: [ScanWhereInput!]
+  """
+  entity_editors edge predicates
+  """
+  hasEntityEditors: Boolean
+  hasEntityEditorsWith: [EntityWhereInput!]
+  """
+  entity_blocked_groups edge predicates
+  """
+  hasEntityBlockedGroups: Boolean
+  hasEntityBlockedGroupsWith: [EntityWhereInput!]
+  """
+  entity_viewers edge predicates
+  """
+  hasEntityViewers: Boolean
+  hasEntityViewersWith: [EntityWhereInput!]
   """
   procedure_editors edge predicates
   """
@@ -77934,6 +78035,7 @@ enum SubcontrolOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -83673,9 +83775,6 @@ input UpdateActionPlanInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
@@ -84617,6 +84716,15 @@ input UpdateGroupInput {
   addScanViewerIDs: [ID!]
   removeScanViewerIDs: [ID!]
   clearScanViewers: Boolean
+  addEntityEditorIDs: [ID!]
+  removeEntityEditorIDs: [ID!]
+  clearEntityEditors: Boolean
+  addEntityBlockedGroupIDs: [ID!]
+  removeEntityBlockedGroupIDs: [ID!]
+  clearEntityBlockedGroups: Boolean
+  addEntityViewerIDs: [ID!]
+  removeEntityViewerIDs: [ID!]
+  clearEntityViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean

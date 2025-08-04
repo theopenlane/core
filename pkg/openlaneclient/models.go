@@ -330,7 +330,6 @@ type ActionPlan struct {
 	Owner    *Organization      `json:"owner,omitempty"`
 	Risks    *RiskConnection    `json:"risks"`
 	Controls *ControlConnection `json:"controls"`
-	Users    *UserConnection    `json:"users"`
 	Programs *ProgramConnection `json:"programs"`
 }
 
@@ -1013,9 +1012,6 @@ type ActionPlanWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
-	// users edge predicates
-	HasUsers     *bool             `json:"hasUsers,omitempty"`
-	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
@@ -4286,7 +4282,6 @@ type CreateActionPlanInput struct {
 	OwnerID    *string  `json:"ownerID,omitempty"`
 	RiskIDs    []string `json:"riskIDs,omitempty"`
 	ControlIDs []string `json:"controlIDs,omitempty"`
-	UserIDs    []string `json:"userIDs,omitempty"`
 	ProgramIDs []string `json:"programIDs,omitempty"`
 }
 
@@ -4715,6 +4710,9 @@ type CreateGroupInput struct {
 	ScanEditorIDs                        []string                 `json:"scanEditorIDs,omitempty"`
 	ScanBlockedGroupIDs                  []string                 `json:"scanBlockedGroupIDs,omitempty"`
 	ScanViewerIDs                        []string                 `json:"scanViewerIDs,omitempty"`
+	EntityEditorIDs                      []string                 `json:"entityEditorIDs,omitempty"`
+	EntityBlockedGroupIDs                []string                 `json:"entityBlockedGroupIDs,omitempty"`
+	EntityViewerIDs                      []string                 `json:"entityViewerIDs,omitempty"`
 	ProcedureEditorIDs                   []string                 `json:"procedureEditorIDs,omitempty"`
 	ProcedureBlockedGroupIDs             []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalPolicyEditorIDs              []string                 `json:"internalPolicyEditorIDs,omitempty"`
@@ -7942,8 +7940,8 @@ type Event struct {
 	Invites              *InviteConnection              `json:"invites"`
 	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
 	Secrets              *HushConnection                `json:"secrets"`
-	Orgmemberships       *OrgMembershipConnection       `json:"orgmemberships"`
-	Groupmemberships     *GroupMembershipConnection     `json:"groupmemberships"`
+	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
+	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
 	Subscribers          *SubscriberConnection          `json:"subscribers"`
 	Files                *FileConnection                `json:"files"`
 	OrgSubscriptions     *OrgSubscriptionConnection     `json:"orgSubscriptions"`
@@ -8139,12 +8137,12 @@ type EventWhereInput struct {
 	// secrets edge predicates
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
-	// orgmemberships edge predicates
-	HasOrgmemberships     *bool                      `json:"hasOrgmemberships,omitempty"`
-	HasOrgmembershipsWith []*OrgMembershipWhereInput `json:"hasOrgmembershipsWith,omitempty"`
-	// groupmemberships edge predicates
-	HasGroupmemberships     *bool                        `json:"hasGroupmemberships,omitempty"`
-	HasGroupmembershipsWith []*GroupMembershipWhereInput `json:"hasGroupmembershipsWith,omitempty"`
+	// org_memberships edge predicates
+	HasOrgMemberships     *bool                      `json:"hasOrgMemberships,omitempty"`
+	HasOrgMembershipsWith []*OrgMembershipWhereInput `json:"hasOrgMembershipsWith,omitempty"`
+	// group_memberships edge predicates
+	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
+	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
 	// subscribers edge predicates
 	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
 	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
@@ -9828,6 +9826,9 @@ type Group struct {
 	ScanEditors                        *ScanConnection                  `json:"scanEditors"`
 	ScanBlockedGroups                  *ScanConnection                  `json:"scanBlockedGroups"`
 	ScanViewers                        *ScanConnection                  `json:"scanViewers"`
+	EntityEditors                      *EntityConnection                `json:"entityEditors"`
+	EntityBlockedGroups                *EntityConnection                `json:"entityBlockedGroups"`
+	EntityViewers                      *EntityConnection                `json:"entityViewers"`
 	ProcedureEditors                   *ProcedureConnection             `json:"procedureEditors"`
 	ProcedureBlockedGroups             *ProcedureConnection             `json:"procedureBlockedGroups"`
 	InternalPolicyEditors              *InternalPolicyConnection        `json:"internalPolicyEditors"`
@@ -11112,6 +11113,15 @@ type GroupWhereInput struct {
 	// scan_viewers edge predicates
 	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
 	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
+	// entity_editors edge predicates
+	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
+	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
+	// entity_blocked_groups edge predicates
+	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
+	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
+	// entity_viewers edge predicates
+	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
+	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
 	// procedure_editors edge predicates
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -27817,9 +27827,6 @@ type UpdateActionPlanInput struct {
 	AddControlIDs    []string            `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string            `json:"removeControlIDs,omitempty"`
 	ClearControls    *bool               `json:"clearControls,omitempty"`
-	AddUserIDs       []string            `json:"addUserIDs,omitempty"`
-	RemoveUserIDs    []string            `json:"removeUserIDs,omitempty"`
-	ClearUsers       *bool               `json:"clearUsers,omitempty"`
 	AddProgramIDs    []string            `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs []string            `json:"removeProgramIDs,omitempty"`
 	ClearPrograms    *bool               `json:"clearPrograms,omitempty"`
@@ -28551,6 +28558,15 @@ type UpdateGroupInput struct {
 	AddScanViewerIDs                           []string                      `json:"addScanViewerIDs,omitempty"`
 	RemoveScanViewerIDs                        []string                      `json:"removeScanViewerIDs,omitempty"`
 	ClearScanViewers                           *bool                         `json:"clearScanViewers,omitempty"`
+	AddEntityEditorIDs                         []string                      `json:"addEntityEditorIDs,omitempty"`
+	RemoveEntityEditorIDs                      []string                      `json:"removeEntityEditorIDs,omitempty"`
+	ClearEntityEditors                         *bool                         `json:"clearEntityEditors,omitempty"`
+	AddEntityBlockedGroupIDs                   []string                      `json:"addEntityBlockedGroupIDs,omitempty"`
+	RemoveEntityBlockedGroupIDs                []string                      `json:"removeEntityBlockedGroupIDs,omitempty"`
+	ClearEntityBlockedGroups                   *bool                         `json:"clearEntityBlockedGroups,omitempty"`
+	AddEntityViewerIDs                         []string                      `json:"addEntityViewerIDs,omitempty"`
+	RemoveEntityViewerIDs                      []string                      `json:"removeEntityViewerIDs,omitempty"`
+	ClearEntityViewers                         *bool                         `json:"clearEntityViewers,omitempty"`
 	AddProcedureEditorIDs                      []string                      `json:"addProcedureEditorIDs,omitempty"`
 	RemoveProcedureEditorIDs                   []string                      `json:"removeProcedureEditorIDs,omitempty"`
 	ClearProcedureEditors                      *bool                         `json:"clearProcedureEditors,omitempty"`
@@ -32257,6 +32273,7 @@ const (
 	ControlOrderFieldSubcategory        ControlOrderField = "subcategory"
 	ControlOrderFieldRefCode            ControlOrderField = "ref_code"
 	ControlOrderFieldControlOwnerName   ControlOrderField = "CONTROL_OWNER_name"
+	ControlOrderFieldDelegateName       ControlOrderField = "DELEGATE_name"
 )
 
 var AllControlOrderField = []ControlOrderField{
@@ -32270,11 +32287,12 @@ var AllControlOrderField = []ControlOrderField{
 	ControlOrderFieldSubcategory,
 	ControlOrderFieldRefCode,
 	ControlOrderFieldControlOwnerName,
+	ControlOrderFieldDelegateName,
 }
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName:
 		return true
 	}
 	return false
@@ -36623,6 +36641,7 @@ const (
 	SubcontrolOrderFieldSubcategory        SubcontrolOrderField = "subcategory"
 	SubcontrolOrderFieldRefCode            SubcontrolOrderField = "ref_code"
 	SubcontrolOrderFieldControlOwnerName   SubcontrolOrderField = "CONTROL_OWNER_name"
+	SubcontrolOrderFieldDelegateName       SubcontrolOrderField = "DELEGATE_name"
 )
 
 var AllSubcontrolOrderField = []SubcontrolOrderField{
@@ -36636,11 +36655,12 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 	SubcontrolOrderFieldSubcategory,
 	SubcontrolOrderFieldRefCode,
 	SubcontrolOrderFieldControlOwnerName,
+	SubcontrolOrderFieldDelegateName,
 }
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName:
 		return true
 	}
 	return false

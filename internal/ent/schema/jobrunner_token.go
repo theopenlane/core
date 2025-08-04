@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -104,6 +105,9 @@ func (j JobRunnerToken) Edges() []ent.Edge {
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: j,
 			edgeSchema: JobRunner{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

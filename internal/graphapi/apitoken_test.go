@@ -11,6 +11,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 )
@@ -107,12 +108,12 @@ func TestMutationCreateAPIToken(t *testing.T) {
 
 	testCases := []struct {
 		name     string
-		input    openlaneclient.CreateAPITokenInput
+		input    testclient.CreateAPITokenInput
 		errorMsg string
 	}{
 		{
 			name: "happy path",
-			input: openlaneclient.CreateAPITokenInput{
+			input: testclient.CreateAPITokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 				Scopes:      []string{"read", "write"},
@@ -120,7 +121,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 		},
 		{
 			name: "happy path, set expire",
-			input: openlaneclient.CreateAPITokenInput{
+			input: testclient.CreateAPITokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 				ExpiresAt:   &expiration30Days,
@@ -128,7 +129,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 		},
 		{
 			name: "happy path, set org",
-			input: openlaneclient.CreateAPITokenInput{
+			input: testclient.CreateAPITokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 				ExpiresAt:   &expiration30Days,
@@ -136,13 +137,13 @@ func TestMutationCreateAPIToken(t *testing.T) {
 		},
 		{
 			name: "happy path, name only",
-			input: openlaneclient.CreateAPITokenInput{
+			input: testclient.CreateAPITokenInput{
 				Name: "forthethingz",
 			},
 		},
 		{
 			name: "empty name",
-			input: openlaneclient.CreateAPITokenInput{
+			input: testclient.CreateAPITokenInput{
 				Description: &tokenDescription,
 			},
 			errorMsg: "value is less than the required length",
@@ -197,14 +198,14 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 	testCases := []struct {
 		name     string
 		tokenID  string
-		input    openlaneclient.UpdateAPITokenInput
+		input    testclient.UpdateAPITokenInput
 		ctx      context.Context
 		errorMsg string
 	}{
 		{
 			name:    "happy path, update name ",
 			tokenID: token.ID,
-			input: openlaneclient.UpdateAPITokenInput{
+			input: testclient.UpdateAPITokenInput{
 				Name: &tokenName,
 			},
 			ctx: testUser1.UserCtx,
@@ -212,7 +213,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 		{
 			name:    "update name, no access",
 			tokenID: token.ID,
-			input: openlaneclient.UpdateAPITokenInput{
+			input: testclient.UpdateAPITokenInput{
 				Name: &tokenName,
 			},
 			ctx:      testUser2.UserCtx,
@@ -221,7 +222,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 		{
 			name:    "happy path, update description",
 			tokenID: token.ID,
-			input: openlaneclient.UpdateAPITokenInput{
+			input: testclient.UpdateAPITokenInput{
 				Description: &tokenDescription,
 			},
 			ctx: testUser1.UserCtx,
@@ -229,7 +230,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 		{
 			name:    "happy path, add scope",
 			tokenID: token.ID,
-			input: openlaneclient.UpdateAPITokenInput{
+			input: testclient.UpdateAPITokenInput{
 				Scopes: []string{"write"},
 			},
 			ctx: testUser1.UserCtx,
@@ -237,7 +238,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 		{
 			name:    "invalid token id",
 			tokenID: "notvalidtoken",
-			input: openlaneclient.UpdateAPITokenInput{
+			input: testclient.UpdateAPITokenInput{
 				Description: &tokenDescription,
 			},
 			ctx:      testUser1.UserCtx,

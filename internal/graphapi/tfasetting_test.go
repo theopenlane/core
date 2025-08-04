@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryTFASetting(t *testing.T) {
@@ -27,7 +27,7 @@ func TestQueryTFASetting(t *testing.T) {
 	testCases := []struct {
 		name     string
 		userID   string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -82,15 +82,15 @@ func TestMutationCreateTFASetting(t *testing.T) {
 	testCases := []struct {
 		name   string
 		userID string
-		input  openlaneclient.CreateTFASettingInput
-		client *openlaneclient.OpenlaneClient
+		input  testclient.CreateTFASettingInput
+		client *testclient.TestClient
 		ctx    context.Context
 		errMsg string
 	}{
 		{
 			name:   "happy path",
 			userID: testUser2.ID,
-			input: openlaneclient.CreateTFASettingInput{
+			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,
@@ -99,7 +99,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 		{
 			name:   "happy path, using personal access token",
 			userID: testUser.ID,
-			input: openlaneclient.CreateTFASettingInput{
+			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: patClient,
@@ -108,7 +108,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 		{
 			name:   "unable to create using api token",
 			userID: testUser.ID,
-			input: openlaneclient.CreateTFASettingInput{
+			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: apiClient,
@@ -118,7 +118,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 		{
 			name:   "already exists",
 			userID: testUser.ID,
-			input: openlaneclient.CreateTFASettingInput{
+			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,
@@ -128,7 +128,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 		{
 			name:   "create with not enabling totp should not return qr code",
 			userID: testUserAnother.ID,
-			input: openlaneclient.CreateTFASettingInput{
+			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(false),
 			},
 			client: suite.client.api,
@@ -194,14 +194,14 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 
 	testCases := []struct {
 		name   string
-		input  openlaneclient.UpdateTFASettingInput
-		client *openlaneclient.OpenlaneClient
+		input  testclient.UpdateTFASettingInput
+		client *testclient.TestClient
 		ctx    context.Context
 		errMsg string
 	}{
 		{
 			name: "update verify",
-			input: openlaneclient.UpdateTFASettingInput{
+			input: testclient.UpdateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 				Verified:    lo.ToPtr(true),
 			},
@@ -210,7 +210,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		},
 		{
 			name: "regen codes using personal access token",
-			input: openlaneclient.UpdateTFASettingInput{
+			input: testclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
 			client: patClient,
@@ -218,7 +218,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		},
 		{
 			name: "regen codes using api token not allowed",
-			input: openlaneclient.UpdateTFASettingInput{
+			input: testclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
 			client: apiClient,
@@ -227,7 +227,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		},
 		{
 			name: "regen codes - false",
-			input: openlaneclient.UpdateTFASettingInput{
+			input: testclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(false),
 			},
 			client: suite.client.api,
@@ -235,7 +235,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		},
 		{
 			name: "update totp to false should clear settings",
-			input: openlaneclient.UpdateTFASettingInput{
+			input: testclient.UpdateTFASettingInput{
 				TotpAllowed: lo.ToPtr(false),
 			},
 			client: suite.client.api,
@@ -243,7 +243,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		},
 		{
 			name: "update TotpAllowed to true should enable TFA",
-			input: openlaneclient.UpdateTFASettingInput{
+			input: testclient.UpdateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,

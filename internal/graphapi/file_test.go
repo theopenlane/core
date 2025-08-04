@@ -9,8 +9,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -31,7 +31,7 @@ func TestQueryFile(t *testing.T) {
 
 	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*uploadFile})
 
-	evidence, err := suite.client.api.CreateEvidence(testUser1.UserCtx, openlaneclient.CreateEvidenceInput{
+	evidence, err := suite.client.api.CreateEvidence(testUser1.UserCtx, testclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
 	}, []*graphql.Upload{uploadFile})
@@ -55,7 +55,7 @@ func TestQueryFile(t *testing.T) {
 
 	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*uploadFile})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, openlaneclient.UpdateUserInput{}, uploadFile)
+	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, testclient.UpdateUserInput{}, uploadFile)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
@@ -68,7 +68,7 @@ func TestQueryFile(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -188,7 +188,7 @@ func TestQueryFiles(t *testing.T) {
 
 	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*uploadFile})
 
-	evidence, err := suite.client.api.CreateEvidence(testUser.UserCtx, openlaneclient.CreateEvidenceInput{
+	evidence, err := suite.client.api.CreateEvidence(testUser.UserCtx, testclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
 	}, []*graphql.Upload{uploadFile})
@@ -212,7 +212,7 @@ func TestQueryFiles(t *testing.T) {
 
 	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*uploadFile})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, openlaneclient.UpdateUserInput{}, uploadFile)
+	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, testclient.UpdateUserInput{}, uploadFile)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
@@ -220,7 +220,7 @@ func TestQueryFiles(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{

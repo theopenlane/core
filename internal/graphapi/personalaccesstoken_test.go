@@ -11,8 +11,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 
+	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
@@ -109,19 +110,19 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 
 	testCases := []struct {
 		name     string
-		input    openlaneclient.CreatePersonalAccessTokenInput
+		input    testclient.CreatePersonalAccessTokenInput
 		errorMsg string
 	}{
 		{
 			name: "happy path",
-			input: openlaneclient.CreatePersonalAccessTokenInput{
+			input: testclient.CreatePersonalAccessTokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 			},
 		},
 		{
 			name: "happy path, set expire",
-			input: openlaneclient.CreatePersonalAccessTokenInput{
+			input: testclient.CreatePersonalAccessTokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 				ExpiresAt:   &expiration30Days,
@@ -129,7 +130,7 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 		},
 		{
 			name: "happy path, set orgs",
-			input: openlaneclient.CreatePersonalAccessTokenInput{
+			input: testclient.CreatePersonalAccessTokenInput{
 				Name:            "forthethingz",
 				Description:     &tokenDescription,
 				ExpiresAt:       &expiration30Days,
@@ -138,20 +139,20 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 		},
 		{
 			name: "happy path, name only",
-			input: openlaneclient.CreatePersonalAccessTokenInput{
+			input: testclient.CreatePersonalAccessTokenInput{
 				Name: "forthethingz",
 			},
 		},
 		{
 			name: "empty name",
-			input: openlaneclient.CreatePersonalAccessTokenInput{
+			input: testclient.CreatePersonalAccessTokenInput{
 				Description: &tokenDescription,
 			},
 			errorMsg: "value is less than the required length",
 		},
 		{
 			name: "setting other user id",
-			input: openlaneclient.CreatePersonalAccessTokenInput{
+			input: testclient.CreatePersonalAccessTokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
 			},
@@ -227,41 +228,41 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 	testCases := []struct {
 		name     string
 		tokenID  string
-		input    openlaneclient.UpdatePersonalAccessTokenInput
+		input    testclient.UpdatePersonalAccessTokenInput
 		errorMsg string
 	}{
 		{
 			name:    "happy path, update name",
 			tokenID: token.ID,
-			input: openlaneclient.UpdatePersonalAccessTokenInput{
+			input: testclient.UpdatePersonalAccessTokenInput{
 				Name: &tokenName,
 			},
 		},
 		{
 			name:    "happy path, update description",
 			tokenID: token.ID,
-			input: openlaneclient.UpdatePersonalAccessTokenInput{
+			input: testclient.UpdatePersonalAccessTokenInput{
 				Description: &tokenDescription,
 			},
 		},
 		{
 			name:    "happy path, add org",
 			tokenID: token.ID,
-			input: openlaneclient.UpdatePersonalAccessTokenInput{
+			input: testclient.UpdatePersonalAccessTokenInput{
 				AddOrganizationIDs: []string{testUser1.OrganizationID},
 			},
 		},
 		{
 			name:    "happy path, remove org",
 			tokenID: token.ID,
-			input: openlaneclient.UpdatePersonalAccessTokenInput{
+			input: testclient.UpdatePersonalAccessTokenInput{
 				RemoveOrganizationIDs: []string{testUser1.OrganizationID},
 			},
 		},
 		{
 			name:    "invalid token id",
 			tokenID: "notvalidtoken",
-			input: openlaneclient.UpdatePersonalAccessTokenInput{
+			input: testclient.UpdatePersonalAccessTokenInput{
 				Description: &tokenDescription,
 			},
 			errorMsg: notFoundErrorMsg,
@@ -269,7 +270,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 		{
 			name:    "not authorized",
 			tokenID: tokenOther.ID,
-			input: openlaneclient.UpdatePersonalAccessTokenInput{
+			input: testclient.UpdatePersonalAccessTokenInput{
 				Description: &tokenDescription,
 			},
 			errorMsg: notFoundErrorMsg,
