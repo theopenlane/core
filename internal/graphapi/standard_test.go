@@ -560,8 +560,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				Tags: []string{"new-tag-1", "new-tag-2"},
 			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, update multiple fields, org owned standard",
@@ -578,8 +578,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 				AppendDomains:        []string{"availability", "meows"},
 				RevisionBump:         &models.Major,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
@@ -667,6 +667,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
+			tc.ctx = resetContext(tc.ctx, t)
 			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)

@@ -10,6 +10,8 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
@@ -387,6 +389,9 @@ func TestMutationUpdateProcedure(t *testing.T) {
 	anotherApproverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	anotherDelegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	log.Error().Msg("starting test cases")
+	log.Error().Str("procedureID", procedure.ID).Str("revision", procedure.Revision).Msg("Procedure created for testing")
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateProcedureInput
@@ -414,8 +419,8 @@ func TestMutationUpdateProcedure(t *testing.T) {
 				ApproverID:   &anotherApproverGroup.ID,
 				DelegateID:   &anotherDelegateGroup.ID,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
@@ -506,6 +511,8 @@ func TestMutationUpdateProcedure(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
+			tc.ctx = resetContext(tc.ctx, t)
+
 			resp, err := tc.client.UpdateProcedure(tc.ctx, procedure.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -624,20 +631,21 @@ func TestMutationDeleteProcedure(t *testing.T) {
 }
 
 func TestMutationUpdateBulkProcedure(t *testing.T) {
+	newUser := suite.userBuilder(context.Background(), t)
 	// create procedures to be updated
-	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	procedure3 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	procedure3 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
 
-	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
 
 	// create another user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
 	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(newUser.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, newUser.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(newUser.UserCtx, t)
 
 	procedureAnotherUser := (&ProcedureBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -668,7 +676,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 				RevisionBump: &models.Minor,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -679,7 +687,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 				RevisionBump: &models.Major,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
@@ -687,7 +695,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			ids:         []string{},
 			input:       testclient.UpdateProcedureInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newUser.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
@@ -697,7 +705,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 				Status: &enums.DocumentDraft,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 1, // only procedure1 should be updated
 		},
 		{
@@ -714,6 +722,8 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
+			tc.ctx = resetContext(tc.ctx, t)
+
 			resp, err := tc.client.UpdateBulkProcedure(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -801,7 +811,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID, procedure3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID, procedure3.ID}}).MustDelete(newUser.UserCtx, t)
 	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedureAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{approverGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{approverGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(newUser.UserCtx, t)
 }

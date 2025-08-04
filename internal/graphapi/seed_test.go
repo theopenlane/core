@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
@@ -169,4 +170,23 @@ func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.
 	newUser.UserCtx = auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID)
 
 	return newUser
+}
+
+// resetContext resets the context to ensure it has not additional data that could conflict with the test
+// if the context is the background context, it returns the same context
+// because the context is used with a test client and we are not passing in the client here
+func resetContext(ctx context.Context, t *testing.T) context.Context {
+	if ctx == context.Background() {
+		return ctx
+	}
+
+	au, err := auth.GetAuthenticatedUserFromContext(ctx)
+	require.NoError(t, err)
+
+	// ensure system admin context is kept in the new context
+	if au.IsSystemAdmin {
+		return auth.NewTestContextForSystemAdmin(au.SubjectID, au.OrganizationID)
+	}
+
+	return auth.NewTestContextWithOrgID(au.SubjectID, au.OrganizationID)
 }
