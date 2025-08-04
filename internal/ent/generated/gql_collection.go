@@ -19834,6 +19834,11 @@ func (jrq *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, jobresult.FieldFileID)
 				fieldSeen[jobresult.FieldFileID] = struct{}{}
 			}
+		case "log":
+			if _, ok := fieldSeen[jobresult.FieldLog]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldLog)
+				fieldSeen[jobresult.FieldLog] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -20086,6 +20091,21 @@ func (jrq *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[jobrunner.FieldIPAddress]; !ok {
 				selectedFields = append(selectedFields, jobrunner.FieldIPAddress)
 				fieldSeen[jobrunner.FieldIPAddress] = struct{}{}
+			}
+		case "lastSeen":
+			if _, ok := fieldSeen[jobrunner.FieldLastSeen]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldLastSeen)
+				fieldSeen[jobrunner.FieldLastSeen] = struct{}{}
+			}
+		case "version":
+			if _, ok := fieldSeen[jobrunner.FieldVersion]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldVersion)
+				fieldSeen[jobrunner.FieldVersion] = struct{}{}
+			}
+		case "os":
+			if _, ok := fieldSeen[jobrunner.FieldOs]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldOs)
+				fieldSeen[jobrunner.FieldOs] = struct{}{}
 			}
 		case "id":
 		case "__typename":

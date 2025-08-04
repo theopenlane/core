@@ -92,6 +92,8 @@ func (ec *executionContext) fieldContext_JobResultCreatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_startedAt(ctx, field)
 			case "fileID":
 				return ec.fieldContext_JobResult_fileID(ctx, field)
+			case "log":
+				return ec.fieldContext_JobResult_log(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":
@@ -212,6 +214,8 @@ func (ec *executionContext) fieldContext_JobResultUpdatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_startedAt(ctx, field)
 			case "fileID":
 				return ec.fieldContext_JobResult_fileID(ctx, field)
+			case "log":
+				return ec.fieldContext_JobResult_log(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":

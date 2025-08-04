@@ -4847,10 +4847,12 @@ type CreateJobResultInput struct {
 	// The time the job finished it's execution. This is different from the db insertion time
 	FinishedAt *time.Time `json:"finishedAt,omitempty"`
 	// The time the job started it's execution. This is different from the db insertion time
-	StartedAt      *time.Time `json:"startedAt,omitempty"`
-	OwnerID        *string    `json:"ownerID,omitempty"`
-	ScheduledJobID string     `json:"scheduledJobID"`
-	FileID         string     `json:"fileID"`
+	StartedAt *time.Time `json:"startedAt,omitempty"`
+	// the log output from the job
+	Log            *string `json:"log,omitempty"`
+	OwnerID        *string `json:"ownerID,omitempty"`
+	ScheduledJobID string  `json:"scheduledJobID"`
+	FileID         string  `json:"fileID"`
 }
 
 // CreateJobRunnerInput is used for create JobRunner object.
@@ -4861,7 +4863,13 @@ type CreateJobRunnerInput struct {
 	// the name of the runner
 	Name string `json:"name"`
 	// the IP address of this runner
-	IPAddress         string   `json:"ipAddress"`
+	IPAddress *string `json:"ipAddress,omitempty"`
+	// the last time this runner was seen
+	LastSeen *time.Time `json:"lastSeen,omitempty"`
+	// the version of the runner
+	Version *string `json:"version,omitempty"`
+	// the operating system of the runner
+	Os                *string  `json:"os,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	JobRunnerTokenIDs []string `json:"jobRunnerTokenIDs,omitempty"`
 }
@@ -12961,8 +12969,10 @@ type JobResult struct {
 	// The time the job finished it's execution. This is different from the db insertion time
 	FinishedAt time.Time `json:"finishedAt"`
 	// The time the job started it's execution. This is different from the db insertion time
-	StartedAt    time.Time     `json:"startedAt"`
-	FileID       string        `json:"fileID"`
+	StartedAt time.Time `json:"startedAt"`
+	FileID    string    `json:"fileID"`
+	// the log output from the job
+	Log          *string       `json:"log,omitempty"`
 	Owner        *Organization `json:"owner,omitempty"`
 	ScheduledJob *ScheduledJob `json:"scheduledJob"`
 	File         *File         `json:"file"`
@@ -12980,6 +12990,18 @@ type JobResultConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// Return response for createJobResult mutation
+type JobResultCreatePayload struct {
+	// Created jobResult
+	JobResult *JobResult `json:"jobResult"`
+}
+
+// Return response for deleteJobResult mutation
+type JobResultDeletePayload struct {
+	// Deleted jobResult ID
+	DeletedID string `json:"deletedID"`
+}
+
 // An edge in a connection.
 type JobResultEdge struct {
 	// The item at the end of the edge.
@@ -12994,6 +13016,12 @@ type JobResultOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order JobResults.
 	Field JobResultOrderField `json:"field"`
+}
+
+// Return response for updateJobResult mutation
+type JobResultUpdatePayload struct {
+	// Updated jobResult
+	JobResult *JobResult `json:"jobResult"`
 }
 
 // JobResultWhereInput is used for filtering JobResult objects.
@@ -13143,6 +13171,22 @@ type JobResultWhereInput struct {
 	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+	// log field predicates
+	Log             *string  `json:"log,omitempty"`
+	LogNeq          *string  `json:"logNEQ,omitempty"`
+	LogIn           []string `json:"logIn,omitempty"`
+	LogNotIn        []string `json:"logNotIn,omitempty"`
+	LogGt           *string  `json:"logGT,omitempty"`
+	LogGte          *string  `json:"logGTE,omitempty"`
+	LogLt           *string  `json:"logLT,omitempty"`
+	LogLte          *string  `json:"logLTE,omitempty"`
+	LogContains     *string  `json:"logContains,omitempty"`
+	LogHasPrefix    *string  `json:"logHasPrefix,omitempty"`
+	LogHasSuffix    *string  `json:"logHasSuffix,omitempty"`
+	LogIsNil        *bool    `json:"logIsNil,omitempty"`
+	LogNotNil       *bool    `json:"logNotNil,omitempty"`
+	LogEqualFold    *string  `json:"logEqualFold,omitempty"`
+	LogContainsFold *string  `json:"logContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -13173,7 +13217,13 @@ type JobRunner struct {
 	// the status of this runner
 	Status enums.JobRunnerStatus `json:"status"`
 	// the IP address of this runner
-	IPAddress       string                    `json:"ipAddress"`
+	IPAddress *string `json:"ipAddress,omitempty"`
+	// the last time this runner was seen
+	LastSeen *time.Time `json:"lastSeen,omitempty"`
+	// the version of the runner
+	Version *string `json:"version,omitempty"`
+	// the operating system of the runner
+	Os              *string                   `json:"os,omitempty"`
 	Owner           *Organization             `json:"owner,omitempty"`
 	JobRunnerTokens *JobRunnerTokenConnection `json:"jobRunnerTokens"`
 }
@@ -13188,6 +13238,12 @@ type JobRunnerConnection struct {
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createJobRunner mutation
+type JobRunnerCreatePayload struct {
+	// Created jobRunner
+	JobRunner *JobRunner `json:"jobRunner"`
 }
 
 // Return response for deleteJobRunner mutation
@@ -13780,8 +13836,53 @@ type JobRunnerWhereInput struct {
 	IPAddressContains     *string  `json:"ipAddressContains,omitempty"`
 	IPAddressHasPrefix    *string  `json:"ipAddressHasPrefix,omitempty"`
 	IPAddressHasSuffix    *string  `json:"ipAddressHasSuffix,omitempty"`
+	IPAddressIsNil        *bool    `json:"ipAddressIsNil,omitempty"`
+	IPAddressNotNil       *bool    `json:"ipAddressNotNil,omitempty"`
 	IPAddressEqualFold    *string  `json:"ipAddressEqualFold,omitempty"`
 	IPAddressContainsFold *string  `json:"ipAddressContainsFold,omitempty"`
+	// last_seen field predicates
+	LastSeen       *time.Time   `json:"lastSeen,omitempty"`
+	LastSeenNeq    *time.Time   `json:"lastSeenNEQ,omitempty"`
+	LastSeenIn     []*time.Time `json:"lastSeenIn,omitempty"`
+	LastSeenNotIn  []*time.Time `json:"lastSeenNotIn,omitempty"`
+	LastSeenGt     *time.Time   `json:"lastSeenGT,omitempty"`
+	LastSeenGte    *time.Time   `json:"lastSeenGTE,omitempty"`
+	LastSeenLt     *time.Time   `json:"lastSeenLT,omitempty"`
+	LastSeenLte    *time.Time   `json:"lastSeenLTE,omitempty"`
+	LastSeenIsNil  *bool        `json:"lastSeenIsNil,omitempty"`
+	LastSeenNotNil *bool        `json:"lastSeenNotNil,omitempty"`
+	// version field predicates
+	Version             *string  `json:"version,omitempty"`
+	VersionNeq          *string  `json:"versionNEQ,omitempty"`
+	VersionIn           []string `json:"versionIn,omitempty"`
+	VersionNotIn        []string `json:"versionNotIn,omitempty"`
+	VersionGt           *string  `json:"versionGT,omitempty"`
+	VersionGte          *string  `json:"versionGTE,omitempty"`
+	VersionLt           *string  `json:"versionLT,omitempty"`
+	VersionLte          *string  `json:"versionLTE,omitempty"`
+	VersionContains     *string  `json:"versionContains,omitempty"`
+	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
+	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
+	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
+	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
+	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
+	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+	// os field predicates
+	Os             *string  `json:"os,omitempty"`
+	OsNeq          *string  `json:"osNEQ,omitempty"`
+	OsIn           []string `json:"osIn,omitempty"`
+	OsNotIn        []string `json:"osNotIn,omitempty"`
+	OsGt           *string  `json:"osGT,omitempty"`
+	OsGte          *string  `json:"osGTE,omitempty"`
+	OsLt           *string  `json:"osLT,omitempty"`
+	OsLte          *string  `json:"osLTE,omitempty"`
+	OsContains     *string  `json:"osContains,omitempty"`
+	OsHasPrefix    *string  `json:"osHasPrefix,omitempty"`
+	OsHasSuffix    *string  `json:"osHasSuffix,omitempty"`
+	OsIsNil        *bool    `json:"osIsNil,omitempty"`
+	OsNotNil       *bool    `json:"osNotNil,omitempty"`
+	OsEqualFold    *string  `json:"osEqualFold,omitempty"`
+	OsContainsFold *string  `json:"osContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -21954,6 +22055,18 @@ type ScheduledJobRunConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// Return response for createScheduledJobRun mutation
+type ScheduledJobRunCreatePayload struct {
+	// Created scheduledJobRun
+	ScheduledJobRun *ScheduledJobRun `json:"scheduledJobRun"`
+}
+
+// Return response for deleteScheduledJobRun mutation
+type ScheduledJobRunDeletePayload struct {
+	// Deleted scheduledJobRun ID
+	DeletedID string `json:"deletedID"`
+}
+
 // An edge in a connection.
 type ScheduledJobRunEdge struct {
 	// The item at the end of the edge.
@@ -21968,6 +22081,12 @@ type ScheduledJobRunOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order ScheduledJobRuns.
 	Field ScheduledJobRunOrderField `json:"field"`
+}
+
+// Return response for updateScheduledJobRun mutation
+type ScheduledJobRunUpdatePayload struct {
+	// Updated scheduledJobRun
+	ScheduledJobRun *ScheduledJobRun `json:"scheduledJobRun"`
 }
 
 // ScheduledJobRunWhereInput is used for filtering ScheduledJobRun objects.
@@ -28736,11 +28855,14 @@ type UpdateInviteInput struct {
 // Input was generated by ent.
 type UpdateJobResultInput struct {
 	// the status of this job. did it fail? did it succeed?
-	Status         *enums.JobExecutionStatus `json:"status,omitempty"`
-	OwnerID        *string                   `json:"ownerID,omitempty"`
-	ClearOwner     *bool                     `json:"clearOwner,omitempty"`
-	ScheduledJobID *string                   `json:"scheduledJobID,omitempty"`
-	FileID         *string                   `json:"fileID,omitempty"`
+	Status *enums.JobExecutionStatus `json:"status,omitempty"`
+	// the log output from the job
+	Log            *string `json:"log,omitempty"`
+	ClearLog       *bool   `json:"clearLog,omitempty"`
+	OwnerID        *string `json:"ownerID,omitempty"`
+	ClearOwner     *bool   `json:"clearOwner,omitempty"`
+	ScheduledJobID *string `json:"scheduledJobID,omitempty"`
+	FileID         *string `json:"fileID,omitempty"`
 }
 
 // UpdateJobRunnerInput is used for update JobRunner object.
@@ -28751,7 +28873,19 @@ type UpdateJobRunnerInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the runner
-	Name                    *string  `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// the IP address of this runner
+	IPAddress      *string `json:"ipAddress,omitempty"`
+	ClearIPAddress *bool   `json:"clearIPAddress,omitempty"`
+	// the last time this runner was seen
+	LastSeen      *time.Time `json:"lastSeen,omitempty"`
+	ClearLastSeen *bool      `json:"clearLastSeen,omitempty"`
+	// the version of the runner
+	Version      *string `json:"version,omitempty"`
+	ClearVersion *bool   `json:"clearVersion,omitempty"`
+	// the operating system of the runner
+	Os                      *string  `json:"os,omitempty"`
+	ClearOs                 *bool    `json:"clearOs,omitempty"`
 	OwnerID                 *string  `json:"ownerID,omitempty"`
 	ClearOwner              *bool    `json:"clearOwner,omitempty"`
 	AddJobRunnerTokenIDs    []string `json:"addJobRunnerTokenIDs,omitempty"`

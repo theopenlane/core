@@ -937,6 +937,8 @@ func adminSearchJobRunners(ctx context.Context, query string, after *entgql.Curs
 				jobrunner.OwnerIDContainsFold(query),   // search by OwnerID
 				jobrunner.NameContainsFold(query),      // search by Name
 				jobrunner.IPAddressContainsFold(query), // search by IPAddress
+				jobrunner.VersionContainsFold(query),   // search by Version
+				jobrunner.OsContainsFold(query),        // search by Os
 			),
 		)
 

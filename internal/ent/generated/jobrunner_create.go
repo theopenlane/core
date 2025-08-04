@@ -173,6 +173,56 @@ func (jrc *JobRunnerCreate) SetIPAddress(s string) *JobRunnerCreate {
 	return jrc
 }
 
+// SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
+func (jrc *JobRunnerCreate) SetNillableIPAddress(s *string) *JobRunnerCreate {
+	if s != nil {
+		jrc.SetIPAddress(*s)
+	}
+	return jrc
+}
+
+// SetLastSeen sets the "last_seen" field.
+func (jrc *JobRunnerCreate) SetLastSeen(t time.Time) *JobRunnerCreate {
+	jrc.mutation.SetLastSeen(t)
+	return jrc
+}
+
+// SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
+func (jrc *JobRunnerCreate) SetNillableLastSeen(t *time.Time) *JobRunnerCreate {
+	if t != nil {
+		jrc.SetLastSeen(*t)
+	}
+	return jrc
+}
+
+// SetVersion sets the "version" field.
+func (jrc *JobRunnerCreate) SetVersion(s string) *JobRunnerCreate {
+	jrc.mutation.SetVersion(s)
+	return jrc
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (jrc *JobRunnerCreate) SetNillableVersion(s *string) *JobRunnerCreate {
+	if s != nil {
+		jrc.SetVersion(*s)
+	}
+	return jrc
+}
+
+// SetOs sets the "os" field.
+func (jrc *JobRunnerCreate) SetOs(s string) *JobRunnerCreate {
+	jrc.mutation.SetOs(s)
+	return jrc
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (jrc *JobRunnerCreate) SetNillableOs(s *string) *JobRunnerCreate {
+	if s != nil {
+		jrc.SetOs(*s)
+	}
+	return jrc
+}
+
 // SetID sets the "id" field.
 func (jrc *JobRunnerCreate) SetID(s string) *JobRunnerCreate {
 	jrc.mutation.SetID(s)
@@ -301,14 +351,6 @@ func (jrc *JobRunnerCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobRunner.status": %w`, err)}
 		}
 	}
-	if _, ok := jrc.mutation.IPAddress(); !ok {
-		return &ValidationError{Name: "ip_address", err: errors.New(`generated: missing required field "JobRunner.ip_address"`)}
-	}
-	if v, ok := jrc.mutation.IPAddress(); ok {
-		if err := jobrunner.IPAddressValidator(v); err != nil {
-			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "JobRunner.ip_address": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -392,6 +434,18 @@ func (jrc *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 	if value, ok := jrc.mutation.IPAddress(); ok {
 		_spec.SetField(jobrunner.FieldIPAddress, field.TypeString, value)
 		_node.IPAddress = value
+	}
+	if value, ok := jrc.mutation.LastSeen(); ok {
+		_spec.SetField(jobrunner.FieldLastSeen, field.TypeTime, value)
+		_node.LastSeen = value
+	}
+	if value, ok := jrc.mutation.Version(); ok {
+		_spec.SetField(jobrunner.FieldVersion, field.TypeString, value)
+		_node.Version = value
+	}
+	if value, ok := jrc.mutation.Os(); ok {
+		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
+		_node.Os = value
 	}
 	if nodes := jrc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

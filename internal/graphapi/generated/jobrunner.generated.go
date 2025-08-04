@@ -92,6 +92,12 @@ func (ec *executionContext) fieldContext_JobRunnerCreatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_status(ctx, field)
 			case "ipAddress":
 				return ec.fieldContext_JobRunner_ipAddress(ctx, field)
+			case "lastSeen":
+				return ec.fieldContext_JobRunner_lastSeen(ctx, field)
+			case "version":
+				return ec.fieldContext_JobRunner_version(ctx, field)
+			case "os":
+				return ec.fieldContext_JobRunner_os(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunner_owner(ctx, field)
 			case "jobRunnerTokens":
@@ -210,6 +216,12 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_status(ctx, field)
 			case "ipAddress":
 				return ec.fieldContext_JobRunner_ipAddress(ctx, field)
+			case "lastSeen":
+				return ec.fieldContext_JobRunner_lastSeen(ctx, field)
+			case "version":
+				return ec.fieldContext_JobRunner_version(ctx, field)
+			case "os":
+				return ec.fieldContext_JobRunner_os(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunner_owner(ctx, field)
 			case "jobRunnerTokens":

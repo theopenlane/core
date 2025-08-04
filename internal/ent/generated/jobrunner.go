@@ -46,6 +46,12 @@ type JobRunner struct {
 	Status enums.JobRunnerStatus `json:"status,omitempty"`
 	// the IP address of this runner
 	IPAddress string `json:"ip_address,omitempty"`
+	// the last time this runner was seen
+	LastSeen time.Time `json:"last_seen,omitempty"`
+	// the version of the runner
+	Version string `json:"version,omitempty"`
+	// the operating system of the runner
+	Os string `json:"os,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the JobRunnerQuery when eager-loading is set.
 	Edges        JobRunnerEdges `json:"edges"`
@@ -96,9 +102,9 @@ func (*JobRunner) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case jobrunner.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case jobrunner.FieldID, jobrunner.FieldCreatedBy, jobrunner.FieldUpdatedBy, jobrunner.FieldDeletedBy, jobrunner.FieldDisplayID, jobrunner.FieldOwnerID, jobrunner.FieldName, jobrunner.FieldStatus, jobrunner.FieldIPAddress:
+		case jobrunner.FieldID, jobrunner.FieldCreatedBy, jobrunner.FieldUpdatedBy, jobrunner.FieldDeletedBy, jobrunner.FieldDisplayID, jobrunner.FieldOwnerID, jobrunner.FieldName, jobrunner.FieldStatus, jobrunner.FieldIPAddress, jobrunner.FieldVersion, jobrunner.FieldOs:
 			values[i] = new(sql.NullString)
-		case jobrunner.FieldCreatedAt, jobrunner.FieldUpdatedAt, jobrunner.FieldDeletedAt:
+		case jobrunner.FieldCreatedAt, jobrunner.FieldUpdatedAt, jobrunner.FieldDeletedAt, jobrunner.FieldLastSeen:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -201,6 +207,24 @@ func (jr *JobRunner) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				jr.IPAddress = value.String
 			}
+		case jobrunner.FieldLastSeen:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_seen", values[i])
+			} else if value.Valid {
+				jr.LastSeen = value.Time
+			}
+		case jobrunner.FieldVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field version", values[i])
+			} else if value.Valid {
+				jr.Version = value.String
+			}
+		case jobrunner.FieldOs:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field os", values[i])
+			} else if value.Valid {
+				jr.Os = value.String
+			}
 		default:
 			jr.selectValues.Set(columns[i], values[i])
 		}
@@ -285,6 +309,15 @@ func (jr *JobRunner) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ip_address=")
 	builder.WriteString(jr.IPAddress)
+	builder.WriteString(", ")
+	builder.WriteString("last_seen=")
+	builder.WriteString(jr.LastSeen.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("version=")
+	builder.WriteString(jr.Version)
+	builder.WriteString(", ")
+	builder.WriteString("os=")
+	builder.WriteString(jr.Os)
 	builder.WriteByte(')')
 	return builder.String()
 }
