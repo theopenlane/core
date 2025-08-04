@@ -3,6 +3,7 @@ package gencmd
 import (
 	"bytes"
 	"embed"
+	"errors"
 	"fmt"
 	"html/template"
 	"os"
@@ -25,6 +26,9 @@ var (
 	// schemaCache caches the loaded schema names to avoid repeated file I/O
 	schemaCache       []string
 	schemaCacheLoaded bool
+
+	// ErrMainGoNotFound is returned when main.go file cannot be found
+	ErrMainGoNotFound = errors.New("could not find main.go file")
 )
 
 const (
@@ -262,7 +266,7 @@ func updateMainImports(cmdName string) error {
 	if _, err := os.Stat(mainPath); err != nil {
 		mainPath = "cmd/cli/main.go"
 		if _, err := os.Stat(mainPath); err != nil {
-			return fmt.Errorf("could not find main.go file")
+			return ErrMainGoNotFound
 		}
 	}
 
@@ -284,18 +288,19 @@ func updateMainImports(cmdName string) error {
 	// Insert the import in the right section
 	isHistory := strings.HasSuffix(strings.ToLower(cmdName), "history")
 
-	if isHistory && strings.Contains(fileContent, "// history commands\n") {
+	switch {
+	case isHistory && strings.Contains(fileContent, "// history commands\n"):
 		// Insert after "// history commands" for history commands
 		fileContent = strings.Replace(fileContent, "// history commands\n", "// history commands\n"+newImport+"\n", 1)
-	} else if !isHistory && strings.Contains(fileContent, "\n\t// history commands") {
+	case !isHistory && strings.Contains(fileContent, "\n\t// history commands"):
 		// Insert before "// history commands" for regular commands
 		fileContent = strings.Replace(fileContent, "\n\t// history commands", newImport+"\n\t// history commands", 1)
-	} else {
+	default:
 		// Fallback: insert before closing import parenthesis
 		fileContent = strings.Replace(fileContent, "\n)", "\n"+newImport+"\n)", 1)
 	}
 
-	if err := os.WriteFile(mainPath, []byte(fileContent), 0644); err != nil {
+	if err := os.WriteFile(mainPath, []byte(fileContent), 0600); err != nil {
 		return fmt.Errorf("failed to write main.go: %w", err)
 	}
 
