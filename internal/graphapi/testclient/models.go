@@ -7916,8 +7916,8 @@ type Event struct {
 	Invites              *InviteConnection              `json:"invites"`
 	PersonalAccessTokens *PersonalAccessTokenConnection `json:"personalAccessTokens"`
 	Secrets              *HushConnection                `json:"secrets"`
-	Orgmemberships       *OrgMembershipConnection       `json:"orgmemberships"`
-	Groupmemberships     *GroupMembershipConnection     `json:"groupmemberships"`
+	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
+	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
 	Subscribers          *SubscriberConnection          `json:"subscribers"`
 	Files                *FileConnection                `json:"files"`
 	OrgSubscriptions     *OrgSubscriptionConnection     `json:"orgSubscriptions"`
@@ -8113,12 +8113,12 @@ type EventWhereInput struct {
 	// secrets edge predicates
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
-	// orgmemberships edge predicates
-	HasOrgmemberships     *bool                      `json:"hasOrgmemberships,omitempty"`
-	HasOrgmembershipsWith []*OrgMembershipWhereInput `json:"hasOrgmembershipsWith,omitempty"`
-	// groupmemberships edge predicates
-	HasGroupmemberships     *bool                        `json:"hasGroupmemberships,omitempty"`
-	HasGroupmembershipsWith []*GroupMembershipWhereInput `json:"hasGroupmembershipsWith,omitempty"`
+	// org_memberships edge predicates
+	HasOrgMemberships     *bool                      `json:"hasOrgMemberships,omitempty"`
+	HasOrgMembershipsWith []*OrgMembershipWhereInput `json:"hasOrgMembershipsWith,omitempty"`
+	// group_memberships edge predicates
+	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
+	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
 	// subscribers edge predicates
 	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
 	HasSubscribersWith []*SubscriberWhereInput `json:"hasSubscribersWith,omitempty"`
@@ -32159,6 +32159,7 @@ const (
 	ControlOrderFieldSubcategory        ControlOrderField = "subcategory"
 	ControlOrderFieldRefCode            ControlOrderField = "ref_code"
 	ControlOrderFieldControlOwnerName   ControlOrderField = "CONTROL_OWNER_name"
+	ControlOrderFieldDelegateName       ControlOrderField = "DELEGATE_name"
 )
 
 var AllControlOrderField = []ControlOrderField{
@@ -32172,11 +32173,12 @@ var AllControlOrderField = []ControlOrderField{
 	ControlOrderFieldSubcategory,
 	ControlOrderFieldRefCode,
 	ControlOrderFieldControlOwnerName,
+	ControlOrderFieldDelegateName,
 }
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName:
 		return true
 	}
 	return false
@@ -36525,6 +36527,7 @@ const (
 	SubcontrolOrderFieldSubcategory        SubcontrolOrderField = "subcategory"
 	SubcontrolOrderFieldRefCode            SubcontrolOrderField = "ref_code"
 	SubcontrolOrderFieldControlOwnerName   SubcontrolOrderField = "CONTROL_OWNER_name"
+	SubcontrolOrderFieldDelegateName       SubcontrolOrderField = "DELEGATE_name"
 )
 
 var AllSubcontrolOrderField = []SubcontrolOrderField{
@@ -36538,11 +36541,12 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 	SubcontrolOrderFieldSubcategory,
 	SubcontrolOrderFieldRefCode,
 	SubcontrolOrderFieldControlOwnerName,
+	SubcontrolOrderFieldDelegateName,
 }
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName:
 		return true
 	}
 	return false

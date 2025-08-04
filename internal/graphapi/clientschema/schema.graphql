@@ -6748,6 +6748,7 @@ enum ControlOrderField {
 	subcategory
 	ref_code
 	CONTROL_OWNER_name
+	DELEGATE_name
 }
 """
 Return response for updateControl mutation
@@ -13143,7 +13144,7 @@ type Event implements Node {
 		"""
 		where: HushWhereInput
 	): HushConnection!
-	orgmemberships(
+	orgMemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -13174,7 +13175,7 @@ type Event implements Node {
 		"""
 		where: OrgMembershipWhereInput
 	): OrgMembershipConnection!
-	groupmemberships(
+	groupMemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -13556,15 +13557,15 @@ input EventWhereInput {
 	hasSecrets: Boolean
 	hasSecretsWith: [HushWhereInput!]
 	"""
-	orgmemberships edge predicates
+	org_memberships edge predicates
 	"""
-	hasOrgmemberships: Boolean
-	hasOrgmembershipsWith: [OrgMembershipWhereInput!]
+	hasOrgMemberships: Boolean
+	hasOrgMembershipsWith: [OrgMembershipWhereInput!]
 	"""
-	groupmemberships edge predicates
+	group_memberships edge predicates
 	"""
-	hasGroupmemberships: Boolean
-	hasGroupmembershipsWith: [GroupMembershipWhereInput!]
+	hasGroupMemberships: Boolean
+	hasGroupMembershipsWith: [GroupMembershipWhereInput!]
 	"""
 	subscribers edge predicates
 	"""
@@ -50129,6 +50130,7 @@ enum SubcontrolOrderField {
 	subcategory
 	ref_code
 	CONTROL_OWNER_name
+	DELEGATE_name
 }
 """
 Return response for updateSubcontrol mutation

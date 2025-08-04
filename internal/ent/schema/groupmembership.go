@@ -27,7 +27,7 @@ type GroupMembership struct {
 }
 
 // SchemaGroupMembership is the name of the GroupMembership schema.
-const SchemaGroupMembership = "groupmembership"
+const SchemaGroupMembership = "group_membership"
 
 // Name returns the name of the GroupMembership schema.
 func (GroupMembership) Name() string {

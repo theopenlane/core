@@ -6346,15 +6346,15 @@ func (c *EventClient) QuerySecrets(e *Event) *HushQuery {
 	return query
 }
 
-// QueryOrgmemberships queries the orgmemberships edge of a Event.
-func (c *EventClient) QueryOrgmemberships(e *Event) *OrgMembershipQuery {
+// QueryOrgMemberships queries the org_memberships edge of a Event.
+func (c *EventClient) QueryOrgMemberships(e *Event) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgmembershipsTable, event.OrgmembershipsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgMembershipsTable, event.OrgMembershipsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
@@ -6365,15 +6365,15 @@ func (c *EventClient) QueryOrgmemberships(e *Event) *OrgMembershipQuery {
 	return query
 }
 
-// QueryGroupmemberships queries the groupmemberships edge of a Event.
-func (c *EventClient) QueryGroupmemberships(e *Event) *GroupMembershipQuery {
+// QueryGroupMemberships queries the group_memberships edge of a Event.
+func (c *EventClient) QueryGroupMemberships(e *Event) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := e.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(event.Table, event.FieldID, id),
 			sqlgraph.To(groupmembership.Table, groupmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupmembershipsTable, event.GroupmembershipsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupMembershipsTable, event.GroupMembershipsPrimaryKey...),
 		)
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.GroupMembership
@@ -8736,15 +8736,15 @@ func (c *GroupMembershipClient) QueryUser(gm *GroupMembership) *UserQuery {
 	return query
 }
 
-// QueryOrgmembership queries the orgmembership edge of a GroupMembership.
-func (c *GroupMembershipClient) QueryOrgmembership(gm *GroupMembership) *OrgMembershipQuery {
+// QueryOrgMembership queries the org_membership edge of a GroupMembership.
+func (c *GroupMembershipClient) QueryOrgMembership(gm *GroupMembership) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := gm.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(groupmembership.Table, groupmembership.FieldID, id),
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgmembershipTable, groupmembership.OrgmembershipColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgMembershipTable, groupmembership.OrgMembershipColumn),
 		)
 		schemaConfig := gm.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
@@ -17978,15 +17978,15 @@ func (c *ProgramMembershipClient) QueryUser(pm *ProgramMembership) *UserQuery {
 	return query
 }
 
-// QueryOrgmembership queries the orgmembership edge of a ProgramMembership.
-func (c *ProgramMembershipClient) QueryOrgmembership(pm *ProgramMembership) *OrgMembershipQuery {
+// QueryOrgMembership queries the org_membership edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryOrgMembership(pm *ProgramMembership) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pm.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.OrgmembershipTable, programmembership.OrgmembershipColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.OrgMembershipTable, programmembership.OrgMembershipColumn),
 		)
 		schemaConfig := pm.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership

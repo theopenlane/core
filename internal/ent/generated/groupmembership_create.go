@@ -131,23 +131,23 @@ func (gmc *GroupMembershipCreate) SetUser(u *User) *GroupMembershipCreate {
 	return gmc.SetUserID(u.ID)
 }
 
-// SetOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by ID.
-func (gmc *GroupMembershipCreate) SetOrgmembershipID(id string) *GroupMembershipCreate {
-	gmc.mutation.SetOrgmembershipID(id)
+// SetOrgMembershipID sets the "org_membership" edge to the OrgMembership entity by ID.
+func (gmc *GroupMembershipCreate) SetOrgMembershipID(id string) *GroupMembershipCreate {
+	gmc.mutation.SetOrgMembershipID(id)
 	return gmc
 }
 
-// SetNillableOrgmembershipID sets the "orgmembership" edge to the OrgMembership entity by ID if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableOrgmembershipID(id *string) *GroupMembershipCreate {
+// SetNillableOrgMembershipID sets the "org_membership" edge to the OrgMembership entity by ID if the given value is not nil.
+func (gmc *GroupMembershipCreate) SetNillableOrgMembershipID(id *string) *GroupMembershipCreate {
 	if id != nil {
-		gmc = gmc.SetOrgmembershipID(*id)
+		gmc = gmc.SetOrgMembershipID(*id)
 	}
 	return gmc
 }
 
-// SetOrgmembership sets the "orgmembership" edge to the OrgMembership entity.
-func (gmc *GroupMembershipCreate) SetOrgmembership(o *OrgMembership) *GroupMembershipCreate {
-	return gmc.SetOrgmembershipID(o.ID)
+// SetOrgMembership sets the "org_membership" edge to the OrgMembership entity.
+func (gmc *GroupMembershipCreate) SetOrgMembership(o *OrgMembership) *GroupMembershipCreate {
+	return gmc.SetOrgMembershipID(o.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -344,12 +344,12 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 		_node.UserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := gmc.mutation.OrgmembershipIDs(); len(nodes) > 0 {
+	if nodes := gmc.mutation.OrgMembershipIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   groupmembership.OrgmembershipTable,
-			Columns: []string{groupmembership.OrgmembershipColumn},
+			Table:   groupmembership.OrgMembershipTable,
+			Columns: []string{groupmembership.OrgMembershipColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -359,7 +359,7 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.group_membership_orgmembership = &nodes[0]
+		_node.group_membership_org_membership = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := gmc.mutation.EventsIDs(); len(nodes) > 0 {

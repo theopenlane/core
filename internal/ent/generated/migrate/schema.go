@@ -1642,7 +1642,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
-		{Name: "group_membership_orgmembership", Type: field.TypeString, Nullable: true},
+		{Name: "group_membership_org_membership", Type: field.TypeString, Nullable: true},
 	}
 	// GroupMembershipsTable holds the schema information for the "group_memberships" table.
 	GroupMembershipsTable = &schema.Table{
@@ -1663,7 +1663,7 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "group_memberships_org_memberships_orgmembership",
+				Symbol:     "group_memberships_org_memberships_org_membership",
 				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -3504,7 +3504,7 @@ var (
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
-		{Name: "program_membership_orgmembership", Type: field.TypeString, Nullable: true},
+		{Name: "program_membership_org_membership", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramMembershipsTable holds the schema information for the "program_memberships" table.
 	ProgramMembershipsTable = &schema.Table{
@@ -3525,7 +3525,7 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "program_memberships_org_memberships_orgmembership",
+				Symbol:     "program_memberships_org_memberships_org_membership",
 				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,

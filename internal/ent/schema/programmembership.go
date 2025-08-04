@@ -27,7 +27,7 @@ type ProgramMembership struct {
 }
 
 // SchemaProgramMembership is the name of the ProgramMembership schema.
-const SchemaProgramMembership = "programmembership"
+const SchemaProgramMembership = "program_membership"
 
 // Name returns the name of the ProgramMembership schema.
 func (ProgramMembership) Name() string {

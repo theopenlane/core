@@ -737,7 +737,7 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 
 	gmToReturn, err := gm.client.db.GroupMembership.Query().
 		WithUser().
-		WithOrgmembership().
+		WithOrgMembership().
 		Where(groupmembership.ID(groupMember.ID)).Only(ctx)
 	assert.NilError(t, err)
 
@@ -940,7 +940,7 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 	programMember, err = pm.client.db.ProgramMembership.Query().
 		WithUser().
-		WithOrgmembership().
+		WithOrgMembership().
 		Where(programmembership.ID(programMember.ID)).Only(ctx)
 	assert.NilError(t, err)
 

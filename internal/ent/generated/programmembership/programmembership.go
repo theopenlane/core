@@ -36,8 +36,8 @@ const (
 	EdgeProgram = "program"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
-	// EdgeOrgmembership holds the string denoting the orgmembership edge name in mutations.
-	EdgeOrgmembership = "orgmembership"
+	// EdgeOrgMembership holds the string denoting the org_membership edge name in mutations.
+	EdgeOrgMembership = "org_membership"
 	// Table holds the table name of the programmembership in the database.
 	Table = "program_memberships"
 	// ProgramTable is the table that holds the program relation/edge.
@@ -54,13 +54,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
-	// OrgmembershipTable is the table that holds the orgmembership relation/edge.
-	OrgmembershipTable = "program_memberships"
-	// OrgmembershipInverseTable is the table name for the OrgMembership entity.
+	// OrgMembershipTable is the table that holds the org_membership relation/edge.
+	OrgMembershipTable = "program_memberships"
+	// OrgMembershipInverseTable is the table name for the OrgMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "orgmembership" package.
-	OrgmembershipInverseTable = "org_memberships"
-	// OrgmembershipColumn is the table column denoting the orgmembership relation/edge.
-	OrgmembershipColumn = "program_membership_orgmembership"
+	OrgMembershipInverseTable = "org_memberships"
+	// OrgMembershipColumn is the table column denoting the org_membership relation/edge.
+	OrgMembershipColumn = "program_membership_org_membership"
 )
 
 // Columns holds all SQL columns for programmembership fields.
@@ -78,7 +78,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "program_memberships"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"program_membership_orgmembership",
+	"program_membership_org_membership",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -184,10 +184,10 @@ func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByOrgmembershipField orders the results by orgmembership field.
-func ByOrgmembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByOrgMembershipField orders the results by org_membership field.
+func ByOrgMembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgmembershipStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newOrgMembershipStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newProgramStep() *sqlgraph.Step {
@@ -204,11 +204,11 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
 	)
 }
-func newOrgmembershipStep() *sqlgraph.Step {
+func newOrgMembershipStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgmembershipInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, OrgmembershipTable, OrgmembershipColumn),
+		sqlgraph.To(OrgMembershipInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, OrgMembershipTable, OrgMembershipColumn),
 	)
 }
 

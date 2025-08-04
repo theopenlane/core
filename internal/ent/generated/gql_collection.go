@@ -10181,7 +10181,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				*wq = *query
 			})
 
-		case "orgmemberships":
+		case "orgMemberships":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -10213,11 +10213,11 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(event.OrgmembershipsTable)
-							s.Join(joinT).On(s.C(orgmembership.FieldID), joinT.C(event.OrgmembershipsPrimaryKey[0]))
-							s.Where(sql.InValues(joinT.C(event.OrgmembershipsPrimaryKey[1]), ids...))
-							s.Select(joinT.C(event.OrgmembershipsPrimaryKey[1]), sql.Count("*"))
-							s.GroupBy(joinT.C(event.OrgmembershipsPrimaryKey[1]))
+							joinT := sql.Table(event.OrgMembershipsTable)
+							s.Join(joinT).On(s.C(orgmembership.FieldID), joinT.C(event.OrgMembershipsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(event.OrgMembershipsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(event.OrgMembershipsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(event.OrgMembershipsPrimaryKey[1]))
 						})
 						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
@@ -10238,7 +10238,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				} else {
 					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.Orgmemberships)
+							n := len(nodes[i].Edges.OrgMemberships)
 							if nodes[i].Edges.totalCount[7] == nil {
 								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
@@ -10264,17 +10264,17 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(event.OrgmembershipsPrimaryKey[1], limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(event.OrgMembershipsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedOrgmemberships(alias, func(wq *OrgMembershipQuery) {
+			e.WithNamedOrgMemberships(alias, func(wq *OrgMembershipQuery) {
 				*wq = *query
 			})
 
-		case "groupmemberships":
+		case "groupMemberships":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -10306,11 +10306,11 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(event.GroupmembershipsTable)
-							s.Join(joinT).On(s.C(groupmembership.FieldID), joinT.C(event.GroupmembershipsPrimaryKey[0]))
-							s.Where(sql.InValues(joinT.C(event.GroupmembershipsPrimaryKey[1]), ids...))
-							s.Select(joinT.C(event.GroupmembershipsPrimaryKey[1]), sql.Count("*"))
-							s.GroupBy(joinT.C(event.GroupmembershipsPrimaryKey[1]))
+							joinT := sql.Table(event.GroupMembershipsTable)
+							s.Join(joinT).On(s.C(groupmembership.FieldID), joinT.C(event.GroupMembershipsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(event.GroupMembershipsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(event.GroupMembershipsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(event.GroupMembershipsPrimaryKey[1]))
 						})
 						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
@@ -10331,7 +10331,7 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				} else {
 					e.loadTotal = append(e.loadTotal, func(_ context.Context, nodes []*Event) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.Groupmemberships)
+							n := len(nodes[i].Edges.GroupMemberships)
 							if nodes[i].Edges.totalCount[8] == nil {
 								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
@@ -10357,13 +10357,13 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(event.GroupmembershipsPrimaryKey[1], limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(event.GroupMembershipsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			e.WithNamedGroupmemberships(alias, func(wq *GroupMembershipQuery) {
+			e.WithNamedGroupMemberships(alias, func(wq *GroupMembershipQuery) {
 				*wq = *query
 			})
 

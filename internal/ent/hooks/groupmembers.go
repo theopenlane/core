@@ -53,7 +53,7 @@ func HookGroupMembers() ent.Hook {
 				return nil, err
 			}
 
-			m.SetOrgmembershipID(orgMemberID)
+			m.SetOrgMembershipID(orgMemberID)
 
 			return next.Mutate(ctx, m)
 		})

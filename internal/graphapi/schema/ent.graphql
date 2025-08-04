@@ -12446,7 +12446,7 @@ type Event implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
-  orgmemberships(
+  orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -12477,7 +12477,7 @@ type Event implements Node {
     """
     where: OrgMembershipWhereInput
   ): OrgMembershipConnection!
-  groupmemberships(
+  groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -12823,15 +12823,15 @@ input EventWhereInput {
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
   """
-  orgmemberships edge predicates
+  org_memberships edge predicates
   """
-  hasOrgmemberships: Boolean
-  hasOrgmembershipsWith: [OrgMembershipWhereInput!]
+  hasOrgMemberships: Boolean
+  hasOrgMembershipsWith: [OrgMembershipWhereInput!]
   """
-  groupmemberships edge predicates
+  group_memberships edge predicates
   """
-  hasGroupmemberships: Boolean
-  hasGroupmembershipsWith: [GroupMembershipWhereInput!]
+  hasGroupMemberships: Boolean
+  hasGroupMembershipsWith: [GroupMembershipWhereInput!]
   """
   subscribers edge predicates
   """

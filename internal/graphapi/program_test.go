@@ -892,7 +892,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 	// cleanup group
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 	// org member cleanup
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm1.Edges.Orgmembership.ID, gm2.Edges.Orgmembership.ID, gm3.Edges.Orgmembership.ID, gm4.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID, gm4.Edges.OrgMembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteProgram(t *testing.T) {

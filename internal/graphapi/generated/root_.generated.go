@@ -1113,15 +1113,15 @@ type ComplexityRoot struct {
 		EventID              func(childComplexity int) int
 		EventType            func(childComplexity int) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Groupmemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		GroupMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Groups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                   func(childComplexity int) int
 		Integrations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		Invites              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		Metadata             func(childComplexity int) int
+		OrgMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscriptions     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
 		Organizations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Orgmemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		Secrets              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Subscribers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
@@ -10034,17 +10034,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Event.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
-	case "Event.groupmemberships":
-		if e.complexity.Event.Groupmemberships == nil {
+	case "Event.groupMemberships":
+		if e.complexity.Event.GroupMemberships == nil {
 			break
 		}
 
-		args, err := ec.field_Event_groupmemberships_args(ctx, rawArgs)
+		args, err := ec.field_Event_groupMemberships_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Event.Groupmemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
+		return e.complexity.Event.GroupMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
 
 	case "Event.groups":
 		if e.complexity.Event.Groups == nil {
@@ -10096,6 +10096,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Event.Metadata(childComplexity), true
 
+	case "Event.orgMemberships":
+		if e.complexity.Event.OrgMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Event_orgMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.OrgMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
+
 	case "Event.orgSubscriptions":
 		if e.complexity.Event.OrgSubscriptions == nil {
 			break
@@ -10119,18 +10131,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Event.Organizations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
-
-	case "Event.orgmemberships":
-		if e.complexity.Event.Orgmemberships == nil {
-			break
-		}
-
-		args, err := ec.field_Event_orgmemberships_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Event.Orgmemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
 
 	case "Event.personalAccessTokens":
 		if e.complexity.Event.PersonalAccessTokens == nil {
@@ -42216,6 +42216,7 @@ enum ControlOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -48392,7 +48393,7 @@ type Event implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
-  orgmemberships(
+  orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48423,7 +48424,7 @@ type Event implements Node {
     """
     where: OrgMembershipWhereInput
   ): OrgMembershipConnection!
-  groupmemberships(
+  groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48769,15 +48770,15 @@ input EventWhereInput {
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
   """
-  orgmemberships edge predicates
+  org_memberships edge predicates
   """
-  hasOrgmemberships: Boolean
-  hasOrgmembershipsWith: [OrgMembershipWhereInput!]
+  hasOrgMemberships: Boolean
+  hasOrgMembershipsWith: [OrgMembershipWhereInput!]
   """
-  groupmemberships edge predicates
+  group_memberships edge predicates
   """
-  hasGroupmemberships: Boolean
-  hasGroupmembershipsWith: [GroupMembershipWhereInput!]
+  hasGroupMemberships: Boolean
+  hasGroupMembershipsWith: [GroupMembershipWhereInput!]
   """
   subscribers edge predicates
   """
@@ -78034,6 +78035,7 @@ enum SubcontrolOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.

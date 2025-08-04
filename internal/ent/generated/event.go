@@ -59,10 +59,10 @@ type EventEdges struct {
 	PersonalAccessTokens []*PersonalAccessToken `json:"personal_access_tokens,omitempty"`
 	// Secrets holds the value of the secrets edge.
 	Secrets []*Hush `json:"secrets,omitempty"`
-	// Orgmemberships holds the value of the orgmemberships edge.
-	Orgmemberships []*OrgMembership `json:"orgmemberships,omitempty"`
-	// Groupmemberships holds the value of the groupmemberships edge.
-	Groupmemberships []*GroupMembership `json:"groupmemberships,omitempty"`
+	// OrgMemberships holds the value of the org_memberships edge.
+	OrgMemberships []*OrgMembership `json:"org_memberships,omitempty"`
+	// GroupMemberships holds the value of the group_memberships edge.
+	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// Subscribers holds the value of the subscribers edge.
 	Subscribers []*Subscriber `json:"subscribers,omitempty"`
 	// Files holds the value of the files edge.
@@ -82,8 +82,8 @@ type EventEdges struct {
 	namedInvites              map[string][]*Invite
 	namedPersonalAccessTokens map[string][]*PersonalAccessToken
 	namedSecrets              map[string][]*Hush
-	namedOrgmemberships       map[string][]*OrgMembership
-	namedGroupmemberships     map[string][]*GroupMembership
+	namedOrgMemberships       map[string][]*OrgMembership
+	namedGroupMemberships     map[string][]*GroupMembership
 	namedSubscribers          map[string][]*Subscriber
 	namedFiles                map[string][]*File
 	namedOrgSubscriptions     map[string][]*OrgSubscription
@@ -152,22 +152,22 @@ func (e EventEdges) SecretsOrErr() ([]*Hush, error) {
 	return nil, &NotLoadedError{edge: "secrets"}
 }
 
-// OrgmembershipsOrErr returns the Orgmemberships value or an error if the edge
+// OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) OrgmembershipsOrErr() ([]*OrgMembership, error) {
+func (e EventEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
 	if e.loadedTypes[7] {
-		return e.Orgmemberships, nil
+		return e.OrgMemberships, nil
 	}
-	return nil, &NotLoadedError{edge: "orgmemberships"}
+	return nil, &NotLoadedError{edge: "org_memberships"}
 }
 
-// GroupmembershipsOrErr returns the Groupmemberships value or an error if the edge
+// GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
-func (e EventEdges) GroupmembershipsOrErr() ([]*GroupMembership, error) {
+func (e EventEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 	if e.loadedTypes[8] {
-		return e.Groupmemberships, nil
+		return e.GroupMemberships, nil
 	}
-	return nil, &NotLoadedError{edge: "groupmemberships"}
+	return nil, &NotLoadedError{edge: "group_memberships"}
 }
 
 // SubscribersOrErr returns the Subscribers value or an error if the edge
@@ -344,14 +344,14 @@ func (e *Event) QuerySecrets() *HushQuery {
 	return NewEventClient(e.config).QuerySecrets(e)
 }
 
-// QueryOrgmemberships queries the "orgmemberships" edge of the Event entity.
-func (e *Event) QueryOrgmemberships() *OrgMembershipQuery {
-	return NewEventClient(e.config).QueryOrgmemberships(e)
+// QueryOrgMemberships queries the "org_memberships" edge of the Event entity.
+func (e *Event) QueryOrgMemberships() *OrgMembershipQuery {
+	return NewEventClient(e.config).QueryOrgMemberships(e)
 }
 
-// QueryGroupmemberships queries the "groupmemberships" edge of the Event entity.
-func (e *Event) QueryGroupmemberships() *GroupMembershipQuery {
-	return NewEventClient(e.config).QueryGroupmemberships(e)
+// QueryGroupMemberships queries the "group_memberships" edge of the Event entity.
+func (e *Event) QueryGroupMemberships() *GroupMembershipQuery {
+	return NewEventClient(e.config).QueryGroupMemberships(e)
 }
 
 // QuerySubscribers queries the "subscribers" edge of the Event entity.
@@ -590,51 +590,51 @@ func (e *Event) appendNamedSecrets(name string, edges ...*Hush) {
 	}
 }
 
-// NamedOrgmemberships returns the Orgmemberships named value or an error if the edge was not
+// NamedOrgMemberships returns the OrgMemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedOrgmemberships(name string) ([]*OrgMembership, error) {
-	if e.Edges.namedOrgmemberships == nil {
+func (e *Event) NamedOrgMemberships(name string) ([]*OrgMembership, error) {
+	if e.Edges.namedOrgMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedOrgmemberships[name]
+	nodes, ok := e.Edges.namedOrgMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedOrgmemberships(name string, edges ...*OrgMembership) {
-	if e.Edges.namedOrgmemberships == nil {
-		e.Edges.namedOrgmemberships = make(map[string][]*OrgMembership)
+func (e *Event) appendNamedOrgMemberships(name string, edges ...*OrgMembership) {
+	if e.Edges.namedOrgMemberships == nil {
+		e.Edges.namedOrgMemberships = make(map[string][]*OrgMembership)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedOrgmemberships[name] = []*OrgMembership{}
+		e.Edges.namedOrgMemberships[name] = []*OrgMembership{}
 	} else {
-		e.Edges.namedOrgmemberships[name] = append(e.Edges.namedOrgmemberships[name], edges...)
+		e.Edges.namedOrgMemberships[name] = append(e.Edges.namedOrgMemberships[name], edges...)
 	}
 }
 
-// NamedGroupmemberships returns the Groupmemberships named value or an error if the edge was not
+// NamedGroupMemberships returns the GroupMemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Event) NamedGroupmemberships(name string) ([]*GroupMembership, error) {
-	if e.Edges.namedGroupmemberships == nil {
+func (e *Event) NamedGroupMemberships(name string) ([]*GroupMembership, error) {
+	if e.Edges.namedGroupMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedGroupmemberships[name]
+	nodes, ok := e.Edges.namedGroupMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Event) appendNamedGroupmemberships(name string, edges ...*GroupMembership) {
-	if e.Edges.namedGroupmemberships == nil {
-		e.Edges.namedGroupmemberships = make(map[string][]*GroupMembership)
+func (e *Event) appendNamedGroupMemberships(name string, edges ...*GroupMembership) {
+	if e.Edges.namedGroupMemberships == nil {
+		e.Edges.namedGroupMemberships = make(map[string][]*GroupMembership)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedGroupmemberships[name] = []*GroupMembership{}
+		e.Edges.namedGroupMemberships[name] = []*GroupMembership{}
 	} else {
-		e.Edges.namedGroupmemberships[name] = append(e.Edges.namedGroupmemberships[name], edges...)
+		e.Edges.namedGroupMemberships[name] = append(e.Edges.namedGroupMemberships[name], edges...)
 	}
 }
 

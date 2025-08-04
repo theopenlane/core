@@ -238,5 +238,5 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	// cleanup program
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: pm.ProgramID}).MustDelete(testUser1.UserCtx, t)
 	// cleanup org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{pm.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{pm.Edges.OrgMembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }

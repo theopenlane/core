@@ -36,8 +36,8 @@ const (
 	EdgeGroup = "group"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
-	// EdgeOrgmembership holds the string denoting the orgmembership edge name in mutations.
-	EdgeOrgmembership = "orgmembership"
+	// EdgeOrgMembership holds the string denoting the org_membership edge name in mutations.
+	EdgeOrgMembership = "org_membership"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// Table holds the table name of the groupmembership in the database.
@@ -56,13 +56,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
-	// OrgmembershipTable is the table that holds the orgmembership relation/edge.
-	OrgmembershipTable = "group_memberships"
-	// OrgmembershipInverseTable is the table name for the OrgMembership entity.
+	// OrgMembershipTable is the table that holds the org_membership relation/edge.
+	OrgMembershipTable = "group_memberships"
+	// OrgMembershipInverseTable is the table name for the OrgMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "orgmembership" package.
-	OrgmembershipInverseTable = "org_memberships"
-	// OrgmembershipColumn is the table column denoting the orgmembership relation/edge.
-	OrgmembershipColumn = "group_membership_orgmembership"
+	OrgMembershipInverseTable = "org_memberships"
+	// OrgMembershipColumn is the table column denoting the org_membership relation/edge.
+	OrgMembershipColumn = "group_membership_org_membership"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "group_membership_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -85,7 +85,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "group_memberships"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"group_membership_orgmembership",
+	"group_membership_org_membership",
 }
 
 var (
@@ -197,10 +197,10 @@ func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByOrgmembershipField orders the results by orgmembership field.
-func ByOrgmembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByOrgMembershipField orders the results by org_membership field.
+func ByOrgMembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgmembershipStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newOrgMembershipStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -231,11 +231,11 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
 	)
 }
-func newOrgmembershipStep() *sqlgraph.Step {
+func newOrgMembershipStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgmembershipInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, OrgmembershipTable, OrgmembershipColumn),
+		sqlgraph.To(OrgMembershipInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, OrgMembershipTable, OrgMembershipColumn),
 	)
 }
 func newEventsStep() *sqlgraph.Step {

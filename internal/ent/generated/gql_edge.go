@@ -1520,7 +1520,7 @@ func (e *Event) Secrets(
 	return e.QuerySecrets().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (e *Event) Orgmemberships(
+func (e *Event) OrgMemberships(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
 	opts := []OrgMembershipPaginateOption{
@@ -1529,7 +1529,7 @@ func (e *Event) Orgmemberships(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := e.Edges.totalCount[7][alias]
-	if nodes, err := e.NamedOrgmemberships(alias); err == nil || hasTotalCount {
+	if nodes, err := e.NamedOrgMemberships(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -1538,10 +1538,10 @@ func (e *Event) Orgmemberships(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return e.QueryOrgmemberships().Paginate(ctx, after, first, before, last, opts...)
+	return e.QueryOrgMemberships().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (e *Event) Groupmemberships(
+func (e *Event) GroupMemberships(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupMembershipOrder, where *GroupMembershipWhereInput,
 ) (*GroupMembershipConnection, error) {
 	opts := []GroupMembershipPaginateOption{
@@ -1550,7 +1550,7 @@ func (e *Event) Groupmemberships(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := e.Edges.totalCount[8][alias]
-	if nodes, err := e.NamedGroupmemberships(alias); err == nil || hasTotalCount {
+	if nodes, err := e.NamedGroupMemberships(alias); err == nil || hasTotalCount {
 		pager, err := newGroupMembershipPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -1559,7 +1559,7 @@ func (e *Event) Groupmemberships(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return e.QueryGroupmemberships().Paginate(ctx, after, first, before, last, opts...)
+	return e.QueryGroupMemberships().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (e *Event) Subscribers(

@@ -182,7 +182,7 @@ func TestMutationCreateRisk(t *testing.T) {
 
 	// group to be used for checking access, defaulting to a read only user
 	groupMember := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	groupMemberCtx := auth.NewTestContextWithOrgID(groupMember.UserID, groupMember.Edges.Orgmembership.OrganizationID)
+	groupMemberCtx := auth.NewTestContextWithOrgID(groupMember.UserID, groupMember.Edges.OrgMembership.OrganizationID)
 
 	// add adminUser to the program so that they can create a risk associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,

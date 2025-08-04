@@ -28,7 +28,7 @@ type OrgMembership struct {
 	ent.Schema
 }
 
-const SchemaOrgMembership = "ormembership"
+const SchemaOrgMembership = "org_membership"
 
 func (OrgMembership) Name() string {
 	return SchemaOrgMembership

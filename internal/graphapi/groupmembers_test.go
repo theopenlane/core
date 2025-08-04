@@ -101,7 +101,7 @@ func TestQueryGroupMembers(t *testing.T) {
 	// delete created group member
 	(&Cleanup[*generated.GroupMembershipDeleteOne]{client: suite.client.db.GroupMembership, ID: groupMember.ID}).MustDelete(testUser1.UserCtx, t)
 	// delete org member
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{groupMember.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{groupMember.Edges.OrgMembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateGroupMembers(t *testing.T) {
@@ -346,7 +346,7 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 	// delete created group member
 	(&Cleanup[*generated.GroupMembershipDeleteOne]{client: suite.client.db.GroupMembership, ID: gm.ID}).MustDelete(testUser1.UserCtx, t)
 	// delete org member
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm.Edges.OrgMembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteGroupMembers(t *testing.T) {
@@ -436,7 +436,7 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 	}
 
 	// delete org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm1.Edges.Orgmembership.ID, gm2.Edges.Orgmembership.ID, gm3.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID}}).MustDelete(testUser1.UserCtx, t)
 	// delete the group
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
 }

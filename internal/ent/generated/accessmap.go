@@ -376,12 +376,12 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "secret",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "orgmemberships": {
-	ObjectType:      "orgmembership",
+}, "org_memberships": {
+	ObjectType:      "org_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "groupmemberships": {
-	ObjectType:      "groupmembership",
+}, "group_memberships": {
+	ObjectType:      "group_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "subscribers": {
@@ -657,8 +657,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "user",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "orgmembership": {
-	ObjectType:      "orgmembership",
+}, "org_membership": {
+	ObjectType:      "org_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "events": {
@@ -1408,8 +1408,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "user",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "orgmembership": {
-	ObjectType:      "orgmembership",
+}, "org_membership": {
+	ObjectType:      "org_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
