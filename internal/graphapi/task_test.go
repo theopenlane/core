@@ -459,7 +459,7 @@ func TestMutationCreateTask(t *testing.T) {
 
 func TestMutationUpdateTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	group := (&GroupBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	group := (&GroupMemberBuilder{client: suite.client, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(adminUser.UserCtx, t)
 
 	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
 	assert.NilError(t, err)
@@ -627,7 +627,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "add to group",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AddGroupIDs: []string{group.ID},
+				AddGroupIDs: []string{group.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -784,7 +784,7 @@ func TestMutationUpdateTask(t *testing.T) {
 
 	// cleanup
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.GroupID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTask(t *testing.T) {
