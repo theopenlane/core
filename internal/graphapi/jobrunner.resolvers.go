@@ -14,6 +14,25 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
+// CreateJobRunner is the resolver for the createJobRunner field.
+func (r *mutationResolver) CreateJobRunner(ctx context.Context, input generated.CreateJobRunnerInput) (*model.JobRunnerCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).JobRunner.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobrunner"})
+	}
+
+	return &model.JobRunnerCreatePayload{
+		JobRunner: res,
+	}, nil
+}
+
 // UpdateJobRunner is the resolver for the updateJobRunner field.
 func (r *mutationResolver) UpdateJobRunner(ctx context.Context, id string, input generated.UpdateJobRunnerInput) (*model.JobRunnerUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).JobRunner.Get(ctx, id)

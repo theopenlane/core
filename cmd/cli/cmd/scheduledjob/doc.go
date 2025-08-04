@@ -1,0 +1,2 @@
+// Package scheduledjob is our cobra cli for scheduledjob endpoints
+package scheduledjob

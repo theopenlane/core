@@ -231,6 +231,10 @@ type OpenlaneGraphClient interface {
 	GetAllJobResults(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobResults, error)
 	GetJobResultByID(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor) (*GetJobResultByID, error)
 	GetJobResults(ctx context.Context, first *int64, last *int64, where *JobResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobResults, error)
+	CreateJobResult(ctx context.Context, input CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error)
+	UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error)
+	DeleteJobResult(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobResult, error)
+	CreateJobRunner(ctx context.Context, input CreateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunner, error)
 	DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunner, error)
 	GetAllJobRunners(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunners, error)
 	GetJobRunnerByID(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerByID, error)
@@ -399,6 +403,9 @@ type OpenlaneGraphClient interface {
 	GetAllScheduledJobRuns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobRuns, error)
 	GetScheduledJobRunByID(ctx context.Context, scheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobRunByID, error)
 	GetScheduledJobRuns(ctx context.Context, first *int64, last *int64, where *ScheduledJobRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobRuns, error)
+	CreateScheduledJobRun(ctx context.Context, input CreateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*CreateScheduledJobRun, error)
+	UpdateScheduledJobRun(ctx context.Context, updateScheduledJobRunID string, input UpdateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScheduledJobRun, error)
+	DeleteScheduledJobRun(ctx context.Context, deleteScheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*DeleteScheduledJobRun, error)
 	GlobalSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*GlobalSearch, error)
 	CreateStandard(ctx context.Context, input CreateStandardInput, interceptors ...clientv2.RequestInterceptor) (*CreateStandard, error)
 	DeleteStandard(ctx context.Context, deleteStandardID string, interceptors ...clientv2.RequestInterceptor) (*DeleteStandard, error)
@@ -39514,6 +39521,307 @@ func (t *GetJobResults_JobResults) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type CreateJobResult_CreateJobResult_JobResult struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FileID         string                   "json:\"fileID\" graphql:\"fileID\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateJobResult_CreateJobResult_JobResult) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetExitCode() int64 {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.ExitCode
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetFileID() string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.FileID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return &t.FinishedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetID() string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.ID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.OwnerID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetScheduledJobID() string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.ScheduledJobID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return &t.Status
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateJobResult_CreateJobResult struct {
+	JobResult CreateJobResult_CreateJobResult_JobResult "json:\"jobResult\" graphql:\"jobResult\""
+}
+
+func (t *CreateJobResult_CreateJobResult) GetJobResult() *CreateJobResult_CreateJobResult_JobResult {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult{}
+	}
+	return &t.JobResult
+}
+
+type UpdateJobResult_UpdateJobResult_JobResult struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FileID         string                   "json:\"fileID\" graphql:\"fileID\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetExitCode() int64 {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.ExitCode
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetFileID() string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.FileID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return &t.FinishedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetID() string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.ID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetScheduledJobID() string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.ScheduledJobID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return &t.StartedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return &t.Status
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateJobResult_UpdateJobResult struct {
+	JobResult UpdateJobResult_UpdateJobResult_JobResult "json:\"jobResult\" graphql:\"jobResult\""
+}
+
+func (t *UpdateJobResult_UpdateJobResult) GetJobResult() *UpdateJobResult_UpdateJobResult_JobResult {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult{}
+	}
+	return &t.JobResult
+}
+
+type DeleteJobResult_DeleteJobResult struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteJobResult_DeleteJobResult) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteJobResult_DeleteJobResult{}
+	}
+	return t.DeletedID
+}
+
+type CreateJobRunner_CreateJobRunner_JobRunner struct {
+	CreatedAt *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                "json:\"displayID\" graphql:\"displayID\""
+	ID        string                "json:\"id\" graphql:\"id\""
+	IPAddress string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name      string                "json:\"name\" graphql:\"name\""
+	OwnerID   *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status    enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags      []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetDisplayID() string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.DisplayID
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetID() string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.ID
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetIPAddress() string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.IPAddress
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetName() string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.Name
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.OwnerID
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return &t.Status
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetTags() []string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.Tags
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateJobRunner_CreateJobRunner_JobRunner) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner_JobRunner{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateJobRunner_CreateJobRunner struct {
+	JobRunner CreateJobRunner_CreateJobRunner_JobRunner "json:\"jobRunner\" graphql:\"jobRunner\""
+}
+
+func (t *CreateJobRunner_CreateJobRunner) GetJobRunner() *CreateJobRunner_CreateJobRunner_JobRunner {
+	if t == nil {
+		t = &CreateJobRunner_CreateJobRunner{}
+	}
+	return &t.JobRunner
+}
+
 type DeleteJobRunner_DeleteJobRunner struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -67225,6 +67533,173 @@ func (t *GetScheduledJobRuns_ScheduledJobRuns) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun struct {
+	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string                      "json:\"id\" graphql:\"id\""
+	JobRunnerID    string                      "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
+	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetID() string {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.ID
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetJobRunnerID() string {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.JobRunnerID
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.OwnerID
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetScheduledJobID() string {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.ScheduledJobID
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetStatus() *enums.ScheduledJobRunStatus {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return &t.Status
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateScheduledJobRun_CreateScheduledJobRun struct {
+	ScheduledJobRun CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun "json:\"scheduledJobRun\" graphql:\"scheduledJobRun\""
+}
+
+func (t *CreateScheduledJobRun_CreateScheduledJobRun) GetScheduledJobRun() *CreateScheduledJobRun_CreateScheduledJobRun_ScheduledJobRun {
+	if t == nil {
+		t = &CreateScheduledJobRun_CreateScheduledJobRun{}
+	}
+	return &t.ScheduledJobRun
+}
+
+type UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun struct {
+	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string                      "json:\"id\" graphql:\"id\""
+	JobRunnerID    string                      "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
+	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetID() string {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.ID
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetJobRunnerID() string {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.JobRunnerID
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetScheduledJobID() string {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.ScheduledJobID
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetStatus() *enums.ScheduledJobRunStatus {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return &t.Status
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateScheduledJobRun_UpdateScheduledJobRun struct {
+	ScheduledJobRun UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun "json:\"scheduledJobRun\" graphql:\"scheduledJobRun\""
+}
+
+func (t *UpdateScheduledJobRun_UpdateScheduledJobRun) GetScheduledJobRun() *UpdateScheduledJobRun_UpdateScheduledJobRun_ScheduledJobRun {
+	if t == nil {
+		t = &UpdateScheduledJobRun_UpdateScheduledJobRun{}
+	}
+	return &t.ScheduledJobRun
+}
+
+type DeleteScheduledJobRun_DeleteScheduledJobRun struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteScheduledJobRun_DeleteScheduledJobRun) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteScheduledJobRun_DeleteScheduledJobRun{}
+	}
+	return t.DeletedID
+}
+
 type GlobalSearch_Search_APITokens_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -91657,6 +92132,50 @@ func (t *GetJobResults) GetJobResults() *GetJobResults_JobResults {
 	return &t.JobResults
 }
 
+type CreateJobResult struct {
+	CreateJobResult CreateJobResult_CreateJobResult "json:\"createJobResult\" graphql:\"createJobResult\""
+}
+
+func (t *CreateJobResult) GetCreateJobResult() *CreateJobResult_CreateJobResult {
+	if t == nil {
+		t = &CreateJobResult{}
+	}
+	return &t.CreateJobResult
+}
+
+type UpdateJobResult struct {
+	UpdateJobResult UpdateJobResult_UpdateJobResult "json:\"updateJobResult\" graphql:\"updateJobResult\""
+}
+
+func (t *UpdateJobResult) GetUpdateJobResult() *UpdateJobResult_UpdateJobResult {
+	if t == nil {
+		t = &UpdateJobResult{}
+	}
+	return &t.UpdateJobResult
+}
+
+type DeleteJobResult struct {
+	DeleteJobResult DeleteJobResult_DeleteJobResult "json:\"deleteJobResult\" graphql:\"deleteJobResult\""
+}
+
+func (t *DeleteJobResult) GetDeleteJobResult() *DeleteJobResult_DeleteJobResult {
+	if t == nil {
+		t = &DeleteJobResult{}
+	}
+	return &t.DeleteJobResult
+}
+
+type CreateJobRunner struct {
+	CreateJobRunner CreateJobRunner_CreateJobRunner "json:\"createJobRunner\" graphql:\"createJobRunner\""
+}
+
+func (t *CreateJobRunner) GetCreateJobRunner() *CreateJobRunner_CreateJobRunner {
+	if t == nil {
+		t = &CreateJobRunner{}
+	}
+	return &t.CreateJobRunner
+}
+
 type DeleteJobRunner struct {
 	DeleteJobRunner DeleteJobRunner_DeleteJobRunner "json:\"deleteJobRunner\" graphql:\"deleteJobRunner\""
 }
@@ -93503,6 +94022,39 @@ func (t *GetScheduledJobRuns) GetScheduledJobRuns() *GetScheduledJobRuns_Schedul
 		t = &GetScheduledJobRuns{}
 	}
 	return &t.ScheduledJobRuns
+}
+
+type CreateScheduledJobRun struct {
+	CreateScheduledJobRun CreateScheduledJobRun_CreateScheduledJobRun "json:\"createScheduledJobRun\" graphql:\"createScheduledJobRun\""
+}
+
+func (t *CreateScheduledJobRun) GetCreateScheduledJobRun() *CreateScheduledJobRun_CreateScheduledJobRun {
+	if t == nil {
+		t = &CreateScheduledJobRun{}
+	}
+	return &t.CreateScheduledJobRun
+}
+
+type UpdateScheduledJobRun struct {
+	UpdateScheduledJobRun UpdateScheduledJobRun_UpdateScheduledJobRun "json:\"updateScheduledJobRun\" graphql:\"updateScheduledJobRun\""
+}
+
+func (t *UpdateScheduledJobRun) GetUpdateScheduledJobRun() *UpdateScheduledJobRun_UpdateScheduledJobRun {
+	if t == nil {
+		t = &UpdateScheduledJobRun{}
+	}
+	return &t.UpdateScheduledJobRun
+}
+
+type DeleteScheduledJobRun struct {
+	DeleteScheduledJobRun DeleteScheduledJobRun_DeleteScheduledJobRun "json:\"deleteScheduledJobRun\" graphql:\"deleteScheduledJobRun\""
+}
+
+func (t *DeleteScheduledJobRun) GetDeleteScheduledJobRun() *DeleteScheduledJobRun_DeleteScheduledJobRun {
+	if t == nil {
+		t = &DeleteScheduledJobRun{}
+	}
+	return &t.DeleteScheduledJobRun
 }
 
 type GlobalSearch struct {
@@ -105606,6 +106158,141 @@ func (c *Client) GetJobResults(ctx context.Context, first *int64, last *int64, w
 	return &res, nil
 }
 
+const CreateJobResultDocument = `mutation CreateJobResult ($input: CreateJobResultInput!) {
+	createJobResult(input: $input) {
+		jobResult {
+			id
+			createdAt
+			createdBy
+			updatedAt
+			updatedBy
+			ownerID
+			scheduledJobID
+			status
+			exitCode
+			startedAt
+			finishedAt
+			fileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateJobResult(ctx context.Context, input CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateJobResult
+	if err := c.Client.Post(ctx, "CreateJobResult", CreateJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateJobResultDocument = `mutation UpdateJobResult ($updateJobResultId: ID!, $input: UpdateJobResultInput!) {
+	updateJobResult(id: $updateJobResultId, input: $input) {
+		jobResult {
+			id
+			createdAt
+			createdBy
+			updatedAt
+			updatedBy
+			ownerID
+			scheduledJobID
+			status
+			exitCode
+			startedAt
+			finishedAt
+			fileID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error) {
+	vars := map[string]any{
+		"updateJobResultId": updateJobResultID,
+		"input":             input,
+	}
+
+	var res UpdateJobResult
+	if err := c.Client.Post(ctx, "UpdateJobResult", UpdateJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteJobResultDocument = `mutation DeleteJobResult ($deleteJobResultId: ID!) {
+	deleteJobResult(id: $deleteJobResultId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteJobResult(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobResult, error) {
+	vars := map[string]any{
+		"deleteJobResultId": deleteJobResultID,
+	}
+
+	var res DeleteJobResult
+	if err := c.Client.Post(ctx, "DeleteJobResult", DeleteJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateJobRunnerDocument = `mutation CreateJobRunner ($input: CreateJobRunnerInput!) {
+	createJobRunner(input: $input) {
+		jobRunner {
+			id
+			createdAt
+			createdBy
+			updatedAt
+			updatedBy
+			ownerID
+			name
+			displayID
+			status
+			ipAddress
+			tags
+		}
+	}
+}
+`
+
+func (c *Client) CreateJobRunner(ctx context.Context, input CreateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunner, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateJobRunner
+	if err := c.Client.Post(ctx, "CreateJobRunner", CreateJobRunnerDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteJobRunnerDocument = `mutation DeleteJobRunner ($deleteJobRunnerId: ID!) {
 	deleteJobRunner(id: $deleteJobRunnerId) {
 		deletedID
@@ -113647,6 +114334,99 @@ func (c *Client) GetScheduledJobRuns(ctx context.Context, first *int64, last *in
 	return &res, nil
 }
 
+const CreateScheduledJobRunDocument = `mutation CreateScheduledJobRun ($input: CreateScheduledJobRunInput!) {
+	createScheduledJobRun(input: $input) {
+		scheduledJobRun {
+			id
+			createdAt
+			createdBy
+			updatedAt
+			updatedBy
+			ownerID
+			scheduledJobID
+			jobRunnerID
+			status
+		}
+	}
+}
+`
+
+func (c *Client) CreateScheduledJobRun(ctx context.Context, input CreateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*CreateScheduledJobRun, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateScheduledJobRun
+	if err := c.Client.Post(ctx, "CreateScheduledJobRun", CreateScheduledJobRunDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateScheduledJobRunDocument = `mutation UpdateScheduledJobRun ($updateScheduledJobRunId: ID!, $input: UpdateScheduledJobRunInput!) {
+	updateScheduledJobRun(id: $updateScheduledJobRunId, input: $input) {
+		scheduledJobRun {
+			id
+			createdAt
+			createdBy
+			updatedAt
+			updatedBy
+			ownerID
+			scheduledJobID
+			jobRunnerID
+			status
+		}
+	}
+}
+`
+
+func (c *Client) UpdateScheduledJobRun(ctx context.Context, updateScheduledJobRunID string, input UpdateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScheduledJobRun, error) {
+	vars := map[string]any{
+		"updateScheduledJobRunId": updateScheduledJobRunID,
+		"input":                   input,
+	}
+
+	var res UpdateScheduledJobRun
+	if err := c.Client.Post(ctx, "UpdateScheduledJobRun", UpdateScheduledJobRunDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteScheduledJobRunDocument = `mutation DeleteScheduledJobRun ($deleteScheduledJobRunId: ID!) {
+	deleteScheduledJobRun(id: $deleteScheduledJobRunId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteScheduledJobRun(ctx context.Context, deleteScheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*DeleteScheduledJobRun, error) {
+	vars := map[string]any{
+		"deleteScheduledJobRunId": deleteScheduledJobRunID,
+	}
+
+	var res DeleteScheduledJobRun
+	if err := c.Client.Post(ctx, "DeleteScheduledJobRun", DeleteScheduledJobRunDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 	search(query: $query) {
 		totalCount
@@ -119812,6 +120592,10 @@ var DocumentOperationNames = map[string]string{
 	GetAllJobResultsDocument:                       "GetAllJobResults",
 	GetJobResultByIDDocument:                       "GetJobResultByID",
 	GetJobResultsDocument:                          "GetJobResults",
+	CreateJobResultDocument:                        "CreateJobResult",
+	UpdateJobResultDocument:                        "UpdateJobResult",
+	DeleteJobResultDocument:                        "DeleteJobResult",
+	CreateJobRunnerDocument:                        "CreateJobRunner",
 	DeleteJobRunnerDocument:                        "DeleteJobRunner",
 	GetAllJobRunnersDocument:                       "GetAllJobRunners",
 	GetJobRunnerByIDDocument:                       "GetJobRunnerByID",
@@ -119980,6 +120764,9 @@ var DocumentOperationNames = map[string]string{
 	GetAllScheduledJobRunsDocument:                 "GetAllScheduledJobRuns",
 	GetScheduledJobRunByIDDocument:                 "GetScheduledJobRunByID",
 	GetScheduledJobRunsDocument:                    "GetScheduledJobRuns",
+	CreateScheduledJobRunDocument:                  "CreateScheduledJobRun",
+	UpdateScheduledJobRunDocument:                  "UpdateScheduledJobRun",
+	DeleteScheduledJobRunDocument:                  "DeleteScheduledJobRun",
 	GlobalSearchDocument:                           "GlobalSearch",
 	CreateStandardDocument:                         "CreateStandard",
 	DeleteStandardDocument:                         "DeleteStandard",
