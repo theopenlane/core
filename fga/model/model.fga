@@ -140,7 +140,7 @@ type group
     # main permission sets based on roles
     define can_delete: [service] or admin or parent_deleter
     define can_edit: [service] or admin or parent_editor
-    define can_view: [service] or member or parent_viewer
+    define can_view: [service] or can_edit or member  or parent_viewer
     # additional fine-grained permissions
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
 
