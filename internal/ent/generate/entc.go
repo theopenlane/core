@@ -31,13 +31,13 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
 
-	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/genhelpers"
 )

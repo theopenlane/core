@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/internal/ent/accessmap"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 const (
