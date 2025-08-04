@@ -177,7 +177,7 @@ func (PersonalAccessToken) Hooks() []ent.Hook {
 // Interceptors of the PersonalAccessToken
 func (p PersonalAccessToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("personalaccesstoken", p.Features()...),
+		interceptors.InterceptorFeatures(p.Features()...),
 		interceptors.InterceptorPat(),
 	}
 }

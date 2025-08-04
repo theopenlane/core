@@ -208,7 +208,7 @@ func (r Risk) Annotations() []schema.Annotation {
 // Interceptors of the Risk
 func (r Risk) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("risk", r.Features()...),
+		interceptors.InterceptorFeatures(r.Features()...),
 	}
 }
 

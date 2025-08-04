@@ -126,7 +126,7 @@ func (t TFASetting) Annotations() []schema.Annotation {
 // Interceptors of the TFASetting
 func (t TFASetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("tfasetting", t.Features()...),
+		interceptors.InterceptorFeatures(t.Features()...),
 	}
 }
 

@@ -2,9 +2,10 @@ package rule
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"slices"
 
+	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -102,7 +103,6 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 			return nil, err
 		}
 
-		fmt.Println("YYYY", len(modules), au.OrganizationID)
 		feats = make([]string, 0, len(modules))
 		for _, m := range modules {
 			feats = append(feats, m.Module)
@@ -116,7 +116,6 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		}
 	}
 
-	fmt.Println("XXX", feats)
 	return feats, nil
 }
 
@@ -215,9 +214,9 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 	})
 }
 
-// DenyIfMissingAllFeatures acts as a prerequisite check - denies if features missing, skips if present
-func DenyIfMissingAllFeatures(schema string, features ...models.OrgModule) privacy.QueryMutationRule {
-	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
+// DenyIfMissingAllFeatures acts as a prerequisite check - denies if features missing, Allows if present
+func DenyIfMissingAllFeatures(schema string, features ...models.OrgModule) privacy.MutationRule {
+	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
 
 		if len(features) == 0 {
 			return privacy.Skip
@@ -267,8 +266,13 @@ func DenyIfMissingAllFeatures(schema string, features ...models.OrgModule) priva
 		}
 
 		if !ok {
-			org, _ := auth.GetOrganizationIDFromContext(ctx)
-			fmt.Println(schema, true, org, features)
+			if _, err := auth.GetOrganizationIDFromContext(ctx); errors.Is(err, auth.ErrNoAuthUser) {
+				// for personal access token and cases where the orgid might not be there
+				// for deletions. Let the fgax client do the checks if the token has
+				// enough permissions
+				return privacy.Skip
+			}
+
 			return privacy.Denyf("features are not enabled", features)
 		}
 

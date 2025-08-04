@@ -154,6 +154,6 @@ func (Entity) Features() []models.OrgModule {
 // Interceptors of the Entity
 func (e Entity) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("entity", e.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

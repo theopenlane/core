@@ -123,7 +123,7 @@ func (c ControlImplementation) Annotations() []schema.Annotation {
 // Interceptors of the ControlImplementation
 func (c ControlImplementation) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("controlimplementation", c.Features()...),
+		interceptors.InterceptorFeatures(c.Features()...),
 	}
 }
 

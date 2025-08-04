@@ -126,7 +126,7 @@ func (m MappedControl) Annotations() []schema.Annotation {
 // Interceptors of the MappedControl
 func (m MappedControl) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("mappedcontrol", m.Features()...),
+		interceptors.InterceptorFeatures(m.Features()...),
 	}
 }
 

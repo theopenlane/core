@@ -156,7 +156,7 @@ func (Standard) Hooks() []ent.Hook {
 // Interceptors of the Standard
 func (s Standard) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("standard", s.Features()...),
+		interceptors.InterceptorFeatures(s.Features()...),
 		interceptors.TraverseStandard(),
 	}
 }

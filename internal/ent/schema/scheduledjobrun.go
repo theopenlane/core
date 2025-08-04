@@ -128,7 +128,7 @@ func (ScheduledJobRun) Hooks() []ent.Hook {
 // Interceptors of the ScheduledJobRun
 func (s ScheduledJobRun) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("scheduledjobrun", s.Features()...),
+		interceptors.InterceptorFeatures(s.Features()...),
 	}
 }
 

@@ -106,7 +106,7 @@ func (Procedure) Hooks() []ent.Hook {
 // Interceptors of the Procedure
 func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("procedure", p.Features()...),
+		interceptors.InterceptorFeatures(p.Features()...),
 		// procedures are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.Procedure](),
 	}

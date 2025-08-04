@@ -186,7 +186,7 @@ func (g Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (g Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("group", g.Features()...),
+		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterQueryResults[generated.Group](),
 	}
 }

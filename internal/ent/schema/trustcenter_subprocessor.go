@@ -128,7 +128,7 @@ func (t TrustCenterSubprocessor) Annotations() []schema.Annotation {
 // Interceptors of the TrustCenterSubprocessor
 func (t TrustCenterSubprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("trustcentersubprocessor", t.Features()...),
+		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.InterceptorTrustCenterChild(),
 	}
 }

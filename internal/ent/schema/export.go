@@ -119,7 +119,7 @@ func (e Export) Annotations() []schema.Annotation {
 // Interceptors of the Export
 func (e Export) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("export", e.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }
 

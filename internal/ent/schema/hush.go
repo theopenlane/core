@@ -114,7 +114,7 @@ func (Hush) Hooks() []ent.Hook {
 // Interceptors of the Hush
 func (h Hush) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("hush", h.Features()...),
+		interceptors.InterceptorFeatures(h.Features()...),
 		interceptors.InterceptorHush(),
 	}
 }

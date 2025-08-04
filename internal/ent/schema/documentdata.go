@@ -91,7 +91,7 @@ func (d DocumentData) Annotations() []schema.Annotation {
 // Interceptors of the DocumentData
 func (d DocumentData) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("documentdata", d.Features()...),
+		interceptors.InterceptorFeatures(d.Features()...),
 	}
 }
 

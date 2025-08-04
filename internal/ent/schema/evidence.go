@@ -141,7 +141,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 // Interceptors of the Evidence
 func (e Evidence) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("evidence", e.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }
 

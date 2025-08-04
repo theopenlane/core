@@ -151,7 +151,6 @@ func (Task) Features() []models.OrgModule {
 		models.CatalogRiskManagementAddon,
 		models.CatalogBaseModule,
 		models.CatalogEntityManagementModule,
-		
 	}
 }
 
@@ -166,7 +165,7 @@ func (t Task) Annotations() []schema.Annotation {
 // Interceptors of the Task
 func (t Task) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("task", t.Features()...),
+		interceptors.InterceptorFeatures(t.Features()...),
 	}
 }
 
@@ -182,7 +181,7 @@ func (Task) Hooks() []ent.Hook {
 func (t Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.AllowIfHasAllFeatures(t.Features()...),
+			rule.DenyIfMissingAllFeatures("task", t.Features()...),
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)

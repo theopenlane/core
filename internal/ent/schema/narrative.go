@@ -109,7 +109,7 @@ func (n Narrative) Annotations() []schema.Annotation {
 // Interceptors of the Narrative
 func (n Narrative) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("narrative", n.Features()...),
+		interceptors.InterceptorFeatures(n.Features()...),
 	}
 }
 

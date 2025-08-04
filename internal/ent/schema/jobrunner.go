@@ -120,7 +120,7 @@ func (JobRunner) Hooks() []ent.Hook {
 // Interceptors of the JobRunner
 func (j JobRunner) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("jobrunner", j.Features()...),
+		interceptors.InterceptorFeatures(j.Features()...),
 		interceptors.InterceptorJobRunnerFilterSystemOwned(),
 	}
 }

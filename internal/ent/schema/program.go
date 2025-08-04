@@ -207,7 +207,7 @@ func (Program) Hooks() []ent.Hook {
 // Interceptors of the Program
 func (p Program) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("program", p.Features()...),
+		interceptors.InterceptorFeatures(p.Features()...),
 		interceptors.FilterQueryResults[generated.Program](),
 	}
 }

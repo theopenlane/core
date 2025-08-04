@@ -168,6 +168,6 @@ func (Subcontrol) Features() []models.OrgModule {
 // Interceptors of the Subcontrol
 func (s Subcontrol) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("subcontrol", s.Features()...),
+		interceptors.InterceptorFeatures(s.Features()...),
 	}
 }

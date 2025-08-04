@@ -406,10 +406,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		},
 	}
 
-	for k, tc := range testCases {
-		if k != 0 {
-			t.Skip("skip")
-		}
+	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {

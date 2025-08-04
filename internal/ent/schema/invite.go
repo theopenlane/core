@@ -154,7 +154,7 @@ func (i Invite) Annotations() []schema.Annotation {
 // Interceptors of the Invite
 func (i Invite) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("invite", i.Features()...),
+		interceptors.InterceptorFeatures(i.Features()...),
 	}
 }
 

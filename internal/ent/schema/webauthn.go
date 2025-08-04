@@ -147,7 +147,7 @@ func (w Webauthn) Annotations() []schema.Annotation {
 // Interceptors of the Webauthn
 func (w Webauthn) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("webauthn", w.Features()...),
+		interceptors.InterceptorFeatures(w.Features()...),
 	}
 }
 

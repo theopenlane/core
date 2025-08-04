@@ -136,7 +136,7 @@ func (JobRunnerRegistrationToken) Hooks() []ent.Hook {
 // Interceptors of the JobRunnerRegistrationToken
 func (j JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("jobrunnerregistrationtoken", j.Features()...),
+		interceptors.InterceptorFeatures(j.Features()...),
 		interceptors.InterceptorJobRunnerRegistrationToken(),
 	}
 }

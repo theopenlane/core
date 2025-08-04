@@ -103,7 +103,7 @@ func (Integration) Features() []models.OrgModule {
 // Interceptors of the Integration
 func (i Integration) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("integration", i.Features()...),
+		interceptors.InterceptorFeatures(i.Features()...),
 	}
 }
 

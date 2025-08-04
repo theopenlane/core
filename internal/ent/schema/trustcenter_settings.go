@@ -143,7 +143,7 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 // Interceptors of the TrustCenterSetting
 func (t TrustCenterSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("trustcentersettings", t.Features()...),
+		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.InterceptorTrustCenterChild(),
 	}
 }

@@ -98,7 +98,7 @@ func (a Asset) Annotations() []schema.Annotation {
 // Interceptors of the Asset
 func (a Asset) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("asset", a.Features()...),
+		interceptors.InterceptorFeatures(a.Features()...),
 	}
 }
 

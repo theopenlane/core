@@ -2,7 +2,6 @@ package interceptors
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent"
 
@@ -63,10 +62,6 @@ func interceptorRequireFeatures(schema string, requireAll bool, features ...mode
 			return nil
 		}
 
-		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
-			return nil
-		}
-
 		if tok := token.EmailSignUpTokenFromContext(ctx); tok != nil {
 			return nil
 		}
@@ -99,11 +94,23 @@ func interceptorRequireFeatures(schema string, requireAll bool, features ...mode
 		}
 
 		if !ok {
-			org, err := auth.GetOrganizationIDFromContext(ctx)
-			fmt.Println(schema, requireAll, org, features, err)
 			return ErrFeatureNotEnabled
 		}
 
 		return nil
+	})
+}
+
+func InterceptorFeatures(features ...models.OrgModule) ent.Interceptor {
+	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
+		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
+
+			ok, err := rule.HasAllFeatures(ctx, features...)
+			if err != nil && !ok {
+				return nil, nil
+			}
+
+			return next.Query(ctx, query)
+		})
 	})
 }

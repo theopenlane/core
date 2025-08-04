@@ -144,7 +144,7 @@ func (c ControlObjective) Annotations() []schema.Annotation {
 // Interceptors of the ControlObjective
 func (c ControlObjective) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("controlobjective", c.Features()...),
+		interceptors.InterceptorFeatures(c.Features()...),
 	}
 }
 

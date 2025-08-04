@@ -154,7 +154,7 @@ func (APIToken) Hooks() []ent.Hook {
 // Interceptors of the APIToken
 func (a APIToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// interceptors.InterceptorRequireAllFeatures("apitoken", a.Features()...),
+		interceptors.InterceptorFeatures(a.Features()...),
 		interceptors.InterceptorAPIToken(),
 	}
 }

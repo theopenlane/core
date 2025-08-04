@@ -100,13 +100,13 @@ func (e EntityType) Policy() ent.Policy {
 
 func (EntityType) Features() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogEntityManagementModule,
+		models.CatalogBaseModule,
 	}
 }
 
 // Interceptors of the EntityType
 func (e EntityType) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("entitytype", e.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

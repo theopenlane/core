@@ -89,6 +89,6 @@ func (Scan) Annotations() []schema.Annotation {
 // Interceptors of the Scan
 func (s Scan) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("scan", s.Features()...),
+		interceptors.InterceptorFeatures(s.Features()...),
 	}
 }

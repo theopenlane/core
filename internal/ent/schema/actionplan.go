@@ -102,7 +102,7 @@ func (a ActionPlan) Annotations() []schema.Annotation {
 // Interceptors of the ActionPlan
 func (a ActionPlan) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("actionplan", a.Features()...),
+		interceptors.InterceptorFeatures(a.Features()...),
 	}
 }
 

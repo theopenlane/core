@@ -116,7 +116,7 @@ func (GroupMembership) Mixin() []ent.Mixin {
 // Interceptors of the GroupMembership
 func (g GroupMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("groupmembership", g.Features()...),
+		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterListQuery(),
 	}
 }

@@ -121,7 +121,7 @@ func (e EmailVerificationToken) Annotations() []schema.Annotation {
 // Interceptors of the EmailVerificationToken
 func (e EmailVerificationToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("emailverificationtoken", e.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }
 

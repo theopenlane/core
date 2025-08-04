@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
@@ -73,12 +72,6 @@ func (PasswordResetToken) Fields() []ent.Field {
 	}
 }
 
-func (PasswordResetToken) Features() []models.OrgModule {
-	return []models.OrgModule{
-		models.CatalogBaseModule,
-	}
-}
-
 // Mixin of the PasswordResetToken
 func (p PasswordResetToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
@@ -112,13 +105,6 @@ func (p PasswordResetToken) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the PasswordResetToken
-func (p PasswordResetToken) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("passwordresettoken", p.Features()...),
-	}
-}
-
 // Hooks of the PasswordResetToken
 func (PasswordResetToken) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -135,7 +121,6 @@ func (p PasswordResetToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
-			rule.DenyIfMissingAllFeatures("passwordresettoken", p.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

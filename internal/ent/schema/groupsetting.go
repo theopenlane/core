@@ -98,7 +98,7 @@ func (GroupSetting) Hooks() []ent.Hook {
 // Interceptors of the GroupSetting
 func (g GroupSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("groupsetting", g.Features()...),
+		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.InterceptorGroupSetting(),
 	}
 }

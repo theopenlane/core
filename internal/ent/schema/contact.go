@@ -152,6 +152,6 @@ func (c Contact) Annotations() []schema.Annotation {
 // Interceptors of the Contact
 func (c Contact) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAllFeatures("contact", c.Features()...),
+		interceptors.InterceptorFeatures(c.Features()...),
 	}
 }

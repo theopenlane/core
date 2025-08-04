@@ -125,6 +125,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				auth.SetRefreshToken(c, bearerToken)
 			}
 
+			fmt.Println("HERE", au.OrganizationIDs, au.OrganizationID)
 			auth.SetAuthenticatedUserContext(c, au)
 
 			if conf.RedisClient != nil {

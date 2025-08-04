@@ -139,7 +139,7 @@ func (Subprocessor) Features() []models.OrgModule {
 // Interceptors of the Subprocessor
 func (t Subprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("subprocessor", t.Features()...),
+		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.TraverseSubprocessor(),
 	}
 }

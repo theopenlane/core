@@ -89,7 +89,7 @@ func (e Event) Annotations() []schema.Annotation {
 // Interceptors of the Event
 func (e Event) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("event", e.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }
 

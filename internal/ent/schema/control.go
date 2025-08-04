@@ -193,6 +193,6 @@ func (c Control) Annotations() []schema.Annotation {
 // Interceptors of the Control
 func (c Control) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("control", c.Features()...),
+		interceptors.InterceptorFeatures(c.Features()...),
 	}
 }

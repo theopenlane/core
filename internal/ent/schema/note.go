@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -94,7 +95,7 @@ func (n Note) Annotations() []schema.Annotation {
 // Interceptors for the note
 func (n Note) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// interceptors.InterceptorRequireAllFeatures("note", n.Features()...),
+		interceptors.InterceptorFeatures(n.Features()...),
 	}
 }
 

@@ -160,6 +160,7 @@ func init() {
 	apitoken.Interceptors[1] = apitokenMixinInters2[0]
 	apitoken.Interceptors[2] = apitokenMixinInters6[0]
 	apitoken.Interceptors[3] = apitokenInters[0]
+	apitoken.Interceptors[4] = apitokenInters[1]
 	apitokenMixinFields0 := apitokenMixin[0].Fields()
 	_ = apitokenMixinFields0
 	apitokenMixinFields3 := apitokenMixin[3].Fields()
@@ -1992,6 +1993,7 @@ func init() {
 	file.Interceptors[2] = fileMixinInters6[0]
 	file.Interceptors[3] = fileInters[0]
 	file.Interceptors[4] = fileInters[1]
+	file.Interceptors[5] = fileInters[2]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields3 := fileMixin[3].Fields()
@@ -3681,10 +3683,12 @@ func init() {
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters2 := noteMixin[2].Interceptors()
 	noteMixinInters5 := noteMixin[5].Interceptors()
+	noteInters := schema.Note{}.Interceptors()
 	note.Interceptors[0] = noteMixinInters1[0]
 	note.Interceptors[1] = noteMixinInters2[0]
 	note.Interceptors[2] = noteMixinInters5[0]
 	note.Interceptors[3] = noteMixinInters5[1]
+	note.Interceptors[4] = noteInters[0]
 	noteMixinFields0 := noteMixin[0].Fields()
 	_ = noteMixinFields0
 	noteMixinFields3 := noteMixin[3].Fields()
@@ -4447,10 +4451,8 @@ func init() {
 	passwordresettoken.Hooks[4] = passwordresettokenHooks[0]
 	passwordresettokenMixinInters2 := passwordresettokenMixin[2].Interceptors()
 	passwordresettokenMixinInters3 := passwordresettokenMixin[3].Interceptors()
-	passwordresettokenInters := schema.PasswordResetToken{}.Interceptors()
 	passwordresettoken.Interceptors[0] = passwordresettokenMixinInters2[0]
 	passwordresettoken.Interceptors[1] = passwordresettokenMixinInters3[0]
-	passwordresettoken.Interceptors[2] = passwordresettokenInters[0]
 	passwordresettokenMixinFields0 := passwordresettokenMixin[0].Fields()
 	_ = passwordresettokenMixinFields0
 	passwordresettokenMixinFields1 := passwordresettokenMixin[1].Fields()

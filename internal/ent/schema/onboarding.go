@@ -78,7 +78,7 @@ func (Onboarding) Features() []models.OrgModule {
 // Interceptors of the Onboarding
 func (o Onboarding) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorRequireAnyFeature("onboarding", o.Features()...),
+		interceptors.InterceptorFeatures(o.Features()...),
 	}
 }
 

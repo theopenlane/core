@@ -503,18 +503,16 @@ func (o *OrganizationBuilder) enableAllModules(ctx context.Context, t *testing.T
 
 		// if no rows were updated, the module doesn't exist - create it
 		if n == 0 {
-			n, err := o.client.db.OrgModule.Create().
+			_, err := o.client.db.OrgModule.Create().
 				SetOwnerID(orgID).
 				SetModule(string(feature)).
 				SetActive(true).
 				SetPrice(models.Price{Amount: 0, Interval: "month"}).
 				Save(newCtx)
 			assert.NilError(t, err)
-			fmt.Println("created", orgID, n.OwnerID, n.Module)
 		}
 	}
 
-	fmt.Println("DONE", orgID, o.UserID)
 }
 
 // MustNew user builder is used to create, without authz checks, users in the database
