@@ -76,6 +76,9 @@
 - user: service:ulid-of-service-editor
   relation: can_edit
   object: organization:openlane
+- user: service:ulid-of-service-editor
+  relation: group_manager
+  object: organization:openlane
 # setup service user
 - user: service:ulid-of-service-viewer
   relation: can_view

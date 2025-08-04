@@ -326,8 +326,8 @@ tests:
         assertions:
           admin: false
           member: false
-          can_delete: false
-          can_edit: false
+          can_delete: true
+          can_edit: true
           can_view: true
           audit_log_viewer: false
       # private group check

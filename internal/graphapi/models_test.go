@@ -692,7 +692,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 	}
 
 	if at.Scopes == nil {
-		at.Scopes = []string{"read", "write"}
+		at.Scopes = []string{"read", "write", "group_manager"}
 	}
 
 	request := at.client.db.APIToken.Create().
