@@ -17,7 +17,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryContact(t *testing.T) {
@@ -487,7 +486,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateContactInput
+		input                testclient.UpdateContactInput
 		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
@@ -496,7 +495,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name: "happy path, clear tags on multiple contacts",
 			ids:  []string{contact1.ID, contact2.ID},
-			input: openlaneclient.UpdateContactInput{
+			input: testclient.UpdateContactInput{
 				ClearTags: lo.ToPtr(true),
 				Title:     lo.ToPtr("Cleared Title"),
 			},
@@ -507,7 +506,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateContactInput{FullName: lo.ToPtr("test")},
+			input:       testclient.UpdateContactInput{FullName: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -515,7 +514,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name: "mixed success and failure - some contacts not authorized",
 			ids:  []string{contact1.ID, contactAnotherUser.ID}, // second contact should fail authorization
-			input: openlaneclient.UpdateContactInput{
+			input: testclient.UpdateContactInput{
 				FullName: lo.ToPtr("Updated by authorized user"),
 			},
 			client:               suite.client.api,
@@ -525,7 +524,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name: "update not allowed, view only user",
 			ids:  []string{contact1.ID},
-			input: openlaneclient.UpdateContactInput{
+			input: testclient.UpdateContactInput{
 				FullName: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
@@ -535,7 +534,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to contacts",
 			ids:  []string{contact1.ID},
-			input: openlaneclient.UpdateContactInput{
+			input: testclient.UpdateContactInput{
 				FullName: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
@@ -545,7 +544,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name: "update status on multiple contacts",
 			ids:  []string{contact1.ID, contact2.ID, contact3.ID},
-			input: openlaneclient.UpdateContactInput{
+			input: testclient.UpdateContactInput{
 				Status: &enums.UserStatusInactive,
 			},
 			client:               suite.client.api,
@@ -555,7 +554,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name: "update company on multiple contacts",
 			ids:  []string{contact1.ID, contact2.ID},
-			input: openlaneclient.UpdateContactInput{
+			input: testclient.UpdateContactInput{
 				Company: lo.ToPtr("Updated Company"),
 			},
 			client:               suite.client.api,

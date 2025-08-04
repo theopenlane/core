@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -1958,7 +1957,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
-	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, openlaneclient.UpdateControlInput{
+	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, testclient.UpdateControlInput{
 		Status: lo.ToPtr(enums.ControlStatusPreparing),
 	})
 
@@ -1969,7 +1968,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateControlInput
+		input                testclient.UpdateControlInput
 		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
@@ -1979,7 +1978,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "happy path, update status on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status:     &enums.ControlStatusPreparing,
 				StandardID: &standard.ID,
 			},
@@ -1995,7 +1994,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "happy path, clear operations and editor permissions",
 			ids:  []string{control1.ID, control2.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
 				AddEditorIDs:          []string{groupMember.GroupID},
@@ -2012,7 +2011,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateControlInput{Description: lo.ToPtr("test")},
+			input:       testclient.UpdateControlInput{Description: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -2020,7 +2019,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "mixed success and failure - some controls not authorized",
 			ids:  []string{control1.ID, controlAnotherUser.ID}, // second control should fail authorization
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
@@ -2030,7 +2029,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "update allowed, user added to one of the programs",
 			ids:  []string{control1.ID, control2.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusApproved,
 			},
 			client:               suite.client.api,
@@ -2040,7 +2039,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to controls",
 			ids:  []string{control1.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
@@ -2050,7 +2049,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "update control type and category on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				ControlType:    &enums.ControlTypeDetective,
 				Category:       lo.ToPtr("Availability"),
 				ControlOwnerID: &ownerGroup.ID,
@@ -2062,7 +2061,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "add programs and control implementations to multiple controls",
 			ids:  []string{control1.ID, control2.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				AddProgramIDs:               []string{program2.ID},
 				AddControlImplementationIDs: []string{controlImplementation.ID},
 				Tags:                        []string{"bulk", "update"},
@@ -2184,7 +2183,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 					assert.Check(t, found)
 
 					// ensure the user has access to the control now
-					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)

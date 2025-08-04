@@ -4,7 +4,10 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
+// TestClient includes the generated GraphQL client and the Openlane REST client
 type TestClient struct {
+	// TestGraphClient is the generated GraphQL client with possibly more complex queries to make
+	// tests easier to write than the OpenlaneGraphClient
 	TestGraphClient
 	openlaneclient.OpenlaneRestClient
 }

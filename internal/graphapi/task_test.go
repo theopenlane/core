@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryTask(t *testing.T) {
@@ -867,7 +866,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateTaskInput
+		input                testclient.UpdateTaskInput
 		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
@@ -876,7 +875,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "happy path, clear tags on multiple tasks",
 			ids:  []string{task1.ID, task2.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				ClearTags: lo.ToPtr(true),
 				Details:   lo.ToPtr("Cleared all tags"),
 			},
@@ -887,7 +886,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateTaskInput{Title: lo.ToPtr("test")},
+			input:       testclient.UpdateTaskInput{Title: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
 			expectedErr: "ids is required",
@@ -895,7 +894,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "mixed success and failure - some tasks not authorized",
 			ids:  []string{task1.ID, taskAnotherUser.ID}, // second task should fail authorization
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				Title: lo.ToPtr("Updated by authorized user"),
 			},
 			client:               suite.client.api,
@@ -905,7 +904,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to tasks",
 			ids:  []string{task1.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				Title: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
@@ -915,7 +914,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "update status on multiple tasks",
 			ids:  []string{task1.ID, task2.ID, task3.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				Status: &enums.TaskStatusInProgress,
 			},
 			client:               suite.client.api,
@@ -925,7 +924,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name: "assign tasks to org member",
 			ids:  []string{task1.ID, task2.ID},
-			input: openlaneclient.UpdateTaskInput{
+			input: testclient.UpdateTaskInput{
 				AssigneeID: &om.UserID,
 			},
 			client:               suite.client.api,

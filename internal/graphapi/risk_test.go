@@ -668,7 +668,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 	riskAnotherUser := (&RiskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the risk
-	res, err := suite.client.api.UpdateBulkRisk(testUser2.UserCtx, []string{risk1.ID}, openlaneclient.UpdateRiskInput{
+	res, err := suite.client.api.UpdateBulkRisk(testUser2.UserCtx, []string{risk1.ID}, testclient.UpdateRiskInput{
 		Status: lo.ToPtr(enums.RiskArchived),
 	})
 
@@ -679,8 +679,8 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateRiskInput
-		client               *openlaneclient.OpenlaneClient
+		input                testclient.UpdateRiskInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
@@ -688,7 +688,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "happy path, update multiple risks with same fields",
 			ids:  []string{risk1.ID, risk2.ID, risk3.ID},
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				Details: lo.ToPtr("Updated details for all risks"),
 				Impact:  &enums.RiskImpactModerate,
 			},
@@ -699,7 +699,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "happy path, update risk type and score",
 			ids:  []string{risk1.ID, risk2.ID},
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				RiskType: lo.ToPtr("Financial"),
 				Score:    lo.ToPtr(int64(8)),
 			},
@@ -710,7 +710,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateRiskInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateRiskInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -718,7 +718,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "mixed success and failure - some risks not authorized",
 			ids:  []string{risk1.ID, riskAnotherUser.ID}, // second risk should fail authorization
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				Status: &enums.RiskOpen,
 			},
 			client:               suite.client.api,
@@ -728,7 +728,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to risks",
 			ids:  []string{risk1.ID},
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				Status: &enums.RiskArchived,
 			},
 			client:               suite.client.api,
@@ -753,7 +753,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			assert.Check(t, is.Len(resp.UpdateBulkRisk.Risks, tc.expectedUpdatedCount))
 			assert.Check(t, is.Len(resp.UpdateBulkRisk.UpdatedIDs, tc.expectedUpdatedCount))
 
-			riskMap := make(map[string]*openlaneclient.UpdateBulkRisk_UpdateBulkRisk_Risks)
+			riskMap := make(map[string]*testclient.UpdateBulkRisk_UpdateBulkRisk_Risks)
 			for _, risk := range resp.UpdateBulkRisk.Risks {
 				riskMap[risk.ID] = risk
 			}

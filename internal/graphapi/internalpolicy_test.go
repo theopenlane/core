@@ -777,7 +777,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 	policyAnotherUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the policy
-	res, err := suite.client.api.UpdateBulkInternalPolicy(testUser2.UserCtx, []string{policy1.ID}, openlaneclient.UpdateInternalPolicyInput{
+	res, err := suite.client.api.UpdateBulkInternalPolicy(testUser2.UserCtx, []string{policy1.ID}, testclient.UpdateInternalPolicyInput{
 		Status: lo.ToPtr(enums.DocumentPublished),
 	})
 
@@ -788,8 +788,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateInternalPolicyInput
-		client               *openlaneclient.OpenlaneClient
+		input                testclient.UpdateInternalPolicyInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
@@ -797,7 +797,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name: "happy path, update status on multiple policies",
 			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
-			input: openlaneclient.UpdateInternalPolicyInput{
+			input: testclient.UpdateInternalPolicyInput{
 				Status:     &enums.DocumentPublished,
 				PolicyType: lo.ToPtr("Security"),
 			},
@@ -808,7 +808,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name: "happy path, editor permissions and revision bump",
 			ids:  []string{policy1.ID, policy2.ID},
-			input: openlaneclient.UpdateInternalPolicyInput{
+			input: testclient.UpdateInternalPolicyInput{
 				AddEditorIDs: []string{groupMember.GroupID},
 				RevisionBump: &models.Major,
 			},
@@ -819,7 +819,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateInternalPolicyInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateInternalPolicyInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -827,7 +827,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name: "mixed success and failure - some policies not authorized",
 			ids:  []string{policy1.ID, policyAnotherUser.ID}, // second policy should fail authorization
-			input: openlaneclient.UpdateInternalPolicyInput{
+			input: testclient.UpdateInternalPolicyInput{
 				Status: &enums.DocumentDraft,
 			},
 			client:               suite.client.api,
@@ -837,7 +837,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to policies",
 			ids:  []string{policy1.ID},
-			input: openlaneclient.UpdateInternalPolicyInput{
+			input: testclient.UpdateInternalPolicyInput{
 				Status: &enums.DocumentPublished,
 			},
 			client:               suite.client.api,
@@ -847,7 +847,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name: "update multiple policies with controls and tasks",
 			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
-			input: openlaneclient.UpdateInternalPolicyInput{
+			input: testclient.UpdateInternalPolicyInput{
 				Details:          lo.ToPtr("Updated details for all policies"),
 				AddControlIDs:    []string{control.ID},
 				AddSubcontrolIDs: []string{subcontrol.ID},
@@ -903,7 +903,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 
 				if len(tc.input.AddEditorIDs) > 0 {
 					// ensure the user has access to the policy now
-					res, err := suite.client.api.UpdateInternalPolicy(anotherAdminUser.UserCtx, policy.ID, openlaneclient.UpdateInternalPolicyInput{
+					res, err := suite.client.api.UpdateInternalPolicy(anotherAdminUser.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)

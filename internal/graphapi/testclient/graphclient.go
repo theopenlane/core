@@ -16,6 +16,7 @@ import (
 type TestGraphClient interface {
 	CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVActionPlan, error)
 	CreateBulkActionPlan(ctx context.Context, input []*CreateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkActionPlan, error)
+	UpdateBulkActionPlan(ctx context.Context, ids []string, input UpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkActionPlan, error)
 	CreateActionPlan(ctx context.Context, input CreateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*CreateActionPlan, error)
 	DeleteActionPlan(ctx context.Context, deleteActionPlanID string, interceptors ...clientv2.RequestInterceptor) (*DeleteActionPlan, error)
 	GetAllActionPlans(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllActionPlans, error)
@@ -44,6 +45,7 @@ type TestGraphClient interface {
 	AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy *AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
+	UpdateBulkContact(ctx context.Context, ids []string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
 	DeleteContact(ctx context.Context, deleteContactID string, interceptors ...clientv2.RequestInterceptor) (*DeleteContact, error)
 	GetAllContacts(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContacts, error)
@@ -54,6 +56,7 @@ type TestGraphClient interface {
 	GetContactHistories(ctx context.Context, where *ContactHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactHistories, error)
 	CreateBulkControl(ctx context.Context, input []*CreateControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControl, error)
 	CreateBulkCSVControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControl, error)
+	UpdateBulkControl(ctx context.Context, ids []string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error)
 	CreateControl(ctx context.Context, input CreateControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControl, error)
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
 	GetAllControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControls, error)
@@ -209,6 +212,7 @@ type TestGraphClient interface {
 	GetIntegrationHistories(ctx context.Context, where *IntegrationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationHistories, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
+	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
@@ -322,6 +326,7 @@ type TestGraphClient interface {
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProcedure, error)
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
+	UpdateBulkProcedure(ctx context.Context, ids []string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
@@ -362,6 +367,7 @@ type TestGraphClient interface {
 	GetProgramMembershipHistories(ctx context.Context, where *ProgramMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipHistories, error)
 	CreateBulkCSVRisk(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRisk, error)
 	CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRisk, error)
+	UpdateBulkRisk(ctx context.Context, ids []string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error)
 	CreateRisk(ctx context.Context, input CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateRisk, error)
 	DeleteRisk(ctx context.Context, deleteRiskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteRisk, error)
 	GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
@@ -432,6 +438,7 @@ type TestGraphClient interface {
 	UpdateSubscriber(ctx context.Context, email string, input UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubscriber, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error)
 	CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error)
+	UpdateBulkTask(ctx context.Context, ids []string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTask, error)
 	CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error)
 	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
 	GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
@@ -782,6 +789,147 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan) GetActionPlans() []*CreateBu
 		t = &CreateBulkActionPlan_CreateBulkActionPlan{}
 	}
 	return t.ActionPlans
+}
+
+type UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans struct {
+	ActionPlanType   *string               "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApprovalRequired *bool                 "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	CreatedAt        *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details          *string               "json:\"details,omitempty\" graphql:\"details\""
+	DueDate          *time.Time            "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	ID               string                "json:\"id\" graphql:\"id\""
+	Name             string                "json:\"name\" graphql:\"name\""
+	Priority         *enums.Priority       "json:\"priority,omitempty\" graphql:\"priority\""
+	ReviewDue        *time.Time            "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency      "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string               "json:\"revision,omitempty\" graphql:\"revision\""
+	Source           *string               "json:\"source,omitempty\" graphql:\"source\""
+	Status           *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetActionPlanType() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.ActionPlanType
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetDueDate() *time.Time {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.DueDate
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetID() string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetName() string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetPriority() *enums.Priority {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Priority
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.ReviewDue
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetRevision() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Revision
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetSource() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Source
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkActionPlan_UpdateBulkActionPlan struct {
+	ActionPlans []*UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+	UpdatedIDs  []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetActionPlans() []*UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan{}
+	}
+	return t.ActionPlans
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan{}
+	}
+	return t.UpdatedIDs
 }
 
 type CreateActionPlan_CreateActionPlan_ActionPlan struct {
@@ -10343,6 +10491,126 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact) GetContacts() []*CreateBulkC
 	return t.Contacts
 }
 
+type UpdateBulkContact_UpdateBulkContact_Contacts struct {
+	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
+	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
+	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
+	FullName    string           "json:\"fullName\" graphql:\"fullName\""
+	ID          string           "json:\"id\" graphql:\"id\""
+	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PhoneNumber *string          "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	Status      enums.UserStatus "json:\"status\" graphql:\"status\""
+	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
+	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetAddress() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.Address
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetCompany() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.Company
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetEmail() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.Email
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetFullName() string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.FullName
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetID() string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetPhoneNumber() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.PhoneNumber
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetStatus() *enums.UserStatus {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return &t.Status
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetTitle() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.Title
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkContact_UpdateBulkContact struct {
+	Contacts   []*UpdateBulkContact_UpdateBulkContact_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+	UpdatedIDs []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkContact_UpdateBulkContact) GetContacts() []*UpdateBulkContact_UpdateBulkContact_Contacts {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact{}
+	}
+	return t.Contacts
+}
+func (t *UpdateBulkContact_UpdateBulkContact) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact{}
+	}
+	return t.UpdatedIDs
+}
+
 type CreateContact_CreateContact_Contact struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
@@ -11598,6 +11866,455 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl) GetControls() []*CreateBulkC
 		t = &CreateBulkCSVControl_CreateBulkCSVControl{}
 	}
 	return t.Controls
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner) GetName() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner{}
+	}
+	return t.Name
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges struct {
+	Node *UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges) GetNode() *UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges_Node {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Programs struct {
+	Edges []*UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Programs) GetEdges() []*UpdateBulkControl_UpdateBulkControl_Controls_Programs_Edges {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Programs{}
+	}
+	return t.Edges
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node struct {
+	Details *string               "json:\"details,omitempty\" graphql:\"details\""
+	ID      string                "json:\"id\" graphql:\"id\""
+	Status  *enums.DocumentStatus "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node{}
+	}
+	return t.Status
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges struct {
+	Node *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges) GetNode() *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges_Node {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations struct {
+	Edges []*UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations) GetEdges() []*UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations_Edges {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations{}
+	}
+	return t.Edges
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges struct {
+	Node *UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges) GetNode() *UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges_Node {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_Editors struct {
+	Edges []*UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_Editors) GetEdges() []*UpdateBulkControl_UpdateBulkControl_Controls_Editors_Edges {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_Editors{}
+	}
+	return t.Edges
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges struct {
+	Node *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges) GetNode() *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups struct {
+	Edges []*UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups) GetEdges() []*UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups_Edges {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type UpdateBulkControl_UpdateBulkControl_Controls struct {
+	AssessmentMethods      []*models.AssessmentMethod                                          "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
+	AssessmentObjectives   []*models.AssessmentObjective                                       "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
+	BlockedGroups          UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups          "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	Category               *string                                                             "json:\"category,omitempty\" graphql:\"category\""
+	CategoryID             *string                                                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	ControlImplementations UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
+	ControlOwner           *UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
+	ControlQuestions       []string                                                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
+	ControlType            *enums.ControlType                                                  "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt              *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate               *UpdateBulkControl_UpdateBulkControl_Controls_Delegate              "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Description            *string                                                             "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID              string                                                              "json:\"displayID\" graphql:\"displayID\""
+	Editors                UpdateBulkControl_UpdateBulkControl_Controls_Editors                "json:\"editors\" graphql:\"editors\""
+	ExampleEvidence        []*models.ExampleEvidence                                           "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
+	ID                     string                                                              "json:\"id\" graphql:\"id\""
+	ImplementationGuidance []*models.ImplementationGuidance                                    "json:\"implementationGuidance,omitempty\" graphql:\"implementationGuidance\""
+	MappedCategories       []string                                                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
+	OwnerID                *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Programs               UpdateBulkControl_UpdateBulkControl_Controls_Programs               "json:\"programs\" graphql:\"programs\""
+	RefCode                string                                                              "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                                             "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+	References             []*models.Reference                                                 "json:\"references,omitempty\" graphql:\"references\""
+	Source                 *enums.ControlSource                                                "json:\"source,omitempty\" graphql:\"source\""
+	StandardID             *string                                                             "json:\"standardID,omitempty\" graphql:\"standardID\""
+	Status                 *enums.ControlStatus                                                "json:\"status,omitempty\" graphql:\"status\""
+	Subcategory            *string                                                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Tags                   []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetAssessmentMethods() []*models.AssessmentMethod {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.AssessmentMethods
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetAssessmentObjectives() []*models.AssessmentObjective {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.AssessmentObjectives
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetBlockedGroups() *UpdateBulkControl_UpdateBulkControl_Controls_BlockedGroups {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return &t.BlockedGroups
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetCategory() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Category
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetCategoryID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.CategoryID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlImplementations() *UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return &t.ControlImplementations
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlOwner() *UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ControlOwner
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlQuestions() []string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ControlQuestions
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlType() *enums.ControlType {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ControlType
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetDelegate() *UpdateBulkControl_UpdateBulkControl_Controls_Delegate {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetDescription() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Description
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetEditors() *UpdateBulkControl_UpdateBulkControl_Controls_Editors {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return &t.Editors
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetExampleEvidence() []*models.ExampleEvidence {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ExampleEvidence
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetID() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetImplementationGuidance() []*models.ImplementationGuidance {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ImplementationGuidance
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetMappedCategories() []string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.MappedCategories
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetPrograms() *UpdateBulkControl_UpdateBulkControl_Controls_Programs {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return &t.Programs
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetRefCode() string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.RefCode
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetReferenceFramework() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ReferenceFramework
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetReferences() []*models.Reference {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.References
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSource() *enums.ControlSource {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Source
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetStandardID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.StandardID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetStatus() *enums.ControlStatus {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSubcategory() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Subcategory
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkControl_UpdateBulkControl struct {
+	Controls   []*UpdateBulkControl_UpdateBulkControl_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+	UpdatedIDs []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkControl_UpdateBulkControl) GetControls() []*UpdateBulkControl_UpdateBulkControl_Controls {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl{}
+	}
+	return t.Controls
+}
+func (t *UpdateBulkControl_UpdateBulkControl) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl{}
+	}
+	return t.UpdatedIDs
 }
 
 type CreateControl_CreateControl_Control_ControlOwner struct {
@@ -35792,6 +36509,190 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy) GetInternalPolicies(
 	return t.InternalPolicies
 }
 
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver) GetID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver) GetName() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver{}
+	}
+	return t.Name
+}
+
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies struct {
+	ApprovalRequired *bool                                                                        "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	Approver         *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver "json:\"approver,omitempty\" graphql:\"approver\""
+	CreatedAt        *time.Time                                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate         *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details          *string                                                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                                       "json:\"displayID\" graphql:\"displayID\""
+	ID               string                                                                       "json:\"id\" graphql:\"id\""
+	Name             string                                                                       "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                                      "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                                   "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                             "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                                      "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                                        "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetApprover() *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Approver
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetDelegate() *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetName() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetPolicyType() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.PolicyType
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ReviewDue
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetRevision() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Revision
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy struct {
+	InternalPolicies []*UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	UpdatedIDs       []string                                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetInternalPolicies() []*UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
+	}
+	return t.InternalPolicies
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
+	}
+	return t.UpdatedIDs
+}
+
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node struct {
 	ID      string "json:\"id\" graphql:\"id\""
 	RefCode string "json:\"refCode\" graphql:\"refCode\""
@@ -53160,6 +54061,190 @@ func (t *CreateBulkProcedure_CreateBulkProcedure) GetProcedures() []*CreateBulkP
 	return t.Procedures
 }
 
+type UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver) GetName() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver{}
+	}
+	return t.Name
+}
+
+type UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkProcedure_UpdateBulkProcedure_Procedures struct {
+	ApprovalRequired *bool                                                        "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	Approver         *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver "json:\"approver,omitempty\" graphql:\"approver\""
+	CreatedAt        *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate         *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details          *string                                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                       "json:\"displayID\" graphql:\"displayID\""
+	ID               string                                                       "json:\"id\" graphql:\"id\""
+	Name             string                                                       "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                                      "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                                   "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                             "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                      "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                        "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetApprover() *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Approver
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetDelegate() *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetName() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ReviewDue
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetRevision() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Revision
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkProcedure_UpdateBulkProcedure struct {
+	Procedures []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	UpdatedIDs []string                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetProcedures() []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
+	}
+	return t.Procedures
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
+	}
+	return t.UpdatedIDs
+}
+
 type CreateProcedure_CreateProcedure_Procedure_Editors_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -60816,6 +61901,190 @@ func (t *CreateBulkRisk_CreateBulkRisk) GetRisks() []*CreateBulkRisk_CreateBulkR
 		t = &CreateBulkRisk_CreateBulkRisk{}
 	}
 	return t.Risks
+}
+
+type UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder) GetID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder) GetName() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder{}
+	}
+	return t.Name
+}
+
+type UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkRisk_UpdateBulkRisk_Risks struct {
+	BusinessCosts *string                                          "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate      *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate    "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details       *string                                          "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                           "json:\"displayID\" graphql:\"displayID\""
+	ID            string                                           "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                                "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                            "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                          "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                           "json:\"name\" graphql:\"name\""
+	RiskType      *string                                          "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Score         *int64                                           "json:\"score,omitempty\" graphql:\"score\""
+	Stakeholder   *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
+	Status        *enums.RiskStatus                                "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetBusinessCosts() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.BusinessCosts
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetDelegate() *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetImpact() *enums.RiskImpact {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Impact
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetLikelihood() *enums.RiskLikelihood {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Likelihood
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetMitigation() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Mitigation
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetName() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetRiskType() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.RiskType
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetScore() *int64 {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Score
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetStakeholder() *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Stakeholder
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetStatus() *enums.RiskStatus {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkRisk_UpdateBulkRisk struct {
+	Risks      []*UpdateBulkRisk_UpdateBulkRisk_Risks "json:\"risks,omitempty\" graphql:\"risks\""
+	UpdatedIDs []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk) GetRisks() []*UpdateBulkRisk_UpdateBulkRisk_Risks {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk{}
+	}
+	return t.Risks
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk{}
+	}
+	return t.UpdatedIDs
 }
 
 type CreateRisk_CreateRisk_Risk_Programs_Edges_Node struct {
@@ -77088,6 +78357,265 @@ func (t *CreateBulkTask_CreateBulkTask) GetTasks() []*CreateBulkTask_CreateBulkT
 	return t.Tasks
 }
 
+type UpdateBulkTask_UpdateBulkTask_Tasks_Assignee struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Assignee) GetID() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Assignee{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Assignee{}
+	}
+	return t.LastName
+}
+
+type UpdateBulkTask_UpdateBulkTask_Tasks_Assigner struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Assigner) GetID() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Assigner{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Assigner{}
+	}
+	return t.LastName
+}
+
+type UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Text      string     "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetText() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges struct {
+	Node *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges) GetNode() *UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges_Node {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateBulkTask_UpdateBulkTask_Tasks_Comments struct {
+	Edges []*UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks_Comments) GetEdges() []*UpdateBulkTask_UpdateBulkTask_Tasks_Comments_Edges {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks_Comments{}
+	}
+	return t.Edges
+}
+
+type UpdateBulkTask_UpdateBulkTask_Tasks struct {
+	Assignee  *UpdateBulkTask_UpdateBulkTask_Tasks_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner  *UpdateBulkTask_UpdateBulkTask_Tasks_Assigner "json:\"assigner,omitempty\" graphql:\"assigner\""
+	Category  *string                                       "json:\"category,omitempty\" graphql:\"category\""
+	Comments  UpdateBulkTask_UpdateBulkTask_Tasks_Comments  "json:\"comments\" graphql:\"comments\""
+	Completed *models.DateTime                              "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details   *string                                       "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID string                                        "json:\"displayID\" graphql:\"displayID\""
+	Due       *models.DateTime                              "json:\"due,omitempty\" graphql:\"due\""
+	ID        string                                        "json:\"id\" graphql:\"id\""
+	Status    enums.TaskStatus                              "json:\"status\" graphql:\"status\""
+	Tags      []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	Title     string                                        "json:\"title\" graphql:\"title\""
+	UpdatedAt *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetAssignee() *UpdateBulkTask_UpdateBulkTask_Tasks_Assignee {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Assignee
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetAssigner() *UpdateBulkTask_UpdateBulkTask_Tasks_Assigner {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Assigner
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetCategory() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Category
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetComments() *UpdateBulkTask_UpdateBulkTask_Tasks_Comments {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return &t.Comments
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetCompleted() *models.DateTime {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Completed
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetDue() *models.DateTime {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Due
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetID() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return &t.Status
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetTitle() string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.Title
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask_Tasks{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkTask_UpdateBulkTask struct {
+	Tasks      []*UpdateBulkTask_UpdateBulkTask_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedIDs []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkTask_UpdateBulkTask) GetTasks() []*UpdateBulkTask_UpdateBulkTask_Tasks {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask{}
+	}
+	return t.Tasks
+}
+func (t *UpdateBulkTask_UpdateBulkTask) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask{}
+	}
+	return t.UpdatedIDs
+}
+
 type CreateTask_CreateTask_Task_Assignee struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
@@ -87764,6 +89292,17 @@ func (t *CreateBulkActionPlan) GetCreateBulkActionPlan() *CreateBulkActionPlan_C
 	return &t.CreateBulkActionPlan
 }
 
+type UpdateBulkActionPlan struct {
+	UpdateBulkActionPlan UpdateBulkActionPlan_UpdateBulkActionPlan "json:\"updateBulkActionPlan\" graphql:\"updateBulkActionPlan\""
+}
+
+func (t *UpdateBulkActionPlan) GetUpdateBulkActionPlan() *UpdateBulkActionPlan_UpdateBulkActionPlan {
+	if t == nil {
+		t = &UpdateBulkActionPlan{}
+	}
+	return &t.UpdateBulkActionPlan
+}
+
 type CreateActionPlan struct {
 	CreateActionPlan CreateActionPlan_CreateActionPlan "json:\"createActionPlan\" graphql:\"createActionPlan\""
 }
@@ -88072,6 +89611,17 @@ func (t *CreateBulkCSVContact) GetCreateBulkCSVContact() *CreateBulkCSVContact_C
 	return &t.CreateBulkCSVContact
 }
 
+type UpdateBulkContact struct {
+	UpdateBulkContact UpdateBulkContact_UpdateBulkContact "json:\"updateBulkContact\" graphql:\"updateBulkContact\""
+}
+
+func (t *UpdateBulkContact) GetUpdateBulkContact() *UpdateBulkContact_UpdateBulkContact {
+	if t == nil {
+		t = &UpdateBulkContact{}
+	}
+	return &t.UpdateBulkContact
+}
+
 type CreateContact struct {
 	CreateContact CreateContact_CreateContact "json:\"createContact\" graphql:\"createContact\""
 }
@@ -88180,6 +89730,17 @@ func (t *CreateBulkCSVControl) GetCreateBulkCSVControl() *CreateBulkCSVControl_C
 		t = &CreateBulkCSVControl{}
 	}
 	return &t.CreateBulkCSVControl
+}
+
+type UpdateBulkControl struct {
+	UpdateBulkControl UpdateBulkControl_UpdateBulkControl "json:\"updateBulkControl\" graphql:\"updateBulkControl\""
+}
+
+func (t *UpdateBulkControl) GetUpdateBulkControl() *UpdateBulkControl_UpdateBulkControl {
+	if t == nil {
+		t = &UpdateBulkControl{}
+	}
+	return &t.UpdateBulkControl
 }
 
 type CreateControl struct {
@@ -89887,6 +91448,17 @@ func (t *CreateBulkInternalPolicy) GetCreateBulkInternalPolicy() *CreateBulkInte
 	return &t.CreateBulkInternalPolicy
 }
 
+type UpdateBulkInternalPolicy struct {
+	UpdateBulkInternalPolicy UpdateBulkInternalPolicy_UpdateBulkInternalPolicy "json:\"updateBulkInternalPolicy\" graphql:\"updateBulkInternalPolicy\""
+}
+
+func (t *UpdateBulkInternalPolicy) GetUpdateBulkInternalPolicy() *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy{}
+	}
+	return &t.UpdateBulkInternalPolicy
+}
+
 type CreateInternalPolicy struct {
 	CreateInternalPolicy CreateInternalPolicy_CreateInternalPolicy "json:\"createInternalPolicy\" graphql:\"createInternalPolicy\""
 }
@@ -91130,6 +92702,17 @@ func (t *CreateBulkProcedure) GetCreateBulkProcedure() *CreateBulkProcedure_Crea
 	return &t.CreateBulkProcedure
 }
 
+type UpdateBulkProcedure struct {
+	UpdateBulkProcedure UpdateBulkProcedure_UpdateBulkProcedure "json:\"updateBulkProcedure\" graphql:\"updateBulkProcedure\""
+}
+
+func (t *UpdateBulkProcedure) GetUpdateBulkProcedure() *UpdateBulkProcedure_UpdateBulkProcedure {
+	if t == nil {
+		t = &UpdateBulkProcedure{}
+	}
+	return &t.UpdateBulkProcedure
+}
+
 type CreateProcedure struct {
 	CreateProcedure CreateProcedure_CreateProcedure "json:\"createProcedure\" graphql:\"createProcedure\""
 }
@@ -91568,6 +93151,17 @@ func (t *CreateBulkRisk) GetCreateBulkRisk() *CreateBulkRisk_CreateBulkRisk {
 		t = &CreateBulkRisk{}
 	}
 	return &t.CreateBulkRisk
+}
+
+type UpdateBulkRisk struct {
+	UpdateBulkRisk UpdateBulkRisk_UpdateBulkRisk "json:\"updateBulkRisk\" graphql:\"updateBulkRisk\""
+}
+
+func (t *UpdateBulkRisk) GetUpdateBulkRisk() *UpdateBulkRisk_UpdateBulkRisk {
+	if t == nil {
+		t = &UpdateBulkRisk{}
+	}
+	return &t.UpdateBulkRisk
 }
 
 type CreateRisk struct {
@@ -92338,6 +93932,17 @@ func (t *CreateBulkTask) GetCreateBulkTask() *CreateBulkTask_CreateBulkTask {
 		t = &CreateBulkTask{}
 	}
 	return &t.CreateBulkTask
+}
+
+type UpdateBulkTask struct {
+	UpdateBulkTask UpdateBulkTask_UpdateBulkTask "json:\"updateBulkTask\" graphql:\"updateBulkTask\""
+}
+
+func (t *UpdateBulkTask) GetUpdateBulkTask() *UpdateBulkTask_UpdateBulkTask {
+	if t == nil {
+		t = &UpdateBulkTask{}
+	}
+	return &t.UpdateBulkTask
 }
 
 type CreateTask struct {
@@ -93228,6 +94833,50 @@ func (c *Client) CreateBulkActionPlan(ctx context.Context, input []*CreateAction
 
 	var res CreateBulkActionPlan
 	if err := c.Client.Post(ctx, "CreateBulkActionPlan", CreateBulkActionPlanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
+	updateBulkActionPlan(ids: $ids, input: $input) {
+		actionPlans {
+			actionPlanType
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			dueDate
+			id
+			name
+			priority
+			reviewDue
+			reviewFrequency
+			revision
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkActionPlan(ctx context.Context, ids []string, input UpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkActionPlan, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkActionPlan
+	if err := c.Client.Post(ctx, "UpdateBulkActionPlan", UpdateBulkActionPlanDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -95327,6 +96976,47 @@ func (c *Client) CreateBulkCSVContact(ctx context.Context, input graphql.Upload,
 	return &res, nil
 }
 
+const UpdateBulkContactDocument = `mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
+	updateBulkContact(ids: $ids, input: $input) {
+		contacts {
+			address
+			company
+			createdAt
+			createdBy
+			email
+			fullName
+			id
+			ownerID
+			phoneNumber
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkContact(ctx context.Context, ids []string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkContact, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkContact
+	if err := c.Client.Post(ctx, "UpdateBulkContact", UpdateBulkContactDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateContactDocument = `mutation CreateContact ($input: CreateContactInput!) {
 	createContact(input: $input) {
 		contact {
@@ -95723,6 +97413,100 @@ func (c *Client) CreateBulkCSVControl(ctx context.Context, input graphql.Upload,
 
 	var res CreateBulkCSVControl
 	if err := c.Client.Post(ctx, "CreateBulkCSVControl", CreateBulkCSVControlDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
+	updateBulkControl(ids: $ids, input: $input) {
+		controls {
+			assessmentMethods
+			assessmentObjectives
+			category
+			categoryID
+			controlQuestions
+			controlType
+			createdAt
+			createdBy
+			description
+			displayID
+			exampleEvidence
+			id
+			implementationGuidance
+			mappedCategories
+			ownerID
+			refCode
+			references
+			referenceFramework
+			source
+			standardID
+			status
+			subcategory
+			tags
+			updatedAt
+			updatedBy
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			controlImplementations {
+				edges {
+					node {
+						id
+						details
+						status
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkControl(ctx context.Context, ids []string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkControl, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkControl
+	if err := c.Client.Post(ctx, "UpdateBulkControl", UpdateBulkControlDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -102924,6 +104708,57 @@ func (c *Client) CreateBulkInternalPolicy(ctx context.Context, input []*CreateIn
 	return &res, nil
 }
 
+const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {
+	updateBulkInternalPolicy(ids: $ids, input: $input) {
+		internalPolicies {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			policyType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			tags
+			updatedAt
+			updatedBy
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkInternalPolicy(ctx context.Context, ids []string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkInternalPolicy
+	if err := c.Client.Post(ctx, "UpdateBulkInternalPolicy", UpdateBulkInternalPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 	createInternalPolicy(input: $input) {
 		internalPolicy {
@@ -108128,6 +109963,57 @@ func (c *Client) CreateBulkProcedure(ctx context.Context, input []*CreateProcedu
 	return &res, nil
 }
 
+const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
+	updateBulkProcedure(ids: $ids, input: $input) {
+		procedures {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			procedureType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			tags
+			updatedAt
+			updatedBy
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkProcedure(ctx context.Context, ids []string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkProcedure
+	if err := c.Client.Post(ctx, "UpdateBulkProcedure", UpdateBulkProcedureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedureInput!) {
 	createProcedure(input: $input) {
 		procedure {
@@ -110195,6 +112081,57 @@ func (c *Client) CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, i
 
 	var res CreateBulkRisk
 	if err := c.Client.Post(ctx, "CreateBulkRisk", CreateBulkRiskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
+	updateBulkRisk(ids: $ids, input: $input) {
+		risks {
+			businessCosts
+			createdAt
+			createdBy
+			details
+			id
+			displayID
+			impact
+			likelihood
+			mitigation
+			name
+			riskType
+			status
+			score
+			tags
+			updatedAt
+			updatedBy
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkRisk(ctx context.Context, ids []string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkRisk
+	if err := c.Client.Post(ctx, "UpdateBulkRisk", UpdateBulkRiskDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -114311,6 +116248,69 @@ func (c *Client) CreateBulkTask(ctx context.Context, input []*CreateTaskInput, i
 	return &res, nil
 }
 
+const UpdateBulkTaskDocument = `mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
+	updateBulkTask(ids: $ids, input: $input) {
+		tasks {
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			completed
+			createdAt
+			createdBy
+			details
+			category
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+			due
+			id
+			displayID
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkTask(ctx context.Context, ids []string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTask, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkTask
+	if err := c.Client.Post(ctx, "UpdateBulkTask", UpdateBulkTaskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTaskDocument = `mutation CreateTask ($input: CreateTaskInput!) {
 	createTask(input: $input) {
 		task {
@@ -117597,6 +119597,7 @@ func (c *Client) GetAllWebauthns(ctx context.Context, interceptors ...clientv2.R
 var DocumentOperationNames = map[string]string{
 	CreateBulkCSVActionPlanDocument:                "CreateBulkCSVActionPlan",
 	CreateBulkActionPlanDocument:                   "CreateBulkActionPlan",
+	UpdateBulkActionPlanDocument:                   "UpdateBulkActionPlan",
 	CreateActionPlanDocument:                       "CreateActionPlan",
 	DeleteActionPlanDocument:                       "DeleteActionPlan",
 	GetAllActionPlansDocument:                      "GetAllActionPlans",
@@ -117625,6 +119626,7 @@ var DocumentOperationNames = map[string]string{
 	AuditLogsDocument:                              "AuditLogs",
 	CreateBulkContactDocument:                      "CreateBulkContact",
 	CreateBulkCSVContactDocument:                   "CreateBulkCSVContact",
+	UpdateBulkContactDocument:                      "UpdateBulkContact",
 	CreateContactDocument:                          "CreateContact",
 	DeleteContactDocument:                          "DeleteContact",
 	GetAllContactsDocument:                         "GetAllContacts",
@@ -117635,6 +119637,7 @@ var DocumentOperationNames = map[string]string{
 	GetContactHistoriesDocument:                    "GetContactHistories",
 	CreateBulkControlDocument:                      "CreateBulkControl",
 	CreateBulkCSVControlDocument:                   "CreateBulkCSVControl",
+	UpdateBulkControlDocument:                      "UpdateBulkControl",
 	CreateControlDocument:                          "CreateControl",
 	DeleteControlDocument:                          "DeleteControl",
 	GetAllControlsDocument:                         "GetAllControls",
@@ -117790,6 +119793,7 @@ var DocumentOperationNames = map[string]string{
 	GetIntegrationHistoriesDocument:                "GetIntegrationHistories",
 	CreateBulkCSVInternalPolicyDocument:            "CreateBulkCSVInternalPolicy",
 	CreateBulkInternalPolicyDocument:               "CreateBulkInternalPolicy",
+	UpdateBulkInternalPolicyDocument:               "UpdateBulkInternalPolicy",
 	CreateInternalPolicyDocument:                   "CreateInternalPolicy",
 	DeleteInternalPolicyDocument:                   "DeleteInternalPolicy",
 	GetAllInternalPoliciesDocument:                 "GetAllInternalPolicies",
@@ -117903,6 +119907,7 @@ var DocumentOperationNames = map[string]string{
 	UpdatePersonalAccessTokenDocument:              "UpdatePersonalAccessToken",
 	CreateBulkCSVProcedureDocument:                 "CreateBulkCSVProcedure",
 	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
+	UpdateBulkProcedureDocument:                    "UpdateBulkProcedure",
 	CreateProcedureDocument:                        "CreateProcedure",
 	DeleteProcedureDocument:                        "DeleteProcedure",
 	GetAllProceduresDocument:                       "GetAllProcedures",
@@ -117943,6 +119948,7 @@ var DocumentOperationNames = map[string]string{
 	GetProgramMembershipHistoriesDocument:          "GetProgramMembershipHistories",
 	CreateBulkCSVRiskDocument:                      "CreateBulkCSVRisk",
 	CreateBulkRiskDocument:                         "CreateBulkRisk",
+	UpdateBulkRiskDocument:                         "UpdateBulkRisk",
 	CreateRiskDocument:                             "CreateRisk",
 	DeleteRiskDocument:                             "DeleteRisk",
 	GetAllRisksDocument:                            "GetAllRisks",
@@ -118013,6 +120019,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateSubscriberDocument:                       "UpdateSubscriber",
 	CreateBulkCSVTaskDocument:                      "CreateBulkCSVTask",
 	CreateBulkTaskDocument:                         "CreateBulkTask",
+	UpdateBulkTaskDocument:                         "UpdateBulkTask",
 	CreateTaskDocument:                             "CreateTask",
 	DeleteTaskDocument:                             "DeleteTask",
 	GetAllTasksDocument:                            "GetAllTasks",
