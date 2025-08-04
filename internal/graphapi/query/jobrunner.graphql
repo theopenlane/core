@@ -1,3 +1,21 @@
+mutation CreateJobRunner($input: CreateJobRunnerInput!) {
+  createJobRunner(input: $input) {
+    jobRunner {
+      id
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      ownerID
+      name
+      displayID
+      status
+      ipAddress
+      tags
+    }
+  }
+}
+
 mutation DeleteJobRunner($deleteJobRunnerId: ID!) {
   deleteJobRunner(id: $deleteJobRunnerId) {
     deletedID

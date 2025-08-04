@@ -22010,6 +22010,24 @@ type JobResultConnection {
 	totalCount: Int!
 }
 """
+Return response for createJobResult mutation
+"""
+type JobResultCreatePayload {
+	"""
+	Created jobResult
+	"""
+	jobResult: JobResult!
+}
+"""
+Return response for deleteJobResult mutation
+"""
+type JobResultDeletePayload {
+	"""
+	Deleted jobResult ID
+	"""
+	deletedID: ID!
+}
+"""
 An edge in a connection.
 """
 type JobResultEdge {
@@ -22054,6 +22072,15 @@ enum JobResultOrderField {
 	exit_code
 	finished_at
 	started_at
+}
+"""
+Return response for updateJobResult mutation
+"""
+type JobResultUpdatePayload {
+	"""
+	Updated jobResult
+	"""
+	jobResult: JobResult!
 }
 """
 JobResultWhereInput is used for filtering JobResult objects.
@@ -22327,6 +22354,15 @@ type JobRunnerConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+Return response for createJobRunner mutation
+"""
+type JobRunnerCreatePayload {
+	"""
+	Created jobRunner
+	"""
+	jobRunner: JobRunner!
 }
 """
 Return response for deleteJobRunner mutation
@@ -26289,6 +26325,47 @@ type Mutation {
 		id: ID!
 	): InviteDeletePayload!
 	"""
+	Create a new jobResult
+	"""
+	createJobResult(
+		"""
+		values of the jobResult
+		"""
+		input: CreateJobResultInput!
+	): JobResultCreatePayload!
+	"""
+	Update an existing jobResult
+	"""
+	updateJobResult(
+		"""
+		ID of the jobResult
+		"""
+		id: ID!
+
+		"""
+		New values for the jobResult
+		"""
+		input: UpdateJobResultInput!
+	): JobResultUpdatePayload!
+	"""
+	Delete an existing jobResult
+	"""
+	deleteJobResult(
+		"""
+		ID of the jobResult
+		"""
+		id: ID!
+	): JobResultDeletePayload!
+	"""
+	Create a new invite
+	"""
+	createJobRunner(
+		"""
+		values of the invite
+		"""
+		input: CreateJobRunnerInput!
+	): JobRunnerCreatePayload!
+	"""
 	Update an existing jobRunner
 	"""
 	updateJobRunner(
@@ -27127,6 +27204,38 @@ type Mutation {
 		"""
 		id: ID!
 	): ScheduledJobDeletePayload!
+	"""
+	Create a new scheduledJobRun
+	"""
+	createScheduledJobRun(
+		"""
+		values of the scheduledJobRun
+		"""
+		input: CreateScheduledJobRunInput!
+	): ScheduledJobRunCreatePayload!
+	"""
+	Update an existing scheduledJobRun
+	"""
+	updateScheduledJobRun(
+		"""
+		ID of the scheduledJobRun
+		"""
+		id: ID!
+
+		"""
+		New values for the scheduledJobRun
+		"""
+		input: UpdateScheduledJobRunInput!
+	): ScheduledJobRunUpdatePayload!
+	"""
+	Delete an existing scheduledJobRun
+	"""
+	deleteScheduledJobRun(
+		"""
+		ID of the scheduledJobRun
+		"""
+		id: ID!
+	): ScheduledJobRunDeletePayload!
 	"""
 	Create a new standard
 	"""
@@ -47313,6 +47422,24 @@ type ScheduledJobRunConnection {
 	totalCount: Int!
 }
 """
+Return response for createScheduledJobRun mutation
+"""
+type ScheduledJobRunCreatePayload {
+	"""
+	Created scheduledJobRun
+	"""
+	scheduledJobRun: ScheduledJobRun!
+}
+"""
+Return response for deleteScheduledJobRun mutation
+"""
+type ScheduledJobRunDeletePayload {
+	"""
+	Deleted scheduledJobRun ID
+	"""
+	deletedID: ID!
+}
+"""
 An edge in a connection.
 """
 type ScheduledJobRunEdge {
@@ -47351,6 +47478,15 @@ ScheduledJobRunScheduledJobRunStatus is enum for the field status
 enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScheduledJobRunStatus") {
 	PENDING
 	ACQUIRED
+}
+"""
+Return response for updateScheduledJobRun mutation
+"""
+type ScheduledJobRunUpdatePayload {
+	"""
+	Updated scheduledJobRun
+	"""
+	scheduledJobRun: ScheduledJobRun!
 }
 """
 ScheduledJobRunWhereInput is used for filtering ScheduledJobRun objects.

@@ -10,3 +10,66 @@ extend type Query {
     ):  JobResult!
 }
 
+extend type Mutation{
+    """
+    Create a new jobResult
+    """
+    createJobResult(
+        """
+        values of the jobResult
+        """
+        input: CreateJobResultInput!
+    ): JobResultCreatePayload!
+    """
+    Update an existing jobResult
+    """
+    updateJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+        """
+        New values for the jobResult
+        """
+        input: UpdateJobResultInput!
+    ): JobResultUpdatePayload!
+    """
+    Delete an existing jobResult
+    """
+    deleteJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+    ): JobResultDeletePayload!
+}
+
+"""
+Return response for createJobResult mutation
+"""
+type JobResultCreatePayload {
+    """
+    Created jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for updateJobResult mutation
+"""
+type JobResultUpdatePayload {
+    """
+    Updated jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for deleteJobResult mutation
+"""
+type JobResultDeletePayload {
+    """
+    Deleted jobResult ID
+    """
+    deletedID: ID!
+}

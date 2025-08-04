@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"
-	"github.com/redis/go-redis/v9"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
@@ -81,22 +81,22 @@ const (
 // HandlerTestSuite handles the setup and teardown between tests
 type HandlerTestSuite struct {
 	suite.Suite
-	e                 *echo.Echo
-	db                *ent.Client
-	api               *openlaneclient.OpenlaneClient
-	h                 *handlers.Handler
-	router            *route.Router
-	fga               *fgax.Client
-	tf                *testutils.TestFixture
-	ofgaTF            *fgatest.OpenFGATestFixture
-	stripeMockBackend *mocks.MockStripeBackend
-	objectStore       *objects.Objects
-	sharedTokenManager *tokens.TokenManager
-	sharedRedisClient  *redis.Client
+	e                    *echo.Echo
+	db                   *ent.Client
+	api                  *openlaneclient.OpenlaneClient
+	h                    *handlers.Handler
+	router               *route.Router
+	fga                  *fgax.Client
+	tf                   *testutils.TestFixture
+	ofgaTF               *fgatest.OpenFGATestFixture
+	stripeMockBackend    *mocks.MockStripeBackend
+	objectStore          *objects.Objects
+	sharedTokenManager   *tokens.TokenManager
+	sharedRedisClient    *redis.Client
 	sharedSessionManager sessions.Store[map[string]any]
-	sharedFGAClient    *fgax.Client
-	sharedOTPManager   *totp.Client
-	sharedPondPool     *soiree.PondPool
+	sharedFGAClient      *fgax.Client
+	sharedOTPManager     *totp.Client
+	sharedPondPool       *soiree.PondPool
 
 	// OpenAPI operations for reuse in tests
 	startImpersonationOp *openapi3.Operation
@@ -237,7 +237,6 @@ func (suite *HandlerTestSuite) createImpersonationOperation(operationID, descrip
 	operation.Security = handlers.BearerSecurity()
 	return operation
 }
-
 
 // registerTestHandler is a helper to register test handlers with OpenAPI context
 func (suite *HandlerTestSuite) registerTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {

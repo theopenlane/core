@@ -767,6 +767,30 @@ type InviteUpdatePayload struct {
 	Invite *generated.Invite `json:"invite"`
 }
 
+// Return response for createJobResult mutation
+type JobResultCreatePayload struct {
+	// Created jobResult
+	JobResult *generated.JobResult `json:"jobResult"`
+}
+
+// Return response for deleteJobResult mutation
+type JobResultDeletePayload struct {
+	// Deleted jobResult ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobResult mutation
+type JobResultUpdatePayload struct {
+	// Updated jobResult
+	JobResult *generated.JobResult `json:"jobResult"`
+}
+
+// Return response for createJobRunner mutation
+type JobRunnerCreatePayload struct {
+	// Created jobRunner
+	JobRunner *generated.JobRunner `json:"jobRunner"`
+}
+
 // Return response for deleteJobRunner mutation
 type JobRunnerDeletePayload struct {
 	// Deleted jobRunner ID
@@ -1185,6 +1209,24 @@ type ScheduledJobCreatePayload struct {
 type ScheduledJobDeletePayload struct {
 	// Deleted scheduledJob ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createScheduledJobRun mutation
+type ScheduledJobRunCreatePayload struct {
+	// Created scheduledJobRun
+	ScheduledJobRun *generated.ScheduledJobRun `json:"scheduledJobRun"`
+}
+
+// Return response for deleteScheduledJobRun mutation
+type ScheduledJobRunDeletePayload struct {
+	// Deleted scheduledJobRun ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateScheduledJobRun mutation
+type ScheduledJobRunUpdatePayload struct {
+	// Updated scheduledJobRun
+	ScheduledJobRun *generated.ScheduledJobRun `json:"scheduledJobRun"`
 }
 
 // Return response for updateScheduledJob mutation

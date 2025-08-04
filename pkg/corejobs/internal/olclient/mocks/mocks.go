@@ -8477,6 +8477,172 @@ func (_c *MockOpenlaneGraphClient_CreateInvite_Call) RunAndReturn(run func(ctx c
 	return _c
 }
 
+// CreateJobResult provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateJobResult(ctx context.Context, input openlaneclient.CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateJobResult")
+	}
+
+	var r0 *openlaneclient.CreateJobResult
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobResultInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobResultInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateJobResult); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateJobResult)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateJobResultInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateJobResult_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateJobResult'
+type MockOpenlaneGraphClient_CreateJobResult_Call struct {
+	*mock.Call
+}
+
+// CreateJobResult is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateJobResultInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateJobResult(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateJobResult_Call {
+	return &MockOpenlaneGraphClient_CreateJobResult_Call{Call: _e.mock.On("CreateJobResult",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) Run(run func(ctx context.Context, input openlaneclient.CreateJobResultInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateJobResult_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateJobResultInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateJobResultInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) Return(createJobResult *openlaneclient.CreateJobResult, err error) *MockOpenlaneGraphClient_CreateJobResult_Call {
+	_c.Call.Return(createJobResult, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateJobResult_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobResult, error)) *MockOpenlaneGraphClient_CreateJobResult_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateJobRunner provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateJobRunner(ctx context.Context, input openlaneclient.CreateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobRunner, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateJobRunner")
+	}
+
+	var r0 *openlaneclient.CreateJobRunner
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobRunnerInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobRunner, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateJobRunnerInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateJobRunner); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateJobRunner)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateJobRunnerInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateJobRunner_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateJobRunner'
+type MockOpenlaneGraphClient_CreateJobRunner_Call struct {
+	*mock.Call
+}
+
+// CreateJobRunner is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateJobRunnerInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateJobRunner(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateJobRunner_Call {
+	return &MockOpenlaneGraphClient_CreateJobRunner_Call{Call: _e.mock.On("CreateJobRunner",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateJobRunner_Call) Run(run func(ctx context.Context, input openlaneclient.CreateJobRunnerInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateJobRunner_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateJobRunnerInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateJobRunnerInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateJobRunner_Call) Return(createJobRunner *openlaneclient.CreateJobRunner, err error) *MockOpenlaneGraphClient_CreateJobRunner_Call {
+	_c.Call.Return(createJobRunner, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateJobRunner_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobRunner, error)) *MockOpenlaneGraphClient_CreateJobRunner_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateJobRunnerRegistrationToken provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateJobRunnerRegistrationToken(ctx context.Context, input openlaneclient.CreateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateJobRunnerRegistrationToken, error) {
 	var tmpRet mock.Arguments
@@ -9896,6 +10062,89 @@ func (_c *MockOpenlaneGraphClient_CreateScheduledJob_Call) Return(createSchedule
 }
 
 func (_c *MockOpenlaneGraphClient_CreateScheduledJob_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateScheduledJob, error)) *MockOpenlaneGraphClient_CreateScheduledJob_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateScheduledJobRun provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateScheduledJobRun(ctx context.Context, input openlaneclient.CreateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateScheduledJobRun, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateScheduledJobRun")
+	}
+
+	var r0 *openlaneclient.CreateScheduledJobRun
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateScheduledJobRunInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateScheduledJobRun, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateScheduledJobRunInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateScheduledJobRun); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateScheduledJobRun)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateScheduledJobRunInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateScheduledJobRun_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateScheduledJobRun'
+type MockOpenlaneGraphClient_CreateScheduledJobRun_Call struct {
+	*mock.Call
+}
+
+// CreateScheduledJobRun is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateScheduledJobRunInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateScheduledJobRun(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateScheduledJobRun_Call {
+	return &MockOpenlaneGraphClient_CreateScheduledJobRun_Call{Call: _e.mock.On("CreateScheduledJobRun",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateScheduledJobRun_Call) Run(run func(ctx context.Context, input openlaneclient.CreateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateScheduledJobRun_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateScheduledJobRunInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateScheduledJobRunInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateScheduledJobRun_Call) Return(createScheduledJobRun *openlaneclient.CreateScheduledJobRun, err error) *MockOpenlaneGraphClient_CreateScheduledJobRun_Call {
+	_c.Call.Return(createScheduledJobRun, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateScheduledJobRun_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateScheduledJobRun, error)) *MockOpenlaneGraphClient_CreateScheduledJobRun_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -12651,6 +12900,89 @@ func (_c *MockOpenlaneGraphClient_DeleteInvite_Call) RunAndReturn(run func(ctx c
 	return _c
 }
 
+// DeleteJobResult provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteJobResult(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteJobResult, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteJobResultID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteJobResultID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteJobResult")
+	}
+
+	var r0 *openlaneclient.DeleteJobResult
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteJobResult, error)); ok {
+		return returnFunc(ctx, deleteJobResultID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteJobResult); ok {
+		r0 = returnFunc(ctx, deleteJobResultID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteJobResult)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteJobResultID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteJobResult_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteJobResult'
+type MockOpenlaneGraphClient_DeleteJobResult_Call struct {
+	*mock.Call
+}
+
+// DeleteJobResult is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteJobResultID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobResult(ctx interface{}, deleteJobResultID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteJobResult_Call {
+	return &MockOpenlaneGraphClient_DeleteJobResult_Call{Call: _e.mock.On("DeleteJobResult",
+		append([]interface{}{ctx, deleteJobResultID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteJobResult_Call) Run(run func(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteJobResult_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteJobResult_Call) Return(deleteJobResult *openlaneclient.DeleteJobResult, err error) *MockOpenlaneGraphClient_DeleteJobResult_Call {
+	_c.Call.Return(deleteJobResult, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteJobResult_Call) RunAndReturn(run func(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteJobResult, error)) *MockOpenlaneGraphClient_DeleteJobResult_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteJobRunner provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteJobRunner, error) {
 	var tmpRet mock.Arguments
@@ -13892,6 +14224,89 @@ func (_c *MockOpenlaneGraphClient_DeleteScheduledJob_Call) Return(deleteSchedule
 }
 
 func (_c *MockOpenlaneGraphClient_DeleteScheduledJob_Call) RunAndReturn(run func(ctx context.Context, deleteScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteScheduledJob, error)) *MockOpenlaneGraphClient_DeleteScheduledJob_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteScheduledJobRun provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteScheduledJobRun(ctx context.Context, deleteScheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteScheduledJobRun, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteScheduledJobRunID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteScheduledJobRunID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteScheduledJobRun")
+	}
+
+	var r0 *openlaneclient.DeleteScheduledJobRun
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteScheduledJobRun, error)); ok {
+		return returnFunc(ctx, deleteScheduledJobRunID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteScheduledJobRun); ok {
+		r0 = returnFunc(ctx, deleteScheduledJobRunID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteScheduledJobRun)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteScheduledJobRunID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteScheduledJobRun_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteScheduledJobRun'
+type MockOpenlaneGraphClient_DeleteScheduledJobRun_Call struct {
+	*mock.Call
+}
+
+// DeleteScheduledJobRun is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteScheduledJobRunID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteScheduledJobRun(ctx interface{}, deleteScheduledJobRunID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call {
+	return &MockOpenlaneGraphClient_DeleteScheduledJobRun_Call{Call: _e.mock.On("DeleteScheduledJobRun",
+		append([]interface{}{ctx, deleteScheduledJobRunID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call) Run(run func(ctx context.Context, deleteScheduledJobRunID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call) Return(deleteScheduledJobRun *openlaneclient.DeleteScheduledJobRun, err error) *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call {
+	_c.Call.Return(deleteScheduledJobRun, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call) RunAndReturn(run func(ctx context.Context, deleteScheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteScheduledJobRun, error)) *MockOpenlaneGraphClient_DeleteScheduledJobRun_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -39232,6 +39647,95 @@ func (_c *MockOpenlaneGraphClient_UpdateInternalPolicy_Call) RunAndReturn(run fu
 	return _c
 }
 
+// UpdateJobResult provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateJobResult(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateJobResultID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateJobResultID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateJobResult")
+	}
+
+	var r0 *openlaneclient.UpdateJobResult
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateJobResultInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error)); ok {
+		return returnFunc(ctx, updateJobResultID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateJobResultInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateJobResult); ok {
+		r0 = returnFunc(ctx, updateJobResultID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateJobResult)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateJobResultInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateJobResultID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateJobResult_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateJobResult'
+type MockOpenlaneGraphClient_UpdateJobResult_Call struct {
+	*mock.Call
+}
+
+// UpdateJobResult is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateJobResultID string
+//   - input openlaneclient.UpdateJobResultInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateJobResult(ctx interface{}, updateJobResultID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+	return &MockOpenlaneGraphClient_UpdateJobResult_Call{Call: _e.mock.On("UpdateJobResult",
+		append([]interface{}{ctx, updateJobResultID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) Run(run func(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateJobResultInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateJobResultInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) Return(updateJobResult *openlaneclient.UpdateJobResult, err error) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+	_c.Call.Return(updateJobResult, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateJobResult_Call) RunAndReturn(run func(ctx context.Context, updateJobResultID string, input openlaneclient.UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobResult, error)) *MockOpenlaneGraphClient_UpdateJobResult_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateJobRunner provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) UpdateJobRunner(ctx context.Context, updateJobRunnerID string, input openlaneclient.UpdateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateJobRunner, error) {
 	var tmpRet mock.Arguments
@@ -40480,6 +40984,95 @@ func (_c *MockOpenlaneGraphClient_UpdateScheduledJob_Call) Return(updateSchedule
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateScheduledJob_Call) RunAndReturn(run func(ctx context.Context, updateScheduledJobID string, input openlaneclient.UpdateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateScheduledJob, error)) *MockOpenlaneGraphClient_UpdateScheduledJob_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateScheduledJobRun provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateScheduledJobRun(ctx context.Context, updateScheduledJobRunID string, input openlaneclient.UpdateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateScheduledJobRun, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateScheduledJobRunID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateScheduledJobRunID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateScheduledJobRun")
+	}
+
+	var r0 *openlaneclient.UpdateScheduledJobRun
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateScheduledJobRunInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateScheduledJobRun, error)); ok {
+		return returnFunc(ctx, updateScheduledJobRunID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateScheduledJobRunInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateScheduledJobRun); ok {
+		r0 = returnFunc(ctx, updateScheduledJobRunID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateScheduledJobRun)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateScheduledJobRunInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateScheduledJobRunID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateScheduledJobRun_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateScheduledJobRun'
+type MockOpenlaneGraphClient_UpdateScheduledJobRun_Call struct {
+	*mock.Call
+}
+
+// UpdateScheduledJobRun is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateScheduledJobRunID string
+//   - input openlaneclient.UpdateScheduledJobRunInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateScheduledJobRun(ctx interface{}, updateScheduledJobRunID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call {
+	return &MockOpenlaneGraphClient_UpdateScheduledJobRun_Call{Call: _e.mock.On("UpdateScheduledJobRun",
+		append([]interface{}{ctx, updateScheduledJobRunID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call) Run(run func(ctx context.Context, updateScheduledJobRunID string, input openlaneclient.UpdateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateScheduledJobRunInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateScheduledJobRunInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call) Return(updateScheduledJobRun *openlaneclient.UpdateScheduledJobRun, err error) *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call {
+	_c.Call.Return(updateScheduledJobRun, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call) RunAndReturn(run func(ctx context.Context, updateScheduledJobRunID string, input openlaneclient.UpdateScheduledJobRunInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateScheduledJobRun, error)) *MockOpenlaneGraphClient_UpdateScheduledJobRun_Call {
 	_c.Call.Return(run)
 	return _c
 }

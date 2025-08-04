@@ -12970,6 +12970,18 @@ type JobResultConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// Return response for createJobResult mutation
+type JobResultCreatePayload struct {
+	// Created jobResult
+	JobResult *JobResult `json:"jobResult"`
+}
+
+// Return response for deleteJobResult mutation
+type JobResultDeletePayload struct {
+	// Deleted jobResult ID
+	DeletedID string `json:"deletedID"`
+}
+
 // An edge in a connection.
 type JobResultEdge struct {
 	// The item at the end of the edge.
@@ -12984,6 +12996,12 @@ type JobResultOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order JobResults.
 	Field JobResultOrderField `json:"field"`
+}
+
+// Return response for updateJobResult mutation
+type JobResultUpdatePayload struct {
+	// Updated jobResult
+	JobResult *JobResult `json:"jobResult"`
 }
 
 // JobResultWhereInput is used for filtering JobResult objects.
@@ -13178,6 +13196,12 @@ type JobRunnerConnection struct {
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createJobRunner mutation
+type JobRunnerCreatePayload struct {
+	// Created jobRunner
+	JobRunner *JobRunner `json:"jobRunner"`
 }
 
 // Return response for deleteJobRunner mutation
@@ -21944,6 +21968,18 @@ type ScheduledJobRunConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// Return response for createScheduledJobRun mutation
+type ScheduledJobRunCreatePayload struct {
+	// Created scheduledJobRun
+	ScheduledJobRun *ScheduledJobRun `json:"scheduledJobRun"`
+}
+
+// Return response for deleteScheduledJobRun mutation
+type ScheduledJobRunDeletePayload struct {
+	// Deleted scheduledJobRun ID
+	DeletedID string `json:"deletedID"`
+}
+
 // An edge in a connection.
 type ScheduledJobRunEdge struct {
 	// The item at the end of the edge.
@@ -21958,6 +21994,12 @@ type ScheduledJobRunOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order ScheduledJobRuns.
 	Field ScheduledJobRunOrderField `json:"field"`
+}
+
+// Return response for updateScheduledJobRun mutation
+type ScheduledJobRunUpdatePayload struct {
+	// Updated scheduledJobRun
+	ScheduledJobRun *ScheduledJobRun `json:"scheduledJobRun"`
 }
 
 // ScheduledJobRunWhereInput is used for filtering ScheduledJobRun objects.

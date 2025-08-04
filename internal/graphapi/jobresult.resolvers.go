@@ -7,9 +7,73 @@ package graphapi
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
+
+// CreateJobResult is the resolver for the createJobResult field.
+func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.CreateJobResultInput) (*model.JobResultCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).JobResult.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobresult"})
+	}
+
+	return &model.JobResultCreatePayload{
+		JobResult: res,
+	}, nil
+}
+
+// UpdateJobResult is the resolver for the updateJobResult field.
+func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput) (*model.JobResultUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).JobResult.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobresult"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobresult"})
+	}
+
+	return &model.JobResultUpdatePayload{
+		JobResult: res,
+	}, nil
+}
+
+// DeleteJobResult is the resolver for the deleteJobResult field.
+func (r *mutationResolver) DeleteJobResult(ctx context.Context, id string) (*model.JobResultDeletePayload, error) {
+	if err := withTransactionalMutation(ctx).JobResult.DeleteOneID(id).Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "jobresult"})
+	}
+
+	if err := generated.JobResultEdgeCleanup(ctx, id); err != nil {
+		return nil, newCascadeDeleteError(err)
+	}
+
+	return &model.JobResultDeletePayload{
+		DeletedID: id,
+	}, nil
+}
 
 // JobResult is the resolver for the jobResult field.
 func (r *queryResolver) JobResult(ctx context.Context, id string) (*generated.JobResult, error) {

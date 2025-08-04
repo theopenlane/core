@@ -1965,9 +1965,21 @@ type ComplexityRoot struct {
 		TotalCount func(childComplexity int) int
 	}
 
+	JobResultCreatePayload struct {
+		JobResult func(childComplexity int) int
+	}
+
+	JobResultDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
 	JobResultEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	JobResultUpdatePayload struct {
+		JobResult func(childComplexity int) int
 	}
 
 	JobRunner struct {
@@ -1991,6 +2003,10 @@ type ComplexityRoot struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	JobRunnerCreatePayload struct {
+		JobRunner func(childComplexity int) int
 	}
 
 	JobRunnerDeletePayload struct {
@@ -2416,6 +2432,8 @@ type ComplexityRoot struct {
 		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
+		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput) int
+		CreateJobRunner                      func(childComplexity int, input generated.CreateJobRunnerInput) int
 		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
 		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
 		CreateJobTemplate                    func(childComplexity int, input generated.CreateJobTemplateInput) int
@@ -2435,6 +2453,7 @@ type ComplexityRoot struct {
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
+		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
@@ -2472,6 +2491,7 @@ type ComplexityRoot struct {
 		DeleteIntegration                    func(childComplexity int, id string) int
 		DeleteInternalPolicy                 func(childComplexity int, id string) int
 		DeleteInvite                         func(childComplexity int, id string) int
+		DeleteJobResult                      func(childComplexity int, id string) int
 		DeleteJobRunner                      func(childComplexity int, id string) int
 		DeleteJobRunnerRegistrationToken     func(childComplexity int, id string) int
 		DeleteJobRunnerToken                 func(childComplexity int, id string) int
@@ -2489,6 +2509,7 @@ type ComplexityRoot struct {
 		DeleteRisk                           func(childComplexity int, id string) int
 		DeleteScan                           func(childComplexity int, id string) int
 		DeleteScheduledJob                   func(childComplexity int, id string) int
+		DeleteScheduledJobRun                func(childComplexity int, id string) int
 		DeleteStandard                       func(childComplexity int, id string) int
 		DeleteSubcontrol                     func(childComplexity int, id string) int
 		DeleteSubprocessor                   func(childComplexity int, id string) int
@@ -2531,6 +2552,7 @@ type ComplexityRoot struct {
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
 		UpdateJobTemplate                    func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
 		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
@@ -2546,6 +2568,7 @@ type ComplexityRoot struct {
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
+		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
@@ -3973,9 +3996,21 @@ type ComplexityRoot struct {
 		TotalCount func(childComplexity int) int
 	}
 
+	ScheduledJobRunCreatePayload struct {
+		ScheduledJobRun func(childComplexity int) int
+	}
+
+	ScheduledJobRunDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
 	ScheduledJobRunEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	ScheduledJobRunUpdatePayload struct {
+		ScheduledJobRun func(childComplexity int) int
 	}
 
 	ScheduledJobUpdatePayload struct {
@@ -14165,6 +14200,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResultConnection.TotalCount(childComplexity), true
 
+	case "JobResultCreatePayload.jobResult":
+		if e.complexity.JobResultCreatePayload.JobResult == nil {
+			break
+		}
+
+		return e.complexity.JobResultCreatePayload.JobResult(childComplexity), true
+
+	case "JobResultDeletePayload.deletedID":
+		if e.complexity.JobResultDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.JobResultDeletePayload.DeletedID(childComplexity), true
+
 	case "JobResultEdge.cursor":
 		if e.complexity.JobResultEdge.Cursor == nil {
 			break
@@ -14178,6 +14227,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobResultEdge.Node(childComplexity), true
+
+	case "JobResultUpdatePayload.jobResult":
+		if e.complexity.JobResultUpdatePayload.JobResult == nil {
+			break
+		}
+
+		return e.complexity.JobResultUpdatePayload.JobResult(childComplexity), true
 
 	case "JobRunner.createdAt":
 		if e.complexity.JobRunner.CreatedAt == nil {
@@ -14302,6 +14358,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunnerConnection.TotalCount(childComplexity), true
+
+	case "JobRunnerCreatePayload.jobRunner":
+		if e.complexity.JobRunnerCreatePayload.JobRunner == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerCreatePayload.JobRunner(childComplexity), true
 
 	case "JobRunnerDeletePayload.deletedID":
 		if e.complexity.JobRunnerDeletePayload.DeletedID == nil {
@@ -16856,6 +16919,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateInvite(childComplexity, args["input"].(generated.CreateInviteInput)), true
 
+	case "Mutation.createJobResult":
+		if e.complexity.Mutation.CreateJobResult == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobResult_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobResult(childComplexity, args["input"].(generated.CreateJobResultInput)), true
+
+	case "Mutation.createJobRunner":
+		if e.complexity.Mutation.CreateJobRunner == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobRunner_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobRunner(childComplexity, args["input"].(generated.CreateJobRunnerInput)), true
+
 	case "Mutation.createJobRunnerRegistrationToken":
 		if e.complexity.Mutation.CreateJobRunnerRegistrationToken == nil {
 			break
@@ -17083,6 +17170,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateScheduledJob(childComplexity, args["input"].(generated.CreateScheduledJobInput)), true
+
+	case "Mutation.createScheduledJobRun":
+		if e.complexity.Mutation.CreateScheduledJobRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createScheduledJobRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateScheduledJobRun(childComplexity, args["input"].(generated.CreateScheduledJobRunInput)), true
 
 	case "Mutation.createStandard":
 		if e.complexity.Mutation.CreateStandard == nil {
@@ -17528,6 +17627,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteInvite(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteJobResult":
+		if e.complexity.Mutation.DeleteJobResult == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteJobResult_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteJobResult(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteJobRunner":
 		if e.complexity.Mutation.DeleteJobRunner == nil {
 			break
@@ -17731,6 +17842,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteScheduledJob(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteScheduledJobRun":
+		if e.complexity.Mutation.DeleteScheduledJobRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteScheduledJobRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteScheduledJobRun(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteStandard":
 		if e.complexity.Mutation.DeleteStandard == nil {
@@ -18236,6 +18359,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateInvite(childComplexity, args["id"].(string), args["input"].(generated.UpdateInviteInput)), true
 
+	case "Mutation.updateJobResult":
+		if e.complexity.Mutation.UpdateJobResult == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateJobResult_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateJobResult(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobResultInput)), true
+
 	case "Mutation.updateJobRunner":
 		if e.complexity.Mutation.UpdateJobRunner == nil {
 			break
@@ -18415,6 +18550,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateScheduledJob(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobInput)), true
+
+	case "Mutation.updateScheduledJobRun":
+		if e.complexity.Mutation.UpdateScheduledJobRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateScheduledJobRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateScheduledJobRun(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobRunInput)), true
 
 	case "Mutation.updateStandard":
 		if e.complexity.Mutation.UpdateStandard == nil {
@@ -27679,6 +27826,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobRunConnection.TotalCount(childComplexity), true
 
+	case "ScheduledJobRunCreatePayload.scheduledJobRun":
+		if e.complexity.ScheduledJobRunCreatePayload.ScheduledJobRun == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRunCreatePayload.ScheduledJobRun(childComplexity), true
+
+	case "ScheduledJobRunDeletePayload.deletedID":
+		if e.complexity.ScheduledJobRunDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRunDeletePayload.DeletedID(childComplexity), true
+
 	case "ScheduledJobRunEdge.cursor":
 		if e.complexity.ScheduledJobRunEdge.Cursor == nil {
 			break
@@ -27692,6 +27853,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobRunEdge.Node(childComplexity), true
+
+	case "ScheduledJobRunUpdatePayload.scheduledJobRun":
+		if e.complexity.ScheduledJobRunUpdatePayload.ScheduledJobRun == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRunUpdatePayload.ScheduledJobRun(childComplexity), true
 
 	case "ScheduledJobUpdatePayload.scheduledJob":
 		if e.complexity.ScheduledJobUpdatePayload.ScheduledJob == nil {
@@ -90141,6 +90309,69 @@ type InviteBulkCreatePayload {
     ):  JobResult!
 }
 
+extend type Mutation{
+    """
+    Create a new jobResult
+    """
+    createJobResult(
+        """
+        values of the jobResult
+        """
+        input: CreateJobResultInput!
+    ): JobResultCreatePayload!
+    """
+    Update an existing jobResult
+    """
+    updateJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+        """
+        New values for the jobResult
+        """
+        input: UpdateJobResultInput!
+    ): JobResultUpdatePayload!
+    """
+    Delete an existing jobResult
+    """
+    deleteJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+    ): JobResultDeletePayload!
+}
+
+"""
+Return response for createJobResult mutation
+"""
+type JobResultCreatePayload {
+    """
+    Created jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for updateJobResult mutation
+"""
+type JobResultUpdatePayload {
+    """
+    Updated jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for deleteJobResult mutation
+"""
+type JobResultDeletePayload {
+    """
+    Deleted jobResult ID
+    """
+    deletedID: ID!
+}
 `, BuiltIn: false},
 	{Name: "../schema/jobrunner.graphql", Input: `extend type Query {
     """
@@ -90155,6 +90386,16 @@ type InviteBulkCreatePayload {
 }
 
 extend type Mutation{
+    """
+    Create a new invite
+    """
+    createJobRunner(
+        """
+        values of the invite
+        """
+        input: CreateJobRunnerInput!
+    ): JobRunnerCreatePayload!
+
     """
     Update an existing jobRunner
     """
@@ -90198,6 +90439,16 @@ type JobRunnerDeletePayload {
     Deleted jobRunner ID
     """
     deletedID: ID!
+}
+
+"""
+Return response for createJobRunner mutation
+"""
+type JobRunnerCreatePayload {
+    """
+    Created jobRunner
+    """
+    jobRunner: JobRunner!
 }
 `, BuiltIn: false},
 	{Name: "../schema/jobrunnerregistrationtoken.graphql", Input: `extend type Query {
@@ -92123,6 +92374,69 @@ type ScheduledJobBulkCreatePayload {
     ):  ScheduledJobRun!
 }
 
+extend type Mutation{
+    """
+    Create a new scheduledJobRun
+    """
+    createScheduledJobRun(
+        """
+        values of the scheduledJobRun
+        """
+        input: CreateScheduledJobRunInput!
+    ): ScheduledJobRunCreatePayload!
+    """
+    Update an existing scheduledJobRun
+    """
+    updateScheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+        """
+        New values for the scheduledJobRun
+        """
+        input: UpdateScheduledJobRunInput!
+    ): ScheduledJobRunUpdatePayload!
+    """
+    Delete an existing scheduledJobRun
+    """
+    deleteScheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+    ): ScheduledJobRunDeletePayload!
+}
+
+"""
+Return response for createScheduledJobRun mutation
+"""
+type ScheduledJobRunCreatePayload {
+    """
+    Created scheduledJobRun
+    """
+    scheduledJobRun: ScheduledJobRun!
+}
+
+"""
+Return response for updateScheduledJobRun mutation
+"""
+type ScheduledJobRunUpdatePayload {
+    """
+    Updated scheduledJobRun
+    """
+    scheduledJobRun: ScheduledJobRun!
+}
+
+"""
+Return response for deleteScheduledJobRun mutation
+"""
+type ScheduledJobRunDeletePayload {
+    """
+    Deleted scheduledJobRun ID
+    """
+    deletedID: ID!
+}
 `, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
