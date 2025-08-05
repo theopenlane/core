@@ -671,22 +671,14 @@ func init() {
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters2 := controlMixin[2].Interceptors()
 	controlMixinInters7 := controlMixin[7].Interceptors()
-<<<<<<< HEAD
-	controlInters := schema.Control{}.Interceptors()
-||||||| 0b10dda5
-=======
 	controlMixinInters8 := controlMixin[8].Interceptors()
->>>>>>> origin/main
+	controlInters := schema.Control{}.Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
 	control.Interceptors[1] = controlMixinInters2[0]
 	control.Interceptors[2] = controlMixinInters7[0]
 	control.Interceptors[3] = controlMixinInters7[1]
-<<<<<<< HEAD
-	control.Interceptors[4] = controlInters[0]
-||||||| 0b10dda5
-=======
 	control.Interceptors[4] = controlMixinInters8[0]
->>>>>>> origin/main
+	control.Interceptors[5] = controlInters[0]
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields3 := controlMixin[3].Fields()
@@ -1149,9 +1141,11 @@ func init() {
 	dnsverificationMixinInters1 := dnsverificationMixin[1].Interceptors()
 	dnsverificationMixinInters2 := dnsverificationMixin[2].Interceptors()
 	dnsverificationMixinInters6 := dnsverificationMixin[6].Interceptors()
+	dnsverificationInters := schema.DNSVerification{}.Interceptors()
 	dnsverification.Interceptors[0] = dnsverificationMixinInters1[0]
 	dnsverification.Interceptors[1] = dnsverificationMixinInters2[0]
 	dnsverification.Interceptors[2] = dnsverificationMixinInters6[0]
+	dnsverification.Interceptors[3] = dnsverificationInters[0]
 	dnsverificationMixinFields0 := dnsverificationMixin[0].Fields()
 	_ = dnsverificationMixinFields0
 	dnsverificationMixinFields3 := dnsverificationMixin[3].Fields()
@@ -3331,8 +3325,10 @@ func init() {
 	mappabledomain.Hooks[3] = mappabledomainMixinHooks2[0]
 	mappabledomainMixinInters1 := mappabledomainMixin[1].Interceptors()
 	mappabledomainMixinInters2 := mappabledomainMixin[2].Interceptors()
+	mappabledomainInters := schema.MappableDomain{}.Interceptors()
 	mappabledomain.Interceptors[0] = mappabledomainMixinInters1[0]
 	mappabledomain.Interceptors[1] = mappabledomainMixinInters2[0]
+	mappabledomain.Interceptors[2] = mappabledomainInters[0]
 	mappabledomainMixinFields0 := mappabledomainMixin[0].Fields()
 	_ = mappabledomainMixinFields0
 	mappabledomainMixinFields3 := mappabledomainMixin[3].Fields()
@@ -4632,15 +4628,9 @@ func init() {
 	procedure.Interceptors[0] = procedureMixinInters1[0]
 	procedure.Interceptors[1] = procedureMixinInters2[0]
 	procedure.Interceptors[2] = procedureMixinInters7[0]
-<<<<<<< HEAD
-	procedure.Interceptors[3] = procedureInters[0]
-	procedure.Interceptors[4] = procedureInters[1]
-||||||| 0b10dda5
-	procedure.Interceptors[3] = procedureInters[0]
-=======
 	procedure.Interceptors[3] = procedureMixinInters8[0]
 	procedure.Interceptors[4] = procedureInters[0]
->>>>>>> origin/main
+	procedure.Interceptors[5] = procedureInters[1]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
 	procedureMixinFields3 := procedureMixin[3].Fields()

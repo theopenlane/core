@@ -12,12 +12,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-<<<<<<< HEAD
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-||||||| 0b10dda5
-=======
 	"github.com/theopenlane/core/internal/graphapi/testclient"
->>>>>>> origin/main
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/models"
