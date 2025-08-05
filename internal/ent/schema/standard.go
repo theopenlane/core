@@ -8,6 +8,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -155,6 +156,10 @@ func (Standard) Hooks() []ent.Hook {
 		hooks.HookStandardPublicAccessTuples(),
 		hooks.HookStandardCreate(),
 		hooks.HookStandardDelete(),
+		hook.On(
+			hooks.OrgOwnedTuplesHook(),
+			ent.OpCreate,
+		),
 	}
 }
 

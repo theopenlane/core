@@ -37982,7 +37982,7 @@ func (sq *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterComplianceClient{config: s.config}).Query()
+				query = (&TrustCenterComplianceClient{config: sq.config}).Query()
 			)
 			args := newTrustCenterCompliancePaginateArgs(fieldArgs(ctx, new(TrustCenterComplianceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -38000,7 +38000,7 @@ func (sq *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Standard) error {
+					sq.loadTotal = append(sq.loadTotal, func(ctx context.Context, nodes []*Standard) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -38029,7 +38029,7 @@ func (sq *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 						return nil
 					})
 				} else {
-					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Standard) error {
+					sq.loadTotal = append(sq.loadTotal, func(_ context.Context, nodes []*Standard) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterCompliances)
 							if nodes[i].Edges.totalCount[2] == nil {
@@ -38063,7 +38063,7 @@ func (sq *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			} else {
 				query = pager.applyOrder(query)
 			}
-			s.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
+			sq.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -42766,7 +42766,7 @@ func (tcq *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterComplianceClient{config: tc.config}).Query()
+				query = (&TrustCenterComplianceClient{config: tcq.config}).Query()
 			)
 			args := newTrustCenterCompliancePaginateArgs(fieldArgs(ctx, new(TrustCenterComplianceWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -42784,7 +42784,7 @@ func (tcq *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opC
 				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
 				if hasPagination || ignoredEdges {
 					query := query.Clone()
-					tc.loadTotal = append(tc.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+					tcq.loadTotal = append(tcq.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
 						ids := make([]driver.Value, len(nodes))
 						for i := range nodes {
 							ids[i] = nodes[i].ID
@@ -42813,7 +42813,7 @@ func (tcq *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opC
 						return nil
 					})
 				} else {
-					tc.loadTotal = append(tc.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+					tcq.loadTotal = append(tcq.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterCompliances)
 							if nodes[i].Edges.totalCount[4] == nil {
@@ -42847,7 +42847,7 @@ func (tcq *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opC
 			} else {
 				query = pager.applyOrder(query)
 			}
-			tc.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
+			tcq.WithNamedTrustCenterCompliances(alias, func(wq *TrustCenterComplianceQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -42985,12 +42985,12 @@ func (tccq *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNod
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&TrustCenterClient{config: tcc.config}).Query()
+				query = (&TrustCenterClient{config: tccq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
 				return err
 			}
-			tcc.withTrustCenter = query
+			tccq.withTrustCenter = query
 			if _, ok := fieldSeen[trustcentercompliance.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcentercompliance.FieldTrustCenterID)
 				fieldSeen[trustcentercompliance.FieldTrustCenterID] = struct{}{}
@@ -43000,12 +43000,12 @@ func (tccq *TrustCenterComplianceQuery) collectField(ctx context.Context, oneNod
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&StandardClient{config: tcc.config}).Query()
+				query = (&StandardClient{config: tccq.config}).Query()
 			)
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
 				return err
 			}
-			tcc.withStandard = query
+			tccq.withStandard = query
 			if _, ok := fieldSeen[trustcentercompliance.FieldStandardID]; !ok {
 				selectedFields = append(selectedFields, trustcentercompliance.FieldStandardID)
 				fieldSeen[trustcentercompliance.FieldStandardID] = struct{}{}

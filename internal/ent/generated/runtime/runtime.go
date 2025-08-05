@@ -5375,6 +5375,8 @@ func init() {
 	standard.Hooks[8] = standardHooks[1]
 
 	standard.Hooks[9] = standardHooks[2]
+
+	standard.Hooks[10] = standardHooks[3]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters2 := standardMixin[2].Interceptors()
 	standardMixinInters7 := standardMixin[7].Interceptors()
