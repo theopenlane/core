@@ -284,7 +284,7 @@ func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.Mu
 	})
 }
 
-func DenyQueryIfMissingAllFeatures(schema string, features ...models.OrgModule) privacy.QueryRule {
+func DenyQueryIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
 
 		if len(features) == 0 {

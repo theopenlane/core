@@ -106,4 +106,3 @@ func (MappableDomain) Features() []models.OrgModule {
 		models.CatalogTrustCenterModule,
 	}
 }
-
