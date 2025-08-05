@@ -63,7 +63,7 @@ require (
 	github.com/projectdiscovery/utils v0.4.22
 	github.com/prometheus/client_golang v1.23.0
 	github.com/ravilushqa/otelgqlgen v0.19.0
-	github.com/redis/go-redis/v9 v9.11.0
+	github.com/redis/go-redis/v9 v9.12.0
 	github.com/riverqueue/river v0.23.1
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.23.1
 	github.com/robfig/cron/v3 v3.0.1
