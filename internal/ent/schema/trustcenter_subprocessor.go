@@ -104,6 +104,9 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 // Policy of the TrustCenterSubprocessor
 func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("trustcenter_subprocessor", t.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("trustcenter_subprocessor", t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
@@ -135,7 +138,6 @@ func (t TrustCenterSubprocessor) Annotations() []schema.Annotation {
 // Interceptors of the TrustCenterSubprocessor
 func (t TrustCenterSubprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.InterceptorTrustCenterChild(),
 	}
 }

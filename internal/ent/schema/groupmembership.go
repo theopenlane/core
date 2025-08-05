@@ -124,7 +124,6 @@ func (GroupMembership) Mixin() []ent.Mixin {
 // Interceptors of the GroupMembership
 func (g GroupMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterListQuery(),
 	}
 }
@@ -140,6 +139,9 @@ func (GroupMembership) Hooks() []ent.Hook {
 // Policy of the GroupMembership
 func (g GroupMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("groupmembership", g.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("groupmembership", g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),

@@ -180,7 +180,6 @@ func (PersonalAccessToken) Hooks() []ent.Hook {
 // Interceptors of the PersonalAccessToken
 func (p PersonalAccessToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(p.Features()...),
 		interceptors.InterceptorPat(),
 	}
 }

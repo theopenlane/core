@@ -188,7 +188,6 @@ func (g Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (g Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterQueryResults[generated.Group](),
 	}
 }
@@ -205,6 +204,9 @@ func (Group) Hooks() []ent.Hook {
 // Policy of the group
 func (g Group) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("group", g.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("group", g.Features()...),
 			policy.CheckCreateAccess(),

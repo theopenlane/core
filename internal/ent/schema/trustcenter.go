@@ -126,6 +126,9 @@ func (TrustCenter) Hooks() []ent.Hook {
 // Policy of the TrustCenter
 func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("trustcenter", t.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("trustcenter", t.Features()...),
 			policy.CheckOrgWriteAccess(),
@@ -157,7 +160,6 @@ func (t TrustCenter) Annotations() []schema.Annotation {
 // Interceptors of the TrustCenter
 func (t TrustCenter) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.InterceptorTrustCenter(),
 	}
 }

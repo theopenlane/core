@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -67,6 +66,9 @@ func (s Scan) Edges() []ent.Edge {
 
 func (s Scan) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("scan", s.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("scan", s.Features()...),
 			policy.CheckOrgWriteAccess(),
@@ -84,11 +86,4 @@ func (Scan) Features() []models.OrgModule {
 // Annotations of the Scan
 func (Scan) Annotations() []schema.Annotation {
 	return []schema.Annotation{}
-}
-
-// Interceptors of the Scan
-func (s Scan) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(s.Features()...),
-	}
 }

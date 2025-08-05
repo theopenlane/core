@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -134,14 +135,24 @@ func (o OrgMembership) Interceptors() []ent.Interceptor {
 	}
 }
 
+func (o OrgMembership) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Policy of the OrgMembership
-func (OrgMembership) Policy() ent.Policy {
+func (o OrgMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("org_memberships", o.Features()...),
+		),
 		policy.WithOnMutationRules(
 			ent.OpDelete|ent.OpDeleteOne,
 			rule.AllowSelfOrgMembershipDelete(),
 		),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures("org_memberships", o.Features()...),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
 		),

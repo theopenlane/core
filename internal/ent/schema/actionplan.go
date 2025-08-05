@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -98,16 +97,12 @@ func (a ActionPlan) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the ActionPlan
-func (a ActionPlan) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(a.Features()...),
-	}
-}
-
 // Policy of the ActionPlan
 func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("actionplan", a.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("actionplan", a.Features()...),
 			policy.CheckCreateAccess(),

@@ -156,6 +156,10 @@ func checkFeatures(ctx context.Context, requireAll bool, feats ...models.OrgModu
 		return false, err
 	}
 
+	if len(enabled) == 0 {
+		return true, nil
+	}
+
 	enabledSet := make(map[string]struct{}, len(enabled))
 
 	for _, f := range enabled {
@@ -277,5 +281,59 @@ func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.Mu
 		}
 
 		return privacy.Skip
+	})
+}
+
+func DenyQueryIfMissingAllFeatures(schema string, features ...models.OrgModule) privacy.QueryRule {
+	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
+
+		if len(features) == 0 {
+			return privacy.Skip
+		}
+
+		// check for bypass
+		// For unauthenticated users, this interceptor
+		// will still run when a query is done to fetch the data such as an api
+		// token or personal access token
+		// And would lead to a situation where the features cannot be
+		// retrieved from the database and a failure occurrs
+		if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
+			return privacy.Skip
+		}
+
+		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
+			return privacy.Skip
+		}
+
+		if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+			return privacy.Skip
+		}
+
+		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
+			return privacy.Skip
+		}
+
+		if tok := token.EmailSignUpTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		if tok := token.ResetTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		if tok := token.VerifyTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		if tok := token.JobRunnerRegistrationTokenFromContext(ctx); tok != nil {
+			return privacy.Skip
+		}
+
+		_, err := HasAllFeatures(ctx, features...)
+		if err != nil {
+			return err
+		}
+
+		return privacy.Allow
 	})
 }

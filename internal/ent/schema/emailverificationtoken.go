@@ -118,13 +118,6 @@ func (e EmailVerificationToken) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the EmailVerificationToken
-func (e EmailVerificationToken) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
-	}
-}
-
 // Hooks of the EmailVerificationToken
 func (EmailVerificationToken) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -136,6 +129,7 @@ func (EmailVerificationToken) Hooks() []ent.Hook {
 func (e EmailVerificationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("emailverificationtoken", e.Features()...),
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](),
 		),
 		policy.WithOnMutationRules(

@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -138,13 +137,6 @@ func (e Evidence) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Evidence
-func (e Evidence) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
-	}
-}
-
 // Hooks of the Evidence
 func (Evidence) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -155,6 +147,9 @@ func (Evidence) Hooks() []ent.Hook {
 // Policy of the Evidence
 func (e Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("evidence", e.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("evidence", e.Features()...),
 			policy.CheckCreateAccess(),

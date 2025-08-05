@@ -140,7 +140,6 @@ func (JobRunnerRegistrationToken) Hooks() []ent.Hook {
 // Interceptors of the JobRunnerRegistrationToken
 func (j JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(j.Features()...),
 		interceptors.InterceptorJobRunnerRegistrationToken(),
 	}
 }
@@ -149,6 +148,7 @@ func (j JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
 func (j JobRunnerRegistrationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("jobrunner_registration_token", j.Features()...),
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.JobRunnerRegistrationToken](),
 		),
 		policy.WithMutationRules(

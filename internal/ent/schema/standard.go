@@ -156,7 +156,6 @@ func (Standard) Hooks() []ent.Hook {
 // Interceptors of the Standard
 func (s Standard) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(s.Features()...),
 		interceptors.TraverseStandard(),
 	}
 }
@@ -164,6 +163,9 @@ func (s Standard) Interceptors() []ent.Interceptor {
 // Policy of the Standard
 func (s Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("standard", s.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
 			rule.DenyIfMissingAllFeatures("standard", s.Features()...),

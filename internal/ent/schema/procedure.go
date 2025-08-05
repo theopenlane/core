@@ -106,7 +106,6 @@ func (Procedure) Hooks() []ent.Hook {
 // Interceptors of the Procedure
 func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(p.Features()...),
 		// procedures are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.Procedure](),
 	}
@@ -115,6 +114,9 @@ func (p Procedure) Interceptors() []ent.Interceptor {
 // Policy of the Procedure
 func (p Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("procedure", p.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("procedure", p.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ProcedureMutation](rule.ProgramParent), // if mutation contains program_id, check access

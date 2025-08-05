@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -136,13 +135,6 @@ func (m MappedControl) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the MappedControl
-func (m MappedControl) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(m.Features()...),
-	}
-}
-
 // Hooks of the MappedControl
 func (MappedControl) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -156,6 +148,9 @@ func (MappedControl) Hooks() []ent.Hook {
 // Policy of the MappedControl
 func (m MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("mappedcontrol", m.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("mappedcontrol", m.Features()...),
 			policy.CheckCreateAccess(),

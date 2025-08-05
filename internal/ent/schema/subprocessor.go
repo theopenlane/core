@@ -114,6 +114,9 @@ func (Subprocessor) Hooks() []ent.Hook {
 // Policy of the Subprocessor
 func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("subprocessor", t.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
 			rule.DenyIfMissingAllFeatures("subprocessor", t.Features()...),
@@ -139,7 +142,6 @@ func (Subprocessor) Features() []models.OrgModule {
 // Interceptors of the Subprocessor
 func (t Subprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.TraverseSubprocessor(),
 	}
 }

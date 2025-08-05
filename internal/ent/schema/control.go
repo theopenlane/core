@@ -171,6 +171,9 @@ func (Control) Hooks() []ent.Hook {
 // Policy of the Control
 func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("control", c.Features()...),
+		),
 		policy.WithMutationRules(
 			// when an admin deletes a standard, we updated
 			// controls to unlink the standard that might belong to an organization
@@ -195,12 +198,5 @@ func (c Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
-	}
-}
-
-// Interceptors of the Control
-func (c Control) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(c.Features()...),
 	}
 }

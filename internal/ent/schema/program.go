@@ -207,7 +207,6 @@ func (Program) Hooks() []ent.Hook {
 // Interceptors of the Program
 func (p Program) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(p.Features()...),
 		interceptors.FilterQueryResults[generated.Program](),
 	}
 }
@@ -215,6 +214,9 @@ func (p Program) Interceptors() []ent.Interceptor {
 // Policy of the program
 func (p Program) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("program", p.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("program", p.Features()...),
 			policy.CheckCreateAccess(),

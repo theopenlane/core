@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -172,13 +171,6 @@ func (t Task) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Task
-func (t Task) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
-	}
-}
-
 // Hooks of the Task
 func (Task) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -190,6 +182,9 @@ func (Task) Hooks() []ent.Hook {
 // Policy of the Task
 func (t Task) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("task", t.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("task", t.Features()...),
 			entfga.CheckEditAccess[*generated.TaskMutation](),

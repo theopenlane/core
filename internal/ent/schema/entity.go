@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -141,6 +140,9 @@ func (Entity) Hooks() []ent.Hook {
 // Policy of the Entity
 func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("entity", e.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("entity", e.Features()...),
 			policy.CheckOrgWriteAccess(),
@@ -151,12 +153,5 @@ func (e Entity) Policy() ent.Policy {
 func (Entity) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogEntityManagementModule,
-	}
-}
-
-// Interceptors of the Entity
-func (e Entity) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

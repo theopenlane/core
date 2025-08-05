@@ -143,7 +143,6 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 // Interceptors of the TrustCenterSetting
 func (t TrustCenterSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
 		interceptors.InterceptorTrustCenterChild(),
 	}
 }
@@ -158,6 +157,9 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("trustcenter_settings", t.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("trustcenter_settings", t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),

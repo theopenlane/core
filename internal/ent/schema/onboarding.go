@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -76,13 +75,6 @@ func (Onboarding) Features() []models.OrgModule {
 	}
 }
 
-// Interceptors of the Onboarding
-func (o Onboarding) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(o.Features()...),
-	}
-}
-
 // Mixin of the Onboarding
 func (Onboarding) Mixin() []ent.Mixin {
 	return []ent.Mixin{
@@ -130,6 +122,7 @@ func (o Onboarding) Policy() ent.Policy {
 	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("onboarding", o.Features()...),
 			// this data should not be queried, so we deny all queries except
 			// those explicitly allowed from internal services
 			rule.AllowIfContextAllowRule(),

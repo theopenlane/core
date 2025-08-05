@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
@@ -123,17 +122,11 @@ func (t TFASetting) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the TFASetting
-func (t TFASetting) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(t.Features()...),
-	}
-}
-
 // Policy of the TFASetting
 func (t TFASetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("tfasetting", t.Features()...),
 			rule.AllowIfSelf(),
 		),
 		policy.WithMutationRules(

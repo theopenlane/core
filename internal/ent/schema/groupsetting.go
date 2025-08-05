@@ -98,7 +98,6 @@ func (GroupSetting) Hooks() []ent.Hook {
 // Interceptors of the GroupSetting
 func (g GroupSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.InterceptorGroupSetting(),
 	}
 }
@@ -113,6 +112,9 @@ func (GroupSetting) Mixin() []ent.Mixin {
 // Policy defines the privacy policy of the GroupSetting
 func (g GroupSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("groupsetting", g.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("groupsetting", g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupSettingMutation](),

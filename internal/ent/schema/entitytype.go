@@ -10,7 +10,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -91,6 +90,9 @@ func (EntityType) Indexes() []ent.Index {
 // Policy of the EntityType
 func (e EntityType) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("entitytype", e.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("entitytype", e.Features()...),
 			policy.CheckOrgWriteAccess(),
@@ -101,12 +103,5 @@ func (e EntityType) Policy() ent.Policy {
 func (EntityType) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
-	}
-}
-
-// Interceptors of the EntityType
-func (e EntityType) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -118,6 +117,9 @@ func (DNSVerification) Indexes() []ent.Index {
 // Policy of the DNSVerification
 func (e DNSVerification) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("dnsverification", e.Features()...),
+		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 			rule.DenyIfMissingAllFeatures("dnsverification", e.Features()...),
@@ -133,11 +135,5 @@ func (DNSVerification) Hooks() []ent.Hook {
 func (DNSVerification) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
-	}
-}
-
-func (e DNSVerification) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

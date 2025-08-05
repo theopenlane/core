@@ -13,7 +13,8 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -144,15 +145,20 @@ func (w Webauthn) Annotations() []schema.Annotation {
 	}
 }
 
-// Interceptors of the Webauthn
-func (w Webauthn) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(w.Features()...),
-	}
-}
-
 func (Webauthn) Edges() []ent.Edge {
 	return []ent.Edge{}
+}
+
+// Policy of the Webauthn
+func (w Webauthn) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.DenyQueryIfMissingAllFeatures("webauthn", w.Features()...),
+		),
+		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures("webauthn", w.Features()...),
+		),
+	)
 }
 
 func (Webauthn) Hooks() []ent.Hook {
