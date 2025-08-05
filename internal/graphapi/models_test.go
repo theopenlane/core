@@ -30,8 +30,9 @@ import (
 )
 
 type OrganizationBuilder struct {
-	client *client
-	UserID string
+	client   *client
+	UserID   string
+	Features []models.OrgModule
 
 	// Fields
 	Name           string
@@ -465,14 +466,19 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 		assert.NilError(t, err)
 	}
 
-	o.enableAllModules(ctx, t, org.ID)
+	o.enableModules(ctx, t, org.ID)
 
 	return org
 }
 
-// enableAllModules enables all organization modules for the given organization
-func (o *OrganizationBuilder) enableAllModules(ctx context.Context, t *testing.T, orgID string) {
-	features := models.AllOrgModules
+// enableModules enables the selected organization modules for the given organization
+func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, orgID string) {
+
+	features := o.Features
+
+	if len(o.Features) == 0 {
+		features = models.AllOrgModules
+	}
 
 	tuples := make([]fgax.TupleKey, 0, len(features))
 	for _, feature := range features {

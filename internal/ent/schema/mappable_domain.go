@@ -84,11 +84,11 @@ func (MappableDomain) Indexes() []ent.Index {
 }
 
 // Policy of the MappableDomain
-func (m MappableDomain) Policy() ent.Policy {
+func (e MappableDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
-			rule.DenyIfMissingAllFeatures("mappable_domain", m.Features()...),
+			rule.DenyIfMissingAllFeatures("mappable_domain", e.Features()...),
 			privacy.AlwaysDenyRule(),
 		),
 	)
@@ -105,8 +105,8 @@ func (MappableDomain) Features() []models.OrgModule {
 	}
 }
 
-func (m MappableDomain) Interceptors() []ent.Interceptor {
+func (e MappableDomain) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(m.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

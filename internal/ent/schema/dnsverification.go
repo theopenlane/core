@@ -116,11 +116,11 @@ func (DNSVerification) Indexes() []ent.Index {
 }
 
 // Policy of the DNSVerification
-func (d DNSVerification) Policy() ent.Policy {
+func (e DNSVerification) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
-			rule.DenyIfMissingAllFeatures("dnsverification", d.Features()...),
+			rule.DenyIfMissingAllFeatures("dnsverification", e.Features()...),
 		),
 	)
 }
@@ -136,8 +136,8 @@ func (DNSVerification) Features() []models.OrgModule {
 	}
 }
 
-func (d DNSVerification) Interceptors() []ent.Interceptor {
+func (e DNSVerification) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorFeatures(d.Features()...),
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

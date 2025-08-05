@@ -7,12 +7,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
@@ -81,8 +78,6 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 	testGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	testUser.GroupID = testGroup.ID
 
-	suite.enableAllModules(ctx, t, testUser.ID, testUser.OrganizationID, features...)
-
 	return testUser
 }
 
@@ -109,45 +104,6 @@ func (om *OrgModuleBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 	assert.NilError(t, err)
 
 	return orgModule
-}
-
-func (suite *GraphTestSuite) enableAllModules(ctx context.Context, t *testing.T,
-	userID, orgID string, features ...models.OrgModule) {
-
-	if len(features) == 0 {
-		features = models.AllOrgModules
-	}
-
-	tuples := make([]fgax.TupleKey, 0, len(features))
-	for _, feature := range features {
-		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
-			SubjectID:   orgID,
-			SubjectType: generated.TypeOrganization,
-			ObjectID:    string(feature),
-			ObjectType:  "feature",
-			Relation:    "enabled",
-		}))
-	}
-
-	_, err := suite.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
-	assert.NilError(t, err)
-
-	// create a context with the organization ID properly set for authentication
-	newCtx := auth.NewTestContextWithOrgID(userID, orgID)
-	newCtx = contextx.With(newCtx, auth.OrganizationCreationContextKey{})
-	newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
-
-	// update existing org modules to active state instead of creating new ones
-	for _, feature := range features {
-		err := suite.client.db.OrgModule.Update().
-			Where(
-				orgmodule.OwnerID(orgID),
-				orgmodule.Module(string(feature)),
-			).
-			SetActive(true).
-			Exec(newCtx)
-		assert.NilError(t, err)
-	}
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens
