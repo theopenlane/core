@@ -7,12 +7,6 @@ builds:
     flags:
       - -trimpath
       - -tags=netgo
-    ldflags:
-      - "-X main.Version={{ .Env.VERSION }}"
-      - "-X main.Commit={{ .Env.COMMIT }}"
-      - "-X main.CommitDate={{ .Env.COMMIT_DATE }}"
-      - "-X main.TreeState={{ .Env.TREE_STATE }}"
-      - "-X github.com/theopenlane/core/internal/constants.CLIVersion={{ .Env.VERSION }}"
     goos:
       - linux
     main: ./cmd/cli
