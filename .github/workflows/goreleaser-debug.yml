@@ -57,7 +57,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --verbose --snapshot --clean --fail-fast --config .goreleaser-debug.yaml
+          args: release --verbose --snapshot --clean --fail-fast --config .goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
@@ -65,4 +65,3 @@ jobs:
           COMMIT: ${{ needs.ldflags_args.outputs.commit }}
           COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
           TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
-          GOPROXY: https://proxy.golang.org,direct
