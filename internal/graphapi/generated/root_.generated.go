@@ -146,7 +146,6 @@ type ComplexityRoot struct {
 		Tags                            func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
-		Users                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -1114,15 +1113,15 @@ type ComplexityRoot struct {
 		EventID              func(childComplexity int) int
 		EventType            func(childComplexity int) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Groupmemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		GroupMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Groups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                   func(childComplexity int) int
 		Integrations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		Invites              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		Metadata             func(childComplexity int) int
+		OrgMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscriptions     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
 		Organizations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Orgmemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		Secrets              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Subscribers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
@@ -1399,6 +1398,9 @@ type ComplexityRoot struct {
 		Description                        func(childComplexity int) int
 		DisplayID                          func(childComplexity int) int
 		DisplayName                        func(childComplexity int) int
+		EntityBlockedGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityEditors                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityViewers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Events                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Files                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GravatarLogoURL                    func(childComplexity int) int
@@ -1949,6 +1951,7 @@ type ComplexityRoot struct {
 		FileID         func(childComplexity int) int
 		FinishedAt     func(childComplexity int) int
 		ID             func(childComplexity int) int
+		Log            func(childComplexity int) int
 		Owner          func(childComplexity int) int
 		OwnerID        func(childComplexity int) int
 		ScheduledJob   func(childComplexity int) int
@@ -1965,9 +1968,21 @@ type ComplexityRoot struct {
 		TotalCount func(childComplexity int) int
 	}
 
+	JobResultCreatePayload struct {
+		JobResult func(childComplexity int) int
+	}
+
+	JobResultDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
 	JobResultEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	JobResultUpdatePayload struct {
+		JobResult func(childComplexity int) int
 	}
 
 	JobRunner struct {
@@ -1977,7 +1992,9 @@ type ComplexityRoot struct {
 		ID              func(childComplexity int) int
 		IPAddress       func(childComplexity int) int
 		JobRunnerTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		LastSeen        func(childComplexity int) int
 		Name            func(childComplexity int) int
+		Os              func(childComplexity int) int
 		Owner           func(childComplexity int) int
 		OwnerID         func(childComplexity int) int
 		Status          func(childComplexity int) int
@@ -1985,12 +2002,17 @@ type ComplexityRoot struct {
 		Tags            func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
 		UpdatedBy       func(childComplexity int) int
+		Version         func(childComplexity int) int
 	}
 
 	JobRunnerConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	JobRunnerCreatePayload struct {
+		JobRunner func(childComplexity int) int
 	}
 
 	JobRunnerDeletePayload struct {
@@ -2416,6 +2438,8 @@ type ComplexityRoot struct {
 		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
+		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput) int
+		CreateJobRunner                      func(childComplexity int, input generated.CreateJobRunnerInput) int
 		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
 		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
 		CreateJobTemplate                    func(childComplexity int, input generated.CreateJobTemplateInput) int
@@ -2435,6 +2459,7 @@ type ComplexityRoot struct {
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
+		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
@@ -2472,6 +2497,7 @@ type ComplexityRoot struct {
 		DeleteIntegration                    func(childComplexity int, id string) int
 		DeleteInternalPolicy                 func(childComplexity int, id string) int
 		DeleteInvite                         func(childComplexity int, id string) int
+		DeleteJobResult                      func(childComplexity int, id string) int
 		DeleteJobRunner                      func(childComplexity int, id string) int
 		DeleteJobRunnerRegistrationToken     func(childComplexity int, id string) int
 		DeleteJobRunnerToken                 func(childComplexity int, id string) int
@@ -2489,6 +2515,7 @@ type ComplexityRoot struct {
 		DeleteRisk                           func(childComplexity int, id string) int
 		DeleteScan                           func(childComplexity int, id string) int
 		DeleteScheduledJob                   func(childComplexity int, id string) int
+		DeleteScheduledJobRun                func(childComplexity int, id string) int
 		DeleteStandard                       func(childComplexity int, id string) int
 		DeleteSubcontrol                     func(childComplexity int, id string) int
 		DeleteSubprocessor                   func(childComplexity int, id string) int
@@ -2531,6 +2558,7 @@ type ComplexityRoot struct {
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
 		UpdateJobTemplate                    func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
 		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
@@ -2546,6 +2574,7 @@ type ComplexityRoot struct {
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
+		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
@@ -3973,9 +4002,21 @@ type ComplexityRoot struct {
 		TotalCount func(childComplexity int) int
 	}
 
+	ScheduledJobRunCreatePayload struct {
+		ScheduledJobRun func(childComplexity int) int
+	}
+
+	ScheduledJobRunDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
 	ScheduledJobRunEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	ScheduledJobRunUpdatePayload struct {
+		ScheduledJobRun func(childComplexity int) int
 	}
 
 	ScheduledJobUpdatePayload struct {
@@ -5514,18 +5555,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.UpdatedBy(childComplexity), true
-
-	case "ActionPlan.users":
-		if e.complexity.ActionPlan.Users == nil {
-			break
-		}
-
-		args, err := ec.field_ActionPlan_users_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.ActionPlan.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -10009,17 +10038,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Event.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
-	case "Event.groupmemberships":
-		if e.complexity.Event.Groupmemberships == nil {
+	case "Event.groupMemberships":
+		if e.complexity.Event.GroupMemberships == nil {
 			break
 		}
 
-		args, err := ec.field_Event_groupmemberships_args(ctx, rawArgs)
+		args, err := ec.field_Event_groupMemberships_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Event.Groupmemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
+		return e.complexity.Event.GroupMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
 
 	case "Event.groups":
 		if e.complexity.Event.Groups == nil {
@@ -10071,6 +10100,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Event.Metadata(childComplexity), true
 
+	case "Event.orgMemberships":
+		if e.complexity.Event.OrgMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Event_orgMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Event.OrgMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
+
 	case "Event.orgSubscriptions":
 		if e.complexity.Event.OrgSubscriptions == nil {
 			break
@@ -10094,18 +10135,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Event.Organizations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationOrder), args["where"].(*generated.OrganizationWhereInput)), true
-
-	case "Event.orgmemberships":
-		if e.complexity.Event.Orgmemberships == nil {
-			break
-		}
-
-		args, err := ec.field_Event_orgmemberships_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Event.Orgmemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrgMembershipOrder), args["where"].(*generated.OrgMembershipWhereInput)), true
 
 	case "Event.personalAccessTokens":
 		if e.complexity.Event.PersonalAccessTokens == nil {
@@ -11476,6 +11505,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.DisplayName(childComplexity), true
+
+	case "Group.entityBlockedGroups":
+		if e.complexity.Group.EntityBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Group.entityEditors":
+		if e.complexity.Group.EntityEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Group.entityViewers":
+		if e.complexity.Group.EntityViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_entityViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.EntityViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
 	case "Group.events":
 		if e.complexity.Group.Events == nil {
@@ -14088,6 +14153,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResult.ID(childComplexity), true
 
+	case "JobResult.log":
+		if e.complexity.JobResult.Log == nil {
+			break
+		}
+
+		return e.complexity.JobResult.Log(childComplexity), true
+
 	case "JobResult.owner":
 		if e.complexity.JobResult.Owner == nil {
 			break
@@ -14165,6 +14237,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResultConnection.TotalCount(childComplexity), true
 
+	case "JobResultCreatePayload.jobResult":
+		if e.complexity.JobResultCreatePayload.JobResult == nil {
+			break
+		}
+
+		return e.complexity.JobResultCreatePayload.JobResult(childComplexity), true
+
+	case "JobResultDeletePayload.deletedID":
+		if e.complexity.JobResultDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.JobResultDeletePayload.DeletedID(childComplexity), true
+
 	case "JobResultEdge.cursor":
 		if e.complexity.JobResultEdge.Cursor == nil {
 			break
@@ -14178,6 +14264,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobResultEdge.Node(childComplexity), true
+
+	case "JobResultUpdatePayload.jobResult":
+		if e.complexity.JobResultUpdatePayload.JobResult == nil {
+			break
+		}
+
+		return e.complexity.JobResultUpdatePayload.JobResult(childComplexity), true
 
 	case "JobRunner.createdAt":
 		if e.complexity.JobRunner.CreatedAt == nil {
@@ -14226,12 +14319,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunner.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
 
+	case "JobRunner.lastSeen":
+		if e.complexity.JobRunner.LastSeen == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.LastSeen(childComplexity), true
+
 	case "JobRunner.name":
 		if e.complexity.JobRunner.Name == nil {
 			break
 		}
 
 		return e.complexity.JobRunner.Name(childComplexity), true
+
+	case "JobRunner.os":
+		if e.complexity.JobRunner.Os == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Os(childComplexity), true
 
 	case "JobRunner.owner":
 		if e.complexity.JobRunner.Owner == nil {
@@ -14282,6 +14389,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunner.UpdatedBy(childComplexity), true
 
+	case "JobRunner.version":
+		if e.complexity.JobRunner.Version == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Version(childComplexity), true
+
 	case "JobRunnerConnection.edges":
 		if e.complexity.JobRunnerConnection.Edges == nil {
 			break
@@ -14302,6 +14416,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunnerConnection.TotalCount(childComplexity), true
+
+	case "JobRunnerCreatePayload.jobRunner":
+		if e.complexity.JobRunnerCreatePayload.JobRunner == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerCreatePayload.JobRunner(childComplexity), true
 
 	case "JobRunnerDeletePayload.deletedID":
 		if e.complexity.JobRunnerDeletePayload.DeletedID == nil {
@@ -16856,6 +16977,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateInvite(childComplexity, args["input"].(generated.CreateInviteInput)), true
 
+	case "Mutation.createJobResult":
+		if e.complexity.Mutation.CreateJobResult == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobResult_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobResult(childComplexity, args["input"].(generated.CreateJobResultInput)), true
+
+	case "Mutation.createJobRunner":
+		if e.complexity.Mutation.CreateJobRunner == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobRunner_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobRunner(childComplexity, args["input"].(generated.CreateJobRunnerInput)), true
+
 	case "Mutation.createJobRunnerRegistrationToken":
 		if e.complexity.Mutation.CreateJobRunnerRegistrationToken == nil {
 			break
@@ -17083,6 +17228,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateScheduledJob(childComplexity, args["input"].(generated.CreateScheduledJobInput)), true
+
+	case "Mutation.createScheduledJobRun":
+		if e.complexity.Mutation.CreateScheduledJobRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createScheduledJobRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateScheduledJobRun(childComplexity, args["input"].(generated.CreateScheduledJobRunInput)), true
 
 	case "Mutation.createStandard":
 		if e.complexity.Mutation.CreateStandard == nil {
@@ -17528,6 +17685,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteInvite(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteJobResult":
+		if e.complexity.Mutation.DeleteJobResult == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteJobResult_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteJobResult(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteJobRunner":
 		if e.complexity.Mutation.DeleteJobRunner == nil {
 			break
@@ -17731,6 +17900,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteScheduledJob(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteScheduledJobRun":
+		if e.complexity.Mutation.DeleteScheduledJobRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteScheduledJobRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteScheduledJobRun(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteStandard":
 		if e.complexity.Mutation.DeleteStandard == nil {
@@ -18236,6 +18417,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateInvite(childComplexity, args["id"].(string), args["input"].(generated.UpdateInviteInput)), true
 
+	case "Mutation.updateJobResult":
+		if e.complexity.Mutation.UpdateJobResult == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateJobResult_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateJobResult(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobResultInput)), true
+
 	case "Mutation.updateJobRunner":
 		if e.complexity.Mutation.UpdateJobRunner == nil {
 			break
@@ -18415,6 +18608,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateScheduledJob(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobInput)), true
+
+	case "Mutation.updateScheduledJobRun":
+		if e.complexity.Mutation.UpdateScheduledJobRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateScheduledJobRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateScheduledJobRun(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobRunInput)), true
 
 	case "Mutation.updateStandard":
 		if e.complexity.Mutation.UpdateStandard == nil {
@@ -27679,6 +27884,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobRunConnection.TotalCount(childComplexity), true
 
+	case "ScheduledJobRunCreatePayload.scheduledJobRun":
+		if e.complexity.ScheduledJobRunCreatePayload.ScheduledJobRun == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRunCreatePayload.ScheduledJobRun(childComplexity), true
+
+	case "ScheduledJobRunDeletePayload.deletedID":
+		if e.complexity.ScheduledJobRunDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRunDeletePayload.DeletedID(childComplexity), true
+
 	case "ScheduledJobRunEdge.cursor":
 		if e.complexity.ScheduledJobRunEdge.Cursor == nil {
 			break
@@ -27692,6 +27911,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobRunEdge.Node(childComplexity), true
+
+	case "ScheduledJobRunUpdatePayload.scheduledJobRun":
+		if e.complexity.ScheduledJobRunUpdatePayload.ScheduledJobRun == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRunUpdatePayload.ScheduledJobRun(childComplexity), true
 
 	case "ScheduledJobUpdatePayload.scheduledJob":
 		if e.complexity.ScheduledJobUpdatePayload.ScheduledJob == nil {
@@ -36225,37 +36451,6 @@ type ActionPlan implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
-  users(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Users returned from the connection.
-    """
-    orderBy: [UserOrder!]
-
-    """
-    Filtering options for Users returned from the connection.
-    """
-    where: UserWhereInput
-  ): UserConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -37196,11 +37391,6 @@ input ActionPlanWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
-  """
-  users edge predicates
-  """
-  hasUsers: Boolean
-  hasUsersWith: [UserWhereInput!]
   """
   programs edge predicates
   """
@@ -42058,6 +42248,7 @@ enum ControlOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -42627,7 +42818,6 @@ input CreateActionPlanInput {
   ownerID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
-  userIDs: [ID!]
   programIDs: [ID!]
 }
 """
@@ -43261,6 +43451,9 @@ input CreateGroupInput {
   scanEditorIDs: [ID!]
   scanBlockedGroupIDs: [ID!]
   scanViewerIDs: [ID!]
+  entityEditorIDs: [ID!]
+  entityBlockedGroupIDs: [ID!]
+  entityViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -43467,6 +43660,10 @@ input CreateJobResultInput {
   The time the job started it's execution. This is different from the db insertion time
   """
   startedAt: Time
+  """
+  the log output from the job
+  """
+  log: String
   ownerID: ID
   scheduledJobID: ID!
   fileID: ID!
@@ -43487,7 +43684,19 @@ input CreateJobRunnerInput {
   """
   the IP address of this runner
   """
-  ipAddress: String!
+  ipAddress: String
+  """
+  the last time this runner was seen
+  """
+  lastSeen: Time
+  """
+  the version of the runner
+  """
+  version: String
+  """
+  the operating system of the runner
+  """
+  os: String
   ownerID: ID
   jobRunnerTokenIDs: [ID!]
 }
@@ -48232,7 +48441,7 @@ type Event implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
-  orgmemberships(
+  orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48263,7 +48472,7 @@ type Event implements Node {
     """
     where: OrgMembershipWhereInput
   ): OrgMembershipConnection!
-  groupmemberships(
+  groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48609,15 +48818,15 @@ input EventWhereInput {
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
   """
-  orgmemberships edge predicates
+  org_memberships edge predicates
   """
-  hasOrgmemberships: Boolean
-  hasOrgmembershipsWith: [OrgMembershipWhereInput!]
+  hasOrgMemberships: Boolean
+  hasOrgMembershipsWith: [OrgMembershipWhereInput!]
   """
-  groupmemberships edge predicates
+  group_memberships edge predicates
   """
-  hasGroupmemberships: Boolean
-  hasGroupmembershipsWith: [GroupMembershipWhereInput!]
+  hasGroupMemberships: Boolean
+  hasGroupMembershipsWith: [GroupMembershipWhereInput!]
   """
   subscribers edge predicates
   """
@@ -51629,6 +51838,99 @@ type Group implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  entityEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  entityViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -53599,6 +53901,21 @@ input GroupWhereInput {
   """
   hasScanViewers: Boolean
   hasScanViewersWith: [ScanWhereInput!]
+  """
+  entity_editors edge predicates
+  """
+  hasEntityEditors: Boolean
+  hasEntityEditorsWith: [EntityWhereInput!]
+  """
+  entity_blocked_groups edge predicates
+  """
+  hasEntityBlockedGroups: Boolean
+  hasEntityBlockedGroupsWith: [EntityWhereInput!]
+  """
+  entity_viewers edge predicates
+  """
+  hasEntityViewers: Boolean
+  hasEntityViewersWith: [EntityWhereInput!]
   """
   procedure_editors edge predicates
   """
@@ -56477,6 +56794,10 @@ type JobResult implements Node {
   """
   startedAt: Time!
   fileID: ID!
+  """
+  the log output from the job
+  """
+  log: String
   owner: Organization
   scheduledJob: ScheduledJob!
   file: File!
@@ -56718,6 +57039,24 @@ input JobResultWhereInput {
   fileIDEqualFold: ID
   fileIDContainsFold: ID
   """
+  log field predicates
+  """
+  log: String
+  logNEQ: String
+  logIn: [String!]
+  logNotIn: [String!]
+  logGT: String
+  logGTE: String
+  logLT: String
+  logLTE: String
+  logContains: String
+  logHasPrefix: String
+  logHasSuffix: String
+  logIsNil: Boolean
+  logNotNil: Boolean
+  logEqualFold: String
+  logContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -56766,7 +57105,19 @@ type JobRunner implements Node {
   """
   the IP address of this runner
   """
-  ipAddress: String!
+  ipAddress: String
+  """
+  the last time this runner was seen
+  """
+  lastSeen: Time
+  """
+  the version of the runner
+  """
+  version: String
+  """
+  the operating system of the runner
+  """
+  os: String
   owner: Organization
   jobRunnerTokens(
     """
@@ -57555,8 +57906,59 @@ input JobRunnerWhereInput {
   ipAddressContains: String
   ipAddressHasPrefix: String
   ipAddressHasSuffix: String
+  ipAddressIsNil: Boolean
+  ipAddressNotNil: Boolean
   ipAddressEqualFold: String
   ipAddressContainsFold: String
+  """
+  last_seen field predicates
+  """
+  lastSeen: Time
+  lastSeenNEQ: Time
+  lastSeenIn: [Time!]
+  lastSeenNotIn: [Time!]
+  lastSeenGT: Time
+  lastSeenGTE: Time
+  lastSeenLT: Time
+  lastSeenLTE: Time
+  lastSeenIsNil: Boolean
+  lastSeenNotNil: Boolean
+  """
+  version field predicates
+  """
+  version: String
+  versionNEQ: String
+  versionIn: [String!]
+  versionNotIn: [String!]
+  versionGT: String
+  versionGTE: String
+  versionLT: String
+  versionLTE: String
+  versionContains: String
+  versionHasPrefix: String
+  versionHasSuffix: String
+  versionIsNil: Boolean
+  versionNotNil: Boolean
+  versionEqualFold: String
+  versionContainsFold: String
+  """
+  os field predicates
+  """
+  os: String
+  osNEQ: String
+  osIn: [String!]
+  osNotIn: [String!]
+  osGT: String
+  osGTE: String
+  osLT: String
+  osLTE: String
+  osContains: String
+  osHasPrefix: String
+  osHasSuffix: String
+  osIsNil: Boolean
+  osNotNil: Boolean
+  osEqualFold: String
+  osContainsFold: String
   """
   owner edge predicates
   """
@@ -77766,6 +78168,7 @@ enum SubcontrolOrderField {
   subcategory
   ref_code
   CONTROL_OWNER_name
+  DELEGATE_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -83505,9 +83908,6 @@ input UpdateActionPlanInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUsers: Boolean
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
@@ -84449,6 +84849,15 @@ input UpdateGroupInput {
   addScanViewerIDs: [ID!]
   removeScanViewerIDs: [ID!]
   clearScanViewers: Boolean
+  addEntityEditorIDs: [ID!]
+  removeEntityEditorIDs: [ID!]
+  clearEntityEditors: Boolean
+  addEntityBlockedGroupIDs: [ID!]
+  removeEntityBlockedGroupIDs: [ID!]
+  clearEntityBlockedGroups: Boolean
+  addEntityViewerIDs: [ID!]
+  removeEntityViewerIDs: [ID!]
+  clearEntityViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean
@@ -84712,6 +85121,11 @@ input UpdateJobResultInput {
   the status of this job. did it fail? did it succeed?
   """
   status: JobResultJobExecutionStatus
+  """
+  the log output from the job
+  """
+  log: String
+  clearLog: Boolean
   ownerID: ID
   clearOwner: Boolean
   scheduledJobID: ID
@@ -84732,6 +85146,26 @@ input UpdateJobRunnerInput {
   the name of the runner
   """
   name: String
+  """
+  the IP address of this runner
+  """
+  ipAddress: String
+  clearIPAddress: Boolean
+  """
+  the last time this runner was seen
+  """
+  lastSeen: Time
+  clearLastSeen: Boolean
+  """
+  the version of the runner
+  """
+  version: String
+  clearVersion: Boolean
+  """
+  the operating system of the runner
+  """
+  os: String
+  clearOs: Boolean
   ownerID: ID
   clearOwner: Boolean
   addJobRunnerTokenIDs: [ID!]
@@ -90141,6 +90575,69 @@ type InviteBulkCreatePayload {
     ):  JobResult!
 }
 
+extend type Mutation{
+    """
+    Create a new jobResult
+    """
+    createJobResult(
+        """
+        values of the jobResult
+        """
+        input: CreateJobResultInput!
+    ): JobResultCreatePayload!
+    """
+    Update an existing jobResult
+    """
+    updateJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+        """
+        New values for the jobResult
+        """
+        input: UpdateJobResultInput!
+    ): JobResultUpdatePayload!
+    """
+    Delete an existing jobResult
+    """
+    deleteJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+    ): JobResultDeletePayload!
+}
+
+"""
+Return response for createJobResult mutation
+"""
+type JobResultCreatePayload {
+    """
+    Created jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for updateJobResult mutation
+"""
+type JobResultUpdatePayload {
+    """
+    Updated jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for deleteJobResult mutation
+"""
+type JobResultDeletePayload {
+    """
+    Deleted jobResult ID
+    """
+    deletedID: ID!
+}
 `, BuiltIn: false},
 	{Name: "../schema/jobrunner.graphql", Input: `extend type Query {
     """
@@ -90155,6 +90652,16 @@ type InviteBulkCreatePayload {
 }
 
 extend type Mutation{
+    """
+    Create a new invite
+    """
+    createJobRunner(
+        """
+        values of the invite
+        """
+        input: CreateJobRunnerInput!
+    ): JobRunnerCreatePayload!
+
     """
     Update an existing jobRunner
     """
@@ -90198,6 +90705,16 @@ type JobRunnerDeletePayload {
     Deleted jobRunner ID
     """
     deletedID: ID!
+}
+
+"""
+Return response for createJobRunner mutation
+"""
+type JobRunnerCreatePayload {
+    """
+    Created jobRunner
+    """
+    jobRunner: JobRunner!
 }
 `, BuiltIn: false},
 	{Name: "../schema/jobrunnerregistrationtoken.graphql", Input: `extend type Query {
@@ -92123,6 +92640,69 @@ type ScheduledJobBulkCreatePayload {
     ):  ScheduledJobRun!
 }
 
+extend type Mutation{
+    """
+    Create a new scheduledJobRun
+    """
+    createScheduledJobRun(
+        """
+        values of the scheduledJobRun
+        """
+        input: CreateScheduledJobRunInput!
+    ): ScheduledJobRunCreatePayload!
+    """
+    Update an existing scheduledJobRun
+    """
+    updateScheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+        """
+        New values for the scheduledJobRun
+        """
+        input: UpdateScheduledJobRunInput!
+    ): ScheduledJobRunUpdatePayload!
+    """
+    Delete an existing scheduledJobRun
+    """
+    deleteScheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+    ): ScheduledJobRunDeletePayload!
+}
+
+"""
+Return response for createScheduledJobRun mutation
+"""
+type ScheduledJobRunCreatePayload {
+    """
+    Created scheduledJobRun
+    """
+    scheduledJobRun: ScheduledJobRun!
+}
+
+"""
+Return response for updateScheduledJobRun mutation
+"""
+type ScheduledJobRunUpdatePayload {
+    """
+    Updated scheduledJobRun
+    """
+    scheduledJobRun: ScheduledJobRun!
+}
+
+"""
+Return response for deleteScheduledJobRun mutation
+"""
+type ScheduledJobRunDeletePayload {
+    """
+    Deleted scheduledJobRun ID
+    """
+    deletedID: ID!
+}
 `, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """

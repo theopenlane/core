@@ -1,0 +1,181 @@
+
+mutation CreateBulkCSVTask($input: Upload!) {
+  createBulkCSVTask(input: $input) {
+    tasks {
+      assigneeID
+      assignerID
+      category
+      completed
+      createdAt
+      createdBy
+      details
+      displayID
+      due
+      id
+      ownerID
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTask($input: [CreateTaskInput!]) {
+  createBulkTask(input: $input) {
+    tasks {
+      assigneeID
+      assignerID
+      category
+      completed
+      createdAt
+      createdBy
+      details
+      displayID
+      due
+      id
+      ownerID
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTask($input: CreateTaskInput!) {
+  createTask(input: $input) {
+    task {
+      assigneeID
+      assignerID
+      category
+      completed
+      createdAt
+      createdBy
+      details
+      displayID
+      due
+      id
+      ownerID
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTask($deleteTaskId: ID!) {
+  deleteTask(id: $deleteTaskId) {
+    deletedID
+  }
+}
+
+query GetAllTasks {
+  tasks {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assigneeID
+        assignerID
+        category
+        completed
+        createdAt
+        createdBy
+        details
+        displayID
+        due
+        id
+        ownerID
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTaskByID($taskId: ID!) {
+  task(id: $taskId) {
+    assigneeID
+    assignerID
+    category
+    completed
+    createdAt
+    createdBy
+    details
+    displayID
+    due
+    id
+    ownerID
+    status
+    tags
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTasks($first: Int, $last: Int, $where: TaskWhereInput) {
+  tasks(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assigneeID
+        assignerID
+        category
+        completed
+        createdAt
+        createdBy
+        details
+        displayID
+        due
+        id
+        ownerID
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
+  updateTask(id: $updateTaskId, input: $input) {
+    task {
+      assigneeID
+      assignerID
+      category
+      completed
+      createdAt
+      createdBy
+      details
+      displayID
+      due
+      id
+      ownerID
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

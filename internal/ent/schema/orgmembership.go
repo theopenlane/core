@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // OrgMembership holds the schema definition for the OrgMembership entity
@@ -27,7 +28,7 @@ type OrgMembership struct {
 	ent.Schema
 }
 
-const SchemaOrgMembership = "orgmembership"
+const SchemaOrgMembership = "org_membership"
 
 func (OrgMembership) Name() string {
 	return SchemaOrgMembership
@@ -65,6 +66,9 @@ func (o OrgMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "organization_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: o,
@@ -72,6 +76,9 @@ func (o OrgMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			field:      "user_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(o, Event{}),
 	}

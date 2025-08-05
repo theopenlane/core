@@ -47,6 +47,9 @@ type SchemaConfig struct {
 	DocumentDataHistory                string // DocumentDataHistory table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.
+	EntityBlockedGroups                string // Entity-blocked_groups->Group table.
+	EntityEditors                      string // Entity-editors->Group table.
+	EntityViewers                      string // Entity-viewers->Group table.
 	EntityContacts                     string // Entity-contacts->Contact table.
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
@@ -218,7 +221,6 @@ type SchemaConfig struct {
 	User                               string // User table.
 	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.
-	UserActionPlans                    string // User-action_plans->ActionPlan table.
 	UserHistory                        string // UserHistory table.
 	UserSetting                        string // UserSetting table.
 	UserSettingFiles                   string // UserSetting-files->File table.

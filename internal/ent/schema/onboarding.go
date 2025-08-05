@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // Onboarding holds the schema definition for the Onboarding entity
@@ -98,6 +99,9 @@ func (o Onboarding) Edges() []ent.Edge {
 			edgeSchema: Organization{},
 			field:      "organization_id",
 			immutable:  true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 	}
 }

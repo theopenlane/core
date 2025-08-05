@@ -10,3 +10,66 @@ extend type Query {
     ):  ScheduledJobRun!
 }
 
+extend type Mutation{
+    """
+    Create a new scheduledJobRun
+    """
+    createScheduledJobRun(
+        """
+        values of the scheduledJobRun
+        """
+        input: CreateScheduledJobRunInput!
+    ): ScheduledJobRunCreatePayload!
+    """
+    Update an existing scheduledJobRun
+    """
+    updateScheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+        """
+        New values for the scheduledJobRun
+        """
+        input: UpdateScheduledJobRunInput!
+    ): ScheduledJobRunUpdatePayload!
+    """
+    Delete an existing scheduledJobRun
+    """
+    deleteScheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+    ): ScheduledJobRunDeletePayload!
+}
+
+"""
+Return response for createScheduledJobRun mutation
+"""
+type ScheduledJobRunCreatePayload {
+    """
+    Created scheduledJobRun
+    """
+    scheduledJobRun: ScheduledJobRun!
+}
+
+"""
+Return response for updateScheduledJobRun mutation
+"""
+type ScheduledJobRunUpdatePayload {
+    """
+    Updated scheduledJobRun
+    """
+    scheduledJobRun: ScheduledJobRun!
+}
+
+"""
+Return response for deleteScheduledJobRun mutation
+"""
+type ScheduledJobRunDeletePayload {
+    """
+    Deleted scheduledJobRun ID
+    """
+    deletedID: ID!
+}

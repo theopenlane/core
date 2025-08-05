@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -15,15 +15,15 @@ func TestMutationUpdateNote(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateTaskInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateTaskInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.UpdateTaskInput{
-				AddComment: &openlaneclient.CreateNoteInput{
+			request: testclient.UpdateTaskInput{
+				AddComment: &testclient.CreateNoteInput{
 					Text: "This is a test note",
 				},
 			},
@@ -32,8 +32,8 @@ func TestMutationUpdateNote(t *testing.T) {
 		},
 		{
 			name: "happy path with PAT",
-			request: openlaneclient.UpdateTaskInput{
-				AddComment: &openlaneclient.CreateNoteInput{
+			request: testclient.UpdateTaskInput{
+				AddComment: &testclient.CreateNoteInput{
 					Text:    "This is a test note using PAT",
 					OwnerID: &testUser1.OrganizationID,
 				},
@@ -43,8 +43,8 @@ func TestMutationUpdateNote(t *testing.T) {
 		},
 		{
 			name: "missing required field - text",
-			request: openlaneclient.UpdateTaskInput{
-				AddComment: &openlaneclient.CreateNoteInput{},
+			request: testclient.UpdateTaskInput{
+				AddComment: &testclient.CreateNoteInput{},
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -52,8 +52,8 @@ func TestMutationUpdateNote(t *testing.T) {
 		},
 		{
 			name: "owner id must be present with pat",
-			request: openlaneclient.UpdateTaskInput{
-				AddComment: &openlaneclient.CreateNoteInput{
+			request: testclient.UpdateTaskInput{
+				AddComment: &testclient.CreateNoteInput{
 					Text: "This is a test note using PAT",
 				},
 			},
@@ -63,15 +63,15 @@ func TestMutationUpdateNote(t *testing.T) {
 		},
 		{
 			name: "task not found",
-			request: openlaneclient.UpdateTaskInput{
-				AddComment: &openlaneclient.CreateNoteInput{
+			request: testclient.UpdateTaskInput{
+				AddComment: &testclient.CreateNoteInput{
 					Text:    "This is a test note",
 					OwnerID: &testUser1.OrganizationID,
 				},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx, //wrong user
-			expectedErr: "task not found",
+			ctx:         viewOnlyUser.UserCtx, // wrong user
+			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 
@@ -107,16 +107,16 @@ func TestMutationDeleteNote(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     func() openlaneclient.UpdateTaskInput // changed to function to get fresh note ID each time
-		client      *openlaneclient.OpenlaneClient
+		request     func() testclient.UpdateTaskInput // changed to function to get fresh note ID each time
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path",
-			request: func() openlaneclient.UpdateTaskInput {
-				createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, openlaneclient.UpdateTaskInput{
-					AddComment: &openlaneclient.CreateNoteInput{
+			request: func() testclient.UpdateTaskInput {
+				createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
+					AddComment: &testclient.CreateNoteInput{
 						Text: "Note to be deleted",
 					},
 				})
@@ -124,7 +124,7 @@ func TestMutationDeleteNote(t *testing.T) {
 				assert.Assert(t, createResp != nil)
 				assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 				noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
-				return openlaneclient.UpdateTaskInput{
+				return testclient.UpdateTaskInput{
 					DeleteComment: &noteID,
 				}
 			},
@@ -133,10 +133,10 @@ func TestMutationDeleteNote(t *testing.T) {
 		},
 		{
 			name: "happy path with PAT",
-			request: func() openlaneclient.UpdateTaskInput {
+			request: func() testclient.UpdateTaskInput {
 				// create a note to delete
-				createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, openlaneclient.UpdateTaskInput{
-					AddComment: &openlaneclient.CreateNoteInput{
+				createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
+					AddComment: &testclient.CreateNoteInput{
 						Text: "Note to be deleted with PAT",
 					},
 				})
@@ -144,7 +144,7 @@ func TestMutationDeleteNote(t *testing.T) {
 				assert.Assert(t, createResp != nil)
 				assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 				noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
-				return openlaneclient.UpdateTaskInput{
+				return testclient.UpdateTaskInput{
 					DeleteComment: &noteID,
 				}
 			},
@@ -153,8 +153,8 @@ func TestMutationDeleteNote(t *testing.T) {
 		},
 		{
 			name: "comment not found",
-			request: func() openlaneclient.UpdateTaskInput {
-				return openlaneclient.UpdateTaskInput{
+			request: func() testclient.UpdateTaskInput {
+				return testclient.UpdateTaskInput{
 					DeleteComment: &[]string{"non-existent-id"}[0],
 				}
 			},
@@ -190,8 +190,8 @@ func TestMutationDeleteNote(t *testing.T) {
 func TestQueryNote(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, openlaneclient.UpdateTaskInput{
-		AddComment: &openlaneclient.CreateNoteInput{
+	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, testclient.UpdateTaskInput{
+		AddComment: &testclient.CreateNoteInput{
 			Text: "Note for querying",
 		},
 	})
@@ -203,7 +203,7 @@ func TestQueryNote(t *testing.T) {
 	testCases := []struct {
 		name        string
 		noteID      string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

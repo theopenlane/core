@@ -1,0 +1,153 @@
+
+mutation CreateBulkCSVInvite($input: Upload!) {
+  createBulkCSVInvite(input: $input) {
+    invites {
+      createdAt
+      createdBy
+      expires
+      id
+      ownerID
+      recipient
+      requestorID
+      role
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkInvite($input: [CreateInviteInput!]) {
+  createBulkInvite(input: $input) {
+    invites {
+      createdAt
+      createdBy
+      expires
+      id
+      ownerID
+      recipient
+      requestorID
+      role
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateInvite($input: CreateInviteInput!) {
+  createInvite(input: $input) {
+    invite {
+      createdAt
+      createdBy
+      expires
+      id
+      ownerID
+      recipient
+      requestorID
+      role
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteInvite($deleteInviteId: ID!) {
+  deleteInvite(id: $deleteInviteId) {
+    deletedID
+  }
+}
+
+query GetAllInvites {
+  invites {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        expires
+        id
+        ownerID
+        recipient
+        requestorID
+        role
+        sendAttempts
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetInviteByID($inviteId: ID!) {
+  invite(id: $inviteId) {
+    createdAt
+    createdBy
+    expires
+    id
+    ownerID
+    recipient
+    requestorID
+    role
+    sendAttempts
+    status
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetInvites($first: Int, $last: Int, $where: InviteWhereInput) {
+  invites(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        expires
+        id
+        ownerID
+        recipient
+        requestorID
+        role
+        sendAttempts
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateInvite($updateInviteId: ID!, $input: UpdateInviteInput!) {
+  updateInvite(id: $updateInviteId, input: $input) {
+    invite {
+      createdAt
+      createdBy
+      expires
+      id
+      ownerID
+      recipient
+      requestorID
+      role
+      sendAttempts
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -44,6 +44,12 @@ const (
 	FieldStatus = "status"
 	// FieldIPAddress holds the string denoting the ip_address field in the database.
 	FieldIPAddress = "ip_address"
+	// FieldLastSeen holds the string denoting the last_seen field in the database.
+	FieldLastSeen = "last_seen"
+	// FieldVersion holds the string denoting the version field in the database.
+	FieldVersion = "version"
+	// FieldOs holds the string denoting the os field in the database.
+	FieldOs = "os"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeJobRunnerTokens holds the string denoting the job_runner_tokens edge name in mutations.
@@ -80,6 +86,9 @@ var Columns = []string{
 	FieldName,
 	FieldStatus,
 	FieldIPAddress,
+	FieldLastSeen,
+	FieldVersion,
+	FieldOs,
 }
 
 var (
@@ -119,8 +128,6 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
-	// IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
-	IPAddressValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -203,6 +210,21 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByIPAddress orders the results by the ip_address field.
 func ByIPAddress(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIPAddress, opts...).ToFunc()
+}
+
+// ByLastSeen orders the results by the last_seen field.
+func ByLastSeen(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastSeen, opts...).ToFunc()
+}
+
+// ByVersion orders the results by the version field.
+func ByVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+}
+
+// ByOs orders the results by the os field.
+func ByOs(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOs, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

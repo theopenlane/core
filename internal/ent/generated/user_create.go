@@ -1061,16 +1061,16 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if nodes := uc.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   user.ActionPlansTable,
-			Columns: user.ActionPlansPrimaryKey,
+			Columns: []string{user.ActionPlansColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uc.schemaConfig.UserActionPlans
+		edge.Schema = uc.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

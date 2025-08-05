@@ -1,0 +1,272 @@
+
+mutation CreateBulkCSVSubcontrol($input: Upload!) {
+  createBulkCSVSubcontrol(input: $input) {
+    subcontrols {
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlID
+      controlOwnerID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
+  createBulkSubcontrol(input: $input) {
+    subcontrols {
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlID
+      controlOwnerID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
+  createSubcontrol(input: $input) {
+    subcontrol {
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlID
+      controlOwnerID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteSubcontrol($deleteSubcontrolId: ID!) {
+  deleteSubcontrol(id: $deleteSubcontrolId) {
+    deletedID
+  }
+}
+
+query GetAllSubcontrols {
+  subcontrols {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlID
+        controlOwnerID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        id
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        referenceFramework
+        referenceID
+        references
+        source
+        status
+        subcategory
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetSubcontrolByID($subcontrolId: ID!) {
+  subcontrol(id: $subcontrolId) {
+    assessmentMethods
+    assessmentObjectives
+    auditorReferenceID
+    category
+    categoryID
+    controlID
+    controlOwnerID
+    controlQuestions
+    controlType
+    createdAt
+    createdBy
+    delegateID
+    description
+    displayID
+    exampleEvidence
+    id
+    implementationGuidance
+    mappedCategories
+    ownerID
+    refCode
+    referenceFramework
+    referenceID
+    references
+    source
+    status
+    subcategory
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetSubcontrols($first: Int, $last: Int, $where: SubcontrolWhereInput) {
+  subcontrols(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlID
+        controlOwnerID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        id
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        referenceFramework
+        referenceID
+        references
+        source
+        status
+        subcategory
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
+  updateSubcontrol(id: $updateSubcontrolId, input: $input) {
+    subcontrol {
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlID
+      controlOwnerID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // DocumentMixin implements the document pattern with approver for schemas.
@@ -155,10 +156,16 @@ func getApproverEdges(documentType string) []ent.Edge {
 		edge.To("approver", Group.Type).
 			Unique().
 			Field("approver_id").
+			Annotations(
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			).
 			Comment(fmt.Sprintf("the group of users who are responsible for approving the %s", documentType)),
 		edge.To("delegate", Group.Type).
 			Unique().
 			Field("delegate_id").
+			Annotations(
+				accessmap.EdgeAuthCheck(Group{}.Name()),
+			).
 			Comment(fmt.Sprintf("temporary delegates for the %s, used for temporary approval", documentType)),
 	}
 }

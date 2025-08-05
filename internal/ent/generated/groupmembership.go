@@ -37,9 +37,9 @@ type GroupMembership struct {
 	UserID string `json:"user_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the GroupMembershipQuery when eager-loading is set.
-	Edges                          GroupMembershipEdges `json:"edges"`
-	group_membership_orgmembership *string
-	selectValues                   sql.SelectValues
+	Edges                           GroupMembershipEdges `json:"edges"`
+	group_membership_org_membership *string
+	selectValues                    sql.SelectValues
 }
 
 // GroupMembershipEdges holds the relations/edges for other nodes in the graph.
@@ -48,8 +48,8 @@ type GroupMembershipEdges struct {
 	Group *Group `json:"group,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
-	// Orgmembership holds the value of the orgmembership edge.
-	Orgmembership *OrgMembership `json:"orgmembership,omitempty"`
+	// OrgMembership holds the value of the org_membership edge.
+	OrgMembership *OrgMembership `json:"org_membership,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -83,15 +83,15 @@ func (e GroupMembershipEdges) UserOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "user"}
 }
 
-// OrgmembershipOrErr returns the Orgmembership value or an error if the edge
+// OrgMembershipOrErr returns the OrgMembership value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e GroupMembershipEdges) OrgmembershipOrErr() (*OrgMembership, error) {
-	if e.Orgmembership != nil {
-		return e.Orgmembership, nil
+func (e GroupMembershipEdges) OrgMembershipOrErr() (*OrgMembership, error) {
+	if e.OrgMembership != nil {
+		return e.OrgMembership, nil
 	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: orgmembership.Label}
 	}
-	return nil, &NotLoadedError{edge: "orgmembership"}
+	return nil, &NotLoadedError{edge: "org_membership"}
 }
 
 // EventsOrErr returns the Events value or an error if the edge
@@ -112,7 +112,7 @@ func (*GroupMembership) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case groupmembership.FieldCreatedAt, groupmembership.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case groupmembership.ForeignKeys[0]: // group_membership_orgmembership
+		case groupmembership.ForeignKeys[0]: // group_membership_org_membership
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -179,10 +179,10 @@ func (gm *GroupMembership) assignValues(columns []string, values []any) error {
 			}
 		case groupmembership.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field group_membership_orgmembership", values[i])
+				return fmt.Errorf("unexpected type %T for field group_membership_org_membership", values[i])
 			} else if value.Valid {
-				gm.group_membership_orgmembership = new(string)
-				*gm.group_membership_orgmembership = value.String
+				gm.group_membership_org_membership = new(string)
+				*gm.group_membership_org_membership = value.String
 			}
 		default:
 			gm.selectValues.Set(columns[i], values[i])
@@ -207,9 +207,9 @@ func (gm *GroupMembership) QueryUser() *UserQuery {
 	return NewGroupMembershipClient(gm.config).QueryUser(gm)
 }
 
-// QueryOrgmembership queries the "orgmembership" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryOrgmembership() *OrgMembershipQuery {
-	return NewGroupMembershipClient(gm.config).QueryOrgmembership(gm)
+// QueryOrgMembership queries the "org_membership" edge of the GroupMembership entity.
+func (gm *GroupMembership) QueryOrgMembership() *OrgMembershipQuery {
+	return NewGroupMembershipClient(gm.config).QueryOrgMembership(gm)
 }
 
 // QueryEvents queries the "events" edge of the GroupMembership entity.

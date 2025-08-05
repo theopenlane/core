@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // Task holds the schema definition for the Task entity
@@ -118,6 +119,9 @@ func (t Task) Edges() []ent.Edge {
 			t:          User.Type,
 			field:      "assigner_id",
 			ref:        "assigner_tasks",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
@@ -125,12 +129,18 @@ func (t Task) Edges() []ent.Edge {
 			t:          User.Type,
 			field:      "assignee_id",
 			ref:        "assignee_tasks",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: t,
 			name:       "comments",
 			t:          Note.Type,
 			comment:    "conversations related to the task",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
 		}),
 		defaultEdgeFromWithPagination(t, Group{}),
 		defaultEdgeFromWithPagination(t, InternalPolicy{}),

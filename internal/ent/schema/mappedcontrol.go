@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -77,24 +78,36 @@ func (m MappedControl) Edges() []ent.Edge {
 			t:          Control.Type,
 			name:       "from_controls",
 			comment:    "controls that map to another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Control{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Control.Type,
 			name:       "to_controls",
 			comment:    "controls that are being mapped from another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Control{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Subcontrol.Type,
 			name:       "from_subcontrols",
 			comment:    "subcontrols map to another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Subcontrol{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Subcontrol.Type,
 			name:       "to_subcontrols",
 			comment:    "subcontrols are being mapped from another control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Subcontrol{}.Name()),
+			},
 		}),
 	}
 }

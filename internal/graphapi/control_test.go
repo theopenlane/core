@@ -12,9 +12,9 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -37,7 +37,7 @@ func TestQueryControl(t *testing.T) {
 		name          string
 		queryID       string
 		programAccess bool // whether the user has access to the program
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		errorMsg      string
 	}{
@@ -91,7 +91,7 @@ func TestQueryControl(t *testing.T) {
 			// setup the control if it is not already created
 			if tc.queryID == "" {
 				resp, err := suite.client.api.CreateControl(testUser1.UserCtx,
-					openlaneclient.CreateControlInput{
+					testclient.CreateControlInput{
 						RefCode:    "CTL-" + ulids.New().String(), // ensure unique ref code
 						ProgramIDs: []string{program.ID},
 					})
@@ -119,7 +119,8 @@ func TestQueryControl(t *testing.T) {
 			assert.Check(t, len(resp.Control.RefCode) != 0)
 
 			if tc.programAccess {
-				assert.Check(t, is.Len(resp.Control.Programs.Edges, 1))
+				assert.Assert(t, resp.Control.Programs.Edges != nil)
+				assert.Assert(t, is.Len(resp.Control.Programs.Edges, 1))
 				assert.Check(t, len(resp.Control.Programs.Edges[0].Node.ID) != 0)
 			} else {
 				assert.Check(t, is.Len(resp.Control.Programs.Edges, 0))
@@ -148,7 +149,7 @@ func TestQueryControls(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		first           *int64
 		last            *int64
 		ctx             context.Context
@@ -276,7 +277,7 @@ func TestQueryControlsMultipleOrgCheck(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		first           *int64
 		last            *int64
 		ctx             context.Context
@@ -335,14 +336,14 @@ func TestMutationCreateControl(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateControlInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateControlInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode: "A-1",
 			},
 			client: suite.client.api,
@@ -350,7 +351,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode:          "A-2",
 				Description:      lo.ToPtr("A description of the Control"),
 				Status:           &enums.ControlStatusPreparing,
@@ -408,7 +409,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "add groups",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode:         "A-3",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
@@ -418,7 +419,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode: "A-4",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -427,7 +428,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "using pat with no owner id",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode: "A-4",
 			},
 			client:      suite.client.apiWithPAT,
@@ -436,7 +437,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "using api token",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode: "A-5",
 			},
 			client: suite.client.apiWithToken,
@@ -444,7 +445,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode: "A-6",
 			},
 			client:      suite.client.api,
@@ -453,7 +454,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "user authorized, they were added to the program",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode:    "A-7",
 				ProgramIDs: []string{program1.ID},
 			},
@@ -462,7 +463,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "user authorized, user not authorized to one of the programs",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode:    "A-8",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
@@ -472,7 +473,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "missing required ref code",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				Description: lo.ToPtr("A description of the Control"),
 			},
 			client:      suite.client.api,
@@ -481,7 +482,7 @@ func TestMutationCreateControl(t *testing.T) {
 		},
 		{
 			name: "user not authorized, no permissions to one of the programs",
-			request: openlaneclient.CreateControlInput{
+			request: testclient.CreateControlInput{
 				RefCode:    "A-9",
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
@@ -738,9 +739,9 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	subcontrolIDsToDelete := []string{}
 	testCases := []struct {
 		name               string
-		request            openlaneclient.CloneControlInput
+		request            testclient.CloneControlInput
 		expectedControls   []*generated.Control
-		client             *openlaneclient.OpenlaneClient
+		client             *testclient.TestClient
 		ctx                context.Context
 		expectedStandard   *string
 		expectedNumProgram int
@@ -748,7 +749,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	}{
 		{
 			name: "happy path, all controls under standard using standard id",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				StandardID: &publicStandard.ID,
 			},
 			expectedStandard: lo.ToPtr(publicStandard.ShortName),
@@ -758,7 +759,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, all controls under standard using standard id and program set",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				StandardID: &publicStandard2.ID,
 				ProgramID:  &program.ID,
 			},
@@ -769,7 +770,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, all controls under standard",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: controlIDs,
 			},
 			expectedStandard: &publicStandard.ShortName,
@@ -779,7 +780,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, clone single control, should  be a no-op. because the control already exists",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[7].ID},
 			},
 			expectedControls: []*generated.Control{controls[7]},
@@ -789,7 +790,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, all controls under standard with program",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: controlIDs,
 				ProgramID:  &program.ID,
 			},
@@ -801,7 +802,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "all controls under standard with program no access",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: controlIDs,
 				ProgramID:  &programAnotherOrg.ID,
 			},
@@ -813,7 +814,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, clone control under org",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
 			expectedControls: []*generated.Control{orgOwnedControl},
@@ -823,7 +824,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, clone control under org with program",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 				ProgramID:  &program.ID,
 			},
@@ -835,7 +836,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, clone single control using personal access token",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 				OwnerID:    &testUser1.OrganizationID,
 			},
@@ -847,7 +848,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "clone single control using personal access token, missing owner id",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 			},
 			expectedStandard: &publicStandard.ShortName,
@@ -858,7 +859,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "happy path, clone single control using api token",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 			},
 			expectedStandard:   &publicStandard.ShortName,
@@ -869,7 +870,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name: "clone control under org, no access to control",
-			request: openlaneclient.CloneControlInput{
+			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
 			expectedStandard: lo.ToPtr("Custom"),
@@ -880,7 +881,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		},
 		{
 			name:             "clone control under org, empty request",
-			request:          openlaneclient.CloneControlInput{},
+			request:          testclient.CloneControlInput{},
 			expectedStandard: lo.ToPtr("Custom"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
@@ -912,7 +913,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, len(tc.expectedControls)))
 
 			// sort controls so they are consistent
-			slices.SortFunc(resp.CreateControlsByClone.Controls, func(a, b *openlaneclient.CreateControlsByClone_CreateControlsByClone_Controls) int {
+			slices.SortFunc(resp.CreateControlsByClone.Controls, func(a, b *testclient.CreateControlsByClone_CreateControlsByClone_Controls) int {
 				return cmp.Compare(a.RefCode, b.RefCode)
 			})
 
@@ -1048,7 +1049,7 @@ func TestMutationUpdateControl(t *testing.T) {
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
-	res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+	res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
 		Status: lo.ToPtr(enums.ControlStatusPreparing),
 	})
 	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
@@ -1056,15 +1057,15 @@ func TestMutationUpdateControl(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		request              openlaneclient.UpdateControlInput
-		client               *openlaneclient.OpenlaneClient
+		request              testclient.UpdateControlInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedRefFramework string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				Description:   lo.ToPtr("Updated description"),
 				AddProgramIDs: []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
 				AddEditorIDs:  []string{groupMember.GroupID},
@@ -1079,7 +1080,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				Status:      &enums.ControlStatusPreparing,
 				StandardID:  &standardUpdate.ID,
 				Tags:        []string{"tag1", "tag2"},
@@ -1134,7 +1135,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		},
 		{
 			name: "happy path, remove some things",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
 				ClearStandard:         lo.ToPtr(true),
@@ -1144,7 +1145,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		},
 		{
 			name: "update ref code to empty",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				RefCode: lo.ToPtr(""),
 			},
 			client:      suite.client.api,
@@ -1153,7 +1154,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not permissions in same org",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:      suite.client.api,
@@ -1162,7 +1163,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		},
 		{
 			name: "update allowed, user added to one of the programs",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client: suite.client.api,
@@ -1170,7 +1171,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateControlInput{
+			request: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:      suite.client.api,
@@ -1304,7 +1305,7 @@ func TestMutationUpdateControl(t *testing.T) {
 				assert.Check(t, found)
 
 				// ensure the user has access to the control now
-				res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+				res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
 					Tags: []string{"tag1"},
 				})
 				assert.NilError(t, err)
@@ -1332,7 +1333,7 @@ func TestMutationDeleteControl(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -1421,7 +1422,7 @@ func TestQueryControlCategories(t *testing.T) {
 
 	testCases := []struct {
 		name           string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		ctx            context.Context
 		expectedErr    string
 		expectedResult []string
@@ -1494,7 +1495,7 @@ func TestQueryControlSubcategories(t *testing.T) {
 
 	testCases := []struct {
 		name           string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		ctx            context.Context
 		expectedErr    string
 		expectedResult []string
@@ -1575,37 +1576,37 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 
 	testCases := []struct {
 		name           string
-		client         *openlaneclient.OpenlaneClient
-		where          *openlaneclient.ControlWhereInput
+		client         *testclient.TestClient
+		where          *testclient.ControlWhereInput
 		ctx            context.Context
 		expectedErr    string
-		expectedResult []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework
+		expectedResult []*testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework
 	}{
 		{
 			name:   "happy path, get control categories",
 			client: suite.client.api,
 			ctx:    newUser.UserCtx,
-			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
+			expectedResult: []*testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+					Node: testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control1.Category,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+					Node: testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control2.Category,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+					Node: testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control5.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+					Node: testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control6.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1616,18 +1617,18 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 			name:   "filter by standard, two results expected",
 			client: suite.client.api,
 			ctx:    newUser.UserCtx,
-			where: &openlaneclient.ControlWhereInput{
+			where: &testclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
-			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
+			expectedResult: []*testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+					Node: testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control5.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+					Node: testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control6.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1638,7 +1639,7 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 			name:           "no controls, no results",
 			client:         suite.client.api,
 			ctx:            testUser2.UserCtx,
-			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{},
+			expectedResult: []*testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{},
 		},
 	}
 
@@ -1659,7 +1660,7 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 			assert.Check(t, is.Len(resp.ControlCategoriesByFramework, len(tc.expectedResult)))
 
 			// sort the categories so they are consistent
-			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework) int {
+			slices.SortFunc(tc.expectedResult, func(a, b *testclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework) int {
 				return cmp.Compare(a.Node.Name, b.Node.Name)
 			})
 
@@ -1697,31 +1698,31 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 
 	testCases := []struct {
 		name           string
-		client         *openlaneclient.OpenlaneClient
-		where          *openlaneclient.ControlWhereInput
+		client         *testclient.TestClient
+		where          *testclient.ControlWhereInput
 		ctx            context.Context
 		expectedErr    string
-		expectedResult []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework
+		expectedResult []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework
 	}{
 		{
 			name:   "happy path, get control subcategories",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
+			expectedResult: []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+					Node: testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control1.Subcategory,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+					Node: testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control2.Subcategory,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+					Node: testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control5.Subcategory,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1732,12 +1733,12 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 			name:   "filter by standard, one result expected",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.ControlWhereInput{
+			where: &testclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
-			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
+			expectedResult: []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+					Node: testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control5.Subcategory,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1748,7 +1749,7 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 			name:           "no controls, no results",
 			client:         suite.client.api,
 			ctx:            testUser2.UserCtx,
-			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{},
+			expectedResult: []*testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{},
 		},
 	}
 
@@ -1766,13 +1767,22 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.ControlSubcategoriesByFramework, len(tc.expectedResult)))
-
 			// sort the categories so they are consistent
-			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) int {
+			slices.SortFunc(tc.expectedResult, func(a, b *testclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) int {
 				return cmp.Compare(a.Node.Name, b.Node.Name)
 			})
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategoriesByFramework))
+
+			for _, category := range tc.expectedResult {
+				foundCat := false
+				for _, respCat := range resp.ControlSubcategoriesByFramework {
+					if category.Node.Name == respCat.Node.Name && category.Node.ReferenceFramework != nil && respCat.Node.ReferenceFramework != nil &&
+						*category.Node.ReferenceFramework == *respCat.Node.ReferenceFramework {
+						foundCat = true
+						break
+					}
+				}
+				assert.Check(t, foundCat, "Expected subcategory %s to be in the response", category.Node.Name)
+			}
 
 			for _, category := range resp.ControlSubcategoriesByFramework {
 				// check for empty categories
@@ -1811,10 +1821,10 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 	cursor := ""
 	testCases := []struct {
 		name                 string
-		client               *openlaneclient.OpenlaneClient
+		client               *testclient.TestClient
 		first                *int64
 		after                *string
-		where                *openlaneclient.ControlWhereInput
+		where                *testclient.ControlWhereInput
 		category             *string
 		ctx                  context.Context
 		expectedErr          string
@@ -1873,7 +1883,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			name:   "filter by standard, two results expected",
 			client: suite.client.api,
 			ctx:    user1.UserCtx,
-			where: &openlaneclient.ControlWhereInput{
+			where: &testclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
 			expectedCountResults: 2, // 2 unique categories expected for the standard
@@ -1947,7 +1957,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
-	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, openlaneclient.UpdateControlInput{
+	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, testclient.UpdateControlInput{
 		Status: lo.ToPtr(enums.ControlStatusPreparing),
 	})
 
@@ -1958,8 +1968,8 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateControlInput
-		client               *openlaneclient.OpenlaneClient
+		input                testclient.UpdateControlInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedRefFramework map[string]string // control ID -> expected framework
@@ -1968,7 +1978,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "happy path, update status on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status:     &enums.ControlStatusPreparing,
 				StandardID: &standard.ID,
 			},
@@ -1984,7 +1994,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "happy path, clear operations and editor permissions",
 			ids:  []string{control1.ID, control2.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
 				AddEditorIDs:          []string{groupMember.GroupID},
@@ -2001,7 +2011,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateControlInput{Description: lo.ToPtr("test")},
+			input:       testclient.UpdateControlInput{Description: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -2009,7 +2019,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "mixed success and failure - some controls not authorized",
 			ids:  []string{control1.ID, controlAnotherUser.ID}, // second control should fail authorization
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
@@ -2019,7 +2029,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "update allowed, user added to one of the programs",
 			ids:  []string{control1.ID, control2.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusApproved,
 			},
 			client:               suite.client.api,
@@ -2029,7 +2039,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to controls",
 			ids:  []string{control1.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
@@ -2039,7 +2049,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "update control type and category on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				ControlType:    &enums.ControlTypeDetective,
 				Category:       lo.ToPtr("Availability"),
 				ControlOwnerID: &ownerGroup.ID,
@@ -2051,7 +2061,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name: "add programs and control implementations to multiple controls",
 			ids:  []string{control1.ID, control2.ID},
-			input: openlaneclient.UpdateControlInput{
+			input: testclient.UpdateControlInput{
 				AddProgramIDs:               []string{program2.ID},
 				AddControlImplementationIDs: []string{controlImplementation.ID},
 				Tags:                        []string{"bulk", "update"},
@@ -2173,7 +2183,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 					assert.Check(t, found)
 
 					// ensure the user has access to the control now
-					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+					res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)

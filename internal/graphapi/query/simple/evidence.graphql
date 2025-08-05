@@ -1,0 +1,188 @@
+
+mutation CreateBulkCSVEvidence($input: Upload!) {
+  createBulkCSVEvidence(input: $input) {
+    evidences {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+    }
+  }
+}
+
+mutation CreateBulkEvidence($input: [CreateEvidenceInput!]) {
+  createBulkEvidence(input: $input) {
+    evidences {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+    }
+  }
+}
+
+mutation CreateEvidence($input: CreateEvidenceInput!) {
+  createEvidence(input: $input) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+    }
+  }
+}
+
+mutation DeleteEvidence($deleteEvidenceId: ID!) {
+  deleteEvidence(id: $deleteEvidenceId) {
+    deletedID
+  }
+}
+
+query GetAllEvidences {
+  evidences {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}
+query GetEvidenceByID($evidenceId: ID!) {
+  evidence(id: $evidenceId) {
+    collectionProcedure
+    createdAt
+    createdBy
+    creationDate
+    description
+    displayID
+    id
+    isAutomated
+    name
+    ownerID
+    renewalDate
+    source
+    status
+    tags
+    updatedAt
+    updatedBy
+    url
+  }
+}
+
+query GetEvidences($first: Int, $last: Int, $where: EvidenceWhereInput) {
+  evidences(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}
+mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!) {
+  updateEvidence(id: $updateEvidenceId, input: $input) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+    }
+  }
+}

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -21,7 +21,7 @@ func TestQueryUserSetting(t *testing.T) {
 	assert.NilError(t, err)
 
 	// setup valid user context
-	user1SettingResp, err := suite.client.api.GetUserSettings(reqCtx, openlaneclient.UserSettingWhereInput{})
+	user1SettingResp, err := suite.client.api.GetUserSettings(reqCtx, testclient.UserSettingWhereInput{})
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(user1SettingResp.UserSettings.Edges, 1))
 
@@ -30,9 +30,9 @@ func TestQueryUserSetting(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
-		expected *openlaneclient.GetUserSettings_UserSettings_Edges_Node
+		expected *testclient.GetUserSettings_UserSettings_Edges_Node
 		errorMsg string
 	}{
 		{
@@ -131,25 +131,25 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 	testCases := []struct {
 		name          string
 		userSettingID string
-		updateInput   openlaneclient.UpdateUserSettingInput
-		client        *openlaneclient.OpenlaneClient
+		updateInput   testclient.UpdateUserSettingInput
+		client        *testclient.TestClient
 		ctx           context.Context
-		expectedRes   openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
+		expectedRes   testclient.UpdateUserSetting_UpdateUserSetting_UserSetting
 		errorMsg      string
 	}{
 		{
 			name:          "update default org and tags",
 			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateUserSettingInput{
+			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &org.ID,
 				Tags:         []string{"mitb", "funk"},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			expectedRes: openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
+			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
 				Tags:   []string{"mitb", "funk"},
-				DefaultOrg: &openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg{
+				DefaultOrg: &testclient.UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg{
 					ID: org.ID,
 				},
 			},
@@ -157,16 +157,16 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		{
 			name:          "update default org and tags for view only user",
 			userSettingID: viewOnlyUser.UserInfo.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateUserSettingInput{
+			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &om.OrganizationID,
 				Tags:         []string{"mitb", "funk"},
 			},
 			client: suite.client.api,
 			ctx:    viewOnlyUser.UserCtx,
-			expectedRes: openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
+			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
 				Tags:   []string{"mitb", "funk"},
-				DefaultOrg: &openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg{
+				DefaultOrg: &testclient.UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg{
 					ID: om.OrganizationID,
 				},
 			},
@@ -174,7 +174,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		{
 			name:          "update default org to org without access",
 			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateUserSettingInput{
+			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &org2.ID,
 			},
 			client:   suite.client.api,
@@ -184,7 +184,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		{
 			name:          "update status to invalid",
 			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateUserSettingInput{
+			updateInput: testclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusInvalid,
 			},
 			client:   suite.client.api,
@@ -194,12 +194,12 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		{
 			name:          "update status to suspended using personal access token",
 			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
-			updateInput: openlaneclient.UpdateUserSettingInput{
+			updateInput: testclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusSuspended,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
-			expectedRes: openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
+			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusSuspended,
 				Tags:   []string{"mitb", "funk"},
 			},

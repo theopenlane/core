@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
@@ -61,9 +62,9 @@ type GraphTestSuite struct {
 // client contains all the clients the test need to interact with
 type client struct {
 	db           *ent.Client
-	api          *openlaneclient.OpenlaneClient
-	apiWithPAT   *openlaneclient.OpenlaneClient
-	apiWithToken *openlaneclient.OpenlaneClient
+	api          *testclient.TestClient
+	apiWithPAT   *testclient.TestClient
+	apiWithToken *testclient.TestClient
 	fga          *fgax.Client
 	objectStore  *objects.Objects
 }

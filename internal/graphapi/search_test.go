@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -52,7 +52,7 @@ func TestGlobalSearch(t *testing.T) {
 
 	testCases := []struct {
 		name             string
-		client           *openlaneclient.OpenlaneClient
+		client           *testclient.TestClient
 		ctx              context.Context
 		query            string
 		expectedResults  int

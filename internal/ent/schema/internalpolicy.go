@@ -69,9 +69,11 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			// all policies must be associated to an organization
-			newOrgOwnedMixin(i, withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(i,
+				withSkipForSystemAdmin(true),
+			),
 			// add group edit permissions to the procedure
-			newGroupPermissionsMixin(withSkipViewPermissions()),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			// policies are documents
 			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
 		},

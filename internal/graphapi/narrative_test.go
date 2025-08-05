@@ -9,8 +9,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -29,7 +29,7 @@ func TestQueryNarrative(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -80,7 +80,7 @@ func TestQueryNarrative(t *testing.T) {
 			// setup the narrative if it is not already created
 			if tc.queryID == "" {
 				resp, err := suite.client.api.CreateNarrative(testUser1.UserCtx,
-					openlaneclient.CreateNarrativeInput{
+					testclient.CreateNarrativeInput{
 						Name:       "Narrative",
 						ProgramIDs: []string{program.ID},
 					})
@@ -133,7 +133,7 @@ func TestQueryNarratives(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -204,15 +204,15 @@ func TestMutationCreateNarrative(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		request       openlaneclient.CreateNarrativeInput
+		request       testclient.CreateNarrativeInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name: "Narrative",
 			},
 			client: suite.client.api,
@@ -220,7 +220,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name:        "Another Narrative",
 				Description: lo.ToPtr("A description of the Narrative"),
 				Details:     lo.ToPtr("Details of the Narrative"),
@@ -231,7 +231,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "add groups",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name:            "Test Procedure",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
@@ -242,7 +242,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name:    "Narrative",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -251,7 +251,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "using api token",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name: "Narrative",
 			},
 			client: suite.client.apiWithToken,
@@ -259,7 +259,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name: "Narrative",
 			},
 			client:      suite.client.api,
@@ -268,7 +268,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "user now authorized, added to group with creator permissions",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name: "Narrative",
 			},
 			addGroupToOrg: true,
@@ -277,7 +277,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "user authorized, they were added to the program",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name:       "Narrative",
 				ProgramIDs: []string{program1.ID},
 			},
@@ -286,7 +286,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name: "user authorized, user not authorized to one of the programs",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name:       "Narrative",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
@@ -296,14 +296,14 @@ func TestMutationCreateNarrative(t *testing.T) {
 		},
 		{
 			name:        "missing required name",
-			request:     openlaneclient.CreateNarrativeInput{},
+			request:     testclient.CreateNarrativeInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
 			name: "user not authorized, no permissions to one of the programs",
-			request: openlaneclient.CreateNarrativeInput{
+			request: testclient.CreateNarrativeInput{
 				Name:       "Narrative",
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
@@ -317,7 +317,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
-					openlaneclient.UpdateOrganizationInput{
+					testclient.UpdateOrganizationInput{
 						AddNarrativeCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				assert.NilError(t, err)
@@ -421,14 +421,14 @@ func TestMutationUpdateNarrative(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateNarrativeInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateNarrativeInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateNarrativeInput{
+			request: testclient.UpdateNarrativeInput{
 				Tags:         []string{"tag1", "tag2"},
 				Description:  lo.ToPtr("Updated description"),
 				AddViewerIDs: []string{groupMember.GroupID},
@@ -438,7 +438,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateNarrativeInput{
+			request: testclient.UpdateNarrativeInput{
 				AppendTags:  []string{"tag3", "tag4"},
 				Name:        lo.ToPtr("Updated Name"),
 				Description: lo.ToPtr("Updated Description"),
@@ -449,7 +449,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not permissions in same org",
-			request: openlaneclient.UpdateNarrativeInput{
+			request: testclient.UpdateNarrativeInput{
 				AppendTags: []string{"tag3"},
 			},
 			client:      suite.client.api,
@@ -458,7 +458,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateNarrativeInput{
+			request: testclient.UpdateNarrativeInput{
 				AppendTags: []string{"tag3"},
 			},
 			client:      suite.client.api,
@@ -540,7 +540,7 @@ func TestMutationDeleteNarrative(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

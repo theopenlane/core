@@ -1148,10 +1148,6 @@ type ActionPlanWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
-	// "users" edge predicates.
-	HasUsers     *bool             `json:"hasUsers,omitempty"`
-	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
-
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
@@ -1978,24 +1974,6 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, actionplan.HasControlsWith(with...))
-	}
-	if i.HasUsers != nil {
-		p := actionplan.HasUsers()
-		if !*i.HasUsers {
-			p = actionplan.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasUsersWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUsersWith))
-		for _, w := range i.HasUsersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasUsersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, actionplan.HasUsersWith(with...))
 	}
 	if i.HasPrograms != nil {
 		p := actionplan.HasPrograms()
@@ -20199,13 +20177,13 @@ type EventWhereInput struct {
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 
-	// "orgmemberships" edge predicates.
-	HasOrgmemberships     *bool                      `json:"hasOrgmemberships,omitempty"`
-	HasOrgmembershipsWith []*OrgMembershipWhereInput `json:"hasOrgmembershipsWith,omitempty"`
+	// "org_memberships" edge predicates.
+	HasOrgMemberships     *bool                      `json:"hasOrgMemberships,omitempty"`
+	HasOrgMembershipsWith []*OrgMembershipWhereInput `json:"hasOrgMembershipsWith,omitempty"`
 
-	// "groupmemberships" edge predicates.
-	HasGroupmemberships     *bool                        `json:"hasGroupmemberships,omitempty"`
-	HasGroupmembershipsWith []*GroupMembershipWhereInput `json:"hasGroupmembershipsWith,omitempty"`
+	// "group_memberships" edge predicates.
+	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
+	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
 
 	// "subscribers" edge predicates.
 	HasSubscribers     *bool                   `json:"hasSubscribers,omitempty"`
@@ -20727,41 +20705,41 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 		}
 		predicates = append(predicates, event.HasSecretsWith(with...))
 	}
-	if i.HasOrgmemberships != nil {
-		p := event.HasOrgmemberships()
-		if !*i.HasOrgmemberships {
+	if i.HasOrgMemberships != nil {
+		p := event.HasOrgMemberships()
+		if !*i.HasOrgMemberships {
 			p = event.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasOrgmembershipsWith) > 0 {
-		with := make([]predicate.OrgMembership, 0, len(i.HasOrgmembershipsWith))
-		for _, w := range i.HasOrgmembershipsWith {
+	if len(i.HasOrgMembershipsWith) > 0 {
+		with := make([]predicate.OrgMembership, 0, len(i.HasOrgMembershipsWith))
+		for _, w := range i.HasOrgMembershipsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrgmembershipsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasOrgMembershipsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, event.HasOrgmembershipsWith(with...))
+		predicates = append(predicates, event.HasOrgMembershipsWith(with...))
 	}
-	if i.HasGroupmemberships != nil {
-		p := event.HasGroupmemberships()
-		if !*i.HasGroupmemberships {
+	if i.HasGroupMemberships != nil {
+		p := event.HasGroupMemberships()
+		if !*i.HasGroupMemberships {
 			p = event.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasGroupmembershipsWith) > 0 {
-		with := make([]predicate.GroupMembership, 0, len(i.HasGroupmembershipsWith))
-		for _, w := range i.HasGroupmembershipsWith {
+	if len(i.HasGroupMembershipsWith) > 0 {
+		with := make([]predicate.GroupMembership, 0, len(i.HasGroupMembershipsWith))
+		for _, w := range i.HasGroupMembershipsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasGroupmembershipsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasGroupMembershipsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, event.HasGroupmembershipsWith(with...))
+		predicates = append(predicates, event.HasGroupMembershipsWith(with...))
 	}
 	if i.HasSubscribers != nil {
 		p := event.HasSubscribers()
@@ -26366,6 +26344,18 @@ type GroupWhereInput struct {
 	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
 	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
 
+	// "entity_editors" edge predicates.
+	HasEntityEditors     *bool               `json:"hasEntityEditors,omitempty"`
+	HasEntityEditorsWith []*EntityWhereInput `json:"hasEntityEditorsWith,omitempty"`
+
+	// "entity_blocked_groups" edge predicates.
+	HasEntityBlockedGroups     *bool               `json:"hasEntityBlockedGroups,omitempty"`
+	HasEntityBlockedGroupsWith []*EntityWhereInput `json:"hasEntityBlockedGroupsWith,omitempty"`
+
+	// "entity_viewers" edge predicates.
+	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
+	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
+
 	// "procedure_editors" edge predicates.
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -27194,6 +27184,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasScanViewersWith(with...))
+	}
+	if i.HasEntityEditors != nil {
+		p := group.HasEntityEditors()
+		if !*i.HasEntityEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityEditorsWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityEditorsWith))
+		for _, w := range i.HasEntityEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityEditorsWith(with...))
+	}
+	if i.HasEntityBlockedGroups != nil {
+		p := group.HasEntityBlockedGroups()
+		if !*i.HasEntityBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityBlockedGroupsWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityBlockedGroupsWith))
+		for _, w := range i.HasEntityBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityBlockedGroupsWith(with...))
+	}
+	if i.HasEntityViewers != nil {
+		p := group.HasEntityViewers()
+		if !*i.HasEntityViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityViewersWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasEntityViewersWith))
+		for _, w := range i.HasEntityViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasEntityViewersWith(with...))
 	}
 	if i.HasProcedureEditors != nil {
 		p := group.HasProcedureEditors()
@@ -36043,6 +36087,23 @@ type JobResultWhereInput struct {
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 
+	// "log" field predicates.
+	Log             *string  `json:"log,omitempty"`
+	LogNEQ          *string  `json:"logNEQ,omitempty"`
+	LogIn           []string `json:"logIn,omitempty"`
+	LogNotIn        []string `json:"logNotIn,omitempty"`
+	LogGT           *string  `json:"logGT,omitempty"`
+	LogGTE          *string  `json:"logGTE,omitempty"`
+	LogLT           *string  `json:"logLT,omitempty"`
+	LogLTE          *string  `json:"logLTE,omitempty"`
+	LogContains     *string  `json:"logContains,omitempty"`
+	LogHasPrefix    *string  `json:"logHasPrefix,omitempty"`
+	LogHasSuffix    *string  `json:"logHasSuffix,omitempty"`
+	LogIsNil        bool     `json:"logIsNil,omitempty"`
+	LogNotNil       bool     `json:"logNotNil,omitempty"`
+	LogEqualFold    *string  `json:"logEqualFold,omitempty"`
+	LogContainsFold *string  `json:"logContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -36514,6 +36575,51 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 	if i.FileIDContainsFold != nil {
 		predicates = append(predicates, jobresult.FileIDContainsFold(*i.FileIDContainsFold))
 	}
+	if i.Log != nil {
+		predicates = append(predicates, jobresult.LogEQ(*i.Log))
+	}
+	if i.LogNEQ != nil {
+		predicates = append(predicates, jobresult.LogNEQ(*i.LogNEQ))
+	}
+	if len(i.LogIn) > 0 {
+		predicates = append(predicates, jobresult.LogIn(i.LogIn...))
+	}
+	if len(i.LogNotIn) > 0 {
+		predicates = append(predicates, jobresult.LogNotIn(i.LogNotIn...))
+	}
+	if i.LogGT != nil {
+		predicates = append(predicates, jobresult.LogGT(*i.LogGT))
+	}
+	if i.LogGTE != nil {
+		predicates = append(predicates, jobresult.LogGTE(*i.LogGTE))
+	}
+	if i.LogLT != nil {
+		predicates = append(predicates, jobresult.LogLT(*i.LogLT))
+	}
+	if i.LogLTE != nil {
+		predicates = append(predicates, jobresult.LogLTE(*i.LogLTE))
+	}
+	if i.LogContains != nil {
+		predicates = append(predicates, jobresult.LogContains(*i.LogContains))
+	}
+	if i.LogHasPrefix != nil {
+		predicates = append(predicates, jobresult.LogHasPrefix(*i.LogHasPrefix))
+	}
+	if i.LogHasSuffix != nil {
+		predicates = append(predicates, jobresult.LogHasSuffix(*i.LogHasSuffix))
+	}
+	if i.LogIsNil {
+		predicates = append(predicates, jobresult.LogIsNil())
+	}
+	if i.LogNotNil {
+		predicates = append(predicates, jobresult.LogNotNil())
+	}
+	if i.LogEqualFold != nil {
+		predicates = append(predicates, jobresult.LogEqualFold(*i.LogEqualFold))
+	}
+	if i.LogContainsFold != nil {
+		predicates = append(predicates, jobresult.LogContainsFold(*i.LogContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := jobresult.HasOwner()
@@ -36727,8 +36833,56 @@ type JobRunnerWhereInput struct {
 	IPAddressContains     *string  `json:"ipAddressContains,omitempty"`
 	IPAddressHasPrefix    *string  `json:"ipAddressHasPrefix,omitempty"`
 	IPAddressHasSuffix    *string  `json:"ipAddressHasSuffix,omitempty"`
+	IPAddressIsNil        bool     `json:"ipAddressIsNil,omitempty"`
+	IPAddressNotNil       bool     `json:"ipAddressNotNil,omitempty"`
 	IPAddressEqualFold    *string  `json:"ipAddressEqualFold,omitempty"`
 	IPAddressContainsFold *string  `json:"ipAddressContainsFold,omitempty"`
+
+	// "last_seen" field predicates.
+	LastSeen       *time.Time  `json:"lastSeen,omitempty"`
+	LastSeenNEQ    *time.Time  `json:"lastSeenNEQ,omitempty"`
+	LastSeenIn     []time.Time `json:"lastSeenIn,omitempty"`
+	LastSeenNotIn  []time.Time `json:"lastSeenNotIn,omitempty"`
+	LastSeenGT     *time.Time  `json:"lastSeenGT,omitempty"`
+	LastSeenGTE    *time.Time  `json:"lastSeenGTE,omitempty"`
+	LastSeenLT     *time.Time  `json:"lastSeenLT,omitempty"`
+	LastSeenLTE    *time.Time  `json:"lastSeenLTE,omitempty"`
+	LastSeenIsNil  bool        `json:"lastSeenIsNil,omitempty"`
+	LastSeenNotNil bool        `json:"lastSeenNotNil,omitempty"`
+
+	// "version" field predicates.
+	Version             *string  `json:"version,omitempty"`
+	VersionNEQ          *string  `json:"versionNEQ,omitempty"`
+	VersionIn           []string `json:"versionIn,omitempty"`
+	VersionNotIn        []string `json:"versionNotIn,omitempty"`
+	VersionGT           *string  `json:"versionGT,omitempty"`
+	VersionGTE          *string  `json:"versionGTE,omitempty"`
+	VersionLT           *string  `json:"versionLT,omitempty"`
+	VersionLTE          *string  `json:"versionLTE,omitempty"`
+	VersionContains     *string  `json:"versionContains,omitempty"`
+	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
+	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
+	VersionIsNil        bool     `json:"versionIsNil,omitempty"`
+	VersionNotNil       bool     `json:"versionNotNil,omitempty"`
+	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
+	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+
+	// "os" field predicates.
+	Os             *string  `json:"os,omitempty"`
+	OsNEQ          *string  `json:"osNEQ,omitempty"`
+	OsIn           []string `json:"osIn,omitempty"`
+	OsNotIn        []string `json:"osNotIn,omitempty"`
+	OsGT           *string  `json:"osGT,omitempty"`
+	OsGTE          *string  `json:"osGTE,omitempty"`
+	OsLT           *string  `json:"osLT,omitempty"`
+	OsLTE          *string  `json:"osLTE,omitempty"`
+	OsContains     *string  `json:"osContains,omitempty"`
+	OsHasPrefix    *string  `json:"osHasPrefix,omitempty"`
+	OsHasSuffix    *string  `json:"osHasSuffix,omitempty"`
+	OsIsNil        bool     `json:"osIsNil,omitempty"`
+	OsNotNil       bool     `json:"osNotNil,omitempty"`
+	OsEqualFold    *string  `json:"osEqualFold,omitempty"`
+	OsContainsFold *string  `json:"osContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -37170,11 +37324,137 @@ func (i *JobRunnerWhereInput) P() (predicate.JobRunner, error) {
 	if i.IPAddressHasSuffix != nil {
 		predicates = append(predicates, jobrunner.IPAddressHasSuffix(*i.IPAddressHasSuffix))
 	}
+	if i.IPAddressIsNil {
+		predicates = append(predicates, jobrunner.IPAddressIsNil())
+	}
+	if i.IPAddressNotNil {
+		predicates = append(predicates, jobrunner.IPAddressNotNil())
+	}
 	if i.IPAddressEqualFold != nil {
 		predicates = append(predicates, jobrunner.IPAddressEqualFold(*i.IPAddressEqualFold))
 	}
 	if i.IPAddressContainsFold != nil {
 		predicates = append(predicates, jobrunner.IPAddressContainsFold(*i.IPAddressContainsFold))
+	}
+	if i.LastSeen != nil {
+		predicates = append(predicates, jobrunner.LastSeenEQ(*i.LastSeen))
+	}
+	if i.LastSeenNEQ != nil {
+		predicates = append(predicates, jobrunner.LastSeenNEQ(*i.LastSeenNEQ))
+	}
+	if len(i.LastSeenIn) > 0 {
+		predicates = append(predicates, jobrunner.LastSeenIn(i.LastSeenIn...))
+	}
+	if len(i.LastSeenNotIn) > 0 {
+		predicates = append(predicates, jobrunner.LastSeenNotIn(i.LastSeenNotIn...))
+	}
+	if i.LastSeenGT != nil {
+		predicates = append(predicates, jobrunner.LastSeenGT(*i.LastSeenGT))
+	}
+	if i.LastSeenGTE != nil {
+		predicates = append(predicates, jobrunner.LastSeenGTE(*i.LastSeenGTE))
+	}
+	if i.LastSeenLT != nil {
+		predicates = append(predicates, jobrunner.LastSeenLT(*i.LastSeenLT))
+	}
+	if i.LastSeenLTE != nil {
+		predicates = append(predicates, jobrunner.LastSeenLTE(*i.LastSeenLTE))
+	}
+	if i.LastSeenIsNil {
+		predicates = append(predicates, jobrunner.LastSeenIsNil())
+	}
+	if i.LastSeenNotNil {
+		predicates = append(predicates, jobrunner.LastSeenNotNil())
+	}
+	if i.Version != nil {
+		predicates = append(predicates, jobrunner.VersionEQ(*i.Version))
+	}
+	if i.VersionNEQ != nil {
+		predicates = append(predicates, jobrunner.VersionNEQ(*i.VersionNEQ))
+	}
+	if len(i.VersionIn) > 0 {
+		predicates = append(predicates, jobrunner.VersionIn(i.VersionIn...))
+	}
+	if len(i.VersionNotIn) > 0 {
+		predicates = append(predicates, jobrunner.VersionNotIn(i.VersionNotIn...))
+	}
+	if i.VersionGT != nil {
+		predicates = append(predicates, jobrunner.VersionGT(*i.VersionGT))
+	}
+	if i.VersionGTE != nil {
+		predicates = append(predicates, jobrunner.VersionGTE(*i.VersionGTE))
+	}
+	if i.VersionLT != nil {
+		predicates = append(predicates, jobrunner.VersionLT(*i.VersionLT))
+	}
+	if i.VersionLTE != nil {
+		predicates = append(predicates, jobrunner.VersionLTE(*i.VersionLTE))
+	}
+	if i.VersionContains != nil {
+		predicates = append(predicates, jobrunner.VersionContains(*i.VersionContains))
+	}
+	if i.VersionHasPrefix != nil {
+		predicates = append(predicates, jobrunner.VersionHasPrefix(*i.VersionHasPrefix))
+	}
+	if i.VersionHasSuffix != nil {
+		predicates = append(predicates, jobrunner.VersionHasSuffix(*i.VersionHasSuffix))
+	}
+	if i.VersionIsNil {
+		predicates = append(predicates, jobrunner.VersionIsNil())
+	}
+	if i.VersionNotNil {
+		predicates = append(predicates, jobrunner.VersionNotNil())
+	}
+	if i.VersionEqualFold != nil {
+		predicates = append(predicates, jobrunner.VersionEqualFold(*i.VersionEqualFold))
+	}
+	if i.VersionContainsFold != nil {
+		predicates = append(predicates, jobrunner.VersionContainsFold(*i.VersionContainsFold))
+	}
+	if i.Os != nil {
+		predicates = append(predicates, jobrunner.OsEQ(*i.Os))
+	}
+	if i.OsNEQ != nil {
+		predicates = append(predicates, jobrunner.OsNEQ(*i.OsNEQ))
+	}
+	if len(i.OsIn) > 0 {
+		predicates = append(predicates, jobrunner.OsIn(i.OsIn...))
+	}
+	if len(i.OsNotIn) > 0 {
+		predicates = append(predicates, jobrunner.OsNotIn(i.OsNotIn...))
+	}
+	if i.OsGT != nil {
+		predicates = append(predicates, jobrunner.OsGT(*i.OsGT))
+	}
+	if i.OsGTE != nil {
+		predicates = append(predicates, jobrunner.OsGTE(*i.OsGTE))
+	}
+	if i.OsLT != nil {
+		predicates = append(predicates, jobrunner.OsLT(*i.OsLT))
+	}
+	if i.OsLTE != nil {
+		predicates = append(predicates, jobrunner.OsLTE(*i.OsLTE))
+	}
+	if i.OsContains != nil {
+		predicates = append(predicates, jobrunner.OsContains(*i.OsContains))
+	}
+	if i.OsHasPrefix != nil {
+		predicates = append(predicates, jobrunner.OsHasPrefix(*i.OsHasPrefix))
+	}
+	if i.OsHasSuffix != nil {
+		predicates = append(predicates, jobrunner.OsHasSuffix(*i.OsHasSuffix))
+	}
+	if i.OsIsNil {
+		predicates = append(predicates, jobrunner.OsIsNil())
+	}
+	if i.OsNotNil {
+		predicates = append(predicates, jobrunner.OsNotNil())
+	}
+	if i.OsEqualFold != nil {
+		predicates = append(predicates, jobrunner.OsEqualFold(*i.OsEqualFold))
+	}
+	if i.OsContainsFold != nil {
+		predicates = append(predicates, jobrunner.OsContainsFold(*i.OsContainsFold))
 	}
 
 	if i.HasOwner != nil {

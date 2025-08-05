@@ -152,6 +152,9 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
 
+	// adds default hooks for all edge permissions
+	db.Use(hooks.HookEdgePermissions())
+
 	// add event emission for mutations
 	eventer := hooks.NewEventerPool(db)
 	hooks.RegisterGlobalHooks(db, eventer)
@@ -161,6 +164,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	}
 
 	db.Use(hooks.MetricsHook())
+
 	db.Use(BlockHook())
 
 	return db, nil

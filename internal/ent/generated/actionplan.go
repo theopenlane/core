@@ -81,6 +81,7 @@ type ActionPlan struct {
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
 	Edges                   ActionPlanEdges `json:"edges"`
 	subcontrol_action_plans *string
+	user_action_plans       *string
 	selectValues            sql.SelectValues
 }
 
@@ -96,19 +97,16 @@ type ActionPlanEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
-	// Users holds the value of the users edge.
-	Users []*User `json:"users,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [6]map[string]int
 
 	namedRisks    map[string][]*Risk
 	namedControls map[string][]*Control
-	namedUsers    map[string][]*User
 	namedPrograms map[string][]*Program
 }
 
@@ -163,19 +161,10 @@ func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
-// UsersOrErr returns the Users value or an error if the edge
-// was not loaded in eager-loading.
-func (e ActionPlanEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[5] {
-		return e.Users, nil
-	}
-	return nil, &NotLoadedError{edge: "users"}
-}
-
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[5] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -195,6 +184,8 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
 		case actionplan.ForeignKeys[0]: // subcontrol_action_plans
+			values[i] = new(sql.NullString)
+		case actionplan.ForeignKeys[1]: // user_action_plans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -406,6 +397,13 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 				ap.subcontrol_action_plans = new(string)
 				*ap.subcontrol_action_plans = value.String
 			}
+		case actionplan.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field user_action_plans", values[i])
+			} else if value.Valid {
+				ap.user_action_plans = new(string)
+				*ap.user_action_plans = value.String
+			}
 		default:
 			ap.selectValues.Set(columns[i], values[i])
 		}
@@ -442,11 +440,6 @@ func (ap *ActionPlan) QueryRisks() *RiskQuery {
 // QueryControls queries the "controls" edge of the ActionPlan entity.
 func (ap *ActionPlan) QueryControls() *ControlQuery {
 	return NewActionPlanClient(ap.config).QueryControls(ap)
-}
-
-// QueryUsers queries the "users" edge of the ActionPlan entity.
-func (ap *ActionPlan) QueryUsers() *UserQuery {
-	return NewActionPlanClient(ap.config).QueryUsers(ap)
 }
 
 // QueryPrograms queries the "programs" edge of the ActionPlan entity.
@@ -609,30 +602,6 @@ func (ap *ActionPlan) appendNamedControls(name string, edges ...*Control) {
 		ap.Edges.namedControls[name] = []*Control{}
 	} else {
 		ap.Edges.namedControls[name] = append(ap.Edges.namedControls[name], edges...)
-	}
-}
-
-// NamedUsers returns the Users named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (ap *ActionPlan) NamedUsers(name string) ([]*User, error) {
-	if ap.Edges.namedUsers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := ap.Edges.namedUsers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (ap *ActionPlan) appendNamedUsers(name string, edges ...*User) {
-	if ap.Edges.namedUsers == nil {
-		ap.Edges.namedUsers = make(map[string][]*User)
-	}
-	if len(edges) == 0 {
-		ap.Edges.namedUsers[name] = []*User{}
-	} else {
-		ap.Edges.namedUsers[name] = append(ap.Edges.namedUsers[name], edges...)
 	}
 }
 

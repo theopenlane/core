@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // ScheduledJob holds the schema definition for the ScheduledJob entity
@@ -106,6 +107,9 @@ func (c ScheduledJob) Edges() []ent.Edge {
 			edgeSchema: JobTemplate{},
 			field:      "job_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(JobTemplate{}.Name()),
+			},
 		}),
 
 		defaultEdgeToWithPagination(c, Control{}),
@@ -116,6 +120,9 @@ func (c ScheduledJob) Edges() []ent.Edge {
 			edgeSchema: JobRunner{},
 			field:      "job_runner_id",
 			required:   false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

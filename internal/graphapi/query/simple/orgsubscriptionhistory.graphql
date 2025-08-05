@@ -1,0 +1,79 @@
+
+
+query GetAllOrgSubscriptionHistories {
+  orgSubscriptionHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        daysUntilDue
+        expiresAt
+        featureLookupKeys
+        features
+        historyTime
+        id
+        operation
+        ownerID
+        paymentMethodAdded
+        productPrice
+        productTier
+        ref
+        stripeCustomerID
+        stripeProductTierID
+        stripeSubscriptionID
+        stripeSubscriptionStatus
+        tags
+        trialExpiresAt
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetOrgSubscriptionHistories($first: Int, $last: Int, $where: OrgSubscriptionHistoryWhereInput) {
+  orgSubscriptionHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        daysUntilDue
+        expiresAt
+        featureLookupKeys
+        features
+        historyTime
+        id
+        operation
+        ownerID
+        paymentMethodAdded
+        productPrice
+        productTier
+        ref
+        stripeCustomerID
+        stripeProductTierID
+        stripeSubscriptionID
+        stripeSubscriptionStatus
+        tags
+        trialExpiresAt
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

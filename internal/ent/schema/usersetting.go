@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // UserSetting holds the schema definition for the User entity.
@@ -98,12 +99,18 @@ func (u UserSetting) Edges() []ent.Edge {
 			edgeSchema: User{},
 			ref:        "setting",
 			field:      "user_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: u,
 			name:       "default_org",
 			t:          Organization.Type,
 			comment:    "organization to load on user login",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(u, File{}),
 	}

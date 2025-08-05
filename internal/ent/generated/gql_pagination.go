@@ -3408,7 +3408,7 @@ func (p *controlPager) applyOrder(query *ControlQuery) *ControlQuery {
 			defaultOrdered = true
 		}
 		switch o.Field.column {
-		case ControlOrderFieldControlOwnerName.column:
+		case ControlOrderFieldControlOwnerName.column, ControlOrderFieldDelegateName.column:
 		default:
 			if len(query.ctx.Fields) > 0 {
 				query.ctx.AppendFieldOnce(o.Field.column)
@@ -3428,7 +3428,7 @@ func (p *controlPager) applyOrder(query *ControlQuery) *ControlQuery {
 func (p *controlPager) orderExpr(query *ControlQuery) sql.Querier {
 	for _, o := range p.order {
 		switch o.Field.column {
-		case ControlOrderFieldControlOwnerName.column:
+		case ControlOrderFieldControlOwnerName.column, ControlOrderFieldDelegateName.column:
 			direction := o.Direction
 			if p.reverse {
 				direction = direction.Reverse()
@@ -3670,6 +3670,26 @@ var (
 			}
 		},
 	}
+	// ControlOrderFieldDelegateName orders by DELEGATE_name.
+	ControlOrderFieldDelegateName = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			return c.Value("delegate_name")
+		},
+		column: "delegate_name",
+		toTerm: func(opts ...sql.OrderTermOption) control.OrderOption {
+			return control.ByDelegateField(
+				group.FieldName,
+				append(opts, sql.OrderSelectAs("delegate_name"))...,
+			)
+		},
+		toCursor: func(c *Control) Cursor {
+			cv, _ := c.Value("delegate_name")
+			return Cursor{
+				ID:    c.ID,
+				Value: cv,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3696,6 +3716,8 @@ func (f ControlOrderField) String() string {
 		str = "ref_code"
 	case ControlOrderFieldControlOwnerName.column:
 		str = "CONTROL_OWNER_name"
+	case ControlOrderFieldDelegateName.column:
+		str = "DELEGATE_name"
 	}
 	return str
 }
@@ -3732,6 +3754,8 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldRefCode
 	case "CONTROL_OWNER_name":
 		*f = *ControlOrderFieldControlOwnerName
+	case "DELEGATE_name":
+		*f = *ControlOrderFieldDelegateName
 	default:
 		return fmt.Errorf("%s is not a valid ControlOrderField", str)
 	}
@@ -32246,7 +32270,7 @@ func (p *subcontrolPager) applyOrder(query *SubcontrolQuery) *SubcontrolQuery {
 			defaultOrdered = true
 		}
 		switch o.Field.column {
-		case SubcontrolOrderFieldControlOwnerName.column:
+		case SubcontrolOrderFieldControlOwnerName.column, SubcontrolOrderFieldDelegateName.column:
 		default:
 			if len(query.ctx.Fields) > 0 {
 				query.ctx.AppendFieldOnce(o.Field.column)
@@ -32266,7 +32290,7 @@ func (p *subcontrolPager) applyOrder(query *SubcontrolQuery) *SubcontrolQuery {
 func (p *subcontrolPager) orderExpr(query *SubcontrolQuery) sql.Querier {
 	for _, o := range p.order {
 		switch o.Field.column {
-		case SubcontrolOrderFieldControlOwnerName.column:
+		case SubcontrolOrderFieldControlOwnerName.column, SubcontrolOrderFieldDelegateName.column:
 			direction := o.Direction
 			if p.reverse {
 				direction = direction.Reverse()
@@ -32508,6 +32532,26 @@ var (
 			}
 		},
 	}
+	// SubcontrolOrderFieldDelegateName orders by DELEGATE_name.
+	SubcontrolOrderFieldDelegateName = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			return s.Value("delegate_name")
+		},
+		column: "delegate_name",
+		toTerm: func(opts ...sql.OrderTermOption) subcontrol.OrderOption {
+			return subcontrol.ByDelegateField(
+				group.FieldName,
+				append(opts, sql.OrderSelectAs("delegate_name"))...,
+			)
+		},
+		toCursor: func(s *Subcontrol) Cursor {
+			cv, _ := s.Value("delegate_name")
+			return Cursor{
+				ID:    s.ID,
+				Value: cv,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -32534,6 +32578,8 @@ func (f SubcontrolOrderField) String() string {
 		str = "ref_code"
 	case SubcontrolOrderFieldControlOwnerName.column:
 		str = "CONTROL_OWNER_name"
+	case SubcontrolOrderFieldDelegateName.column:
+		str = "DELEGATE_name"
 	}
 	return str
 }
@@ -32570,6 +32616,8 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldRefCode
 	case "CONTROL_OWNER_name":
 		*f = *SubcontrolOrderFieldControlOwnerName
+	case "DELEGATE_name":
+		*f = *SubcontrolOrderFieldDelegateName
 	default:
 		return fmt.Errorf("%s is not a valid SubcontrolOrderField", str)
 	}

@@ -11,8 +11,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func TestQueryInvite(t *testing.T) {
@@ -22,7 +22,7 @@ func TestQueryInvite(t *testing.T) {
 	testCases := []struct {
 		name    string
 		queryID string
-		client  *openlaneclient.OpenlaneClient
+		client  *testclient.TestClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -108,7 +108,7 @@ func TestMutationCreateInvite(t *testing.T) {
 		orgID            string
 		groupID          *string
 		role             enums.Role
-		client           *openlaneclient.OpenlaneClient
+		client           *testclient.TestClient
 		ctx              context.Context
 		requestorID      string
 		expectedStatus   enums.InviteStatus
@@ -270,7 +270,7 @@ func TestMutationCreateInvite(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			role := tc.role
-			input := openlaneclient.CreateInviteInput{
+			input := testclient.CreateInviteInput{
 				Recipient: tc.recipient,
 				OwnerID:   &tc.orgID,
 				Role:      &role,
@@ -325,7 +325,7 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 	testCases := []struct {
 		name             string
 		recipients       []string
-		client           *openlaneclient.OpenlaneClient
+		client           *testclient.TestClient
 		ctx              context.Context
 		requestorID      string
 		expectedStatus   enums.InviteStatus
@@ -366,10 +366,10 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			input := []*openlaneclient.CreateInviteInput{}
+			input := []*testclient.CreateInviteInput{}
 
 			for _, recipient := range tc.recipients {
-				input = append(input, &openlaneclient.CreateInviteInput{
+				input = append(input, &testclient.CreateInviteInput{
 					Recipient: recipient,
 				})
 			}
@@ -414,7 +414,7 @@ func TestMutationDeleteInvite(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

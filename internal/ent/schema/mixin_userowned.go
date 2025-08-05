@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // UserOwnedMixin defines a mixin for user-owned entities.
@@ -118,6 +119,7 @@ func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 		Ref(userOwned.Ref).
 		Annotations(
 			entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+			accessmap.EdgeNoAuthCheck(),
 		).
 		Unique()
 

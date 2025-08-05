@@ -84,8 +84,6 @@ const (
 	EdgeRisks = "risks"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
-	// EdgeUsers holds the string denoting the users edge name in mutations.
-	EdgeUsers = "users"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
 	// Table holds the table name of the actionplan in the database.
@@ -121,11 +119,6 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
-	UsersTable = "user_action_plans"
-	// UsersInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UsersInverseTable = "users"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_action_plans"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -170,6 +163,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"subcontrol_action_plans",
+	"user_action_plans",
 }
 
 var (
@@ -179,9 +173,6 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "action_plan_id"}
-	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
-	// primary key for the users relation (M2M).
-	UsersPrimaryKey = []string{"user_id", "action_plan_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "action_plan_id"}
@@ -443,20 +434,6 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByUsersCount orders the results by users count.
-func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUsersStep(), opts...)
-	}
-}
-
-// ByUsers orders the results by users terms.
-func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByProgramsCount orders the results by programs count.
 func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -503,13 +480,6 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
-	)
-}
-func newUsersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UsersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

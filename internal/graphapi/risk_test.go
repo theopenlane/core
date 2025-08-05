@@ -9,8 +9,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -29,7 +29,7 @@ func TestQueryRisk(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -80,7 +80,7 @@ func TestQueryRisk(t *testing.T) {
 			// setup the risk if it is not already created
 			if tc.queryID == "" {
 				resp, err := suite.client.api.CreateRisk(testUser1.UserCtx,
-					openlaneclient.CreateRiskInput{
+					testclient.CreateRiskInput{
 						Name:       "Risk",
 						ProgramIDs: []string{program.ID},
 					})
@@ -124,7 +124,7 @@ func TestQueryRisks(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -182,7 +182,7 @@ func TestMutationCreateRisk(t *testing.T) {
 
 	// group to be used for checking access, defaulting to a read only user
 	groupMember := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	groupMemberCtx := auth.NewTestContextWithOrgID(groupMember.UserID, groupMember.Edges.Orgmembership.OrganizationID)
+	groupMemberCtx := auth.NewTestContextWithOrgID(groupMember.UserID, groupMember.Edges.OrgMembership.OrganizationID)
 
 	// add adminUser to the program so that they can create a risk associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
@@ -198,15 +198,15 @@ func TestMutationCreateRisk(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		request       openlaneclient.CreateRiskInput
+		request       testclient.CreateRiskInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
 			client: suite.client.api,
@@ -214,7 +214,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name:          "Another Risk",
 				Details:       lo.ToPtr("details of the Risk"),
 				Status:        &enums.RiskMitigated,
@@ -233,7 +233,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "add groups",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name:            "Test Risk",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
@@ -244,7 +244,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name:    "Risk",
 				OwnerID: &testUser1.OrganizationID,
 			},
@@ -253,7 +253,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "using api token",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
 			client: suite.client.apiWithToken,
@@ -261,7 +261,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
 			client:      suite.client.api,
@@ -270,7 +270,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "user now authorized, added group to org",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
 			addGroupToOrg: true,
@@ -279,7 +279,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "user authorized, they were added to the program",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name:       "Risk",
 				ProgramIDs: []string{program1.ID},
 			},
@@ -288,7 +288,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name: "user authorized, user not authorized to one of the programs",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name:       "Risk",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
@@ -298,14 +298,14 @@ func TestMutationCreateRisk(t *testing.T) {
 		},
 		{
 			name:        "missing required name",
-			request:     openlaneclient.CreateRiskInput{},
+			request:     testclient.CreateRiskInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
 			name: "user not authorized, no permissions to one of the programs",
-			request: openlaneclient.CreateRiskInput{
+			request: testclient.CreateRiskInput{
 				Name:       "Risk",
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
@@ -319,7 +319,7 @@ func TestMutationCreateRisk(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
-					openlaneclient.UpdateOrganizationInput{
+					testclient.UpdateOrganizationInput{
 						AddRiskCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
 				assert.NilError(t, err)
@@ -475,14 +475,14 @@ func TestMutationUpdateRisk(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateRiskInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.UpdateRiskInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateRiskInput{
+			request: testclient.UpdateRiskInput{
 				Details:       lo.ToPtr("Updated details"),
 				AddViewerIDs:  []string{groupMember.GroupID},
 				StakeholderID: &stakeholderGroup.ID,
@@ -493,7 +493,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateRiskInput{
+			request: testclient.UpdateRiskInput{
 				Status:        &enums.RiskArchived,
 				Tags:          []string{"tag1", "tag2"},
 				Mitigation:    lo.ToPtr("Updated mitigation"),
@@ -506,7 +506,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not permissions in same org",
-			request: openlaneclient.UpdateRiskInput{
+			request: testclient.UpdateRiskInput{
 				Likelihood: &enums.RiskLikelihoodLow,
 			},
 			client:      suite.client.api,
@@ -515,7 +515,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateRiskInput{
+			request: testclient.UpdateRiskInput{
 				Likelihood: &enums.RiskLikelihoodLow,
 			},
 			client:      suite.client.api,
@@ -600,7 +600,7 @@ func TestMutationDeleteRisk(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -668,7 +668,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 	riskAnotherUser := (&RiskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the risk
-	res, err := suite.client.api.UpdateBulkRisk(testUser2.UserCtx, []string{risk1.ID}, openlaneclient.UpdateRiskInput{
+	res, err := suite.client.api.UpdateBulkRisk(testUser2.UserCtx, []string{risk1.ID}, testclient.UpdateRiskInput{
 		Status: lo.ToPtr(enums.RiskArchived),
 	})
 
@@ -679,8 +679,8 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		ids                  []string
-		input                openlaneclient.UpdateRiskInput
-		client               *openlaneclient.OpenlaneClient
+		input                testclient.UpdateRiskInput
+		client               *testclient.TestClient
 		ctx                  context.Context
 		expectedErr          string
 		expectedUpdatedCount int
@@ -688,7 +688,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "happy path, update multiple risks with same fields",
 			ids:  []string{risk1.ID, risk2.ID, risk3.ID},
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				Details: lo.ToPtr("Updated details for all risks"),
 				Impact:  &enums.RiskImpactModerate,
 			},
@@ -699,7 +699,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "happy path, update risk type and score",
 			ids:  []string{risk1.ID, risk2.ID},
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				RiskType: lo.ToPtr("Financial"),
 				Score:    lo.ToPtr(int64(8)),
 			},
@@ -710,7 +710,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       openlaneclient.UpdateRiskInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateRiskInput{Details: lo.ToPtr("test")},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -718,7 +718,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "mixed success and failure - some risks not authorized",
 			ids:  []string{risk1.ID, riskAnotherUser.ID}, // second risk should fail authorization
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				Status: &enums.RiskOpen,
 			},
 			client:               suite.client.api,
@@ -728,7 +728,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to risks",
 			ids:  []string{risk1.ID},
-			input: openlaneclient.UpdateRiskInput{
+			input: testclient.UpdateRiskInput{
 				Status: &enums.RiskArchived,
 			},
 			client:               suite.client.api,
@@ -753,7 +753,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			assert.Check(t, is.Len(resp.UpdateBulkRisk.Risks, tc.expectedUpdatedCount))
 			assert.Check(t, is.Len(resp.UpdateBulkRisk.UpdatedIDs, tc.expectedUpdatedCount))
 
-			riskMap := make(map[string]*openlaneclient.UpdateBulkRisk_UpdateBulkRisk_Risks)
+			riskMap := make(map[string]*testclient.UpdateBulkRisk_UpdateBulkRisk_Risks)
 			for _, risk := range resp.UpdateBulkRisk.Risks {
 				riskMap[risk.ID] = risk
 			}

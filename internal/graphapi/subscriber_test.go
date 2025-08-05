@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQuerySubscriber(t *testing.T) {
@@ -22,7 +22,7 @@ func TestQuerySubscriber(t *testing.T) {
 	testCases := []struct {
 		name    string
 		email   string
-		client  *openlaneclient.OpenlaneClient
+		client  *testclient.TestClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -111,7 +111,7 @@ func TestQuerySubscribers(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		numExpected int
 	}{
@@ -161,7 +161,7 @@ func TestMutationCreateBulkSubscribers(t *testing.T) {
 	testCases := []struct {
 		name    string
 		emails  []string
-		client  *openlaneclient.OpenlaneClient
+		client  *testclient.TestClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -197,10 +197,10 @@ func TestMutationCreateBulkSubscribers(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			input := []*openlaneclient.CreateSubscriberInput{}
+			input := []*testclient.CreateSubscriberInput{}
 
 			for _, v := range tc.emails {
-				input = append(input, &openlaneclient.CreateSubscriberInput{
+				input = append(input, &testclient.CreateSubscriberInput{
 					Email: v,
 				})
 			}
@@ -237,7 +237,7 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 		email            string
 		ownerID          string
 		setUnsubscribed  bool
-		client           *openlaneclient.OpenlaneClient
+		client           *testclient.TestClient
 		ctx              context.Context
 		wantErr          bool
 		expectedAttempts int
@@ -267,7 +267,7 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			input := openlaneclient.CreateSubscriberInput{
+			input := testclient.CreateSubscriberInput{
 				Email: tc.email,
 			}
 
@@ -306,7 +306,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 		email             string
 		ownerID           string
 		setUnsubscribed   bool
-		client            *openlaneclient.OpenlaneClient
+		client            *testclient.TestClient
 		ctx               context.Context
 		wantErr           bool
 		expectedMessage   string
@@ -384,7 +384,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			input := openlaneclient.CreateSubscriberInput{
+			input := testclient.CreateSubscriberInput{
 				Email: tc.email,
 			}
 
@@ -416,7 +416,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 
 			if tc.setUnsubscribed {
 				// Set the subscriber as unsubscribed to test for duplicate email
-				resp, err := tc.client.UpdateSubscriber(tc.ctx, resp.CreateSubscriber.Subscriber.Email, openlaneclient.UpdateSubscriberInput{
+				resp, err := tc.client.UpdateSubscriber(tc.ctx, resp.CreateSubscriber.Subscriber.Email, testclient.UpdateSubscriberInput{
 					Unsubscribed: lo.ToPtr(true),
 				})
 				assert.NilError(t, err)
@@ -457,15 +457,15 @@ func TestUpdateSubscriber(t *testing.T) {
 	testCases := []struct {
 		name        string
 		email       string
-		updateInput openlaneclient.UpdateSubscriberInput
-		client      *openlaneclient.OpenlaneClient
+		updateInput testclient.UpdateSubscriberInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		wantErr     bool
 	}{
 		{
 			name:  "happy path",
 			email: subscriber.Email,
-			updateInput: openlaneclient.UpdateSubscriberInput{
+			updateInput: testclient.UpdateSubscriberInput{
 				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
 			},
 			client:  suite.client.api,
@@ -475,7 +475,7 @@ func TestUpdateSubscriber(t *testing.T) {
 		{
 			name:  "happy path, using api token",
 			email: subscriber.Email,
-			updateInput: openlaneclient.UpdateSubscriberInput{
+			updateInput: testclient.UpdateSubscriberInput{
 				PhoneNumber: lo.ToPtr("+1-555-867-5310"),
 			},
 			client:  suite.client.apiWithToken,
@@ -485,7 +485,7 @@ func TestUpdateSubscriber(t *testing.T) {
 		{
 			name:  "happy path, using personal access token",
 			email: subscriber.Email,
-			updateInput: openlaneclient.UpdateSubscriberInput{
+			updateInput: testclient.UpdateSubscriberInput{
 				PhoneNumber: lo.ToPtr("+1-555-867-5311"),
 			},
 			client:  suite.client.apiWithPAT,
@@ -495,7 +495,7 @@ func TestUpdateSubscriber(t *testing.T) {
 		{
 			name:  "happy path, using api token, set unsubscribed = false",
 			email: subscriber.Email,
-			updateInput: openlaneclient.UpdateSubscriberInput{
+			updateInput: testclient.UpdateSubscriberInput{
 				Unsubscribed: lo.ToPtr(true),
 			},
 			client:  suite.client.apiWithToken,
@@ -505,7 +505,7 @@ func TestUpdateSubscriber(t *testing.T) {
 		{
 			name:  "invalid email",
 			email: "beep@boop.com",
-			updateInput: openlaneclient.UpdateSubscriberInput{
+			updateInput: testclient.UpdateSubscriberInput{
 				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
 			},
 			client:  suite.client.api,
@@ -515,7 +515,7 @@ func TestUpdateSubscriber(t *testing.T) {
 		{
 			name:  "subscriber for another org",
 			email: subscriber2.Email,
-			updateInput: openlaneclient.UpdateSubscriberInput{
+			updateInput: testclient.UpdateSubscriberInput{
 				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
 			},
 			client:  suite.client.api,
@@ -548,7 +548,7 @@ func TestUpdateSubscriber(t *testing.T) {
 
 				if *tc.updateInput.Unsubscribed {
 					// ensure I can create another subscriber with the same email
-					resp, err := tc.client.CreateSubscriber(tc.ctx, openlaneclient.CreateSubscriberInput{
+					resp, err := tc.client.CreateSubscriber(tc.ctx, testclient.CreateSubscriberInput{
 						Email: tc.email,
 					})
 					assert.NilError(t, err)
@@ -574,7 +574,7 @@ func TestDeleteSubscriber(t *testing.T) {
 		name           string
 		email          string
 		organizationID string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		ctx            context.Context
 		wantErr        bool
 	}{
@@ -643,7 +643,7 @@ func TestActiveSubscriber(t *testing.T) {
 		name       string
 		email      string
 		ownerID    string
-		client     *openlaneclient.OpenlaneClient
+		client     *testclient.TestClient
 		ctx        context.Context
 		wantErr    bool
 		markActive bool
@@ -668,7 +668,7 @@ func TestActiveSubscriber(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			input := openlaneclient.CreateSubscriberInput{
+			input := testclient.CreateSubscriberInput{
 				Email: tc.email,
 			}
 

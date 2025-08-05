@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -14,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
+
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // CustomDomain holds the schema definition for the CustomDomain
@@ -88,6 +91,9 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "mappable_domain_id",
 			required:   true,
 			immutable:  true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: e,
@@ -95,6 +101,9 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "dns_verification_id",
 			required:   false,
 			immutable:  false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

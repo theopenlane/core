@@ -7,7 +7,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -19,7 +19,7 @@ func TestQueryCustomDomainByID(t *testing.T) {
 		name           string
 		expectedDomain string
 		queryID        string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		ctx            context.Context
 		errorMsg       string
 	}{
@@ -87,10 +87,10 @@ func TestQueryCustomDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
-		where           *openlaneclient.CustomDomainWhereInput
+		where           *testclient.CustomDomainWhereInput
 	}{
 		{
 			name:            "return all",
@@ -108,7 +108,7 @@ func TestQueryCustomDomains(t *testing.T) {
 			name:   "query by domain",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.CustomDomainWhereInput{
+			where: &testclient.CustomDomainWhereInput{
 				CnameRecord: &customDomain1.CnameRecord,
 			},
 			expectedResults: 1,
@@ -117,7 +117,7 @@ func TestQueryCustomDomains(t *testing.T) {
 			name:   "query by domain, not found",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.CustomDomainWhereInput{
+			where: &testclient.CustomDomainWhereInput{
 				CnameRecord: &nonExistentDomain,
 			},
 			expectedResults: 0,
@@ -126,7 +126,7 @@ func TestQueryCustomDomains(t *testing.T) {
 			name:   "query by mappable domain",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.CustomDomainWhereInput{
+			where: &testclient.CustomDomainWhereInput{
 				MappableDomainID: &customDomain1.MappableDomainID,
 			},
 			expectedResults: 1,
@@ -159,14 +159,14 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateCustomDomainInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateCustomDomainInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path",
-			request: openlaneclient.CreateCustomDomainInput{
+			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
@@ -176,7 +176,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 		},
 		{
 			name: "happy path, adminUser",
-			request: openlaneclient.CreateCustomDomainInput{
+			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
@@ -186,7 +186,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 		},
 		{
 			name: "not authorized",
-			request: openlaneclient.CreateCustomDomainInput{
+			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
@@ -197,7 +197,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 		},
 		{
 			name: "invalid domain",
-			request: openlaneclient.CreateCustomDomainInput{
+			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "!invalid-domain",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
@@ -208,7 +208,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 		},
 		{
 			name: "missing mappable domain",
-			request: openlaneclient.CreateCustomDomainInput{
+			request: testclient.CreateCustomDomainInput{
 				CnameRecord: "test2.example.com",
 				OwnerID:     lo.ToPtr(testUser1.OrganizationID),
 			},
@@ -243,15 +243,15 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 }
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-	customDomain3 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain3 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
 		name        string
 		id          string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -308,17 +308,17 @@ func TestUpdateCustomDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		errorMsg    string
-		updateInput openlaneclient.UpdateCustomDomainInput
+		updateInput testclient.UpdateCustomDomainInput
 	}{
 		{
 			name:    "happy path",
 			queryID: customDomain.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
-			updateInput: openlaneclient.UpdateCustomDomainInput{
+			updateInput: testclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
 			},
 		},
@@ -327,7 +327,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 			queryID: customDomain.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
-			updateInput: openlaneclient.UpdateCustomDomainInput{
+			updateInput: testclient.UpdateCustomDomainInput{
 				DNSVerificationID: &dnsVerification.ID,
 			},
 		},
@@ -336,7 +336,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 			queryID: customDomain.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
-			updateInput: openlaneclient.UpdateCustomDomainInput{
+			updateInput: testclient.UpdateCustomDomainInput{
 				ClearDNSVerification: lo.ToPtr(true),
 			},
 		},
@@ -345,7 +345,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 			queryID: customDomain.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			updateInput: openlaneclient.UpdateCustomDomainInput{
+			updateInput: testclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
 			},
 			errorMsg: notFoundErrorMsg,
@@ -376,15 +376,15 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		requests    []*openlaneclient.CreateCustomDomainInput
-		client      *openlaneclient.OpenlaneClient
+		requests    []*testclient.CreateCustomDomainInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 		numExpected int
 	}{
 		{
 			name: "happy path - multiple domains",
-			requests: []*openlaneclient.CreateCustomDomainInput{
+			requests: []*testclient.CreateCustomDomainInput{
 				{
 					CnameRecord:      "bulk1.example.com",
 					MappableDomainID: mappableDomain.ID,
@@ -407,7 +407,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 		},
 		{
 			name: "happy path - single domain",
-			requests: []*openlaneclient.CreateCustomDomainInput{
+			requests: []*testclient.CreateCustomDomainInput{
 				{
 					CnameRecord:      "singlebulk.example.com",
 					MappableDomainID: mappableDomain.ID,
@@ -420,7 +420,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 		},
 		{
 			name: "happy path - admin user",
-			requests: []*openlaneclient.CreateCustomDomainInput{
+			requests: []*testclient.CreateCustomDomainInput{
 				{
 					CnameRecord:      "adminbulk.example.com",
 					MappableDomainID: mappableDomain.ID,
@@ -433,7 +433,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 		},
 		{
 			name: "invalid domain in batch",
-			requests: []*openlaneclient.CreateCustomDomainInput{
+			requests: []*testclient.CreateCustomDomainInput{
 				{
 					CnameRecord:      "valid.example.com",
 					MappableDomainID: mappableDomain.ID,
@@ -451,7 +451,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 		},
 		{
 			name: "not authorized",
-			requests: []*openlaneclient.CreateCustomDomainInput{
+			requests: []*testclient.CreateCustomDomainInput{
 				{
 					CnameRecord:      "unauthorized.example.com",
 					MappableDomainID: mappableDomain.ID,
@@ -464,7 +464,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 		},
 		{
 			name:        "empty input",
-			requests:    []*openlaneclient.CreateCustomDomainInput{},
+			requests:    []*testclient.CreateCustomDomainInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "input is required",
@@ -517,24 +517,21 @@ func TestGetAllCustomDomains(t *testing.T) {
 	customDomain1 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-		OwnerID:          testUser1.OrganizationID,
 	}).MustNew(testUser1.UserCtx, t)
 
 	customDomain2 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-		OwnerID:          testUser1.OrganizationID,
 	}).MustNew(testUser1.UserCtx, t)
 
 	customDomain3 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-		OwnerID:          testUser2.OrganizationID,
 	}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int64
 		expectedErr     string

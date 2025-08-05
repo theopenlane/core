@@ -1,17 +1,30 @@
 package schema
 
 import (
+	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
 
+	"github.com/rs/zerolog/log"
+	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // GroupPermissionsMixin is a mixin for group permissions on an entity
@@ -25,6 +38,10 @@ type GroupPermissionsMixin struct {
 
 	// ViewPermissions adds view permission for a group
 	ViewPermissions bool
+	// IncludeInterceptorFilter is used to skip the interceptor filter
+	// this is used for more complex view permissions that are not solely based
+	// on the group membership
+	IncludeInterceptorFilter bool
 }
 
 // GroupPermissionsEdgesMixin is a mixin for the reverse edges on the group schema
@@ -105,6 +122,13 @@ func withSkipViewPermissions() groupPermissionsOption {
 	}
 }
 
+// withGroupPermissionsInterceptor skips the interceptor filter for the group permissions
+func withGroupPermissionsInterceptor() groupPermissionsOption {
+	return func(g *GroupPermissionsMixin) {
+		g.IncludeInterceptorFilter = true
+	}
+}
+
 // Edges of the GroupPermissionsMixin
 func (g GroupPermissionsMixin) Edges() []ent.Edge {
 	blockEdge := edge.To("blocked_groups", Group.Type).
@@ -113,6 +137,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
+			accessmap.EdgeAuthCheck(Group{}.Name()),
 		)
 
 	editEdge := edge.To("editors", Group.Type).
@@ -121,6 +146,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
+			accessmap.EdgeAuthCheck(Group{}.Name()),
 		)
 
 	viewEdge := edge.To("viewers", Group.Type).
@@ -129,6 +155,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
+			accessmap.EdgeAuthCheck(Group{}.Name()),
 		)
 
 	edges := []ent.Edge{blockEdge, editEdge}
@@ -139,6 +166,117 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 	}
 
 	return edges
+}
+
+// Interceptors of the GroupPermissionsMixin
+func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
+	if !g.IncludeInterceptorFilter {
+		return []ent.Interceptor{}
+	}
+
+	// this interceptor is used to limit the results returned by the query to not include
+	// results that have a blocked group that the user is a member of
+	// this can be used to prevent extra queries to fga for objects that are view by default
+	// except for blocked groups (e.g. controls)
+	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		// add a filter to exclude results that have a blocked group that the user is a member of
+		au, err := auth.GetAuthenticatedUserFromContext(ctx)
+		if err != nil {
+			return err
+		}
+
+		if skip := groupPermissionInterceptorSkipper(ctx, au); skip {
+			return nil
+		}
+
+		groupIDs, err := generated.FromContext(ctx).Group.Query().Where(
+			group.HasMembersWith(
+				groupmembership.UserID(au.SubjectID),
+			),
+		).IDs(ctx)
+		if err != nil {
+			log.Error().Err(err).Msg("failed to get group IDs for user")
+
+			return err
+		}
+
+		addBlockedGroupPredicate(q, groupIDs)
+
+		if g.ViewPermissions {
+			addViewGroupPredicate(q, groupIDs)
+		}
+
+		return nil
+	})}
+}
+
+func groupPermissionInterceptorSkipper(ctx context.Context, au *auth.AuthenticatedUser) bool {
+	// bypass if request is set to allowed
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return true
+	}
+
+	// if its a service account, we don't need to filter by groups
+	if au.AuthenticationType == auth.APITokenAuthentication {
+		return true
+	}
+
+	// skip for org owners, they might not have explicit access to the object, but they can view all objects in the org
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+		return true
+	}
+
+	return false
+}
+
+// addBlockedGroupPredicate adds a predicate to the query to filter out results
+// that have a blocked group that the user is a member of
+func addBlockedGroupPredicate(q intercept.Query, groupIDs []string) {
+	objectSnakeCase := strcase.SnakeCase(q.Type())
+	tableName := fmt.Sprintf("%s_blocked_groups", objectSnakeCase)
+	q.WhereP(func(s *sql.Selector) {
+		t := sql.Table(tableName)
+		s.LeftJoin(t).On(
+			s.C("id"), t.C(fmt.Sprintf("%s_id", objectSnakeCase)),
+		)
+		s.Where(
+			sql.Or(
+				sql.IsNull(t.C("group_id")),
+				sql.NotIn(
+					t.C("group_id"), convertToAny(groupIDs)...,
+				),
+			),
+		)
+	})
+}
+
+// addViewGroupPredicate adds a predicate to the query to include
+// results that have a viewer group that the user is a member of
+// or results with no viewer group at all
+func addViewGroupPredicate(q intercept.Query, groupIDs []string) {
+	log.Error().Str("query_type", q.Type()).Msg("adding view group predicate")
+	objectSnakeCase := strcase.SnakeCase(q.Type())
+	tableName := fmt.Sprintf("%s_viewers", objectSnakeCase)
+	q.WhereP(func(s *sql.Selector) {
+		t := sql.Table(tableName)
+		s.Join(t).On(
+			s.C("id"), t.C(fmt.Sprintf("%s_id", objectSnakeCase)),
+		)
+		s.Where(
+			sql.In(
+				t.C("group_id"), convertToAny(groupIDs)...,
+			),
+		)
+	})
+}
+
+// convertToAny converts a slice of strings to a slice of any
+func convertToAny(ids []string) []any {
+	anys := make([]any, len(ids))
+	for i, id := range ids {
+		anys[i] = id
+	}
+	return anys
 }
 
 // Hooks of the GroupPermissionsMixin
@@ -194,6 +332,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 					entgql.RelayConnection(),
 					entgql.QueryField(),
 					entgql.MultiOrder(),
+					accessmap.EdgeAuthCheck(sch.Name()),
 				),
 			edge.From(fmt.Sprintf("%s_blocked_groups", sch.Name()), sch.GetType()).
 				Ref("blocked_groups").
@@ -201,6 +340,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 					entgql.RelayConnection(),
 					entgql.QueryField(),
 					entgql.MultiOrder(),
+					accessmap.EdgeAuthCheck(sch.Name()),
 				),
 		}
 
@@ -214,6 +354,7 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 					entgql.RelayConnection(),
 					entgql.QueryField(),
 					entgql.MultiOrder(),
+					accessmap.EdgeAuthCheck(sch.Name()),
 				)
 
 			edges = append(edges, viewerEdge)

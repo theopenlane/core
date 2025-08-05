@@ -22,10 +22,10 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *HandlerTestSuite) TestRegisterHandler() {
@@ -259,7 +259,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					ctx = auth.NewTestContextWithOrgID(out.ID, testUser1.OrganizationID)
 
 					// make sure user is a member of the organization they were invited to
-					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &openlaneclient.OrgMembershipWhereInput{
+					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &testclient.OrgMembershipWhereInput{
 						OrganizationID: &testUser1.OrganizationID,
 					})
 					require.NoError(t, err)
@@ -280,7 +280,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					ctx = auth.NewTestContextWithOrgID(out.ID, u.Edges.DefaultOrg.ID)
 
 					// make sure user is an owner of their personal org
-					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &openlaneclient.OrgMembershipWhereInput{
+					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &testclient.OrgMembershipWhereInput{
 						OrganizationID: &u.Edges.DefaultOrg.ID,
 					})
 					require.NoError(t, err)

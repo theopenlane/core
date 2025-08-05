@@ -513,37 +513,6 @@ type ActionPlan implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
-	users(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Users returned from the connection.
-		"""
-		orderBy: [UserOrder!]
-
-		"""
-		Filtering options for Users returned from the connection.
-		"""
-		where: UserWhereInput
-	): UserConnection!
 	programs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -1533,11 +1502,6 @@ input ActionPlanWhereInput {
 	"""
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
-	"""
-	users edge predicates
-	"""
-	hasUsers: Boolean
-	hasUsersWith: [UserWhereInput!]
 	"""
 	programs edge predicates
 	"""
@@ -6784,6 +6748,7 @@ enum ControlOrderField {
 	subcategory
 	ref_code
 	CONTROL_OWNER_name
+	DELEGATE_name
 }
 """
 Return response for updateControl mutation
@@ -7362,7 +7327,6 @@ input CreateActionPlanInput {
 	ownerID: ID
 	riskIDs: [ID!]
 	controlIDs: [ID!]
-	userIDs: [ID!]
 	programIDs: [ID!]
 }
 """
@@ -8010,6 +7974,9 @@ input CreateGroupInput {
 	scanEditorIDs: [ID!]
 	scanBlockedGroupIDs: [ID!]
 	scanViewerIDs: [ID!]
+	entityEditorIDs: [ID!]
+	entityBlockedGroupIDs: [ID!]
+	entityViewerIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
 	internalPolicyEditorIDs: [ID!]
@@ -8217,6 +8184,10 @@ input CreateJobResultInput {
 	The time the job started it's execution. This is different from the db insertion time
 	"""
 	startedAt: Time
+	"""
+	the log output from the job
+	"""
+	log: String
 	ownerID: ID
 	scheduledJobID: ID!
 	fileID: ID!
@@ -8237,7 +8208,19 @@ input CreateJobRunnerInput {
 	"""
 	the IP address of this runner
 	"""
-	ipAddress: String!
+	ipAddress: String
+	"""
+	the last time this runner was seen
+	"""
+	lastSeen: Time
+	"""
+	the version of the runner
+	"""
+	version: String
+	"""
+	the operating system of the runner
+	"""
+	os: String
 	ownerID: ID
 	jobRunnerTokenIDs: [ID!]
 }
@@ -13177,7 +13160,7 @@ type Event implements Node {
 		"""
 		where: HushWhereInput
 	): HushConnection!
-	orgmemberships(
+	orgMemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -13208,7 +13191,7 @@ type Event implements Node {
 		"""
 		where: OrgMembershipWhereInput
 	): OrgMembershipConnection!
-	groupmemberships(
+	groupMemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -13590,15 +13573,15 @@ input EventWhereInput {
 	hasSecrets: Boolean
 	hasSecretsWith: [HushWhereInput!]
 	"""
-	orgmemberships edge predicates
+	org_memberships edge predicates
 	"""
-	hasOrgmemberships: Boolean
-	hasOrgmembershipsWith: [OrgMembershipWhereInput!]
+	hasOrgMemberships: Boolean
+	hasOrgMembershipsWith: [OrgMembershipWhereInput!]
 	"""
-	groupmemberships edge predicates
+	group_memberships edge predicates
 	"""
-	hasGroupmemberships: Boolean
-	hasGroupmembershipsWith: [GroupMembershipWhereInput!]
+	hasGroupMemberships: Boolean
+	hasGroupMembershipsWith: [GroupMembershipWhereInput!]
 	"""
 	subscribers edge predicates
 	"""
@@ -16705,6 +16688,99 @@ type Group implements Node {
 		"""
 		where: ScanWhereInput
 	): ScanConnection!
+	entityEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	entityBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	entityViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
 	procedureEditors(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -18955,6 +19031,21 @@ input GroupWhereInput {
 	"""
 	hasScanViewers: Boolean
 	hasScanViewersWith: [ScanWhereInput!]
+	"""
+	entity_editors edge predicates
+	"""
+	hasEntityEditors: Boolean
+	hasEntityEditorsWith: [EntityWhereInput!]
+	"""
+	entity_blocked_groups edge predicates
+	"""
+	hasEntityBlockedGroups: Boolean
+	hasEntityBlockedGroupsWith: [EntityWhereInput!]
+	"""
+	entity_viewers edge predicates
+	"""
+	hasEntityViewers: Boolean
+	hasEntityViewersWith: [EntityWhereInput!]
 	"""
 	procedure_editors edge predicates
 	"""
@@ -21988,6 +22079,10 @@ type JobResult implements Node {
 	"""
 	startedAt: Time!
 	fileID: ID!
+	"""
+	the log output from the job
+	"""
+	log: String
 	owner: Organization
 	scheduledJob: ScheduledJob!
 	file: File!
@@ -22008,6 +22103,24 @@ type JobResultConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+Return response for createJobResult mutation
+"""
+type JobResultCreatePayload {
+	"""
+	Created jobResult
+	"""
+	jobResult: JobResult!
+}
+"""
+Return response for deleteJobResult mutation
+"""
+type JobResultDeletePayload {
+	"""
+	Deleted jobResult ID
+	"""
+	deletedID: ID!
 }
 """
 An edge in a connection.
@@ -22054,6 +22167,15 @@ enum JobResultOrderField {
 	exit_code
 	finished_at
 	started_at
+}
+"""
+Return response for updateJobResult mutation
+"""
+type JobResultUpdatePayload {
+	"""
+	Updated jobResult
+	"""
+	jobResult: JobResult!
 }
 """
 JobResultWhereInput is used for filtering JobResult objects.
@@ -22229,6 +22351,24 @@ input JobResultWhereInput {
 	fileIDEqualFold: ID
 	fileIDContainsFold: ID
 	"""
+	log field predicates
+	"""
+	log: String
+	logNEQ: String
+	logIn: [String!]
+	logNotIn: [String!]
+	logGT: String
+	logGTE: String
+	logLT: String
+	logLTE: String
+	logContains: String
+	logHasPrefix: String
+	logHasSuffix: String
+	logIsNil: Boolean
+	logNotNil: Boolean
+	logEqualFold: String
+	logContainsFold: String
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -22277,7 +22417,19 @@ type JobRunner implements Node {
 	"""
 	the IP address of this runner
 	"""
-	ipAddress: String!
+	ipAddress: String
+	"""
+	the last time this runner was seen
+	"""
+	lastSeen: Time
+	"""
+	the version of the runner
+	"""
+	version: String
+	"""
+	the operating system of the runner
+	"""
+	os: String
 	owner: Organization
 	jobRunnerTokens(
 		"""
@@ -22327,6 +22479,15 @@ type JobRunnerConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+Return response for createJobRunner mutation
+"""
+type JobRunnerCreatePayload {
+	"""
+	Created jobRunner
+	"""
+	jobRunner: JobRunner!
 }
 """
 Return response for deleteJobRunner mutation
@@ -23138,8 +23299,59 @@ input JobRunnerWhereInput {
 	ipAddressContains: String
 	ipAddressHasPrefix: String
 	ipAddressHasSuffix: String
+	ipAddressIsNil: Boolean
+	ipAddressNotNil: Boolean
 	ipAddressEqualFold: String
 	ipAddressContainsFold: String
+	"""
+	last_seen field predicates
+	"""
+	lastSeen: Time
+	lastSeenNEQ: Time
+	lastSeenIn: [Time!]
+	lastSeenNotIn: [Time!]
+	lastSeenGT: Time
+	lastSeenGTE: Time
+	lastSeenLT: Time
+	lastSeenLTE: Time
+	lastSeenIsNil: Boolean
+	lastSeenNotNil: Boolean
+	"""
+	version field predicates
+	"""
+	version: String
+	versionNEQ: String
+	versionIn: [String!]
+	versionNotIn: [String!]
+	versionGT: String
+	versionGTE: String
+	versionLT: String
+	versionLTE: String
+	versionContains: String
+	versionHasPrefix: String
+	versionHasSuffix: String
+	versionIsNil: Boolean
+	versionNotNil: Boolean
+	versionEqualFold: String
+	versionContainsFold: String
+	"""
+	os field predicates
+	"""
+	os: String
+	osNEQ: String
+	osIn: [String!]
+	osNotIn: [String!]
+	osGT: String
+	osGTE: String
+	osLT: String
+	osLTE: String
+	osContains: String
+	osHasPrefix: String
+	osHasSuffix: String
+	osIsNil: Boolean
+	osNotNil: Boolean
+	osEqualFold: String
+	osContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -26289,6 +26501,47 @@ type Mutation {
 		id: ID!
 	): InviteDeletePayload!
 	"""
+	Create a new jobResult
+	"""
+	createJobResult(
+		"""
+		values of the jobResult
+		"""
+		input: CreateJobResultInput!
+	): JobResultCreatePayload!
+	"""
+	Update an existing jobResult
+	"""
+	updateJobResult(
+		"""
+		ID of the jobResult
+		"""
+		id: ID!
+
+		"""
+		New values for the jobResult
+		"""
+		input: UpdateJobResultInput!
+	): JobResultUpdatePayload!
+	"""
+	Delete an existing jobResult
+	"""
+	deleteJobResult(
+		"""
+		ID of the jobResult
+		"""
+		id: ID!
+	): JobResultDeletePayload!
+	"""
+	Create a new invite
+	"""
+	createJobRunner(
+		"""
+		values of the invite
+		"""
+		input: CreateJobRunnerInput!
+	): JobRunnerCreatePayload!
+	"""
 	Update an existing jobRunner
 	"""
 	updateJobRunner(
@@ -27127,6 +27380,38 @@ type Mutation {
 		"""
 		id: ID!
 	): ScheduledJobDeletePayload!
+	"""
+	Create a new scheduledJobRun
+	"""
+	createScheduledJobRun(
+		"""
+		values of the scheduledJobRun
+		"""
+		input: CreateScheduledJobRunInput!
+	): ScheduledJobRunCreatePayload!
+	"""
+	Update an existing scheduledJobRun
+	"""
+	updateScheduledJobRun(
+		"""
+		ID of the scheduledJobRun
+		"""
+		id: ID!
+
+		"""
+		New values for the scheduledJobRun
+		"""
+		input: UpdateScheduledJobRunInput!
+	): ScheduledJobRunUpdatePayload!
+	"""
+	Delete an existing scheduledJobRun
+	"""
+	deleteScheduledJobRun(
+		"""
+		ID of the scheduledJobRun
+		"""
+		id: ID!
+	): ScheduledJobRunDeletePayload!
 	"""
 	Create a new standard
 	"""
@@ -47313,6 +47598,24 @@ type ScheduledJobRunConnection {
 	totalCount: Int!
 }
 """
+Return response for createScheduledJobRun mutation
+"""
+type ScheduledJobRunCreatePayload {
+	"""
+	Created scheduledJobRun
+	"""
+	scheduledJobRun: ScheduledJobRun!
+}
+"""
+Return response for deleteScheduledJobRun mutation
+"""
+type ScheduledJobRunDeletePayload {
+	"""
+	Deleted scheduledJobRun ID
+	"""
+	deletedID: ID!
+}
+"""
 An edge in a connection.
 """
 type ScheduledJobRunEdge {
@@ -47351,6 +47654,15 @@ ScheduledJobRunScheduledJobRunStatus is enum for the field status
 enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScheduledJobRunStatus") {
 	PENDING
 	ACQUIRED
+}
+"""
+Return response for updateScheduledJobRun mutation
+"""
+type ScheduledJobRunUpdatePayload {
+	"""
+	Updated scheduledJobRun
+	"""
+	scheduledJobRun: ScheduledJobRun!
 }
 """
 ScheduledJobRunWhereInput is used for filtering ScheduledJobRun objects.
@@ -49919,6 +50231,7 @@ enum SubcontrolOrderField {
 	subcategory
 	ref_code
 	CONTROL_OWNER_name
+	DELEGATE_name
 }
 """
 Return response for updateSubcontrol mutation
@@ -55982,9 +56295,6 @@ input UpdateActionPlanInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
-	addUserIDs: [ID!]
-	removeUserIDs: [ID!]
-	clearUsers: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
@@ -56929,6 +57239,15 @@ input UpdateGroupInput {
 	addScanViewerIDs: [ID!]
 	removeScanViewerIDs: [ID!]
 	clearScanViewers: Boolean
+	addEntityEditorIDs: [ID!]
+	removeEntityEditorIDs: [ID!]
+	clearEntityEditors: Boolean
+	addEntityBlockedGroupIDs: [ID!]
+	removeEntityBlockedGroupIDs: [ID!]
+	clearEntityBlockedGroups: Boolean
+	addEntityViewerIDs: [ID!]
+	removeEntityViewerIDs: [ID!]
+	clearEntityViewers: Boolean
 	addProcedureEditorIDs: [ID!]
 	removeProcedureEditorIDs: [ID!]
 	clearProcedureEditors: Boolean
@@ -57201,6 +57520,11 @@ input UpdateJobResultInput {
 	the status of this job. did it fail? did it succeed?
 	"""
 	status: JobResultJobExecutionStatus
+	"""
+	the log output from the job
+	"""
+	log: String
+	clearLog: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	scheduledJobID: ID
@@ -57221,6 +57545,26 @@ input UpdateJobRunnerInput {
 	the name of the runner
 	"""
 	name: String
+	"""
+	the IP address of this runner
+	"""
+	ipAddress: String
+	clearIPAddress: Boolean
+	"""
+	the last time this runner was seen
+	"""
+	lastSeen: Time
+	clearLastSeen: Boolean
+	"""
+	the version of the runner
+	"""
+	version: String
+	clearVersion: Boolean
+	"""
+	the operating system of the runner
+	"""
+	os: String
+	clearOs: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addJobRunnerTokenIDs: [ID!]

@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -15,7 +14,6 @@ import (
 // TraverseSubprocessor only returns public subprocessors and subprocessors owned by the organization
 func TraverseSubprocessor() ent.Interceptor {
 	return intercept.TraverseSubprocessor(func(ctx context.Context, q *generated.SubprocessorQuery) error {
-		zerolog.Ctx(ctx).Debug().Msg("traversing subprocessor")
 		var orgIDs []string
 		var err error
 

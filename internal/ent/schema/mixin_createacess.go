@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // createObjectTypes is a list of object types that access can be granted specifically for creation
@@ -66,6 +67,7 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				accessmap.EdgeAuthCheck(Group{}.Name()),
 			)
 
 		edges = append(edges, edge)

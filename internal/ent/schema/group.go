@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/entx/accessmap"
 )
 
 // Group holds the schema definition for the Group entity
@@ -110,6 +111,7 @@ func (g Group) Edges() []ent.Edge {
 			t:          GroupSetting.Type,
 			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("Group"),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		edge.From("users", User.Type).
@@ -143,7 +145,7 @@ func (g Group) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(g),
 			// Add the reverse edges for m:m relationships permissions based on the groups
 			newGroupPermissionsEdgesMixin(
-				withEdges(Program{}, Risk{}, ControlObjective{}, Narrative{}, ControlImplementation{}, Scan{}),
+				withEdges(Program{}, Risk{}, ControlObjective{}, Narrative{}, ControlImplementation{}, Scan{}, Entity{}),
 				withEdgesNoView(Procedure{}, InternalPolicy{}, Control{}, MappedControl{}),
 			),
 		},

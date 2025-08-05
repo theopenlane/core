@@ -253,34 +253,34 @@ func (ec *EventCreate) AddSecrets(h ...*Hush) *EventCreate {
 	return ec.AddSecretIDs(ids...)
 }
 
-// AddOrgmembershipIDs adds the "orgmemberships" edge to the OrgMembership entity by IDs.
-func (ec *EventCreate) AddOrgmembershipIDs(ids ...string) *EventCreate {
-	ec.mutation.AddOrgmembershipIDs(ids...)
+// AddOrgMembershipIDs adds the "org_memberships" edge to the OrgMembership entity by IDs.
+func (ec *EventCreate) AddOrgMembershipIDs(ids ...string) *EventCreate {
+	ec.mutation.AddOrgMembershipIDs(ids...)
 	return ec
 }
 
-// AddOrgmemberships adds the "orgmemberships" edges to the OrgMembership entity.
-func (ec *EventCreate) AddOrgmemberships(o ...*OrgMembership) *EventCreate {
+// AddOrgMemberships adds the "org_memberships" edges to the OrgMembership entity.
+func (ec *EventCreate) AddOrgMemberships(o ...*OrgMembership) *EventCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return ec.AddOrgmembershipIDs(ids...)
+	return ec.AddOrgMembershipIDs(ids...)
 }
 
-// AddGroupmembershipIDs adds the "groupmemberships" edge to the GroupMembership entity by IDs.
-func (ec *EventCreate) AddGroupmembershipIDs(ids ...string) *EventCreate {
-	ec.mutation.AddGroupmembershipIDs(ids...)
+// AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
+func (ec *EventCreate) AddGroupMembershipIDs(ids ...string) *EventCreate {
+	ec.mutation.AddGroupMembershipIDs(ids...)
 	return ec
 }
 
-// AddGroupmemberships adds the "groupmemberships" edges to the GroupMembership entity.
-func (ec *EventCreate) AddGroupmemberships(g ...*GroupMembership) *EventCreate {
+// AddGroupMemberships adds the "group_memberships" edges to the GroupMembership entity.
+func (ec *EventCreate) AddGroupMemberships(g ...*GroupMembership) *EventCreate {
 	ids := make([]string, len(g))
 	for i := range g {
 		ids[i] = g[i].ID
 	}
-	return ec.AddGroupmembershipIDs(ids...)
+	return ec.AddGroupMembershipIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
@@ -589,12 +589,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrgmembershipsIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.OrgMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.OrgmembershipsTable,
-			Columns: event.OrgmembershipsPrimaryKey,
+			Table:   event.OrgMembershipsTable,
+			Columns: event.OrgMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
@@ -606,12 +606,12 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.GroupmembershipsIDs(); len(nodes) > 0 {
+	if nodes := ec.mutation.GroupMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   event.GroupmembershipsTable,
-			Columns: event.GroupmembershipsPrimaryKey,
+			Table:   event.GroupMembershipsTable,
+			Columns: event.GroupMembershipsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),

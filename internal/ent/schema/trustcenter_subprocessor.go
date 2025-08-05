@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -79,12 +80,18 @@ func (t TrustCenterSubprocessor) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
 			edgeSchema: Subprocessor{},
 			field:      "subprocessor_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

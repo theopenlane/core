@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/entx/history"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -28,7 +28,7 @@ func TestAuditLogList(t *testing.T) {
 
 	// Update the program to ensure that the update is logged
 	_, err := suite.client.api.UpdateProgram(reqCtx, program1.ID,
-		openlaneclient.UpdateProgramInput{
+		testclient.UpdateProgramInput{
 			Name:        lo.ToPtr("Updated Program"),
 			Description: lo.ToPtr("Updated description"),
 		})
@@ -50,9 +50,9 @@ func TestAuditLogList(t *testing.T) {
 		last          *int64
 		after         *string
 		before        *string
-		where         *openlaneclient.AuditLogWhereInput
-		order         *openlaneclient.AuditLogOrder
-		client        *openlaneclient.OpenlaneClient
+		where         *testclient.AuditLogWhereInput
+		order         *testclient.AuditLogOrder
+		client        *testclient.TestClient
 		ctx           context.Context
 		expectedCount int
 		totalCount    int
@@ -64,7 +64,7 @@ func TestAuditLogList(t *testing.T) {
 	}{
 		{
 			name: "happy path, table with no history",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "APIToken",
 			},
 			client:        suite.client.api,
@@ -73,7 +73,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, user",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "User",
 			},
 			client:        suite.client.api,
@@ -83,7 +83,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, user setting",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "UserSetting",
 			},
 			client:        suite.client.api,
@@ -92,7 +92,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, program",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "Program",
 			},
 			client:        suite.client.api,
@@ -102,7 +102,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, program update",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table:     "Program",
 				Operation: &updateOp,
 			},
@@ -113,7 +113,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, program create",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table:     "Program",
 				Operation: &createOp,
 			},
@@ -124,7 +124,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, procedure",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "Procedure",
 			},
 			client:        suite.client.api,
@@ -133,7 +133,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, policy",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "InternalPolicy",
 			},
 			client:        suite.client.api,
@@ -142,7 +142,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, control",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "Control",
 			},
 			client:        suite.client.api,
@@ -155,7 +155,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, control page 2",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "Control",
 			},
 			client:        suite.client.api,
@@ -169,7 +169,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, control page 3",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "Control",
 			},
 			client:        suite.client.api,
@@ -182,7 +182,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name:   "missing table parameter",
-			where:  &openlaneclient.AuditLogWhereInput{},
+			where:  &testclient.AuditLogWhereInput{},
 			client: suite.client.api,
 			ctx:    reqCtx,
 		},
@@ -194,7 +194,7 @@ func TestAuditLogList(t *testing.T) {
 		},
 		{
 			name: "happy path, another user shouldn't see these procedure audit logs",
-			where: &openlaneclient.AuditLogWhereInput{
+			where: &testclient.AuditLogWhereInput{
 				Table: "Procedure",
 			},
 			client:        suite.client.api,

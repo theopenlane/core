@@ -1,0 +1,202 @@
+
+mutation CreateBulkCSVUser($input: Upload!) {
+  createBulkCSVUser(input: $input) {
+    users {
+      authProvider
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      displayID
+      displayName
+      email
+      firstName
+      id
+      lastLoginProvider
+      lastName
+      lastSeen
+      role
+      sub
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkUser($input: [CreateUserInput!]) {
+  createBulkUser(input: $input) {
+    users {
+      authProvider
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      displayID
+      displayName
+      email
+      firstName
+      id
+      lastLoginProvider
+      lastName
+      lastSeen
+      role
+      sub
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      authProvider
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      displayID
+      displayName
+      email
+      firstName
+      id
+      lastLoginProvider
+      lastName
+      lastSeen
+      role
+      sub
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteUser($deleteUserId: ID!) {
+  deleteUser(id: $deleteUserId) {
+    deletedID
+  }
+}
+
+query GetAllUsers {
+  users {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authProvider
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayID
+        displayName
+        email
+        firstName
+        id
+        lastLoginProvider
+        lastName
+        lastSeen
+        role
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetUserByID($userId: ID!) {
+  user(id: $userId) {
+    authProvider
+    avatarLocalFileID
+    avatarRemoteURL
+    avatarUpdatedAt
+    createdAt
+    createdBy
+    displayID
+    displayName
+    email
+    firstName
+    id
+    lastLoginProvider
+    lastName
+    lastSeen
+    role
+    sub
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetUsers($first: Int, $last: Int, $where: UserWhereInput) {
+  users(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authProvider
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayID
+        displayName
+        email
+        firstName
+        id
+        lastLoginProvider
+        lastName
+        lastSeen
+        role
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!) {
+  updateUser(id: $updateUserId, input: $input) {
+    user {
+      authProvider
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      displayID
+      displayName
+      email
+      firstName
+      id
+      lastLoginProvider
+      lastName
+      lastSeen
+      role
+      sub
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

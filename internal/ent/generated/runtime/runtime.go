@@ -671,12 +671,22 @@ func init() {
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters2 := controlMixin[2].Interceptors()
 	controlMixinInters7 := controlMixin[7].Interceptors()
+<<<<<<< HEAD
 	controlInters := schema.Control{}.Interceptors()
+||||||| 0b10dda5
+=======
+	controlMixinInters8 := controlMixin[8].Interceptors()
+>>>>>>> origin/main
 	control.Interceptors[0] = controlMixinInters1[0]
 	control.Interceptors[1] = controlMixinInters2[0]
 	control.Interceptors[2] = controlMixinInters7[0]
 	control.Interceptors[3] = controlMixinInters7[1]
+<<<<<<< HEAD
 	control.Interceptors[4] = controlInters[0]
+||||||| 0b10dda5
+=======
+	control.Interceptors[4] = controlMixinInters8[0]
+>>>>>>> origin/main
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields3 := controlMixin[3].Fields()
@@ -2637,11 +2647,13 @@ func init() {
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
 	internalpolicyMixinInters2 := internalpolicyMixin[2].Interceptors()
 	internalpolicyMixinInters7 := internalpolicyMixin[7].Interceptors()
+	internalpolicyMixinInters8 := internalpolicyMixin[8].Interceptors()
 	internalpolicyInters := schema.InternalPolicy{}.Interceptors()
 	internalpolicy.Interceptors[0] = internalpolicyMixinInters1[0]
 	internalpolicy.Interceptors[1] = internalpolicyMixinInters2[0]
 	internalpolicy.Interceptors[2] = internalpolicyMixinInters7[0]
-	internalpolicy.Interceptors[3] = internalpolicyInters[0]
+	internalpolicy.Interceptors[3] = internalpolicyMixinInters8[0]
+	internalpolicy.Interceptors[4] = internalpolicyInters[0]
 	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
 	_ = internalpolicyMixinFields0
 	internalpolicyMixinFields3 := internalpolicyMixin[3].Fields()
@@ -3030,10 +3042,6 @@ func init() {
 	jobrunnerDescSystemOwned := jobrunnerMixinFields7[0].Descriptor()
 	// jobrunner.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	jobrunner.DefaultSystemOwned = jobrunnerDescSystemOwned.Default.(bool)
-	// jobrunnerDescIPAddress is the schema descriptor for ip_address field.
-	jobrunnerDescIPAddress := jobrunnerFields[2].Descriptor()
-	// jobrunner.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
-	jobrunner.IPAddressValidator = jobrunnerDescIPAddress.Validators[0].(func(string) error)
 	// jobrunnerDescID is the schema descriptor for id field.
 	jobrunnerDescID := jobrunnerMixinFields3[0].Descriptor()
 	// jobrunner.DefaultID holds the default value on creation for the id field.
@@ -4619,12 +4627,20 @@ func init() {
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters2 := procedureMixin[2].Interceptors()
 	procedureMixinInters7 := procedureMixin[7].Interceptors()
+	procedureMixinInters8 := procedureMixin[8].Interceptors()
 	procedureInters := schema.Procedure{}.Interceptors()
 	procedure.Interceptors[0] = procedureMixinInters1[0]
 	procedure.Interceptors[1] = procedureMixinInters2[0]
 	procedure.Interceptors[2] = procedureMixinInters7[0]
+<<<<<<< HEAD
 	procedure.Interceptors[3] = procedureInters[0]
 	procedure.Interceptors[4] = procedureInters[1]
+||||||| 0b10dda5
+	procedure.Interceptors[3] = procedureInters[0]
+=======
+	procedure.Interceptors[3] = procedureMixinInters8[0]
+	procedure.Interceptors[4] = procedureInters[0]
+>>>>>>> origin/main
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
 	procedureMixinFields3 := procedureMixin[3].Fields()

@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -74,6 +75,9 @@ func (o OrgModule) Edges() []ent.Edge {
 			edgeSchema: OrgSubscription{},
 			field:      "subscription_id",
 			ref:        "modules",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(o, OrgProduct{}),
 		defaultEdgeToWithPagination(o, OrgPrice{}),

@@ -206,7 +206,6 @@ type CreateActionPlanInput struct {
 	OwnerID                         *string
 	RiskIDs                         []string
 	ControlIDs                      []string
-	UserIDs                         []string
 	ProgramIDs                      []string
 }
 
@@ -279,9 +278,6 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
@@ -349,9 +345,6 @@ type UpdateActionPlanInput struct {
 	ClearControls                         bool
 	AddControlIDs                         []string
 	RemoveControlIDs                      []string
-	ClearUsers                            bool
-	AddUserIDs                            []string
-	RemoveUserIDs                         []string
 	ClearPrograms                         bool
 	AddProgramIDs                         []string
 	RemoveProgramIDs                      []string
@@ -520,15 +513,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
-	}
-	if i.ClearUsers {
-		m.ClearUsers()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -3799,6 +3783,9 @@ type CreateGroupInput struct {
 	ScanEditorIDs                        []string
 	ScanBlockedGroupIDs                  []string
 	ScanViewerIDs                        []string
+	EntityEditorIDs                      []string
+	EntityBlockedGroupIDs                []string
+	EntityViewerIDs                      []string
 	ProcedureEditorIDs                   []string
 	ProcedureBlockedGroupIDs             []string
 	InternalPolicyEditorIDs              []string
@@ -3885,6 +3872,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ScanViewerIDs; len(v) > 0 {
 		m.AddScanViewerIDs(v...)
+	}
+	if v := i.EntityEditorIDs; len(v) > 0 {
+		m.AddEntityEditorIDs(v...)
+	}
+	if v := i.EntityBlockedGroupIDs; len(v) > 0 {
+		m.AddEntityBlockedGroupIDs(v...)
+	}
+	if v := i.EntityViewerIDs; len(v) > 0 {
+		m.AddEntityViewerIDs(v...)
 	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
@@ -4000,6 +3996,15 @@ type UpdateGroupInput struct {
 	ClearScanViewers                           bool
 	AddScanViewerIDs                           []string
 	RemoveScanViewerIDs                        []string
+	ClearEntityEditors                         bool
+	AddEntityEditorIDs                         []string
+	RemoveEntityEditorIDs                      []string
+	ClearEntityBlockedGroups                   bool
+	AddEntityBlockedGroupIDs                   []string
+	RemoveEntityBlockedGroupIDs                []string
+	ClearEntityViewers                         bool
+	AddEntityViewerIDs                         []string
+	RemoveEntityViewerIDs                      []string
 	ClearProcedureEditors                      bool
 	AddProcedureEditorIDs                      []string
 	RemoveProcedureEditorIDs                   []string
@@ -4236,6 +4241,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveScanViewerIDs; len(v) > 0 {
 		m.RemoveScanViewerIDs(v...)
+	}
+	if i.ClearEntityEditors {
+		m.ClearEntityEditors()
+	}
+	if v := i.AddEntityEditorIDs; len(v) > 0 {
+		m.AddEntityEditorIDs(v...)
+	}
+	if v := i.RemoveEntityEditorIDs; len(v) > 0 {
+		m.RemoveEntityEditorIDs(v...)
+	}
+	if i.ClearEntityBlockedGroups {
+		m.ClearEntityBlockedGroups()
+	}
+	if v := i.AddEntityBlockedGroupIDs; len(v) > 0 {
+		m.AddEntityBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveEntityBlockedGroupIDs; len(v) > 0 {
+		m.RemoveEntityBlockedGroupIDs(v...)
+	}
+	if i.ClearEntityViewers {
+		m.ClearEntityViewers()
+	}
+	if v := i.AddEntityViewerIDs; len(v) > 0 {
+		m.AddEntityViewerIDs(v...)
+	}
+	if v := i.RemoveEntityViewerIDs; len(v) > 0 {
+		m.RemoveEntityViewerIDs(v...)
 	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()
@@ -5187,6 +5219,7 @@ type CreateJobResultInput struct {
 	ExitCode       int
 	FinishedAt     *time.Time
 	StartedAt      *time.Time
+	Log            *string
 	OwnerID        *string
 	ScheduledJobID string
 	FileID         string
@@ -5201,6 +5234,9 @@ func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
 	}
 	if v := i.StartedAt; v != nil {
 		m.SetStartedAt(*v)
+	}
+	if v := i.Log; v != nil {
+		m.SetLog(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -5218,6 +5254,8 @@ func (c *JobResultCreate) SetInput(i CreateJobResultInput) *JobResultCreate {
 // UpdateJobResultInput represents a mutation input for updating jobresults.
 type UpdateJobResultInput struct {
 	Status         *enums.JobExecutionStatus
+	ClearLog       bool
+	Log            *string
 	ClearOwner     bool
 	OwnerID        *string
 	ScheduledJobID *string
@@ -5228,6 +5266,12 @@ type UpdateJobResultInput struct {
 func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearLog {
+		m.ClearLog()
+	}
+	if v := i.Log; v != nil {
+		m.SetLog(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5259,7 +5303,10 @@ func (c *JobResultUpdateOne) SetInput(i UpdateJobResultInput) *JobResultUpdateOn
 type CreateJobRunnerInput struct {
 	Tags              []string
 	Name              string
-	IPAddress         string
+	IPAddress         *string
+	LastSeen          *time.Time
+	Version           *string
+	Os                *string
 	OwnerID           *string
 	JobRunnerTokenIDs []string
 }
@@ -5270,7 +5317,18 @@ func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	m.SetIPAddress(i.IPAddress)
+	if v := i.IPAddress; v != nil {
+		m.SetIPAddress(*v)
+	}
+	if v := i.LastSeen; v != nil {
+		m.SetLastSeen(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.Os; v != nil {
+		m.SetOs(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -5291,6 +5349,14 @@ type UpdateJobRunnerInput struct {
 	Tags                    []string
 	AppendTags              []string
 	Name                    *string
+	ClearIPAddress          bool
+	IPAddress               *string
+	ClearLastSeen           bool
+	LastSeen                *time.Time
+	ClearVersion            bool
+	Version                 *string
+	ClearOs                 bool
+	Os                      *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearJobRunnerTokens    bool
@@ -5311,6 +5377,30 @@ func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearIPAddress {
+		m.ClearIPAddress()
+	}
+	if v := i.IPAddress; v != nil {
+		m.SetIPAddress(*v)
+	}
+	if i.ClearLastSeen {
+		m.ClearLastSeen()
+	}
+	if v := i.LastSeen; v != nil {
+		m.SetLastSeen(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearOs {
+		m.ClearOs()
+	}
+	if v := i.Os; v != nil {
+		m.SetOs(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

@@ -99,10 +99,10 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
 			case "secrets":
 				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgmemberships":
-				return ec.fieldContext_Event_orgmemberships(ctx, field)
-			case "groupmemberships":
-				return ec.fieldContext_Event_groupmemberships(ctx, field)
+			case "orgMemberships":
+				return ec.fieldContext_Event_orgMemberships(ctx, field)
+			case "groupMemberships":
+				return ec.fieldContext_Event_groupMemberships(ctx, field)
 			case "subscribers":
 				return ec.fieldContext_Event_subscribers(ctx, field)
 			case "files":
@@ -189,10 +189,10 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
 			case "secrets":
 				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgmemberships":
-				return ec.fieldContext_Event_orgmemberships(ctx, field)
-			case "groupmemberships":
-				return ec.fieldContext_Event_groupmemberships(ctx, field)
+			case "orgMemberships":
+				return ec.fieldContext_Event_orgMemberships(ctx, field)
+			case "groupMemberships":
+				return ec.fieldContext_Event_groupMemberships(ctx, field)
 			case "subscribers":
 				return ec.fieldContext_Event_subscribers(ctx, field)
 			case "files":
@@ -323,10 +323,10 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
 			case "secrets":
 				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgmemberships":
-				return ec.fieldContext_Event_orgmemberships(ctx, field)
-			case "groupmemberships":
-				return ec.fieldContext_Event_groupmemberships(ctx, field)
+			case "orgMemberships":
+				return ec.fieldContext_Event_orgMemberships(ctx, field)
+			case "groupMemberships":
+				return ec.fieldContext_Event_groupMemberships(ctx, field)
 			case "subscribers":
 				return ec.fieldContext_Event_subscribers(ctx, field)
 			case "files":

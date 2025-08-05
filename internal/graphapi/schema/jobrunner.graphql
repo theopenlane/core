@@ -12,6 +12,16 @@ extend type Query {
 
 extend type Mutation{
     """
+    Create a new invite
+    """
+    createJobRunner(
+        """
+        values of the invite
+        """
+        input: CreateJobRunnerInput!
+    ): JobRunnerCreatePayload!
+
+    """
     Update an existing jobRunner
     """
     updateJobRunner(
@@ -54,4 +64,14 @@ type JobRunnerDeletePayload {
     Deleted jobRunner ID
     """
     deletedID: ID!
+}
+
+"""
+Return response for createJobRunner mutation
+"""
+type JobRunnerCreatePayload {
+    """
+    Created jobRunner
+    """
+    jobRunner: JobRunner!
 }

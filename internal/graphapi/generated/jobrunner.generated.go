@@ -29,6 +29,86 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _JobRunnerCreatePayload_jobRunner(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerCreatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_JobRunnerCreatePayload_jobRunner(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.JobRunner, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*generated.JobRunner)
+	fc.Result = res
+	return ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_JobRunnerCreatePayload_jobRunner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "JobRunnerCreatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_JobRunner_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_JobRunner_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_JobRunner_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_JobRunner_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_JobRunner_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_JobRunner_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_JobRunner_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_JobRunner_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_JobRunner_systemOwned(ctx, field)
+			case "name":
+				return ec.fieldContext_JobRunner_name(ctx, field)
+			case "status":
+				return ec.fieldContext_JobRunner_status(ctx, field)
+			case "ipAddress":
+				return ec.fieldContext_JobRunner_ipAddress(ctx, field)
+			case "lastSeen":
+				return ec.fieldContext_JobRunner_lastSeen(ctx, field)
+			case "version":
+				return ec.fieldContext_JobRunner_version(ctx, field)
+			case "os":
+				return ec.fieldContext_JobRunner_os(ctx, field)
+			case "owner":
+				return ec.fieldContext_JobRunner_owner(ctx, field)
+			case "jobRunnerTokens":
+				return ec.fieldContext_JobRunner_jobRunnerTokens(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type JobRunner", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _JobRunnerDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerDeletePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_JobRunnerDeletePayload_deletedID(ctx, field)
 	if err != nil {
@@ -136,6 +216,12 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_status(ctx, field)
 			case "ipAddress":
 				return ec.fieldContext_JobRunner_ipAddress(ctx, field)
+			case "lastSeen":
+				return ec.fieldContext_JobRunner_lastSeen(ctx, field)
+			case "version":
+				return ec.fieldContext_JobRunner_version(ctx, field)
+			case "os":
+				return ec.fieldContext_JobRunner_os(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunner_owner(ctx, field)
 			case "jobRunnerTokens":
@@ -158,6 +244,45 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var jobRunnerCreatePayloadImplementors = []string{"JobRunnerCreatePayload"}
+
+func (ec *executionContext) _JobRunnerCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.JobRunnerCreatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, jobRunnerCreatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("JobRunnerCreatePayload")
+		case "jobRunner":
+			out.Values[i] = ec._JobRunnerCreatePayload_jobRunner(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var jobRunnerDeletePayloadImplementors = []string{"JobRunnerDeletePayload"}
 
@@ -240,6 +365,20 @@ func (ec *executionContext) _JobRunnerUpdatePayload(ctx context.Context, sel ast
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) marshalNJobRunnerCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.JobRunnerCreatePayload) graphql.Marshaler {
+	return ec._JobRunnerCreatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNJobRunnerCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.JobRunnerCreatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._JobRunnerCreatePayload(ctx, sel, v)
+}
 
 func (ec *executionContext) marshalNJobRunnerDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.JobRunnerDeletePayload) graphql.Marshaler {
 	return ec._JobRunnerDeletePayload(ctx, sel, &v)

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -102,6 +103,9 @@ func (j JobRunnerRegistrationToken) Edges() []ent.Edge {
 			field:      "job_runner_id",
 			name:       "runner_id",
 			required:   false,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

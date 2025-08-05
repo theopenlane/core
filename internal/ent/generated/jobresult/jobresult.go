@@ -44,6 +44,8 @@ const (
 	FieldStartedAt = "started_at"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
+	// FieldLog holds the string denoting the log field in the database.
+	FieldLog = "log"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeScheduledJob holds the string denoting the scheduled_job edge name in mutations.
@@ -91,6 +93,7 @@ var Columns = []string{
 	FieldFinishedAt,
 	FieldStartedAt,
 	FieldFileID,
+	FieldLog,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -211,6 +214,11 @@ func ByStartedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByFileID orders the results by the file_id field.
 func ByFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFileID, opts...).ToFunc()
+}
+
+// ByLog orders the results by the log field.
+func ByLog(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLog, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

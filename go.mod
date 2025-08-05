@@ -8,7 +8,7 @@ require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.2
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.5
+	entgo.io/ent v0.14.4
 	github.com/99designs/gqlgen v0.17.78
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.33.0
@@ -510,6 +510,7 @@ require (
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
+	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.9.0
@@ -634,7 +635,7 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
 	golang.org/x/mod v0.26.0
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sync v0.16.0

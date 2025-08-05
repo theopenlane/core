@@ -11,8 +11,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -35,7 +35,7 @@ func TestQueryEvidence(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   *testclient.TestClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -147,7 +147,7 @@ func TestQueryEvidences(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          *testclient.TestClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -224,15 +224,15 @@ func TestMutationCreateEvidence(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateEvidenceInput
+		request     testclient.CreateEvidenceInput
 		files       []*graphql.Upload
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name: "Test Evidence",
 			},
 			client: suite.client.api,
@@ -240,7 +240,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name:                "Test Evidence",
 				Description:         lo.ToPtr("This is a test Evidence"),
 				CollectionProcedure: lo.ToPtr("This is how we collected the Evidence"),
@@ -274,7 +274,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "happy path, admin user in org",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name:                "Test Evidence",
 				Description:         lo.ToPtr("This is a test Evidence"),
 				CollectionProcedure: lo.ToPtr("This is how we collected the Evidence"),
@@ -292,7 +292,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name:    "Test Evidence - TSK-123",
 				TaskIDs: []string{task.ID},
 				OwnerID: &testUser1.OrganizationID,
@@ -310,7 +310,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name: "Test Evidence - TSK-123",
 			},
 			files: []*graphql.Upload{
@@ -326,7 +326,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name: "Test Evidence",
 			},
 			client:      suite.client.api,
@@ -334,8 +334,19 @@ func TestMutationCreateEvidence(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "no access to linked control",
+			request: testclient.CreateEvidenceInput{
+				Name:        "Test Evidence",
+				Description: lo.ToPtr("This is a test Evidence"),
+				ControlIDs:  []string{control1.ID, control2.ID},
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
 			name: "missing required field",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Description: lo.ToPtr("This is a test Evidence"),
 			},
 			client:      suite.client.api,
@@ -344,7 +355,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "invalid url",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name: "TSK-11123F Evidence",
 				URL:  lo.ToPtr("invalid"),
 			},
@@ -354,7 +365,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		},
 		{
 			name: "creation date in the future",
-			request: openlaneclient.CreateEvidenceInput{
+			request: testclient.CreateEvidenceInput{
 				Name:         "Test Evidence",
 				CreationDate: lo.ToPtr(time.Now().Add(time.Hour)),
 			},
@@ -489,15 +500,15 @@ func TestMutationUpdateEvidence(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.UpdateEvidenceInput
+		request     testclient.UpdateEvidenceInput
 		files       []*graphql.Upload
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateEvidenceInput{
+			request: testclient.UpdateEvidenceInput{
 				CollectionProcedure: lo.ToPtr("This is how we collected the updated Evidence"),
 			},
 			client: suite.client.api,
@@ -505,7 +516,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields using PAT",
-			request: openlaneclient.UpdateEvidenceInput{
+			request: testclient.UpdateEvidenceInput{
 				Name:                lo.ToPtr("Updated Evidence"),
 				Description:         lo.ToPtr("This is an updated Evidence"),
 				CollectionProcedure: lo.ToPtr("This is how we collected the updated Evidence"),
@@ -524,7 +535,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateEvidenceInput{
+			request: testclient.UpdateEvidenceInput{
 				Description: lo.ToPtr("This is an updated description of evidence"),
 			},
 			client:      suite.client.api,
@@ -533,7 +544,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateEvidenceInput{
+			request: testclient.UpdateEvidenceInput{
 				Source: lo.ToPtr("woofs"),
 			},
 			client:      suite.client.api,
@@ -542,7 +553,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		},
 		{
 			name: "update not allowed, creation date is in the future",
-			request: openlaneclient.UpdateEvidenceInput{
+			request: testclient.UpdateEvidenceInput{
 				CreationDate: lo.ToPtr(time.Now().Add(time.Minute)),
 			},
 			client:      suite.client.api,
@@ -603,7 +614,7 @@ func TestMutationDeleteEvidence(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

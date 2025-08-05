@@ -123,6 +123,8 @@ func createScopeTuples(scopes []string, orgID, tokenID string) (tuples []fgax.Tu
 			relation = "can_edit"
 		case "delete":
 			relation = "can_delete"
+		case "group_manager":
+			relation = "group_manager"
 		}
 
 		req := fgax.TupleRequest{

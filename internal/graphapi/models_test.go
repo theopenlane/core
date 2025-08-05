@@ -303,7 +303,6 @@ type SubprocessorBuilder struct {
 	Name          string
 	Description   string
 	LogoRemoteURL string
-	OwnerID       string
 }
 
 type NoteBuilder struct {
@@ -742,7 +741,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 	}
 
 	if at.Scopes == nil {
-		at.Scopes = []string{"read", "write"}
+		at.Scopes = []string{"read", "write", "group_manager"}
 	}
 
 	request := at.client.db.APIToken.Create().
@@ -774,15 +773,20 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 		gm.UserID = orgMember.UserID
 	}
 
-	groupMember, err := gm.client.db.GroupMembership.Create().
+	mut := gm.client.db.GroupMembership.Create().
 		SetUserID(gm.UserID).
-		SetGroupID(gm.GroupID).
-		Save(ctx)
+		SetGroupID(gm.GroupID)
+
+	if gm.Role != "" {
+		mut.SetRole(*enums.ToRole(gm.Role))
+	}
+
+	groupMember, err := mut.Save(ctx)
 	assert.NilError(t, err)
 
 	gmToReturn, err := gm.client.db.GroupMembership.Query().
 		WithUser().
-		WithOrgmembership().
+		WithOrgMembership().
 		Where(groupmembership.ID(groupMember.ID)).Only(ctx)
 	assert.NilError(t, err)
 
@@ -985,7 +989,7 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 	programMember, err = pm.client.db.ProgramMembership.Query().
 		WithUser().
-		WithOrgmembership().
+		WithOrgMembership().
 		Where(programmembership.ID(programMember.ID)).Only(ctx)
 	assert.NilError(t, err)
 
@@ -1303,10 +1307,6 @@ func (s *SubprocessorBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Su
 		mutation.SetLogoRemoteURL(s.LogoRemoteURL)
 	}
 
-	if s.OwnerID != "" {
-		mutation.SetOwnerID(s.OwnerID)
-	}
-
 	subprocessor, err := mutation.Save(ctx)
 	assert.NilError(t, err)
 
@@ -1451,7 +1451,6 @@ type CustomDomainBuilder struct {
 	// Fields
 	CnameRecord      string
 	MappableDomainID string
-	OwnerID          string
 }
 
 // DNSVerificationBuilder is used to create DNS verifications
@@ -1468,7 +1467,6 @@ type DNSVerificationBuilder struct {
 	ExpectedAcmeChallengeValue  string
 	AcmeChallengeStatus         *enums.SSLVerificationStatus
 	AcmeChallengeStatusReason   *string
-	OwnerID                     string
 	CustomDomainIDs             []string
 }
 
@@ -1485,15 +1483,9 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 		c.MappableDomainID = mappableDomain.ID
 	}
 
-	if c.OwnerID == "" {
-		// Use the organization ID from the test user
-		c.OwnerID = testUser1.OrganizationID
-	}
-
 	customDomain, err := c.client.db.CustomDomain.Create().
 		SetCnameRecord(c.CnameRecord).
 		SetMappableDomainID(c.MappableDomainID).
-		SetOwnerID(c.OwnerID).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -1570,18 +1562,12 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		d.DNSTxtValue = gofakeit.UUID()
 	}
 
-	if d.OwnerID == "" {
-		// Use the organization ID from the test user
-		d.OwnerID = testUser1.OrganizationID
-	}
-
 	mutation := d.client.db.DNSVerification.Create().
 		SetCloudflareHostnameID(d.CloudflareHostnameID).
 		SetDNSTxtRecord(d.DNSTxtRecord).
 		SetDNSTxtValue(d.DNSTxtValue).
 		SetAcmeChallengePath(d.AcmeChallengePath).
-		SetExpectedAcmeChallengeValue(d.ExpectedAcmeChallengeValue).
-		SetOwnerID(d.OwnerID)
+		SetExpectedAcmeChallengeValue(d.ExpectedAcmeChallengeValue)
 
 	if d.DNSVerificationStatus != nil {
 		mutation.SetDNSVerificationStatus(*d.DNSVerificationStatus)
@@ -1704,7 +1690,6 @@ type TrustCenterBuilder struct {
 	// Fields
 	Slug           string
 	CustomDomainID string
-	OwnerID        string
 }
 
 // TrustCenterSettingBuilder is used to create trust center settings
@@ -1716,7 +1701,6 @@ type TrustCenterSettingBuilder struct {
 	Overview      string
 	PrimaryColor  string
 	TrustCenterID string
-	OwnerID       string
 	Tags          []string
 }
 
@@ -1728,14 +1712,8 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 		tc.Slug = randomName(t)
 	}
 
-	if tc.OwnerID == "" {
-		// Use the organization ID from the test user
-		tc.OwnerID = testUser1.OrganizationID
-	}
-
 	mutation := tc.client.db.TrustCenter.Create().
-		SetSlug(tc.Slug).
-		SetOwnerID(tc.OwnerID)
+		SetSlug(tc.Slug)
 
 	if tc.CustomDomainID != "" {
 		mutation.SetCustomDomainID(tc.CustomDomainID)
@@ -1767,11 +1745,6 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 		// Create a trust center if not provided
 		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(ctx, t)
 		tcs.TrustCenterID = trustCenter.ID
-	}
-
-	if tcs.OwnerID == "" {
-		// Use the organization ID from the test user
-		tcs.OwnerID = testUser1.OrganizationID
 	}
 
 	if len(tcs.Tags) == 0 {
@@ -1837,7 +1810,6 @@ type SecretBuilder struct {
 	Kind           string
 	SecretName     string
 	SecretValue    string
-	OwnerID        string
 	IntegrationIDs []string
 }
 
@@ -1883,18 +1855,12 @@ func (sb *SecretBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Hush {
 		sb.SecretValue = "gho_test_token_123456"
 	}
 
-	if sb.OwnerID == "" {
-		// Use the organization ID from the test user
-		sb.OwnerID = testUser1.OrganizationID
-	}
-
 	mutation := sb.client.db.Hush.Create().
 		SetName(sb.Name).
 		SetDescription(sb.Description).
 		SetKind(sb.Kind).
 		SetSecretName(sb.SecretName).
-		SetSecretValue(sb.SecretValue).
-		SetOwnerID(sb.OwnerID)
+		SetSecretValue(sb.SecretValue)
 
 	// Add integration associations if provided
 	if len(sb.IntegrationIDs) > 0 {

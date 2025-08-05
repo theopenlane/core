@@ -88,6 +88,10 @@ func (JobResult) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			),
+		field.Text("log").
+			Comment("the log output from the job").
+			Optional().
+			Nillable(),
 	}
 }
 

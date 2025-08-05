@@ -48,7 +48,7 @@ func HookProgramMembers() ent.Hook {
 				return nil, ErrUserNotInOrg
 			}
 
-			m.SetOrgmembershipID(orgMemberID)
+			m.SetOrgMembershipID(orgMemberID)
 
 			return next.Mutate(ctx, m)
 		})

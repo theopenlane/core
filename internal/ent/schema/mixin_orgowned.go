@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
@@ -200,17 +199,8 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		// check query context skips
-		ctxQuery := ent.QueryFromContext(ctx)
-
-		switch o.SkipInterceptor {
-		case interceptors.SkipAll:
+		if skipQueryModeCheck(ctx, o.SkipOrgInterceptorType) {
 			return nil
-		case interceptors.SkipOnlyQuery:
-			{
-				if ctxQuery.Op == interceptors.OnlyOperation {
-					return nil
-				}
-			}
 		}
 
 		if o.AllowAnonymousTrustCenterAccess {

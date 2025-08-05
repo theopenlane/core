@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -43,7 +43,7 @@ func TestQueryScheduledJob(t *testing.T) {
 	testCases := []struct {
 		name          string
 		userID        string
-		client        *openlaneclient.OpenlaneClient
+		client        *testclient.TestClient
 		ctx           context.Context
 		errorMsg      string
 		expectedCount int
@@ -138,7 +138,7 @@ func TestScheduledJobs(t *testing.T) {
 	testCases := []struct {
 		name       string
 		ctx        context.Context
-		client     *openlaneclient.OpenlaneClient
+		client     *testclient.TestClient
 		jobBuilder ScheduledJobBuilder
 		errorMsg   string
 	}{
@@ -230,6 +230,8 @@ func TestScheduledJobs(t *testing.T) {
 
 func TestMutationCreateScheduledJob(t *testing.T) {
 	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// jobSystemOwned := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client, Name: "Test Control"}).MustNew(testUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
@@ -242,22 +244,31 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		request     openlaneclient.CreateScheduledJobInput
-		client      *openlaneclient.OpenlaneClient
+		request     testclient.CreateScheduledJobInput
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name: "happy path, minimal input, cron inherited from job template",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
+		// TODO: see comment on schema, public tuples need to be implemented for this to work
+		// {
+		// 	name: "happy path, minimal input, cron inherited from job template, system owned job",
+		// 	request: testclient.CreateScheduledJobInput{
+		// 		JobTemplateID: jobSystemOwned.ID,
+		// 	},
+		// 	client: suite.client.api,
+		// 	ctx:    testUser1.UserCtx,
+		// },
 		{
 			name: "happy path, all input",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &cron,
 				JobRunnerID:   &runner.ID,
@@ -269,7 +280,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "happy path, using pat",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &cron,
 				OwnerID:       &testUser1.OrganizationID,
@@ -279,7 +290,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "happy path, using api token",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &cron,
 			},
@@ -288,7 +299,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "user not authorized, not enough permissions",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &cron,
 			},
@@ -298,17 +309,17 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "user not authorized, job not in organization",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &cron,
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "user not authorized, job runner not in organization",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job2.ID,
 				Cron:          &cron,
 				JobRunnerID:   &runner.ID,
@@ -319,7 +330,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "missing required field, job template id",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				Cron: &cron,
 			},
 			client:      suite.client.api,
@@ -328,7 +339,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "invalid input, cron",
-			request: openlaneclient.CreateScheduledJobInput{
+			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &invalidCron,
 			},
@@ -390,6 +401,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 	// cleanup each JobTemplate created
 	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job2.ID}).MustDelete(testUser2.UserCtx, t)
+	// (&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobSystemOwned.ID}).MustDelete(systemAdminUser.UserCtx, t)
 
 	// cleanup each JobRunner created
 	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: runner.ID}).MustDelete(testUser1.UserCtx, t)
@@ -420,15 +432,15 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 	invalidCron := "0 0 0 * *"
 	testCases := []struct {
 		name           string
-		request        openlaneclient.UpdateScheduledJobInput
+		request        testclient.UpdateScheduledJobInput
 		scheduledJobID string
-		client         *openlaneclient.OpenlaneClient
+		client         *testclient.TestClient
 		ctx            context.Context
 		expectedErr    string
 	}{
 		{
 			name: "happy path, update field",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				Cron: &newCron,
 			},
 			scheduledJobID: scheduledJob.ID,
@@ -437,7 +449,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				AddControlIDs:    []string{control2.ID},
 				AddSubcontrolIDs: []string{subControl.ID},
 				JobRunnerID:      &runner.ID,
@@ -449,7 +461,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields with pat",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				Cron: &anotherCron,
 			},
 			scheduledJobID: scheduledJob2.ID,
@@ -458,7 +470,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "happy path, update multiple fields with api token",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				JobRunnerID: &anotherRunner.ID,
 			},
 			scheduledJobID: scheduledJob.ID,
@@ -467,7 +479,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "update not allowed, not enough permissions",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				Cron: &newCron,
 			},
 			scheduledJobID: scheduledJob.ID,
@@ -477,7 +489,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "update not allowed, no permissions",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				Cron: &newCron,
 			},
 			scheduledJobID: scheduledJob.ID,
@@ -487,7 +499,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		},
 		{
 			name: "invalid input, cron",
-			request: openlaneclient.UpdateScheduledJobInput{
+			request: testclient.UpdateScheduledJobInput{
 				Cron: &invalidCron,
 			},
 			scheduledJobID: scheduledJob.ID,
@@ -559,7 +571,7 @@ func TestMutationDeleteScheduledJob(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
 	}{

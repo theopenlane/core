@@ -790,12 +790,12 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.Event {
 	})
 }
 
-// HasOrgmemberships applies the HasEdge predicate on the "orgmemberships" edge.
-func HasOrgmemberships() predicate.Event {
+// HasOrgMemberships applies the HasEdge predicate on the "org_memberships" edge.
+func HasOrgMemberships() predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, OrgmembershipsTable, OrgmembershipsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, OrgMembershipsTable, OrgMembershipsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgMembership
@@ -804,10 +804,10 @@ func HasOrgmemberships() predicate.Event {
 	})
 }
 
-// HasOrgmembershipsWith applies the HasEdge predicate on the "orgmemberships" edge with a given conditions (other predicates).
-func HasOrgmembershipsWith(preds ...predicate.OrgMembership) predicate.Event {
+// HasOrgMembershipsWith applies the HasEdge predicate on the "org_memberships" edge with a given conditions (other predicates).
+func HasOrgMembershipsWith(preds ...predicate.OrgMembership) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
-		step := newOrgmembershipsStep()
+		step := newOrgMembershipsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.OrgMembershipEvents
@@ -819,12 +819,12 @@ func HasOrgmembershipsWith(preds ...predicate.OrgMembership) predicate.Event {
 	})
 }
 
-// HasGroupmemberships applies the HasEdge predicate on the "groupmemberships" edge.
-func HasGroupmemberships() predicate.Event {
+// HasGroupMemberships applies the HasEdge predicate on the "group_memberships" edge.
+func HasGroupMemberships() predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, GroupmembershipsTable, GroupmembershipsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, GroupMembershipsTable, GroupMembershipsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.GroupMembership
@@ -833,10 +833,10 @@ func HasGroupmemberships() predicate.Event {
 	})
 }
 
-// HasGroupmembershipsWith applies the HasEdge predicate on the "groupmemberships" edge with a given conditions (other predicates).
-func HasGroupmembershipsWith(preds ...predicate.GroupMembership) predicate.Event {
+// HasGroupMembershipsWith applies the HasEdge predicate on the "group_memberships" edge with a given conditions (other predicates).
+func HasGroupMembershipsWith(preds ...predicate.GroupMembership) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
-		step := newGroupmembershipsStep()
+		step := newGroupMembershipsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.GroupMembership
 		step.Edge.Schema = schemaConfig.GroupMembershipEvents

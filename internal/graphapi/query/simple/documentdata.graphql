@@ -1,0 +1,132 @@
+
+mutation CreateBulkCSVDocumentData($input: Upload!) {
+  createBulkCSVDocumentData(input: $input) {
+    documentData {
+      createdAt
+      createdBy
+      data
+      id
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkDocumentData($input: [CreateDocumentDataInput!]) {
+  createBulkDocumentData(input: $input) {
+    documentData {
+      createdAt
+      createdBy
+      data
+      id
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateDocumentData($input: CreateDocumentDataInput!) {
+  createDocumentData(input: $input) {
+    documentData {
+      createdAt
+      createdBy
+      data
+      id
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteDocumentData($deleteDocumentDataId: ID!) {
+  deleteDocumentData(id: $deleteDocumentDataId) {
+    deletedID
+  }
+}
+
+query GetAllDocumentData {
+  documentData {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        data
+        id
+        ownerID
+        tags
+        templateID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetDocumentDataByID($documentDataId: ID!) {
+  documentData(id: $documentDataId) {
+    createdAt
+    createdBy
+    data
+    id
+    ownerID
+    tags
+    templateID
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetDocumentData($first: Int, $last: Int, $where: DocumentDataWhereInput) {
+  documentData(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        data
+        id
+        ownerID
+        tags
+        templateID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDataInput!) {
+  updateDocumentData(id: $updateDocumentDataId, input: $input) {
+    documentData {
+      createdAt
+      createdBy
+      data
+      id
+      ownerID
+      tags
+      templateID
+      updatedAt
+      updatedBy
+    }
+  }
+}

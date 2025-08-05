@@ -71,7 +71,6 @@ func (a ActionPlan) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(a, Risk{}),
 		defaultEdgeFromWithPagination(a, Control{}),
-		defaultEdgeFromWithPagination(a, User{}),
 		defaultEdgeFromWithPagination(a, Program{}),
 	}
 }

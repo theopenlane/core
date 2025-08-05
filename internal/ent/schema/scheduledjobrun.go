@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -96,6 +97,9 @@ func (s ScheduledJobRun) Edges() []ent.Edge {
 			edgeSchema: JobRunner{},
 			field:      "job_runner_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

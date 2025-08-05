@@ -1,3 +1,4 @@
+version: 2
 project_name: openlane
 builds:
   - env:
@@ -32,25 +33,11 @@ builds:
           - CGO_ENABLED=1
     main: ./cmd/cli
 archives:
-  - format: tar.gz # we can use binary, but it seems there's an issue where goreleaser skips the sboms
+  - formats: [tar.gz] # we can use binary, but it seems there's an issue where goreleaser skips the sboms
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        format: zip
-brews:
-  - homepage: 'https://github.com/theopenlane/core'
-    description: 'openlane is the client CLI for interacting with the openlane server'
-    directory: Formula
-    license: 'Apache-2.0'
-    commit_author:
-      name: theopenlane-bender
-      email: bender@theopenlane.io
-    repository:
-      owner: theopenlane
-      name: homebrew-tap
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    test: |
-      system "#{bin}/openlane --help"
+        formats: [zip]
 source:
   enabled: true
 changelog:

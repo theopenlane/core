@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/objects"
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
@@ -42,7 +43,23 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 }
 
 // TestClient creates a new OpenlaneClient for testing
-func TestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
+	e := testEchoServer(c, u, false)
+
+	// setup interceptors
+	if opts == nil {
+		opts = []openlaneclient.ClientOption{}
+	}
+
+	opts = append(opts, openlaneclient.WithTransport(localRoundTripper{server: e}))
+
+	config := openlaneclient.NewDefaultConfig()
+
+	return testclient.New(config, opts...)
+}
+
+// TestClient creates a new OpenlaneClient for testing
+func TestRestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(c, u, false)
 
 	// setup interceptors
@@ -58,7 +75,7 @@ func TestClient(c *ent.Client, u *objects.Objects, opts ...openlaneclient.Client
 }
 
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
-func TestClientWithAuth(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestClientWithAuth(c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
 	e := testEchoServer(c, u, true)
 
 	// setup interceptors
@@ -70,7 +87,7 @@ func TestClientWithAuth(c *ent.Client, u *objects.Objects, opts ...openlaneclien
 
 	config := openlaneclient.NewDefaultConfig()
 
-	return openlaneclient.New(config, opts...)
+	return testclient.New(config, opts...)
 }
 
 // testEchoServer creates a new echo server for testing the graph api

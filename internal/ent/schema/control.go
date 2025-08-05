@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -71,6 +72,9 @@ func (c Control) Edges() []ent.Edge {
 			fromSchema: c,
 			edgeSchema: Standard{},
 			field:      "standard_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeToWithPagination(c, Asset{}),
@@ -146,10 +150,14 @@ func (c Control) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Control](c,
 				withParents(Organization{}, Program{}, Standard{}),
 				withOrganizationOwner(true),
+				// controls are generally viewable by all users in the organization
+				// exceptions are based on group based access so we can safely
+				// skip the interceptor
+				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
 			// add groups permissions with editor, and blocked groups
 			// skip view because controls are automatically viewable by all users in the organization
-			newGroupPermissionsMixin(withSkipViewPermissions()),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 		},
 	}.getMixins(c)
 }

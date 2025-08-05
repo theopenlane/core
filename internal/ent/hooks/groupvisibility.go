@@ -87,7 +87,7 @@ func getVisibilityTuples(ctx context.Context, m *generated.GroupSettingMutation,
 			return nil, err
 		}
 
-		writeReqs = append(writeReqs, *writeReq)
+		writeReqs = append(writeReqs, writeReq...)
 	}
 
 	return writeReqs, nil
