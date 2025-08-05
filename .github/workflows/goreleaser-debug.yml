@@ -33,7 +33,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --verbose --snapshot --clean --fail-fast --config .goreleaser-old.yaml
+          args: release --verbose --snapshot --clean --fail-fast --config .goreleaser-debug.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}

@@ -14,21 +14,9 @@ builds:
       - "-X main.TreeState={{ .Env.TREE_STATE }}"
       - "-X github.com/theopenlane/core/internal/constants.CLIVersion={{ .Env.VERSION }}"
     goos:
-      - darwin
-    goarch:
-      - amd64
-      - arm64
-    overrides:
-      - goos: darwin
-        goarch: arm64
-        env:
-          - CGO_ENABLED=1
-      - goos: darwin
-        goarch: amd64
-        goamd64: v1
-        env:
-          - CGO_ENABLED=1
+      - linux
     main: ./cmd/cli
 archives:
   - formats: ['tar.gz']
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: >-
+      {{ .ProjectName }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "386" }}i386 {{- else }}{{ .Arch }}{{ end }} {{- if .Arm }}v{{ .Arm }}{{ end }}
