@@ -2,7 +2,7 @@ version: 2
 project_name: openlane
 builds:
   - env:
-      - CGO_ENABLED=1
+      - CGO_ENABLED=0
     binary: openlane
     goos:
       - linux
