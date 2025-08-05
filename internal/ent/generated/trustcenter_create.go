@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 )
@@ -211,6 +212,21 @@ func (tcc *TrustCenterCreate) AddTrustCenterSubprocessors(t ...*TrustCenterSubpr
 		ids[i] = t[i].ID
 	}
 	return tcc.AddTrustCenterSubprocessorIDs(ids...)
+}
+
+// AddTrustCenterComplianceIDs adds the "trust_center_compliances" edge to the TrustCenterCompliance entity by IDs.
+func (tcc *TrustCenterCreate) AddTrustCenterComplianceIDs(ids ...string) *TrustCenterCreate {
+	tcc.mutation.AddTrustCenterComplianceIDs(ids...)
+	return tcc
+}
+
+// AddTrustCenterCompliances adds the "trust_center_compliances" edges to the TrustCenterCompliance entity.
+func (tcc *TrustCenterCreate) AddTrustCenterCompliances(t ...*TrustCenterCompliance) *TrustCenterCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tcc.AddTrustCenterComplianceIDs(ids...)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
@@ -423,6 +439,23 @@ func (tcc *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) 
 			},
 		}
 		edge.Schema = tcc.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcc.mutation.TrustCenterCompliancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterCompliancesTable,
+			Columns: []string{trustcenter.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcc.schemaConfig.TrustCenterCompliance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

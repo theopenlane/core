@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -355,6 +356,21 @@ func (sc *StandardCreate) AddControls(c ...*Control) *StandardCreate {
 	return sc.AddControlIDs(ids...)
 }
 
+// AddTrustCenterComplianceIDs adds the "trust_center_compliances" edge to the TrustCenterCompliance entity by IDs.
+func (sc *StandardCreate) AddTrustCenterComplianceIDs(ids ...string) *StandardCreate {
+	sc.mutation.AddTrustCenterComplianceIDs(ids...)
+	return sc
+}
+
+// AddTrustCenterCompliances adds the "trust_center_compliances" edges to the TrustCenterCompliance entity.
+func (sc *StandardCreate) AddTrustCenterCompliances(t ...*TrustCenterCompliance) *StandardCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return sc.AddTrustCenterComplianceIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (sc *StandardCreate) Mutation() *StandardMutation {
 	return sc.mutation
@@ -624,6 +640,23 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.TrustCenterCompliancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterCompliancesTable,
+			Columns: []string{standard.TrustCenterCompliancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.TrustCenterCompliance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

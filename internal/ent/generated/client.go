@@ -19820,6 +19820,25 @@ func (c *StandardClient) QueryControls(s *Standard) *ControlQuery {
 	return query
 }
 
+// QueryTrustCenterCompliances queries the trust_center_compliances edge of a Standard.
+func (c *StandardClient) QueryTrustCenterCompliances(s *Standard) *TrustCenterComplianceQuery {
+	query := (&TrustCenterComplianceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(trustcentercompliance.Table, trustcentercompliance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, standard.TrustCenterCompliancesTable, standard.TrustCenterCompliancesColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterCompliance
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *StandardClient) Hooks() []Hook {
 	hooks := c.hooks.Standard
@@ -22257,6 +22276,25 @@ func (c *TrustCenterClient) QueryTrustCenterSubprocessors(tc *TrustCenter) *Trus
 	return query
 }
 
+// QueryTrustCenterCompliances queries the trust_center_compliances edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTrustCenterCompliances(tc *TrustCenter) *TrustCenterComplianceQuery {
+	query := (&TrustCenterComplianceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcentercompliance.Table, trustcentercompliance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterCompliancesTable, trustcenter.TrustCenterCompliancesColumn),
+		)
+		schemaConfig := tc.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterCompliance
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromV = sqlgraph.Neighbors(tc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenter
@@ -22390,6 +22428,44 @@ func (c *TrustCenterComplianceClient) GetX(ctx context.Context, id string) *Trus
 		panic(err)
 	}
 	return obj
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterCompliance.
+func (c *TrustCenterComplianceClient) QueryTrustCenter(tcc *TrustCenterCompliance) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentercompliance.Table, trustcentercompliance.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentercompliance.TrustCenterTable, trustcentercompliance.TrustCenterColumn),
+		)
+		schemaConfig := tcc.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromV = sqlgraph.Neighbors(tcc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandard queries the standard edge of a TrustCenterCompliance.
+func (c *TrustCenterComplianceClient) QueryStandard(tcc *TrustCenterCompliance) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentercompliance.Table, trustcentercompliance.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentercompliance.StandardTable, trustcentercompliance.StandardColumn),
+		)
+		schemaConfig := tcc.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		fromV = sqlgraph.Neighbors(tcc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

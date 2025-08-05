@@ -113,6 +113,8 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
+			case "trustCenterCompliances":
+				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -207,6 +209,8 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
+			case "trustCenterCompliances":
+				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -345,6 +349,8 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
+			case "trustCenterCompliances":
+				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},

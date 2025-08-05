@@ -122,6 +122,40 @@ func (tcchu *TrustCenterComplianceHistoryUpdate) ClearTags() *TrustCenterComplia
 	return tcchu
 }
 
+// SetStandardID sets the "standard_id" field.
+func (tcchu *TrustCenterComplianceHistoryUpdate) SetStandardID(s string) *TrustCenterComplianceHistoryUpdate {
+	tcchu.mutation.SetStandardID(s)
+	return tcchu
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (tcchu *TrustCenterComplianceHistoryUpdate) SetNillableStandardID(s *string) *TrustCenterComplianceHistoryUpdate {
+	if s != nil {
+		tcchu.SetStandardID(*s)
+	}
+	return tcchu
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcchu *TrustCenterComplianceHistoryUpdate) SetTrustCenterID(s string) *TrustCenterComplianceHistoryUpdate {
+	tcchu.mutation.SetTrustCenterID(s)
+	return tcchu
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcchu *TrustCenterComplianceHistoryUpdate) SetNillableTrustCenterID(s *string) *TrustCenterComplianceHistoryUpdate {
+	if s != nil {
+		tcchu.SetTrustCenterID(*s)
+	}
+	return tcchu
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (tcchu *TrustCenterComplianceHistoryUpdate) ClearTrustCenterID() *TrustCenterComplianceHistoryUpdate {
+	tcchu.mutation.ClearTrustCenterID()
+	return tcchu
+}
+
 // Mutation returns the TrustCenterComplianceHistoryMutation object of the builder.
 func (tcchu *TrustCenterComplianceHistoryUpdate) Mutation() *TrustCenterComplianceHistoryMutation {
 	return tcchu.mutation
@@ -227,6 +261,15 @@ func (tcchu *TrustCenterComplianceHistoryUpdate) sqlSave(ctx context.Context) (n
 	}
 	if tcchu.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := tcchu.mutation.StandardID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
+	}
+	if value, ok := tcchu.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if tcchu.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = tcchu.schemaConfig.TrustCenterComplianceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcchu.schemaConfig)
@@ -339,6 +382,40 @@ func (tcchuo *TrustCenterComplianceHistoryUpdateOne) AppendTags(s []string) *Tru
 // ClearTags clears the value of the "tags" field.
 func (tcchuo *TrustCenterComplianceHistoryUpdateOne) ClearTags() *TrustCenterComplianceHistoryUpdateOne {
 	tcchuo.mutation.ClearTags()
+	return tcchuo
+}
+
+// SetStandardID sets the "standard_id" field.
+func (tcchuo *TrustCenterComplianceHistoryUpdateOne) SetStandardID(s string) *TrustCenterComplianceHistoryUpdateOne {
+	tcchuo.mutation.SetStandardID(s)
+	return tcchuo
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (tcchuo *TrustCenterComplianceHistoryUpdateOne) SetNillableStandardID(s *string) *TrustCenterComplianceHistoryUpdateOne {
+	if s != nil {
+		tcchuo.SetStandardID(*s)
+	}
+	return tcchuo
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcchuo *TrustCenterComplianceHistoryUpdateOne) SetTrustCenterID(s string) *TrustCenterComplianceHistoryUpdateOne {
+	tcchuo.mutation.SetTrustCenterID(s)
+	return tcchuo
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcchuo *TrustCenterComplianceHistoryUpdateOne) SetNillableTrustCenterID(s *string) *TrustCenterComplianceHistoryUpdateOne {
+	if s != nil {
+		tcchuo.SetTrustCenterID(*s)
+	}
+	return tcchuo
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (tcchuo *TrustCenterComplianceHistoryUpdateOne) ClearTrustCenterID() *TrustCenterComplianceHistoryUpdateOne {
+	tcchuo.mutation.ClearTrustCenterID()
 	return tcchuo
 }
 
@@ -477,6 +554,15 @@ func (tcchuo *TrustCenterComplianceHistoryUpdateOne) sqlSave(ctx context.Context
 	}
 	if tcchuo.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := tcchuo.mutation.StandardID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
+	}
+	if value, ok := tcchuo.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if tcchuo.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = tcchuo.schemaConfig.TrustCenterComplianceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcchuo.schemaConfig)
