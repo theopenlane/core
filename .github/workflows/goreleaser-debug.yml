@@ -1,0 +1,132 @@
+name: GoReleaser Debug
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+jobs:
+  ldflags_args:
+    runs-on: ubuntu-latest
+    outputs:
+      commit-date: ${{ steps.ldflags.outputs.commit-date }}
+      commit: ${{ steps.ldflags.outputs.commit }}
+      version: ${{ steps.ldflags.outputs.version }}
+      tree-state: ${{ steps.ldflags.outputs.tree-state }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: ldflags
+        run: |
+          echo "commit=$GITHUB_SHA" >> $GITHUB_OUTPUT
+          echo "commit-date=$(git log --date=iso8601-strict -1 --pretty=%ct)" >> $GITHUB_OUTPUT
+          echo "version=$(git describe --tags --always --dirty | cut -c2-)" >> $GITHUB_OUTPUT
+          echo "tree-state=$(if git diff --quiet; then echo "clean"; else echo "dirty"; fi)" >> $GITHUB_OUTPUT
+
+  goreleaser-test:
+    name: Test GoReleaser Build
+    needs:
+      - ldflags_args
+    permissions:
+      contents: write # To add assets to a release.
+      id-token: write # To do keyless signing with cosign
+    runs-on: macos-14 # M1/Apple Silicon runner - matching release workflow
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@7b36ad622f042cab6f59a75c2ac24ccb256e9b45 # v0.20.4
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.9.2
+
+      - name: Debug Go Environment
+        run: |
+          echo "=== Go Version ==="
+          go version
+          echo "=== Go Environment ==="
+          go env
+          echo "=== Test Simple Build (matching goreleaser config) ==="
+          time CGO_ENABLED=1 go build -trimpath -tags=netgo -o openlane ./cmd/cli 2>&1 | head -20
+          echo "=== Clean up test build ==="
+          rm -f openlane
+
+      - name: Test GoReleaser Build Command
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: build --snapshot --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          VERSION: ${{ needs.ldflags_args.outputs.version }}
+          COMMIT: ${{ needs.ldflags_args.outputs.commit }}
+          COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
+          TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
+          GOPROXY: https://proxy.golang.org,direct
+
+      - name: Test GoReleaser Full Release (dry-run)
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --snapshot --clean --skip=publish,sign --verbose
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          VERSION: ${{ needs.ldflags_args.outputs.version }}
+          COMMIT: ${{ needs.ldflags_args.outputs.commit }}
+          COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
+          TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
+          GOPROXY: https://proxy.golang.org,direct
+
+      - name: Test GoReleaser EXACT Release Command (snapshot mode)
+        id: run-goreleaser-exact
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --snapshot --clean --verbose
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          VERSION: ${{ needs.ldflags_args.outputs.version }}
+          COMMIT: ${{ needs.ldflags_args.outputs.commit }}
+          COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
+          TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
+
+      - name: Upload Build Artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goreleaser-debug-macos-14
+          path: |
+            dist/
+            *.log
+
+      - name: Debug on Failure
+        if: failure()
+        run: |
+          echo "=== Disk Space ==="
+          df -h
+          echo "=== Memory Usage ==="
+          if command -v free >/dev/null 2>&1; then free -h; fi
+          echo "=== Process List ==="
+          ps aux | grep -E "(go|goreleaser)" | grep -v grep || true
+          echo "=== Network Connectivity ==="
+          curl -s -o /dev/null -w "%{http_code}" https://proxy.golang.org || echo "Failed to reach proxy.golang.org"
+          echo "=== Recent System Messages ==="
+          if command -v dmesg >/dev/null 2>&1; then sudo dmesg | tail -50; fi

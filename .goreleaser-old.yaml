@@ -1,7 +1,7 @@
-version: 2
 project_name: openlane
 builds:
   - env:
+      - GO111MODULE=on
       - CGO_ENABLED=0
     binary: openlane
     flags:
@@ -32,11 +32,25 @@ builds:
           - CGO_ENABLED=1
     main: ./cmd/cli
 archives:
-  - formats: ['tar.gz'] # we can use binary, but it seems there's an issue where goreleaser skips the sboms
+  - format: tar.gz # we can use binary, but it seems there's an issue where goreleaser skips the sboms
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        formats: ['zip']
+        format: zip
+brews:
+  - homepage: 'https://github.com/theopenlane/core'
+    description: 'openlane is the client CLI for interacting with the openlane server'
+    directory: Formula
+    license: 'Apache-2.0'
+    commit_author:
+      name: bender-core
+      email: bender@theopenlane.io
+    repository:
+      owner: theopenlane
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    test: |
+      system "#{bin}/openlane --help"
 source:
   enabled: true
 changelog:
@@ -45,10 +59,12 @@ changelog:
 sboms:
   - artifacts: archive
 release:
+  # If set to auto, will mark the release as not ready for production
+  # in case there is an indicator for this in the tag e.g. v1.0.0-rc1
   prerelease: auto
   github:
     owner: theopenlane
-    name: core
+    name: openlane
 # This section defines how and which artifacts we want to sign for the release.
 signs:
   - cmd: cosign
