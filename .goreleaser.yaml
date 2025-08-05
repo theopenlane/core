@@ -2,7 +2,6 @@ version: 2
 project_name: openlane
 builds:
   - env:
-      - GO111MODULE=on
       - CGO_ENABLED=0
     binary: openlane
     flags:
@@ -32,11 +31,11 @@ builds:
           - CGO_ENABLED=1
     main: ./cmd/cli
 archives:
-  - formats: [tar.gz] # we can use binary, but it seems there's an issue where goreleaser skips the sboms
+  - formats: ['tar.gz'] # we can use binary, but it seems there's an issue where goreleaser skips the sboms
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        formats: [zip]
+        formats: ['zip']
 source:
   enabled: true
 changelog:
