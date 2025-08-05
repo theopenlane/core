@@ -58,12 +58,29 @@ jobs:
           go version
           echo "=== Go Environment ==="
           go env
+
+      - name: Debug Suspect Package
+        run: |
+          echo "=== Testing httpsnoop package fetch ==="
+          timeout 30s go get -v github.com/felixge/httpsnoop@v1.0.4 || echo "Failed to fetch httpsnoop"
+          echo "=== Testing likely next packages in chain ==="
+          timeout 30s go get -v go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc@v0.62.0 || echo "Failed to fetch otelgrpc"
+          timeout 30s go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.6 || echo "Failed to fetch enterprise-certificate-proxy"
+          timeout 30s go get -v google.golang.org/grpc@v1.74.2 || echo "Failed to fetch grpc"
+          timeout 30s go get -v google.golang.org/genproto@v0.0.0-20250715232539-7130f93afb79 || echo "Failed to fetch genproto"
+          echo "=== Check what imports httpsnoop ==="
+          go mod graph | grep httpsnoop || true
+          echo "=== Show dependency graph for server packages ==="
+          go mod graph | grep -E "(otel|grpc|google)" | head -20 || true
+
+      - name: Test Builds
+        run: |
           echo "=== Test Native Build (darwin/arm64 with CGO) ==="
-          time CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -trimpath -tags=netgo -o openlane ./cmd/cli
+          timeout 60s time CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -trimpath -tags=netgo -o openlane ./cmd/cli || echo "Native build timed out"
           echo "=== Test Cross-Compile Build (darwin/amd64 with CGO) ==="
-          time CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -trimpath -tags=netgo -o openlane-amd64 ./cmd/cli || echo "Cross-compile failed"
-          echo "=== Test Server Build ==="
-          time CGO_ENABLED=1 go build -mod=mod -o core .
+          timeout 60s time CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -trimpath -tags=netgo -o openlane-amd64 ./cmd/cli || echo "Cross-compile failed or timed out"
+          echo "=== Test Server Build (this is what's hanging) ==="
+          timeout 120s time CGO_ENABLED=1 go build -mod=mod -v -o core . 2>&1 || echo "Server build timed out after 2 minutes"
           echo "=== Clean up builds ==="
           rm -f openlane openlane-amd64 core
 
