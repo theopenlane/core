@@ -64,7 +64,7 @@ release:
   prerelease: auto
   github:
     owner: theopenlane
-    name: openlane
+    name: core
 # This section defines how and which artifacts we want to sign for the release.
 signs:
   - cmd: cosign
