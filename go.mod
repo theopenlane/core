@@ -8,14 +8,14 @@ require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.2
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.4
+	entgo.io/ent v0.14.5
 	github.com/99designs/gqlgen v0.17.78
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.33.0
 	github.com/alicebob/miniredis/v2 v2.35.0
 	github.com/alitto/pond/v2 v2.5.0
-	github.com/aws/aws-sdk-go-v2/config v1.30.2
-	github.com/aws/aws-sdk-go-v2/credentials v1.18.2
+	github.com/aws/aws-sdk-go-v2/config v1.30.3
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.3
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.86.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.3.0
@@ -26,7 +26,7 @@ require (
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.132.0
-	github.com/go-jose/go-jose/v4 v4.1.1
+	github.com/go-jose/go-jose/v4 v4.1.2
 	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/go-webauthn/webauthn v0.13.4
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
@@ -46,10 +46,10 @@ require (
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/lestrrat-go/httprc/v3 v3.0.0
-	github.com/lestrrat-go/jwx/v3 v3.0.9
+	github.com/lestrrat-go/jwx/v3 v3.0.10
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
-	github.com/miekg/dns v1.1.67
+	github.com/miekg/dns v1.1.68
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.6.4
 	github.com/oNaiPs/go-generate-fast v0.3.0
@@ -57,7 +57,7 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.3
-	github.com/projectdiscovery/cdncheck v1.1.29
+	github.com/projectdiscovery/cdncheck v1.1.30
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.22
@@ -81,7 +81,7 @@ require (
 	github.com/theopenlane/entx v0.12.1
 	github.com/theopenlane/gqlgen-plugins v0.7.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.15.0
+	github.com/theopenlane/iam v0.15.1
 	github.com/theopenlane/newman v0.2.0
 	github.com/theopenlane/riverboat v0.2.1
 	github.com/theopenlane/utils v0.4.8
@@ -157,7 +157,7 @@ require (
 	github.com/ashanbrown/forbidigo v1.6.0 // indirect
 	github.com/ashanbrown/makezero v1.2.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.0 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.1 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.2 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.2 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.2 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
@@ -166,9 +166,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.8.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.26.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.31.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.35.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.27.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.32.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.36.0 // indirect
 	github.com/aws/smithy-go v1.22.5 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bitfield/gotestdox v0.2.2 // indirect
@@ -490,7 +490,7 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.37.2
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.18.2
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.18.3
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -581,7 +581,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/projectdiscovery/katana v1.2.1
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
-	github.com/projectdiscovery/wappalyzergo v0.2.39
+	github.com/projectdiscovery/wappalyzergo v0.2.40
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.65.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
@@ -619,7 +619,7 @@ require (
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	github.com/zclconf/go-cty v1.16.3 // indirect
-	github.com/zitadel/oidc/v3 v3.43.0
+	github.com/zitadel/oidc/v3 v3.43.1
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib v1.36.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.62.0 // indirect
