@@ -33,7 +33,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: macos-14 # M1/Apple Silicon runner - matching release workflow
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,65 +52,12 @@ jobs:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.9.2
 
-      - name: Debug Go Environment
-        run: |
-          echo "=== Go Version ==="
-          go version
-          echo "=== Go Environment ==="
-          go env
-
-      - name: Debug Suspect Package - Enterprise Certificate Proxy
-        run: |
-          echo "=== Testing enterprise-certificate-proxy directly ==="
-          echo "Starting download at $(date)"
-          go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.6 && echo "SUCCESS: enterprise-certificate-proxy downloaded" || echo "FAILED: enterprise-certificate-proxy download failed"
-          echo "Finished at $(date)"
-
-          echo "=== Testing different versions ==="
-          go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.4 && echo "SUCCESS: v0.3.4 downloaded" || echo "FAILED: v0.3.4 download failed"
-          go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.0 && echo "SUCCESS: v0.3.0 downloaded" || echo "FAILED: v0.3.0 download failed"
-
-          echo "=== Testing manual download ==="
-          curl -v https://proxy.golang.org/github.com/googleapis/enterprise-certificate-proxy/@v/v0.3.6.info || echo "Failed to get package info"
-
-          echo "=== Testing related googleapis packages ==="
-          go get -v github.com/googleapis/gax-go/v2@v2.15.0 && echo "SUCCESS: gax-go downloaded" || echo "FAILED: gax-go download failed"
-
-      - name: Debug Other Packages
-        run: |
-          echo "=== Testing httpsnoop package fetch ==="
-          go get -v github.com/felixge/httpsnoop@v1.0.4 || echo "Failed to fetch httpsnoop"
-          echo "=== Testing Google Cloud packages ==="
-          go get -v cloud.google.com/go@v0.121.4 || echo "Failed to fetch cloud.google.com/go"
-          go get -v cloud.google.com/go/auth@v0.16.3 || echo "Failed to fetch cloud.google.com/go/auth"
-          go get -v google.golang.org/grpc@v1.74.2 || echo "Failed to fetch grpc"
-          echo "=== Test building with Google Cloud deps ==="
-          echo 'package main; import _ "cloud.google.com/go"; func main() {}' > test_gc.go
-          CGO_ENABLED=1 go build -o test_gc test_gc.go && echo "Google Cloud build OK" || echo "Google Cloud build FAILED"
-          rm -f test_gc test_gc.go
-          echo "=== Check what imports httpsnoop ==="
-          go mod graph | grep httpsnoop | wc -l
-          echo "=== Show Google Cloud dependencies ==="
-          go mod graph | grep "cloud.google.com" | head -10 || true
-
-      - name: Test Builds
-        run: |
-          echo "=== Test Native Build (darwin/arm64 with CGO) ==="
-          time CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -trimpath -tags=netgo -o openlane ./cmd/cli || echo "Native build failed"
-          echo "=== Test Cross-Compile Build (darwin/amd64 with CGO) ==="
-          time CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -trimpath -tags=netgo -o openlane-amd64 ./cmd/cli || echo "Cross-compile failed"
-          echo "=== Test Server Build (this is what's hanging) ==="
-          echo "Starting server build at $(date)"
-          time CGO_ENABLED=1 go build -mod=mod -v -o core . 2>&1 || echo "Server build failed"
-          echo "=== Clean up builds ==="
-          rm -f openlane openlane-amd64 core
-
       - name: Test GoReleaser Build (Darwin only)
         uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: latest
-          args: build --snapshot --clean --config .goreleaser-debug.yaml --timeout 5m
+          args: build --snapshot --clean --config .goreleaser-debug.yaml --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
@@ -119,72 +66,3 @@ jobs:
           COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
           TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
           GOPROXY: https://proxy.golang.org,direct
-
-      - name: Test GoReleaser Build (Full config)
-        if: success()
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: latest
-          args: build --snapshot --clean --timeout 5m
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
-          VERSION: ${{ needs.ldflags_args.outputs.version }}
-          COMMIT: ${{ needs.ldflags_args.outputs.commit }}
-          COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
-          TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
-          GOPROXY: https://proxy.golang.org,direct
-
-      - name: Test GoReleaser Full Release (dry-run)
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --snapshot --clean --skip=publish,sign --verbose
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
-          VERSION: ${{ needs.ldflags_args.outputs.version }}
-          COMMIT: ${{ needs.ldflags_args.outputs.commit }}
-          COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
-          TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
-          GOPROXY: https://proxy.golang.org,direct
-
-      - name: Test GoReleaser EXACT Release Command (snapshot mode)
-        id: run-goreleaser-exact
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --snapshot --clean --verbose
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
-          VERSION: ${{ needs.ldflags_args.outputs.version }}
-          COMMIT: ${{ needs.ldflags_args.outputs.commit }}
-          COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
-          TREE_STATE: ${{ needs.ldflags_args.outputs.tree-state }}
-
-      - name: Upload Build Artifacts
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: goreleaser-debug-macos-14
-          path: |
-            dist/
-            *.log
-
-      - name: Debug on Failure
-        if: failure()
-        run: |
-          echo "=== Disk Space ==="
-          df -h
-          echo "=== Memory Usage ==="
-          if command -v free >/dev/null 2>&1; then free -h; fi
-          echo "=== Process List ==="
-          ps aux | grep -E "(go|goreleaser)" | grep -v grep || true
-          echo "=== Network Connectivity ==="
-          curl -s -o /dev/null -w "%{http_code}" https://proxy.golang.org || echo "Failed to reach proxy.golang.org"
-          echo "=== Recent System Messages ==="
-          if command -v dmesg >/dev/null 2>&1; then sudo dmesg | tail -50; fi
