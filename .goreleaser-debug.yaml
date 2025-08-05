@@ -6,6 +6,8 @@ builds:
     binary: openlane
     goos:
       - linux
+    goarch:
+      - amd64
     main: ./cmd/cli
 archives:
   - formats: [tar.gz]
