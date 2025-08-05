@@ -59,11 +59,28 @@ jobs:
           echo "=== Go Environment ==="
           go env
 
-      - name: Debug Suspect Package
+      - name: Debug Suspect Package - Enterprise Certificate Proxy
+        run: |
+          echo "=== Testing enterprise-certificate-proxy directly ==="
+          echo "Starting download at $(date)"
+          go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.6 && echo "SUCCESS: enterprise-certificate-proxy downloaded" || echo "FAILED: enterprise-certificate-proxy download failed"
+          echo "Finished at $(date)"
+
+          echo "=== Testing different versions ==="
+          go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.4 && echo "SUCCESS: v0.3.4 downloaded" || echo "FAILED: v0.3.4 download failed"
+          go get -v github.com/googleapis/enterprise-certificate-proxy@v0.3.0 && echo "SUCCESS: v0.3.0 downloaded" || echo "FAILED: v0.3.0 download failed"
+
+          echo "=== Testing manual download ==="
+          curl -v https://proxy.golang.org/github.com/googleapis/enterprise-certificate-proxy/@v/v0.3.6.info || echo "Failed to get package info"
+
+          echo "=== Testing related googleapis packages ==="
+          go get -v github.com/googleapis/gax-go/v2@v2.15.0 && echo "SUCCESS: gax-go downloaded" || echo "FAILED: gax-go download failed"
+
+      - name: Debug Other Packages
         run: |
           echo "=== Testing httpsnoop package fetch ==="
           go get -v github.com/felixge/httpsnoop@v1.0.4 || echo "Failed to fetch httpsnoop"
-          echo "=== Testing Google Cloud packages (likely culprits) ==="
+          echo "=== Testing Google Cloud packages ==="
           go get -v cloud.google.com/go@v0.121.4 || echo "Failed to fetch cloud.google.com/go"
           go get -v cloud.google.com/go/auth@v0.16.3 || echo "Failed to fetch cloud.google.com/go/auth"
           go get -v google.golang.org/grpc@v1.74.2 || echo "Failed to fetch grpc"
