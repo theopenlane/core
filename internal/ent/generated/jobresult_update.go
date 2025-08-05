@@ -169,6 +169,26 @@ func (jru *JobResultUpdate) SetNillableFileID(s *string) *JobResultUpdate {
 	return jru
 }
 
+// SetLog sets the "log" field.
+func (jru *JobResultUpdate) SetLog(s string) *JobResultUpdate {
+	jru.mutation.SetLog(s)
+	return jru
+}
+
+// SetNillableLog sets the "log" field if the given value is not nil.
+func (jru *JobResultUpdate) SetNillableLog(s *string) *JobResultUpdate {
+	if s != nil {
+		jru.SetLog(*s)
+	}
+	return jru
+}
+
+// ClearLog clears the value of the "log" field.
+func (jru *JobResultUpdate) ClearLog() *JobResultUpdate {
+	jru.mutation.ClearLog()
+	return jru
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jru *JobResultUpdate) SetOwner(o *Organization) *JobResultUpdate {
 	return jru.SetOwnerID(o.ID)
@@ -320,6 +340,12 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := jru.mutation.Status(); ok {
 		_spec.SetField(jobresult.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := jru.mutation.Log(); ok {
+		_spec.SetField(jobresult.FieldLog, field.TypeString, value)
+	}
+	if jru.mutation.LogCleared() {
+		_spec.ClearField(jobresult.FieldLog, field.TypeString)
 	}
 	if jru.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -572,6 +598,26 @@ func (jruo *JobResultUpdateOne) SetNillableFileID(s *string) *JobResultUpdateOne
 	return jruo
 }
 
+// SetLog sets the "log" field.
+func (jruo *JobResultUpdateOne) SetLog(s string) *JobResultUpdateOne {
+	jruo.mutation.SetLog(s)
+	return jruo
+}
+
+// SetNillableLog sets the "log" field if the given value is not nil.
+func (jruo *JobResultUpdateOne) SetNillableLog(s *string) *JobResultUpdateOne {
+	if s != nil {
+		jruo.SetLog(*s)
+	}
+	return jruo
+}
+
+// ClearLog clears the value of the "log" field.
+func (jruo *JobResultUpdateOne) ClearLog() *JobResultUpdateOne {
+	jruo.mutation.ClearLog()
+	return jruo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jruo *JobResultUpdateOne) SetOwner(o *Organization) *JobResultUpdateOne {
 	return jruo.SetOwnerID(o.ID)
@@ -753,6 +799,12 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 	}
 	if value, ok := jruo.mutation.Status(); ok {
 		_spec.SetField(jobresult.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := jruo.mutation.Log(); ok {
+		_spec.SetField(jobresult.FieldLog, field.TypeString, value)
+	}
+	if jruo.mutation.LogCleared() {
+		_spec.ClearField(jobresult.FieldLog, field.TypeString)
 	}
 	if jruo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

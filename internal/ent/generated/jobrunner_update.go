@@ -173,6 +173,86 @@ func (jru *JobRunnerUpdate) SetNillableStatus(ers *enums.JobRunnerStatus) *JobRu
 	return jru
 }
 
+// SetIPAddress sets the "ip_address" field.
+func (jru *JobRunnerUpdate) SetIPAddress(s string) *JobRunnerUpdate {
+	jru.mutation.SetIPAddress(s)
+	return jru
+}
+
+// SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
+func (jru *JobRunnerUpdate) SetNillableIPAddress(s *string) *JobRunnerUpdate {
+	if s != nil {
+		jru.SetIPAddress(*s)
+	}
+	return jru
+}
+
+// ClearIPAddress clears the value of the "ip_address" field.
+func (jru *JobRunnerUpdate) ClearIPAddress() *JobRunnerUpdate {
+	jru.mutation.ClearIPAddress()
+	return jru
+}
+
+// SetLastSeen sets the "last_seen" field.
+func (jru *JobRunnerUpdate) SetLastSeen(t time.Time) *JobRunnerUpdate {
+	jru.mutation.SetLastSeen(t)
+	return jru
+}
+
+// SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
+func (jru *JobRunnerUpdate) SetNillableLastSeen(t *time.Time) *JobRunnerUpdate {
+	if t != nil {
+		jru.SetLastSeen(*t)
+	}
+	return jru
+}
+
+// ClearLastSeen clears the value of the "last_seen" field.
+func (jru *JobRunnerUpdate) ClearLastSeen() *JobRunnerUpdate {
+	jru.mutation.ClearLastSeen()
+	return jru
+}
+
+// SetVersion sets the "version" field.
+func (jru *JobRunnerUpdate) SetVersion(s string) *JobRunnerUpdate {
+	jru.mutation.SetVersion(s)
+	return jru
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (jru *JobRunnerUpdate) SetNillableVersion(s *string) *JobRunnerUpdate {
+	if s != nil {
+		jru.SetVersion(*s)
+	}
+	return jru
+}
+
+// ClearVersion clears the value of the "version" field.
+func (jru *JobRunnerUpdate) ClearVersion() *JobRunnerUpdate {
+	jru.mutation.ClearVersion()
+	return jru
+}
+
+// SetOs sets the "os" field.
+func (jru *JobRunnerUpdate) SetOs(s string) *JobRunnerUpdate {
+	jru.mutation.SetOs(s)
+	return jru
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (jru *JobRunnerUpdate) SetNillableOs(s *string) *JobRunnerUpdate {
+	if s != nil {
+		jru.SetOs(*s)
+	}
+	return jru
+}
+
+// ClearOs clears the value of the "os" field.
+func (jru *JobRunnerUpdate) ClearOs() *JobRunnerUpdate {
+	jru.mutation.ClearOs()
+	return jru
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jru *JobRunnerUpdate) SetOwner(o *Organization) *JobRunnerUpdate {
 	return jru.SetOwnerID(o.ID)
@@ -344,6 +424,30 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := jru.mutation.Status(); ok {
 		_spec.SetField(jobrunner.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := jru.mutation.IPAddress(); ok {
+		_spec.SetField(jobrunner.FieldIPAddress, field.TypeString, value)
+	}
+	if jru.mutation.IPAddressCleared() {
+		_spec.ClearField(jobrunner.FieldIPAddress, field.TypeString)
+	}
+	if value, ok := jru.mutation.LastSeen(); ok {
+		_spec.SetField(jobrunner.FieldLastSeen, field.TypeTime, value)
+	}
+	if jru.mutation.LastSeenCleared() {
+		_spec.ClearField(jobrunner.FieldLastSeen, field.TypeTime)
+	}
+	if value, ok := jru.mutation.Version(); ok {
+		_spec.SetField(jobrunner.FieldVersion, field.TypeString, value)
+	}
+	if jru.mutation.VersionCleared() {
+		_spec.ClearField(jobrunner.FieldVersion, field.TypeString)
+	}
+	if value, ok := jru.mutation.Os(); ok {
+		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
+	}
+	if jru.mutation.OsCleared() {
+		_spec.ClearField(jobrunner.FieldOs, field.TypeString)
 	}
 	if jru.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -586,6 +690,86 @@ func (jruo *JobRunnerUpdateOne) SetNillableStatus(ers *enums.JobRunnerStatus) *J
 	return jruo
 }
 
+// SetIPAddress sets the "ip_address" field.
+func (jruo *JobRunnerUpdateOne) SetIPAddress(s string) *JobRunnerUpdateOne {
+	jruo.mutation.SetIPAddress(s)
+	return jruo
+}
+
+// SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
+func (jruo *JobRunnerUpdateOne) SetNillableIPAddress(s *string) *JobRunnerUpdateOne {
+	if s != nil {
+		jruo.SetIPAddress(*s)
+	}
+	return jruo
+}
+
+// ClearIPAddress clears the value of the "ip_address" field.
+func (jruo *JobRunnerUpdateOne) ClearIPAddress() *JobRunnerUpdateOne {
+	jruo.mutation.ClearIPAddress()
+	return jruo
+}
+
+// SetLastSeen sets the "last_seen" field.
+func (jruo *JobRunnerUpdateOne) SetLastSeen(t time.Time) *JobRunnerUpdateOne {
+	jruo.mutation.SetLastSeen(t)
+	return jruo
+}
+
+// SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
+func (jruo *JobRunnerUpdateOne) SetNillableLastSeen(t *time.Time) *JobRunnerUpdateOne {
+	if t != nil {
+		jruo.SetLastSeen(*t)
+	}
+	return jruo
+}
+
+// ClearLastSeen clears the value of the "last_seen" field.
+func (jruo *JobRunnerUpdateOne) ClearLastSeen() *JobRunnerUpdateOne {
+	jruo.mutation.ClearLastSeen()
+	return jruo
+}
+
+// SetVersion sets the "version" field.
+func (jruo *JobRunnerUpdateOne) SetVersion(s string) *JobRunnerUpdateOne {
+	jruo.mutation.SetVersion(s)
+	return jruo
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (jruo *JobRunnerUpdateOne) SetNillableVersion(s *string) *JobRunnerUpdateOne {
+	if s != nil {
+		jruo.SetVersion(*s)
+	}
+	return jruo
+}
+
+// ClearVersion clears the value of the "version" field.
+func (jruo *JobRunnerUpdateOne) ClearVersion() *JobRunnerUpdateOne {
+	jruo.mutation.ClearVersion()
+	return jruo
+}
+
+// SetOs sets the "os" field.
+func (jruo *JobRunnerUpdateOne) SetOs(s string) *JobRunnerUpdateOne {
+	jruo.mutation.SetOs(s)
+	return jruo
+}
+
+// SetNillableOs sets the "os" field if the given value is not nil.
+func (jruo *JobRunnerUpdateOne) SetNillableOs(s *string) *JobRunnerUpdateOne {
+	if s != nil {
+		jruo.SetOs(*s)
+	}
+	return jruo
+}
+
+// ClearOs clears the value of the "os" field.
+func (jruo *JobRunnerUpdateOne) ClearOs() *JobRunnerUpdateOne {
+	jruo.mutation.ClearOs()
+	return jruo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jruo *JobRunnerUpdateOne) SetOwner(o *Organization) *JobRunnerUpdateOne {
 	return jruo.SetOwnerID(o.ID)
@@ -787,6 +971,30 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 	}
 	if value, ok := jruo.mutation.Status(); ok {
 		_spec.SetField(jobrunner.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := jruo.mutation.IPAddress(); ok {
+		_spec.SetField(jobrunner.FieldIPAddress, field.TypeString, value)
+	}
+	if jruo.mutation.IPAddressCleared() {
+		_spec.ClearField(jobrunner.FieldIPAddress, field.TypeString)
+	}
+	if value, ok := jruo.mutation.LastSeen(); ok {
+		_spec.SetField(jobrunner.FieldLastSeen, field.TypeTime, value)
+	}
+	if jruo.mutation.LastSeenCleared() {
+		_spec.ClearField(jobrunner.FieldLastSeen, field.TypeTime)
+	}
+	if value, ok := jruo.mutation.Version(); ok {
+		_spec.SetField(jobrunner.FieldVersion, field.TypeString, value)
+	}
+	if jruo.mutation.VersionCleared() {
+		_spec.ClearField(jobrunner.FieldVersion, field.TypeString)
+	}
+	if value, ok := jruo.mutation.Os(); ok {
+		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
+	}
+	if jruo.mutation.OsCleared() {
+		_spec.ClearField(jobrunner.FieldOs, field.TypeString)
 	}
 	if jruo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

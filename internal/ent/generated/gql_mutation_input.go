@@ -5219,6 +5219,7 @@ type CreateJobResultInput struct {
 	ExitCode       int
 	FinishedAt     *time.Time
 	StartedAt      *time.Time
+	Log            *string
 	OwnerID        *string
 	ScheduledJobID string
 	FileID         string
@@ -5233,6 +5234,9 @@ func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
 	}
 	if v := i.StartedAt; v != nil {
 		m.SetStartedAt(*v)
+	}
+	if v := i.Log; v != nil {
+		m.SetLog(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -5250,6 +5254,8 @@ func (c *JobResultCreate) SetInput(i CreateJobResultInput) *JobResultCreate {
 // UpdateJobResultInput represents a mutation input for updating jobresults.
 type UpdateJobResultInput struct {
 	Status         *enums.JobExecutionStatus
+	ClearLog       bool
+	Log            *string
 	ClearOwner     bool
 	OwnerID        *string
 	ScheduledJobID *string
@@ -5260,6 +5266,12 @@ type UpdateJobResultInput struct {
 func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearLog {
+		m.ClearLog()
+	}
+	if v := i.Log; v != nil {
+		m.SetLog(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5291,7 +5303,10 @@ func (c *JobResultUpdateOne) SetInput(i UpdateJobResultInput) *JobResultUpdateOn
 type CreateJobRunnerInput struct {
 	Tags              []string
 	Name              string
-	IPAddress         string
+	IPAddress         *string
+	LastSeen          *time.Time
+	Version           *string
+	Os                *string
 	OwnerID           *string
 	JobRunnerTokenIDs []string
 }
@@ -5302,7 +5317,18 @@ func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	m.SetIPAddress(i.IPAddress)
+	if v := i.IPAddress; v != nil {
+		m.SetIPAddress(*v)
+	}
+	if v := i.LastSeen; v != nil {
+		m.SetLastSeen(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.Os; v != nil {
+		m.SetOs(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -5323,6 +5349,14 @@ type UpdateJobRunnerInput struct {
 	Tags                    []string
 	AppendTags              []string
 	Name                    *string
+	ClearIPAddress          bool
+	IPAddress               *string
+	ClearLastSeen           bool
+	LastSeen                *time.Time
+	ClearVersion            bool
+	Version                 *string
+	ClearOs                 bool
+	Os                      *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearJobRunnerTokens    bool
@@ -5343,6 +5377,30 @@ func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearIPAddress {
+		m.ClearIPAddress()
+	}
+	if v := i.IPAddress; v != nil {
+		m.SetIPAddress(*v)
+	}
+	if i.ClearLastSeen {
+		m.ClearLastSeen()
+	}
+	if v := i.LastSeen; v != nil {
+		m.SetLastSeen(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearOs {
+		m.ClearOs()
+	}
+	if v := i.Os; v != nil {
+		m.SetOs(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

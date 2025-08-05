@@ -2094,6 +2094,7 @@ var (
 		{Name: "exit_code", Type: field.TypeInt},
 		{Name: "finished_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
+		{Name: "log", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "scheduled_job_id", Type: field.TypeString},
 		{Name: "file_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2106,19 +2107,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_results_scheduled_jobs_scheduled_job",
-				Columns:    []*schema.Column{JobResultsColumns[11]},
+				Columns:    []*schema.Column{JobResultsColumns[12]},
 				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "job_results_files_file",
-				Columns:    []*schema.Column{JobResultsColumns[12]},
+				Columns:    []*schema.Column{JobResultsColumns[13]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "job_results_organizations_job_results",
-				Columns:    []*schema.Column{JobResultsColumns[13]},
+				Columns:    []*schema.Column{JobResultsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2127,7 +2128,7 @@ var (
 			{
 				Name:    "jobresult_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobResultsColumns[13]},
+				Columns: []*schema.Column{JobResultsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2148,7 +2149,10 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
-		{Name: "ip_address", Type: field.TypeString, Unique: true},
+		{Name: "ip_address", Type: field.TypeString, Nullable: true},
+		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "os", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// JobRunnersTable holds the schema information for the "job_runners" table.
@@ -2159,7 +2163,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_runners_organizations_job_runners",
-				Columns:    []*schema.Column{JobRunnersColumns[13]},
+				Columns:    []*schema.Column{JobRunnersColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2168,12 +2172,12 @@ var (
 			{
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[13]},
+				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[16]},
 			},
 			{
 				Name:    "jobrunner_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobRunnersColumns[13]},
+				Columns: []*schema.Column{JobRunnersColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

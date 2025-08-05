@@ -174,6 +174,20 @@ func (jrc *JobResultCreate) SetFileID(s string) *JobResultCreate {
 	return jrc
 }
 
+// SetLog sets the "log" field.
+func (jrc *JobResultCreate) SetLog(s string) *JobResultCreate {
+	jrc.mutation.SetLog(s)
+	return jrc
+}
+
+// SetNillableLog sets the "log" field if the given value is not nil.
+func (jrc *JobResultCreate) SetNillableLog(s *string) *JobResultCreate {
+	if s != nil {
+		jrc.SetLog(*s)
+	}
+	return jrc
+}
+
 // SetID sets the "id" field.
 func (jrc *JobResultCreate) SetID(s string) *JobResultCreate {
 	jrc.mutation.SetID(s)
@@ -394,6 +408,10 @@ func (jrc *JobResultCreate) createSpec() (*JobResult, *sqlgraph.CreateSpec) {
 	if value, ok := jrc.mutation.StartedAt(); ok {
 		_spec.SetField(jobresult.FieldStartedAt, field.TypeTime, value)
 		_node.StartedAt = value
+	}
+	if value, ok := jrc.mutation.Log(); ok {
+		_spec.SetField(jobresult.FieldLog, field.TypeString, value)
+		_node.Log = &value
 	}
 	if nodes := jrc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
