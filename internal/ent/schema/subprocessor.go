@@ -112,11 +112,11 @@ func (Subprocessor) Hooks() []ent.Hook {
 }
 
 // Policy of the Subprocessor
-func (s Subprocessor) Policy() ent.Policy {
+func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
-			rule.DenyIfMissingAllFeatures("subprocessor", s.Features()...),
+			rule.DenyIfMissingAllFeatures("subprocessor", t.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

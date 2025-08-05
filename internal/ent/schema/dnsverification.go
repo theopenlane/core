@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -133,5 +133,11 @@ func (DNSVerification) Hooks() []ent.Hook {
 func (DNSVerification) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
+	}
+}
+
+func (d DNSVerification) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(d.Features()...),
 	}
 }

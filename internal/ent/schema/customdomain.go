@@ -108,7 +108,7 @@ func (CustomDomain) Indexes() []ent.Index {
 }
 
 // Policy of the CustomDomain
-func (c CustomDomain) Policy() ent.Policy {
+func (e CustomDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
@@ -119,7 +119,7 @@ func (c CustomDomain) Policy() ent.Policy {
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
-			rule.DenyIfMissingAllFeatures("customdomain", c.Features()...),
+			rule.DenyIfMissingAllFeatures("customdomain", e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

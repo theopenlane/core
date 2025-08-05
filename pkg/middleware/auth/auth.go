@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 	"time"
 
@@ -91,7 +92,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			switch getTokenType(bearerToken) {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
-				au, id, err = checkToken(reqCtx, conf, bearerToken)
+				au, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
 				if err != nil {
 					return unauthorized(c, err, conf, validator)
 				}
@@ -125,7 +126,6 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				auth.SetRefreshToken(c, bearerToken)
 			}
 
-			fmt.Println("HERE", au.OrganizationIDs, au.OrganizationID)
 			auth.SetAuthenticatedUserContext(c, au)
 
 			if conf.RedisClient != nil {
@@ -262,12 +262,12 @@ func createAnonymousTrustCenterUserFromClaims(_ context.Context, _ *ent.Client, 
 // checkToken checks the bearer authorization token against the database to see if the provided
 // token is an active personal access token or api token.
 // If the token is valid, the authenticated user is returned
-func checkToken(ctx context.Context, conf *Options, token string) (*auth.AuthenticatedUser, string, error) {
+func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
 	// allow check to bypass privacy rules
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// check if the token is a personal access token
-	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token)
+	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)
 	if err == nil {
 		return au, id, nil
 	}
@@ -282,7 +282,9 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 }
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
-func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
+	token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
+
 	pat, err := fetchPATFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
@@ -326,14 +328,20 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client, token
 		return nil, "", err
 	}
 
-	return &auth.AuthenticatedUser{
+	authUser := &auth.AuthenticatedUser{
 		SubjectID:          pat.OwnerID,
 		SubjectName:        getSubjectName(pat.Edges.Owner),
 		SubjectEmail:       pat.Edges.Owner.Email,
 		OrganizationIDs:    orgIDs,
 		AuthenticationType: auth.PATAuthentication,
 		IsSystemAdmin:      systemAdmin,
-	}, pat.ID, nil
+	}
+
+	if slices.Contains(orgIDs, orgFromHeader) {
+		authUser.OrganizationID = orgFromHeader
+	}
+
+	return authUser, pat.ID, nil
 }
 
 func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {

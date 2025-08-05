@@ -7,8 +7,8 @@ replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-gener
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.2
-	entgo.io/contrib v0.6.0
-	entgo.io/ent v0.14.4
+	entgo.io/contrib v0.7.0
+	entgo.io/ent v0.14.5
 	github.com/99designs/gqlgen v0.17.78
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.33.0
@@ -78,10 +78,10 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.4
-	github.com/theopenlane/entx v0.11.2
+	github.com/theopenlane/entx v0.12.1
 	github.com/theopenlane/gqlgen-plugins v0.7.0
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.15.0
+	github.com/theopenlane/iam v0.15.1
 	github.com/theopenlane/newman v0.2.0
 	github.com/theopenlane/riverboat v0.2.1
 	github.com/theopenlane/utils v0.4.8

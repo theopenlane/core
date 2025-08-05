@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -101,5 +102,11 @@ func (MappableDomain) Hooks() []ent.Hook {
 func (MappableDomain) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
+	}
+}
+
+func (m MappableDomain) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(m.Features()...),
 	}
 }

@@ -215,8 +215,8 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 }
 
 // DenyIfMissingAllFeatures acts as a prerequisite check - denies if features missing, Allows if present
-func DenyIfMissingAllFeatures(schema string, features ...models.OrgModule) privacy.MutationRule {
-	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.MutationRule {
+	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
 
 		if len(features) == 0 {
 			return privacy.Skip
