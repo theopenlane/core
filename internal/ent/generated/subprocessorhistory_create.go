@@ -22,235 +22,235 @@ type SubprocessorHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (shc *SubprocessorHistoryCreate) SetHistoryTime(t time.Time) *SubprocessorHistoryCreate {
-	shc.mutation.SetHistoryTime(t)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetHistoryTime(v time.Time) *SubprocessorHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableHistoryTime(t *time.Time) *SubprocessorHistoryCreate {
-	if t != nil {
-		shc.SetHistoryTime(*t)
+func (_c *SubprocessorHistoryCreate) SetNillableHistoryTime(v *time.Time) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (shc *SubprocessorHistoryCreate) SetRef(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetRef(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetRef(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableRef(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetRef(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableRef(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (shc *SubprocessorHistoryCreate) SetOperation(ht history.OpType) *SubprocessorHistoryCreate {
-	shc.mutation.SetOperation(ht)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetOperation(v history.OpType) *SubprocessorHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (shc *SubprocessorHistoryCreate) SetCreatedAt(t time.Time) *SubprocessorHistoryCreate {
-	shc.mutation.SetCreatedAt(t)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetCreatedAt(v time.Time) *SubprocessorHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableCreatedAt(t *time.Time) *SubprocessorHistoryCreate {
-	if t != nil {
-		shc.SetCreatedAt(*t)
+func (_c *SubprocessorHistoryCreate) SetNillableCreatedAt(v *time.Time) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shc *SubprocessorHistoryCreate) SetUpdatedAt(t time.Time) *SubprocessorHistoryCreate {
-	shc.mutation.SetUpdatedAt(t)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetUpdatedAt(v time.Time) *SubprocessorHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableUpdatedAt(t *time.Time) *SubprocessorHistoryCreate {
-	if t != nil {
-		shc.SetUpdatedAt(*t)
+func (_c *SubprocessorHistoryCreate) SetNillableUpdatedAt(v *time.Time) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (shc *SubprocessorHistoryCreate) SetCreatedBy(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetCreatedBy(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetCreatedBy(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableCreatedBy(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetCreatedBy(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableCreatedBy(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shc *SubprocessorHistoryCreate) SetUpdatedBy(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetUpdatedBy(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetUpdatedBy(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableUpdatedBy(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetUpdatedBy(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableUpdatedBy(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shc *SubprocessorHistoryCreate) SetDeletedAt(t time.Time) *SubprocessorHistoryCreate {
-	shc.mutation.SetDeletedAt(t)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetDeletedAt(v time.Time) *SubprocessorHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableDeletedAt(t *time.Time) *SubprocessorHistoryCreate {
-	if t != nil {
-		shc.SetDeletedAt(*t)
+func (_c *SubprocessorHistoryCreate) SetNillableDeletedAt(v *time.Time) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shc *SubprocessorHistoryCreate) SetDeletedBy(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetDeletedBy(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetDeletedBy(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableDeletedBy(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetDeletedBy(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableDeletedBy(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (shc *SubprocessorHistoryCreate) SetTags(s []string) *SubprocessorHistoryCreate {
-	shc.mutation.SetTags(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetTags(v []string) *SubprocessorHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shc *SubprocessorHistoryCreate) SetOwnerID(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetOwnerID(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetOwnerID(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableOwnerID(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetOwnerID(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableOwnerID(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetSystemOwned sets the "system_owned" field.
-func (shc *SubprocessorHistoryCreate) SetSystemOwned(b bool) *SubprocessorHistoryCreate {
-	shc.mutation.SetSystemOwned(b)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetSystemOwned(v bool) *SubprocessorHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
 }
 
 // SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableSystemOwned(b *bool) *SubprocessorHistoryCreate {
-	if b != nil {
-		shc.SetSystemOwned(*b)
+func (_c *SubprocessorHistoryCreate) SetNillableSystemOwned(v *bool) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (shc *SubprocessorHistoryCreate) SetName(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetName(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetName(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (shc *SubprocessorHistoryCreate) SetDescription(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetDescription(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetDescription(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableDescription(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetDescription(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableDescription(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (shc *SubprocessorHistoryCreate) SetLogoRemoteURL(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetLogoRemoteURL(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetLogoRemoteURL(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetLogoRemoteURL(v)
+	return _c
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableLogoRemoteURL(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetLogoRemoteURL(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableLogoRemoteURL(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetLogoRemoteURL(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (shc *SubprocessorHistoryCreate) SetLogoLocalFileID(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetLogoLocalFileID(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetLogoLocalFileID(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetLogoLocalFileID(v)
+	return _c
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableLogoLocalFileID(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetLogoLocalFileID(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableLogoLocalFileID(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetLogoLocalFileID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (shc *SubprocessorHistoryCreate) SetID(s string) *SubprocessorHistoryCreate {
-	shc.mutation.SetID(s)
-	return shc
+func (_c *SubprocessorHistoryCreate) SetID(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (shc *SubprocessorHistoryCreate) SetNillableID(s *string) *SubprocessorHistoryCreate {
-	if s != nil {
-		shc.SetID(*s)
+func (_c *SubprocessorHistoryCreate) SetNillableID(v *string) *SubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return shc
+	return _c
 }
 
 // Mutation returns the SubprocessorHistoryMutation object of the builder.
-func (shc *SubprocessorHistoryCreate) Mutation() *SubprocessorHistoryMutation {
-	return shc.mutation
+func (_c *SubprocessorHistoryCreate) Mutation() *SubprocessorHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the SubprocessorHistory in the database.
-func (shc *SubprocessorHistoryCreate) Save(ctx context.Context) (*SubprocessorHistory, error) {
-	if err := shc.defaults(); err != nil {
+func (_c *SubprocessorHistoryCreate) Save(ctx context.Context) (*SubprocessorHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (shc *SubprocessorHistoryCreate) SaveX(ctx context.Context) *SubprocessorHistory {
-	v, err := shc.Save(ctx)
+func (_c *SubprocessorHistoryCreate) SaveX(ctx context.Context) *SubprocessorHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -258,84 +258,84 @@ func (shc *SubprocessorHistoryCreate) SaveX(ctx context.Context) *SubprocessorHi
 }
 
 // Exec executes the query.
-func (shc *SubprocessorHistoryCreate) Exec(ctx context.Context) error {
-	_, err := shc.Save(ctx)
+func (_c *SubprocessorHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shc *SubprocessorHistoryCreate) ExecX(ctx context.Context) {
-	if err := shc.Exec(ctx); err != nil {
+func (_c *SubprocessorHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *SubprocessorHistoryCreate) defaults() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *SubprocessorHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if subprocessorhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized subprocessorhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := subprocessorhistory.DefaultHistoryTime()
-		shc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := shc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if subprocessorhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessorhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessorhistory.DefaultCreatedAt()
-		shc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if subprocessorhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessorhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessorhistory.DefaultUpdatedAt()
-		shc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := subprocessorhistory.DefaultTags
-		shc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := shc.mutation.SystemOwned(); !ok {
+	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subprocessorhistory.DefaultSystemOwned
-		shc.mutation.SetSystemOwned(v)
+		_c.mutation.SetSystemOwned(v)
 	}
-	if _, ok := shc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if subprocessorhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subprocessorhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := subprocessorhistory.DefaultID()
-		shc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shc *SubprocessorHistoryCreate) check() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *SubprocessorHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "SubprocessorHistory.history_time"`)}
 	}
-	if _, ok := shc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "SubprocessorHistory.operation"`)}
 	}
-	if v, ok := shc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := subprocessorhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "SubprocessorHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "SubprocessorHistory.name"`)}
 	}
 	return nil
 }
 
-func (shc *SubprocessorHistoryCreate) sqlSave(ctx context.Context) (*SubprocessorHistory, error) {
-	if err := shc.check(); err != nil {
+func (_c *SubprocessorHistoryCreate) sqlSave(ctx context.Context) (*SubprocessorHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := shc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, shc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -348,82 +348,82 @@ func (shc *SubprocessorHistoryCreate) sqlSave(ctx context.Context) (*Subprocesso
 			return nil, fmt.Errorf("unexpected SubprocessorHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	shc.mutation.id = &_node.ID
-	shc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (shc *SubprocessorHistoryCreate) createSpec() (*SubprocessorHistory, *sqlgraph.CreateSpec) {
+func (_c *SubprocessorHistoryCreate) createSpec() (*SubprocessorHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &SubprocessorHistory{config: shc.config}
+		_node = &SubprocessorHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subprocessorhistory.Table, sqlgraph.NewFieldSpec(subprocessorhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = shc.schemaConfig.SubprocessorHistory
-	if id, ok := shc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.SubprocessorHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := shc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(subprocessorhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := shc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(subprocessorhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := shc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(subprocessorhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := shc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := shc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := shc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := shc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := shc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := shc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(subprocessorhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := shc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(subprocessorhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := shc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := shc.mutation.SystemOwned(); ok {
+	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(subprocessorhistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
 	}
-	if value, ok := shc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(subprocessorhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := shc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(subprocessorhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := shc.mutation.LogoRemoteURL(); ok {
+	if value, ok := _c.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
 	}
-	if value, ok := shc.mutation.LogoLocalFileID(); ok {
+	if value, ok := _c.mutation.LogoLocalFileID(); ok {
 		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
 		_node.LogoLocalFileID = &value
 	}
@@ -438,16 +438,16 @@ type SubprocessorHistoryCreateBulk struct {
 }
 
 // Save creates the SubprocessorHistory entities in the database.
-func (shcb *SubprocessorHistoryCreateBulk) Save(ctx context.Context) ([]*SubprocessorHistory, error) {
-	if shcb.err != nil {
-		return nil, shcb.err
+func (_c *SubprocessorHistoryCreateBulk) Save(ctx context.Context) ([]*SubprocessorHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(shcb.builders))
-	nodes := make([]*SubprocessorHistory, len(shcb.builders))
-	mutators := make([]Mutator, len(shcb.builders))
-	for i := range shcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*SubprocessorHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := shcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SubprocessorHistoryMutation)
@@ -461,11 +461,11 @@ func (shcb *SubprocessorHistoryCreateBulk) Save(ctx context.Context) ([]*Subproc
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, shcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, shcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -485,7 +485,7 @@ func (shcb *SubprocessorHistoryCreateBulk) Save(ctx context.Context) ([]*Subproc
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, shcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -493,8 +493,8 @@ func (shcb *SubprocessorHistoryCreateBulk) Save(ctx context.Context) ([]*Subproc
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shcb *SubprocessorHistoryCreateBulk) SaveX(ctx context.Context) []*SubprocessorHistory {
-	v, err := shcb.Save(ctx)
+func (_c *SubprocessorHistoryCreateBulk) SaveX(ctx context.Context) []*SubprocessorHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -502,14 +502,14 @@ func (shcb *SubprocessorHistoryCreateBulk) SaveX(ctx context.Context) []*Subproc
 }
 
 // Exec executes the query.
-func (shcb *SubprocessorHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := shcb.Save(ctx)
+func (_c *SubprocessorHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shcb *SubprocessorHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := shcb.Exec(ctx); err != nil {
+func (_c *SubprocessorHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

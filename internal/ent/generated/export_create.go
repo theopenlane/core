@@ -25,242 +25,242 @@ type ExportCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ec *ExportCreate) SetCreatedAt(t time.Time) *ExportCreate {
-	ec.mutation.SetCreatedAt(t)
-	return ec
+func (_c *ExportCreate) SetCreatedAt(v time.Time) *ExportCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableCreatedAt(t *time.Time) *ExportCreate {
-	if t != nil {
-		ec.SetCreatedAt(*t)
+func (_c *ExportCreate) SetNillableCreatedAt(v *time.Time) *ExportCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ec *ExportCreate) SetUpdatedAt(t time.Time) *ExportCreate {
-	ec.mutation.SetUpdatedAt(t)
-	return ec
+func (_c *ExportCreate) SetUpdatedAt(v time.Time) *ExportCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableUpdatedAt(t *time.Time) *ExportCreate {
-	if t != nil {
-		ec.SetUpdatedAt(*t)
+func (_c *ExportCreate) SetNillableUpdatedAt(v *time.Time) *ExportCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ec *ExportCreate) SetCreatedBy(s string) *ExportCreate {
-	ec.mutation.SetCreatedBy(s)
-	return ec
+func (_c *ExportCreate) SetCreatedBy(v string) *ExportCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableCreatedBy(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetCreatedBy(*s)
+func (_c *ExportCreate) SetNillableCreatedBy(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ec *ExportCreate) SetUpdatedBy(s string) *ExportCreate {
-	ec.mutation.SetUpdatedBy(s)
-	return ec
+func (_c *ExportCreate) SetUpdatedBy(v string) *ExportCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableUpdatedBy(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetUpdatedBy(*s)
+func (_c *ExportCreate) SetNillableUpdatedBy(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ec *ExportCreate) SetDeletedAt(t time.Time) *ExportCreate {
-	ec.mutation.SetDeletedAt(t)
-	return ec
+func (_c *ExportCreate) SetDeletedAt(v time.Time) *ExportCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableDeletedAt(t *time.Time) *ExportCreate {
-	if t != nil {
-		ec.SetDeletedAt(*t)
+func (_c *ExportCreate) SetNillableDeletedAt(v *time.Time) *ExportCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ec *ExportCreate) SetDeletedBy(s string) *ExportCreate {
-	ec.mutation.SetDeletedBy(s)
-	return ec
+func (_c *ExportCreate) SetDeletedBy(v string) *ExportCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableDeletedBy(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetDeletedBy(*s)
+func (_c *ExportCreate) SetNillableDeletedBy(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ec *ExportCreate) SetOwnerID(s string) *ExportCreate {
-	ec.mutation.SetOwnerID(s)
-	return ec
+func (_c *ExportCreate) SetOwnerID(v string) *ExportCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableOwnerID(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetOwnerID(*s)
+func (_c *ExportCreate) SetNillableOwnerID(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetExportType sets the "export_type" field.
-func (ec *ExportCreate) SetExportType(et enums.ExportType) *ExportCreate {
-	ec.mutation.SetExportType(et)
-	return ec
+func (_c *ExportCreate) SetExportType(v enums.ExportType) *ExportCreate {
+	_c.mutation.SetExportType(v)
+	return _c
 }
 
 // SetFormat sets the "format" field.
-func (ec *ExportCreate) SetFormat(ef enums.ExportFormat) *ExportCreate {
-	ec.mutation.SetFormat(ef)
-	return ec
+func (_c *ExportCreate) SetFormat(v enums.ExportFormat) *ExportCreate {
+	_c.mutation.SetFormat(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (ec *ExportCreate) SetStatus(es enums.ExportStatus) *ExportCreate {
-	ec.mutation.SetStatus(es)
-	return ec
+func (_c *ExportCreate) SetStatus(v enums.ExportStatus) *ExportCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableStatus(es *enums.ExportStatus) *ExportCreate {
-	if es != nil {
-		ec.SetStatus(*es)
+func (_c *ExportCreate) SetNillableStatus(v *enums.ExportStatus) *ExportCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetRequestorID sets the "requestor_id" field.
-func (ec *ExportCreate) SetRequestorID(s string) *ExportCreate {
-	ec.mutation.SetRequestorID(s)
-	return ec
+func (_c *ExportCreate) SetRequestorID(v string) *ExportCreate {
+	_c.mutation.SetRequestorID(v)
+	return _c
 }
 
 // SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableRequestorID(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetRequestorID(*s)
+func (_c *ExportCreate) SetNillableRequestorID(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetRequestorID(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetFields sets the "fields" field.
-func (ec *ExportCreate) SetFields(s []string) *ExportCreate {
-	ec.mutation.SetFields(s)
-	return ec
+func (_c *ExportCreate) SetFields(v []string) *ExportCreate {
+	_c.mutation.SetFields(v)
+	return _c
 }
 
 // SetFilters sets the "filters" field.
-func (ec *ExportCreate) SetFilters(s string) *ExportCreate {
-	ec.mutation.SetFilters(s)
-	return ec
+func (_c *ExportCreate) SetFilters(v string) *ExportCreate {
+	_c.mutation.SetFilters(v)
+	return _c
 }
 
 // SetNillableFilters sets the "filters" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableFilters(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetFilters(*s)
+func (_c *ExportCreate) SetNillableFilters(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetFilters(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetErrorMessage sets the "error_message" field.
-func (ec *ExportCreate) SetErrorMessage(s string) *ExportCreate {
-	ec.mutation.SetErrorMessage(s)
-	return ec
+func (_c *ExportCreate) SetErrorMessage(v string) *ExportCreate {
+	_c.mutation.SetErrorMessage(v)
+	return _c
 }
 
 // SetNillableErrorMessage sets the "error_message" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableErrorMessage(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetErrorMessage(*s)
+func (_c *ExportCreate) SetNillableErrorMessage(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetErrorMessage(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ec *ExportCreate) SetID(s string) *ExportCreate {
-	ec.mutation.SetID(s)
-	return ec
+func (_c *ExportCreate) SetID(v string) *ExportCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ec *ExportCreate) SetNillableID(s *string) *ExportCreate {
-	if s != nil {
-		ec.SetID(*s)
+func (_c *ExportCreate) SetNillableID(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ec *ExportCreate) SetOwner(o *Organization) *ExportCreate {
-	return ec.SetOwnerID(o.ID)
+func (_c *ExportCreate) SetOwner(v *Organization) *ExportCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (ec *ExportCreate) AddEventIDs(ids ...string) *ExportCreate {
-	ec.mutation.AddEventIDs(ids...)
-	return ec
+func (_c *ExportCreate) AddEventIDs(ids ...string) *ExportCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (ec *ExportCreate) AddEvents(e ...*Event) *ExportCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *ExportCreate) AddEvents(v ...*Event) *ExportCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (ec *ExportCreate) AddFileIDs(ids ...string) *ExportCreate {
-	ec.mutation.AddFileIDs(ids...)
-	return ec
+func (_c *ExportCreate) AddFileIDs(ids ...string) *ExportCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (ec *ExportCreate) AddFiles(f ...*File) *ExportCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *ExportCreate) AddFiles(v ...*File) *ExportCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // Mutation returns the ExportMutation object of the builder.
-func (ec *ExportCreate) Mutation() *ExportMutation {
-	return ec.mutation
+func (_c *ExportCreate) Mutation() *ExportMutation {
+	return _c.mutation
 }
 
 // Save creates the Export in the database.
-func (ec *ExportCreate) Save(ctx context.Context) (*Export, error) {
-	if err := ec.defaults(); err != nil {
+func (_c *ExportCreate) Save(ctx context.Context) (*Export, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ec.sqlSave, ec.mutation, ec.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ec *ExportCreate) SaveX(ctx context.Context) *Export {
-	v, err := ec.Save(ctx)
+func (_c *ExportCreate) SaveX(ctx context.Context) *Export {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -268,79 +268,79 @@ func (ec *ExportCreate) SaveX(ctx context.Context) *Export {
 }
 
 // Exec executes the query.
-func (ec *ExportCreate) Exec(ctx context.Context) error {
-	_, err := ec.Save(ctx)
+func (_c *ExportCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ec *ExportCreate) ExecX(ctx context.Context) {
-	if err := ec.Exec(ctx); err != nil {
+func (_c *ExportCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ec *ExportCreate) defaults() error {
-	if _, ok := ec.mutation.CreatedAt(); !ok {
+func (_c *ExportCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if export.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized export.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := export.DefaultCreatedAt()
-		ec.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ec.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if export.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized export.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := export.DefaultUpdatedAt()
-		ec.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ec.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := export.DefaultStatus
-		ec.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := ec.mutation.GetFields(); !ok {
+	if _, ok := _c.mutation.GetFields(); !ok {
 		v := export.DefaultFields
-		ec.mutation.SetFields(v)
+		_c.mutation.SetFields(v)
 	}
-	if _, ok := ec.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if export.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized export.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := export.DefaultID()
-		ec.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ec *ExportCreate) check() error {
-	if _, ok := ec.mutation.ExportType(); !ok {
+func (_c *ExportCreate) check() error {
+	if _, ok := _c.mutation.ExportType(); !ok {
 		return &ValidationError{Name: "export_type", err: errors.New(`generated: missing required field "Export.export_type"`)}
 	}
-	if v, ok := ec.mutation.ExportType(); ok {
+	if v, ok := _c.mutation.ExportType(); ok {
 		if err := export.ExportTypeValidator(v); err != nil {
 			return &ValidationError{Name: "export_type", err: fmt.Errorf(`generated: validator failed for field "Export.export_type": %w`, err)}
 		}
 	}
-	if _, ok := ec.mutation.Format(); !ok {
+	if _, ok := _c.mutation.Format(); !ok {
 		return &ValidationError{Name: "format", err: errors.New(`generated: missing required field "Export.format"`)}
 	}
-	if v, ok := ec.mutation.Format(); ok {
+	if v, ok := _c.mutation.Format(); ok {
 		if err := export.FormatValidator(v); err != nil {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`generated: validator failed for field "Export.format": %w`, err)}
 		}
 	}
-	if _, ok := ec.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Export.status"`)}
 	}
-	if v, ok := ec.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := export.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Export.status": %w`, err)}
 		}
 	}
-	if v, ok := ec.mutation.RequestorID(); ok {
+	if v, ok := _c.mutation.RequestorID(); ok {
 		if err := export.RequestorIDValidator(v); err != nil {
 			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Export.requestor_id": %w`, err)}
 		}
@@ -348,12 +348,12 @@ func (ec *ExportCreate) check() error {
 	return nil
 }
 
-func (ec *ExportCreate) sqlSave(ctx context.Context) (*Export, error) {
-	if err := ec.check(); err != nil {
+func (_c *ExportCreate) sqlSave(ctx context.Context) (*Export, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ec.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ec.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -366,74 +366,74 @@ func (ec *ExportCreate) sqlSave(ctx context.Context) (*Export, error) {
 			return nil, fmt.Errorf("unexpected Export.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ec.mutation.id = &_node.ID
-	ec.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ec *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
+func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Export{config: ec.config}
+		_node = &Export{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(export.Table, sqlgraph.NewFieldSpec(export.FieldID, field.TypeString))
 	)
-	_spec.Schema = ec.schemaConfig.Export
-	if id, ok := ec.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Export
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ec.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(export.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ec.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(export.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ec.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(export.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ec.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(export.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ec.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(export.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ec.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(export.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ec.mutation.ExportType(); ok {
+	if value, ok := _c.mutation.ExportType(); ok {
 		_spec.SetField(export.FieldExportType, field.TypeEnum, value)
 		_node.ExportType = value
 	}
-	if value, ok := ec.mutation.Format(); ok {
+	if value, ok := _c.mutation.Format(); ok {
 		_spec.SetField(export.FieldFormat, field.TypeEnum, value)
 		_node.Format = value
 	}
-	if value, ok := ec.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(export.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := ec.mutation.RequestorID(); ok {
+	if value, ok := _c.mutation.RequestorID(); ok {
 		_spec.SetField(export.FieldRequestorID, field.TypeString, value)
 		_node.RequestorID = value
 	}
-	if value, ok := ec.mutation.GetFields(); ok {
+	if value, ok := _c.mutation.GetFields(); ok {
 		_spec.SetField(export.FieldFields, field.TypeJSON, value)
 		_node.Fields = value
 	}
-	if value, ok := ec.mutation.Filters(); ok {
+	if value, ok := _c.mutation.Filters(); ok {
 		_spec.SetField(export.FieldFilters, field.TypeString, value)
 		_node.Filters = value
 	}
-	if value, ok := ec.mutation.ErrorMessage(); ok {
+	if value, ok := _c.mutation.ErrorMessage(); ok {
 		_spec.SetField(export.FieldErrorMessage, field.TypeString, value)
 		_node.ErrorMessage = value
 	}
-	if nodes := ec.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -444,14 +444,14 @@ func (ec *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.Export
+		edge.Schema = _c.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -462,13 +462,13 @@ func (ec *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.Event
+		edge.Schema = _c.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -479,7 +479,7 @@ func (ec *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.File
+		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -496,16 +496,16 @@ type ExportCreateBulk struct {
 }
 
 // Save creates the Export entities in the database.
-func (ecb *ExportCreateBulk) Save(ctx context.Context) ([]*Export, error) {
-	if ecb.err != nil {
-		return nil, ecb.err
+func (_c *ExportCreateBulk) Save(ctx context.Context) ([]*Export, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ecb.builders))
-	nodes := make([]*Export, len(ecb.builders))
-	mutators := make([]Mutator, len(ecb.builders))
-	for i := range ecb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Export, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ecb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ExportMutation)
@@ -519,11 +519,11 @@ func (ecb *ExportCreateBulk) Save(ctx context.Context) ([]*Export, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ecb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ecb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -543,7 +543,7 @@ func (ecb *ExportCreateBulk) Save(ctx context.Context) ([]*Export, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ecb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -551,8 +551,8 @@ func (ecb *ExportCreateBulk) Save(ctx context.Context) ([]*Export, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ecb *ExportCreateBulk) SaveX(ctx context.Context) []*Export {
-	v, err := ecb.Save(ctx)
+func (_c *ExportCreateBulk) SaveX(ctx context.Context) []*Export {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -560,14 +560,14 @@ func (ecb *ExportCreateBulk) SaveX(ctx context.Context) []*Export {
 }
 
 // Exec executes the query.
-func (ecb *ExportCreateBulk) Exec(ctx context.Context) error {
-	_, err := ecb.Save(ctx)
+func (_c *ExportCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ecb *ExportCreateBulk) ExecX(ctx context.Context) {
-	if err := ecb.Exec(ctx); err != nil {
+func (_c *ExportCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

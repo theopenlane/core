@@ -22,58 +22,58 @@ type CustomDomainHistoryDelete struct {
 }
 
 // Where appends a list predicates to the CustomDomainHistoryDelete builder.
-func (cdhd *CustomDomainHistoryDelete) Where(ps ...predicate.CustomDomainHistory) *CustomDomainHistoryDelete {
-	cdhd.mutation.Where(ps...)
-	return cdhd
+func (_d *CustomDomainHistoryDelete) Where(ps ...predicate.CustomDomainHistory) *CustomDomainHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cdhd *CustomDomainHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cdhd.sqlExec, cdhd.mutation, cdhd.hooks)
+func (_d *CustomDomainHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdhd *CustomDomainHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := cdhd.Exec(ctx)
+func (_d *CustomDomainHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cdhd *CustomDomainHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *CustomDomainHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(customdomainhistory.Table, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = cdhd.schemaConfig.CustomDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cdhd.schemaConfig)
-	if ps := cdhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.CustomDomainHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cdhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cdhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // CustomDomainHistoryDeleteOne is the builder for deleting a single CustomDomainHistory entity.
 type CustomDomainHistoryDeleteOne struct {
-	cdhd *CustomDomainHistoryDelete
+	_d *CustomDomainHistoryDelete
 }
 
 // Where appends a list predicates to the CustomDomainHistoryDelete builder.
-func (cdhdo *CustomDomainHistoryDeleteOne) Where(ps ...predicate.CustomDomainHistory) *CustomDomainHistoryDeleteOne {
-	cdhdo.cdhd.mutation.Where(ps...)
-	return cdhdo
+func (_d *CustomDomainHistoryDeleteOne) Where(ps ...predicate.CustomDomainHistory) *CustomDomainHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cdhdo *CustomDomainHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := cdhdo.cdhd.Exec(ctx)
+func (_d *CustomDomainHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (cdhdo *CustomDomainHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdhdo *CustomDomainHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := cdhdo.Exec(ctx); err != nil {
+func (_d *CustomDomainHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

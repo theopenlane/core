@@ -8684,13 +8684,13 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (atq *APITokenQuery) addPredicate(pred func(s *sql.Selector)) {
-	atq.predicates = append(atq.predicates, pred)
+func (_q *APITokenQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the APITokenQuery builder.
-func (atq *APITokenQuery) Filter() *APITokenFilter {
-	return &APITokenFilter{config: atq.config, predicateAdder: atq}
+func (_q *APITokenQuery) Filter() *APITokenFilter {
+	return &APITokenFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -8833,13 +8833,13 @@ func (f *APITokenFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (apq *ActionPlanQuery) addPredicate(pred func(s *sql.Selector)) {
-	apq.predicates = append(apq.predicates, pred)
+func (_q *ActionPlanQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ActionPlanQuery builder.
-func (apq *ActionPlanQuery) Filter() *ActionPlanFilter {
-	return &ActionPlanFilter{config: apq.config, predicateAdder: apq}
+func (_q *ActionPlanQuery) Filter() *ActionPlanFilter {
+	return &ActionPlanFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9097,13 +9097,13 @@ func (f *ActionPlanFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (aphq *ActionPlanHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	aphq.predicates = append(aphq.predicates, pred)
+func (_q *ActionPlanHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ActionPlanHistoryQuery builder.
-func (aphq *ActionPlanHistoryQuery) Filter() *ActionPlanHistoryFilter {
-	return &ActionPlanHistoryFilter{config: aphq.config, predicateAdder: aphq}
+func (_q *ActionPlanHistoryQuery) Filter() *ActionPlanHistoryFilter {
+	return &ActionPlanHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9292,13 +9292,13 @@ func (f *ActionPlanHistoryFilter) WhereSource(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (aq *AssetQuery) addPredicate(pred func(s *sql.Selector)) {
-	aq.predicates = append(aq.predicates, pred)
+func (_q *AssetQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the AssetQuery builder.
-func (aq *AssetQuery) Filter() *AssetFilter {
-	return &AssetFilter{config: aq.config, predicateAdder: aq}
+func (_q *AssetQuery) Filter() *AssetFilter {
+	return &AssetFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9505,13 +9505,13 @@ func (f *AssetFilter) WhereHasControlsWith(preds ...predicate.Control) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ahq *AssetHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ahq.predicates = append(ahq.predicates, pred)
+func (_q *AssetHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the AssetHistoryQuery builder.
-func (ahq *AssetHistoryQuery) Filter() *AssetHistoryFilter {
-	return &AssetHistoryFilter{config: ahq.config, predicateAdder: ahq}
+func (_q *AssetHistoryQuery) Filter() *AssetHistoryFilter {
+	return &AssetHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9635,13 +9635,13 @@ func (f *AssetHistoryFilter) WhereCategories(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cq *ContactQuery) addPredicate(pred func(s *sql.Selector)) {
-	cq.predicates = append(cq.predicates, pred)
+func (_q *ContactQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ContactQuery builder.
-func (cq *ContactQuery) Filter() *ContactFilter {
-	return &ContactFilter{config: cq.config, predicateAdder: cq}
+func (_q *ContactQuery) Filter() *ContactFilter {
+	return &ContactFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9792,13 +9792,13 @@ func (f *ContactFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (chq *ContactHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	chq.predicates = append(chq.predicates, pred)
+func (_q *ContactHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ContactHistoryQuery builder.
-func (chq *ContactHistoryQuery) Filter() *ContactHistoryFilter {
-	return &ContactHistoryFilter{config: chq.config, predicateAdder: chq}
+func (_q *ContactHistoryQuery) Filter() *ContactHistoryFilter {
+	return &ContactHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9922,13 +9922,13 @@ func (f *ContactHistoryFilter) WhereStatus(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cq *ControlQuery) addPredicate(pred func(s *sql.Selector)) {
-	cq.predicates = append(cq.predicates, pred)
+func (_q *ControlQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ControlQuery builder.
-func (cq *ControlQuery) Filter() *ControlFilter {
-	return &ControlFilter{config: cq.config, predicateAdder: cq}
+func (_q *ControlQuery) Filter() *ControlFilter {
+	return &ControlFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -10420,13 +10420,13 @@ func (f *ControlFilter) WhereHasMappedFromControlsWith(preds ...predicate.Mapped
 }
 
 // addPredicate implements the predicateAdder interface.
-func (chq *ControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	chq.predicates = append(chq.predicates, pred)
+func (_q *ControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ControlHistoryQuery builder.
-func (chq *ControlHistoryQuery) Filter() *ControlHistoryFilter {
-	return &ControlHistoryFilter{config: chq.config, predicateAdder: chq}
+func (_q *ControlHistoryQuery) Filter() *ControlHistoryFilter {
+	return &ControlHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -10625,13 +10625,13 @@ func (f *ControlHistoryFilter) WhereStandardID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ciq *ControlImplementationQuery) addPredicate(pred func(s *sql.Selector)) {
-	ciq.predicates = append(ciq.predicates, pred)
+func (_q *ControlImplementationQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ControlImplementationQuery builder.
-func (ciq *ControlImplementationQuery) Filter() *ControlImplementationFilter {
-	return &ControlImplementationFilter{config: ciq.config, predicateAdder: ciq}
+func (_q *ControlImplementationQuery) Filter() *ControlImplementationFilter {
+	return &ControlImplementationFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -10814,13 +10814,13 @@ func (f *ControlImplementationFilter) WhereHasSubcontrolsWith(preds ...predicate
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cihq *ControlImplementationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	cihq.predicates = append(cihq.predicates, pred)
+func (_q *ControlImplementationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ControlImplementationHistoryQuery builder.
-func (cihq *ControlImplementationHistoryQuery) Filter() *ControlImplementationHistoryFilter {
-	return &ControlImplementationHistoryFilter{config: cihq.config, predicateAdder: cihq}
+func (_q *ControlImplementationHistoryQuery) Filter() *ControlImplementationHistoryFilter {
+	return &ControlImplementationHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -10934,13 +10934,13 @@ func (f *ControlImplementationHistoryFilter) WhereDetails(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (coq *ControlObjectiveQuery) addPredicate(pred func(s *sql.Selector)) {
-	coq.predicates = append(coq.predicates, pred)
+func (_q *ControlObjectiveQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ControlObjectiveQuery builder.
-func (coq *ControlObjectiveQuery) Filter() *ControlObjectiveFilter {
-	return &ControlObjectiveFilter{config: coq.config, predicateAdder: coq}
+func (_q *ControlObjectiveQuery) Filter() *ControlObjectiveFilter {
+	return &ControlObjectiveFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -11241,13 +11241,13 @@ func (f *ControlObjectiveFilter) WhereHasTasksWith(preds ...predicate.Task) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cohq *ControlObjectiveHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	cohq.predicates = append(cohq.predicates, pred)
+func (_q *ControlObjectiveHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ControlObjectiveHistoryQuery builder.
-func (cohq *ControlObjectiveHistoryQuery) Filter() *ControlObjectiveHistoryFilter {
-	return &ControlObjectiveHistoryFilter{config: cohq.config, predicateAdder: cohq}
+func (_q *ControlObjectiveHistoryQuery) Filter() *ControlObjectiveHistoryFilter {
+	return &ControlObjectiveHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -11381,13 +11381,13 @@ func (f *ControlObjectiveHistoryFilter) WhereSubcategory(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cdq *CustomDomainQuery) addPredicate(pred func(s *sql.Selector)) {
-	cdq.predicates = append(cdq.predicates, pred)
+func (_q *CustomDomainQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the CustomDomainQuery builder.
-func (cdq *CustomDomainQuery) Filter() *CustomDomainFilter {
-	return &CustomDomainFilter{config: cdq.config, predicateAdder: cdq}
+func (_q *CustomDomainQuery) Filter() *CustomDomainFilter {
+	return &CustomDomainFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -11518,13 +11518,13 @@ func (f *CustomDomainFilter) WhereHasDNSVerificationWith(preds ...predicate.DNSV
 }
 
 // addPredicate implements the predicateAdder interface.
-func (cdhq *CustomDomainHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	cdhq.predicates = append(cdhq.predicates, pred)
+func (_q *CustomDomainHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the CustomDomainHistoryQuery builder.
-func (cdhq *CustomDomainHistoryQuery) Filter() *CustomDomainHistoryFilter {
-	return &CustomDomainHistoryFilter{config: cdhq.config, predicateAdder: cdhq}
+func (_q *CustomDomainHistoryQuery) Filter() *CustomDomainHistoryFilter {
+	return &CustomDomainHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -11628,13 +11628,13 @@ func (f *CustomDomainHistoryFilter) WhereDNSVerificationID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (dvq *DNSVerificationQuery) addPredicate(pred func(s *sql.Selector)) {
-	dvq.predicates = append(dvq.predicates, pred)
+func (_q *DNSVerificationQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the DNSVerificationQuery builder.
-func (dvq *DNSVerificationQuery) Filter() *DNSVerificationFilter {
-	return &DNSVerificationFilter{config: dvq.config, predicateAdder: dvq}
+func (_q *DNSVerificationQuery) Filter() *DNSVerificationFilter {
+	return &DNSVerificationFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -11781,13 +11781,13 @@ func (f *DNSVerificationFilter) WhereHasCustomDomainsWith(preds ...predicate.Cus
 }
 
 // addPredicate implements the predicateAdder interface.
-func (dvhq *DNSVerificationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	dvhq.predicates = append(dvhq.predicates, pred)
+func (_q *DNSVerificationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the DNSVerificationHistoryQuery builder.
-func (dvhq *DNSVerificationHistoryQuery) Filter() *DNSVerificationHistoryFilter {
-	return &DNSVerificationHistoryFilter{config: dvhq.config, predicateAdder: dvhq}
+func (_q *DNSVerificationHistoryQuery) Filter() *DNSVerificationHistoryFilter {
+	return &DNSVerificationHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -11921,13 +11921,13 @@ func (f *DNSVerificationHistoryFilter) WhereAcmeChallengeStatusReason(p entql.St
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ddq *DocumentDataQuery) addPredicate(pred func(s *sql.Selector)) {
-	ddq.predicates = append(ddq.predicates, pred)
+func (_q *DocumentDataQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the DocumentDataQuery builder.
-func (ddq *DocumentDataQuery) Filter() *DocumentDataFilter {
-	return &DocumentDataFilter{config: ddq.config, predicateAdder: ddq}
+func (_q *DocumentDataQuery) Filter() *DocumentDataFilter {
+	return &DocumentDataFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12067,13 +12067,13 @@ func (f *DocumentDataFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ddhq *DocumentDataHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ddhq.predicates = append(ddhq.predicates, pred)
+func (_q *DocumentDataHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the DocumentDataHistoryQuery builder.
-func (ddhq *DocumentDataHistoryQuery) Filter() *DocumentDataHistoryFilter {
-	return &DocumentDataHistoryFilter{config: ddhq.config, predicateAdder: ddhq}
+func (_q *DocumentDataHistoryQuery) Filter() *DocumentDataHistoryFilter {
+	return &DocumentDataHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12172,13 +12172,13 @@ func (f *DocumentDataHistoryFilter) WhereData(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (evtq *EmailVerificationTokenQuery) addPredicate(pred func(s *sql.Selector)) {
-	evtq.predicates = append(evtq.predicates, pred)
+func (_q *EmailVerificationTokenQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EmailVerificationTokenQuery builder.
-func (evtq *EmailVerificationTokenQuery) Filter() *EmailVerificationTokenFilter {
-	return &EmailVerificationTokenFilter{config: evtq.config, predicateAdder: evtq}
+func (_q *EmailVerificationTokenQuery) Filter() *EmailVerificationTokenFilter {
+	return &EmailVerificationTokenFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12281,13 +12281,13 @@ func (f *EmailVerificationTokenFilter) WhereHasOwnerWith(preds ...predicate.User
 }
 
 // addPredicate implements the predicateAdder interface.
-func (eq *EntityQuery) addPredicate(pred func(s *sql.Selector)) {
-	eq.predicates = append(eq.predicates, pred)
+func (_q *EntityQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EntityQuery builder.
-func (eq *EntityQuery) Filter() *EntityFilter {
-	return &EntityFilter{config: eq.config, predicateAdder: eq}
+func (_q *EntityQuery) Filter() *EntityFilter {
+	return &EntityFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12545,13 +12545,13 @@ func (f *EntityFilter) WhereHasEntityTypeWith(preds ...predicate.EntityType) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ehq *EntityHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ehq.predicates = append(ehq.predicates, pred)
+func (_q *EntityHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EntityHistoryQuery builder.
-func (ehq *EntityHistoryQuery) Filter() *EntityHistoryFilter {
-	return &EntityHistoryFilter{config: ehq.config, predicateAdder: ehq}
+func (_q *EntityHistoryQuery) Filter() *EntityHistoryFilter {
+	return &EntityHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12670,13 +12670,13 @@ func (f *EntityHistoryFilter) WhereStatus(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (etq *EntityTypeQuery) addPredicate(pred func(s *sql.Selector)) {
-	etq.predicates = append(etq.predicates, pred)
+func (_q *EntityTypeQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EntityTypeQuery builder.
-func (etq *EntityTypeQuery) Filter() *EntityTypeFilter {
-	return &EntityTypeFilter{config: etq.config, predicateAdder: etq}
+func (_q *EntityTypeQuery) Filter() *EntityTypeFilter {
+	return &EntityTypeFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12783,13 +12783,13 @@ func (f *EntityTypeFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ethq *EntityTypeHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ethq.predicates = append(ethq.predicates, pred)
+func (_q *EntityTypeHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EntityTypeHistoryQuery builder.
-func (ethq *EntityTypeHistoryQuery) Filter() *EntityTypeHistoryFilter {
-	return &EntityTypeHistoryFilter{config: ethq.config, predicateAdder: ethq}
+func (_q *EntityTypeHistoryQuery) Filter() *EntityTypeHistoryFilter {
+	return &EntityTypeHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12883,13 +12883,13 @@ func (f *EntityTypeHistoryFilter) WhereName(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (eq *EventQuery) addPredicate(pred func(s *sql.Selector)) {
-	eq.predicates = append(eq.predicates, pred)
+func (_q *EventQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EventQuery builder.
-func (eq *EventQuery) Filter() *EventFilter {
-	return &EventFilter{config: eq.config, predicateAdder: eq}
+func (_q *EventQuery) Filter() *EventFilter {
+	return &EventFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -13136,13 +13136,13 @@ func (f *EventFilter) WhereHasOrgSubscriptionsWith(preds ...predicate.OrgSubscri
 }
 
 // addPredicate implements the predicateAdder interface.
-func (eq *EvidenceQuery) addPredicate(pred func(s *sql.Selector)) {
-	eq.predicates = append(eq.predicates, pred)
+func (_q *EvidenceQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EvidenceQuery builder.
-func (eq *EvidenceQuery) Filter() *EvidenceFilter {
-	return &EvidenceFilter{config: eq.config, predicateAdder: eq}
+func (_q *EvidenceQuery) Filter() *EvidenceFilter {
+	return &EvidenceFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -13364,13 +13364,13 @@ func (f *EvidenceFilter) WhereHasTasksWith(preds ...predicate.Task) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ehq *EvidenceHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ehq.predicates = append(ehq.predicates, pred)
+func (_q *EvidenceHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the EvidenceHistoryQuery builder.
-func (ehq *EvidenceHistoryQuery) Filter() *EvidenceHistoryFilter {
-	return &EvidenceHistoryFilter{config: ehq.config, predicateAdder: ehq}
+func (_q *EvidenceHistoryQuery) Filter() *EvidenceHistoryFilter {
+	return &EvidenceHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -13509,13 +13509,13 @@ func (f *EvidenceHistoryFilter) WhereStatus(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (eq *ExportQuery) addPredicate(pred func(s *sql.Selector)) {
-	eq.predicates = append(eq.predicates, pred)
+func (_q *ExportQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ExportQuery builder.
-func (eq *ExportQuery) Filter() *ExportFilter {
-	return &ExportFilter{config: eq.config, predicateAdder: eq}
+func (_q *ExportQuery) Filter() *ExportFilter {
+	return &ExportFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -13661,13 +13661,13 @@ func (f *ExportFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fq *FileQuery) addPredicate(pred func(s *sql.Selector)) {
-	fq.predicates = append(fq.predicates, pred)
+func (_q *FileQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileQuery builder.
-func (fq *FileQuery) Filter() *FileFilter {
-	return &FileFilter{config: fq.config, predicateAdder: fq}
+func (_q *FileQuery) Filter() *FileFilter {
+	return &FileFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -14002,13 +14002,13 @@ func (f *FileFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fhq *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	fhq.predicates = append(fhq.predicates, pred)
+func (_q *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileHistoryQuery builder.
-func (fhq *FileHistoryQuery) Filter() *FileHistoryFilter {
-	return &FileHistoryFilter{config: fhq.config, predicateAdder: fhq}
+func (_q *FileHistoryQuery) Filter() *FileHistoryFilter {
+	return &FileHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -14162,13 +14162,13 @@ func (f *FileHistoryFilter) WhereFileContents(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (gq *GroupQuery) addPredicate(pred func(s *sql.Selector)) {
-	gq.predicates = append(gq.predicates, pred)
+func (_q *GroupQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the GroupQuery builder.
-func (gq *GroupQuery) Filter() *GroupFilter {
-	return &GroupFilter{config: gq.config, predicateAdder: gq}
+func (_q *GroupQuery) Filter() *GroupFilter {
+	return &GroupFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -14809,13 +14809,13 @@ func (f *GroupFilter) WhereHasMembersWith(preds ...predicate.GroupMembership) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ghq *GroupHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ghq.predicates = append(ghq.predicates, pred)
+func (_q *GroupHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the GroupHistoryQuery builder.
-func (ghq *GroupHistoryQuery) Filter() *GroupHistoryFilter {
-	return &GroupHistoryFilter{config: ghq.config, predicateAdder: ghq}
+func (_q *GroupHistoryQuery) Filter() *GroupHistoryFilter {
+	return &GroupHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -14939,13 +14939,13 @@ func (f *GroupHistoryFilter) WhereDisplayName(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (gmq *GroupMembershipQuery) addPredicate(pred func(s *sql.Selector)) {
-	gmq.predicates = append(gmq.predicates, pred)
+func (_q *GroupMembershipQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the GroupMembershipQuery builder.
-func (gmq *GroupMembershipQuery) Filter() *GroupMembershipFilter {
-	return &GroupMembershipFilter{config: gmq.config, predicateAdder: gmq}
+func (_q *GroupMembershipQuery) Filter() *GroupMembershipFilter {
+	return &GroupMembershipFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15070,13 +15070,13 @@ func (f *GroupMembershipFilter) WhereHasEventsWith(preds ...predicate.Event) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (gmhq *GroupMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	gmhq.predicates = append(gmhq.predicates, pred)
+func (_q *GroupMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the GroupMembershipHistoryQuery builder.
-func (gmhq *GroupMembershipHistoryQuery) Filter() *GroupMembershipHistoryFilter {
-	return &GroupMembershipHistoryFilter{config: gmhq.config, predicateAdder: gmhq}
+func (_q *GroupMembershipHistoryQuery) Filter() *GroupMembershipHistoryFilter {
+	return &GroupMembershipHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15160,13 +15160,13 @@ func (f *GroupMembershipHistoryFilter) WhereUserID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (gsq *GroupSettingQuery) addPredicate(pred func(s *sql.Selector)) {
-	gsq.predicates = append(gsq.predicates, pred)
+func (_q *GroupSettingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the GroupSettingQuery builder.
-func (gsq *GroupSettingQuery) Filter() *GroupSettingFilter {
-	return &GroupSettingFilter{config: gsq.config, predicateAdder: gsq}
+func (_q *GroupSettingQuery) Filter() *GroupSettingFilter {
+	return &GroupSettingFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15269,13 +15269,13 @@ func (f *GroupSettingFilter) WhereHasGroupWith(preds ...predicate.Group) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (gshq *GroupSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	gshq.predicates = append(gshq.predicates, pred)
+func (_q *GroupSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the GroupSettingHistoryQuery builder.
-func (gshq *GroupSettingHistoryQuery) Filter() *GroupSettingHistoryFilter {
-	return &GroupSettingHistoryFilter{config: gshq.config, predicateAdder: gshq}
+func (_q *GroupSettingHistoryQuery) Filter() *GroupSettingHistoryFilter {
+	return &GroupSettingHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15379,13 +15379,13 @@ func (f *GroupSettingHistoryFilter) WhereGroupID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (hq *HushQuery) addPredicate(pred func(s *sql.Selector)) {
-	hq.predicates = append(hq.predicates, pred)
+func (_q *HushQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the HushQuery builder.
-func (hq *HushQuery) Filter() *HushFilter {
-	return &HushFilter{config: hq.config, predicateAdder: hq}
+func (_q *HushQuery) Filter() *HushFilter {
+	return &HushFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15521,13 +15521,13 @@ func (f *HushFilter) WhereHasEventsWith(preds ...predicate.Event) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (hhq *HushHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	hhq.predicates = append(hhq.predicates, pred)
+func (_q *HushHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the HushHistoryQuery builder.
-func (hhq *HushHistoryQuery) Filter() *HushHistoryFilter {
-	return &HushHistoryFilter{config: hhq.config, predicateAdder: hhq}
+func (_q *HushHistoryQuery) Filter() *HushHistoryFilter {
+	return &HushHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15636,13 +15636,13 @@ func (f *HushHistoryFilter) WhereSecretValue(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (iq *IntegrationQuery) addPredicate(pred func(s *sql.Selector)) {
-	iq.predicates = append(iq.predicates, pred)
+func (_q *IntegrationQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the IntegrationQuery builder.
-func (iq *IntegrationQuery) Filter() *IntegrationFilter {
-	return &IntegrationFilter{config: iq.config, predicateAdder: iq}
+func (_q *IntegrationQuery) Filter() *IntegrationFilter {
+	return &IntegrationFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15773,13 +15773,13 @@ func (f *IntegrationFilter) WhereHasEventsWith(preds ...predicate.Event) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ihq *IntegrationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ihq.predicates = append(ihq.predicates, pred)
+func (_q *IntegrationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the IntegrationHistoryQuery builder.
-func (ihq *IntegrationHistoryQuery) Filter() *IntegrationHistoryFilter {
-	return &IntegrationHistoryFilter{config: ihq.config, predicateAdder: ihq}
+func (_q *IntegrationHistoryQuery) Filter() *IntegrationHistoryFilter {
+	return &IntegrationHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -15883,13 +15883,13 @@ func (f *IntegrationHistoryFilter) WhereKind(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ipq *InternalPolicyQuery) addPredicate(pred func(s *sql.Selector)) {
-	ipq.predicates = append(ipq.predicates, pred)
+func (_q *InternalPolicyQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the InternalPolicyQuery builder.
-func (ipq *InternalPolicyQuery) Filter() *InternalPolicyFilter {
-	return &InternalPolicyFilter{config: ipq.config, predicateAdder: ipq}
+func (_q *InternalPolicyQuery) Filter() *InternalPolicyFilter {
+	return &InternalPolicyFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16235,13 +16235,13 @@ func (f *InternalPolicyFilter) WhereHasProgramsWith(preds ...predicate.Program) 
 }
 
 // addPredicate implements the predicateAdder interface.
-func (iphq *InternalPolicyHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	iphq.predicates = append(iphq.predicates, pred)
+func (_q *InternalPolicyHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the InternalPolicyHistoryQuery builder.
-func (iphq *InternalPolicyHistoryQuery) Filter() *InternalPolicyHistoryFilter {
-	return &InternalPolicyHistoryFilter{config: iphq.config, predicateAdder: iphq}
+func (_q *InternalPolicyHistoryQuery) Filter() *InternalPolicyHistoryFilter {
+	return &InternalPolicyHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16420,13 +16420,13 @@ func (f *InternalPolicyHistoryFilter) WhereDismissedImprovementSuggestions(p ent
 }
 
 // addPredicate implements the predicateAdder interface.
-func (iq *InviteQuery) addPredicate(pred func(s *sql.Selector)) {
-	iq.predicates = append(iq.predicates, pred)
+func (_q *InviteQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the InviteQuery builder.
-func (iq *InviteQuery) Filter() *InviteFilter {
-	return &InviteFilter{config: iq.config, predicateAdder: iq}
+func (_q *InviteQuery) Filter() *InviteFilter {
+	return &InviteFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16577,13 +16577,13 @@ func (f *InviteFilter) WhereHasGroupsWith(preds ...predicate.Group) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (jrq *JobResultQuery) addPredicate(pred func(s *sql.Selector)) {
-	jrq.predicates = append(jrq.predicates, pred)
+func (_q *JobResultQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the JobResultQuery builder.
-func (jrq *JobResultQuery) Filter() *JobResultFilter {
-	return &JobResultFilter{config: jrq.config, predicateAdder: jrq}
+func (_q *JobResultQuery) Filter() *JobResultFilter {
+	return &JobResultFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16729,13 +16729,13 @@ func (f *JobResultFilter) WhereHasFileWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (jrq *JobRunnerQuery) addPredicate(pred func(s *sql.Selector)) {
-	jrq.predicates = append(jrq.predicates, pred)
+func (_q *JobRunnerQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the JobRunnerQuery builder.
-func (jrq *JobRunnerQuery) Filter() *JobRunnerFilter {
-	return &JobRunnerFilter{config: jrq.config, predicateAdder: jrq}
+func (_q *JobRunnerQuery) Filter() *JobRunnerFilter {
+	return &JobRunnerFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16877,13 +16877,13 @@ func (f *JobRunnerFilter) WhereHasJobRunnerTokensWith(preds ...predicate.JobRunn
 }
 
 // addPredicate implements the predicateAdder interface.
-func (jrrtq *JobRunnerRegistrationTokenQuery) addPredicate(pred func(s *sql.Selector)) {
-	jrrtq.predicates = append(jrrtq.predicates, pred)
+func (_q *JobRunnerRegistrationTokenQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the JobRunnerRegistrationTokenQuery builder.
-func (jrrtq *JobRunnerRegistrationTokenQuery) Filter() *JobRunnerRegistrationTokenFilter {
-	return &JobRunnerRegistrationTokenFilter{config: jrrtq.config, predicateAdder: jrrtq}
+func (_q *JobRunnerRegistrationTokenQuery) Filter() *JobRunnerRegistrationTokenFilter {
+	return &JobRunnerRegistrationTokenFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17005,13 +17005,13 @@ func (f *JobRunnerRegistrationTokenFilter) WhereHasJobRunnerWith(preds ...predic
 }
 
 // addPredicate implements the predicateAdder interface.
-func (jrtq *JobRunnerTokenQuery) addPredicate(pred func(s *sql.Selector)) {
-	jrtq.predicates = append(jrtq.predicates, pred)
+func (_q *JobRunnerTokenQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the JobRunnerTokenQuery builder.
-func (jrtq *JobRunnerTokenQuery) Filter() *JobRunnerTokenFilter {
-	return &JobRunnerTokenFilter{config: jrtq.config, predicateAdder: jrtq}
+func (_q *JobRunnerTokenQuery) Filter() *JobRunnerTokenFilter {
+	return &JobRunnerTokenFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17148,13 +17148,13 @@ func (f *JobRunnerTokenFilter) WhereHasJobRunnersWith(preds ...predicate.JobRunn
 }
 
 // addPredicate implements the predicateAdder interface.
-func (jtq *JobTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
-	jtq.predicates = append(jtq.predicates, pred)
+func (_q *JobTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the JobTemplateQuery builder.
-func (jtq *JobTemplateQuery) Filter() *JobTemplateFilter {
-	return &JobTemplateFilter{config: jtq.config, predicateAdder: jtq}
+func (_q *JobTemplateQuery) Filter() *JobTemplateFilter {
+	return &JobTemplateFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17301,13 +17301,13 @@ func (f *JobTemplateFilter) WhereHasScheduledJobsWith(preds ...predicate.Schedul
 }
 
 // addPredicate implements the predicateAdder interface.
-func (jthq *JobTemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	jthq.predicates = append(jthq.predicates, pred)
+func (_q *JobTemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the JobTemplateHistoryQuery builder.
-func (jthq *JobTemplateHistoryQuery) Filter() *JobTemplateHistoryFilter {
-	return &JobTemplateHistoryFilter{config: jthq.config, predicateAdder: jthq}
+func (_q *JobTemplateHistoryQuery) Filter() *JobTemplateHistoryFilter {
+	return &JobTemplateHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17441,13 +17441,13 @@ func (f *JobTemplateHistoryFilter) WhereCron(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (mdq *MappableDomainQuery) addPredicate(pred func(s *sql.Selector)) {
-	mdq.predicates = append(mdq.predicates, pred)
+func (_q *MappableDomainQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the MappableDomainQuery builder.
-func (mdq *MappableDomainQuery) Filter() *MappableDomainFilter {
-	return &MappableDomainFilter{config: mdq.config, predicateAdder: mdq}
+func (_q *MappableDomainQuery) Filter() *MappableDomainFilter {
+	return &MappableDomainFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17540,13 +17540,13 @@ func (f *MappableDomainFilter) WhereHasCustomDomainsWith(preds ...predicate.Cust
 }
 
 // addPredicate implements the predicateAdder interface.
-func (mdhq *MappableDomainHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	mdhq.predicates = append(mdhq.predicates, pred)
+func (_q *MappableDomainHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the MappableDomainHistoryQuery builder.
-func (mdhq *MappableDomainHistoryQuery) Filter() *MappableDomainHistoryFilter {
-	return &MappableDomainHistoryFilter{config: mdhq.config, predicateAdder: mdhq}
+func (_q *MappableDomainHistoryQuery) Filter() *MappableDomainHistoryFilter {
+	return &MappableDomainHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17640,13 +17640,13 @@ func (f *MappableDomainHistoryFilter) WhereZoneID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (mcq *MappedControlQuery) addPredicate(pred func(s *sql.Selector)) {
-	mcq.predicates = append(mcq.predicates, pred)
+func (_q *MappedControlQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the MappedControlQuery builder.
-func (mcq *MappedControlQuery) Filter() *MappedControlFilter {
-	return &MappedControlFilter{config: mcq.config, predicateAdder: mcq}
+func (_q *MappedControlQuery) Filter() *MappedControlFilter {
+	return &MappedControlFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17838,13 +17838,13 @@ func (f *MappedControlFilter) WhereHasToSubcontrolsWith(preds ...predicate.Subco
 }
 
 // addPredicate implements the predicateAdder interface.
-func (mchq *MappedControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	mchq.predicates = append(mchq.predicates, pred)
+func (_q *MappedControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the MappedControlHistoryQuery builder.
-func (mchq *MappedControlHistoryQuery) Filter() *MappedControlHistoryFilter {
-	return &MappedControlHistoryFilter{config: mchq.config, predicateAdder: mchq}
+func (_q *MappedControlHistoryQuery) Filter() *MappedControlHistoryFilter {
+	return &MappedControlHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -17953,13 +17953,13 @@ func (f *MappedControlHistoryFilter) WhereSource(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (nq *NarrativeQuery) addPredicate(pred func(s *sql.Selector)) {
-	nq.predicates = append(nq.predicates, pred)
+func (_q *NarrativeQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the NarrativeQuery builder.
-func (nq *NarrativeQuery) Filter() *NarrativeFilter {
-	return &NarrativeFilter{config: nq.config, predicateAdder: nq}
+func (_q *NarrativeQuery) Filter() *NarrativeFilter {
+	return &NarrativeFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18165,13 +18165,13 @@ func (f *NarrativeFilter) WhereHasProceduresWith(preds ...predicate.Procedure) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (nhq *NarrativeHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	nhq.predicates = append(nhq.predicates, pred)
+func (_q *NarrativeHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the NarrativeHistoryQuery builder.
-func (nhq *NarrativeHistoryQuery) Filter() *NarrativeHistoryFilter {
-	return &NarrativeHistoryFilter{config: nhq.config, predicateAdder: nhq}
+func (_q *NarrativeHistoryQuery) Filter() *NarrativeHistoryFilter {
+	return &NarrativeHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18280,13 +18280,13 @@ func (f *NarrativeHistoryFilter) WhereDetails(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (nq *NoteQuery) addPredicate(pred func(s *sql.Selector)) {
-	nq.predicates = append(nq.predicates, pred)
+func (_q *NoteQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the NoteQuery builder.
-func (nq *NoteQuery) Filter() *NoteFilter {
-	return &NoteFilter{config: nq.config, predicateAdder: nq}
+func (_q *NoteQuery) Filter() *NoteFilter {
+	return &NoteFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18407,13 +18407,13 @@ func (f *NoteFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (nhq *NoteHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	nhq.predicates = append(nhq.predicates, pred)
+func (_q *NoteHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the NoteHistoryQuery builder.
-func (nhq *NoteHistoryQuery) Filter() *NoteHistoryFilter {
-	return &NoteHistoryFilter{config: nhq.config, predicateAdder: nhq}
+func (_q *NoteHistoryQuery) Filter() *NoteHistoryFilter {
+	return &NoteHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18507,13 +18507,13 @@ func (f *NoteHistoryFilter) WhereText(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (oq *OnboardingQuery) addPredicate(pred func(s *sql.Selector)) {
-	oq.predicates = append(oq.predicates, pred)
+func (_q *OnboardingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OnboardingQuery builder.
-func (oq *OnboardingQuery) Filter() *OnboardingFilter {
-	return &OnboardingFilter{config: oq.config, predicateAdder: oq}
+func (_q *OnboardingQuery) Filter() *OnboardingFilter {
+	return &OnboardingFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18601,13 +18601,13 @@ func (f *OnboardingFilter) WhereHasOrganizationWith(preds ...predicate.Organizat
 }
 
 // addPredicate implements the predicateAdder interface.
-func (omq *OrgMembershipQuery) addPredicate(pred func(s *sql.Selector)) {
-	omq.predicates = append(omq.predicates, pred)
+func (_q *OrgMembershipQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgMembershipQuery builder.
-func (omq *OrgMembershipQuery) Filter() *OrgMembershipFilter {
-	return &OrgMembershipFilter{config: omq.config, predicateAdder: omq}
+func (_q *OrgMembershipQuery) Filter() *OrgMembershipFilter {
+	return &OrgMembershipFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18718,13 +18718,13 @@ func (f *OrgMembershipFilter) WhereHasEventsWith(preds ...predicate.Event) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (omhq *OrgMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	omhq.predicates = append(omhq.predicates, pred)
+func (_q *OrgMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgMembershipHistoryQuery builder.
-func (omhq *OrgMembershipHistoryQuery) Filter() *OrgMembershipHistoryFilter {
-	return &OrgMembershipHistoryFilter{config: omhq.config, predicateAdder: omhq}
+func (_q *OrgMembershipHistoryQuery) Filter() *OrgMembershipHistoryFilter {
+	return &OrgMembershipHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18808,13 +18808,13 @@ func (f *OrgMembershipHistoryFilter) WhereUserID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (omq *OrgModuleQuery) addPredicate(pred func(s *sql.Selector)) {
-	omq.predicates = append(omq.predicates, pred)
+func (_q *OrgModuleQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgModuleQuery builder.
-func (omq *OrgModuleQuery) Filter() *OrgModuleFilter {
-	return &OrgModuleFilter{config: omq.config, predicateAdder: omq}
+func (_q *OrgModuleQuery) Filter() *OrgModuleFilter {
+	return &OrgModuleFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -18989,13 +18989,13 @@ func (f *OrgModuleFilter) WhereHasOrgPricesWith(preds ...predicate.OrgPrice) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (opq *OrgPriceQuery) addPredicate(pred func(s *sql.Selector)) {
-	opq.predicates = append(opq.predicates, pred)
+func (_q *OrgPriceQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgPriceQuery builder.
-func (opq *OrgPriceQuery) Filter() *OrgPriceFilter {
-	return &OrgPriceFilter{config: opq.config, predicateAdder: opq}
+func (_q *OrgPriceQuery) Filter() *OrgPriceFilter {
+	return &OrgPriceFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -19155,13 +19155,13 @@ func (f *OrgPriceFilter) WhereHasOrgSubscriptionWith(preds ...predicate.OrgSubsc
 }
 
 // addPredicate implements the predicateAdder interface.
-func (opq *OrgProductQuery) addPredicate(pred func(s *sql.Selector)) {
-	opq.predicates = append(opq.predicates, pred)
+func (_q *OrgProductQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgProductQuery builder.
-func (opq *OrgProductQuery) Filter() *OrgProductFilter {
-	return &OrgProductFilter{config: opq.config, predicateAdder: opq}
+func (_q *OrgProductQuery) Filter() *OrgProductFilter {
+	return &OrgProductFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -19321,13 +19321,13 @@ func (f *OrgProductFilter) WhereHasOrgModulesWith(preds ...predicate.OrgModule) 
 }
 
 // addPredicate implements the predicateAdder interface.
-func (osq *OrgSubscriptionQuery) addPredicate(pred func(s *sql.Selector)) {
-	osq.predicates = append(osq.predicates, pred)
+func (_q *OrgSubscriptionQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgSubscriptionQuery builder.
-func (osq *OrgSubscriptionQuery) Filter() *OrgSubscriptionFilter {
-	return &OrgSubscriptionFilter{config: osq.config, predicateAdder: osq}
+func (_q *OrgSubscriptionQuery) Filter() *OrgSubscriptionFilter {
+	return &OrgSubscriptionFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -19536,13 +19536,13 @@ func (f *OrgSubscriptionFilter) WhereHasPricesWith(preds ...predicate.OrgPrice) 
 }
 
 // addPredicate implements the predicateAdder interface.
-func (oshq *OrgSubscriptionHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	oshq.predicates = append(oshq.predicates, pred)
+func (_q *OrgSubscriptionHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrgSubscriptionHistoryQuery builder.
-func (oshq *OrgSubscriptionHistoryQuery) Filter() *OrgSubscriptionHistoryFilter {
-	return &OrgSubscriptionHistoryFilter{config: oshq.config, predicateAdder: oshq}
+func (_q *OrgSubscriptionHistoryQuery) Filter() *OrgSubscriptionHistoryFilter {
+	return &OrgSubscriptionHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -19696,13 +19696,13 @@ func (f *OrgSubscriptionHistoryFilter) WhereFeatureLookupKeys(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (oq *OrganizationQuery) addPredicate(pred func(s *sql.Selector)) {
-	oq.predicates = append(oq.predicates, pred)
+func (_q *OrganizationQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrganizationQuery builder.
-func (oq *OrganizationQuery) Filter() *OrganizationFilter {
-	return &OrganizationFilter{config: oq.config, predicateAdder: oq}
+func (_q *OrganizationQuery) Filter() *OrganizationFilter {
+	return &OrganizationFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -20754,13 +20754,13 @@ func (f *OrganizationFilter) WhereHasMembersWith(preds ...predicate.OrgMembershi
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ohq *OrganizationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ohq.predicates = append(ohq.predicates, pred)
+func (_q *OrganizationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrganizationHistoryQuery builder.
-func (ohq *OrganizationHistoryQuery) Filter() *OrganizationHistoryFilter {
-	return &OrganizationHistoryFilter{config: ohq.config, predicateAdder: ohq}
+func (_q *OrganizationHistoryQuery) Filter() *OrganizationHistoryFilter {
+	return &OrganizationHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -20889,13 +20889,13 @@ func (f *OrganizationHistoryFilter) WhereDedicatedDb(p entql.BoolP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (osq *OrganizationSettingQuery) addPredicate(pred func(s *sql.Selector)) {
-	osq.predicates = append(osq.predicates, pred)
+func (_q *OrganizationSettingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrganizationSettingQuery builder.
-func (osq *OrganizationSettingQuery) Filter() *OrganizationSettingFilter {
-	return &OrganizationSettingFilter{config: osq.config, predicateAdder: osq}
+func (_q *OrganizationSettingQuery) Filter() *OrganizationSettingFilter {
+	return &OrganizationSettingFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -21082,13 +21082,13 @@ func (f *OrganizationSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (oshq *OrganizationSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	oshq.predicates = append(oshq.predicates, pred)
+func (_q *OrganizationSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the OrganizationSettingHistoryQuery builder.
-func (oshq *OrganizationSettingHistoryQuery) Filter() *OrganizationSettingHistoryFilter {
-	return &OrganizationSettingHistoryFilter{config: oshq.config, predicateAdder: oshq}
+func (_q *OrganizationSettingHistoryQuery) Filter() *OrganizationSettingHistoryFilter {
+	return &OrganizationSettingHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -21262,13 +21262,13 @@ func (f *OrganizationSettingHistoryFilter) WhereComplianceWebhookToken(p entql.S
 }
 
 // addPredicate implements the predicateAdder interface.
-func (prtq *PasswordResetTokenQuery) addPredicate(pred func(s *sql.Selector)) {
-	prtq.predicates = append(prtq.predicates, pred)
+func (_q *PasswordResetTokenQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the PasswordResetTokenQuery builder.
-func (prtq *PasswordResetTokenQuery) Filter() *PasswordResetTokenFilter {
-	return &PasswordResetTokenFilter{config: prtq.config, predicateAdder: prtq}
+func (_q *PasswordResetTokenQuery) Filter() *PasswordResetTokenFilter {
+	return &PasswordResetTokenFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -21371,13 +21371,13 @@ func (f *PasswordResetTokenFilter) WhereHasOwnerWith(preds ...predicate.User) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (patq *PersonalAccessTokenQuery) addPredicate(pred func(s *sql.Selector)) {
-	patq.predicates = append(patq.predicates, pred)
+func (_q *PersonalAccessTokenQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the PersonalAccessTokenQuery builder.
-func (patq *PersonalAccessTokenQuery) Filter() *PersonalAccessTokenFilter {
-	return &PersonalAccessTokenFilter{config: patq.config, predicateAdder: patq}
+func (_q *PersonalAccessTokenQuery) Filter() *PersonalAccessTokenFilter {
+	return &PersonalAccessTokenFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -21548,13 +21548,13 @@ func (f *PersonalAccessTokenFilter) WhereHasEventsWith(preds ...predicate.Event)
 }
 
 // addPredicate implements the predicateAdder interface.
-func (pq *ProcedureQuery) addPredicate(pred func(s *sql.Selector)) {
-	pq.predicates = append(pq.predicates, pred)
+func (_q *ProcedureQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ProcedureQuery builder.
-func (pq *ProcedureQuery) Filter() *ProcedureFilter {
-	return &ProcedureFilter{config: pq.config, predicateAdder: pq}
+func (_q *ProcedureQuery) Filter() *ProcedureFilter {
+	return &ProcedureFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -21886,13 +21886,13 @@ func (f *ProcedureFilter) WhereHasTasksWith(preds ...predicate.Task) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (phq *ProcedureHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	phq.predicates = append(phq.predicates, pred)
+func (_q *ProcedureHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ProcedureHistoryQuery builder.
-func (phq *ProcedureHistoryQuery) Filter() *ProcedureHistoryFilter {
-	return &ProcedureHistoryFilter{config: phq.config, predicateAdder: phq}
+func (_q *ProcedureHistoryQuery) Filter() *ProcedureHistoryFilter {
+	return &ProcedureHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -22071,13 +22071,13 @@ func (f *ProcedureHistoryFilter) WhereDismissedImprovementSuggestions(p entql.By
 }
 
 // addPredicate implements the predicateAdder interface.
-func (pq *ProgramQuery) addPredicate(pred func(s *sql.Selector)) {
-	pq.predicates = append(pq.predicates, pred)
+func (_q *ProgramQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ProgramQuery builder.
-func (pq *ProgramQuery) Filter() *ProgramFilter {
-	return &ProgramFilter{config: pq.config, predicateAdder: pq}
+func (_q *ProgramQuery) Filter() *ProgramFilter {
+	return &ProgramFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -22473,13 +22473,13 @@ func (f *ProgramFilter) WhereHasMembersWith(preds ...predicate.ProgramMembership
 }
 
 // addPredicate implements the predicateAdder interface.
-func (phq *ProgramHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	phq.predicates = append(phq.predicates, pred)
+func (_q *ProgramHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ProgramHistoryQuery builder.
-func (phq *ProgramHistoryQuery) Filter() *ProgramHistoryFilter {
-	return &ProgramHistoryFilter{config: phq.config, predicateAdder: phq}
+func (_q *ProgramHistoryQuery) Filter() *ProgramHistoryFilter {
+	return &ProgramHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -22638,13 +22638,13 @@ func (f *ProgramHistoryFilter) WhereAuditorEmail(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (pmq *ProgramMembershipQuery) addPredicate(pred func(s *sql.Selector)) {
-	pmq.predicates = append(pmq.predicates, pred)
+func (_q *ProgramMembershipQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ProgramMembershipQuery builder.
-func (pmq *ProgramMembershipQuery) Filter() *ProgramMembershipFilter {
-	return &ProgramMembershipFilter{config: pmq.config, predicateAdder: pmq}
+func (_q *ProgramMembershipQuery) Filter() *ProgramMembershipFilter {
+	return &ProgramMembershipFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -22755,13 +22755,13 @@ func (f *ProgramMembershipFilter) WhereHasOrgMembershipWith(preds ...predicate.O
 }
 
 // addPredicate implements the predicateAdder interface.
-func (pmhq *ProgramMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	pmhq.predicates = append(pmhq.predicates, pred)
+func (_q *ProgramMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ProgramMembershipHistoryQuery builder.
-func (pmhq *ProgramMembershipHistoryQuery) Filter() *ProgramMembershipHistoryFilter {
-	return &ProgramMembershipHistoryFilter{config: pmhq.config, predicateAdder: pmhq}
+func (_q *ProgramMembershipHistoryQuery) Filter() *ProgramMembershipHistoryFilter {
+	return &ProgramMembershipHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -22845,13 +22845,13 @@ func (f *ProgramMembershipHistoryFilter) WhereUserID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (rq *RiskQuery) addPredicate(pred func(s *sql.Selector)) {
-	rq.predicates = append(rq.predicates, pred)
+func (_q *RiskQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the RiskQuery builder.
-func (rq *RiskQuery) Filter() *RiskFilter {
-	return &RiskFilter{config: rq.config, predicateAdder: rq}
+func (_q *RiskQuery) Filter() *RiskFilter {
+	return &RiskFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23214,13 +23214,13 @@ func (f *RiskFilter) WhereHasDelegateWith(preds ...predicate.Group) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (rhq *RiskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	rhq.predicates = append(rhq.predicates, pred)
+func (_q *RiskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the RiskHistoryQuery builder.
-func (rhq *RiskHistoryQuery) Filter() *RiskHistoryFilter {
-	return &RiskHistoryFilter{config: rhq.config, predicateAdder: rhq}
+func (_q *RiskHistoryQuery) Filter() *RiskHistoryFilter {
+	return &RiskHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23374,13 +23374,13 @@ func (f *RiskHistoryFilter) WhereDelegateID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *ScanQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *ScanQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ScanQuery builder.
-func (sq *ScanQuery) Filter() *ScanFilter {
-	return &ScanFilter{config: sq.config, predicateAdder: sq}
+func (_q *ScanQuery) Filter() *ScanFilter {
+	return &ScanFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23558,13 +23558,13 @@ func (f *ScanFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (shq *ScanHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	shq.predicates = append(shq.predicates, pred)
+func (_q *ScanHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ScanHistoryQuery builder.
-func (shq *ScanHistoryQuery) Filter() *ScanHistoryFilter {
-	return &ScanHistoryFilter{config: shq.config, predicateAdder: shq}
+func (_q *ScanHistoryQuery) Filter() *ScanHistoryFilter {
+	return &ScanHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23673,13 +23673,13 @@ func (f *ScanHistoryFilter) WhereStatus(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sjq *ScheduledJobQuery) addPredicate(pred func(s *sql.Selector)) {
-	sjq.predicates = append(sjq.predicates, pred)
+func (_q *ScheduledJobQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ScheduledJobQuery builder.
-func (sjq *ScheduledJobQuery) Filter() *ScheduledJobFilter {
-	return &ScheduledJobFilter{config: sjq.config, predicateAdder: sjq}
+func (_q *ScheduledJobQuery) Filter() *ScheduledJobFilter {
+	return &ScheduledJobFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23848,13 +23848,13 @@ func (f *ScheduledJobFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunner)
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sjhq *ScheduledJobHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	sjhq.predicates = append(sjhq.predicates, pred)
+func (_q *ScheduledJobHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ScheduledJobHistoryQuery builder.
-func (sjhq *ScheduledJobHistoryQuery) Filter() *ScheduledJobHistoryFilter {
-	return &ScheduledJobHistoryFilter{config: sjhq.config, predicateAdder: sjhq}
+func (_q *ScheduledJobHistoryQuery) Filter() *ScheduledJobHistoryFilter {
+	return &ScheduledJobHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23968,13 +23968,13 @@ func (f *ScheduledJobHistoryFilter) WhereJobRunnerID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sjrq *ScheduledJobRunQuery) addPredicate(pred func(s *sql.Selector)) {
-	sjrq.predicates = append(sjrq.predicates, pred)
+func (_q *ScheduledJobRunQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ScheduledJobRunQuery builder.
-func (sjrq *ScheduledJobRunQuery) Filter() *ScheduledJobRunFilter {
-	return &ScheduledJobRunFilter{config: sjrq.config, predicateAdder: sjrq}
+func (_q *ScheduledJobRunQuery) Filter() *ScheduledJobRunFilter {
+	return &ScheduledJobRunFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -24110,13 +24110,13 @@ func (f *ScheduledJobRunFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunn
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *StandardQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *StandardQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the StandardQuery builder.
-func (sq *StandardQuery) Filter() *StandardFilter {
-	return &StandardFilter{config: sq.config, predicateAdder: sq}
+func (_q *StandardQuery) Filter() *StandardFilter {
+	return &StandardFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -24293,13 +24293,13 @@ func (f *StandardFilter) WhereHasControlsWith(preds ...predicate.Control) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (shq *StandardHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	shq.predicates = append(shq.predicates, pred)
+func (_q *StandardHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the StandardHistoryQuery builder.
-func (shq *StandardHistoryQuery) Filter() *StandardHistoryFilter {
-	return &StandardHistoryFilter{config: shq.config, predicateAdder: shq}
+func (_q *StandardHistoryQuery) Filter() *StandardHistoryFilter {
+	return &StandardHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -24463,13 +24463,13 @@ func (f *StandardHistoryFilter) WhereVersion(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *SubcontrolQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *SubcontrolQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SubcontrolQuery builder.
-func (sq *SubcontrolQuery) Filter() *SubcontrolFilter {
-	return &SubcontrolFilter{config: sq.config, predicateAdder: sq}
+func (_q *SubcontrolQuery) Filter() *SubcontrolFilter {
+	return &SubcontrolFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -24877,13 +24877,13 @@ func (f *SubcontrolFilter) WhereHasMappedFromSubcontrolsWith(preds ...predicate.
 }
 
 // addPredicate implements the predicateAdder interface.
-func (shq *SubcontrolHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	shq.predicates = append(shq.predicates, pred)
+func (_q *SubcontrolHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SubcontrolHistoryQuery builder.
-func (shq *SubcontrolHistoryQuery) Filter() *SubcontrolHistoryFilter {
-	return &SubcontrolHistoryFilter{config: shq.config, predicateAdder: shq}
+func (_q *SubcontrolHistoryQuery) Filter() *SubcontrolHistoryFilter {
+	return &SubcontrolHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25082,13 +25082,13 @@ func (f *SubcontrolHistoryFilter) WhereControlID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *SubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *SubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SubprocessorQuery builder.
-func (sq *SubprocessorQuery) Filter() *SubprocessorFilter {
-	return &SubprocessorFilter{config: sq.config, predicateAdder: sq}
+func (_q *SubprocessorQuery) Filter() *SubprocessorFilter {
+	return &SubprocessorFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25243,13 +25243,13 @@ func (f *SubprocessorFilter) WhereHasTrustCenterSubprocessorsWith(preds ...predi
 }
 
 // addPredicate implements the predicateAdder interface.
-func (shq *SubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	shq.predicates = append(shq.predicates, pred)
+func (_q *SubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SubprocessorHistoryQuery builder.
-func (shq *SubprocessorHistoryQuery) Filter() *SubprocessorHistoryFilter {
-	return &SubprocessorHistoryFilter{config: shq.config, predicateAdder: shq}
+func (_q *SubprocessorHistoryQuery) Filter() *SubprocessorHistoryFilter {
+	return &SubprocessorHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25363,13 +25363,13 @@ func (f *SubprocessorHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *SubscriberQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *SubscriberQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SubscriberQuery builder.
-func (sq *SubscriberQuery) Filter() *SubscriberFilter {
-	return &SubscriberFilter{config: sq.config, predicateAdder: sq}
+func (_q *SubscriberQuery) Filter() *SubscriberFilter {
+	return &SubscriberFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25521,13 +25521,13 @@ func (f *SubscriberFilter) WhereHasEventsWith(preds ...predicate.Event) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tsq *TFASettingQuery) addPredicate(pred func(s *sql.Selector)) {
-	tsq.predicates = append(tsq.predicates, pred)
+func (_q *TFASettingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TFASettingQuery builder.
-func (tsq *TFASettingQuery) Filter() *TFASettingFilter {
-	return &TFASettingFilter{config: tsq.config, predicateAdder: tsq}
+func (_q *TFASettingQuery) Filter() *TFASettingFilter {
+	return &TFASettingFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25640,13 +25640,13 @@ func (f *TFASettingFilter) WhereHasOwnerWith(preds ...predicate.User) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tq *TaskQuery) addPredicate(pred func(s *sql.Selector)) {
-	tq.predicates = append(tq.predicates, pred)
+func (_q *TaskQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TaskQuery builder.
-func (tq *TaskQuery) Filter() *TaskFilter {
-	return &TaskFilter{config: tq.config, predicateAdder: tq}
+func (_q *TaskQuery) Filter() *TaskFilter {
+	return &TaskFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25947,13 +25947,13 @@ func (f *TaskFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (thq *TaskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	thq.predicates = append(thq.predicates, pred)
+func (_q *TaskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TaskHistoryQuery builder.
-func (thq *TaskHistoryQuery) Filter() *TaskHistoryFilter {
-	return &TaskHistoryFilter{config: thq.config, predicateAdder: thq}
+func (_q *TaskHistoryQuery) Filter() *TaskHistoryFilter {
+	return &TaskHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26087,13 +26087,13 @@ func (f *TaskHistoryFilter) WhereAssignerID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tq *TemplateQuery) addPredicate(pred func(s *sql.Selector)) {
-	tq.predicates = append(tq.predicates, pred)
+func (_q *TemplateQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TemplateQuery builder.
-func (tq *TemplateQuery) Filter() *TemplateFilter {
-	return &TemplateFilter{config: tq.config, predicateAdder: tq}
+func (_q *TemplateQuery) Filter() *TemplateFilter {
+	return &TemplateFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26234,13 +26234,13 @@ func (f *TemplateFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (thq *TemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	thq.predicates = append(thq.predicates, pred)
+func (_q *TemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TemplateHistoryQuery builder.
-func (thq *TemplateHistoryQuery) Filter() *TemplateHistoryFilter {
-	return &TemplateHistoryFilter{config: thq.config, predicateAdder: thq}
+func (_q *TemplateHistoryQuery) Filter() *TemplateHistoryFilter {
+	return &TemplateHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26354,13 +26354,13 @@ func (f *TemplateHistoryFilter) WhereUischema(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tcq *TrustCenterQuery) addPredicate(pred func(s *sql.Selector)) {
-	tcq.predicates = append(tcq.predicates, pred)
+func (_q *TrustCenterQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterQuery builder.
-func (tcq *TrustCenterQuery) Filter() *TrustCenterFilter {
-	return &TrustCenterFilter{config: tcq.config, predicateAdder: tcq}
+func (_q *TrustCenterQuery) Filter() *TrustCenterFilter {
+	return &TrustCenterFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26500,13 +26500,13 @@ func (f *TrustCenterFilter) WhereHasTrustCenterSubprocessorsWith(preds ...predic
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tccq *TrustCenterComplianceQuery) addPredicate(pred func(s *sql.Selector)) {
-	tccq.predicates = append(tccq.predicates, pred)
+func (_q *TrustCenterComplianceQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterComplianceQuery builder.
-func (tccq *TrustCenterComplianceQuery) Filter() *TrustCenterComplianceFilter {
-	return &TrustCenterComplianceFilter{config: tccq.config, predicateAdder: tccq}
+func (_q *TrustCenterComplianceQuery) Filter() *TrustCenterComplianceFilter {
+	return &TrustCenterComplianceFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26575,13 +26575,13 @@ func (f *TrustCenterComplianceFilter) WhereTags(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tcchq *TrustCenterComplianceHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	tcchq.predicates = append(tcchq.predicates, pred)
+func (_q *TrustCenterComplianceHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterComplianceHistoryQuery builder.
-func (tcchq *TrustCenterComplianceHistoryQuery) Filter() *TrustCenterComplianceHistoryFilter {
-	return &TrustCenterComplianceHistoryFilter{config: tcchq.config, predicateAdder: tcchq}
+func (_q *TrustCenterComplianceHistoryQuery) Filter() *TrustCenterComplianceHistoryFilter {
+	return &TrustCenterComplianceHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26665,13 +26665,13 @@ func (f *TrustCenterComplianceHistoryFilter) WhereTags(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tchq *TrustCenterHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	tchq.predicates = append(tchq.predicates, pred)
+func (_q *TrustCenterHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterHistoryQuery builder.
-func (tchq *TrustCenterHistoryQuery) Filter() *TrustCenterHistoryFilter {
-	return &TrustCenterHistoryFilter{config: tchq.config, predicateAdder: tchq}
+func (_q *TrustCenterHistoryQuery) Filter() *TrustCenterHistoryFilter {
+	return &TrustCenterHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26770,13 +26770,13 @@ func (f *TrustCenterHistoryFilter) WhereCustomDomainID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tcsq *TrustCenterSettingQuery) addPredicate(pred func(s *sql.Selector)) {
-	tcsq.predicates = append(tcsq.predicates, pred)
+func (_q *TrustCenterSettingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterSettingQuery builder.
-func (tcsq *TrustCenterSettingQuery) Filter() *TrustCenterSettingFilter {
-	return &TrustCenterSettingFilter{config: tcsq.config, predicateAdder: tcsq}
+func (_q *TrustCenterSettingQuery) Filter() *TrustCenterSettingFilter {
+	return &TrustCenterSettingFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -26961,13 +26961,13 @@ func (f *TrustCenterSettingFilter) WhereHasFaviconFileWith(preds ...predicate.Fi
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tcshq *TrustCenterSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	tcshq.predicates = append(tcshq.predicates, pred)
+func (_q *TrustCenterSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterSettingHistoryQuery builder.
-func (tcshq *TrustCenterSettingHistoryQuery) Filter() *TrustCenterSettingHistoryFilter {
-	return &TrustCenterSettingHistoryFilter{config: tcshq.config, predicateAdder: tcshq}
+func (_q *TrustCenterSettingHistoryQuery) Filter() *TrustCenterSettingHistoryFilter {
+	return &TrustCenterSettingHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -27111,13 +27111,13 @@ func (f *TrustCenterSettingHistoryFilter) WhereAccentColor(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tcsq *TrustCenterSubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
-	tcsq.predicates = append(tcsq.predicates, pred)
+func (_q *TrustCenterSubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterSubprocessorQuery builder.
-func (tcsq *TrustCenterSubprocessorQuery) Filter() *TrustCenterSubprocessorFilter {
-	return &TrustCenterSubprocessorFilter{config: tcsq.config, predicateAdder: tcsq}
+func (_q *TrustCenterSubprocessorQuery) Filter() *TrustCenterSubprocessorFilter {
+	return &TrustCenterSubprocessorFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -27229,13 +27229,13 @@ func (f *TrustCenterSubprocessorFilter) WhereHasSubprocessorWith(preds ...predic
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tcshq *TrustCenterSubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	tcshq.predicates = append(tcshq.predicates, pred)
+func (_q *TrustCenterSubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TrustCenterSubprocessorHistoryQuery builder.
-func (tcshq *TrustCenterSubprocessorHistoryQuery) Filter() *TrustCenterSubprocessorHistoryFilter {
-	return &TrustCenterSubprocessorHistoryFilter{config: tcshq.config, predicateAdder: tcshq}
+func (_q *TrustCenterSubprocessorHistoryQuery) Filter() *TrustCenterSubprocessorHistoryFilter {
+	return &TrustCenterSubprocessorHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -27334,13 +27334,13 @@ func (f *TrustCenterSubprocessorHistoryFilter) WhereCategory(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (uq *UserQuery) addPredicate(pred func(s *sql.Selector)) {
-	uq.predicates = append(uq.predicates, pred)
+func (_q *UserQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the UserQuery builder.
-func (uq *UserQuery) Filter() *UserFilter {
-	return &UserFilter{config: uq.config, predicateAdder: uq}
+func (_q *UserQuery) Filter() *UserFilter {
+	return &UserFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -27745,13 +27745,13 @@ func (f *UserFilter) WhereHasProgramMembershipsWith(preds ...predicate.ProgramMe
 }
 
 // addPredicate implements the predicateAdder interface.
-func (uhq *UserHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	uhq.predicates = append(uhq.predicates, pred)
+func (_q *UserHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the UserHistoryQuery builder.
-func (uhq *UserHistoryQuery) Filter() *UserHistoryFilter {
-	return &UserHistoryFilter{config: uhq.config, predicateAdder: uhq}
+func (_q *UserHistoryQuery) Filter() *UserHistoryFilter {
+	return &UserHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -27905,13 +27905,13 @@ func (f *UserHistoryFilter) WhereRole(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (usq *UserSettingQuery) addPredicate(pred func(s *sql.Selector)) {
-	usq.predicates = append(usq.predicates, pred)
+func (_q *UserSettingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the UserSettingQuery builder.
-func (usq *UserSettingQuery) Filter() *UserSettingFilter {
-	return &UserSettingFilter{config: usq.config, predicateAdder: usq}
+func (_q *UserSettingQuery) Filter() *UserSettingFilter {
+	return &UserSettingFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -28067,13 +28067,13 @@ func (f *UserSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (ushq *UserSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	ushq.predicates = append(ushq.predicates, pred)
+func (_q *UserSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the UserSettingHistoryQuery builder.
-func (ushq *UserSettingHistoryQuery) Filter() *UserSettingHistoryFilter {
-	return &UserSettingHistoryFilter{config: ushq.config, predicateAdder: ushq}
+func (_q *UserSettingHistoryQuery) Filter() *UserSettingHistoryFilter {
+	return &UserSettingHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -28202,13 +28202,13 @@ func (f *UserSettingHistoryFilter) WherePhoneNumber(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (wq *WebauthnQuery) addPredicate(pred func(s *sql.Selector)) {
-	wq.predicates = append(wq.predicates, pred)
+func (_q *WebauthnQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the WebauthnQuery builder.
-func (wq *WebauthnQuery) Filter() *WebauthnFilter {
-	return &WebauthnFilter{config: wq.config, predicateAdder: wq}
+func (_q *WebauthnQuery) Filter() *WebauthnFilter {
+	return &WebauthnFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.

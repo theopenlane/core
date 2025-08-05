@@ -22,58 +22,58 @@ type TrustCenterDelete struct {
 }
 
 // Where appends a list predicates to the TrustCenterDelete builder.
-func (tcd *TrustCenterDelete) Where(ps ...predicate.TrustCenter) *TrustCenterDelete {
-	tcd.mutation.Where(ps...)
-	return tcd
+func (_d *TrustCenterDelete) Where(ps ...predicate.TrustCenter) *TrustCenterDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tcd *TrustCenterDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcd.sqlExec, tcd.mutation, tcd.hooks)
+func (_d *TrustCenterDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcd *TrustCenterDelete) ExecX(ctx context.Context) int {
-	n, err := tcd.Exec(ctx)
+func (_d *TrustCenterDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tcd *TrustCenterDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TrustCenterDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcenter.Table, sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString))
-	_spec.Node.Schema = tcd.schemaConfig.TrustCenter
-	ctx = internal.NewSchemaConfigContext(ctx, tcd.schemaConfig)
-	if ps := tcd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TrustCenter
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tcd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tcd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TrustCenterDeleteOne is the builder for deleting a single TrustCenter entity.
 type TrustCenterDeleteOne struct {
-	tcd *TrustCenterDelete
+	_d *TrustCenterDelete
 }
 
 // Where appends a list predicates to the TrustCenterDelete builder.
-func (tcdo *TrustCenterDeleteOne) Where(ps ...predicate.TrustCenter) *TrustCenterDeleteOne {
-	tcdo.tcd.mutation.Where(ps...)
-	return tcdo
+func (_d *TrustCenterDeleteOne) Where(ps ...predicate.TrustCenter) *TrustCenterDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tcdo *TrustCenterDeleteOne) Exec(ctx context.Context) error {
-	n, err := tcdo.tcd.Exec(ctx)
+func (_d *TrustCenterDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (tcdo *TrustCenterDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcdo *TrustCenterDeleteOne) ExecX(ctx context.Context) {
-	if err := tcdo.Exec(ctx); err != nil {
+func (_d *TrustCenterDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

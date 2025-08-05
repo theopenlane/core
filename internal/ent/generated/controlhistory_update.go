@@ -29,517 +29,517 @@ type ControlHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ControlHistoryUpdate builder.
-func (chu *ControlHistoryUpdate) Where(ps ...predicate.ControlHistory) *ControlHistoryUpdate {
-	chu.mutation.Where(ps...)
-	return chu
+func (_u *ControlHistoryUpdate) Where(ps ...predicate.ControlHistory) *ControlHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (chu *ControlHistoryUpdate) SetUpdatedAt(t time.Time) *ControlHistoryUpdate {
-	chu.mutation.SetUpdatedAt(t)
-	return chu
+func (_u *ControlHistoryUpdate) SetUpdatedAt(v time.Time) *ControlHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (chu *ControlHistoryUpdate) ClearUpdatedAt() *ControlHistoryUpdate {
-	chu.mutation.ClearUpdatedAt()
-	return chu
+func (_u *ControlHistoryUpdate) ClearUpdatedAt() *ControlHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (chu *ControlHistoryUpdate) SetUpdatedBy(s string) *ControlHistoryUpdate {
-	chu.mutation.SetUpdatedBy(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetUpdatedBy(v string) *ControlHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableUpdatedBy(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetUpdatedBy(*s)
+func (_u *ControlHistoryUpdate) SetNillableUpdatedBy(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (chu *ControlHistoryUpdate) ClearUpdatedBy() *ControlHistoryUpdate {
-	chu.mutation.ClearUpdatedBy()
-	return chu
+func (_u *ControlHistoryUpdate) ClearUpdatedBy() *ControlHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (chu *ControlHistoryUpdate) SetDeletedAt(t time.Time) *ControlHistoryUpdate {
-	chu.mutation.SetDeletedAt(t)
-	return chu
+func (_u *ControlHistoryUpdate) SetDeletedAt(v time.Time) *ControlHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ControlHistoryUpdate {
-	if t != nil {
-		chu.SetDeletedAt(*t)
+func (_u *ControlHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (chu *ControlHistoryUpdate) ClearDeletedAt() *ControlHistoryUpdate {
-	chu.mutation.ClearDeletedAt()
-	return chu
+func (_u *ControlHistoryUpdate) ClearDeletedAt() *ControlHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (chu *ControlHistoryUpdate) SetDeletedBy(s string) *ControlHistoryUpdate {
-	chu.mutation.SetDeletedBy(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetDeletedBy(v string) *ControlHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableDeletedBy(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetDeletedBy(*s)
+func (_u *ControlHistoryUpdate) SetNillableDeletedBy(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (chu *ControlHistoryUpdate) ClearDeletedBy() *ControlHistoryUpdate {
-	chu.mutation.ClearDeletedBy()
-	return chu
+func (_u *ControlHistoryUpdate) ClearDeletedBy() *ControlHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (chu *ControlHistoryUpdate) SetTags(s []string) *ControlHistoryUpdate {
-	chu.mutation.SetTags(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetTags(v []string) *ControlHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (chu *ControlHistoryUpdate) AppendTags(s []string) *ControlHistoryUpdate {
-	chu.mutation.AppendTags(s)
-	return chu
+// AppendTags appends value to the "tags" field.
+func (_u *ControlHistoryUpdate) AppendTags(v []string) *ControlHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (chu *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
-	chu.mutation.ClearTags()
-	return chu
+func (_u *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (chu *ControlHistoryUpdate) SetDescription(s string) *ControlHistoryUpdate {
-	chu.mutation.SetDescription(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetDescription(v string) *ControlHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableDescription(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetDescription(*s)
+func (_u *ControlHistoryUpdate) SetNillableDescription(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (chu *ControlHistoryUpdate) ClearDescription() *ControlHistoryUpdate {
-	chu.mutation.ClearDescription()
-	return chu
+func (_u *ControlHistoryUpdate) ClearDescription() *ControlHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetReferenceID sets the "reference_id" field.
-func (chu *ControlHistoryUpdate) SetReferenceID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetReferenceID(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetReferenceID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetReferenceID(v)
+	return _u
 }
 
 // SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableReferenceID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetReferenceID(*s)
+func (_u *ControlHistoryUpdate) SetNillableReferenceID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetReferenceID(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearReferenceID clears the value of the "reference_id" field.
-func (chu *ControlHistoryUpdate) ClearReferenceID() *ControlHistoryUpdate {
-	chu.mutation.ClearReferenceID()
-	return chu
+func (_u *ControlHistoryUpdate) ClearReferenceID() *ControlHistoryUpdate {
+	_u.mutation.ClearReferenceID()
+	return _u
 }
 
 // SetAuditorReferenceID sets the "auditor_reference_id" field.
-func (chu *ControlHistoryUpdate) SetAuditorReferenceID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetAuditorReferenceID(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetAuditorReferenceID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetAuditorReferenceID(v)
+	return _u
 }
 
 // SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableAuditorReferenceID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetAuditorReferenceID(*s)
+func (_u *ControlHistoryUpdate) SetNillableAuditorReferenceID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetAuditorReferenceID(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
-func (chu *ControlHistoryUpdate) ClearAuditorReferenceID() *ControlHistoryUpdate {
-	chu.mutation.ClearAuditorReferenceID()
-	return chu
+func (_u *ControlHistoryUpdate) ClearAuditorReferenceID() *ControlHistoryUpdate {
+	_u.mutation.ClearAuditorReferenceID()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (chu *ControlHistoryUpdate) SetStatus(es enums.ControlStatus) *ControlHistoryUpdate {
-	chu.mutation.SetStatus(es)
-	return chu
+func (_u *ControlHistoryUpdate) SetStatus(v enums.ControlStatus) *ControlHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableStatus(es *enums.ControlStatus) *ControlHistoryUpdate {
-	if es != nil {
-		chu.SetStatus(*es)
+func (_u *ControlHistoryUpdate) SetNillableStatus(v *enums.ControlStatus) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (chu *ControlHistoryUpdate) ClearStatus() *ControlHistoryUpdate {
-	chu.mutation.ClearStatus()
-	return chu
+func (_u *ControlHistoryUpdate) ClearStatus() *ControlHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (chu *ControlHistoryUpdate) SetSource(es enums.ControlSource) *ControlHistoryUpdate {
-	chu.mutation.SetSource(es)
-	return chu
+func (_u *ControlHistoryUpdate) SetSource(v enums.ControlSource) *ControlHistoryUpdate {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableSource(es *enums.ControlSource) *ControlHistoryUpdate {
-	if es != nil {
-		chu.SetSource(*es)
+func (_u *ControlHistoryUpdate) SetNillableSource(v *enums.ControlSource) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (chu *ControlHistoryUpdate) ClearSource() *ControlHistoryUpdate {
-	chu.mutation.ClearSource()
-	return chu
+func (_u *ControlHistoryUpdate) ClearSource() *ControlHistoryUpdate {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetReferenceFramework sets the "reference_framework" field.
-func (chu *ControlHistoryUpdate) SetReferenceFramework(s string) *ControlHistoryUpdate {
-	chu.mutation.SetReferenceFramework(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetReferenceFramework(v string) *ControlHistoryUpdate {
+	_u.mutation.SetReferenceFramework(v)
+	return _u
 }
 
 // SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableReferenceFramework(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetReferenceFramework(*s)
+func (_u *ControlHistoryUpdate) SetNillableReferenceFramework(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetReferenceFramework(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearReferenceFramework clears the value of the "reference_framework" field.
-func (chu *ControlHistoryUpdate) ClearReferenceFramework() *ControlHistoryUpdate {
-	chu.mutation.ClearReferenceFramework()
-	return chu
+func (_u *ControlHistoryUpdate) ClearReferenceFramework() *ControlHistoryUpdate {
+	_u.mutation.ClearReferenceFramework()
+	return _u
 }
 
 // SetControlType sets the "control_type" field.
-func (chu *ControlHistoryUpdate) SetControlType(et enums.ControlType) *ControlHistoryUpdate {
-	chu.mutation.SetControlType(et)
-	return chu
+func (_u *ControlHistoryUpdate) SetControlType(v enums.ControlType) *ControlHistoryUpdate {
+	_u.mutation.SetControlType(v)
+	return _u
 }
 
 // SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableControlType(et *enums.ControlType) *ControlHistoryUpdate {
-	if et != nil {
-		chu.SetControlType(*et)
+func (_u *ControlHistoryUpdate) SetNillableControlType(v *enums.ControlType) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetControlType(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearControlType clears the value of the "control_type" field.
-func (chu *ControlHistoryUpdate) ClearControlType() *ControlHistoryUpdate {
-	chu.mutation.ClearControlType()
-	return chu
+func (_u *ControlHistoryUpdate) ClearControlType() *ControlHistoryUpdate {
+	_u.mutation.ClearControlType()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (chu *ControlHistoryUpdate) SetCategory(s string) *ControlHistoryUpdate {
-	chu.mutation.SetCategory(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetCategory(v string) *ControlHistoryUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableCategory(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetCategory(*s)
+func (_u *ControlHistoryUpdate) SetNillableCategory(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (chu *ControlHistoryUpdate) ClearCategory() *ControlHistoryUpdate {
-	chu.mutation.ClearCategory()
-	return chu
+func (_u *ControlHistoryUpdate) ClearCategory() *ControlHistoryUpdate {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetCategoryID sets the "category_id" field.
-func (chu *ControlHistoryUpdate) SetCategoryID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetCategoryID(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetCategoryID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetCategoryID(v)
+	return _u
 }
 
 // SetNillableCategoryID sets the "category_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableCategoryID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetCategoryID(*s)
+func (_u *ControlHistoryUpdate) SetNillableCategoryID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetCategoryID(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearCategoryID clears the value of the "category_id" field.
-func (chu *ControlHistoryUpdate) ClearCategoryID() *ControlHistoryUpdate {
-	chu.mutation.ClearCategoryID()
-	return chu
+func (_u *ControlHistoryUpdate) ClearCategoryID() *ControlHistoryUpdate {
+	_u.mutation.ClearCategoryID()
+	return _u
 }
 
 // SetSubcategory sets the "subcategory" field.
-func (chu *ControlHistoryUpdate) SetSubcategory(s string) *ControlHistoryUpdate {
-	chu.mutation.SetSubcategory(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetSubcategory(v string) *ControlHistoryUpdate {
+	_u.mutation.SetSubcategory(v)
+	return _u
 }
 
 // SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableSubcategory(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetSubcategory(*s)
+func (_u *ControlHistoryUpdate) SetNillableSubcategory(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetSubcategory(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearSubcategory clears the value of the "subcategory" field.
-func (chu *ControlHistoryUpdate) ClearSubcategory() *ControlHistoryUpdate {
-	chu.mutation.ClearSubcategory()
-	return chu
+func (_u *ControlHistoryUpdate) ClearSubcategory() *ControlHistoryUpdate {
+	_u.mutation.ClearSubcategory()
+	return _u
 }
 
 // SetMappedCategories sets the "mapped_categories" field.
-func (chu *ControlHistoryUpdate) SetMappedCategories(s []string) *ControlHistoryUpdate {
-	chu.mutation.SetMappedCategories(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetMappedCategories(v []string) *ControlHistoryUpdate {
+	_u.mutation.SetMappedCategories(v)
+	return _u
 }
 
-// AppendMappedCategories appends s to the "mapped_categories" field.
-func (chu *ControlHistoryUpdate) AppendMappedCategories(s []string) *ControlHistoryUpdate {
-	chu.mutation.AppendMappedCategories(s)
-	return chu
+// AppendMappedCategories appends value to the "mapped_categories" field.
+func (_u *ControlHistoryUpdate) AppendMappedCategories(v []string) *ControlHistoryUpdate {
+	_u.mutation.AppendMappedCategories(v)
+	return _u
 }
 
 // ClearMappedCategories clears the value of the "mapped_categories" field.
-func (chu *ControlHistoryUpdate) ClearMappedCategories() *ControlHistoryUpdate {
-	chu.mutation.ClearMappedCategories()
-	return chu
+func (_u *ControlHistoryUpdate) ClearMappedCategories() *ControlHistoryUpdate {
+	_u.mutation.ClearMappedCategories()
+	return _u
 }
 
 // SetAssessmentObjectives sets the "assessment_objectives" field.
-func (chu *ControlHistoryUpdate) SetAssessmentObjectives(mo []models.AssessmentObjective) *ControlHistoryUpdate {
-	chu.mutation.SetAssessmentObjectives(mo)
-	return chu
+func (_u *ControlHistoryUpdate) SetAssessmentObjectives(v []models.AssessmentObjective) *ControlHistoryUpdate {
+	_u.mutation.SetAssessmentObjectives(v)
+	return _u
 }
 
-// AppendAssessmentObjectives appends mo to the "assessment_objectives" field.
-func (chu *ControlHistoryUpdate) AppendAssessmentObjectives(mo []models.AssessmentObjective) *ControlHistoryUpdate {
-	chu.mutation.AppendAssessmentObjectives(mo)
-	return chu
+// AppendAssessmentObjectives appends value to the "assessment_objectives" field.
+func (_u *ControlHistoryUpdate) AppendAssessmentObjectives(v []models.AssessmentObjective) *ControlHistoryUpdate {
+	_u.mutation.AppendAssessmentObjectives(v)
+	return _u
 }
 
 // ClearAssessmentObjectives clears the value of the "assessment_objectives" field.
-func (chu *ControlHistoryUpdate) ClearAssessmentObjectives() *ControlHistoryUpdate {
-	chu.mutation.ClearAssessmentObjectives()
-	return chu
+func (_u *ControlHistoryUpdate) ClearAssessmentObjectives() *ControlHistoryUpdate {
+	_u.mutation.ClearAssessmentObjectives()
+	return _u
 }
 
 // SetAssessmentMethods sets the "assessment_methods" field.
-func (chu *ControlHistoryUpdate) SetAssessmentMethods(mm []models.AssessmentMethod) *ControlHistoryUpdate {
-	chu.mutation.SetAssessmentMethods(mm)
-	return chu
+func (_u *ControlHistoryUpdate) SetAssessmentMethods(v []models.AssessmentMethod) *ControlHistoryUpdate {
+	_u.mutation.SetAssessmentMethods(v)
+	return _u
 }
 
-// AppendAssessmentMethods appends mm to the "assessment_methods" field.
-func (chu *ControlHistoryUpdate) AppendAssessmentMethods(mm []models.AssessmentMethod) *ControlHistoryUpdate {
-	chu.mutation.AppendAssessmentMethods(mm)
-	return chu
+// AppendAssessmentMethods appends value to the "assessment_methods" field.
+func (_u *ControlHistoryUpdate) AppendAssessmentMethods(v []models.AssessmentMethod) *ControlHistoryUpdate {
+	_u.mutation.AppendAssessmentMethods(v)
+	return _u
 }
 
 // ClearAssessmentMethods clears the value of the "assessment_methods" field.
-func (chu *ControlHistoryUpdate) ClearAssessmentMethods() *ControlHistoryUpdate {
-	chu.mutation.ClearAssessmentMethods()
-	return chu
+func (_u *ControlHistoryUpdate) ClearAssessmentMethods() *ControlHistoryUpdate {
+	_u.mutation.ClearAssessmentMethods()
+	return _u
 }
 
 // SetControlQuestions sets the "control_questions" field.
-func (chu *ControlHistoryUpdate) SetControlQuestions(s []string) *ControlHistoryUpdate {
-	chu.mutation.SetControlQuestions(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetControlQuestions(v []string) *ControlHistoryUpdate {
+	_u.mutation.SetControlQuestions(v)
+	return _u
 }
 
-// AppendControlQuestions appends s to the "control_questions" field.
-func (chu *ControlHistoryUpdate) AppendControlQuestions(s []string) *ControlHistoryUpdate {
-	chu.mutation.AppendControlQuestions(s)
-	return chu
+// AppendControlQuestions appends value to the "control_questions" field.
+func (_u *ControlHistoryUpdate) AppendControlQuestions(v []string) *ControlHistoryUpdate {
+	_u.mutation.AppendControlQuestions(v)
+	return _u
 }
 
 // ClearControlQuestions clears the value of the "control_questions" field.
-func (chu *ControlHistoryUpdate) ClearControlQuestions() *ControlHistoryUpdate {
-	chu.mutation.ClearControlQuestions()
-	return chu
+func (_u *ControlHistoryUpdate) ClearControlQuestions() *ControlHistoryUpdate {
+	_u.mutation.ClearControlQuestions()
+	return _u
 }
 
 // SetImplementationGuidance sets the "implementation_guidance" field.
-func (chu *ControlHistoryUpdate) SetImplementationGuidance(mg []models.ImplementationGuidance) *ControlHistoryUpdate {
-	chu.mutation.SetImplementationGuidance(mg)
-	return chu
+func (_u *ControlHistoryUpdate) SetImplementationGuidance(v []models.ImplementationGuidance) *ControlHistoryUpdate {
+	_u.mutation.SetImplementationGuidance(v)
+	return _u
 }
 
-// AppendImplementationGuidance appends mg to the "implementation_guidance" field.
-func (chu *ControlHistoryUpdate) AppendImplementationGuidance(mg []models.ImplementationGuidance) *ControlHistoryUpdate {
-	chu.mutation.AppendImplementationGuidance(mg)
-	return chu
+// AppendImplementationGuidance appends value to the "implementation_guidance" field.
+func (_u *ControlHistoryUpdate) AppendImplementationGuidance(v []models.ImplementationGuidance) *ControlHistoryUpdate {
+	_u.mutation.AppendImplementationGuidance(v)
+	return _u
 }
 
 // ClearImplementationGuidance clears the value of the "implementation_guidance" field.
-func (chu *ControlHistoryUpdate) ClearImplementationGuidance() *ControlHistoryUpdate {
-	chu.mutation.ClearImplementationGuidance()
-	return chu
+func (_u *ControlHistoryUpdate) ClearImplementationGuidance() *ControlHistoryUpdate {
+	_u.mutation.ClearImplementationGuidance()
+	return _u
 }
 
 // SetExampleEvidence sets the "example_evidence" field.
-func (chu *ControlHistoryUpdate) SetExampleEvidence(me []models.ExampleEvidence) *ControlHistoryUpdate {
-	chu.mutation.SetExampleEvidence(me)
-	return chu
+func (_u *ControlHistoryUpdate) SetExampleEvidence(v []models.ExampleEvidence) *ControlHistoryUpdate {
+	_u.mutation.SetExampleEvidence(v)
+	return _u
 }
 
-// AppendExampleEvidence appends me to the "example_evidence" field.
-func (chu *ControlHistoryUpdate) AppendExampleEvidence(me []models.ExampleEvidence) *ControlHistoryUpdate {
-	chu.mutation.AppendExampleEvidence(me)
-	return chu
+// AppendExampleEvidence appends value to the "example_evidence" field.
+func (_u *ControlHistoryUpdate) AppendExampleEvidence(v []models.ExampleEvidence) *ControlHistoryUpdate {
+	_u.mutation.AppendExampleEvidence(v)
+	return _u
 }
 
 // ClearExampleEvidence clears the value of the "example_evidence" field.
-func (chu *ControlHistoryUpdate) ClearExampleEvidence() *ControlHistoryUpdate {
-	chu.mutation.ClearExampleEvidence()
-	return chu
+func (_u *ControlHistoryUpdate) ClearExampleEvidence() *ControlHistoryUpdate {
+	_u.mutation.ClearExampleEvidence()
+	return _u
 }
 
 // SetReferences sets the "references" field.
-func (chu *ControlHistoryUpdate) SetReferences(m []models.Reference) *ControlHistoryUpdate {
-	chu.mutation.SetReferences(m)
-	return chu
+func (_u *ControlHistoryUpdate) SetReferences(v []models.Reference) *ControlHistoryUpdate {
+	_u.mutation.SetReferences(v)
+	return _u
 }
 
-// AppendReferences appends m to the "references" field.
-func (chu *ControlHistoryUpdate) AppendReferences(m []models.Reference) *ControlHistoryUpdate {
-	chu.mutation.AppendReferences(m)
-	return chu
+// AppendReferences appends value to the "references" field.
+func (_u *ControlHistoryUpdate) AppendReferences(v []models.Reference) *ControlHistoryUpdate {
+	_u.mutation.AppendReferences(v)
+	return _u
 }
 
 // ClearReferences clears the value of the "references" field.
-func (chu *ControlHistoryUpdate) ClearReferences() *ControlHistoryUpdate {
-	chu.mutation.ClearReferences()
-	return chu
+func (_u *ControlHistoryUpdate) ClearReferences() *ControlHistoryUpdate {
+	_u.mutation.ClearReferences()
+	return _u
 }
 
 // SetControlOwnerID sets the "control_owner_id" field.
-func (chu *ControlHistoryUpdate) SetControlOwnerID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetControlOwnerID(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetControlOwnerID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetControlOwnerID(v)
+	return _u
 }
 
 // SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableControlOwnerID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetControlOwnerID(*s)
+func (_u *ControlHistoryUpdate) SetNillableControlOwnerID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetControlOwnerID(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearControlOwnerID clears the value of the "control_owner_id" field.
-func (chu *ControlHistoryUpdate) ClearControlOwnerID() *ControlHistoryUpdate {
-	chu.mutation.ClearControlOwnerID()
-	return chu
+func (_u *ControlHistoryUpdate) ClearControlOwnerID() *ControlHistoryUpdate {
+	_u.mutation.ClearControlOwnerID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (chu *ControlHistoryUpdate) SetDelegateID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetDelegateID(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetDelegateID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableDelegateID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetDelegateID(*s)
+func (_u *ControlHistoryUpdate) SetNillableDelegateID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (chu *ControlHistoryUpdate) ClearDelegateID() *ControlHistoryUpdate {
-	chu.mutation.ClearDelegateID()
-	return chu
+func (_u *ControlHistoryUpdate) ClearDelegateID() *ControlHistoryUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetRefCode sets the "ref_code" field.
-func (chu *ControlHistoryUpdate) SetRefCode(s string) *ControlHistoryUpdate {
-	chu.mutation.SetRefCode(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetRefCode(v string) *ControlHistoryUpdate {
+	_u.mutation.SetRefCode(v)
+	return _u
 }
 
 // SetNillableRefCode sets the "ref_code" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableRefCode(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetRefCode(*s)
+func (_u *ControlHistoryUpdate) SetNillableRefCode(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetRefCode(*v)
 	}
-	return chu
+	return _u
 }
 
 // SetStandardID sets the "standard_id" field.
-func (chu *ControlHistoryUpdate) SetStandardID(s string) *ControlHistoryUpdate {
-	chu.mutation.SetStandardID(s)
-	return chu
+func (_u *ControlHistoryUpdate) SetStandardID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetStandardID(v)
+	return _u
 }
 
 // SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableStandardID(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetStandardID(*s)
+func (_u *ControlHistoryUpdate) SetNillableStandardID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetStandardID(*v)
 	}
-	return chu
+	return _u
 }
 
 // ClearStandardID clears the value of the "standard_id" field.
-func (chu *ControlHistoryUpdate) ClearStandardID() *ControlHistoryUpdate {
-	chu.mutation.ClearStandardID()
-	return chu
+func (_u *ControlHistoryUpdate) ClearStandardID() *ControlHistoryUpdate {
+	_u.mutation.ClearStandardID()
+	return _u
 }
 
 // Mutation returns the ControlHistoryMutation object of the builder.
-func (chu *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
-	return chu.mutation
+func (_u *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (chu *ControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := chu.defaults(); err != nil {
+func (_u *ControlHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (chu *ControlHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := chu.Save(ctx)
+func (_u *ControlHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -547,43 +547,43 @@ func (chu *ControlHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (chu *ControlHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := chu.Save(ctx)
+func (_u *ControlHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chu *ControlHistoryUpdate) ExecX(ctx context.Context) {
-	if err := chu.Exec(ctx); err != nil {
+func (_u *ControlHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (chu *ControlHistoryUpdate) defaults() error {
-	if _, ok := chu.mutation.UpdatedAt(); !ok && !chu.mutation.UpdatedAtCleared() {
+func (_u *ControlHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if controlhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
-		chu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (chu *ControlHistoryUpdate) check() error {
-	if v, ok := chu.mutation.Status(); ok {
+func (_u *ControlHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := controlhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := chu.mutation.Source(); ok {
+	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := chu.mutation.ControlType(); ok {
+	if v, ok := _u.mutation.ControlType(); ok {
 		if err := controlhistory.ControlTypeValidator(v); err != nil {
 			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.control_type": %w`, err)}
 		}
@@ -592,232 +592,232 @@ func (chu *ControlHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (chu *ControlHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlHistoryUpdate {
-	chu.modifiers = append(chu.modifiers, modifiers...)
-	return chu
+func (_u *ControlHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := chu.check(); err != nil {
-		return n, err
+func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(controlhistory.Table, controlhistory.Columns, sqlgraph.NewFieldSpec(controlhistory.FieldID, field.TypeString))
-	if ps := chu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if chu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(controlhistory.FieldRef, field.TypeString)
 	}
-	if chu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := chu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if chu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if chu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(controlhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := chu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if chu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(controlhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := chu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(controlhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if chu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := chu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(controlhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if chu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(controlhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := chu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldTags, value)
 		})
 	}
-	if chu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 	}
-	if chu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(controlhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := chu.mutation.ReferenceID(); ok {
+	if value, ok := _u.mutation.ReferenceID(); ok {
 		_spec.SetField(controlhistory.FieldReferenceID, field.TypeString, value)
 	}
-	if chu.mutation.ReferenceIDCleared() {
+	if _u.mutation.ReferenceIDCleared() {
 		_spec.ClearField(controlhistory.FieldReferenceID, field.TypeString)
 	}
-	if value, ok := chu.mutation.AuditorReferenceID(); ok {
+	if value, ok := _u.mutation.AuditorReferenceID(); ok {
 		_spec.SetField(controlhistory.FieldAuditorReferenceID, field.TypeString, value)
 	}
-	if chu.mutation.AuditorReferenceIDCleared() {
+	if _u.mutation.AuditorReferenceIDCleared() {
 		_spec.ClearField(controlhistory.FieldAuditorReferenceID, field.TypeString)
 	}
-	if value, ok := chu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if chu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := chu.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 	}
-	if chu.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(controlhistory.FieldSource, field.TypeEnum)
 	}
-	if value, ok := chu.mutation.ReferenceFramework(); ok {
+	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
 	}
-	if chu.mutation.ReferenceFrameworkCleared() {
+	if _u.mutation.ReferenceFrameworkCleared() {
 		_spec.ClearField(controlhistory.FieldReferenceFramework, field.TypeString)
 	}
-	if value, ok := chu.mutation.ControlType(); ok {
+	if value, ok := _u.mutation.ControlType(); ok {
 		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)
 	}
-	if chu.mutation.ControlTypeCleared() {
+	if _u.mutation.ControlTypeCleared() {
 		_spec.ClearField(controlhistory.FieldControlType, field.TypeEnum)
 	}
-	if value, ok := chu.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(controlhistory.FieldCategory, field.TypeString, value)
 	}
-	if chu.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(controlhistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := chu.mutation.CategoryID(); ok {
+	if value, ok := _u.mutation.CategoryID(); ok {
 		_spec.SetField(controlhistory.FieldCategoryID, field.TypeString, value)
 	}
-	if chu.mutation.CategoryIDCleared() {
+	if _u.mutation.CategoryIDCleared() {
 		_spec.ClearField(controlhistory.FieldCategoryID, field.TypeString)
 	}
-	if value, ok := chu.mutation.Subcategory(); ok {
+	if value, ok := _u.mutation.Subcategory(); ok {
 		_spec.SetField(controlhistory.FieldSubcategory, field.TypeString, value)
 	}
-	if chu.mutation.SubcategoryCleared() {
+	if _u.mutation.SubcategoryCleared() {
 		_spec.ClearField(controlhistory.FieldSubcategory, field.TypeString)
 	}
-	if value, ok := chu.mutation.MappedCategories(); ok {
+	if value, ok := _u.mutation.MappedCategories(); ok {
 		_spec.SetField(controlhistory.FieldMappedCategories, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedMappedCategories(); ok {
+	if value, ok := _u.mutation.AppendedMappedCategories(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldMappedCategories, value)
 		})
 	}
-	if chu.mutation.MappedCategoriesCleared() {
+	if _u.mutation.MappedCategoriesCleared() {
 		_spec.ClearField(controlhistory.FieldMappedCategories, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.AssessmentObjectives(); ok {
+	if value, ok := _u.mutation.AssessmentObjectives(); ok {
 		_spec.SetField(controlhistory.FieldAssessmentObjectives, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedAssessmentObjectives(); ok {
+	if value, ok := _u.mutation.AppendedAssessmentObjectives(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldAssessmentObjectives, value)
 		})
 	}
-	if chu.mutation.AssessmentObjectivesCleared() {
+	if _u.mutation.AssessmentObjectivesCleared() {
 		_spec.ClearField(controlhistory.FieldAssessmentObjectives, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.AssessmentMethods(); ok {
+	if value, ok := _u.mutation.AssessmentMethods(); ok {
 		_spec.SetField(controlhistory.FieldAssessmentMethods, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedAssessmentMethods(); ok {
+	if value, ok := _u.mutation.AppendedAssessmentMethods(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldAssessmentMethods, value)
 		})
 	}
-	if chu.mutation.AssessmentMethodsCleared() {
+	if _u.mutation.AssessmentMethodsCleared() {
 		_spec.ClearField(controlhistory.FieldAssessmentMethods, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.ControlQuestions(); ok {
+	if value, ok := _u.mutation.ControlQuestions(); ok {
 		_spec.SetField(controlhistory.FieldControlQuestions, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedControlQuestions(); ok {
+	if value, ok := _u.mutation.AppendedControlQuestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldControlQuestions, value)
 		})
 	}
-	if chu.mutation.ControlQuestionsCleared() {
+	if _u.mutation.ControlQuestionsCleared() {
 		_spec.ClearField(controlhistory.FieldControlQuestions, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.ImplementationGuidance(); ok {
+	if value, ok := _u.mutation.ImplementationGuidance(); ok {
 		_spec.SetField(controlhistory.FieldImplementationGuidance, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedImplementationGuidance(); ok {
+	if value, ok := _u.mutation.AppendedImplementationGuidance(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldImplementationGuidance, value)
 		})
 	}
-	if chu.mutation.ImplementationGuidanceCleared() {
+	if _u.mutation.ImplementationGuidanceCleared() {
 		_spec.ClearField(controlhistory.FieldImplementationGuidance, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.ExampleEvidence(); ok {
+	if value, ok := _u.mutation.ExampleEvidence(); ok {
 		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedExampleEvidence(); ok {
+	if value, ok := _u.mutation.AppendedExampleEvidence(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldExampleEvidence, value)
 		})
 	}
-	if chu.mutation.ExampleEvidenceCleared() {
+	if _u.mutation.ExampleEvidenceCleared() {
 		_spec.ClearField(controlhistory.FieldExampleEvidence, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.References(); ok {
+	if value, ok := _u.mutation.References(); ok {
 		_spec.SetField(controlhistory.FieldReferences, field.TypeJSON, value)
 	}
-	if value, ok := chu.mutation.AppendedReferences(); ok {
+	if value, ok := _u.mutation.AppendedReferences(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldReferences, value)
 		})
 	}
-	if chu.mutation.ReferencesCleared() {
+	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(controlhistory.FieldReferences, field.TypeJSON)
 	}
-	if value, ok := chu.mutation.ControlOwnerID(); ok {
+	if value, ok := _u.mutation.ControlOwnerID(); ok {
 		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
 	}
-	if chu.mutation.ControlOwnerIDCleared() {
+	if _u.mutation.ControlOwnerIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlOwnerID, field.TypeString)
 	}
-	if value, ok := chu.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(controlhistory.FieldDelegateID, field.TypeString, value)
 	}
-	if chu.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(controlhistory.FieldDelegateID, field.TypeString)
 	}
-	if chu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := chu.mutation.RefCode(); ok {
+	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
 	}
-	if value, ok := chu.mutation.StandardID(); ok {
+	if value, ok := _u.mutation.StandardID(); ok {
 		_spec.SetField(controlhistory.FieldStandardID, field.TypeString, value)
 	}
-	if chu.mutation.StandardIDCleared() {
+	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(controlhistory.FieldStandardID, field.TypeString)
 	}
-	_spec.Node.Schema = chu.schemaConfig.ControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, chu.schemaConfig)
-	_spec.AddModifiers(chu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ControlHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{controlhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -825,8 +825,8 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		return 0, err
 	}
-	chu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ControlHistoryUpdateOne is the builder for updating a single ControlHistory entity.
@@ -839,524 +839,524 @@ type ControlHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (chuo *ControlHistoryUpdateOne) SetUpdatedAt(t time.Time) *ControlHistoryUpdateOne {
-	chuo.mutation.SetUpdatedAt(t)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetUpdatedAt(v time.Time) *ControlHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (chuo *ControlHistoryUpdateOne) ClearUpdatedAt() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearUpdatedAt()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearUpdatedAt() *ControlHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (chuo *ControlHistoryUpdateOne) SetUpdatedBy(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetUpdatedBy(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetUpdatedBy(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetUpdatedBy(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (chuo *ControlHistoryUpdateOne) ClearUpdatedBy() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearUpdatedBy()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearUpdatedBy() *ControlHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (chuo *ControlHistoryUpdateOne) SetDeletedAt(t time.Time) *ControlHistoryUpdateOne {
-	chuo.mutation.SetDeletedAt(t)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetDeletedAt(v time.Time) *ControlHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ControlHistoryUpdateOne {
-	if t != nil {
-		chuo.SetDeletedAt(*t)
+func (_u *ControlHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (chuo *ControlHistoryUpdateOne) ClearDeletedAt() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearDeletedAt()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearDeletedAt() *ControlHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (chuo *ControlHistoryUpdateOne) SetDeletedBy(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetDeletedBy(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetDeletedBy(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableDeletedBy(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetDeletedBy(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableDeletedBy(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (chuo *ControlHistoryUpdateOne) ClearDeletedBy() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearDeletedBy()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearDeletedBy() *ControlHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (chuo *ControlHistoryUpdateOne) SetTags(s []string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetTags(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetTags(v []string) *ControlHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (chuo *ControlHistoryUpdateOne) AppendTags(s []string) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendTags(s)
-	return chuo
+// AppendTags appends value to the "tags" field.
+func (_u *ControlHistoryUpdateOne) AppendTags(v []string) *ControlHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (chuo *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearTags()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (chuo *ControlHistoryUpdateOne) SetDescription(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetDescription(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetDescription(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableDescription(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetDescription(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableDescription(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (chuo *ControlHistoryUpdateOne) ClearDescription() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearDescription()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearDescription() *ControlHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetReferenceID sets the "reference_id" field.
-func (chuo *ControlHistoryUpdateOne) SetReferenceID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetReferenceID(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetReferenceID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetReferenceID(v)
+	return _u
 }
 
 // SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableReferenceID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetReferenceID(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableReferenceID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetReferenceID(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearReferenceID clears the value of the "reference_id" field.
-func (chuo *ControlHistoryUpdateOne) ClearReferenceID() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearReferenceID()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearReferenceID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearReferenceID()
+	return _u
 }
 
 // SetAuditorReferenceID sets the "auditor_reference_id" field.
-func (chuo *ControlHistoryUpdateOne) SetAuditorReferenceID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetAuditorReferenceID(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetAuditorReferenceID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetAuditorReferenceID(v)
+	return _u
 }
 
 // SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableAuditorReferenceID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetAuditorReferenceID(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableAuditorReferenceID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditorReferenceID(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
-func (chuo *ControlHistoryUpdateOne) ClearAuditorReferenceID() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearAuditorReferenceID()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearAuditorReferenceID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearAuditorReferenceID()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (chuo *ControlHistoryUpdateOne) SetStatus(es enums.ControlStatus) *ControlHistoryUpdateOne {
-	chuo.mutation.SetStatus(es)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetStatus(v enums.ControlStatus) *ControlHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableStatus(es *enums.ControlStatus) *ControlHistoryUpdateOne {
-	if es != nil {
-		chuo.SetStatus(*es)
+func (_u *ControlHistoryUpdateOne) SetNillableStatus(v *enums.ControlStatus) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (chuo *ControlHistoryUpdateOne) ClearStatus() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearStatus()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearStatus() *ControlHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (chuo *ControlHistoryUpdateOne) SetSource(es enums.ControlSource) *ControlHistoryUpdateOne {
-	chuo.mutation.SetSource(es)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetSource(v enums.ControlSource) *ControlHistoryUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableSource(es *enums.ControlSource) *ControlHistoryUpdateOne {
-	if es != nil {
-		chuo.SetSource(*es)
+func (_u *ControlHistoryUpdateOne) SetNillableSource(v *enums.ControlSource) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (chuo *ControlHistoryUpdateOne) ClearSource() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearSource()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearSource() *ControlHistoryUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetReferenceFramework sets the "reference_framework" field.
-func (chuo *ControlHistoryUpdateOne) SetReferenceFramework(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetReferenceFramework(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetReferenceFramework(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetReferenceFramework(v)
+	return _u
 }
 
 // SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableReferenceFramework(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetReferenceFramework(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableReferenceFramework(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetReferenceFramework(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearReferenceFramework clears the value of the "reference_framework" field.
-func (chuo *ControlHistoryUpdateOne) ClearReferenceFramework() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearReferenceFramework()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearReferenceFramework() *ControlHistoryUpdateOne {
+	_u.mutation.ClearReferenceFramework()
+	return _u
 }
 
 // SetControlType sets the "control_type" field.
-func (chuo *ControlHistoryUpdateOne) SetControlType(et enums.ControlType) *ControlHistoryUpdateOne {
-	chuo.mutation.SetControlType(et)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetControlType(v enums.ControlType) *ControlHistoryUpdateOne {
+	_u.mutation.SetControlType(v)
+	return _u
 }
 
 // SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableControlType(et *enums.ControlType) *ControlHistoryUpdateOne {
-	if et != nil {
-		chuo.SetControlType(*et)
+func (_u *ControlHistoryUpdateOne) SetNillableControlType(v *enums.ControlType) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetControlType(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearControlType clears the value of the "control_type" field.
-func (chuo *ControlHistoryUpdateOne) ClearControlType() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearControlType()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearControlType() *ControlHistoryUpdateOne {
+	_u.mutation.ClearControlType()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (chuo *ControlHistoryUpdateOne) SetCategory(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetCategory(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetCategory(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableCategory(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetCategory(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableCategory(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (chuo *ControlHistoryUpdateOne) ClearCategory() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearCategory()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearCategory() *ControlHistoryUpdateOne {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetCategoryID sets the "category_id" field.
-func (chuo *ControlHistoryUpdateOne) SetCategoryID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetCategoryID(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetCategoryID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetCategoryID(v)
+	return _u
 }
 
 // SetNillableCategoryID sets the "category_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableCategoryID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetCategoryID(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableCategoryID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetCategoryID(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearCategoryID clears the value of the "category_id" field.
-func (chuo *ControlHistoryUpdateOne) ClearCategoryID() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearCategoryID()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearCategoryID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearCategoryID()
+	return _u
 }
 
 // SetSubcategory sets the "subcategory" field.
-func (chuo *ControlHistoryUpdateOne) SetSubcategory(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetSubcategory(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetSubcategory(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetSubcategory(v)
+	return _u
 }
 
 // SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableSubcategory(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetSubcategory(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableSubcategory(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubcategory(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearSubcategory clears the value of the "subcategory" field.
-func (chuo *ControlHistoryUpdateOne) ClearSubcategory() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearSubcategory()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearSubcategory() *ControlHistoryUpdateOne {
+	_u.mutation.ClearSubcategory()
+	return _u
 }
 
 // SetMappedCategories sets the "mapped_categories" field.
-func (chuo *ControlHistoryUpdateOne) SetMappedCategories(s []string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetMappedCategories(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetMappedCategories(v []string) *ControlHistoryUpdateOne {
+	_u.mutation.SetMappedCategories(v)
+	return _u
 }
 
-// AppendMappedCategories appends s to the "mapped_categories" field.
-func (chuo *ControlHistoryUpdateOne) AppendMappedCategories(s []string) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendMappedCategories(s)
-	return chuo
+// AppendMappedCategories appends value to the "mapped_categories" field.
+func (_u *ControlHistoryUpdateOne) AppendMappedCategories(v []string) *ControlHistoryUpdateOne {
+	_u.mutation.AppendMappedCategories(v)
+	return _u
 }
 
 // ClearMappedCategories clears the value of the "mapped_categories" field.
-func (chuo *ControlHistoryUpdateOne) ClearMappedCategories() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearMappedCategories()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearMappedCategories() *ControlHistoryUpdateOne {
+	_u.mutation.ClearMappedCategories()
+	return _u
 }
 
 // SetAssessmentObjectives sets the "assessment_objectives" field.
-func (chuo *ControlHistoryUpdateOne) SetAssessmentObjectives(mo []models.AssessmentObjective) *ControlHistoryUpdateOne {
-	chuo.mutation.SetAssessmentObjectives(mo)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetAssessmentObjectives(v []models.AssessmentObjective) *ControlHistoryUpdateOne {
+	_u.mutation.SetAssessmentObjectives(v)
+	return _u
 }
 
-// AppendAssessmentObjectives appends mo to the "assessment_objectives" field.
-func (chuo *ControlHistoryUpdateOne) AppendAssessmentObjectives(mo []models.AssessmentObjective) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendAssessmentObjectives(mo)
-	return chuo
+// AppendAssessmentObjectives appends value to the "assessment_objectives" field.
+func (_u *ControlHistoryUpdateOne) AppendAssessmentObjectives(v []models.AssessmentObjective) *ControlHistoryUpdateOne {
+	_u.mutation.AppendAssessmentObjectives(v)
+	return _u
 }
 
 // ClearAssessmentObjectives clears the value of the "assessment_objectives" field.
-func (chuo *ControlHistoryUpdateOne) ClearAssessmentObjectives() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearAssessmentObjectives()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearAssessmentObjectives() *ControlHistoryUpdateOne {
+	_u.mutation.ClearAssessmentObjectives()
+	return _u
 }
 
 // SetAssessmentMethods sets the "assessment_methods" field.
-func (chuo *ControlHistoryUpdateOne) SetAssessmentMethods(mm []models.AssessmentMethod) *ControlHistoryUpdateOne {
-	chuo.mutation.SetAssessmentMethods(mm)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetAssessmentMethods(v []models.AssessmentMethod) *ControlHistoryUpdateOne {
+	_u.mutation.SetAssessmentMethods(v)
+	return _u
 }
 
-// AppendAssessmentMethods appends mm to the "assessment_methods" field.
-func (chuo *ControlHistoryUpdateOne) AppendAssessmentMethods(mm []models.AssessmentMethod) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendAssessmentMethods(mm)
-	return chuo
+// AppendAssessmentMethods appends value to the "assessment_methods" field.
+func (_u *ControlHistoryUpdateOne) AppendAssessmentMethods(v []models.AssessmentMethod) *ControlHistoryUpdateOne {
+	_u.mutation.AppendAssessmentMethods(v)
+	return _u
 }
 
 // ClearAssessmentMethods clears the value of the "assessment_methods" field.
-func (chuo *ControlHistoryUpdateOne) ClearAssessmentMethods() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearAssessmentMethods()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearAssessmentMethods() *ControlHistoryUpdateOne {
+	_u.mutation.ClearAssessmentMethods()
+	return _u
 }
 
 // SetControlQuestions sets the "control_questions" field.
-func (chuo *ControlHistoryUpdateOne) SetControlQuestions(s []string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetControlQuestions(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetControlQuestions(v []string) *ControlHistoryUpdateOne {
+	_u.mutation.SetControlQuestions(v)
+	return _u
 }
 
-// AppendControlQuestions appends s to the "control_questions" field.
-func (chuo *ControlHistoryUpdateOne) AppendControlQuestions(s []string) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendControlQuestions(s)
-	return chuo
+// AppendControlQuestions appends value to the "control_questions" field.
+func (_u *ControlHistoryUpdateOne) AppendControlQuestions(v []string) *ControlHistoryUpdateOne {
+	_u.mutation.AppendControlQuestions(v)
+	return _u
 }
 
 // ClearControlQuestions clears the value of the "control_questions" field.
-func (chuo *ControlHistoryUpdateOne) ClearControlQuestions() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearControlQuestions()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearControlQuestions() *ControlHistoryUpdateOne {
+	_u.mutation.ClearControlQuestions()
+	return _u
 }
 
 // SetImplementationGuidance sets the "implementation_guidance" field.
-func (chuo *ControlHistoryUpdateOne) SetImplementationGuidance(mg []models.ImplementationGuidance) *ControlHistoryUpdateOne {
-	chuo.mutation.SetImplementationGuidance(mg)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetImplementationGuidance(v []models.ImplementationGuidance) *ControlHistoryUpdateOne {
+	_u.mutation.SetImplementationGuidance(v)
+	return _u
 }
 
-// AppendImplementationGuidance appends mg to the "implementation_guidance" field.
-func (chuo *ControlHistoryUpdateOne) AppendImplementationGuidance(mg []models.ImplementationGuidance) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendImplementationGuidance(mg)
-	return chuo
+// AppendImplementationGuidance appends value to the "implementation_guidance" field.
+func (_u *ControlHistoryUpdateOne) AppendImplementationGuidance(v []models.ImplementationGuidance) *ControlHistoryUpdateOne {
+	_u.mutation.AppendImplementationGuidance(v)
+	return _u
 }
 
 // ClearImplementationGuidance clears the value of the "implementation_guidance" field.
-func (chuo *ControlHistoryUpdateOne) ClearImplementationGuidance() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearImplementationGuidance()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearImplementationGuidance() *ControlHistoryUpdateOne {
+	_u.mutation.ClearImplementationGuidance()
+	return _u
 }
 
 // SetExampleEvidence sets the "example_evidence" field.
-func (chuo *ControlHistoryUpdateOne) SetExampleEvidence(me []models.ExampleEvidence) *ControlHistoryUpdateOne {
-	chuo.mutation.SetExampleEvidence(me)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetExampleEvidence(v []models.ExampleEvidence) *ControlHistoryUpdateOne {
+	_u.mutation.SetExampleEvidence(v)
+	return _u
 }
 
-// AppendExampleEvidence appends me to the "example_evidence" field.
-func (chuo *ControlHistoryUpdateOne) AppendExampleEvidence(me []models.ExampleEvidence) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendExampleEvidence(me)
-	return chuo
+// AppendExampleEvidence appends value to the "example_evidence" field.
+func (_u *ControlHistoryUpdateOne) AppendExampleEvidence(v []models.ExampleEvidence) *ControlHistoryUpdateOne {
+	_u.mutation.AppendExampleEvidence(v)
+	return _u
 }
 
 // ClearExampleEvidence clears the value of the "example_evidence" field.
-func (chuo *ControlHistoryUpdateOne) ClearExampleEvidence() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearExampleEvidence()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearExampleEvidence() *ControlHistoryUpdateOne {
+	_u.mutation.ClearExampleEvidence()
+	return _u
 }
 
 // SetReferences sets the "references" field.
-func (chuo *ControlHistoryUpdateOne) SetReferences(m []models.Reference) *ControlHistoryUpdateOne {
-	chuo.mutation.SetReferences(m)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetReferences(v []models.Reference) *ControlHistoryUpdateOne {
+	_u.mutation.SetReferences(v)
+	return _u
 }
 
-// AppendReferences appends m to the "references" field.
-func (chuo *ControlHistoryUpdateOne) AppendReferences(m []models.Reference) *ControlHistoryUpdateOne {
-	chuo.mutation.AppendReferences(m)
-	return chuo
+// AppendReferences appends value to the "references" field.
+func (_u *ControlHistoryUpdateOne) AppendReferences(v []models.Reference) *ControlHistoryUpdateOne {
+	_u.mutation.AppendReferences(v)
+	return _u
 }
 
 // ClearReferences clears the value of the "references" field.
-func (chuo *ControlHistoryUpdateOne) ClearReferences() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearReferences()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearReferences() *ControlHistoryUpdateOne {
+	_u.mutation.ClearReferences()
+	return _u
 }
 
 // SetControlOwnerID sets the "control_owner_id" field.
-func (chuo *ControlHistoryUpdateOne) SetControlOwnerID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetControlOwnerID(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetControlOwnerID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetControlOwnerID(v)
+	return _u
 }
 
 // SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableControlOwnerID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetControlOwnerID(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableControlOwnerID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetControlOwnerID(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearControlOwnerID clears the value of the "control_owner_id" field.
-func (chuo *ControlHistoryUpdateOne) ClearControlOwnerID() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearControlOwnerID()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearControlOwnerID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearControlOwnerID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (chuo *ControlHistoryUpdateOne) SetDelegateID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetDelegateID(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetDelegateID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableDelegateID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetDelegateID(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableDelegateID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (chuo *ControlHistoryUpdateOne) ClearDelegateID() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearDelegateID()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearDelegateID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetRefCode sets the "ref_code" field.
-func (chuo *ControlHistoryUpdateOne) SetRefCode(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetRefCode(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetRefCode(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetRefCode(v)
+	return _u
 }
 
 // SetNillableRefCode sets the "ref_code" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableRefCode(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetRefCode(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableRefCode(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetRefCode(*v)
 	}
-	return chuo
+	return _u
 }
 
 // SetStandardID sets the "standard_id" field.
-func (chuo *ControlHistoryUpdateOne) SetStandardID(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetStandardID(s)
-	return chuo
+func (_u *ControlHistoryUpdateOne) SetStandardID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetStandardID(v)
+	return _u
 }
 
 // SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableStandardID(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetStandardID(*s)
+func (_u *ControlHistoryUpdateOne) SetNillableStandardID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetStandardID(*v)
 	}
-	return chuo
+	return _u
 }
 
 // ClearStandardID clears the value of the "standard_id" field.
-func (chuo *ControlHistoryUpdateOne) ClearStandardID() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearStandardID()
-	return chuo
+func (_u *ControlHistoryUpdateOne) ClearStandardID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearStandardID()
+	return _u
 }
 
 // Mutation returns the ControlHistoryMutation object of the builder.
-func (chuo *ControlHistoryUpdateOne) Mutation() *ControlHistoryMutation {
-	return chuo.mutation
+func (_u *ControlHistoryUpdateOne) Mutation() *ControlHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ControlHistoryUpdate builder.
-func (chuo *ControlHistoryUpdateOne) Where(ps ...predicate.ControlHistory) *ControlHistoryUpdateOne {
-	chuo.mutation.Where(ps...)
-	return chuo
+func (_u *ControlHistoryUpdateOne) Where(ps ...predicate.ControlHistory) *ControlHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (chuo *ControlHistoryUpdateOne) Select(field string, fields ...string) *ControlHistoryUpdateOne {
-	chuo.fields = append([]string{field}, fields...)
-	return chuo
+func (_u *ControlHistoryUpdateOne) Select(field string, fields ...string) *ControlHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ControlHistory entity.
-func (chuo *ControlHistoryUpdateOne) Save(ctx context.Context) (*ControlHistory, error) {
-	if err := chuo.defaults(); err != nil {
+func (_u *ControlHistoryUpdateOne) Save(ctx context.Context) (*ControlHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (chuo *ControlHistoryUpdateOne) SaveX(ctx context.Context) *ControlHistory {
-	node, err := chuo.Save(ctx)
+func (_u *ControlHistoryUpdateOne) SaveX(ctx context.Context) *ControlHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1364,43 +1364,43 @@ func (chuo *ControlHistoryUpdateOne) SaveX(ctx context.Context) *ControlHistory 
 }
 
 // Exec executes the query on the entity.
-func (chuo *ControlHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := chuo.Save(ctx)
+func (_u *ControlHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chuo *ControlHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := chuo.Exec(ctx); err != nil {
+func (_u *ControlHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (chuo *ControlHistoryUpdateOne) defaults() error {
-	if _, ok := chuo.mutation.UpdatedAt(); !ok && !chuo.mutation.UpdatedAtCleared() {
+func (_u *ControlHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if controlhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
-		chuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (chuo *ControlHistoryUpdateOne) check() error {
-	if v, ok := chuo.mutation.Status(); ok {
+func (_u *ControlHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := controlhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := chuo.mutation.Source(); ok {
+	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := chuo.mutation.ControlType(); ok {
+	if v, ok := _u.mutation.ControlType(); ok {
 		if err := controlhistory.ControlTypeValidator(v); err != nil {
 			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "ControlHistory.control_type": %w`, err)}
 		}
@@ -1409,22 +1409,22 @@ func (chuo *ControlHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (chuo *ControlHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlHistoryUpdateOne {
-	chuo.modifiers = append(chuo.modifiers, modifiers...)
-	return chuo
+func (_u *ControlHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlHistory, err error) {
-	if err := chuo.check(); err != nil {
+func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(controlhistory.Table, controlhistory.Columns, sqlgraph.NewFieldSpec(controlhistory.FieldID, field.TypeString))
-	id, ok := chuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ControlHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := chuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, controlhistory.FieldID)
 		for _, f := range fields {
@@ -1436,225 +1436,225 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 			}
 		}
 	}
-	if ps := chuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if chuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(controlhistory.FieldRef, field.TypeString)
 	}
-	if chuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := chuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if chuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if chuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(controlhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := chuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if chuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(controlhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := chuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(controlhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if chuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := chuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(controlhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if chuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(controlhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := chuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldTags, value)
 		})
 	}
-	if chuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 	}
-	if chuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(controlhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := chuo.mutation.ReferenceID(); ok {
+	if value, ok := _u.mutation.ReferenceID(); ok {
 		_spec.SetField(controlhistory.FieldReferenceID, field.TypeString, value)
 	}
-	if chuo.mutation.ReferenceIDCleared() {
+	if _u.mutation.ReferenceIDCleared() {
 		_spec.ClearField(controlhistory.FieldReferenceID, field.TypeString)
 	}
-	if value, ok := chuo.mutation.AuditorReferenceID(); ok {
+	if value, ok := _u.mutation.AuditorReferenceID(); ok {
 		_spec.SetField(controlhistory.FieldAuditorReferenceID, field.TypeString, value)
 	}
-	if chuo.mutation.AuditorReferenceIDCleared() {
+	if _u.mutation.AuditorReferenceIDCleared() {
 		_spec.ClearField(controlhistory.FieldAuditorReferenceID, field.TypeString)
 	}
-	if value, ok := chuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if chuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := chuo.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 	}
-	if chuo.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(controlhistory.FieldSource, field.TypeEnum)
 	}
-	if value, ok := chuo.mutation.ReferenceFramework(); ok {
+	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
 	}
-	if chuo.mutation.ReferenceFrameworkCleared() {
+	if _u.mutation.ReferenceFrameworkCleared() {
 		_spec.ClearField(controlhistory.FieldReferenceFramework, field.TypeString)
 	}
-	if value, ok := chuo.mutation.ControlType(); ok {
+	if value, ok := _u.mutation.ControlType(); ok {
 		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)
 	}
-	if chuo.mutation.ControlTypeCleared() {
+	if _u.mutation.ControlTypeCleared() {
 		_spec.ClearField(controlhistory.FieldControlType, field.TypeEnum)
 	}
-	if value, ok := chuo.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(controlhistory.FieldCategory, field.TypeString, value)
 	}
-	if chuo.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(controlhistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := chuo.mutation.CategoryID(); ok {
+	if value, ok := _u.mutation.CategoryID(); ok {
 		_spec.SetField(controlhistory.FieldCategoryID, field.TypeString, value)
 	}
-	if chuo.mutation.CategoryIDCleared() {
+	if _u.mutation.CategoryIDCleared() {
 		_spec.ClearField(controlhistory.FieldCategoryID, field.TypeString)
 	}
-	if value, ok := chuo.mutation.Subcategory(); ok {
+	if value, ok := _u.mutation.Subcategory(); ok {
 		_spec.SetField(controlhistory.FieldSubcategory, field.TypeString, value)
 	}
-	if chuo.mutation.SubcategoryCleared() {
+	if _u.mutation.SubcategoryCleared() {
 		_spec.ClearField(controlhistory.FieldSubcategory, field.TypeString)
 	}
-	if value, ok := chuo.mutation.MappedCategories(); ok {
+	if value, ok := _u.mutation.MappedCategories(); ok {
 		_spec.SetField(controlhistory.FieldMappedCategories, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedMappedCategories(); ok {
+	if value, ok := _u.mutation.AppendedMappedCategories(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldMappedCategories, value)
 		})
 	}
-	if chuo.mutation.MappedCategoriesCleared() {
+	if _u.mutation.MappedCategoriesCleared() {
 		_spec.ClearField(controlhistory.FieldMappedCategories, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.AssessmentObjectives(); ok {
+	if value, ok := _u.mutation.AssessmentObjectives(); ok {
 		_spec.SetField(controlhistory.FieldAssessmentObjectives, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedAssessmentObjectives(); ok {
+	if value, ok := _u.mutation.AppendedAssessmentObjectives(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldAssessmentObjectives, value)
 		})
 	}
-	if chuo.mutation.AssessmentObjectivesCleared() {
+	if _u.mutation.AssessmentObjectivesCleared() {
 		_spec.ClearField(controlhistory.FieldAssessmentObjectives, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.AssessmentMethods(); ok {
+	if value, ok := _u.mutation.AssessmentMethods(); ok {
 		_spec.SetField(controlhistory.FieldAssessmentMethods, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedAssessmentMethods(); ok {
+	if value, ok := _u.mutation.AppendedAssessmentMethods(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldAssessmentMethods, value)
 		})
 	}
-	if chuo.mutation.AssessmentMethodsCleared() {
+	if _u.mutation.AssessmentMethodsCleared() {
 		_spec.ClearField(controlhistory.FieldAssessmentMethods, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.ControlQuestions(); ok {
+	if value, ok := _u.mutation.ControlQuestions(); ok {
 		_spec.SetField(controlhistory.FieldControlQuestions, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedControlQuestions(); ok {
+	if value, ok := _u.mutation.AppendedControlQuestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldControlQuestions, value)
 		})
 	}
-	if chuo.mutation.ControlQuestionsCleared() {
+	if _u.mutation.ControlQuestionsCleared() {
 		_spec.ClearField(controlhistory.FieldControlQuestions, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.ImplementationGuidance(); ok {
+	if value, ok := _u.mutation.ImplementationGuidance(); ok {
 		_spec.SetField(controlhistory.FieldImplementationGuidance, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedImplementationGuidance(); ok {
+	if value, ok := _u.mutation.AppendedImplementationGuidance(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldImplementationGuidance, value)
 		})
 	}
-	if chuo.mutation.ImplementationGuidanceCleared() {
+	if _u.mutation.ImplementationGuidanceCleared() {
 		_spec.ClearField(controlhistory.FieldImplementationGuidance, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.ExampleEvidence(); ok {
+	if value, ok := _u.mutation.ExampleEvidence(); ok {
 		_spec.SetField(controlhistory.FieldExampleEvidence, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedExampleEvidence(); ok {
+	if value, ok := _u.mutation.AppendedExampleEvidence(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldExampleEvidence, value)
 		})
 	}
-	if chuo.mutation.ExampleEvidenceCleared() {
+	if _u.mutation.ExampleEvidenceCleared() {
 		_spec.ClearField(controlhistory.FieldExampleEvidence, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.References(); ok {
+	if value, ok := _u.mutation.References(); ok {
 		_spec.SetField(controlhistory.FieldReferences, field.TypeJSON, value)
 	}
-	if value, ok := chuo.mutation.AppendedReferences(); ok {
+	if value, ok := _u.mutation.AppendedReferences(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlhistory.FieldReferences, value)
 		})
 	}
-	if chuo.mutation.ReferencesCleared() {
+	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(controlhistory.FieldReferences, field.TypeJSON)
 	}
-	if value, ok := chuo.mutation.ControlOwnerID(); ok {
+	if value, ok := _u.mutation.ControlOwnerID(); ok {
 		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
 	}
-	if chuo.mutation.ControlOwnerIDCleared() {
+	if _u.mutation.ControlOwnerIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlOwnerID, field.TypeString)
 	}
-	if value, ok := chuo.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(controlhistory.FieldDelegateID, field.TypeString, value)
 	}
-	if chuo.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(controlhistory.FieldDelegateID, field.TypeString)
 	}
-	if chuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := chuo.mutation.RefCode(); ok {
+	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
 	}
-	if value, ok := chuo.mutation.StandardID(); ok {
+	if value, ok := _u.mutation.StandardID(); ok {
 		_spec.SetField(controlhistory.FieldStandardID, field.TypeString, value)
 	}
-	if chuo.mutation.StandardIDCleared() {
+	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(controlhistory.FieldStandardID, field.TypeString)
 	}
-	_spec.Node.Schema = chuo.schemaConfig.ControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, chuo.schemaConfig)
-	_spec.AddModifiers(chuo.modifiers...)
-	_node = &ControlHistory{config: chuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ControlHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ControlHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, chuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{controlhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1662,6 +1662,6 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 		}
 		return nil, err
 	}
-	chuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

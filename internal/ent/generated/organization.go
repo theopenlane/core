@@ -897,7 +897,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Organization fields.
-func (o *Organization) assignValues(columns []string, values []any) error {
+func (_m *Organization) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -907,49 +907,49 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				o.ID = value.String
+				_m.ID = value.String
 			}
 		case organization.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				o.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case organization.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				o.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case organization.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				o.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case organization.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				o.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case organization.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				o.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case organization.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				o.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case organization.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &o.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -957,61 +957,61 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				o.Name = value.String
+				_m.Name = value.String
 			}
 		case organization.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				o.DisplayName = value.String
+				_m.DisplayName = value.String
 			}
 		case organization.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				o.Description = value.String
+				_m.Description = value.String
 			}
 		case organization.FieldParentOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_organization_id", values[i])
 			} else if value.Valid {
-				o.ParentOrganizationID = value.String
+				_m.ParentOrganizationID = value.String
 			}
 		case organization.FieldPersonalOrg:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field personal_org", values[i])
 			} else if value.Valid {
-				o.PersonalOrg = value.Bool
+				_m.PersonalOrg = value.Bool
 			}
 		case organization.FieldAvatarRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
 			} else if value.Valid {
-				o.AvatarRemoteURL = new(string)
-				*o.AvatarRemoteURL = value.String
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
 			}
 		case organization.FieldAvatarLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
 			} else if value.Valid {
-				o.AvatarLocalFileID = new(string)
-				*o.AvatarLocalFileID = value.String
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
 			}
 		case organization.FieldAvatarUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
 			} else if value.Valid {
-				o.AvatarUpdatedAt = new(time.Time)
-				*o.AvatarUpdatedAt = value.Time
+				_m.AvatarUpdatedAt = new(time.Time)
+				*_m.AvatarUpdatedAt = value.Time
 			}
 		case organization.FieldDedicatedDb:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field dedicated_db", values[i])
 			} else if value.Valid {
-				o.DedicatedDb = value.Bool
+				_m.DedicatedDb = value.Bool
 			}
 		default:
-			o.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -1019,1958 +1019,1958 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Organization.
 // This includes values selected through modifiers, order, etc.
-func (o *Organization) Value(name string) (ent.Value, error) {
-	return o.selectValues.Get(name)
+func (_m *Organization) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryControlCreators queries the "control_creators" edge of the Organization entity.
-func (o *Organization) QueryControlCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryControlCreators(o)
+func (_m *Organization) QueryControlCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryControlCreators(_m)
 }
 
 // QueryControlImplementationCreators queries the "control_implementation_creators" edge of the Organization entity.
-func (o *Organization) QueryControlImplementationCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryControlImplementationCreators(o)
+func (_m *Organization) QueryControlImplementationCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryControlImplementationCreators(_m)
 }
 
 // QueryControlObjectiveCreators queries the "control_objective_creators" edge of the Organization entity.
-func (o *Organization) QueryControlObjectiveCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryControlObjectiveCreators(o)
+func (_m *Organization) QueryControlObjectiveCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryControlObjectiveCreators(_m)
 }
 
 // QueryEvidenceCreators queries the "evidence_creators" edge of the Organization entity.
-func (o *Organization) QueryEvidenceCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryEvidenceCreators(o)
+func (_m *Organization) QueryEvidenceCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryEvidenceCreators(_m)
 }
 
 // QueryGroupCreators queries the "group_creators" edge of the Organization entity.
-func (o *Organization) QueryGroupCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryGroupCreators(o)
+func (_m *Organization) QueryGroupCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryGroupCreators(_m)
 }
 
 // QueryInternalPolicyCreators queries the "internal_policy_creators" edge of the Organization entity.
-func (o *Organization) QueryInternalPolicyCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryInternalPolicyCreators(o)
+func (_m *Organization) QueryInternalPolicyCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryInternalPolicyCreators(_m)
 }
 
 // QueryMappedControlCreators queries the "mapped_control_creators" edge of the Organization entity.
-func (o *Organization) QueryMappedControlCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryMappedControlCreators(o)
+func (_m *Organization) QueryMappedControlCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryMappedControlCreators(_m)
 }
 
 // QueryNarrativeCreators queries the "narrative_creators" edge of the Organization entity.
-func (o *Organization) QueryNarrativeCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryNarrativeCreators(o)
+func (_m *Organization) QueryNarrativeCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryNarrativeCreators(_m)
 }
 
 // QueryProcedureCreators queries the "procedure_creators" edge of the Organization entity.
-func (o *Organization) QueryProcedureCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryProcedureCreators(o)
+func (_m *Organization) QueryProcedureCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryProcedureCreators(_m)
 }
 
 // QueryProgramCreators queries the "program_creators" edge of the Organization entity.
-func (o *Organization) QueryProgramCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryProgramCreators(o)
+func (_m *Organization) QueryProgramCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryProgramCreators(_m)
 }
 
 // QueryRiskCreators queries the "risk_creators" edge of the Organization entity.
-func (o *Organization) QueryRiskCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryRiskCreators(o)
+func (_m *Organization) QueryRiskCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryRiskCreators(_m)
 }
 
 // QueryScheduledJobCreators queries the "scheduled_job_creators" edge of the Organization entity.
-func (o *Organization) QueryScheduledJobCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryScheduledJobCreators(o)
+func (_m *Organization) QueryScheduledJobCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryScheduledJobCreators(_m)
 }
 
 // QueryStandardCreators queries the "standard_creators" edge of the Organization entity.
-func (o *Organization) QueryStandardCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryStandardCreators(o)
+func (_m *Organization) QueryStandardCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryStandardCreators(_m)
 }
 
 // QueryTemplateCreators queries the "template_creators" edge of the Organization entity.
-func (o *Organization) QueryTemplateCreators() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryTemplateCreators(o)
+func (_m *Organization) QueryTemplateCreators() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryTemplateCreators(_m)
 }
 
 // QueryParent queries the "parent" edge of the Organization entity.
-func (o *Organization) QueryParent() *OrganizationQuery {
-	return NewOrganizationClient(o.config).QueryParent(o)
+func (_m *Organization) QueryParent() *OrganizationQuery {
+	return NewOrganizationClient(_m.config).QueryParent(_m)
 }
 
 // QueryChildren queries the "children" edge of the Organization entity.
-func (o *Organization) QueryChildren() *OrganizationQuery {
-	return NewOrganizationClient(o.config).QueryChildren(o)
+func (_m *Organization) QueryChildren() *OrganizationQuery {
+	return NewOrganizationClient(_m.config).QueryChildren(_m)
 }
 
 // QuerySetting queries the "setting" edge of the Organization entity.
-func (o *Organization) QuerySetting() *OrganizationSettingQuery {
-	return NewOrganizationClient(o.config).QuerySetting(o)
+func (_m *Organization) QuerySetting() *OrganizationSettingQuery {
+	return NewOrganizationClient(_m.config).QuerySetting(_m)
 }
 
 // QueryPersonalAccessTokens queries the "personal_access_tokens" edge of the Organization entity.
-func (o *Organization) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
-	return NewOrganizationClient(o.config).QueryPersonalAccessTokens(o)
+func (_m *Organization) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
+	return NewOrganizationClient(_m.config).QueryPersonalAccessTokens(_m)
 }
 
 // QueryAPITokens queries the "api_tokens" edge of the Organization entity.
-func (o *Organization) QueryAPITokens() *APITokenQuery {
-	return NewOrganizationClient(o.config).QueryAPITokens(o)
+func (_m *Organization) QueryAPITokens() *APITokenQuery {
+	return NewOrganizationClient(_m.config).QueryAPITokens(_m)
 }
 
 // QueryUsers queries the "users" edge of the Organization entity.
-func (o *Organization) QueryUsers() *UserQuery {
-	return NewOrganizationClient(o.config).QueryUsers(o)
+func (_m *Organization) QueryUsers() *UserQuery {
+	return NewOrganizationClient(_m.config).QueryUsers(_m)
 }
 
 // QueryFiles queries the "files" edge of the Organization entity.
-func (o *Organization) QueryFiles() *FileQuery {
-	return NewOrganizationClient(o.config).QueryFiles(o)
+func (_m *Organization) QueryFiles() *FileQuery {
+	return NewOrganizationClient(_m.config).QueryFiles(_m)
 }
 
 // QueryEvents queries the "events" edge of the Organization entity.
-func (o *Organization) QueryEvents() *EventQuery {
-	return NewOrganizationClient(o.config).QueryEvents(o)
+func (_m *Organization) QueryEvents() *EventQuery {
+	return NewOrganizationClient(_m.config).QueryEvents(_m)
 }
 
 // QuerySecrets queries the "secrets" edge of the Organization entity.
-func (o *Organization) QuerySecrets() *HushQuery {
-	return NewOrganizationClient(o.config).QuerySecrets(o)
+func (_m *Organization) QuerySecrets() *HushQuery {
+	return NewOrganizationClient(_m.config).QuerySecrets(_m)
 }
 
 // QueryAvatarFile queries the "avatar_file" edge of the Organization entity.
-func (o *Organization) QueryAvatarFile() *FileQuery {
-	return NewOrganizationClient(o.config).QueryAvatarFile(o)
+func (_m *Organization) QueryAvatarFile() *FileQuery {
+	return NewOrganizationClient(_m.config).QueryAvatarFile(_m)
 }
 
 // QueryGroups queries the "groups" edge of the Organization entity.
-func (o *Organization) QueryGroups() *GroupQuery {
-	return NewOrganizationClient(o.config).QueryGroups(o)
+func (_m *Organization) QueryGroups() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryGroups(_m)
 }
 
 // QueryTemplates queries the "templates" edge of the Organization entity.
-func (o *Organization) QueryTemplates() *TemplateQuery {
-	return NewOrganizationClient(o.config).QueryTemplates(o)
+func (_m *Organization) QueryTemplates() *TemplateQuery {
+	return NewOrganizationClient(_m.config).QueryTemplates(_m)
 }
 
 // QueryIntegrations queries the "integrations" edge of the Organization entity.
-func (o *Organization) QueryIntegrations() *IntegrationQuery {
-	return NewOrganizationClient(o.config).QueryIntegrations(o)
+func (_m *Organization) QueryIntegrations() *IntegrationQuery {
+	return NewOrganizationClient(_m.config).QueryIntegrations(_m)
 }
 
 // QueryDocuments queries the "documents" edge of the Organization entity.
-func (o *Organization) QueryDocuments() *DocumentDataQuery {
-	return NewOrganizationClient(o.config).QueryDocuments(o)
+func (_m *Organization) QueryDocuments() *DocumentDataQuery {
+	return NewOrganizationClient(_m.config).QueryDocuments(_m)
 }
 
 // QueryOrgSubscriptions queries the "org_subscriptions" edge of the Organization entity.
-func (o *Organization) QueryOrgSubscriptions() *OrgSubscriptionQuery {
-	return NewOrganizationClient(o.config).QueryOrgSubscriptions(o)
+func (_m *Organization) QueryOrgSubscriptions() *OrgSubscriptionQuery {
+	return NewOrganizationClient(_m.config).QueryOrgSubscriptions(_m)
 }
 
 // QueryOrgProducts queries the "org_products" edge of the Organization entity.
-func (o *Organization) QueryOrgProducts() *OrgProductQuery {
-	return NewOrganizationClient(o.config).QueryOrgProducts(o)
+func (_m *Organization) QueryOrgProducts() *OrgProductQuery {
+	return NewOrganizationClient(_m.config).QueryOrgProducts(_m)
 }
 
 // QueryOrgPrices queries the "org_prices" edge of the Organization entity.
-func (o *Organization) QueryOrgPrices() *OrgPriceQuery {
-	return NewOrganizationClient(o.config).QueryOrgPrices(o)
+func (_m *Organization) QueryOrgPrices() *OrgPriceQuery {
+	return NewOrganizationClient(_m.config).QueryOrgPrices(_m)
 }
 
 // QueryOrgModules queries the "org_modules" edge of the Organization entity.
-func (o *Organization) QueryOrgModules() *OrgModuleQuery {
-	return NewOrganizationClient(o.config).QueryOrgModules(o)
+func (_m *Organization) QueryOrgModules() *OrgModuleQuery {
+	return NewOrganizationClient(_m.config).QueryOrgModules(_m)
 }
 
 // QueryInvites queries the "invites" edge of the Organization entity.
-func (o *Organization) QueryInvites() *InviteQuery {
-	return NewOrganizationClient(o.config).QueryInvites(o)
+func (_m *Organization) QueryInvites() *InviteQuery {
+	return NewOrganizationClient(_m.config).QueryInvites(_m)
 }
 
 // QuerySubscribers queries the "subscribers" edge of the Organization entity.
-func (o *Organization) QuerySubscribers() *SubscriberQuery {
-	return NewOrganizationClient(o.config).QuerySubscribers(o)
+func (_m *Organization) QuerySubscribers() *SubscriberQuery {
+	return NewOrganizationClient(_m.config).QuerySubscribers(_m)
 }
 
 // QueryEntities queries the "entities" edge of the Organization entity.
-func (o *Organization) QueryEntities() *EntityQuery {
-	return NewOrganizationClient(o.config).QueryEntities(o)
+func (_m *Organization) QueryEntities() *EntityQuery {
+	return NewOrganizationClient(_m.config).QueryEntities(_m)
 }
 
 // QueryEntityTypes queries the "entity_types" edge of the Organization entity.
-func (o *Organization) QueryEntityTypes() *EntityTypeQuery {
-	return NewOrganizationClient(o.config).QueryEntityTypes(o)
+func (_m *Organization) QueryEntityTypes() *EntityTypeQuery {
+	return NewOrganizationClient(_m.config).QueryEntityTypes(_m)
 }
 
 // QueryContacts queries the "contacts" edge of the Organization entity.
-func (o *Organization) QueryContacts() *ContactQuery {
-	return NewOrganizationClient(o.config).QueryContacts(o)
+func (_m *Organization) QueryContacts() *ContactQuery {
+	return NewOrganizationClient(_m.config).QueryContacts(_m)
 }
 
 // QueryNotes queries the "notes" edge of the Organization entity.
-func (o *Organization) QueryNotes() *NoteQuery {
-	return NewOrganizationClient(o.config).QueryNotes(o)
+func (_m *Organization) QueryNotes() *NoteQuery {
+	return NewOrganizationClient(_m.config).QueryNotes(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Organization entity.
-func (o *Organization) QueryTasks() *TaskQuery {
-	return NewOrganizationClient(o.config).QueryTasks(o)
+func (_m *Organization) QueryTasks() *TaskQuery {
+	return NewOrganizationClient(_m.config).QueryTasks(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Organization entity.
-func (o *Organization) QueryPrograms() *ProgramQuery {
-	return NewOrganizationClient(o.config).QueryPrograms(o)
+func (_m *Organization) QueryPrograms() *ProgramQuery {
+	return NewOrganizationClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the Organization entity.
-func (o *Organization) QueryProcedures() *ProcedureQuery {
-	return NewOrganizationClient(o.config).QueryProcedures(o)
+func (_m *Organization) QueryProcedures() *ProcedureQuery {
+	return NewOrganizationClient(_m.config).QueryProcedures(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Organization entity.
-func (o *Organization) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewOrganizationClient(o.config).QueryInternalPolicies(o)
+func (_m *Organization) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewOrganizationClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryRisks queries the "risks" edge of the Organization entity.
-func (o *Organization) QueryRisks() *RiskQuery {
-	return NewOrganizationClient(o.config).QueryRisks(o)
+func (_m *Organization) QueryRisks() *RiskQuery {
+	return NewOrganizationClient(_m.config).QueryRisks(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the Organization entity.
-func (o *Organization) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewOrganizationClient(o.config).QueryControlObjectives(o)
+func (_m *Organization) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewOrganizationClient(_m.config).QueryControlObjectives(_m)
 }
 
 // QueryNarratives queries the "narratives" edge of the Organization entity.
-func (o *Organization) QueryNarratives() *NarrativeQuery {
-	return NewOrganizationClient(o.config).QueryNarratives(o)
+func (_m *Organization) QueryNarratives() *NarrativeQuery {
+	return NewOrganizationClient(_m.config).QueryNarratives(_m)
 }
 
 // QueryControls queries the "controls" edge of the Organization entity.
-func (o *Organization) QueryControls() *ControlQuery {
-	return NewOrganizationClient(o.config).QueryControls(o)
+func (_m *Organization) QueryControls() *ControlQuery {
+	return NewOrganizationClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Organization entity.
-func (o *Organization) QuerySubcontrols() *SubcontrolQuery {
-	return NewOrganizationClient(o.config).QuerySubcontrols(o)
+func (_m *Organization) QuerySubcontrols() *SubcontrolQuery {
+	return NewOrganizationClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryControlImplementations queries the "control_implementations" edge of the Organization entity.
-func (o *Organization) QueryControlImplementations() *ControlImplementationQuery {
-	return NewOrganizationClient(o.config).QueryControlImplementations(o)
+func (_m *Organization) QueryControlImplementations() *ControlImplementationQuery {
+	return NewOrganizationClient(_m.config).QueryControlImplementations(_m)
 }
 
 // QueryMappedControls queries the "mapped_controls" edge of the Organization entity.
-func (o *Organization) QueryMappedControls() *MappedControlQuery {
-	return NewOrganizationClient(o.config).QueryMappedControls(o)
+func (_m *Organization) QueryMappedControls() *MappedControlQuery {
+	return NewOrganizationClient(_m.config).QueryMappedControls(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the Organization entity.
-func (o *Organization) QueryEvidence() *EvidenceQuery {
-	return NewOrganizationClient(o.config).QueryEvidence(o)
+func (_m *Organization) QueryEvidence() *EvidenceQuery {
+	return NewOrganizationClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryStandards queries the "standards" edge of the Organization entity.
-func (o *Organization) QueryStandards() *StandardQuery {
-	return NewOrganizationClient(o.config).QueryStandards(o)
+func (_m *Organization) QueryStandards() *StandardQuery {
+	return NewOrganizationClient(_m.config).QueryStandards(_m)
 }
 
 // QueryActionPlans queries the "action_plans" edge of the Organization entity.
-func (o *Organization) QueryActionPlans() *ActionPlanQuery {
-	return NewOrganizationClient(o.config).QueryActionPlans(o)
+func (_m *Organization) QueryActionPlans() *ActionPlanQuery {
+	return NewOrganizationClient(_m.config).QueryActionPlans(_m)
 }
 
 // QueryCustomDomains queries the "custom_domains" edge of the Organization entity.
-func (o *Organization) QueryCustomDomains() *CustomDomainQuery {
-	return NewOrganizationClient(o.config).QueryCustomDomains(o)
+func (_m *Organization) QueryCustomDomains() *CustomDomainQuery {
+	return NewOrganizationClient(_m.config).QueryCustomDomains(_m)
 }
 
 // QueryJobRunners queries the "job_runners" edge of the Organization entity.
-func (o *Organization) QueryJobRunners() *JobRunnerQuery {
-	return NewOrganizationClient(o.config).QueryJobRunners(o)
+func (_m *Organization) QueryJobRunners() *JobRunnerQuery {
+	return NewOrganizationClient(_m.config).QueryJobRunners(_m)
 }
 
 // QueryJobRunnerTokens queries the "job_runner_tokens" edge of the Organization entity.
-func (o *Organization) QueryJobRunnerTokens() *JobRunnerTokenQuery {
-	return NewOrganizationClient(o.config).QueryJobRunnerTokens(o)
+func (_m *Organization) QueryJobRunnerTokens() *JobRunnerTokenQuery {
+	return NewOrganizationClient(_m.config).QueryJobRunnerTokens(_m)
 }
 
 // QueryJobRunnerRegistrationTokens queries the "job_runner_registration_tokens" edge of the Organization entity.
-func (o *Organization) QueryJobRunnerRegistrationTokens() *JobRunnerRegistrationTokenQuery {
-	return NewOrganizationClient(o.config).QueryJobRunnerRegistrationTokens(o)
+func (_m *Organization) QueryJobRunnerRegistrationTokens() *JobRunnerRegistrationTokenQuery {
+	return NewOrganizationClient(_m.config).QueryJobRunnerRegistrationTokens(_m)
 }
 
 // QueryDNSVerifications queries the "dns_verifications" edge of the Organization entity.
-func (o *Organization) QueryDNSVerifications() *DNSVerificationQuery {
-	return NewOrganizationClient(o.config).QueryDNSVerifications(o)
+func (_m *Organization) QueryDNSVerifications() *DNSVerificationQuery {
+	return NewOrganizationClient(_m.config).QueryDNSVerifications(_m)
 }
 
 // QueryJobTemplates queries the "job_templates" edge of the Organization entity.
-func (o *Organization) QueryJobTemplates() *JobTemplateQuery {
-	return NewOrganizationClient(o.config).QueryJobTemplates(o)
+func (_m *Organization) QueryJobTemplates() *JobTemplateQuery {
+	return NewOrganizationClient(_m.config).QueryJobTemplates(_m)
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Organization entity.
-func (o *Organization) QueryScheduledJobs() *ScheduledJobQuery {
-	return NewOrganizationClient(o.config).QueryScheduledJobs(o)
+func (_m *Organization) QueryScheduledJobs() *ScheduledJobQuery {
+	return NewOrganizationClient(_m.config).QueryScheduledJobs(_m)
 }
 
 // QueryJobResults queries the "job_results" edge of the Organization entity.
-func (o *Organization) QueryJobResults() *JobResultQuery {
-	return NewOrganizationClient(o.config).QueryJobResults(o)
+func (_m *Organization) QueryJobResults() *JobResultQuery {
+	return NewOrganizationClient(_m.config).QueryJobResults(_m)
 }
 
 // QueryScheduledJobRuns queries the "scheduled_job_runs" edge of the Organization entity.
-func (o *Organization) QueryScheduledJobRuns() *ScheduledJobRunQuery {
-	return NewOrganizationClient(o.config).QueryScheduledJobRuns(o)
+func (_m *Organization) QueryScheduledJobRuns() *ScheduledJobRunQuery {
+	return NewOrganizationClient(_m.config).QueryScheduledJobRuns(_m)
 }
 
 // QueryTrustCenters queries the "trust_centers" edge of the Organization entity.
-func (o *Organization) QueryTrustCenters() *TrustCenterQuery {
-	return NewOrganizationClient(o.config).QueryTrustCenters(o)
+func (_m *Organization) QueryTrustCenters() *TrustCenterQuery {
+	return NewOrganizationClient(_m.config).QueryTrustCenters(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Organization entity.
-func (o *Organization) QueryAssets() *AssetQuery {
-	return NewOrganizationClient(o.config).QueryAssets(o)
+func (_m *Organization) QueryAssets() *AssetQuery {
+	return NewOrganizationClient(_m.config).QueryAssets(_m)
 }
 
 // QueryScans queries the "scans" edge of the Organization entity.
-func (o *Organization) QueryScans() *ScanQuery {
-	return NewOrganizationClient(o.config).QueryScans(o)
+func (_m *Organization) QueryScans() *ScanQuery {
+	return NewOrganizationClient(_m.config).QueryScans(_m)
 }
 
 // QuerySubprocessors queries the "subprocessors" edge of the Organization entity.
-func (o *Organization) QuerySubprocessors() *SubprocessorQuery {
-	return NewOrganizationClient(o.config).QuerySubprocessors(o)
+func (_m *Organization) QuerySubprocessors() *SubprocessorQuery {
+	return NewOrganizationClient(_m.config).QuerySubprocessors(_m)
 }
 
 // QueryExports queries the "exports" edge of the Organization entity.
-func (o *Organization) QueryExports() *ExportQuery {
-	return NewOrganizationClient(o.config).QueryExports(o)
+func (_m *Organization) QueryExports() *ExportQuery {
+	return NewOrganizationClient(_m.config).QueryExports(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
-func (o *Organization) QueryMembers() *OrgMembershipQuery {
-	return NewOrganizationClient(o.config).QueryMembers(o)
+func (_m *Organization) QueryMembers() *OrgMembershipQuery {
+	return NewOrganizationClient(_m.config).QueryMembers(_m)
 }
 
 // Update returns a builder for updating this Organization.
 // Note that you need to call Organization.Unwrap() before calling this method if this Organization
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (o *Organization) Update() *OrganizationUpdateOne {
-	return NewOrganizationClient(o.config).UpdateOne(o)
+func (_m *Organization) Update() *OrganizationUpdateOne {
+	return NewOrganizationClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Organization entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (o *Organization) Unwrap() *Organization {
-	_tx, ok := o.config.driver.(*txDriver)
+func (_m *Organization) Unwrap() *Organization {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Organization is not a transactional entity")
 	}
-	o.config.driver = _tx.drv
-	return o
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (o *Organization) String() string {
+func (_m *Organization) String() string {
 	var builder strings.Builder
 	builder.WriteString("Organization(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", o.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(o.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(o.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(o.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(o.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(o.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(o.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", o.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(o.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(o.DisplayName)
+	builder.WriteString(_m.DisplayName)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(o.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("parent_organization_id=")
-	builder.WriteString(o.ParentOrganizationID)
+	builder.WriteString(_m.ParentOrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("personal_org=")
-	builder.WriteString(fmt.Sprintf("%v", o.PersonalOrg))
+	builder.WriteString(fmt.Sprintf("%v", _m.PersonalOrg))
 	builder.WriteString(", ")
-	if v := o.AvatarRemoteURL; v != nil {
+	if v := _m.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := o.AvatarLocalFileID; v != nil {
+	if v := _m.AvatarLocalFileID; v != nil {
 		builder.WriteString("avatar_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := o.AvatarUpdatedAt; v != nil {
+	if v := _m.AvatarUpdatedAt; v != nil {
 		builder.WriteString("avatar_updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("dedicated_db=")
-	builder.WriteString(fmt.Sprintf("%v", o.DedicatedDb))
+	builder.WriteString(fmt.Sprintf("%v", _m.DedicatedDb))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedControlCreators returns the ControlCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControlCreators(name string) ([]*Group, error) {
-	if o.Edges.namedControlCreators == nil {
+func (_m *Organization) NamedControlCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedControlCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControlCreators[name]
+	nodes, ok := _m.Edges.namedControlCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControlCreators(name string, edges ...*Group) {
-	if o.Edges.namedControlCreators == nil {
-		o.Edges.namedControlCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedControlCreators(name string, edges ...*Group) {
+	if _m.Edges.namedControlCreators == nil {
+		_m.Edges.namedControlCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControlCreators[name] = []*Group{}
+		_m.Edges.namedControlCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedControlCreators[name] = append(o.Edges.namedControlCreators[name], edges...)
+		_m.Edges.namedControlCreators[name] = append(_m.Edges.namedControlCreators[name], edges...)
 	}
 }
 
 // NamedControlImplementationCreators returns the ControlImplementationCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControlImplementationCreators(name string) ([]*Group, error) {
-	if o.Edges.namedControlImplementationCreators == nil {
+func (_m *Organization) NamedControlImplementationCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedControlImplementationCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControlImplementationCreators[name]
+	nodes, ok := _m.Edges.namedControlImplementationCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControlImplementationCreators(name string, edges ...*Group) {
-	if o.Edges.namedControlImplementationCreators == nil {
-		o.Edges.namedControlImplementationCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedControlImplementationCreators(name string, edges ...*Group) {
+	if _m.Edges.namedControlImplementationCreators == nil {
+		_m.Edges.namedControlImplementationCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControlImplementationCreators[name] = []*Group{}
+		_m.Edges.namedControlImplementationCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedControlImplementationCreators[name] = append(o.Edges.namedControlImplementationCreators[name], edges...)
+		_m.Edges.namedControlImplementationCreators[name] = append(_m.Edges.namedControlImplementationCreators[name], edges...)
 	}
 }
 
 // NamedControlObjectiveCreators returns the ControlObjectiveCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControlObjectiveCreators(name string) ([]*Group, error) {
-	if o.Edges.namedControlObjectiveCreators == nil {
+func (_m *Organization) NamedControlObjectiveCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedControlObjectiveCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControlObjectiveCreators[name]
+	nodes, ok := _m.Edges.namedControlObjectiveCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControlObjectiveCreators(name string, edges ...*Group) {
-	if o.Edges.namedControlObjectiveCreators == nil {
-		o.Edges.namedControlObjectiveCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedControlObjectiveCreators(name string, edges ...*Group) {
+	if _m.Edges.namedControlObjectiveCreators == nil {
+		_m.Edges.namedControlObjectiveCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControlObjectiveCreators[name] = []*Group{}
+		_m.Edges.namedControlObjectiveCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedControlObjectiveCreators[name] = append(o.Edges.namedControlObjectiveCreators[name], edges...)
+		_m.Edges.namedControlObjectiveCreators[name] = append(_m.Edges.namedControlObjectiveCreators[name], edges...)
 	}
 }
 
 // NamedEvidenceCreators returns the EvidenceCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedEvidenceCreators(name string) ([]*Group, error) {
-	if o.Edges.namedEvidenceCreators == nil {
+func (_m *Organization) NamedEvidenceCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedEvidenceCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedEvidenceCreators[name]
+	nodes, ok := _m.Edges.namedEvidenceCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedEvidenceCreators(name string, edges ...*Group) {
-	if o.Edges.namedEvidenceCreators == nil {
-		o.Edges.namedEvidenceCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedEvidenceCreators(name string, edges ...*Group) {
+	if _m.Edges.namedEvidenceCreators == nil {
+		_m.Edges.namedEvidenceCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedEvidenceCreators[name] = []*Group{}
+		_m.Edges.namedEvidenceCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedEvidenceCreators[name] = append(o.Edges.namedEvidenceCreators[name], edges...)
+		_m.Edges.namedEvidenceCreators[name] = append(_m.Edges.namedEvidenceCreators[name], edges...)
 	}
 }
 
 // NamedGroupCreators returns the GroupCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedGroupCreators(name string) ([]*Group, error) {
-	if o.Edges.namedGroupCreators == nil {
+func (_m *Organization) NamedGroupCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedGroupCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedGroupCreators[name]
+	nodes, ok := _m.Edges.namedGroupCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedGroupCreators(name string, edges ...*Group) {
-	if o.Edges.namedGroupCreators == nil {
-		o.Edges.namedGroupCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedGroupCreators(name string, edges ...*Group) {
+	if _m.Edges.namedGroupCreators == nil {
+		_m.Edges.namedGroupCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedGroupCreators[name] = []*Group{}
+		_m.Edges.namedGroupCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedGroupCreators[name] = append(o.Edges.namedGroupCreators[name], edges...)
+		_m.Edges.namedGroupCreators[name] = append(_m.Edges.namedGroupCreators[name], edges...)
 	}
 }
 
 // NamedInternalPolicyCreators returns the InternalPolicyCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedInternalPolicyCreators(name string) ([]*Group, error) {
-	if o.Edges.namedInternalPolicyCreators == nil {
+func (_m *Organization) NamedInternalPolicyCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedInternalPolicyCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedInternalPolicyCreators[name]
+	nodes, ok := _m.Edges.namedInternalPolicyCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedInternalPolicyCreators(name string, edges ...*Group) {
-	if o.Edges.namedInternalPolicyCreators == nil {
-		o.Edges.namedInternalPolicyCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedInternalPolicyCreators(name string, edges ...*Group) {
+	if _m.Edges.namedInternalPolicyCreators == nil {
+		_m.Edges.namedInternalPolicyCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedInternalPolicyCreators[name] = []*Group{}
+		_m.Edges.namedInternalPolicyCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedInternalPolicyCreators[name] = append(o.Edges.namedInternalPolicyCreators[name], edges...)
+		_m.Edges.namedInternalPolicyCreators[name] = append(_m.Edges.namedInternalPolicyCreators[name], edges...)
 	}
 }
 
 // NamedMappedControlCreators returns the MappedControlCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedMappedControlCreators(name string) ([]*Group, error) {
-	if o.Edges.namedMappedControlCreators == nil {
+func (_m *Organization) NamedMappedControlCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedMappedControlCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedMappedControlCreators[name]
+	nodes, ok := _m.Edges.namedMappedControlCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedMappedControlCreators(name string, edges ...*Group) {
-	if o.Edges.namedMappedControlCreators == nil {
-		o.Edges.namedMappedControlCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedMappedControlCreators(name string, edges ...*Group) {
+	if _m.Edges.namedMappedControlCreators == nil {
+		_m.Edges.namedMappedControlCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedMappedControlCreators[name] = []*Group{}
+		_m.Edges.namedMappedControlCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedMappedControlCreators[name] = append(o.Edges.namedMappedControlCreators[name], edges...)
+		_m.Edges.namedMappedControlCreators[name] = append(_m.Edges.namedMappedControlCreators[name], edges...)
 	}
 }
 
 // NamedNarrativeCreators returns the NarrativeCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedNarrativeCreators(name string) ([]*Group, error) {
-	if o.Edges.namedNarrativeCreators == nil {
+func (_m *Organization) NamedNarrativeCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedNarrativeCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedNarrativeCreators[name]
+	nodes, ok := _m.Edges.namedNarrativeCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedNarrativeCreators(name string, edges ...*Group) {
-	if o.Edges.namedNarrativeCreators == nil {
-		o.Edges.namedNarrativeCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedNarrativeCreators(name string, edges ...*Group) {
+	if _m.Edges.namedNarrativeCreators == nil {
+		_m.Edges.namedNarrativeCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedNarrativeCreators[name] = []*Group{}
+		_m.Edges.namedNarrativeCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedNarrativeCreators[name] = append(o.Edges.namedNarrativeCreators[name], edges...)
+		_m.Edges.namedNarrativeCreators[name] = append(_m.Edges.namedNarrativeCreators[name], edges...)
 	}
 }
 
 // NamedProcedureCreators returns the ProcedureCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedProcedureCreators(name string) ([]*Group, error) {
-	if o.Edges.namedProcedureCreators == nil {
+func (_m *Organization) NamedProcedureCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedProcedureCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedProcedureCreators[name]
+	nodes, ok := _m.Edges.namedProcedureCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedProcedureCreators(name string, edges ...*Group) {
-	if o.Edges.namedProcedureCreators == nil {
-		o.Edges.namedProcedureCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedProcedureCreators(name string, edges ...*Group) {
+	if _m.Edges.namedProcedureCreators == nil {
+		_m.Edges.namedProcedureCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedProcedureCreators[name] = []*Group{}
+		_m.Edges.namedProcedureCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedProcedureCreators[name] = append(o.Edges.namedProcedureCreators[name], edges...)
+		_m.Edges.namedProcedureCreators[name] = append(_m.Edges.namedProcedureCreators[name], edges...)
 	}
 }
 
 // NamedProgramCreators returns the ProgramCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedProgramCreators(name string) ([]*Group, error) {
-	if o.Edges.namedProgramCreators == nil {
+func (_m *Organization) NamedProgramCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedProgramCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedProgramCreators[name]
+	nodes, ok := _m.Edges.namedProgramCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedProgramCreators(name string, edges ...*Group) {
-	if o.Edges.namedProgramCreators == nil {
-		o.Edges.namedProgramCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedProgramCreators(name string, edges ...*Group) {
+	if _m.Edges.namedProgramCreators == nil {
+		_m.Edges.namedProgramCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedProgramCreators[name] = []*Group{}
+		_m.Edges.namedProgramCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedProgramCreators[name] = append(o.Edges.namedProgramCreators[name], edges...)
+		_m.Edges.namedProgramCreators[name] = append(_m.Edges.namedProgramCreators[name], edges...)
 	}
 }
 
 // NamedRiskCreators returns the RiskCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedRiskCreators(name string) ([]*Group, error) {
-	if o.Edges.namedRiskCreators == nil {
+func (_m *Organization) NamedRiskCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedRiskCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedRiskCreators[name]
+	nodes, ok := _m.Edges.namedRiskCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedRiskCreators(name string, edges ...*Group) {
-	if o.Edges.namedRiskCreators == nil {
-		o.Edges.namedRiskCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedRiskCreators(name string, edges ...*Group) {
+	if _m.Edges.namedRiskCreators == nil {
+		_m.Edges.namedRiskCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedRiskCreators[name] = []*Group{}
+		_m.Edges.namedRiskCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedRiskCreators[name] = append(o.Edges.namedRiskCreators[name], edges...)
+		_m.Edges.namedRiskCreators[name] = append(_m.Edges.namedRiskCreators[name], edges...)
 	}
 }
 
 // NamedScheduledJobCreators returns the ScheduledJobCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedScheduledJobCreators(name string) ([]*Group, error) {
-	if o.Edges.namedScheduledJobCreators == nil {
+func (_m *Organization) NamedScheduledJobCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedScheduledJobCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedScheduledJobCreators[name]
+	nodes, ok := _m.Edges.namedScheduledJobCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedScheduledJobCreators(name string, edges ...*Group) {
-	if o.Edges.namedScheduledJobCreators == nil {
-		o.Edges.namedScheduledJobCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedScheduledJobCreators(name string, edges ...*Group) {
+	if _m.Edges.namedScheduledJobCreators == nil {
+		_m.Edges.namedScheduledJobCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedScheduledJobCreators[name] = []*Group{}
+		_m.Edges.namedScheduledJobCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedScheduledJobCreators[name] = append(o.Edges.namedScheduledJobCreators[name], edges...)
+		_m.Edges.namedScheduledJobCreators[name] = append(_m.Edges.namedScheduledJobCreators[name], edges...)
 	}
 }
 
 // NamedStandardCreators returns the StandardCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedStandardCreators(name string) ([]*Group, error) {
-	if o.Edges.namedStandardCreators == nil {
+func (_m *Organization) NamedStandardCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedStandardCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedStandardCreators[name]
+	nodes, ok := _m.Edges.namedStandardCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedStandardCreators(name string, edges ...*Group) {
-	if o.Edges.namedStandardCreators == nil {
-		o.Edges.namedStandardCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedStandardCreators(name string, edges ...*Group) {
+	if _m.Edges.namedStandardCreators == nil {
+		_m.Edges.namedStandardCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedStandardCreators[name] = []*Group{}
+		_m.Edges.namedStandardCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedStandardCreators[name] = append(o.Edges.namedStandardCreators[name], edges...)
+		_m.Edges.namedStandardCreators[name] = append(_m.Edges.namedStandardCreators[name], edges...)
 	}
 }
 
 // NamedTemplateCreators returns the TemplateCreators named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedTemplateCreators(name string) ([]*Group, error) {
-	if o.Edges.namedTemplateCreators == nil {
+func (_m *Organization) NamedTemplateCreators(name string) ([]*Group, error) {
+	if _m.Edges.namedTemplateCreators == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedTemplateCreators[name]
+	nodes, ok := _m.Edges.namedTemplateCreators[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedTemplateCreators(name string, edges ...*Group) {
-	if o.Edges.namedTemplateCreators == nil {
-		o.Edges.namedTemplateCreators = make(map[string][]*Group)
+func (_m *Organization) appendNamedTemplateCreators(name string, edges ...*Group) {
+	if _m.Edges.namedTemplateCreators == nil {
+		_m.Edges.namedTemplateCreators = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedTemplateCreators[name] = []*Group{}
+		_m.Edges.namedTemplateCreators[name] = []*Group{}
 	} else {
-		o.Edges.namedTemplateCreators[name] = append(o.Edges.namedTemplateCreators[name], edges...)
+		_m.Edges.namedTemplateCreators[name] = append(_m.Edges.namedTemplateCreators[name], edges...)
 	}
 }
 
 // NamedChildren returns the Children named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedChildren(name string) ([]*Organization, error) {
-	if o.Edges.namedChildren == nil {
+func (_m *Organization) NamedChildren(name string) ([]*Organization, error) {
+	if _m.Edges.namedChildren == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedChildren[name]
+	nodes, ok := _m.Edges.namedChildren[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedChildren(name string, edges ...*Organization) {
-	if o.Edges.namedChildren == nil {
-		o.Edges.namedChildren = make(map[string][]*Organization)
+func (_m *Organization) appendNamedChildren(name string, edges ...*Organization) {
+	if _m.Edges.namedChildren == nil {
+		_m.Edges.namedChildren = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedChildren[name] = []*Organization{}
+		_m.Edges.namedChildren[name] = []*Organization{}
 	} else {
-		o.Edges.namedChildren[name] = append(o.Edges.namedChildren[name], edges...)
+		_m.Edges.namedChildren[name] = append(_m.Edges.namedChildren[name], edges...)
 	}
 }
 
 // NamedPersonalAccessTokens returns the PersonalAccessTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedPersonalAccessTokens(name string) ([]*PersonalAccessToken, error) {
-	if o.Edges.namedPersonalAccessTokens == nil {
+func (_m *Organization) NamedPersonalAccessTokens(name string) ([]*PersonalAccessToken, error) {
+	if _m.Edges.namedPersonalAccessTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedPersonalAccessTokens[name]
+	nodes, ok := _m.Edges.namedPersonalAccessTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedPersonalAccessTokens(name string, edges ...*PersonalAccessToken) {
-	if o.Edges.namedPersonalAccessTokens == nil {
-		o.Edges.namedPersonalAccessTokens = make(map[string][]*PersonalAccessToken)
+func (_m *Organization) appendNamedPersonalAccessTokens(name string, edges ...*PersonalAccessToken) {
+	if _m.Edges.namedPersonalAccessTokens == nil {
+		_m.Edges.namedPersonalAccessTokens = make(map[string][]*PersonalAccessToken)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedPersonalAccessTokens[name] = []*PersonalAccessToken{}
+		_m.Edges.namedPersonalAccessTokens[name] = []*PersonalAccessToken{}
 	} else {
-		o.Edges.namedPersonalAccessTokens[name] = append(o.Edges.namedPersonalAccessTokens[name], edges...)
+		_m.Edges.namedPersonalAccessTokens[name] = append(_m.Edges.namedPersonalAccessTokens[name], edges...)
 	}
 }
 
 // NamedAPITokens returns the APITokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedAPITokens(name string) ([]*APIToken, error) {
-	if o.Edges.namedAPITokens == nil {
+func (_m *Organization) NamedAPITokens(name string) ([]*APIToken, error) {
+	if _m.Edges.namedAPITokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedAPITokens[name]
+	nodes, ok := _m.Edges.namedAPITokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedAPITokens(name string, edges ...*APIToken) {
-	if o.Edges.namedAPITokens == nil {
-		o.Edges.namedAPITokens = make(map[string][]*APIToken)
+func (_m *Organization) appendNamedAPITokens(name string, edges ...*APIToken) {
+	if _m.Edges.namedAPITokens == nil {
+		_m.Edges.namedAPITokens = make(map[string][]*APIToken)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedAPITokens[name] = []*APIToken{}
+		_m.Edges.namedAPITokens[name] = []*APIToken{}
 	} else {
-		o.Edges.namedAPITokens[name] = append(o.Edges.namedAPITokens[name], edges...)
+		_m.Edges.namedAPITokens[name] = append(_m.Edges.namedAPITokens[name], edges...)
 	}
 }
 
 // NamedUsers returns the Users named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedUsers(name string) ([]*User, error) {
-	if o.Edges.namedUsers == nil {
+func (_m *Organization) NamedUsers(name string) ([]*User, error) {
+	if _m.Edges.namedUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedUsers[name]
+	nodes, ok := _m.Edges.namedUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedUsers(name string, edges ...*User) {
-	if o.Edges.namedUsers == nil {
-		o.Edges.namedUsers = make(map[string][]*User)
+func (_m *Organization) appendNamedUsers(name string, edges ...*User) {
+	if _m.Edges.namedUsers == nil {
+		_m.Edges.namedUsers = make(map[string][]*User)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedUsers[name] = []*User{}
+		_m.Edges.namedUsers[name] = []*User{}
 	} else {
-		o.Edges.namedUsers[name] = append(o.Edges.namedUsers[name], edges...)
+		_m.Edges.namedUsers[name] = append(_m.Edges.namedUsers[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedFiles(name string) ([]*File, error) {
-	if o.Edges.namedFiles == nil {
+func (_m *Organization) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedFiles(name string, edges ...*File) {
-	if o.Edges.namedFiles == nil {
-		o.Edges.namedFiles = make(map[string][]*File)
+func (_m *Organization) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		o.Edges.namedFiles[name] = append(o.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedEvents(name string) ([]*Event, error) {
-	if o.Edges.namedEvents == nil {
+func (_m *Organization) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedEvents(name string, edges ...*Event) {
-	if o.Edges.namedEvents == nil {
-		o.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Organization) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		o.Edges.namedEvents[name] = append(o.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedSecrets returns the Secrets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedSecrets(name string) ([]*Hush, error) {
-	if o.Edges.namedSecrets == nil {
+func (_m *Organization) NamedSecrets(name string) ([]*Hush, error) {
+	if _m.Edges.namedSecrets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedSecrets[name]
+	nodes, ok := _m.Edges.namedSecrets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedSecrets(name string, edges ...*Hush) {
-	if o.Edges.namedSecrets == nil {
-		o.Edges.namedSecrets = make(map[string][]*Hush)
+func (_m *Organization) appendNamedSecrets(name string, edges ...*Hush) {
+	if _m.Edges.namedSecrets == nil {
+		_m.Edges.namedSecrets = make(map[string][]*Hush)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedSecrets[name] = []*Hush{}
+		_m.Edges.namedSecrets[name] = []*Hush{}
 	} else {
-		o.Edges.namedSecrets[name] = append(o.Edges.namedSecrets[name], edges...)
+		_m.Edges.namedSecrets[name] = append(_m.Edges.namedSecrets[name], edges...)
 	}
 }
 
 // NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedGroups(name string) ([]*Group, error) {
-	if o.Edges.namedGroups == nil {
+func (_m *Organization) NamedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedGroups[name]
+	nodes, ok := _m.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedGroups(name string, edges ...*Group) {
-	if o.Edges.namedGroups == nil {
-		o.Edges.namedGroups = make(map[string][]*Group)
+func (_m *Organization) appendNamedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedGroups == nil {
+		_m.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedGroups[name] = []*Group{}
+		_m.Edges.namedGroups[name] = []*Group{}
 	} else {
-		o.Edges.namedGroups[name] = append(o.Edges.namedGroups[name], edges...)
+		_m.Edges.namedGroups[name] = append(_m.Edges.namedGroups[name], edges...)
 	}
 }
 
 // NamedTemplates returns the Templates named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedTemplates(name string) ([]*Template, error) {
-	if o.Edges.namedTemplates == nil {
+func (_m *Organization) NamedTemplates(name string) ([]*Template, error) {
+	if _m.Edges.namedTemplates == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedTemplates[name]
+	nodes, ok := _m.Edges.namedTemplates[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedTemplates(name string, edges ...*Template) {
-	if o.Edges.namedTemplates == nil {
-		o.Edges.namedTemplates = make(map[string][]*Template)
+func (_m *Organization) appendNamedTemplates(name string, edges ...*Template) {
+	if _m.Edges.namedTemplates == nil {
+		_m.Edges.namedTemplates = make(map[string][]*Template)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedTemplates[name] = []*Template{}
+		_m.Edges.namedTemplates[name] = []*Template{}
 	} else {
-		o.Edges.namedTemplates[name] = append(o.Edges.namedTemplates[name], edges...)
+		_m.Edges.namedTemplates[name] = append(_m.Edges.namedTemplates[name], edges...)
 	}
 }
 
 // NamedIntegrations returns the Integrations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedIntegrations(name string) ([]*Integration, error) {
-	if o.Edges.namedIntegrations == nil {
+func (_m *Organization) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedIntegrations[name]
+	nodes, ok := _m.Edges.namedIntegrations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedIntegrations(name string, edges ...*Integration) {
-	if o.Edges.namedIntegrations == nil {
-		o.Edges.namedIntegrations = make(map[string][]*Integration)
+func (_m *Organization) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedIntegrations[name] = []*Integration{}
+		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
-		o.Edges.namedIntegrations[name] = append(o.Edges.namedIntegrations[name], edges...)
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
 	}
 }
 
 // NamedDocuments returns the Documents named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedDocuments(name string) ([]*DocumentData, error) {
-	if o.Edges.namedDocuments == nil {
+func (_m *Organization) NamedDocuments(name string) ([]*DocumentData, error) {
+	if _m.Edges.namedDocuments == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedDocuments[name]
+	nodes, ok := _m.Edges.namedDocuments[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedDocuments(name string, edges ...*DocumentData) {
-	if o.Edges.namedDocuments == nil {
-		o.Edges.namedDocuments = make(map[string][]*DocumentData)
+func (_m *Organization) appendNamedDocuments(name string, edges ...*DocumentData) {
+	if _m.Edges.namedDocuments == nil {
+		_m.Edges.namedDocuments = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedDocuments[name] = []*DocumentData{}
+		_m.Edges.namedDocuments[name] = []*DocumentData{}
 	} else {
-		o.Edges.namedDocuments[name] = append(o.Edges.namedDocuments[name], edges...)
+		_m.Edges.namedDocuments[name] = append(_m.Edges.namedDocuments[name], edges...)
 	}
 }
 
 // NamedOrgSubscriptions returns the OrgSubscriptions named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedOrgSubscriptions(name string) ([]*OrgSubscription, error) {
-	if o.Edges.namedOrgSubscriptions == nil {
+func (_m *Organization) NamedOrgSubscriptions(name string) ([]*OrgSubscription, error) {
+	if _m.Edges.namedOrgSubscriptions == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedOrgSubscriptions[name]
+	nodes, ok := _m.Edges.namedOrgSubscriptions[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedOrgSubscriptions(name string, edges ...*OrgSubscription) {
-	if o.Edges.namedOrgSubscriptions == nil {
-		o.Edges.namedOrgSubscriptions = make(map[string][]*OrgSubscription)
+func (_m *Organization) appendNamedOrgSubscriptions(name string, edges ...*OrgSubscription) {
+	if _m.Edges.namedOrgSubscriptions == nil {
+		_m.Edges.namedOrgSubscriptions = make(map[string][]*OrgSubscription)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedOrgSubscriptions[name] = []*OrgSubscription{}
+		_m.Edges.namedOrgSubscriptions[name] = []*OrgSubscription{}
 	} else {
-		o.Edges.namedOrgSubscriptions[name] = append(o.Edges.namedOrgSubscriptions[name], edges...)
+		_m.Edges.namedOrgSubscriptions[name] = append(_m.Edges.namedOrgSubscriptions[name], edges...)
 	}
 }
 
 // NamedOrgProducts returns the OrgProducts named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedOrgProducts(name string) ([]*OrgProduct, error) {
-	if o.Edges.namedOrgProducts == nil {
+func (_m *Organization) NamedOrgProducts(name string) ([]*OrgProduct, error) {
+	if _m.Edges.namedOrgProducts == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedOrgProducts[name]
+	nodes, ok := _m.Edges.namedOrgProducts[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedOrgProducts(name string, edges ...*OrgProduct) {
-	if o.Edges.namedOrgProducts == nil {
-		o.Edges.namedOrgProducts = make(map[string][]*OrgProduct)
+func (_m *Organization) appendNamedOrgProducts(name string, edges ...*OrgProduct) {
+	if _m.Edges.namedOrgProducts == nil {
+		_m.Edges.namedOrgProducts = make(map[string][]*OrgProduct)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedOrgProducts[name] = []*OrgProduct{}
+		_m.Edges.namedOrgProducts[name] = []*OrgProduct{}
 	} else {
-		o.Edges.namedOrgProducts[name] = append(o.Edges.namedOrgProducts[name], edges...)
+		_m.Edges.namedOrgProducts[name] = append(_m.Edges.namedOrgProducts[name], edges...)
 	}
 }
 
 // NamedOrgPrices returns the OrgPrices named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedOrgPrices(name string) ([]*OrgPrice, error) {
-	if o.Edges.namedOrgPrices == nil {
+func (_m *Organization) NamedOrgPrices(name string) ([]*OrgPrice, error) {
+	if _m.Edges.namedOrgPrices == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedOrgPrices[name]
+	nodes, ok := _m.Edges.namedOrgPrices[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedOrgPrices(name string, edges ...*OrgPrice) {
-	if o.Edges.namedOrgPrices == nil {
-		o.Edges.namedOrgPrices = make(map[string][]*OrgPrice)
+func (_m *Organization) appendNamedOrgPrices(name string, edges ...*OrgPrice) {
+	if _m.Edges.namedOrgPrices == nil {
+		_m.Edges.namedOrgPrices = make(map[string][]*OrgPrice)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedOrgPrices[name] = []*OrgPrice{}
+		_m.Edges.namedOrgPrices[name] = []*OrgPrice{}
 	} else {
-		o.Edges.namedOrgPrices[name] = append(o.Edges.namedOrgPrices[name], edges...)
+		_m.Edges.namedOrgPrices[name] = append(_m.Edges.namedOrgPrices[name], edges...)
 	}
 }
 
 // NamedOrgModules returns the OrgModules named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedOrgModules(name string) ([]*OrgModule, error) {
-	if o.Edges.namedOrgModules == nil {
+func (_m *Organization) NamedOrgModules(name string) ([]*OrgModule, error) {
+	if _m.Edges.namedOrgModules == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedOrgModules[name]
+	nodes, ok := _m.Edges.namedOrgModules[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedOrgModules(name string, edges ...*OrgModule) {
-	if o.Edges.namedOrgModules == nil {
-		o.Edges.namedOrgModules = make(map[string][]*OrgModule)
+func (_m *Organization) appendNamedOrgModules(name string, edges ...*OrgModule) {
+	if _m.Edges.namedOrgModules == nil {
+		_m.Edges.namedOrgModules = make(map[string][]*OrgModule)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedOrgModules[name] = []*OrgModule{}
+		_m.Edges.namedOrgModules[name] = []*OrgModule{}
 	} else {
-		o.Edges.namedOrgModules[name] = append(o.Edges.namedOrgModules[name], edges...)
+		_m.Edges.namedOrgModules[name] = append(_m.Edges.namedOrgModules[name], edges...)
 	}
 }
 
 // NamedInvites returns the Invites named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedInvites(name string) ([]*Invite, error) {
-	if o.Edges.namedInvites == nil {
+func (_m *Organization) NamedInvites(name string) ([]*Invite, error) {
+	if _m.Edges.namedInvites == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedInvites[name]
+	nodes, ok := _m.Edges.namedInvites[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedInvites(name string, edges ...*Invite) {
-	if o.Edges.namedInvites == nil {
-		o.Edges.namedInvites = make(map[string][]*Invite)
+func (_m *Organization) appendNamedInvites(name string, edges ...*Invite) {
+	if _m.Edges.namedInvites == nil {
+		_m.Edges.namedInvites = make(map[string][]*Invite)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedInvites[name] = []*Invite{}
+		_m.Edges.namedInvites[name] = []*Invite{}
 	} else {
-		o.Edges.namedInvites[name] = append(o.Edges.namedInvites[name], edges...)
+		_m.Edges.namedInvites[name] = append(_m.Edges.namedInvites[name], edges...)
 	}
 }
 
 // NamedSubscribers returns the Subscribers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedSubscribers(name string) ([]*Subscriber, error) {
-	if o.Edges.namedSubscribers == nil {
+func (_m *Organization) NamedSubscribers(name string) ([]*Subscriber, error) {
+	if _m.Edges.namedSubscribers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedSubscribers[name]
+	nodes, ok := _m.Edges.namedSubscribers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedSubscribers(name string, edges ...*Subscriber) {
-	if o.Edges.namedSubscribers == nil {
-		o.Edges.namedSubscribers = make(map[string][]*Subscriber)
+func (_m *Organization) appendNamedSubscribers(name string, edges ...*Subscriber) {
+	if _m.Edges.namedSubscribers == nil {
+		_m.Edges.namedSubscribers = make(map[string][]*Subscriber)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedSubscribers[name] = []*Subscriber{}
+		_m.Edges.namedSubscribers[name] = []*Subscriber{}
 	} else {
-		o.Edges.namedSubscribers[name] = append(o.Edges.namedSubscribers[name], edges...)
+		_m.Edges.namedSubscribers[name] = append(_m.Edges.namedSubscribers[name], edges...)
 	}
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedEntities(name string) ([]*Entity, error) {
-	if o.Edges.namedEntities == nil {
+func (_m *Organization) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedEntities(name string, edges ...*Entity) {
-	if o.Edges.namedEntities == nil {
-		o.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *Organization) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		o.Edges.namedEntities[name] = append(o.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 
 // NamedEntityTypes returns the EntityTypes named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedEntityTypes(name string) ([]*EntityType, error) {
-	if o.Edges.namedEntityTypes == nil {
+func (_m *Organization) NamedEntityTypes(name string) ([]*EntityType, error) {
+	if _m.Edges.namedEntityTypes == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedEntityTypes[name]
+	nodes, ok := _m.Edges.namedEntityTypes[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedEntityTypes(name string, edges ...*EntityType) {
-	if o.Edges.namedEntityTypes == nil {
-		o.Edges.namedEntityTypes = make(map[string][]*EntityType)
+func (_m *Organization) appendNamedEntityTypes(name string, edges ...*EntityType) {
+	if _m.Edges.namedEntityTypes == nil {
+		_m.Edges.namedEntityTypes = make(map[string][]*EntityType)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedEntityTypes[name] = []*EntityType{}
+		_m.Edges.namedEntityTypes[name] = []*EntityType{}
 	} else {
-		o.Edges.namedEntityTypes[name] = append(o.Edges.namedEntityTypes[name], edges...)
+		_m.Edges.namedEntityTypes[name] = append(_m.Edges.namedEntityTypes[name], edges...)
 	}
 }
 
 // NamedContacts returns the Contacts named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedContacts(name string) ([]*Contact, error) {
-	if o.Edges.namedContacts == nil {
+func (_m *Organization) NamedContacts(name string) ([]*Contact, error) {
+	if _m.Edges.namedContacts == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedContacts[name]
+	nodes, ok := _m.Edges.namedContacts[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedContacts(name string, edges ...*Contact) {
-	if o.Edges.namedContacts == nil {
-		o.Edges.namedContacts = make(map[string][]*Contact)
+func (_m *Organization) appendNamedContacts(name string, edges ...*Contact) {
+	if _m.Edges.namedContacts == nil {
+		_m.Edges.namedContacts = make(map[string][]*Contact)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedContacts[name] = []*Contact{}
+		_m.Edges.namedContacts[name] = []*Contact{}
 	} else {
-		o.Edges.namedContacts[name] = append(o.Edges.namedContacts[name], edges...)
+		_m.Edges.namedContacts[name] = append(_m.Edges.namedContacts[name], edges...)
 	}
 }
 
 // NamedNotes returns the Notes named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedNotes(name string) ([]*Note, error) {
-	if o.Edges.namedNotes == nil {
+func (_m *Organization) NamedNotes(name string) ([]*Note, error) {
+	if _m.Edges.namedNotes == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedNotes[name]
+	nodes, ok := _m.Edges.namedNotes[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedNotes(name string, edges ...*Note) {
-	if o.Edges.namedNotes == nil {
-		o.Edges.namedNotes = make(map[string][]*Note)
+func (_m *Organization) appendNamedNotes(name string, edges ...*Note) {
+	if _m.Edges.namedNotes == nil {
+		_m.Edges.namedNotes = make(map[string][]*Note)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedNotes[name] = []*Note{}
+		_m.Edges.namedNotes[name] = []*Note{}
 	} else {
-		o.Edges.namedNotes[name] = append(o.Edges.namedNotes[name], edges...)
+		_m.Edges.namedNotes[name] = append(_m.Edges.namedNotes[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedTasks(name string) ([]*Task, error) {
-	if o.Edges.namedTasks == nil {
+func (_m *Organization) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedTasks(name string, edges ...*Task) {
-	if o.Edges.namedTasks == nil {
-		o.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Organization) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		o.Edges.namedTasks[name] = append(o.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedPrograms(name string) ([]*Program, error) {
-	if o.Edges.namedPrograms == nil {
+func (_m *Organization) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedPrograms(name string, edges ...*Program) {
-	if o.Edges.namedPrograms == nil {
-		o.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *Organization) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		o.Edges.namedPrograms[name] = append(o.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedProcedures(name string) ([]*Procedure, error) {
-	if o.Edges.namedProcedures == nil {
+func (_m *Organization) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedProcedures(name string, edges ...*Procedure) {
-	if o.Edges.namedProcedures == nil {
-		o.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *Organization) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		o.Edges.namedProcedures[name] = append(o.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if o.Edges.namedInternalPolicies == nil {
+func (_m *Organization) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if o.Edges.namedInternalPolicies == nil {
-		o.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Organization) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		o.Edges.namedInternalPolicies[name] = append(o.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedRisks(name string) ([]*Risk, error) {
-	if o.Edges.namedRisks == nil {
+func (_m *Organization) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedRisks(name string, edges ...*Risk) {
-	if o.Edges.namedRisks == nil {
-		o.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *Organization) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		o.Edges.namedRisks[name] = append(o.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if o.Edges.namedControlObjectives == nil {
+func (_m *Organization) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControlObjectives[name]
+	nodes, ok := _m.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if o.Edges.namedControlObjectives == nil {
-		o.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+func (_m *Organization) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControlObjectives[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		o.Edges.namedControlObjectives[name] = append(o.Edges.namedControlObjectives[name], edges...)
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedNarratives(name string) ([]*Narrative, error) {
-	if o.Edges.namedNarratives == nil {
+func (_m *Organization) NamedNarratives(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedNarratives[name]
+	nodes, ok := _m.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedNarratives(name string, edges ...*Narrative) {
-	if o.Edges.namedNarratives == nil {
-		o.Edges.namedNarratives = make(map[string][]*Narrative)
+func (_m *Organization) appendNamedNarratives(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarratives == nil {
+		_m.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedNarratives[name] = []*Narrative{}
+		_m.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		o.Edges.namedNarratives[name] = append(o.Edges.namedNarratives[name], edges...)
+		_m.Edges.namedNarratives[name] = append(_m.Edges.namedNarratives[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControls(name string) ([]*Control, error) {
-	if o.Edges.namedControls == nil {
+func (_m *Organization) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControls(name string, edges ...*Control) {
-	if o.Edges.namedControls == nil {
-		o.Edges.namedControls = make(map[string][]*Control)
+func (_m *Organization) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		o.Edges.namedControls[name] = append(o.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if o.Edges.namedSubcontrols == nil {
+func (_m *Organization) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if o.Edges.namedSubcontrols == nil {
-		o.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *Organization) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		o.Edges.namedSubcontrols[name] = append(o.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
-	if o.Edges.namedControlImplementations == nil {
+func (_m *Organization) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedControlImplementations[name]
+	nodes, ok := _m.Edges.namedControlImplementations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
-	if o.Edges.namedControlImplementations == nil {
-		o.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+func (_m *Organization) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
 	} else {
-		o.Edges.namedControlImplementations[name] = append(o.Edges.namedControlImplementations[name], edges...)
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 
 // NamedMappedControls returns the MappedControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedMappedControls(name string) ([]*MappedControl, error) {
-	if o.Edges.namedMappedControls == nil {
+func (_m *Organization) NamedMappedControls(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedMappedControls[name]
+	nodes, ok := _m.Edges.namedMappedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedMappedControls(name string, edges ...*MappedControl) {
-	if o.Edges.namedMappedControls == nil {
-		o.Edges.namedMappedControls = make(map[string][]*MappedControl)
+func (_m *Organization) appendNamedMappedControls(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedControls == nil {
+		_m.Edges.namedMappedControls = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedMappedControls[name] = []*MappedControl{}
+		_m.Edges.namedMappedControls[name] = []*MappedControl{}
 	} else {
-		o.Edges.namedMappedControls[name] = append(o.Edges.namedMappedControls[name], edges...)
+		_m.Edges.namedMappedControls[name] = append(_m.Edges.namedMappedControls[name], edges...)
 	}
 }
 
 // NamedEvidence returns the Evidence named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedEvidence(name string) ([]*Evidence, error) {
-	if o.Edges.namedEvidence == nil {
+func (_m *Organization) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedEvidence[name]
+	nodes, ok := _m.Edges.namedEvidence[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedEvidence(name string, edges ...*Evidence) {
-	if o.Edges.namedEvidence == nil {
-		o.Edges.namedEvidence = make(map[string][]*Evidence)
+func (_m *Organization) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedEvidence[name] = []*Evidence{}
+		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
-		o.Edges.namedEvidence[name] = append(o.Edges.namedEvidence[name], edges...)
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
 	}
 }
 
 // NamedStandards returns the Standards named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedStandards(name string) ([]*Standard, error) {
-	if o.Edges.namedStandards == nil {
+func (_m *Organization) NamedStandards(name string) ([]*Standard, error) {
+	if _m.Edges.namedStandards == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedStandards[name]
+	nodes, ok := _m.Edges.namedStandards[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedStandards(name string, edges ...*Standard) {
-	if o.Edges.namedStandards == nil {
-		o.Edges.namedStandards = make(map[string][]*Standard)
+func (_m *Organization) appendNamedStandards(name string, edges ...*Standard) {
+	if _m.Edges.namedStandards == nil {
+		_m.Edges.namedStandards = make(map[string][]*Standard)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedStandards[name] = []*Standard{}
+		_m.Edges.namedStandards[name] = []*Standard{}
 	} else {
-		o.Edges.namedStandards[name] = append(o.Edges.namedStandards[name], edges...)
+		_m.Edges.namedStandards[name] = append(_m.Edges.namedStandards[name], edges...)
 	}
 }
 
 // NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if o.Edges.namedActionPlans == nil {
+func (_m *Organization) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedActionPlans[name]
+	nodes, ok := _m.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if o.Edges.namedActionPlans == nil {
-		o.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+func (_m *Organization) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedActionPlans[name] = []*ActionPlan{}
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		o.Edges.namedActionPlans[name] = append(o.Edges.namedActionPlans[name], edges...)
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 
 // NamedCustomDomains returns the CustomDomains named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedCustomDomains(name string) ([]*CustomDomain, error) {
-	if o.Edges.namedCustomDomains == nil {
+func (_m *Organization) NamedCustomDomains(name string) ([]*CustomDomain, error) {
+	if _m.Edges.namedCustomDomains == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedCustomDomains[name]
+	nodes, ok := _m.Edges.namedCustomDomains[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
-	if o.Edges.namedCustomDomains == nil {
-		o.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
+func (_m *Organization) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
+	if _m.Edges.namedCustomDomains == nil {
+		_m.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedCustomDomains[name] = []*CustomDomain{}
+		_m.Edges.namedCustomDomains[name] = []*CustomDomain{}
 	} else {
-		o.Edges.namedCustomDomains[name] = append(o.Edges.namedCustomDomains[name], edges...)
+		_m.Edges.namedCustomDomains[name] = append(_m.Edges.namedCustomDomains[name], edges...)
 	}
 }
 
 // NamedJobRunners returns the JobRunners named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedJobRunners(name string) ([]*JobRunner, error) {
-	if o.Edges.namedJobRunners == nil {
+func (_m *Organization) NamedJobRunners(name string) ([]*JobRunner, error) {
+	if _m.Edges.namedJobRunners == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedJobRunners[name]
+	nodes, ok := _m.Edges.namedJobRunners[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedJobRunners(name string, edges ...*JobRunner) {
-	if o.Edges.namedJobRunners == nil {
-		o.Edges.namedJobRunners = make(map[string][]*JobRunner)
+func (_m *Organization) appendNamedJobRunners(name string, edges ...*JobRunner) {
+	if _m.Edges.namedJobRunners == nil {
+		_m.Edges.namedJobRunners = make(map[string][]*JobRunner)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedJobRunners[name] = []*JobRunner{}
+		_m.Edges.namedJobRunners[name] = []*JobRunner{}
 	} else {
-		o.Edges.namedJobRunners[name] = append(o.Edges.namedJobRunners[name], edges...)
+		_m.Edges.namedJobRunners[name] = append(_m.Edges.namedJobRunners[name], edges...)
 	}
 }
 
 // NamedJobRunnerTokens returns the JobRunnerTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedJobRunnerTokens(name string) ([]*JobRunnerToken, error) {
-	if o.Edges.namedJobRunnerTokens == nil {
+func (_m *Organization) NamedJobRunnerTokens(name string) ([]*JobRunnerToken, error) {
+	if _m.Edges.namedJobRunnerTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedJobRunnerTokens[name]
+	nodes, ok := _m.Edges.namedJobRunnerTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedJobRunnerTokens(name string, edges ...*JobRunnerToken) {
-	if o.Edges.namedJobRunnerTokens == nil {
-		o.Edges.namedJobRunnerTokens = make(map[string][]*JobRunnerToken)
+func (_m *Organization) appendNamedJobRunnerTokens(name string, edges ...*JobRunnerToken) {
+	if _m.Edges.namedJobRunnerTokens == nil {
+		_m.Edges.namedJobRunnerTokens = make(map[string][]*JobRunnerToken)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedJobRunnerTokens[name] = []*JobRunnerToken{}
+		_m.Edges.namedJobRunnerTokens[name] = []*JobRunnerToken{}
 	} else {
-		o.Edges.namedJobRunnerTokens[name] = append(o.Edges.namedJobRunnerTokens[name], edges...)
+		_m.Edges.namedJobRunnerTokens[name] = append(_m.Edges.namedJobRunnerTokens[name], edges...)
 	}
 }
 
 // NamedJobRunnerRegistrationTokens returns the JobRunnerRegistrationTokens named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedJobRunnerRegistrationTokens(name string) ([]*JobRunnerRegistrationToken, error) {
-	if o.Edges.namedJobRunnerRegistrationTokens == nil {
+func (_m *Organization) NamedJobRunnerRegistrationTokens(name string) ([]*JobRunnerRegistrationToken, error) {
+	if _m.Edges.namedJobRunnerRegistrationTokens == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedJobRunnerRegistrationTokens[name]
+	nodes, ok := _m.Edges.namedJobRunnerRegistrationTokens[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedJobRunnerRegistrationTokens(name string, edges ...*JobRunnerRegistrationToken) {
-	if o.Edges.namedJobRunnerRegistrationTokens == nil {
-		o.Edges.namedJobRunnerRegistrationTokens = make(map[string][]*JobRunnerRegistrationToken)
+func (_m *Organization) appendNamedJobRunnerRegistrationTokens(name string, edges ...*JobRunnerRegistrationToken) {
+	if _m.Edges.namedJobRunnerRegistrationTokens == nil {
+		_m.Edges.namedJobRunnerRegistrationTokens = make(map[string][]*JobRunnerRegistrationToken)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedJobRunnerRegistrationTokens[name] = []*JobRunnerRegistrationToken{}
+		_m.Edges.namedJobRunnerRegistrationTokens[name] = []*JobRunnerRegistrationToken{}
 	} else {
-		o.Edges.namedJobRunnerRegistrationTokens[name] = append(o.Edges.namedJobRunnerRegistrationTokens[name], edges...)
+		_m.Edges.namedJobRunnerRegistrationTokens[name] = append(_m.Edges.namedJobRunnerRegistrationTokens[name], edges...)
 	}
 }
 
 // NamedDNSVerifications returns the DNSVerifications named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedDNSVerifications(name string) ([]*DNSVerification, error) {
-	if o.Edges.namedDNSVerifications == nil {
+func (_m *Organization) NamedDNSVerifications(name string) ([]*DNSVerification, error) {
+	if _m.Edges.namedDNSVerifications == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedDNSVerifications[name]
+	nodes, ok := _m.Edges.namedDNSVerifications[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedDNSVerifications(name string, edges ...*DNSVerification) {
-	if o.Edges.namedDNSVerifications == nil {
-		o.Edges.namedDNSVerifications = make(map[string][]*DNSVerification)
+func (_m *Organization) appendNamedDNSVerifications(name string, edges ...*DNSVerification) {
+	if _m.Edges.namedDNSVerifications == nil {
+		_m.Edges.namedDNSVerifications = make(map[string][]*DNSVerification)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedDNSVerifications[name] = []*DNSVerification{}
+		_m.Edges.namedDNSVerifications[name] = []*DNSVerification{}
 	} else {
-		o.Edges.namedDNSVerifications[name] = append(o.Edges.namedDNSVerifications[name], edges...)
+		_m.Edges.namedDNSVerifications[name] = append(_m.Edges.namedDNSVerifications[name], edges...)
 	}
 }
 
 // NamedJobTemplates returns the JobTemplates named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedJobTemplates(name string) ([]*JobTemplate, error) {
-	if o.Edges.namedJobTemplates == nil {
+func (_m *Organization) NamedJobTemplates(name string) ([]*JobTemplate, error) {
+	if _m.Edges.namedJobTemplates == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedJobTemplates[name]
+	nodes, ok := _m.Edges.namedJobTemplates[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedJobTemplates(name string, edges ...*JobTemplate) {
-	if o.Edges.namedJobTemplates == nil {
-		o.Edges.namedJobTemplates = make(map[string][]*JobTemplate)
+func (_m *Organization) appendNamedJobTemplates(name string, edges ...*JobTemplate) {
+	if _m.Edges.namedJobTemplates == nil {
+		_m.Edges.namedJobTemplates = make(map[string][]*JobTemplate)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedJobTemplates[name] = []*JobTemplate{}
+		_m.Edges.namedJobTemplates[name] = []*JobTemplate{}
 	} else {
-		o.Edges.namedJobTemplates[name] = append(o.Edges.namedJobTemplates[name], edges...)
+		_m.Edges.namedJobTemplates[name] = append(_m.Edges.namedJobTemplates[name], edges...)
 	}
 }
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
-	if o.Edges.namedScheduledJobs == nil {
+func (_m *Organization) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
+	if _m.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedScheduledJobs[name]
+	nodes, ok := _m.Edges.namedScheduledJobs[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
-	if o.Edges.namedScheduledJobs == nil {
-		o.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
+func (_m *Organization) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
+	if _m.Edges.namedScheduledJobs == nil {
+		_m.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
+		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
-		o.Edges.namedScheduledJobs[name] = append(o.Edges.namedScheduledJobs[name], edges...)
+		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 
 // NamedJobResults returns the JobResults named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedJobResults(name string) ([]*JobResult, error) {
-	if o.Edges.namedJobResults == nil {
+func (_m *Organization) NamedJobResults(name string) ([]*JobResult, error) {
+	if _m.Edges.namedJobResults == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedJobResults[name]
+	nodes, ok := _m.Edges.namedJobResults[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedJobResults(name string, edges ...*JobResult) {
-	if o.Edges.namedJobResults == nil {
-		o.Edges.namedJobResults = make(map[string][]*JobResult)
+func (_m *Organization) appendNamedJobResults(name string, edges ...*JobResult) {
+	if _m.Edges.namedJobResults == nil {
+		_m.Edges.namedJobResults = make(map[string][]*JobResult)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedJobResults[name] = []*JobResult{}
+		_m.Edges.namedJobResults[name] = []*JobResult{}
 	} else {
-		o.Edges.namedJobResults[name] = append(o.Edges.namedJobResults[name], edges...)
+		_m.Edges.namedJobResults[name] = append(_m.Edges.namedJobResults[name], edges...)
 	}
 }
 
 // NamedScheduledJobRuns returns the ScheduledJobRuns named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedScheduledJobRuns(name string) ([]*ScheduledJobRun, error) {
-	if o.Edges.namedScheduledJobRuns == nil {
+func (_m *Organization) NamedScheduledJobRuns(name string) ([]*ScheduledJobRun, error) {
+	if _m.Edges.namedScheduledJobRuns == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedScheduledJobRuns[name]
+	nodes, ok := _m.Edges.namedScheduledJobRuns[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedScheduledJobRuns(name string, edges ...*ScheduledJobRun) {
-	if o.Edges.namedScheduledJobRuns == nil {
-		o.Edges.namedScheduledJobRuns = make(map[string][]*ScheduledJobRun)
+func (_m *Organization) appendNamedScheduledJobRuns(name string, edges ...*ScheduledJobRun) {
+	if _m.Edges.namedScheduledJobRuns == nil {
+		_m.Edges.namedScheduledJobRuns = make(map[string][]*ScheduledJobRun)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedScheduledJobRuns[name] = []*ScheduledJobRun{}
+		_m.Edges.namedScheduledJobRuns[name] = []*ScheduledJobRun{}
 	} else {
-		o.Edges.namedScheduledJobRuns[name] = append(o.Edges.namedScheduledJobRuns[name], edges...)
+		_m.Edges.namedScheduledJobRuns[name] = append(_m.Edges.namedScheduledJobRuns[name], edges...)
 	}
 }
 
 // NamedTrustCenters returns the TrustCenters named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedTrustCenters(name string) ([]*TrustCenter, error) {
-	if o.Edges.namedTrustCenters == nil {
+func (_m *Organization) NamedTrustCenters(name string) ([]*TrustCenter, error) {
+	if _m.Edges.namedTrustCenters == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedTrustCenters[name]
+	nodes, ok := _m.Edges.namedTrustCenters[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedTrustCenters(name string, edges ...*TrustCenter) {
-	if o.Edges.namedTrustCenters == nil {
-		o.Edges.namedTrustCenters = make(map[string][]*TrustCenter)
+func (_m *Organization) appendNamedTrustCenters(name string, edges ...*TrustCenter) {
+	if _m.Edges.namedTrustCenters == nil {
+		_m.Edges.namedTrustCenters = make(map[string][]*TrustCenter)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedTrustCenters[name] = []*TrustCenter{}
+		_m.Edges.namedTrustCenters[name] = []*TrustCenter{}
 	} else {
-		o.Edges.namedTrustCenters[name] = append(o.Edges.namedTrustCenters[name], edges...)
+		_m.Edges.namedTrustCenters[name] = append(_m.Edges.namedTrustCenters[name], edges...)
 	}
 }
 
 // NamedAssets returns the Assets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedAssets(name string) ([]*Asset, error) {
-	if o.Edges.namedAssets == nil {
+func (_m *Organization) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedAssets[name]
+	nodes, ok := _m.Edges.namedAssets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedAssets(name string, edges ...*Asset) {
-	if o.Edges.namedAssets == nil {
-		o.Edges.namedAssets = make(map[string][]*Asset)
+func (_m *Organization) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedAssets[name] = []*Asset{}
+		_m.Edges.namedAssets[name] = []*Asset{}
 	} else {
-		o.Edges.namedAssets[name] = append(o.Edges.namedAssets[name], edges...)
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
 	}
 }
 
 // NamedScans returns the Scans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedScans(name string) ([]*Scan, error) {
-	if o.Edges.namedScans == nil {
+func (_m *Organization) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedScans[name]
+	nodes, ok := _m.Edges.namedScans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedScans(name string, edges ...*Scan) {
-	if o.Edges.namedScans == nil {
-		o.Edges.namedScans = make(map[string][]*Scan)
+func (_m *Organization) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedScans[name] = []*Scan{}
+		_m.Edges.namedScans[name] = []*Scan{}
 	} else {
-		o.Edges.namedScans[name] = append(o.Edges.namedScans[name], edges...)
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 
 // NamedSubprocessors returns the Subprocessors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedSubprocessors(name string) ([]*Subprocessor, error) {
-	if o.Edges.namedSubprocessors == nil {
+func (_m *Organization) NamedSubprocessors(name string) ([]*Subprocessor, error) {
+	if _m.Edges.namedSubprocessors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedSubprocessors[name]
+	nodes, ok := _m.Edges.namedSubprocessors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedSubprocessors(name string, edges ...*Subprocessor) {
-	if o.Edges.namedSubprocessors == nil {
-		o.Edges.namedSubprocessors = make(map[string][]*Subprocessor)
+func (_m *Organization) appendNamedSubprocessors(name string, edges ...*Subprocessor) {
+	if _m.Edges.namedSubprocessors == nil {
+		_m.Edges.namedSubprocessors = make(map[string][]*Subprocessor)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedSubprocessors[name] = []*Subprocessor{}
+		_m.Edges.namedSubprocessors[name] = []*Subprocessor{}
 	} else {
-		o.Edges.namedSubprocessors[name] = append(o.Edges.namedSubprocessors[name], edges...)
+		_m.Edges.namedSubprocessors[name] = append(_m.Edges.namedSubprocessors[name], edges...)
 	}
 }
 
 // NamedExports returns the Exports named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedExports(name string) ([]*Export, error) {
-	if o.Edges.namedExports == nil {
+func (_m *Organization) NamedExports(name string) ([]*Export, error) {
+	if _m.Edges.namedExports == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedExports[name]
+	nodes, ok := _m.Edges.namedExports[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedExports(name string, edges ...*Export) {
-	if o.Edges.namedExports == nil {
-		o.Edges.namedExports = make(map[string][]*Export)
+func (_m *Organization) appendNamedExports(name string, edges ...*Export) {
+	if _m.Edges.namedExports == nil {
+		_m.Edges.namedExports = make(map[string][]*Export)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedExports[name] = []*Export{}
+		_m.Edges.namedExports[name] = []*Export{}
 	} else {
-		o.Edges.namedExports[name] = append(o.Edges.namedExports[name], edges...)
+		_m.Edges.namedExports[name] = append(_m.Edges.namedExports[name], edges...)
 	}
 }
 
 // NamedMembers returns the Members named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedMembers(name string) ([]*OrgMembership, error) {
-	if o.Edges.namedMembers == nil {
+func (_m *Organization) NamedMembers(name string) ([]*OrgMembership, error) {
+	if _m.Edges.namedMembers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedMembers[name]
+	nodes, ok := _m.Edges.namedMembers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedMembers(name string, edges ...*OrgMembership) {
-	if o.Edges.namedMembers == nil {
-		o.Edges.namedMembers = make(map[string][]*OrgMembership)
+func (_m *Organization) appendNamedMembers(name string, edges ...*OrgMembership) {
+	if _m.Edges.namedMembers == nil {
+		_m.Edges.namedMembers = make(map[string][]*OrgMembership)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedMembers[name] = []*OrgMembership{}
+		_m.Edges.namedMembers[name] = []*OrgMembership{}
 	} else {
-		o.Edges.namedMembers[name] = append(o.Edges.namedMembers[name], edges...)
+		_m.Edges.namedMembers[name] = append(_m.Edges.namedMembers[name], edges...)
 	}
 }
 

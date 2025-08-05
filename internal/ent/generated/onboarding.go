@@ -83,7 +83,7 @@ func (*Onboarding) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Onboarding fields.
-func (o *Onboarding) assignValues(columns []string, values []any) error {
+func (_m *Onboarding) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -93,37 +93,37 @@ func (o *Onboarding) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				o.ID = value.String
+				_m.ID = value.String
 			}
 		case onboarding.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				o.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case onboarding.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				o.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case onboarding.FieldOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value.Valid {
-				o.OrganizationID = value.String
+				_m.OrganizationID = value.String
 			}
 		case onboarding.FieldCompanyName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field company_name", values[i])
 			} else if value.Valid {
-				o.CompanyName = value.String
+				_m.CompanyName = value.String
 			}
 		case onboarding.FieldDomains:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field domains", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &o.Domains); err != nil {
+				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
 				}
 			}
@@ -131,7 +131,7 @@ func (o *Onboarding) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field company_details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &o.CompanyDetails); err != nil {
+				if err := json.Unmarshal(*value, &_m.CompanyDetails); err != nil {
 					return fmt.Errorf("unmarshal field company_details: %w", err)
 				}
 			}
@@ -139,7 +139,7 @@ func (o *Onboarding) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field user_details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &o.UserDetails); err != nil {
+				if err := json.Unmarshal(*value, &_m.UserDetails); err != nil {
 					return fmt.Errorf("unmarshal field user_details: %w", err)
 				}
 			}
@@ -147,12 +147,12 @@ func (o *Onboarding) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field compliance", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &o.Compliance); err != nil {
+				if err := json.Unmarshal(*value, &_m.Compliance); err != nil {
 					return fmt.Errorf("unmarshal field compliance: %w", err)
 				}
 			}
 		default:
-			o.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -160,61 +160,61 @@ func (o *Onboarding) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Onboarding.
 // This includes values selected through modifiers, order, etc.
-func (o *Onboarding) Value(name string) (ent.Value, error) {
-	return o.selectValues.Get(name)
+func (_m *Onboarding) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOrganization queries the "organization" edge of the Onboarding entity.
-func (o *Onboarding) QueryOrganization() *OrganizationQuery {
-	return NewOnboardingClient(o.config).QueryOrganization(o)
+func (_m *Onboarding) QueryOrganization() *OrganizationQuery {
+	return NewOnboardingClient(_m.config).QueryOrganization(_m)
 }
 
 // Update returns a builder for updating this Onboarding.
 // Note that you need to call Onboarding.Unwrap() before calling this method if this Onboarding
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (o *Onboarding) Update() *OnboardingUpdateOne {
-	return NewOnboardingClient(o.config).UpdateOne(o)
+func (_m *Onboarding) Update() *OnboardingUpdateOne {
+	return NewOnboardingClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Onboarding entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (o *Onboarding) Unwrap() *Onboarding {
-	_tx, ok := o.config.driver.(*txDriver)
+func (_m *Onboarding) Unwrap() *Onboarding {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Onboarding is not a transactional entity")
 	}
-	o.config.driver = _tx.drv
-	return o
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (o *Onboarding) String() string {
+func (_m *Onboarding) String() string {
 	var builder strings.Builder
 	builder.WriteString("Onboarding(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", o.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("deleted_at=")
-	builder.WriteString(o.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(o.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
-	builder.WriteString(o.OrganizationID)
+	builder.WriteString(_m.OrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("company_name=")
-	builder.WriteString(o.CompanyName)
+	builder.WriteString(_m.CompanyName)
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
-	builder.WriteString(fmt.Sprintf("%v", o.Domains))
+	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
 	builder.WriteString(", ")
 	builder.WriteString("company_details=")
-	builder.WriteString(fmt.Sprintf("%v", o.CompanyDetails))
+	builder.WriteString(fmt.Sprintf("%v", _m.CompanyDetails))
 	builder.WriteString(", ")
 	builder.WriteString("user_details=")
-	builder.WriteString(fmt.Sprintf("%v", o.UserDetails))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserDetails))
 	builder.WriteString(", ")
 	builder.WriteString("compliance=")
-	builder.WriteString(fmt.Sprintf("%v", o.Compliance))
+	builder.WriteString(fmt.Sprintf("%v", _m.Compliance))
 	builder.WriteByte(')')
 	return builder.String()
 }

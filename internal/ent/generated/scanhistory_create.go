@@ -23,213 +23,213 @@ type ScanHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (shc *ScanHistoryCreate) SetHistoryTime(t time.Time) *ScanHistoryCreate {
-	shc.mutation.SetHistoryTime(t)
-	return shc
+func (_c *ScanHistoryCreate) SetHistoryTime(v time.Time) *ScanHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableHistoryTime(t *time.Time) *ScanHistoryCreate {
-	if t != nil {
-		shc.SetHistoryTime(*t)
+func (_c *ScanHistoryCreate) SetNillableHistoryTime(v *time.Time) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (shc *ScanHistoryCreate) SetRef(s string) *ScanHistoryCreate {
-	shc.mutation.SetRef(s)
-	return shc
+func (_c *ScanHistoryCreate) SetRef(v string) *ScanHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableRef(s *string) *ScanHistoryCreate {
-	if s != nil {
-		shc.SetRef(*s)
+func (_c *ScanHistoryCreate) SetNillableRef(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (shc *ScanHistoryCreate) SetOperation(ht history.OpType) *ScanHistoryCreate {
-	shc.mutation.SetOperation(ht)
-	return shc
+func (_c *ScanHistoryCreate) SetOperation(v history.OpType) *ScanHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (shc *ScanHistoryCreate) SetCreatedAt(t time.Time) *ScanHistoryCreate {
-	shc.mutation.SetCreatedAt(t)
-	return shc
+func (_c *ScanHistoryCreate) SetCreatedAt(v time.Time) *ScanHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableCreatedAt(t *time.Time) *ScanHistoryCreate {
-	if t != nil {
-		shc.SetCreatedAt(*t)
+func (_c *ScanHistoryCreate) SetNillableCreatedAt(v *time.Time) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shc *ScanHistoryCreate) SetUpdatedAt(t time.Time) *ScanHistoryCreate {
-	shc.mutation.SetUpdatedAt(t)
-	return shc
+func (_c *ScanHistoryCreate) SetUpdatedAt(v time.Time) *ScanHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ScanHistoryCreate {
-	if t != nil {
-		shc.SetUpdatedAt(*t)
+func (_c *ScanHistoryCreate) SetNillableUpdatedAt(v *time.Time) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (shc *ScanHistoryCreate) SetCreatedBy(s string) *ScanHistoryCreate {
-	shc.mutation.SetCreatedBy(s)
-	return shc
+func (_c *ScanHistoryCreate) SetCreatedBy(v string) *ScanHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableCreatedBy(s *string) *ScanHistoryCreate {
-	if s != nil {
-		shc.SetCreatedBy(*s)
+func (_c *ScanHistoryCreate) SetNillableCreatedBy(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shc *ScanHistoryCreate) SetUpdatedBy(s string) *ScanHistoryCreate {
-	shc.mutation.SetUpdatedBy(s)
-	return shc
+func (_c *ScanHistoryCreate) SetUpdatedBy(v string) *ScanHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableUpdatedBy(s *string) *ScanHistoryCreate {
-	if s != nil {
-		shc.SetUpdatedBy(*s)
+func (_c *ScanHistoryCreate) SetNillableUpdatedBy(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shc *ScanHistoryCreate) SetDeletedAt(t time.Time) *ScanHistoryCreate {
-	shc.mutation.SetDeletedAt(t)
-	return shc
+func (_c *ScanHistoryCreate) SetDeletedAt(v time.Time) *ScanHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableDeletedAt(t *time.Time) *ScanHistoryCreate {
-	if t != nil {
-		shc.SetDeletedAt(*t)
+func (_c *ScanHistoryCreate) SetNillableDeletedAt(v *time.Time) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shc *ScanHistoryCreate) SetDeletedBy(s string) *ScanHistoryCreate {
-	shc.mutation.SetDeletedBy(s)
-	return shc
+func (_c *ScanHistoryCreate) SetDeletedBy(v string) *ScanHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableDeletedBy(s *string) *ScanHistoryCreate {
-	if s != nil {
-		shc.SetDeletedBy(*s)
+func (_c *ScanHistoryCreate) SetNillableDeletedBy(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (shc *ScanHistoryCreate) SetTags(s []string) *ScanHistoryCreate {
-	shc.mutation.SetTags(s)
-	return shc
+func (_c *ScanHistoryCreate) SetTags(v []string) *ScanHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shc *ScanHistoryCreate) SetOwnerID(s string) *ScanHistoryCreate {
-	shc.mutation.SetOwnerID(s)
-	return shc
+func (_c *ScanHistoryCreate) SetOwnerID(v string) *ScanHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableOwnerID(s *string) *ScanHistoryCreate {
-	if s != nil {
-		shc.SetOwnerID(*s)
+func (_c *ScanHistoryCreate) SetNillableOwnerID(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetTarget sets the "target" field.
-func (shc *ScanHistoryCreate) SetTarget(s string) *ScanHistoryCreate {
-	shc.mutation.SetTarget(s)
-	return shc
+func (_c *ScanHistoryCreate) SetTarget(v string) *ScanHistoryCreate {
+	_c.mutation.SetTarget(v)
+	return _c
 }
 
 // SetScanType sets the "scan_type" field.
-func (shc *ScanHistoryCreate) SetScanType(et enums.ScanType) *ScanHistoryCreate {
-	shc.mutation.SetScanType(et)
-	return shc
+func (_c *ScanHistoryCreate) SetScanType(v enums.ScanType) *ScanHistoryCreate {
+	_c.mutation.SetScanType(v)
+	return _c
 }
 
 // SetNillableScanType sets the "scan_type" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableScanType(et *enums.ScanType) *ScanHistoryCreate {
-	if et != nil {
-		shc.SetScanType(*et)
+func (_c *ScanHistoryCreate) SetNillableScanType(v *enums.ScanType) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetScanType(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetMetadata sets the "metadata" field.
-func (shc *ScanHistoryCreate) SetMetadata(m map[string]interface{}) *ScanHistoryCreate {
-	shc.mutation.SetMetadata(m)
-	return shc
+func (_c *ScanHistoryCreate) SetMetadata(v map[string]interface{}) *ScanHistoryCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (shc *ScanHistoryCreate) SetStatus(es enums.ScanStatus) *ScanHistoryCreate {
-	shc.mutation.SetStatus(es)
-	return shc
+func (_c *ScanHistoryCreate) SetStatus(v enums.ScanStatus) *ScanHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableStatus(es *enums.ScanStatus) *ScanHistoryCreate {
-	if es != nil {
-		shc.SetStatus(*es)
+func (_c *ScanHistoryCreate) SetNillableStatus(v *enums.ScanStatus) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (shc *ScanHistoryCreate) SetID(s string) *ScanHistoryCreate {
-	shc.mutation.SetID(s)
-	return shc
+func (_c *ScanHistoryCreate) SetID(v string) *ScanHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (shc *ScanHistoryCreate) SetNillableID(s *string) *ScanHistoryCreate {
-	if s != nil {
-		shc.SetID(*s)
+func (_c *ScanHistoryCreate) SetNillableID(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return shc
+	return _c
 }
 
 // Mutation returns the ScanHistoryMutation object of the builder.
-func (shc *ScanHistoryCreate) Mutation() *ScanHistoryMutation {
-	return shc.mutation
+func (_c *ScanHistoryCreate) Mutation() *ScanHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the ScanHistory in the database.
-func (shc *ScanHistoryCreate) Save(ctx context.Context) (*ScanHistory, error) {
-	if err := shc.defaults(); err != nil {
+func (_c *ScanHistoryCreate) Save(ctx context.Context) (*ScanHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (shc *ScanHistoryCreate) SaveX(ctx context.Context) *ScanHistory {
-	v, err := shc.Save(ctx)
+func (_c *ScanHistoryCreate) SaveX(ctx context.Context) *ScanHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -237,91 +237,91 @@ func (shc *ScanHistoryCreate) SaveX(ctx context.Context) *ScanHistory {
 }
 
 // Exec executes the query.
-func (shc *ScanHistoryCreate) Exec(ctx context.Context) error {
-	_, err := shc.Save(ctx)
+func (_c *ScanHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shc *ScanHistoryCreate) ExecX(ctx context.Context) {
-	if err := shc.Exec(ctx); err != nil {
+func (_c *ScanHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *ScanHistoryCreate) defaults() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *ScanHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if scanhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized scanhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := scanhistory.DefaultHistoryTime()
-		shc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := shc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if scanhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scanhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := scanhistory.DefaultCreatedAt()
-		shc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if scanhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scanhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scanhistory.DefaultUpdatedAt()
-		shc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := scanhistory.DefaultTags
-		shc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := shc.mutation.ScanType(); !ok {
+	if _, ok := _c.mutation.ScanType(); !ok {
 		v := scanhistory.DefaultScanType
-		shc.mutation.SetScanType(v)
+		_c.mutation.SetScanType(v)
 	}
-	if _, ok := shc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := scanhistory.DefaultStatus
-		shc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := shc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if scanhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scanhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := scanhistory.DefaultID()
-		shc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shc *ScanHistoryCreate) check() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *ScanHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "ScanHistory.history_time"`)}
 	}
-	if _, ok := shc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "ScanHistory.operation"`)}
 	}
-	if v, ok := shc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := scanhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.Target(); !ok {
+	if _, ok := _c.mutation.Target(); !ok {
 		return &ValidationError{Name: "target", err: errors.New(`generated: missing required field "ScanHistory.target"`)}
 	}
-	if _, ok := shc.mutation.ScanType(); !ok {
+	if _, ok := _c.mutation.ScanType(); !ok {
 		return &ValidationError{Name: "scan_type", err: errors.New(`generated: missing required field "ScanHistory.scan_type"`)}
 	}
-	if v, ok := shc.mutation.ScanType(); ok {
+	if v, ok := _c.mutation.ScanType(); ok {
 		if err := scanhistory.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.scan_type": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "ScanHistory.status"`)}
 	}
-	if v, ok := shc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := scanhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ScanHistory.status": %w`, err)}
 		}
@@ -329,12 +329,12 @@ func (shc *ScanHistoryCreate) check() error {
 	return nil
 }
 
-func (shc *ScanHistoryCreate) sqlSave(ctx context.Context) (*ScanHistory, error) {
-	if err := shc.check(); err != nil {
+func (_c *ScanHistoryCreate) sqlSave(ctx context.Context) (*ScanHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := shc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, shc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -347,78 +347,78 @@ func (shc *ScanHistoryCreate) sqlSave(ctx context.Context) (*ScanHistory, error)
 			return nil, fmt.Errorf("unexpected ScanHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	shc.mutation.id = &_node.ID
-	shc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (shc *ScanHistoryCreate) createSpec() (*ScanHistory, *sqlgraph.CreateSpec) {
+func (_c *ScanHistoryCreate) createSpec() (*ScanHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ScanHistory{config: shc.config}
+		_node = &ScanHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(scanhistory.Table, sqlgraph.NewFieldSpec(scanhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = shc.schemaConfig.ScanHistory
-	if id, ok := shc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ScanHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := shc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(scanhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := shc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(scanhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := shc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(scanhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := shc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(scanhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := shc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(scanhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := shc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(scanhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := shc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(scanhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := shc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(scanhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := shc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(scanhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := shc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(scanhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := shc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(scanhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := shc.mutation.Target(); ok {
+	if value, ok := _c.mutation.Target(); ok {
 		_spec.SetField(scanhistory.FieldTarget, field.TypeString, value)
 		_node.Target = value
 	}
-	if value, ok := shc.mutation.ScanType(); ok {
+	if value, ok := _c.mutation.ScanType(); ok {
 		_spec.SetField(scanhistory.FieldScanType, field.TypeEnum, value)
 		_node.ScanType = value
 	}
-	if value, ok := shc.mutation.Metadata(); ok {
+	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(scanhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
-	if value, ok := shc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(scanhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
@@ -433,16 +433,16 @@ type ScanHistoryCreateBulk struct {
 }
 
 // Save creates the ScanHistory entities in the database.
-func (shcb *ScanHistoryCreateBulk) Save(ctx context.Context) ([]*ScanHistory, error) {
-	if shcb.err != nil {
-		return nil, shcb.err
+func (_c *ScanHistoryCreateBulk) Save(ctx context.Context) ([]*ScanHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(shcb.builders))
-	nodes := make([]*ScanHistory, len(shcb.builders))
-	mutators := make([]Mutator, len(shcb.builders))
-	for i := range shcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ScanHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := shcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ScanHistoryMutation)
@@ -456,11 +456,11 @@ func (shcb *ScanHistoryCreateBulk) Save(ctx context.Context) ([]*ScanHistory, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, shcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, shcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -480,7 +480,7 @@ func (shcb *ScanHistoryCreateBulk) Save(ctx context.Context) ([]*ScanHistory, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, shcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -488,8 +488,8 @@ func (shcb *ScanHistoryCreateBulk) Save(ctx context.Context) ([]*ScanHistory, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shcb *ScanHistoryCreateBulk) SaveX(ctx context.Context) []*ScanHistory {
-	v, err := shcb.Save(ctx)
+func (_c *ScanHistoryCreateBulk) SaveX(ctx context.Context) []*ScanHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -497,14 +497,14 @@ func (shcb *ScanHistoryCreateBulk) SaveX(ctx context.Context) []*ScanHistory {
 }
 
 // Exec executes the query.
-func (shcb *ScanHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := shcb.Save(ctx)
+func (_c *ScanHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shcb *ScanHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := shcb.Exec(ctx); err != nil {
+func (_c *ScanHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

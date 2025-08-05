@@ -88,7 +88,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TaskHistory fields.
-func (th *TaskHistory) assignValues(columns []string, values []any) error {
+func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -98,73 +98,73 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				th.ID = value.String
+				_m.ID = value.String
 			}
 		case taskhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				th.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case taskhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				th.Ref = value.String
+				_m.Ref = value.String
 			}
 		case taskhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				th.Operation = *value
+				_m.Operation = *value
 			}
 		case taskhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				th.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case taskhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				th.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case taskhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				th.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case taskhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				th.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case taskhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				th.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case taskhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				th.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case taskhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				th.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case taskhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &th.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -172,60 +172,60 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				th.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case taskhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				th.Title = value.String
+				_m.Title = value.String
 			}
 		case taskhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				th.Details = value.String
+				_m.Details = value.String
 			}
 		case taskhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				th.Status = enums.TaskStatus(value.String)
+				_m.Status = enums.TaskStatus(value.String)
 			}
 		case taskhistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				th.Category = value.String
+				_m.Category = value.String
 			}
 		case taskhistory.FieldDue:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field due", values[i])
 			} else if value.Valid {
-				th.Due = new(models.DateTime)
-				*th.Due = *value.S.(*models.DateTime)
+				_m.Due = new(models.DateTime)
+				*_m.Due = *value.S.(*models.DateTime)
 			}
 		case taskhistory.FieldCompleted:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field completed", values[i])
 			} else if value.Valid {
-				th.Completed = new(models.DateTime)
-				*th.Completed = *value.S.(*models.DateTime)
+				_m.Completed = new(models.DateTime)
+				*_m.Completed = *value.S.(*models.DateTime)
 			}
 		case taskhistory.FieldAssigneeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field assignee_id", values[i])
 			} else if value.Valid {
-				th.AssigneeID = value.String
+				_m.AssigneeID = value.String
 			}
 		case taskhistory.FieldAssignerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field assigner_id", values[i])
 			} else if value.Valid {
-				th.AssignerID = value.String
+				_m.AssignerID = value.String
 			}
 		default:
-			th.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -233,96 +233,96 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TaskHistory.
 // This includes values selected through modifiers, order, etc.
-func (th *TaskHistory) Value(name string) (ent.Value, error) {
-	return th.selectValues.Get(name)
+func (_m *TaskHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TaskHistory.
 // Note that you need to call TaskHistory.Unwrap() before calling this method if this TaskHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (th *TaskHistory) Update() *TaskHistoryUpdateOne {
-	return NewTaskHistoryClient(th.config).UpdateOne(th)
+func (_m *TaskHistory) Update() *TaskHistoryUpdateOne {
+	return NewTaskHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TaskHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (th *TaskHistory) Unwrap() *TaskHistory {
-	_tx, ok := th.config.driver.(*txDriver)
+func (_m *TaskHistory) Unwrap() *TaskHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TaskHistory is not a transactional entity")
 	}
-	th.config.driver = _tx.drv
-	return th
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (th *TaskHistory) String() string {
+func (_m *TaskHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TaskHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", th.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(th.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(th.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", th.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(th.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(th.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(th.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(th.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(th.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(th.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(th.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", th.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(th.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(th.Title)
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(th.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", th.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(th.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
-	if v := th.Due; v != nil {
+	if v := _m.Due; v != nil {
 		builder.WriteString("due=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := th.Completed; v != nil {
+	if v := _m.Completed; v != nil {
 		builder.WriteString("completed=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("assignee_id=")
-	builder.WriteString(th.AssigneeID)
+	builder.WriteString(_m.AssigneeID)
 	builder.WriteString(", ")
 	builder.WriteString("assigner_id=")
-	builder.WriteString(th.AssignerID)
+	builder.WriteString(_m.AssignerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -69,44 +69,44 @@ type TaskQuery struct {
 }
 
 // Where adds a new predicate for the TaskQuery builder.
-func (tq *TaskQuery) Where(ps ...predicate.Task) *TaskQuery {
-	tq.predicates = append(tq.predicates, ps...)
-	return tq
+func (_q *TaskQuery) Where(ps ...predicate.Task) *TaskQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tq *TaskQuery) Limit(limit int) *TaskQuery {
-	tq.ctx.Limit = &limit
-	return tq
+func (_q *TaskQuery) Limit(limit int) *TaskQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tq *TaskQuery) Offset(offset int) *TaskQuery {
-	tq.ctx.Offset = &offset
-	return tq
+func (_q *TaskQuery) Offset(offset int) *TaskQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tq *TaskQuery) Unique(unique bool) *TaskQuery {
-	tq.ctx.Unique = &unique
-	return tq
+func (_q *TaskQuery) Unique(unique bool) *TaskQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tq *TaskQuery) Order(o ...task.OrderOption) *TaskQuery {
-	tq.order = append(tq.order, o...)
-	return tq
+func (_q *TaskQuery) Order(o ...task.OrderOption) *TaskQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (tq *TaskQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -115,23 +115,23 @@ func (tq *TaskQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, task.OwnerTable, task.OwnerColumn),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Task
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryAssigner chains the current query on the "assigner" edge.
-func (tq *TaskQuery) QueryAssigner() *UserQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryAssigner() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -140,23 +140,23 @@ func (tq *TaskQuery) QueryAssigner() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, task.AssignerTable, task.AssignerColumn),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryAssignee chains the current query on the "assignee" edge.
-func (tq *TaskQuery) QueryAssignee() *UserQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryAssignee() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -165,23 +165,23 @@ func (tq *TaskQuery) QueryAssignee() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, task.AssigneeTable, task.AssigneeColumn),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Task
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryComments chains the current query on the "comments" edge.
-func (tq *TaskQuery) QueryComments() *NoteQuery {
-	query := (&NoteClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -190,23 +190,23 @@ func (tq *TaskQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, task.CommentsTable, task.CommentsColumn),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryGroups chains the current query on the "groups" edge.
-func (tq *TaskQuery) QueryGroups() *GroupQuery {
-	query := (&GroupClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -215,23 +215,23 @@ func (tq *TaskQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.GroupsTable, task.GroupsPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.GroupTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
-func (tq *TaskQuery) QueryInternalPolicies() *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -240,23 +240,23 @@ func (tq *TaskQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.InternalPoliciesTable, task.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryProcedures chains the current query on the "procedures" edge.
-func (tq *TaskQuery) QueryProcedures() *ProcedureQuery {
-	query := (&ProcedureClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -265,23 +265,23 @@ func (tq *TaskQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.ProceduresTable, task.ProceduresPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControls chains the current query on the "controls" edge.
-func (tq *TaskQuery) QueryControls() *ControlQuery {
-	query := (&ControlClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -290,23 +290,23 @@ func (tq *TaskQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlsTable, task.ControlsPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubcontrols chains the current query on the "subcontrols" edge.
-func (tq *TaskQuery) QuerySubcontrols() *SubcontrolQuery {
-	query := (&SubcontrolClient{config: tq.config}).Query()
+func (_q *TaskQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -315,23 +315,23 @@ func (tq *TaskQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.SubcontrolsTable, task.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControlObjectives chains the current query on the "control_objectives" edge.
-func (tq *TaskQuery) QueryControlObjectives() *ControlObjectiveQuery {
-	query := (&ControlObjectiveClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryControlObjectives() *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -340,23 +340,23 @@ func (tq *TaskQuery) QueryControlObjectives() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlObjectivesTable, task.ControlObjectivesPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryPrograms chains the current query on the "programs" edge.
-func (tq *TaskQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -365,23 +365,23 @@ func (tq *TaskQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.ProgramsTable, task.ProgramsPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryRisks chains the current query on the "risks" edge.
-func (tq *TaskQuery) QueryRisks() *RiskQuery {
-	query := (&RiskClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -390,23 +390,23 @@ func (tq *TaskQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, task.RisksTable, task.RisksPrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskTasks
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvidence chains the current query on the "evidence" edge.
-func (tq *TaskQuery) QueryEvidence() *EvidenceQuery {
-	query := (&EvidenceClient{config: tq.config}).Query()
+func (_q *TaskQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -415,10 +415,10 @@ func (tq *TaskQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, task.EvidenceTable, task.EvidencePrimaryKey...),
 		)
-		schemaConfig := tq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.TaskEvidence
-		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -426,8 +426,8 @@ func (tq *TaskQuery) QueryEvidence() *EvidenceQuery {
 
 // First returns the first Task entity from the query.
 // Returns a *NotFoundError when no Task was found.
-func (tq *TaskQuery) First(ctx context.Context) (*Task, error) {
-	nodes, err := tq.Limit(1).All(setContextOp(ctx, tq.ctx, ent.OpQueryFirst))
+func (_q *TaskQuery) First(ctx context.Context) (*Task, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -438,8 +438,8 @@ func (tq *TaskQuery) First(ctx context.Context) (*Task, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tq *TaskQuery) FirstX(ctx context.Context) *Task {
-	node, err := tq.First(ctx)
+func (_q *TaskQuery) FirstX(ctx context.Context) *Task {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -448,9 +448,9 @@ func (tq *TaskQuery) FirstX(ctx context.Context) *Task {
 
 // FirstID returns the first Task ID from the query.
 // Returns a *NotFoundError when no Task ID was found.
-func (tq *TaskQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *TaskQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -461,8 +461,8 @@ func (tq *TaskQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tq *TaskQuery) FirstIDX(ctx context.Context) string {
-	id, err := tq.FirstID(ctx)
+func (_q *TaskQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -472,8 +472,8 @@ func (tq *TaskQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Task entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Task entity is found.
 // Returns a *NotFoundError when no Task entities are found.
-func (tq *TaskQuery) Only(ctx context.Context) (*Task, error) {
-	nodes, err := tq.Limit(2).All(setContextOp(ctx, tq.ctx, ent.OpQueryOnly))
+func (_q *TaskQuery) Only(ctx context.Context) (*Task, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -488,8 +488,8 @@ func (tq *TaskQuery) Only(ctx context.Context) (*Task, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tq *TaskQuery) OnlyX(ctx context.Context) *Task {
-	node, err := tq.Only(ctx)
+func (_q *TaskQuery) OnlyX(ctx context.Context) *Task {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -499,9 +499,9 @@ func (tq *TaskQuery) OnlyX(ctx context.Context) *Task {
 // OnlyID is like Only, but returns the only Task ID in the query.
 // Returns a *NotSingularError when more than one Task ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tq *TaskQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TaskQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -516,8 +516,8 @@ func (tq *TaskQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tq *TaskQuery) OnlyIDX(ctx context.Context) string {
-	id, err := tq.OnlyID(ctx)
+func (_q *TaskQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -525,18 +525,18 @@ func (tq *TaskQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Tasks.
-func (tq *TaskQuery) All(ctx context.Context) ([]*Task, error) {
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryAll)
-	if err := tq.prepareQuery(ctx); err != nil {
+func (_q *TaskQuery) All(ctx context.Context) ([]*Task, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Task, *TaskQuery]()
-	return withInterceptors[[]*Task](ctx, tq, qr, tq.inters)
+	return withInterceptors[[]*Task](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tq *TaskQuery) AllX(ctx context.Context) []*Task {
-	nodes, err := tq.All(ctx)
+func (_q *TaskQuery) AllX(ctx context.Context) []*Task {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -544,20 +544,20 @@ func (tq *TaskQuery) AllX(ctx context.Context) []*Task {
 }
 
 // IDs executes the query and returns a list of Task IDs.
-func (tq *TaskQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if tq.ctx.Unique == nil && tq.path != nil {
-		tq.Unique(true)
+func (_q *TaskQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
-	if err = tq.Select(task.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(task.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tq *TaskQuery) IDsX(ctx context.Context) []string {
-	ids, err := tq.IDs(ctx)
+func (_q *TaskQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -565,17 +565,17 @@ func (tq *TaskQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (tq *TaskQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryCount)
-	if err := tq.prepareQuery(ctx); err != nil {
+func (_q *TaskQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tq, querierCount[*TaskQuery](), tq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TaskQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tq *TaskQuery) CountX(ctx context.Context) int {
-	count, err := tq.Count(ctx)
+func (_q *TaskQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -583,9 +583,9 @@ func (tq *TaskQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tq *TaskQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryExist)
-	switch _, err := tq.FirstID(ctx); {
+func (_q *TaskQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -596,8 +596,8 @@ func (tq *TaskQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tq *TaskQuery) ExistX(ctx context.Context) bool {
-	exist, err := tq.Exist(ctx)
+func (_q *TaskQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -606,177 +606,177 @@ func (tq *TaskQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TaskQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tq *TaskQuery) Clone() *TaskQuery {
-	if tq == nil {
+func (_q *TaskQuery) Clone() *TaskQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TaskQuery{
-		config:                tq.config,
-		ctx:                   tq.ctx.Clone(),
-		order:                 append([]task.OrderOption{}, tq.order...),
-		inters:                append([]Interceptor{}, tq.inters...),
-		predicates:            append([]predicate.Task{}, tq.predicates...),
-		withOwner:             tq.withOwner.Clone(),
-		withAssigner:          tq.withAssigner.Clone(),
-		withAssignee:          tq.withAssignee.Clone(),
-		withComments:          tq.withComments.Clone(),
-		withGroups:            tq.withGroups.Clone(),
-		withInternalPolicies:  tq.withInternalPolicies.Clone(),
-		withProcedures:        tq.withProcedures.Clone(),
-		withControls:          tq.withControls.Clone(),
-		withSubcontrols:       tq.withSubcontrols.Clone(),
-		withControlObjectives: tq.withControlObjectives.Clone(),
-		withPrograms:          tq.withPrograms.Clone(),
-		withRisks:             tq.withRisks.Clone(),
-		withEvidence:          tq.withEvidence.Clone(),
+		config:                _q.config,
+		ctx:                   _q.ctx.Clone(),
+		order:                 append([]task.OrderOption{}, _q.order...),
+		inters:                append([]Interceptor{}, _q.inters...),
+		predicates:            append([]predicate.Task{}, _q.predicates...),
+		withOwner:             _q.withOwner.Clone(),
+		withAssigner:          _q.withAssigner.Clone(),
+		withAssignee:          _q.withAssignee.Clone(),
+		withComments:          _q.withComments.Clone(),
+		withGroups:            _q.withGroups.Clone(),
+		withInternalPolicies:  _q.withInternalPolicies.Clone(),
+		withProcedures:        _q.withProcedures.Clone(),
+		withControls:          _q.withControls.Clone(),
+		withSubcontrols:       _q.withSubcontrols.Clone(),
+		withControlObjectives: _q.withControlObjectives.Clone(),
+		withPrograms:          _q.withPrograms.Clone(),
+		withRisks:             _q.withRisks.Clone(),
+		withEvidence:          _q.withEvidence.Clone(),
 		// clone intermediate query.
-		sql:       tq.sql.Clone(),
-		path:      tq.path,
-		modifiers: append([]func(*sql.Selector){}, tq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithOwner(opts ...func(*OrganizationQuery)) *TaskQuery {
-	query := (&OrganizationClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithOwner(opts ...func(*OrganizationQuery)) *TaskQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withOwner = query
-	return tq
+	_q.withOwner = query
+	return _q
 }
 
 // WithAssigner tells the query-builder to eager-load the nodes that are connected to
 // the "assigner" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithAssigner(opts ...func(*UserQuery)) *TaskQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithAssigner(opts ...func(*UserQuery)) *TaskQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withAssigner = query
-	return tq
+	_q.withAssigner = query
+	return _q
 }
 
 // WithAssignee tells the query-builder to eager-load the nodes that are connected to
 // the "assignee" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithAssignee(opts ...func(*UserQuery)) *TaskQuery {
-	query := (&UserClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithAssignee(opts ...func(*UserQuery)) *TaskQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withAssignee = query
-	return tq
+	_q.withAssignee = query
+	return _q
 }
 
 // WithComments tells the query-builder to eager-load the nodes that are connected to
 // the "comments" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithComments(opts ...func(*NoteQuery)) *TaskQuery {
-	query := (&NoteClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithComments(opts ...func(*NoteQuery)) *TaskQuery {
+	query := (&NoteClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withComments = query
-	return tq
+	_q.withComments = query
+	return _q
 }
 
 // WithGroups tells the query-builder to eager-load the nodes that are connected to
 // the "groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithGroups(opts ...func(*GroupQuery)) *TaskQuery {
-	query := (&GroupClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithGroups(opts ...func(*GroupQuery)) *TaskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withGroups = query
-	return tq
+	_q.withGroups = query
+	return _q
 }
 
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *TaskQuery {
-	query := (&InternalPolicyClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *TaskQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withInternalPolicies = query
-	return tq
+	_q.withInternalPolicies = query
+	return _q
 }
 
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithProcedures(opts ...func(*ProcedureQuery)) *TaskQuery {
-	query := (&ProcedureClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithProcedures(opts ...func(*ProcedureQuery)) *TaskQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withProcedures = query
-	return tq
+	_q.withProcedures = query
+	return _q
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithControls(opts ...func(*ControlQuery)) *TaskQuery {
-	query := (&ControlClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithControls(opts ...func(*ControlQuery)) *TaskQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withControls = query
-	return tq
+	_q.withControls = query
+	return _q
 }
 
 // WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *TaskQuery {
-	query := (&SubcontrolClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *TaskQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withSubcontrols = query
-	return tq
+	_q.withSubcontrols = query
+	return _q
 }
 
 // WithControlObjectives tells the query-builder to eager-load the nodes that are connected to
 // the "control_objectives" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithControlObjectives(opts ...func(*ControlObjectiveQuery)) *TaskQuery {
-	query := (&ControlObjectiveClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithControlObjectives(opts ...func(*ControlObjectiveQuery)) *TaskQuery {
+	query := (&ControlObjectiveClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withControlObjectives = query
-	return tq
+	_q.withControlObjectives = query
+	return _q
 }
 
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithPrograms(opts ...func(*ProgramQuery)) *TaskQuery {
-	query := (&ProgramClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithPrograms(opts ...func(*ProgramQuery)) *TaskQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withPrograms = query
-	return tq
+	_q.withPrograms = query
+	return _q
 }
 
 // WithRisks tells the query-builder to eager-load the nodes that are connected to
 // the "risks" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithRisks(opts ...func(*RiskQuery)) *TaskQuery {
-	query := (&RiskClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithRisks(opts ...func(*RiskQuery)) *TaskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withRisks = query
-	return tq
+	_q.withRisks = query
+	return _q
 }
 
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithEvidence(opts ...func(*EvidenceQuery)) *TaskQuery {
-	query := (&EvidenceClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithEvidence(opts ...func(*EvidenceQuery)) *TaskQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withEvidence = query
-	return tq
+	_q.withEvidence = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -793,10 +793,10 @@ func (tq *TaskQuery) WithEvidence(opts ...func(*EvidenceQuery)) *TaskQuery {
 //		GroupBy(task.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (tq *TaskQuery) GroupBy(field string, fields ...string) *TaskGroupBy {
-	tq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TaskGroupBy{build: tq}
-	grbuild.flds = &tq.ctx.Fields
+func (_q *TaskQuery) GroupBy(field string, fields ...string) *TaskGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TaskGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = task.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -814,261 +814,261 @@ func (tq *TaskQuery) GroupBy(field string, fields ...string) *TaskGroupBy {
 //	client.Task.Query().
 //		Select(task.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (tq *TaskQuery) Select(fields ...string) *TaskSelect {
-	tq.ctx.Fields = append(tq.ctx.Fields, fields...)
-	sbuild := &TaskSelect{TaskQuery: tq}
+func (_q *TaskQuery) Select(fields ...string) *TaskSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TaskSelect{TaskQuery: _q}
 	sbuild.label = task.Label
-	sbuild.flds, sbuild.scan = &tq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TaskSelect configured with the given aggregations.
-func (tq *TaskQuery) Aggregate(fns ...AggregateFunc) *TaskSelect {
-	return tq.Select().Aggregate(fns...)
+func (_q *TaskQuery) Aggregate(fns ...AggregateFunc) *TaskSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tq *TaskQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tq.inters {
+func (_q *TaskQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !task.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if tq.path != nil {
-		prev, err := tq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tq.sql = prev
+		_q.sql = prev
 	}
 	if task.Policy == nil {
 		return errors.New("generated: uninitialized task.Policy (forgotten import generated/runtime?)")
 	}
-	if err := task.Policy.EvalQuery(ctx, tq); err != nil {
+	if err := task.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, error) {
+func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, error) {
 	var (
 		nodes       = []*Task{}
-		_spec       = tq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [13]bool{
-			tq.withOwner != nil,
-			tq.withAssigner != nil,
-			tq.withAssignee != nil,
-			tq.withComments != nil,
-			tq.withGroups != nil,
-			tq.withInternalPolicies != nil,
-			tq.withProcedures != nil,
-			tq.withControls != nil,
-			tq.withSubcontrols != nil,
-			tq.withControlObjectives != nil,
-			tq.withPrograms != nil,
-			tq.withRisks != nil,
-			tq.withEvidence != nil,
+			_q.withOwner != nil,
+			_q.withAssigner != nil,
+			_q.withAssignee != nil,
+			_q.withComments != nil,
+			_q.withGroups != nil,
+			_q.withInternalPolicies != nil,
+			_q.withProcedures != nil,
+			_q.withControls != nil,
+			_q.withSubcontrols != nil,
+			_q.withControlObjectives != nil,
+			_q.withPrograms != nil,
+			_q.withRisks != nil,
+			_q.withEvidence != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Task).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Task{config: tq.config}
+		node := &Task{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tq.schemaConfig.Task
-	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
-	if len(tq.modifiers) > 0 {
-		_spec.Modifiers = tq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Task
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tq.withOwner; query != nil {
-		if err := tq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Task, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withAssigner; query != nil {
-		if err := tq.loadAssigner(ctx, query, nodes, nil,
+	if query := _q.withAssigner; query != nil {
+		if err := _q.loadAssigner(ctx, query, nodes, nil,
 			func(n *Task, e *User) { n.Edges.Assigner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withAssignee; query != nil {
-		if err := tq.loadAssignee(ctx, query, nodes, nil,
+	if query := _q.withAssignee; query != nil {
+		if err := _q.loadAssignee(ctx, query, nodes, nil,
 			func(n *Task, e *User) { n.Edges.Assignee = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withComments; query != nil {
-		if err := tq.loadComments(ctx, query, nodes,
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Task) { n.Edges.Comments = []*Note{} },
 			func(n *Task, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withGroups; query != nil {
-		if err := tq.loadGroups(ctx, query, nodes,
+	if query := _q.withGroups; query != nil {
+		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *Task) { n.Edges.Groups = []*Group{} },
 			func(n *Task, e *Group) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withInternalPolicies; query != nil {
-		if err := tq.loadInternalPolicies(ctx, query, nodes,
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Task) { n.Edges.InternalPolicies = []*InternalPolicy{} },
 			func(n *Task, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withProcedures; query != nil {
-		if err := tq.loadProcedures(ctx, query, nodes,
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Task) { n.Edges.Procedures = []*Procedure{} },
 			func(n *Task, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withControls; query != nil {
-		if err := tq.loadControls(ctx, query, nodes,
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Task) { n.Edges.Controls = []*Control{} },
 			func(n *Task, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withSubcontrols; query != nil {
-		if err := tq.loadSubcontrols(ctx, query, nodes,
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Task) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *Task, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withControlObjectives; query != nil {
-		if err := tq.loadControlObjectives(ctx, query, nodes,
+	if query := _q.withControlObjectives; query != nil {
+		if err := _q.loadControlObjectives(ctx, query, nodes,
 			func(n *Task) { n.Edges.ControlObjectives = []*ControlObjective{} },
 			func(n *Task, e *ControlObjective) { n.Edges.ControlObjectives = append(n.Edges.ControlObjectives, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withPrograms; query != nil {
-		if err := tq.loadPrograms(ctx, query, nodes,
+	if query := _q.withPrograms; query != nil {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Task) { n.Edges.Programs = []*Program{} },
 			func(n *Task, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withRisks; query != nil {
-		if err := tq.loadRisks(ctx, query, nodes,
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *Task) { n.Edges.Risks = []*Risk{} },
 			func(n *Task, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tq.withEvidence; query != nil {
-		if err := tq.loadEvidence(ctx, query, nodes,
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *Task) { n.Edges.Evidence = []*Evidence{} },
 			func(n *Task, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedComments {
-		if err := tq.loadComments(ctx, query, nodes,
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Task) { n.appendNamedComments(name) },
 			func(n *Task, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedGroups {
-		if err := tq.loadGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedGroups {
+		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *Task) { n.appendNamedGroups(name) },
 			func(n *Task, e *Group) { n.appendNamedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedInternalPolicies {
-		if err := tq.loadInternalPolicies(ctx, query, nodes,
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Task) { n.appendNamedInternalPolicies(name) },
 			func(n *Task, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedProcedures {
-		if err := tq.loadProcedures(ctx, query, nodes,
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Task) { n.appendNamedProcedures(name) },
 			func(n *Task, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedControls {
-		if err := tq.loadControls(ctx, query, nodes,
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Task) { n.appendNamedControls(name) },
 			func(n *Task, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedSubcontrols {
-		if err := tq.loadSubcontrols(ctx, query, nodes,
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Task) { n.appendNamedSubcontrols(name) },
 			func(n *Task, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedControlObjectives {
-		if err := tq.loadControlObjectives(ctx, query, nodes,
+	for name, query := range _q.withNamedControlObjectives {
+		if err := _q.loadControlObjectives(ctx, query, nodes,
 			func(n *Task) { n.appendNamedControlObjectives(name) },
 			func(n *Task, e *ControlObjective) { n.appendNamedControlObjectives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedPrograms {
-		if err := tq.loadPrograms(ctx, query, nodes,
+	for name, query := range _q.withNamedPrograms {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Task) { n.appendNamedPrograms(name) },
 			func(n *Task, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedRisks {
-		if err := tq.loadRisks(ctx, query, nodes,
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *Task) { n.appendNamedRisks(name) },
 			func(n *Task, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tq.withNamedEvidence {
-		if err := tq.loadEvidence(ctx, query, nodes,
+	for name, query := range _q.withNamedEvidence {
+		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *Task) { n.appendNamedEvidence(name) },
 			func(n *Task, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range tq.loadTotal {
-		if err := tq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (tq *TaskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Task, init func(*Task), assign func(*Task, *Organization)) error {
+func (_q *TaskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Task, init func(*Task), assign func(*Task, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
@@ -1097,7 +1097,7 @@ func (tq *TaskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 	}
 	return nil
 }
-func (tq *TaskQuery) loadAssigner(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
+func (_q *TaskQuery) loadAssigner(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
@@ -1126,7 +1126,7 @@ func (tq *TaskQuery) loadAssigner(ctx context.Context, query *UserQuery, nodes [
 	}
 	return nil
 }
-func (tq *TaskQuery) loadAssignee(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
+func (_q *TaskQuery) loadAssignee(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
@@ -1155,7 +1155,7 @@ func (tq *TaskQuery) loadAssignee(ctx context.Context, query *UserQuery, nodes [
 	}
 	return nil
 }
-func (tq *TaskQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Task, init func(*Task), assign func(*Task, *Note)) error {
+func (_q *TaskQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Task, init func(*Task), assign func(*Task, *Note)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Task)
 	for i := range nodes {
@@ -1186,7 +1186,7 @@ func (tq *TaskQuery) loadComments(ctx context.Context, query *NoteQuery, nodes [
 	}
 	return nil
 }
-func (tq *TaskQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Task, init func(*Task), assign func(*Task, *Group)) error {
+func (_q *TaskQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Task, init func(*Task), assign func(*Task, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1199,7 +1199,7 @@ func (tq *TaskQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.GroupsTable)
-		joinT.Schema(tq.schemaConfig.GroupTasks)
+		joinT.Schema(_q.schemaConfig.GroupTasks)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(task.GroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.GroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1248,7 +1248,7 @@ func (tq *TaskQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []
 	}
 	return nil
 }
-func (tq *TaskQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Task, init func(*Task), assign func(*Task, *InternalPolicy)) error {
+func (_q *TaskQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Task, init func(*Task), assign func(*Task, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1261,7 +1261,7 @@ func (tq *TaskQuery) loadInternalPolicies(ctx context.Context, query *InternalPo
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.InternalPoliciesTable)
-		joinT.Schema(tq.schemaConfig.InternalPolicyTasks)
+		joinT.Schema(_q.schemaConfig.InternalPolicyTasks)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(task.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1310,7 +1310,7 @@ func (tq *TaskQuery) loadInternalPolicies(ctx context.Context, query *InternalPo
 	}
 	return nil
 }
-func (tq *TaskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Task, init func(*Task), assign func(*Task, *Procedure)) error {
+func (_q *TaskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Task, init func(*Task), assign func(*Task, *Procedure)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1323,7 +1323,7 @@ func (tq *TaskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.ProceduresTable)
-		joinT.Schema(tq.schemaConfig.ProcedureTasks)
+		joinT.Schema(_q.schemaConfig.ProcedureTasks)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(task.ProceduresPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.ProceduresPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1372,7 +1372,7 @@ func (tq *TaskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, 
 	}
 	return nil
 }
-func (tq *TaskQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Task, init func(*Task), assign func(*Task, *Control)) error {
+func (_q *TaskQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Task, init func(*Task), assign func(*Task, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1385,7 +1385,7 @@ func (tq *TaskQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.ControlsTable)
-		joinT.Schema(tq.schemaConfig.ControlTasks)
+		joinT.Schema(_q.schemaConfig.ControlTasks)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(task.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1434,7 +1434,7 @@ func (tq *TaskQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	return nil
 }
-func (tq *TaskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Task, init func(*Task), assign func(*Task, *Subcontrol)) error {
+func (_q *TaskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Task, init func(*Task), assign func(*Task, *Subcontrol)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1447,7 +1447,7 @@ func (tq *TaskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.SubcontrolsTable)
-		joinT.Schema(tq.schemaConfig.SubcontrolTasks)
+		joinT.Schema(_q.schemaConfig.SubcontrolTasks)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(task.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1496,7 +1496,7 @@ func (tq *TaskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	return nil
 }
-func (tq *TaskQuery) loadControlObjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Task, init func(*Task), assign func(*Task, *ControlObjective)) error {
+func (_q *TaskQuery) loadControlObjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Task, init func(*Task), assign func(*Task, *ControlObjective)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1509,7 +1509,7 @@ func (tq *TaskQuery) loadControlObjectives(ctx context.Context, query *ControlOb
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.ControlObjectivesTable)
-		joinT.Schema(tq.schemaConfig.ControlObjectiveTasks)
+		joinT.Schema(_q.schemaConfig.ControlObjectiveTasks)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(task.ControlObjectivesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.ControlObjectivesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1558,7 +1558,7 @@ func (tq *TaskQuery) loadControlObjectives(ctx context.Context, query *ControlOb
 	}
 	return nil
 }
-func (tq *TaskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Task, init func(*Task), assign func(*Task, *Program)) error {
+func (_q *TaskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Task, init func(*Task), assign func(*Task, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1571,7 +1571,7 @@ func (tq *TaskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.ProgramsTable)
-		joinT.Schema(tq.schemaConfig.ProgramTasks)
+		joinT.Schema(_q.schemaConfig.ProgramTasks)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(task.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1620,7 +1620,7 @@ func (tq *TaskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	return nil
 }
-func (tq *TaskQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Task, init func(*Task), assign func(*Task, *Risk)) error {
+func (_q *TaskQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Task, init func(*Task), assign func(*Task, *Risk)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1633,7 +1633,7 @@ func (tq *TaskQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*T
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.RisksTable)
-		joinT.Schema(tq.schemaConfig.RiskTasks)
+		joinT.Schema(_q.schemaConfig.RiskTasks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(task.RisksPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(task.RisksPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1682,7 +1682,7 @@ func (tq *TaskQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*T
 	}
 	return nil
 }
-func (tq *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Task, init func(*Task), assign func(*Task, *Evidence)) error {
+func (_q *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Task, init func(*Task), assign func(*Task, *Evidence)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
 	nids := make(map[string]map[*Task]struct{})
@@ -1695,7 +1695,7 @@ func (tq *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(task.EvidenceTable)
-		joinT.Schema(tq.schemaConfig.TaskEvidence)
+		joinT.Schema(_q.schemaConfig.TaskEvidence)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(task.EvidencePrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(task.EvidencePrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1745,29 +1745,29 @@ func (tq *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nod
 	return nil
 }
 
-func (tq *TaskQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tq.querySpec()
-	_spec.Node.Schema = tq.schemaConfig.Task
-	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
-	if len(tq.modifiers) > 0 {
-		_spec.Modifiers = tq.modifiers
+func (_q *TaskQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Task
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = tq.ctx.Fields
-	if len(tq.ctx.Fields) > 0 {
-		_spec.Unique = tq.ctx.Unique != nil && *tq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tq *TaskQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(task.Table, task.Columns, sqlgraph.NewFieldSpec(task.FieldID, field.TypeString))
-	_spec.From = tq.sql
-	if unique := tq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, task.FieldID)
 		for i := range fields {
@@ -1775,30 +1775,30 @@ func (tq *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(task.FieldOwnerID)
 		}
-		if tq.withAssigner != nil {
+		if _q.withAssigner != nil {
 			_spec.Node.AddColumnOnce(task.FieldAssignerID)
 		}
-		if tq.withAssignee != nil {
+		if _q.withAssignee != nil {
 			_spec.Node.AddColumnOnce(task.FieldAssigneeID)
 		}
 	}
-	if ps := tq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -1808,188 +1808,188 @@ func (tq *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tq *TaskQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tq.driver.Dialect())
+func (_q *TaskQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(task.Table)
-	columns := tq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = task.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tq.sql != nil {
-		selector = tq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tq.ctx.Unique != nil && *tq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tq.schemaConfig.Task)
-	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Task)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range tq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range tq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tq *TaskQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskSelect {
-	tq.modifiers = append(tq.modifiers, modifiers...)
-	return tq.Select()
+func (_q *TaskQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *TaskQuery {
-	query := (&NoteClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *TaskQuery {
+	query := (&NoteClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedComments == nil {
-		tq.withNamedComments = make(map[string]*NoteQuery)
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
 	}
-	tq.withNamedComments[name] = query
-	return tq
+	_q.withNamedComments[name] = query
+	return _q
 }
 
 // WithNamedGroups tells the query-builder to eager-load the nodes that are connected to the "groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *TaskQuery {
-	query := (&GroupClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *TaskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedGroups == nil {
-		tq.withNamedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedGroups == nil {
+		_q.withNamedGroups = make(map[string]*GroupQuery)
 	}
-	tq.withNamedGroups[name] = query
-	return tq
+	_q.withNamedGroups[name] = query
+	return _q
 }
 
 // WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *TaskQuery {
-	query := (&InternalPolicyClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *TaskQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedInternalPolicies == nil {
-		tq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	tq.withNamedInternalPolicies[name] = query
-	return tq
+	_q.withNamedInternalPolicies[name] = query
+	return _q
 }
 
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *TaskQuery {
-	query := (&ProcedureClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *TaskQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedProcedures == nil {
-		tq.withNamedProcedures = make(map[string]*ProcedureQuery)
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
 	}
-	tq.withNamedProcedures[name] = query
-	return tq
+	_q.withNamedProcedures[name] = query
+	return _q
 }
 
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *TaskQuery {
-	query := (&ControlClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *TaskQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedControls == nil {
-		tq.withNamedControls = make(map[string]*ControlQuery)
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
-	tq.withNamedControls[name] = query
-	return tq
+	_q.withNamedControls[name] = query
+	return _q
 }
 
 // WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *TaskQuery {
-	query := (&SubcontrolClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *TaskQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedSubcontrols == nil {
-		tq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	tq.withNamedSubcontrols[name] = query
-	return tq
+	_q.withNamedSubcontrols[name] = query
+	return _q
 }
 
 // WithNamedControlObjectives tells the query-builder to eager-load the nodes that are connected to the "control_objectives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedControlObjectives(name string, opts ...func(*ControlObjectiveQuery)) *TaskQuery {
-	query := (&ControlObjectiveClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedControlObjectives(name string, opts ...func(*ControlObjectiveQuery)) *TaskQuery {
+	query := (&ControlObjectiveClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedControlObjectives == nil {
-		tq.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
+	if _q.withNamedControlObjectives == nil {
+		_q.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
 	}
-	tq.withNamedControlObjectives[name] = query
-	return tq
+	_q.withNamedControlObjectives[name] = query
+	return _q
 }
 
 // WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *TaskQuery {
-	query := (&ProgramClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *TaskQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedPrograms == nil {
-		tq.withNamedPrograms = make(map[string]*ProgramQuery)
+	if _q.withNamedPrograms == nil {
+		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	tq.withNamedPrograms[name] = query
-	return tq
+	_q.withNamedPrograms[name] = query
+	return _q
 }
 
 // WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *TaskQuery {
-	query := (&RiskClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *TaskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedRisks == nil {
-		tq.withNamedRisks = make(map[string]*RiskQuery)
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
 	}
-	tq.withNamedRisks[name] = query
-	return tq
+	_q.withNamedRisks[name] = query
+	return _q
 }
 
 // WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *TaskQuery {
-	query := (&EvidenceClient{config: tq.config}).Query()
+func (_q *TaskQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *TaskQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tq.withNamedEvidence == nil {
-		tq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	if _q.withNamedEvidence == nil {
+		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
 	}
-	tq.withNamedEvidence[name] = query
-	return tq
+	_q.withNamedEvidence[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -2018,41 +2018,41 @@ type TaskGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tgb *TaskGroupBy) Aggregate(fns ...AggregateFunc) *TaskGroupBy {
-	tgb.fns = append(tgb.fns, fns...)
-	return tgb
+func (_g *TaskGroupBy) Aggregate(fns ...AggregateFunc) *TaskGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tgb *TaskGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tgb.build.ctx, ent.OpQueryGroupBy)
-	if err := tgb.build.prepareQuery(ctx); err != nil {
+func (_g *TaskGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TaskQuery, *TaskGroupBy](ctx, tgb.build, tgb, tgb.build.inters, v)
+	return scanWithInterceptors[*TaskQuery, *TaskGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tgb *TaskGroupBy) sqlScan(ctx context.Context, root *TaskQuery, v any) error {
+func (_g *TaskGroupBy) sqlScan(ctx context.Context, root *TaskQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tgb.fns))
-	for _, fn := range tgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tgb.flds)+len(tgb.fns))
-		for _, f := range *tgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2066,27 +2066,27 @@ type TaskSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ts *TaskSelect) Aggregate(fns ...AggregateFunc) *TaskSelect {
-	ts.fns = append(ts.fns, fns...)
-	return ts
+func (_s *TaskSelect) Aggregate(fns ...AggregateFunc) *TaskSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ts *TaskSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ts.ctx, ent.OpQuerySelect)
-	if err := ts.prepareQuery(ctx); err != nil {
+func (_s *TaskSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TaskQuery, *TaskSelect](ctx, ts.TaskQuery, ts, ts.inters, v)
+	return scanWithInterceptors[*TaskQuery, *TaskSelect](ctx, _s.TaskQuery, _s, _s.inters, v)
 }
 
-func (ts *TaskSelect) sqlScan(ctx context.Context, root *TaskQuery, v any) error {
+func (_s *TaskSelect) sqlScan(ctx context.Context, root *TaskQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ts.fns))
-	for _, fn := range ts.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ts.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -2094,7 +2094,7 @@ func (ts *TaskSelect) sqlScan(ctx context.Context, root *TaskQuery, v any) error
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ts.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2102,7 +2102,7 @@ func (ts *TaskSelect) sqlScan(ctx context.Context, root *TaskQuery, v any) error
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ts *TaskSelect) Modify(modifiers ...func(s *sql.Selector)) *TaskSelect {
-	ts.modifiers = append(ts.modifiers, modifiers...)
-	return ts
+func (_s *TaskSelect) Modify(modifiers ...func(s *sql.Selector)) *TaskSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

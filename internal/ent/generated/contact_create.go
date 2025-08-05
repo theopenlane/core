@@ -25,264 +25,264 @@ type ContactCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cc *ContactCreate) SetCreatedAt(t time.Time) *ContactCreate {
-	cc.mutation.SetCreatedAt(t)
-	return cc
+func (_c *ContactCreate) SetCreatedAt(v time.Time) *ContactCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableCreatedAt(t *time.Time) *ContactCreate {
-	if t != nil {
-		cc.SetCreatedAt(*t)
+func (_c *ContactCreate) SetNillableCreatedAt(v *time.Time) *ContactCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cc *ContactCreate) SetUpdatedAt(t time.Time) *ContactCreate {
-	cc.mutation.SetUpdatedAt(t)
-	return cc
+func (_c *ContactCreate) SetUpdatedAt(v time.Time) *ContactCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableUpdatedAt(t *time.Time) *ContactCreate {
-	if t != nil {
-		cc.SetUpdatedAt(*t)
+func (_c *ContactCreate) SetNillableUpdatedAt(v *time.Time) *ContactCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (cc *ContactCreate) SetCreatedBy(s string) *ContactCreate {
-	cc.mutation.SetCreatedBy(s)
-	return cc
+func (_c *ContactCreate) SetCreatedBy(v string) *ContactCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableCreatedBy(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetCreatedBy(*s)
+func (_c *ContactCreate) SetNillableCreatedBy(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cc *ContactCreate) SetUpdatedBy(s string) *ContactCreate {
-	cc.mutation.SetUpdatedBy(s)
-	return cc
+func (_c *ContactCreate) SetUpdatedBy(v string) *ContactCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableUpdatedBy(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetUpdatedBy(*s)
+func (_c *ContactCreate) SetNillableUpdatedBy(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cc *ContactCreate) SetDeletedAt(t time.Time) *ContactCreate {
-	cc.mutation.SetDeletedAt(t)
-	return cc
+func (_c *ContactCreate) SetDeletedAt(v time.Time) *ContactCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableDeletedAt(t *time.Time) *ContactCreate {
-	if t != nil {
-		cc.SetDeletedAt(*t)
+func (_c *ContactCreate) SetNillableDeletedAt(v *time.Time) *ContactCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cc *ContactCreate) SetDeletedBy(s string) *ContactCreate {
-	cc.mutation.SetDeletedBy(s)
-	return cc
+func (_c *ContactCreate) SetDeletedBy(v string) *ContactCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableDeletedBy(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetDeletedBy(*s)
+func (_c *ContactCreate) SetNillableDeletedBy(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (cc *ContactCreate) SetTags(s []string) *ContactCreate {
-	cc.mutation.SetTags(s)
-	return cc
+func (_c *ContactCreate) SetTags(v []string) *ContactCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cc *ContactCreate) SetOwnerID(s string) *ContactCreate {
-	cc.mutation.SetOwnerID(s)
-	return cc
+func (_c *ContactCreate) SetOwnerID(v string) *ContactCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableOwnerID(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetOwnerID(*s)
+func (_c *ContactCreate) SetNillableOwnerID(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetFullName sets the "full_name" field.
-func (cc *ContactCreate) SetFullName(s string) *ContactCreate {
-	cc.mutation.SetFullName(s)
-	return cc
+func (_c *ContactCreate) SetFullName(v string) *ContactCreate {
+	_c.mutation.SetFullName(v)
+	return _c
 }
 
 // SetTitle sets the "title" field.
-func (cc *ContactCreate) SetTitle(s string) *ContactCreate {
-	cc.mutation.SetTitle(s)
-	return cc
+func (_c *ContactCreate) SetTitle(v string) *ContactCreate {
+	_c.mutation.SetTitle(v)
+	return _c
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableTitle(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetTitle(*s)
+func (_c *ContactCreate) SetNillableTitle(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetTitle(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetCompany sets the "company" field.
-func (cc *ContactCreate) SetCompany(s string) *ContactCreate {
-	cc.mutation.SetCompany(s)
-	return cc
+func (_c *ContactCreate) SetCompany(v string) *ContactCreate {
+	_c.mutation.SetCompany(v)
+	return _c
 }
 
 // SetNillableCompany sets the "company" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableCompany(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetCompany(*s)
+func (_c *ContactCreate) SetNillableCompany(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetCompany(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetEmail sets the "email" field.
-func (cc *ContactCreate) SetEmail(s string) *ContactCreate {
-	cc.mutation.SetEmail(s)
-	return cc
+func (_c *ContactCreate) SetEmail(v string) *ContactCreate {
+	_c.mutation.SetEmail(v)
+	return _c
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableEmail(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetEmail(*s)
+func (_c *ContactCreate) SetNillableEmail(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetEmail(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (cc *ContactCreate) SetPhoneNumber(s string) *ContactCreate {
-	cc.mutation.SetPhoneNumber(s)
-	return cc
+func (_c *ContactCreate) SetPhoneNumber(v string) *ContactCreate {
+	_c.mutation.SetPhoneNumber(v)
+	return _c
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (cc *ContactCreate) SetNillablePhoneNumber(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetPhoneNumber(*s)
+func (_c *ContactCreate) SetNillablePhoneNumber(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetPhoneNumber(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetAddress sets the "address" field.
-func (cc *ContactCreate) SetAddress(s string) *ContactCreate {
-	cc.mutation.SetAddress(s)
-	return cc
+func (_c *ContactCreate) SetAddress(v string) *ContactCreate {
+	_c.mutation.SetAddress(v)
+	return _c
 }
 
 // SetNillableAddress sets the "address" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableAddress(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetAddress(*s)
+func (_c *ContactCreate) SetNillableAddress(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetAddress(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (cc *ContactCreate) SetStatus(es enums.UserStatus) *ContactCreate {
-	cc.mutation.SetStatus(es)
-	return cc
+func (_c *ContactCreate) SetStatus(v enums.UserStatus) *ContactCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableStatus(es *enums.UserStatus) *ContactCreate {
-	if es != nil {
-		cc.SetStatus(*es)
+func (_c *ContactCreate) SetNillableStatus(v *enums.UserStatus) *ContactCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cc *ContactCreate) SetID(s string) *ContactCreate {
-	cc.mutation.SetID(s)
-	return cc
+func (_c *ContactCreate) SetID(v string) *ContactCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableID(s *string) *ContactCreate {
-	if s != nil {
-		cc.SetID(*s)
+func (_c *ContactCreate) SetNillableID(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cc *ContactCreate) SetOwner(o *Organization) *ContactCreate {
-	return cc.SetOwnerID(o.ID)
+func (_c *ContactCreate) SetOwner(v *Organization) *ContactCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (cc *ContactCreate) AddEntityIDs(ids ...string) *ContactCreate {
-	cc.mutation.AddEntityIDs(ids...)
-	return cc
+func (_c *ContactCreate) AddEntityIDs(ids ...string) *ContactCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (cc *ContactCreate) AddEntities(e ...*Entity) *ContactCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *ContactCreate) AddEntities(v ...*Entity) *ContactCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddEntityIDs(ids...)
+	return _c.AddEntityIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (cc *ContactCreate) AddFileIDs(ids ...string) *ContactCreate {
-	cc.mutation.AddFileIDs(ids...)
-	return cc
+func (_c *ContactCreate) AddFileIDs(ids ...string) *ContactCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (cc *ContactCreate) AddFiles(f ...*File) *ContactCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *ContactCreate) AddFiles(v ...*File) *ContactCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // Mutation returns the ContactMutation object of the builder.
-func (cc *ContactCreate) Mutation() *ContactMutation {
-	return cc.mutation
+func (_c *ContactCreate) Mutation() *ContactMutation {
+	return _c.mutation
 }
 
 // Save creates the Contact in the database.
-func (cc *ContactCreate) Save(ctx context.Context) (*Contact, error) {
-	if err := cc.defaults(); err != nil {
+func (_c *ContactCreate) Save(ctx context.Context) (*Contact, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cc *ContactCreate) SaveX(ctx context.Context) *Contact {
-	v, err := cc.Save(ctx)
+func (_c *ContactCreate) SaveX(ctx context.Context) *Contact {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -290,81 +290,81 @@ func (cc *ContactCreate) SaveX(ctx context.Context) *Contact {
 }
 
 // Exec executes the query.
-func (cc *ContactCreate) Exec(ctx context.Context) error {
-	_, err := cc.Save(ctx)
+func (_c *ContactCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cc *ContactCreate) ExecX(ctx context.Context) {
-	if err := cc.Exec(ctx); err != nil {
+func (_c *ContactCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cc *ContactCreate) defaults() error {
-	if _, ok := cc.mutation.CreatedAt(); !ok {
+func (_c *ContactCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if contact.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized contact.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := contact.DefaultCreatedAt()
-		cc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if contact.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized contact.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := contact.DefaultUpdatedAt()
-		cc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := contact.DefaultTags
-		cc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := cc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := contact.DefaultStatus
-		cc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := cc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if contact.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized contact.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := contact.DefaultID()
-		cc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cc *ContactCreate) check() error {
-	if v, ok := cc.mutation.OwnerID(); ok {
+func (_c *ContactCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := contact.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Contact.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := cc.mutation.FullName(); !ok {
+	if _, ok := _c.mutation.FullName(); !ok {
 		return &ValidationError{Name: "full_name", err: errors.New(`generated: missing required field "Contact.full_name"`)}
 	}
-	if v, ok := cc.mutation.FullName(); ok {
+	if v, ok := _c.mutation.FullName(); ok {
 		if err := contact.FullNameValidator(v); err != nil {
 			return &ValidationError{Name: "full_name", err: fmt.Errorf(`generated: validator failed for field "Contact.full_name": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.Email(); ok {
+	if v, ok := _c.mutation.Email(); ok {
 		if err := contact.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "Contact.email": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.PhoneNumber(); ok {
+	if v, ok := _c.mutation.PhoneNumber(); ok {
 		if err := contact.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "Contact.phone_number": %w`, err)}
 		}
 	}
-	if _, ok := cc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Contact.status"`)}
 	}
-	if v, ok := cc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := contact.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Contact.status": %w`, err)}
 		}
@@ -372,12 +372,12 @@ func (cc *ContactCreate) check() error {
 	return nil
 }
 
-func (cc *ContactCreate) sqlSave(ctx context.Context) (*Contact, error) {
-	if err := cc.check(); err != nil {
+func (_c *ContactCreate) sqlSave(ctx context.Context) (*Contact, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -390,78 +390,78 @@ func (cc *ContactCreate) sqlSave(ctx context.Context) (*Contact, error) {
 			return nil, fmt.Errorf("unexpected Contact.ID type: %T", _spec.ID.Value)
 		}
 	}
-	cc.mutation.id = &_node.ID
-	cc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
+func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Contact{config: cc.config}
+		_node = &Contact{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(contact.Table, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString))
 	)
-	_spec.Schema = cc.schemaConfig.Contact
-	if id, ok := cc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Contact
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(contact.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(contact.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(contact.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := cc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cc.mutation.FullName(); ok {
+	if value, ok := _c.mutation.FullName(); ok {
 		_spec.SetField(contact.FieldFullName, field.TypeString, value)
 		_node.FullName = value
 	}
-	if value, ok := cc.mutation.Title(); ok {
+	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(contact.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
-	if value, ok := cc.mutation.Company(); ok {
+	if value, ok := _c.mutation.Company(); ok {
 		_spec.SetField(contact.FieldCompany, field.TypeString, value)
 		_node.Company = value
 	}
-	if value, ok := cc.mutation.Email(); ok {
+	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(contact.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := cc.mutation.PhoneNumber(); ok {
+	if value, ok := _c.mutation.PhoneNumber(); ok {
 		_spec.SetField(contact.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
 	}
-	if value, ok := cc.mutation.Address(); ok {
+	if value, ok := _c.mutation.Address(); ok {
 		_spec.SetField(contact.FieldAddress, field.TypeString, value)
 		_node.Address = value
 	}
-	if value, ok := cc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -472,14 +472,14 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Contact
+		edge.Schema = _c.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -490,13 +490,13 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.EntityContacts
+		edge.Schema = _c.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -507,7 +507,7 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ContactFiles
+		edge.Schema = _c.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -524,16 +524,16 @@ type ContactCreateBulk struct {
 }
 
 // Save creates the Contact entities in the database.
-func (ccb *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
-	if ccb.err != nil {
-		return nil, ccb.err
+func (_c *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
-	nodes := make([]*Contact, len(ccb.builders))
-	mutators := make([]Mutator, len(ccb.builders))
-	for i := range ccb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Contact, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ContactMutation)
@@ -547,11 +547,11 @@ func (ccb *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -571,7 +571,7 @@ func (ccb *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -579,8 +579,8 @@ func (ccb *ContactCreateBulk) Save(ctx context.Context) ([]*Contact, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ccb *ContactCreateBulk) SaveX(ctx context.Context) []*Contact {
-	v, err := ccb.Save(ctx)
+func (_c *ContactCreateBulk) SaveX(ctx context.Context) []*Contact {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -588,14 +588,14 @@ func (ccb *ContactCreateBulk) SaveX(ctx context.Context) []*Contact {
 }
 
 // Exec executes the query.
-func (ccb *ContactCreateBulk) Exec(ctx context.Context) error {
-	_, err := ccb.Save(ctx)
+func (_c *ContactCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ccb *ContactCreateBulk) ExecX(ctx context.Context) {
-	if err := ccb.Exec(ctx); err != nil {
+func (_c *ContactCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

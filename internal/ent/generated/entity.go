@@ -227,7 +227,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Entity fields.
-func (e *Entity) assignValues(columns []string, values []any) error {
+func (_m *Entity) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -237,49 +237,49 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				e.ID = value.String
+				_m.ID = value.String
 			}
 		case entity.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				e.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case entity.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				e.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case entity.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				e.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case entity.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				e.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case entity.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				e.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case entity.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				e.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case entity.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &e.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -287,31 +287,31 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				e.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case entity.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				e.Name = value.String
+				_m.Name = value.String
 			}
 		case entity.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				e.DisplayName = value.String
+				_m.DisplayName = value.String
 			}
 		case entity.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				e.Description = value.String
+				_m.Description = value.String
 			}
 		case entity.FieldDomains:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field domains", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &e.Domains); err != nil {
+				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
 				}
 			}
@@ -319,37 +319,37 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_type_id", values[i])
 			} else if value.Valid {
-				e.EntityTypeID = value.String
+				_m.EntityTypeID = value.String
 			}
 		case entity.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				e.Status = value.String
+				_m.Status = value.String
 			}
 		case entity.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_type_entities", values[i])
 			} else if value.Valid {
-				e.entity_type_entities = new(string)
-				*e.entity_type_entities = value.String
+				_m.entity_type_entities = new(string)
+				*_m.entity_type_entities = value.String
 			}
 		case entity.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_entities", values[i])
 			} else if value.Valid {
-				e.risk_entities = new(string)
-				*e.risk_entities = value.String
+				_m.risk_entities = new(string)
+				*_m.risk_entities = value.String
 			}
 		case entity.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scan_entities", values[i])
 			} else if value.Valid {
-				e.scan_entities = new(string)
-				*e.scan_entities = value.String
+				_m.scan_entities = new(string)
+				*_m.scan_entities = value.String
 			}
 		default:
-			e.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -357,346 +357,346 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Entity.
 // This includes values selected through modifiers, order, etc.
-func (e *Entity) Value(name string) (ent.Value, error) {
-	return e.selectValues.Get(name)
+func (_m *Entity) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Entity entity.
-func (e *Entity) QueryOwner() *OrganizationQuery {
-	return NewEntityClient(e.config).QueryOwner(e)
+func (_m *Entity) QueryOwner() *OrganizationQuery {
+	return NewEntityClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Entity entity.
-func (e *Entity) QueryBlockedGroups() *GroupQuery {
-	return NewEntityClient(e.config).QueryBlockedGroups(e)
+func (_m *Entity) QueryBlockedGroups() *GroupQuery {
+	return NewEntityClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Entity entity.
-func (e *Entity) QueryEditors() *GroupQuery {
-	return NewEntityClient(e.config).QueryEditors(e)
+func (_m *Entity) QueryEditors() *GroupQuery {
+	return NewEntityClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the Entity entity.
-func (e *Entity) QueryViewers() *GroupQuery {
-	return NewEntityClient(e.config).QueryViewers(e)
+func (_m *Entity) QueryViewers() *GroupQuery {
+	return NewEntityClient(_m.config).QueryViewers(_m)
 }
 
 // QueryContacts queries the "contacts" edge of the Entity entity.
-func (e *Entity) QueryContacts() *ContactQuery {
-	return NewEntityClient(e.config).QueryContacts(e)
+func (_m *Entity) QueryContacts() *ContactQuery {
+	return NewEntityClient(_m.config).QueryContacts(_m)
 }
 
 // QueryDocuments queries the "documents" edge of the Entity entity.
-func (e *Entity) QueryDocuments() *DocumentDataQuery {
-	return NewEntityClient(e.config).QueryDocuments(e)
+func (_m *Entity) QueryDocuments() *DocumentDataQuery {
+	return NewEntityClient(_m.config).QueryDocuments(_m)
 }
 
 // QueryNotes queries the "notes" edge of the Entity entity.
-func (e *Entity) QueryNotes() *NoteQuery {
-	return NewEntityClient(e.config).QueryNotes(e)
+func (_m *Entity) QueryNotes() *NoteQuery {
+	return NewEntityClient(_m.config).QueryNotes(_m)
 }
 
 // QueryFiles queries the "files" edge of the Entity entity.
-func (e *Entity) QueryFiles() *FileQuery {
-	return NewEntityClient(e.config).QueryFiles(e)
+func (_m *Entity) QueryFiles() *FileQuery {
+	return NewEntityClient(_m.config).QueryFiles(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Entity entity.
-func (e *Entity) QueryAssets() *AssetQuery {
-	return NewEntityClient(e.config).QueryAssets(e)
+func (_m *Entity) QueryAssets() *AssetQuery {
+	return NewEntityClient(_m.config).QueryAssets(_m)
 }
 
 // QueryScans queries the "scans" edge of the Entity entity.
-func (e *Entity) QueryScans() *ScanQuery {
-	return NewEntityClient(e.config).QueryScans(e)
+func (_m *Entity) QueryScans() *ScanQuery {
+	return NewEntityClient(_m.config).QueryScans(_m)
 }
 
 // QueryEntityType queries the "entity_type" edge of the Entity entity.
-func (e *Entity) QueryEntityType() *EntityTypeQuery {
-	return NewEntityClient(e.config).QueryEntityType(e)
+func (_m *Entity) QueryEntityType() *EntityTypeQuery {
+	return NewEntityClient(_m.config).QueryEntityType(_m)
 }
 
 // Update returns a builder for updating this Entity.
 // Note that you need to call Entity.Unwrap() before calling this method if this Entity
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (e *Entity) Update() *EntityUpdateOne {
-	return NewEntityClient(e.config).UpdateOne(e)
+func (_m *Entity) Update() *EntityUpdateOne {
+	return NewEntityClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Entity entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (e *Entity) Unwrap() *Entity {
-	_tx, ok := e.config.driver.(*txDriver)
+func (_m *Entity) Unwrap() *Entity {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Entity is not a transactional entity")
 	}
-	e.config.driver = _tx.drv
-	return e
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (e *Entity) String() string {
+func (_m *Entity) String() string {
 	var builder strings.Builder
 	builder.WriteString("Entity(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", e.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(e.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(e.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(e.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(e.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(e.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(e.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", e.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(e.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(e.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(e.DisplayName)
+	builder.WriteString(_m.DisplayName)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(e.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
-	builder.WriteString(fmt.Sprintf("%v", e.Domains))
+	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
 	builder.WriteString(", ")
 	builder.WriteString("entity_type_id=")
-	builder.WriteString(e.EntityTypeID)
+	builder.WriteString(_m.EntityTypeID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(e.Status)
+	builder.WriteString(_m.Status)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedBlockedGroups(name string) ([]*Group, error) {
-	if e.Edges.namedBlockedGroups == nil {
+func (_m *Entity) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if e.Edges.namedBlockedGroups == nil {
-		e.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Entity) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		e.Edges.namedBlockedGroups[name] = append(e.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedEditors(name string) ([]*Group, error) {
-	if e.Edges.namedEditors == nil {
+func (_m *Entity) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedEditors(name string, edges ...*Group) {
-	if e.Edges.namedEditors == nil {
-		e.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Entity) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		e.Edges.namedEditors[name] = append(e.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedViewers(name string) ([]*Group, error) {
-	if e.Edges.namedViewers == nil {
+func (_m *Entity) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedViewers(name string, edges ...*Group) {
-	if e.Edges.namedViewers == nil {
-		e.Edges.namedViewers = make(map[string][]*Group)
+func (_m *Entity) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		e.Edges.namedViewers[name] = append(e.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedContacts returns the Contacts named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedContacts(name string) ([]*Contact, error) {
-	if e.Edges.namedContacts == nil {
+func (_m *Entity) NamedContacts(name string) ([]*Contact, error) {
+	if _m.Edges.namedContacts == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedContacts[name]
+	nodes, ok := _m.Edges.namedContacts[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedContacts(name string, edges ...*Contact) {
-	if e.Edges.namedContacts == nil {
-		e.Edges.namedContacts = make(map[string][]*Contact)
+func (_m *Entity) appendNamedContacts(name string, edges ...*Contact) {
+	if _m.Edges.namedContacts == nil {
+		_m.Edges.namedContacts = make(map[string][]*Contact)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedContacts[name] = []*Contact{}
+		_m.Edges.namedContacts[name] = []*Contact{}
 	} else {
-		e.Edges.namedContacts[name] = append(e.Edges.namedContacts[name], edges...)
+		_m.Edges.namedContacts[name] = append(_m.Edges.namedContacts[name], edges...)
 	}
 }
 
 // NamedDocuments returns the Documents named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedDocuments(name string) ([]*DocumentData, error) {
-	if e.Edges.namedDocuments == nil {
+func (_m *Entity) NamedDocuments(name string) ([]*DocumentData, error) {
+	if _m.Edges.namedDocuments == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedDocuments[name]
+	nodes, ok := _m.Edges.namedDocuments[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedDocuments(name string, edges ...*DocumentData) {
-	if e.Edges.namedDocuments == nil {
-		e.Edges.namedDocuments = make(map[string][]*DocumentData)
+func (_m *Entity) appendNamedDocuments(name string, edges ...*DocumentData) {
+	if _m.Edges.namedDocuments == nil {
+		_m.Edges.namedDocuments = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedDocuments[name] = []*DocumentData{}
+		_m.Edges.namedDocuments[name] = []*DocumentData{}
 	} else {
-		e.Edges.namedDocuments[name] = append(e.Edges.namedDocuments[name], edges...)
+		_m.Edges.namedDocuments[name] = append(_m.Edges.namedDocuments[name], edges...)
 	}
 }
 
 // NamedNotes returns the Notes named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedNotes(name string) ([]*Note, error) {
-	if e.Edges.namedNotes == nil {
+func (_m *Entity) NamedNotes(name string) ([]*Note, error) {
+	if _m.Edges.namedNotes == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedNotes[name]
+	nodes, ok := _m.Edges.namedNotes[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedNotes(name string, edges ...*Note) {
-	if e.Edges.namedNotes == nil {
-		e.Edges.namedNotes = make(map[string][]*Note)
+func (_m *Entity) appendNamedNotes(name string, edges ...*Note) {
+	if _m.Edges.namedNotes == nil {
+		_m.Edges.namedNotes = make(map[string][]*Note)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedNotes[name] = []*Note{}
+		_m.Edges.namedNotes[name] = []*Note{}
 	} else {
-		e.Edges.namedNotes[name] = append(e.Edges.namedNotes[name], edges...)
+		_m.Edges.namedNotes[name] = append(_m.Edges.namedNotes[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedFiles(name string) ([]*File, error) {
-	if e.Edges.namedFiles == nil {
+func (_m *Entity) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedFiles(name string, edges ...*File) {
-	if e.Edges.namedFiles == nil {
-		e.Edges.namedFiles = make(map[string][]*File)
+func (_m *Entity) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		e.Edges.namedFiles[name] = append(e.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedAssets returns the Assets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedAssets(name string) ([]*Asset, error) {
-	if e.Edges.namedAssets == nil {
+func (_m *Entity) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedAssets[name]
+	nodes, ok := _m.Edges.namedAssets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedAssets(name string, edges ...*Asset) {
-	if e.Edges.namedAssets == nil {
-		e.Edges.namedAssets = make(map[string][]*Asset)
+func (_m *Entity) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedAssets[name] = []*Asset{}
+		_m.Edges.namedAssets[name] = []*Asset{}
 	} else {
-		e.Edges.namedAssets[name] = append(e.Edges.namedAssets[name], edges...)
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
 	}
 }
 
 // NamedScans returns the Scans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Entity) NamedScans(name string) ([]*Scan, error) {
-	if e.Edges.namedScans == nil {
+func (_m *Entity) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedScans[name]
+	nodes, ok := _m.Edges.namedScans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Entity) appendNamedScans(name string, edges ...*Scan) {
-	if e.Edges.namedScans == nil {
-		e.Edges.namedScans = make(map[string][]*Scan)
+func (_m *Entity) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedScans[name] = []*Scan{}
+		_m.Edges.namedScans[name] = []*Scan{}
 	} else {
-		e.Edges.namedScans[name] = append(e.Edges.namedScans[name], edges...)
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 

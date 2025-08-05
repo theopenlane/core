@@ -23,275 +23,275 @@ type DNSVerificationHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (dvhc *DNSVerificationHistoryCreate) SetHistoryTime(t time.Time) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetHistoryTime(t)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetHistoryTime(v time.Time) *DNSVerificationHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableHistoryTime(t *time.Time) *DNSVerificationHistoryCreate {
-	if t != nil {
-		dvhc.SetHistoryTime(*t)
+func (_c *DNSVerificationHistoryCreate) SetNillableHistoryTime(v *time.Time) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (dvhc *DNSVerificationHistoryCreate) SetRef(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetRef(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetRef(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableRef(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetRef(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableRef(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (dvhc *DNSVerificationHistoryCreate) SetOperation(ht history.OpType) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetOperation(ht)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetOperation(v history.OpType) *DNSVerificationHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (dvhc *DNSVerificationHistoryCreate) SetCreatedAt(t time.Time) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetCreatedAt(t)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetCreatedAt(v time.Time) *DNSVerificationHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableCreatedAt(t *time.Time) *DNSVerificationHistoryCreate {
-	if t != nil {
-		dvhc.SetCreatedAt(*t)
+func (_c *DNSVerificationHistoryCreate) SetNillableCreatedAt(v *time.Time) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (dvhc *DNSVerificationHistoryCreate) SetUpdatedAt(t time.Time) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetUpdatedAt(t)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetUpdatedAt(v time.Time) *DNSVerificationHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *DNSVerificationHistoryCreate {
-	if t != nil {
-		dvhc.SetUpdatedAt(*t)
+func (_c *DNSVerificationHistoryCreate) SetNillableUpdatedAt(v *time.Time) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (dvhc *DNSVerificationHistoryCreate) SetCreatedBy(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetCreatedBy(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetCreatedBy(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableCreatedBy(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetCreatedBy(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableCreatedBy(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (dvhc *DNSVerificationHistoryCreate) SetUpdatedBy(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetUpdatedBy(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetUpdatedBy(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableUpdatedBy(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetUpdatedBy(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableUpdatedBy(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDeletedAt(t time.Time) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDeletedAt(t)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetDeletedAt(v time.Time) *DNSVerificationHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableDeletedAt(t *time.Time) *DNSVerificationHistoryCreate {
-	if t != nil {
-		dvhc.SetDeletedAt(*t)
+func (_c *DNSVerificationHistoryCreate) SetNillableDeletedAt(v *time.Time) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDeletedBy(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDeletedBy(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetDeletedBy(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableDeletedBy(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetDeletedBy(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableDeletedBy(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (dvhc *DNSVerificationHistoryCreate) SetTags(s []string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetTags(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetTags(v []string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (dvhc *DNSVerificationHistoryCreate) SetOwnerID(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetOwnerID(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetOwnerID(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableOwnerID(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetOwnerID(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableOwnerID(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetCloudflareHostnameID sets the "cloudflare_hostname_id" field.
-func (dvhc *DNSVerificationHistoryCreate) SetCloudflareHostnameID(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetCloudflareHostnameID(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetCloudflareHostnameID(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetCloudflareHostnameID(v)
+	return _c
 }
 
 // SetDNSTxtRecord sets the "dns_txt_record" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDNSTxtRecord(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDNSTxtRecord(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetDNSTxtRecord(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetDNSTxtRecord(v)
+	return _c
 }
 
 // SetDNSTxtValue sets the "dns_txt_value" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDNSTxtValue(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDNSTxtValue(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetDNSTxtValue(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetDNSTxtValue(v)
+	return _c
 }
 
 // SetDNSVerificationStatus sets the "dns_verification_status" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDNSVerificationStatus(evs enums.DNSVerificationStatus) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDNSVerificationStatus(evs)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetDNSVerificationStatus(v enums.DNSVerificationStatus) *DNSVerificationHistoryCreate {
+	_c.mutation.SetDNSVerificationStatus(v)
+	return _c
 }
 
 // SetNillableDNSVerificationStatus sets the "dns_verification_status" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatus(evs *enums.DNSVerificationStatus) *DNSVerificationHistoryCreate {
-	if evs != nil {
-		dvhc.SetDNSVerificationStatus(*evs)
+func (_c *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatus(v *enums.DNSVerificationStatus) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetDNSVerificationStatus(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetDNSVerificationStatusReason sets the "dns_verification_status_reason" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDNSVerificationStatusReason(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDNSVerificationStatusReason(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetDNSVerificationStatusReason(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetDNSVerificationStatusReason(v)
+	return _c
 }
 
 // SetNillableDNSVerificationStatusReason sets the "dns_verification_status_reason" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatusReason(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetDNSVerificationStatusReason(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatusReason(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetDNSVerificationStatusReason(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetAcmeChallengePath sets the "acme_challenge_path" field.
-func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengePath(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetAcmeChallengePath(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetAcmeChallengePath(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetAcmeChallengePath(v)
+	return _c
 }
 
 // SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengePath(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetAcmeChallengePath(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableAcmeChallengePath(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetAcmeChallengePath(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
-func (dvhc *DNSVerificationHistoryCreate) SetExpectedAcmeChallengeValue(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetExpectedAcmeChallengeValue(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetExpectedAcmeChallengeValue(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetExpectedAcmeChallengeValue(v)
+	return _c
 }
 
 // SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetExpectedAcmeChallengeValue(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableExpectedAcmeChallengeValue(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetExpectedAcmeChallengeValue(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetAcmeChallengeStatus sets the "acme_challenge_status" field.
-func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengeStatus(evs enums.SSLVerificationStatus) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetAcmeChallengeStatus(evs)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetAcmeChallengeStatus(v enums.SSLVerificationStatus) *DNSVerificationHistoryCreate {
+	_c.mutation.SetAcmeChallengeStatus(v)
+	return _c
 }
 
 // SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatus(evs *enums.SSLVerificationStatus) *DNSVerificationHistoryCreate {
-	if evs != nil {
-		dvhc.SetAcmeChallengeStatus(*evs)
+func (_c *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatus(v *enums.SSLVerificationStatus) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetAcmeChallengeStatus(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
-func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengeStatusReason(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetAcmeChallengeStatusReason(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetAcmeChallengeStatusReason(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetAcmeChallengeStatusReason(v)
+	return _c
 }
 
 // SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetAcmeChallengeStatusReason(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatusReason(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetAcmeChallengeStatusReason(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (dvhc *DNSVerificationHistoryCreate) SetID(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetID(s)
-	return dvhc
+func (_c *DNSVerificationHistoryCreate) SetID(v string) *DNSVerificationHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableID(s *string) *DNSVerificationHistoryCreate {
-	if s != nil {
-		dvhc.SetID(*s)
+func (_c *DNSVerificationHistoryCreate) SetNillableID(v *string) *DNSVerificationHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return dvhc
+	return _c
 }
 
 // Mutation returns the DNSVerificationHistoryMutation object of the builder.
-func (dvhc *DNSVerificationHistoryCreate) Mutation() *DNSVerificationHistoryMutation {
-	return dvhc.mutation
+func (_c *DNSVerificationHistoryCreate) Mutation() *DNSVerificationHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the DNSVerificationHistory in the database.
-func (dvhc *DNSVerificationHistoryCreate) Save(ctx context.Context) (*DNSVerificationHistory, error) {
-	if err := dvhc.defaults(); err != nil {
+func (_c *DNSVerificationHistoryCreate) Save(ctx context.Context) (*DNSVerificationHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, dvhc.sqlSave, dvhc.mutation, dvhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (dvhc *DNSVerificationHistoryCreate) SaveX(ctx context.Context) *DNSVerificationHistory {
-	v, err := dvhc.Save(ctx)
+func (_c *DNSVerificationHistoryCreate) SaveX(ctx context.Context) *DNSVerificationHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -299,97 +299,97 @@ func (dvhc *DNSVerificationHistoryCreate) SaveX(ctx context.Context) *DNSVerific
 }
 
 // Exec executes the query.
-func (dvhc *DNSVerificationHistoryCreate) Exec(ctx context.Context) error {
-	_, err := dvhc.Save(ctx)
+func (_c *DNSVerificationHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvhc *DNSVerificationHistoryCreate) ExecX(ctx context.Context) {
-	if err := dvhc.Exec(ctx); err != nil {
+func (_c *DNSVerificationHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (dvhc *DNSVerificationHistoryCreate) defaults() error {
-	if _, ok := dvhc.mutation.HistoryTime(); !ok {
+func (_c *DNSVerificationHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if dnsverificationhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := dnsverificationhistory.DefaultHistoryTime()
-		dvhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := dvhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if dnsverificationhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := dnsverificationhistory.DefaultCreatedAt()
-		dvhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := dvhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if dnsverificationhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := dnsverificationhistory.DefaultUpdatedAt()
-		dvhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := dvhc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := dnsverificationhistory.DefaultTags
-		dvhc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := dvhc.mutation.DNSVerificationStatus(); !ok {
+	if _, ok := _c.mutation.DNSVerificationStatus(); !ok {
 		v := dnsverificationhistory.DefaultDNSVerificationStatus
-		dvhc.mutation.SetDNSVerificationStatus(v)
+		_c.mutation.SetDNSVerificationStatus(v)
 	}
-	if _, ok := dvhc.mutation.AcmeChallengeStatus(); !ok {
+	if _, ok := _c.mutation.AcmeChallengeStatus(); !ok {
 		v := dnsverificationhistory.DefaultAcmeChallengeStatus
-		dvhc.mutation.SetAcmeChallengeStatus(v)
+		_c.mutation.SetAcmeChallengeStatus(v)
 	}
-	if _, ok := dvhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if dnsverificationhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := dnsverificationhistory.DefaultID()
-		dvhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dvhc *DNSVerificationHistoryCreate) check() error {
-	if _, ok := dvhc.mutation.HistoryTime(); !ok {
+func (_c *DNSVerificationHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "DNSVerificationHistory.history_time"`)}
 	}
-	if _, ok := dvhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "DNSVerificationHistory.operation"`)}
 	}
-	if v, ok := dvhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := dnsverificationhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := dvhc.mutation.CloudflareHostnameID(); !ok {
+	if _, ok := _c.mutation.CloudflareHostnameID(); !ok {
 		return &ValidationError{Name: "cloudflare_hostname_id", err: errors.New(`generated: missing required field "DNSVerificationHistory.cloudflare_hostname_id"`)}
 	}
-	if _, ok := dvhc.mutation.DNSTxtRecord(); !ok {
+	if _, ok := _c.mutation.DNSTxtRecord(); !ok {
 		return &ValidationError{Name: "dns_txt_record", err: errors.New(`generated: missing required field "DNSVerificationHistory.dns_txt_record"`)}
 	}
-	if _, ok := dvhc.mutation.DNSTxtValue(); !ok {
+	if _, ok := _c.mutation.DNSTxtValue(); !ok {
 		return &ValidationError{Name: "dns_txt_value", err: errors.New(`generated: missing required field "DNSVerificationHistory.dns_txt_value"`)}
 	}
-	if _, ok := dvhc.mutation.DNSVerificationStatus(); !ok {
+	if _, ok := _c.mutation.DNSVerificationStatus(); !ok {
 		return &ValidationError{Name: "dns_verification_status", err: errors.New(`generated: missing required field "DNSVerificationHistory.dns_verification_status"`)}
 	}
-	if v, ok := dvhc.mutation.DNSVerificationStatus(); ok {
+	if v, ok := _c.mutation.DNSVerificationStatus(); ok {
 		if err := dnsverificationhistory.DNSVerificationStatusValidator(v); err != nil {
 			return &ValidationError{Name: "dns_verification_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.dns_verification_status": %w`, err)}
 		}
 	}
-	if _, ok := dvhc.mutation.AcmeChallengeStatus(); !ok {
+	if _, ok := _c.mutation.AcmeChallengeStatus(); !ok {
 		return &ValidationError{Name: "acme_challenge_status", err: errors.New(`generated: missing required field "DNSVerificationHistory.acme_challenge_status"`)}
 	}
-	if v, ok := dvhc.mutation.AcmeChallengeStatus(); ok {
+	if v, ok := _c.mutation.AcmeChallengeStatus(); ok {
 		if err := dnsverificationhistory.AcmeChallengeStatusValidator(v); err != nil {
 			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.acme_challenge_status": %w`, err)}
 		}
@@ -397,12 +397,12 @@ func (dvhc *DNSVerificationHistoryCreate) check() error {
 	return nil
 }
 
-func (dvhc *DNSVerificationHistoryCreate) sqlSave(ctx context.Context) (*DNSVerificationHistory, error) {
-	if err := dvhc.check(); err != nil {
+func (_c *DNSVerificationHistoryCreate) sqlSave(ctx context.Context) (*DNSVerificationHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := dvhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, dvhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -415,98 +415,98 @@ func (dvhc *DNSVerificationHistoryCreate) sqlSave(ctx context.Context) (*DNSVeri
 			return nil, fmt.Errorf("unexpected DNSVerificationHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	dvhc.mutation.id = &_node.ID
-	dvhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (dvhc *DNSVerificationHistoryCreate) createSpec() (*DNSVerificationHistory, *sqlgraph.CreateSpec) {
+func (_c *DNSVerificationHistoryCreate) createSpec() (*DNSVerificationHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &DNSVerificationHistory{config: dvhc.config}
+		_node = &DNSVerificationHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(dnsverificationhistory.Table, sqlgraph.NewFieldSpec(dnsverificationhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = dvhc.schemaConfig.DNSVerificationHistory
-	if id, ok := dvhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.DNSVerificationHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := dvhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(dnsverificationhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := dvhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(dnsverificationhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := dvhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(dnsverificationhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := dvhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := dvhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := dvhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := dvhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := dvhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := dvhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := dvhc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(dnsverificationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := dvhc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(dnsverificationhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := dvhc.mutation.CloudflareHostnameID(); ok {
+	if value, ok := _c.mutation.CloudflareHostnameID(); ok {
 		_spec.SetField(dnsverificationhistory.FieldCloudflareHostnameID, field.TypeString, value)
 		_node.CloudflareHostnameID = value
 	}
-	if value, ok := dvhc.mutation.DNSTxtRecord(); ok {
+	if value, ok := _c.mutation.DNSTxtRecord(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSTxtRecord, field.TypeString, value)
 		_node.DNSTxtRecord = value
 	}
-	if value, ok := dvhc.mutation.DNSTxtValue(); ok {
+	if value, ok := _c.mutation.DNSTxtValue(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSTxtValue, field.TypeString, value)
 		_node.DNSTxtValue = value
 	}
-	if value, ok := dvhc.mutation.DNSVerificationStatus(); ok {
+	if value, ok := _c.mutation.DNSVerificationStatus(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatus, field.TypeEnum, value)
 		_node.DNSVerificationStatus = value
 	}
-	if value, ok := dvhc.mutation.DNSVerificationStatusReason(); ok {
+	if value, ok := _c.mutation.DNSVerificationStatusReason(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatusReason, field.TypeString, value)
 		_node.DNSVerificationStatusReason = value
 	}
-	if value, ok := dvhc.mutation.AcmeChallengePath(); ok {
+	if value, ok := _c.mutation.AcmeChallengePath(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengePath, field.TypeString, value)
 		_node.AcmeChallengePath = value
 	}
-	if value, ok := dvhc.mutation.ExpectedAcmeChallengeValue(); ok {
+	if value, ok := _c.mutation.ExpectedAcmeChallengeValue(); ok {
 		_spec.SetField(dnsverificationhistory.FieldExpectedAcmeChallengeValue, field.TypeString, value)
 		_node.ExpectedAcmeChallengeValue = value
 	}
-	if value, ok := dvhc.mutation.AcmeChallengeStatus(); ok {
+	if value, ok := _c.mutation.AcmeChallengeStatus(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatus, field.TypeEnum, value)
 		_node.AcmeChallengeStatus = value
 	}
-	if value, ok := dvhc.mutation.AcmeChallengeStatusReason(); ok {
+	if value, ok := _c.mutation.AcmeChallengeStatusReason(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatusReason, field.TypeString, value)
 		_node.AcmeChallengeStatusReason = value
 	}
@@ -521,16 +521,16 @@ type DNSVerificationHistoryCreateBulk struct {
 }
 
 // Save creates the DNSVerificationHistory entities in the database.
-func (dvhcb *DNSVerificationHistoryCreateBulk) Save(ctx context.Context) ([]*DNSVerificationHistory, error) {
-	if dvhcb.err != nil {
-		return nil, dvhcb.err
+func (_c *DNSVerificationHistoryCreateBulk) Save(ctx context.Context) ([]*DNSVerificationHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(dvhcb.builders))
-	nodes := make([]*DNSVerificationHistory, len(dvhcb.builders))
-	mutators := make([]Mutator, len(dvhcb.builders))
-	for i := range dvhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*DNSVerificationHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := dvhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*DNSVerificationHistoryMutation)
@@ -544,11 +544,11 @@ func (dvhcb *DNSVerificationHistoryCreateBulk) Save(ctx context.Context) ([]*DNS
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, dvhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, dvhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -568,7 +568,7 @@ func (dvhcb *DNSVerificationHistoryCreateBulk) Save(ctx context.Context) ([]*DNS
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, dvhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -576,8 +576,8 @@ func (dvhcb *DNSVerificationHistoryCreateBulk) Save(ctx context.Context) ([]*DNS
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dvhcb *DNSVerificationHistoryCreateBulk) SaveX(ctx context.Context) []*DNSVerificationHistory {
-	v, err := dvhcb.Save(ctx)
+func (_c *DNSVerificationHistoryCreateBulk) SaveX(ctx context.Context) []*DNSVerificationHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -585,14 +585,14 @@ func (dvhcb *DNSVerificationHistoryCreateBulk) SaveX(ctx context.Context) []*DNS
 }
 
 // Exec executes the query.
-func (dvhcb *DNSVerificationHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := dvhcb.Save(ctx)
+func (_c *DNSVerificationHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvhcb *DNSVerificationHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := dvhcb.Exec(ctx); err != nil {
+func (_c *DNSVerificationHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

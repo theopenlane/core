@@ -182,7 +182,7 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Narrative fields.
-func (n *Narrative) assignValues(columns []string, values []any) error {
+func (_m *Narrative) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -192,55 +192,55 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				n.ID = value.String
+				_m.ID = value.String
 			}
 		case narrative.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				n.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case narrative.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				n.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case narrative.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				n.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case narrative.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				n.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case narrative.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				n.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case narrative.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				n.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case narrative.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				n.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case narrative.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &n.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -248,42 +248,42 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				n.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case narrative.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				n.Name = value.String
+				_m.Name = value.String
 			}
 		case narrative.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				n.Description = value.String
+				_m.Description = value.String
 			}
 		case narrative.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				n.Details = value.String
+				_m.Details = value.String
 			}
 		case narrative.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_narratives", values[i])
 			} else if value.Valid {
-				n.control_objective_narratives = new(string)
-				*n.control_objective_narratives = value.String
+				_m.control_objective_narratives = new(string)
+				*_m.control_objective_narratives = value.String
 			}
 		case narrative.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_narratives", values[i])
 			} else if value.Valid {
-				n.subcontrol_narratives = new(string)
-				*n.subcontrol_narratives = value.String
+				_m.subcontrol_narratives = new(string)
+				*_m.subcontrol_narratives = value.String
 			}
 		default:
-			n.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -291,277 +291,277 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Narrative.
 // This includes values selected through modifiers, order, etc.
-func (n *Narrative) Value(name string) (ent.Value, error) {
-	return n.selectValues.Get(name)
+func (_m *Narrative) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Narrative entity.
-func (n *Narrative) QueryOwner() *OrganizationQuery {
-	return NewNarrativeClient(n.config).QueryOwner(n)
+func (_m *Narrative) QueryOwner() *OrganizationQuery {
+	return NewNarrativeClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Narrative entity.
-func (n *Narrative) QueryBlockedGroups() *GroupQuery {
-	return NewNarrativeClient(n.config).QueryBlockedGroups(n)
+func (_m *Narrative) QueryBlockedGroups() *GroupQuery {
+	return NewNarrativeClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Narrative entity.
-func (n *Narrative) QueryEditors() *GroupQuery {
-	return NewNarrativeClient(n.config).QueryEditors(n)
+func (_m *Narrative) QueryEditors() *GroupQuery {
+	return NewNarrativeClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the Narrative entity.
-func (n *Narrative) QueryViewers() *GroupQuery {
-	return NewNarrativeClient(n.config).QueryViewers(n)
+func (_m *Narrative) QueryViewers() *GroupQuery {
+	return NewNarrativeClient(_m.config).QueryViewers(_m)
 }
 
 // QuerySatisfies queries the "satisfies" edge of the Narrative entity.
-func (n *Narrative) QuerySatisfies() *ControlQuery {
-	return NewNarrativeClient(n.config).QuerySatisfies(n)
+func (_m *Narrative) QuerySatisfies() *ControlQuery {
+	return NewNarrativeClient(_m.config).QuerySatisfies(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Narrative entity.
-func (n *Narrative) QueryPrograms() *ProgramQuery {
-	return NewNarrativeClient(n.config).QueryPrograms(n)
+func (_m *Narrative) QueryPrograms() *ProgramQuery {
+	return NewNarrativeClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Narrative entity.
-func (n *Narrative) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewNarrativeClient(n.config).QueryInternalPolicies(n)
+func (_m *Narrative) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewNarrativeClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the Narrative entity.
-func (n *Narrative) QueryProcedures() *ProcedureQuery {
-	return NewNarrativeClient(n.config).QueryProcedures(n)
+func (_m *Narrative) QueryProcedures() *ProcedureQuery {
+	return NewNarrativeClient(_m.config).QueryProcedures(_m)
 }
 
 // Update returns a builder for updating this Narrative.
 // Note that you need to call Narrative.Unwrap() before calling this method if this Narrative
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (n *Narrative) Update() *NarrativeUpdateOne {
-	return NewNarrativeClient(n.config).UpdateOne(n)
+func (_m *Narrative) Update() *NarrativeUpdateOne {
+	return NewNarrativeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Narrative entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (n *Narrative) Unwrap() *Narrative {
-	_tx, ok := n.config.driver.(*txDriver)
+func (_m *Narrative) Unwrap() *Narrative {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Narrative is not a transactional entity")
 	}
-	n.config.driver = _tx.drv
-	return n
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (n *Narrative) String() string {
+func (_m *Narrative) String() string {
 	var builder strings.Builder
 	builder.WriteString("Narrative(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", n.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(n.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(n.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(n.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(n.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(n.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(n.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(n.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", n.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(n.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(n.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(n.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(n.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedBlockedGroups(name string) ([]*Group, error) {
-	if n.Edges.namedBlockedGroups == nil {
+func (_m *Narrative) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if n.Edges.namedBlockedGroups == nil {
-		n.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Narrative) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		n.Edges.namedBlockedGroups[name] = append(n.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedEditors(name string) ([]*Group, error) {
-	if n.Edges.namedEditors == nil {
+func (_m *Narrative) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedEditors(name string, edges ...*Group) {
-	if n.Edges.namedEditors == nil {
-		n.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Narrative) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		n.Edges.namedEditors[name] = append(n.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedViewers(name string) ([]*Group, error) {
-	if n.Edges.namedViewers == nil {
+func (_m *Narrative) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedViewers(name string, edges ...*Group) {
-	if n.Edges.namedViewers == nil {
-		n.Edges.namedViewers = make(map[string][]*Group)
+func (_m *Narrative) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		n.Edges.namedViewers[name] = append(n.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedSatisfies returns the Satisfies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedSatisfies(name string) ([]*Control, error) {
-	if n.Edges.namedSatisfies == nil {
+func (_m *Narrative) NamedSatisfies(name string) ([]*Control, error) {
+	if _m.Edges.namedSatisfies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedSatisfies[name]
+	nodes, ok := _m.Edges.namedSatisfies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedSatisfies(name string, edges ...*Control) {
-	if n.Edges.namedSatisfies == nil {
-		n.Edges.namedSatisfies = make(map[string][]*Control)
+func (_m *Narrative) appendNamedSatisfies(name string, edges ...*Control) {
+	if _m.Edges.namedSatisfies == nil {
+		_m.Edges.namedSatisfies = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedSatisfies[name] = []*Control{}
+		_m.Edges.namedSatisfies[name] = []*Control{}
 	} else {
-		n.Edges.namedSatisfies[name] = append(n.Edges.namedSatisfies[name], edges...)
+		_m.Edges.namedSatisfies[name] = append(_m.Edges.namedSatisfies[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedPrograms(name string) ([]*Program, error) {
-	if n.Edges.namedPrograms == nil {
+func (_m *Narrative) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedPrograms(name string, edges ...*Program) {
-	if n.Edges.namedPrograms == nil {
-		n.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *Narrative) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		n.Edges.namedPrograms[name] = append(n.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if n.Edges.namedInternalPolicies == nil {
+func (_m *Narrative) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if n.Edges.namedInternalPolicies == nil {
-		n.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Narrative) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		n.Edges.namedInternalPolicies[name] = append(n.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Narrative) NamedProcedures(name string) ([]*Procedure, error) {
-	if n.Edges.namedProcedures == nil {
+func (_m *Narrative) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Narrative) appendNamedProcedures(name string, edges ...*Procedure) {
-	if n.Edges.namedProcedures == nil {
-		n.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *Narrative) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		n.Edges.namedProcedures[name] = append(n.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 

@@ -27,316 +27,316 @@ type AssetCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ac *AssetCreate) SetCreatedAt(t time.Time) *AssetCreate {
-	ac.mutation.SetCreatedAt(t)
-	return ac
+func (_c *AssetCreate) SetCreatedAt(v time.Time) *AssetCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableCreatedAt(t *time.Time) *AssetCreate {
-	if t != nil {
-		ac.SetCreatedAt(*t)
+func (_c *AssetCreate) SetNillableCreatedAt(v *time.Time) *AssetCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ac *AssetCreate) SetUpdatedAt(t time.Time) *AssetCreate {
-	ac.mutation.SetUpdatedAt(t)
-	return ac
+func (_c *AssetCreate) SetUpdatedAt(v time.Time) *AssetCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableUpdatedAt(t *time.Time) *AssetCreate {
-	if t != nil {
-		ac.SetUpdatedAt(*t)
+func (_c *AssetCreate) SetNillableUpdatedAt(v *time.Time) *AssetCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ac *AssetCreate) SetCreatedBy(s string) *AssetCreate {
-	ac.mutation.SetCreatedBy(s)
-	return ac
+func (_c *AssetCreate) SetCreatedBy(v string) *AssetCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableCreatedBy(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetCreatedBy(*s)
+func (_c *AssetCreate) SetNillableCreatedBy(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ac *AssetCreate) SetUpdatedBy(s string) *AssetCreate {
-	ac.mutation.SetUpdatedBy(s)
-	return ac
+func (_c *AssetCreate) SetUpdatedBy(v string) *AssetCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableUpdatedBy(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetUpdatedBy(*s)
+func (_c *AssetCreate) SetNillableUpdatedBy(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ac *AssetCreate) SetDeletedAt(t time.Time) *AssetCreate {
-	ac.mutation.SetDeletedAt(t)
-	return ac
+func (_c *AssetCreate) SetDeletedAt(v time.Time) *AssetCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableDeletedAt(t *time.Time) *AssetCreate {
-	if t != nil {
-		ac.SetDeletedAt(*t)
+func (_c *AssetCreate) SetNillableDeletedAt(v *time.Time) *AssetCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ac *AssetCreate) SetDeletedBy(s string) *AssetCreate {
-	ac.mutation.SetDeletedBy(s)
-	return ac
+func (_c *AssetCreate) SetDeletedBy(v string) *AssetCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableDeletedBy(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetDeletedBy(*s)
+func (_c *AssetCreate) SetNillableDeletedBy(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ac *AssetCreate) SetTags(s []string) *AssetCreate {
-	ac.mutation.SetTags(s)
-	return ac
+func (_c *AssetCreate) SetTags(v []string) *AssetCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ac *AssetCreate) SetOwnerID(s string) *AssetCreate {
-	ac.mutation.SetOwnerID(s)
-	return ac
+func (_c *AssetCreate) SetOwnerID(v string) *AssetCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableOwnerID(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetOwnerID(*s)
+func (_c *AssetCreate) SetNillableOwnerID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetAssetType sets the "asset_type" field.
-func (ac *AssetCreate) SetAssetType(et enums.AssetType) *AssetCreate {
-	ac.mutation.SetAssetType(et)
-	return ac
+func (_c *AssetCreate) SetAssetType(v enums.AssetType) *AssetCreate {
+	_c.mutation.SetAssetType(v)
+	return _c
 }
 
 // SetNillableAssetType sets the "asset_type" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableAssetType(et *enums.AssetType) *AssetCreate {
-	if et != nil {
-		ac.SetAssetType(*et)
+func (_c *AssetCreate) SetNillableAssetType(v *enums.AssetType) *AssetCreate {
+	if v != nil {
+		_c.SetAssetType(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ac *AssetCreate) SetName(s string) *AssetCreate {
-	ac.mutation.SetName(s)
-	return ac
+func (_c *AssetCreate) SetName(v string) *AssetCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (ac *AssetCreate) SetDescription(s string) *AssetCreate {
-	ac.mutation.SetDescription(s)
-	return ac
+func (_c *AssetCreate) SetDescription(v string) *AssetCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableDescription(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetDescription(*s)
+func (_c *AssetCreate) SetNillableDescription(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetIdentifier sets the "identifier" field.
-func (ac *AssetCreate) SetIdentifier(s string) *AssetCreate {
-	ac.mutation.SetIdentifier(s)
-	return ac
+func (_c *AssetCreate) SetIdentifier(v string) *AssetCreate {
+	_c.mutation.SetIdentifier(v)
+	return _c
 }
 
 // SetNillableIdentifier sets the "identifier" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableIdentifier(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetIdentifier(*s)
+func (_c *AssetCreate) SetNillableIdentifier(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetIdentifier(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetWebsite sets the "website" field.
-func (ac *AssetCreate) SetWebsite(s string) *AssetCreate {
-	ac.mutation.SetWebsite(s)
-	return ac
+func (_c *AssetCreate) SetWebsite(v string) *AssetCreate {
+	_c.mutation.SetWebsite(v)
+	return _c
 }
 
 // SetNillableWebsite sets the "website" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableWebsite(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetWebsite(*s)
+func (_c *AssetCreate) SetNillableWebsite(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetWebsite(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetCpe sets the "cpe" field.
-func (ac *AssetCreate) SetCpe(s string) *AssetCreate {
-	ac.mutation.SetCpe(s)
-	return ac
+func (_c *AssetCreate) SetCpe(v string) *AssetCreate {
+	_c.mutation.SetCpe(v)
+	return _c
 }
 
 // SetNillableCpe sets the "cpe" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableCpe(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetCpe(*s)
+func (_c *AssetCreate) SetNillableCpe(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetCpe(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetCategories sets the "categories" field.
-func (ac *AssetCreate) SetCategories(s []string) *AssetCreate {
-	ac.mutation.SetCategories(s)
-	return ac
+func (_c *AssetCreate) SetCategories(v []string) *AssetCreate {
+	_c.mutation.SetCategories(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ac *AssetCreate) SetID(s string) *AssetCreate {
-	ac.mutation.SetID(s)
-	return ac
+func (_c *AssetCreate) SetID(v string) *AssetCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ac *AssetCreate) SetNillableID(s *string) *AssetCreate {
-	if s != nil {
-		ac.SetID(*s)
+func (_c *AssetCreate) SetNillableID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ac *AssetCreate) SetOwner(o *Organization) *AssetCreate {
-	return ac.SetOwnerID(o.ID)
+func (_c *AssetCreate) SetOwner(v *Organization) *AssetCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ac *AssetCreate) AddBlockedGroupIDs(ids ...string) *AssetCreate {
-	ac.mutation.AddBlockedGroupIDs(ids...)
-	return ac
+func (_c *AssetCreate) AddBlockedGroupIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ac *AssetCreate) AddBlockedGroups(g ...*Group) *AssetCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *AssetCreate) AddBlockedGroups(v ...*Group) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ac *AssetCreate) AddEditorIDs(ids ...string) *AssetCreate {
-	ac.mutation.AddEditorIDs(ids...)
-	return ac
+func (_c *AssetCreate) AddEditorIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (ac *AssetCreate) AddEditors(g ...*Group) *AssetCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *AssetCreate) AddEditors(v ...*Group) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (ac *AssetCreate) AddViewerIDs(ids ...string) *AssetCreate {
-	ac.mutation.AddViewerIDs(ids...)
-	return ac
+func (_c *AssetCreate) AddViewerIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (ac *AssetCreate) AddViewers(g ...*Group) *AssetCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *AssetCreate) AddViewers(v ...*Group) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddViewerIDs(ids...)
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (ac *AssetCreate) AddScanIDs(ids ...string) *AssetCreate {
-	ac.mutation.AddScanIDs(ids...)
-	return ac
+func (_c *AssetCreate) AddScanIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (ac *AssetCreate) AddScans(s ...*Scan) *AssetCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *AssetCreate) AddScans(v ...*Scan) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddScanIDs(ids...)
+	return _c.AddScanIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (ac *AssetCreate) AddEntityIDs(ids ...string) *AssetCreate {
-	ac.mutation.AddEntityIDs(ids...)
-	return ac
+func (_c *AssetCreate) AddEntityIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (ac *AssetCreate) AddEntities(e ...*Entity) *AssetCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *AssetCreate) AddEntities(v ...*Entity) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddEntityIDs(ids...)
+	return _c.AddEntityIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ac *AssetCreate) AddControlIDs(ids ...string) *AssetCreate {
-	ac.mutation.AddControlIDs(ids...)
-	return ac
+func (_c *AssetCreate) AddControlIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ac *AssetCreate) AddControls(c ...*Control) *AssetCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *AssetCreate) AddControls(v ...*Control) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // Mutation returns the AssetMutation object of the builder.
-func (ac *AssetCreate) Mutation() *AssetMutation {
-	return ac.mutation
+func (_c *AssetCreate) Mutation() *AssetMutation {
+	return _c.mutation
 }
 
 // Save creates the Asset in the database.
-func (ac *AssetCreate) Save(ctx context.Context) (*Asset, error) {
-	if err := ac.defaults(); err != nil {
+func (_c *AssetCreate) Save(ctx context.Context) (*Asset, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ac.sqlSave, ac.mutation, ac.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ac *AssetCreate) SaveX(ctx context.Context) *Asset {
-	v, err := ac.Save(ctx)
+func (_c *AssetCreate) SaveX(ctx context.Context) *Asset {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -344,71 +344,71 @@ func (ac *AssetCreate) SaveX(ctx context.Context) *Asset {
 }
 
 // Exec executes the query.
-func (ac *AssetCreate) Exec(ctx context.Context) error {
-	_, err := ac.Save(ctx)
+func (_c *AssetCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ac *AssetCreate) ExecX(ctx context.Context) {
-	if err := ac.Exec(ctx); err != nil {
+func (_c *AssetCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ac *AssetCreate) defaults() error {
-	if _, ok := ac.mutation.CreatedAt(); !ok {
+func (_c *AssetCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if asset.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized asset.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := asset.DefaultCreatedAt()
-		ac.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if asset.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized asset.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := asset.DefaultUpdatedAt()
-		ac.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ac.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := asset.DefaultTags
-		ac.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ac.mutation.AssetType(); !ok {
+	if _, ok := _c.mutation.AssetType(); !ok {
 		v := asset.DefaultAssetType
-		ac.mutation.SetAssetType(v)
+		_c.mutation.SetAssetType(v)
 	}
-	if _, ok := ac.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if asset.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized asset.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := asset.DefaultID()
-		ac.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ac *AssetCreate) check() error {
-	if v, ok := ac.mutation.OwnerID(); ok {
+func (_c *AssetCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := asset.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := ac.mutation.AssetType(); !ok {
+	if _, ok := _c.mutation.AssetType(); !ok {
 		return &ValidationError{Name: "asset_type", err: errors.New(`generated: missing required field "Asset.asset_type"`)}
 	}
-	if v, ok := ac.mutation.AssetType(); ok {
+	if v, ok := _c.mutation.AssetType(); ok {
 		if err := asset.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "Asset.asset_type": %w`, err)}
 		}
 	}
-	if _, ok := ac.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Asset.name"`)}
 	}
-	if v, ok := ac.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := asset.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
 		}
@@ -416,12 +416,12 @@ func (ac *AssetCreate) check() error {
 	return nil
 }
 
-func (ac *AssetCreate) sqlSave(ctx context.Context) (*Asset, error) {
-	if err := ac.check(); err != nil {
+func (_c *AssetCreate) sqlSave(ctx context.Context) (*Asset, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -434,78 +434,78 @@ func (ac *AssetCreate) sqlSave(ctx context.Context) (*Asset, error) {
 			return nil, fmt.Errorf("unexpected Asset.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ac.mutation.id = &_node.ID
-	ac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
+func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Asset{config: ac.config}
+		_node = &Asset{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(asset.Table, sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString))
 	)
-	_spec.Schema = ac.schemaConfig.Asset
-	if id, ok := ac.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Asset
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ac.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(asset.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ac.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(asset.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ac.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(asset.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ac.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(asset.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ac.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(asset.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ac.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(asset.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ac.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(asset.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ac.mutation.AssetType(); ok {
+	if value, ok := _c.mutation.AssetType(); ok {
 		_spec.SetField(asset.FieldAssetType, field.TypeEnum, value)
 		_node.AssetType = value
 	}
-	if value, ok := ac.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(asset.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ac.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(asset.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ac.mutation.Identifier(); ok {
+	if value, ok := _c.mutation.Identifier(); ok {
 		_spec.SetField(asset.FieldIdentifier, field.TypeString, value)
 		_node.Identifier = value
 	}
-	if value, ok := ac.mutation.Website(); ok {
+	if value, ok := _c.mutation.Website(); ok {
 		_spec.SetField(asset.FieldWebsite, field.TypeString, value)
 		_node.Website = value
 	}
-	if value, ok := ac.mutation.Cpe(); ok {
+	if value, ok := _c.mutation.Cpe(); ok {
 		_spec.SetField(asset.FieldCpe, field.TypeString, value)
 		_node.Cpe = value
 	}
-	if value, ok := ac.mutation.Categories(); ok {
+	if value, ok := _c.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 		_node.Categories = value
 	}
-	if nodes := ac.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -516,14 +516,14 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.Asset
+		edge.Schema = _c.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -534,13 +534,13 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -551,13 +551,13 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -568,13 +568,13 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -585,13 +585,13 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.ScanAssets
+		edge.Schema = _c.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -602,13 +602,13 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.EntityAssets
+		edge.Schema = _c.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -619,7 +619,7 @@ func (ac *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ac.schemaConfig.ControlAssets
+		edge.Schema = _c.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -636,16 +636,16 @@ type AssetCreateBulk struct {
 }
 
 // Save creates the Asset entities in the database.
-func (acb *AssetCreateBulk) Save(ctx context.Context) ([]*Asset, error) {
-	if acb.err != nil {
-		return nil, acb.err
+func (_c *AssetCreateBulk) Save(ctx context.Context) ([]*Asset, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(acb.builders))
-	nodes := make([]*Asset, len(acb.builders))
-	mutators := make([]Mutator, len(acb.builders))
-	for i := range acb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Asset, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := acb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AssetMutation)
@@ -659,11 +659,11 @@ func (acb *AssetCreateBulk) Save(ctx context.Context) ([]*Asset, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, acb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, acb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -683,7 +683,7 @@ func (acb *AssetCreateBulk) Save(ctx context.Context) ([]*Asset, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, acb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -691,8 +691,8 @@ func (acb *AssetCreateBulk) Save(ctx context.Context) ([]*Asset, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (acb *AssetCreateBulk) SaveX(ctx context.Context) []*Asset {
-	v, err := acb.Save(ctx)
+func (_c *AssetCreateBulk) SaveX(ctx context.Context) []*Asset {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -700,14 +700,14 @@ func (acb *AssetCreateBulk) SaveX(ctx context.Context) []*Asset {
 }
 
 // Exec executes the query.
-func (acb *AssetCreateBulk) Exec(ctx context.Context) error {
-	_, err := acb.Save(ctx)
+func (_c *AssetCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (acb *AssetCreateBulk) ExecX(ctx context.Context) {
-	if err := acb.Exec(ctx); err != nil {
+func (_c *AssetCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

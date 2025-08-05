@@ -23,223 +23,223 @@ type GroupSettingHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (gshc *GroupSettingHistoryCreate) SetHistoryTime(t time.Time) *GroupSettingHistoryCreate {
-	gshc.mutation.SetHistoryTime(t)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetHistoryTime(v time.Time) *GroupSettingHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableHistoryTime(t *time.Time) *GroupSettingHistoryCreate {
-	if t != nil {
-		gshc.SetHistoryTime(*t)
+func (_c *GroupSettingHistoryCreate) SetNillableHistoryTime(v *time.Time) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (gshc *GroupSettingHistoryCreate) SetRef(s string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetRef(s)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetRef(v string) *GroupSettingHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableRef(s *string) *GroupSettingHistoryCreate {
-	if s != nil {
-		gshc.SetRef(*s)
+func (_c *GroupSettingHistoryCreate) SetNillableRef(v *string) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (gshc *GroupSettingHistoryCreate) SetOperation(ht history.OpType) *GroupSettingHistoryCreate {
-	gshc.mutation.SetOperation(ht)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetOperation(v history.OpType) *GroupSettingHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (gshc *GroupSettingHistoryCreate) SetCreatedAt(t time.Time) *GroupSettingHistoryCreate {
-	gshc.mutation.SetCreatedAt(t)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetCreatedAt(v time.Time) *GroupSettingHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableCreatedAt(t *time.Time) *GroupSettingHistoryCreate {
-	if t != nil {
-		gshc.SetCreatedAt(*t)
+func (_c *GroupSettingHistoryCreate) SetNillableCreatedAt(v *time.Time) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gshc *GroupSettingHistoryCreate) SetUpdatedAt(t time.Time) *GroupSettingHistoryCreate {
-	gshc.mutation.SetUpdatedAt(t)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetUpdatedAt(v time.Time) *GroupSettingHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableUpdatedAt(t *time.Time) *GroupSettingHistoryCreate {
-	if t != nil {
-		gshc.SetUpdatedAt(*t)
+func (_c *GroupSettingHistoryCreate) SetNillableUpdatedAt(v *time.Time) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (gshc *GroupSettingHistoryCreate) SetCreatedBy(s string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetCreatedBy(s)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetCreatedBy(v string) *GroupSettingHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableCreatedBy(s *string) *GroupSettingHistoryCreate {
-	if s != nil {
-		gshc.SetCreatedBy(*s)
+func (_c *GroupSettingHistoryCreate) SetNillableCreatedBy(v *string) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gshc *GroupSettingHistoryCreate) SetUpdatedBy(s string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetUpdatedBy(s)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetUpdatedBy(v string) *GroupSettingHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableUpdatedBy(s *string) *GroupSettingHistoryCreate {
-	if s != nil {
-		gshc.SetUpdatedBy(*s)
+func (_c *GroupSettingHistoryCreate) SetNillableUpdatedBy(v *string) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (gshc *GroupSettingHistoryCreate) SetDeletedAt(t time.Time) *GroupSettingHistoryCreate {
-	gshc.mutation.SetDeletedAt(t)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetDeletedAt(v time.Time) *GroupSettingHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableDeletedAt(t *time.Time) *GroupSettingHistoryCreate {
-	if t != nil {
-		gshc.SetDeletedAt(*t)
+func (_c *GroupSettingHistoryCreate) SetNillableDeletedAt(v *time.Time) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (gshc *GroupSettingHistoryCreate) SetDeletedBy(s string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetDeletedBy(s)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetDeletedBy(v string) *GroupSettingHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableDeletedBy(s *string) *GroupSettingHistoryCreate {
-	if s != nil {
-		gshc.SetDeletedBy(*s)
+func (_c *GroupSettingHistoryCreate) SetNillableDeletedBy(v *string) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetVisibility sets the "visibility" field.
-func (gshc *GroupSettingHistoryCreate) SetVisibility(e enums.Visibility) *GroupSettingHistoryCreate {
-	gshc.mutation.SetVisibility(e)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetVisibility(v enums.Visibility) *GroupSettingHistoryCreate {
+	_c.mutation.SetVisibility(v)
+	return _c
 }
 
 // SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableVisibility(e *enums.Visibility) *GroupSettingHistoryCreate {
-	if e != nil {
-		gshc.SetVisibility(*e)
+func (_c *GroupSettingHistoryCreate) SetNillableVisibility(v *enums.Visibility) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetVisibility(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetJoinPolicy sets the "join_policy" field.
-func (gshc *GroupSettingHistoryCreate) SetJoinPolicy(ep enums.JoinPolicy) *GroupSettingHistoryCreate {
-	gshc.mutation.SetJoinPolicy(ep)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetJoinPolicy(v enums.JoinPolicy) *GroupSettingHistoryCreate {
+	_c.mutation.SetJoinPolicy(v)
+	return _c
 }
 
 // SetNillableJoinPolicy sets the "join_policy" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableJoinPolicy(ep *enums.JoinPolicy) *GroupSettingHistoryCreate {
-	if ep != nil {
-		gshc.SetJoinPolicy(*ep)
+func (_c *GroupSettingHistoryCreate) SetNillableJoinPolicy(v *enums.JoinPolicy) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetJoinPolicy(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetSyncToSlack sets the "sync_to_slack" field.
-func (gshc *GroupSettingHistoryCreate) SetSyncToSlack(b bool) *GroupSettingHistoryCreate {
-	gshc.mutation.SetSyncToSlack(b)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetSyncToSlack(v bool) *GroupSettingHistoryCreate {
+	_c.mutation.SetSyncToSlack(v)
+	return _c
 }
 
 // SetNillableSyncToSlack sets the "sync_to_slack" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableSyncToSlack(b *bool) *GroupSettingHistoryCreate {
-	if b != nil {
-		gshc.SetSyncToSlack(*b)
+func (_c *GroupSettingHistoryCreate) SetNillableSyncToSlack(v *bool) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetSyncToSlack(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetSyncToGithub sets the "sync_to_github" field.
-func (gshc *GroupSettingHistoryCreate) SetSyncToGithub(b bool) *GroupSettingHistoryCreate {
-	gshc.mutation.SetSyncToGithub(b)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetSyncToGithub(v bool) *GroupSettingHistoryCreate {
+	_c.mutation.SetSyncToGithub(v)
+	return _c
 }
 
 // SetNillableSyncToGithub sets the "sync_to_github" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableSyncToGithub(b *bool) *GroupSettingHistoryCreate {
-	if b != nil {
-		gshc.SetSyncToGithub(*b)
+func (_c *GroupSettingHistoryCreate) SetNillableSyncToGithub(v *bool) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetSyncToGithub(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetGroupID sets the "group_id" field.
-func (gshc *GroupSettingHistoryCreate) SetGroupID(s string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetGroupID(s)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetGroupID(v string) *GroupSettingHistoryCreate {
+	_c.mutation.SetGroupID(v)
+	return _c
 }
 
 // SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableGroupID(s *string) *GroupSettingHistoryCreate {
-	if s != nil {
-		gshc.SetGroupID(*s)
+func (_c *GroupSettingHistoryCreate) SetNillableGroupID(v *string) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetGroupID(*v)
 	}
-	return gshc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (gshc *GroupSettingHistoryCreate) SetID(s string) *GroupSettingHistoryCreate {
-	gshc.mutation.SetID(s)
-	return gshc
+func (_c *GroupSettingHistoryCreate) SetID(v string) *GroupSettingHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (gshc *GroupSettingHistoryCreate) SetNillableID(s *string) *GroupSettingHistoryCreate {
-	if s != nil {
-		gshc.SetID(*s)
+func (_c *GroupSettingHistoryCreate) SetNillableID(v *string) *GroupSettingHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return gshc
+	return _c
 }
 
 // Mutation returns the GroupSettingHistoryMutation object of the builder.
-func (gshc *GroupSettingHistoryCreate) Mutation() *GroupSettingHistoryMutation {
-	return gshc.mutation
+func (_c *GroupSettingHistoryCreate) Mutation() *GroupSettingHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the GroupSettingHistory in the database.
-func (gshc *GroupSettingHistoryCreate) Save(ctx context.Context) (*GroupSettingHistory, error) {
-	if err := gshc.defaults(); err != nil {
+func (_c *GroupSettingHistoryCreate) Save(ctx context.Context) (*GroupSettingHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, gshc.sqlSave, gshc.mutation, gshc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (gshc *GroupSettingHistoryCreate) SaveX(ctx context.Context) *GroupSettingHistory {
-	v, err := gshc.Save(ctx)
+func (_c *GroupSettingHistoryCreate) SaveX(ctx context.Context) *GroupSettingHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -247,92 +247,92 @@ func (gshc *GroupSettingHistoryCreate) SaveX(ctx context.Context) *GroupSettingH
 }
 
 // Exec executes the query.
-func (gshc *GroupSettingHistoryCreate) Exec(ctx context.Context) error {
-	_, err := gshc.Save(ctx)
+func (_c *GroupSettingHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gshc *GroupSettingHistoryCreate) ExecX(ctx context.Context) {
-	if err := gshc.Exec(ctx); err != nil {
+func (_c *GroupSettingHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gshc *GroupSettingHistoryCreate) defaults() error {
-	if _, ok := gshc.mutation.HistoryTime(); !ok {
+func (_c *GroupSettingHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if groupsettinghistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := groupsettinghistory.DefaultHistoryTime()
-		gshc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := gshc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if groupsettinghistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupsettinghistory.DefaultCreatedAt()
-		gshc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := gshc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if groupsettinghistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupsettinghistory.DefaultUpdatedAt()
-		gshc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gshc.mutation.Visibility(); !ok {
+	if _, ok := _c.mutation.Visibility(); !ok {
 		v := groupsettinghistory.DefaultVisibility
-		gshc.mutation.SetVisibility(v)
+		_c.mutation.SetVisibility(v)
 	}
-	if _, ok := gshc.mutation.JoinPolicy(); !ok {
+	if _, ok := _c.mutation.JoinPolicy(); !ok {
 		v := groupsettinghistory.DefaultJoinPolicy
-		gshc.mutation.SetJoinPolicy(v)
+		_c.mutation.SetJoinPolicy(v)
 	}
-	if _, ok := gshc.mutation.SyncToSlack(); !ok {
+	if _, ok := _c.mutation.SyncToSlack(); !ok {
 		v := groupsettinghistory.DefaultSyncToSlack
-		gshc.mutation.SetSyncToSlack(v)
+		_c.mutation.SetSyncToSlack(v)
 	}
-	if _, ok := gshc.mutation.SyncToGithub(); !ok {
+	if _, ok := _c.mutation.SyncToGithub(); !ok {
 		v := groupsettinghistory.DefaultSyncToGithub
-		gshc.mutation.SetSyncToGithub(v)
+		_c.mutation.SetSyncToGithub(v)
 	}
-	if _, ok := gshc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if groupsettinghistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := groupsettinghistory.DefaultID()
-		gshc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gshc *GroupSettingHistoryCreate) check() error {
-	if _, ok := gshc.mutation.HistoryTime(); !ok {
+func (_c *GroupSettingHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "GroupSettingHistory.history_time"`)}
 	}
-	if _, ok := gshc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "GroupSettingHistory.operation"`)}
 	}
-	if v, ok := gshc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := groupsettinghistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "GroupSettingHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := gshc.mutation.Visibility(); !ok {
+	if _, ok := _c.mutation.Visibility(); !ok {
 		return &ValidationError{Name: "visibility", err: errors.New(`generated: missing required field "GroupSettingHistory.visibility"`)}
 	}
-	if v, ok := gshc.mutation.Visibility(); ok {
+	if v, ok := _c.mutation.Visibility(); ok {
 		if err := groupsettinghistory.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "GroupSettingHistory.visibility": %w`, err)}
 		}
 	}
-	if _, ok := gshc.mutation.JoinPolicy(); !ok {
+	if _, ok := _c.mutation.JoinPolicy(); !ok {
 		return &ValidationError{Name: "join_policy", err: errors.New(`generated: missing required field "GroupSettingHistory.join_policy"`)}
 	}
-	if v, ok := gshc.mutation.JoinPolicy(); ok {
+	if v, ok := _c.mutation.JoinPolicy(); ok {
 		if err := groupsettinghistory.JoinPolicyValidator(v); err != nil {
 			return &ValidationError{Name: "join_policy", err: fmt.Errorf(`generated: validator failed for field "GroupSettingHistory.join_policy": %w`, err)}
 		}
@@ -340,12 +340,12 @@ func (gshc *GroupSettingHistoryCreate) check() error {
 	return nil
 }
 
-func (gshc *GroupSettingHistoryCreate) sqlSave(ctx context.Context) (*GroupSettingHistory, error) {
-	if err := gshc.check(); err != nil {
+func (_c *GroupSettingHistoryCreate) sqlSave(ctx context.Context) (*GroupSettingHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := gshc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, gshc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -358,74 +358,74 @@ func (gshc *GroupSettingHistoryCreate) sqlSave(ctx context.Context) (*GroupSetti
 			return nil, fmt.Errorf("unexpected GroupSettingHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	gshc.mutation.id = &_node.ID
-	gshc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (gshc *GroupSettingHistoryCreate) createSpec() (*GroupSettingHistory, *sqlgraph.CreateSpec) {
+func (_c *GroupSettingHistoryCreate) createSpec() (*GroupSettingHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &GroupSettingHistory{config: gshc.config}
+		_node = &GroupSettingHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupsettinghistory.Table, sqlgraph.NewFieldSpec(groupsettinghistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = gshc.schemaConfig.GroupSettingHistory
-	if id, ok := gshc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.GroupSettingHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := gshc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(groupsettinghistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := gshc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(groupsettinghistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := gshc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(groupsettinghistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := gshc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(groupsettinghistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := gshc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupsettinghistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gshc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(groupsettinghistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := gshc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupsettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := gshc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsettinghistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gshc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(groupsettinghistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := gshc.mutation.Visibility(); ok {
+	if value, ok := _c.mutation.Visibility(); ok {
 		_spec.SetField(groupsettinghistory.FieldVisibility, field.TypeEnum, value)
 		_node.Visibility = value
 	}
-	if value, ok := gshc.mutation.JoinPolicy(); ok {
+	if value, ok := _c.mutation.JoinPolicy(); ok {
 		_spec.SetField(groupsettinghistory.FieldJoinPolicy, field.TypeEnum, value)
 		_node.JoinPolicy = value
 	}
-	if value, ok := gshc.mutation.SyncToSlack(); ok {
+	if value, ok := _c.mutation.SyncToSlack(); ok {
 		_spec.SetField(groupsettinghistory.FieldSyncToSlack, field.TypeBool, value)
 		_node.SyncToSlack = value
 	}
-	if value, ok := gshc.mutation.SyncToGithub(); ok {
+	if value, ok := _c.mutation.SyncToGithub(); ok {
 		_spec.SetField(groupsettinghistory.FieldSyncToGithub, field.TypeBool, value)
 		_node.SyncToGithub = value
 	}
-	if value, ok := gshc.mutation.GroupID(); ok {
+	if value, ok := _c.mutation.GroupID(); ok {
 		_spec.SetField(groupsettinghistory.FieldGroupID, field.TypeString, value)
 		_node.GroupID = value
 	}
@@ -440,16 +440,16 @@ type GroupSettingHistoryCreateBulk struct {
 }
 
 // Save creates the GroupSettingHistory entities in the database.
-func (gshcb *GroupSettingHistoryCreateBulk) Save(ctx context.Context) ([]*GroupSettingHistory, error) {
-	if gshcb.err != nil {
-		return nil, gshcb.err
+func (_c *GroupSettingHistoryCreateBulk) Save(ctx context.Context) ([]*GroupSettingHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(gshcb.builders))
-	nodes := make([]*GroupSettingHistory, len(gshcb.builders))
-	mutators := make([]Mutator, len(gshcb.builders))
-	for i := range gshcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*GroupSettingHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := gshcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*GroupSettingHistoryMutation)
@@ -463,11 +463,11 @@ func (gshcb *GroupSettingHistoryCreateBulk) Save(ctx context.Context) ([]*GroupS
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, gshcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, gshcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -487,7 +487,7 @@ func (gshcb *GroupSettingHistoryCreateBulk) Save(ctx context.Context) ([]*GroupS
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, gshcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -495,8 +495,8 @@ func (gshcb *GroupSettingHistoryCreateBulk) Save(ctx context.Context) ([]*GroupS
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gshcb *GroupSettingHistoryCreateBulk) SaveX(ctx context.Context) []*GroupSettingHistory {
-	v, err := gshcb.Save(ctx)
+func (_c *GroupSettingHistoryCreateBulk) SaveX(ctx context.Context) []*GroupSettingHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -504,14 +504,14 @@ func (gshcb *GroupSettingHistoryCreateBulk) SaveX(ctx context.Context) []*GroupS
 }
 
 // Exec executes the query.
-func (gshcb *GroupSettingHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := gshcb.Save(ctx)
+func (_c *GroupSettingHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gshcb *GroupSettingHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := gshcb.Exec(ctx); err != nil {
+func (_c *GroupSettingHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

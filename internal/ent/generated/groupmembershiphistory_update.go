@@ -27,73 +27,73 @@ type GroupMembershipHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the GroupMembershipHistoryUpdate builder.
-func (gmhu *GroupMembershipHistoryUpdate) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryUpdate {
-	gmhu.mutation.Where(ps...)
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gmhu *GroupMembershipHistoryUpdate) SetUpdatedAt(t time.Time) *GroupMembershipHistoryUpdate {
-	gmhu.mutation.SetUpdatedAt(t)
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) SetUpdatedAt(v time.Time) *GroupMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (gmhu *GroupMembershipHistoryUpdate) ClearUpdatedAt() *GroupMembershipHistoryUpdate {
-	gmhu.mutation.ClearUpdatedAt()
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) ClearUpdatedAt() *GroupMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gmhu *GroupMembershipHistoryUpdate) SetUpdatedBy(s string) *GroupMembershipHistoryUpdate {
-	gmhu.mutation.SetUpdatedBy(s)
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) SetUpdatedBy(v string) *GroupMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmhu *GroupMembershipHistoryUpdate) SetNillableUpdatedBy(s *string) *GroupMembershipHistoryUpdate {
-	if s != nil {
-		gmhu.SetUpdatedBy(*s)
+func (_u *GroupMembershipHistoryUpdate) SetNillableUpdatedBy(v *string) *GroupMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return gmhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (gmhu *GroupMembershipHistoryUpdate) ClearUpdatedBy() *GroupMembershipHistoryUpdate {
-	gmhu.mutation.ClearUpdatedBy()
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) ClearUpdatedBy() *GroupMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (gmhu *GroupMembershipHistoryUpdate) SetRole(e enums.Role) *GroupMembershipHistoryUpdate {
-	gmhu.mutation.SetRole(e)
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) SetRole(v enums.Role) *GroupMembershipHistoryUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (gmhu *GroupMembershipHistoryUpdate) SetNillableRole(e *enums.Role) *GroupMembershipHistoryUpdate {
-	if e != nil {
-		gmhu.SetRole(*e)
+func (_u *GroupMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *GroupMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return gmhu
+	return _u
 }
 
 // Mutation returns the GroupMembershipHistoryMutation object of the builder.
-func (gmhu *GroupMembershipHistoryUpdate) Mutation() *GroupMembershipHistoryMutation {
-	return gmhu.mutation
+func (_u *GroupMembershipHistoryUpdate) Mutation() *GroupMembershipHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (gmhu *GroupMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := gmhu.defaults(); err != nil {
+func (_u *GroupMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, gmhu.sqlSave, gmhu.mutation, gmhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gmhu *GroupMembershipHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := gmhu.Save(ctx)
+func (_u *GroupMembershipHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -101,33 +101,33 @@ func (gmhu *GroupMembershipHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (gmhu *GroupMembershipHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := gmhu.Save(ctx)
+func (_u *GroupMembershipHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gmhu *GroupMembershipHistoryUpdate) ExecX(ctx context.Context) {
-	if err := gmhu.Exec(ctx); err != nil {
+func (_u *GroupMembershipHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gmhu *GroupMembershipHistoryUpdate) defaults() error {
-	if _, ok := gmhu.mutation.UpdatedAt(); !ok && !gmhu.mutation.UpdatedAtCleared() {
+func (_u *GroupMembershipHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if groupmembershiphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupmembershiphistory.UpdateDefaultUpdatedAt()
-		gmhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gmhu *GroupMembershipHistoryUpdate) check() error {
-	if v, ok := gmhu.mutation.Role(); ok {
+func (_u *GroupMembershipHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := groupmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "GroupMembershipHistory.role": %w`, err)}
 		}
@@ -136,51 +136,51 @@ func (gmhu *GroupMembershipHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (gmhu *GroupMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdate {
-	gmhu.modifiers = append(gmhu.modifiers, modifiers...)
-	return gmhu
+func (_u *GroupMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := gmhu.check(); err != nil {
-		return n, err
+func (_u *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(groupmembershiphistory.Table, groupmembershiphistory.Columns, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
-	if ps := gmhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if gmhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldRef, field.TypeString)
 	}
-	if gmhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := gmhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if gmhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if gmhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := gmhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if gmhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := gmhu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = gmhu.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, gmhu.schemaConfig)
-	_spec.AddModifiers(gmhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, gmhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.GroupMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupmembershiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -188,8 +188,8 @@ func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		return 0, err
 	}
-	gmhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // GroupMembershipHistoryUpdateOne is the builder for updating a single GroupMembershipHistory entity.
@@ -202,80 +202,80 @@ type GroupMembershipHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetUpdatedAt(t time.Time) *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.SetUpdatedAt(t)
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) SetUpdatedAt(v time.Time) *GroupMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) ClearUpdatedAt() *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.ClearUpdatedAt()
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedAt() *GroupMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetUpdatedBy(s string) *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.SetUpdatedBy(s)
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) SetUpdatedBy(v string) *GroupMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableUpdatedBy(s *string) *GroupMembershipHistoryUpdateOne {
-	if s != nil {
-		gmhuo.SetUpdatedBy(*s)
+func (_u *GroupMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *GroupMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return gmhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) ClearUpdatedBy() *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.ClearUpdatedBy()
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedBy() *GroupMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetRole(e enums.Role) *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.SetRole(e)
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) SetRole(v enums.Role) *GroupMembershipHistoryUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableRole(e *enums.Role) *GroupMembershipHistoryUpdateOne {
-	if e != nil {
-		gmhuo.SetRole(*e)
+func (_u *GroupMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *GroupMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return gmhuo
+	return _u
 }
 
 // Mutation returns the GroupMembershipHistoryMutation object of the builder.
-func (gmhuo *GroupMembershipHistoryUpdateOne) Mutation() *GroupMembershipHistoryMutation {
-	return gmhuo.mutation
+func (_u *GroupMembershipHistoryUpdateOne) Mutation() *GroupMembershipHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the GroupMembershipHistoryUpdate builder.
-func (gmhuo *GroupMembershipHistoryUpdateOne) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.Where(ps...)
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (gmhuo *GroupMembershipHistoryUpdateOne) Select(field string, fields ...string) *GroupMembershipHistoryUpdateOne {
-	gmhuo.fields = append([]string{field}, fields...)
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) Select(field string, fields ...string) *GroupMembershipHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated GroupMembershipHistory entity.
-func (gmhuo *GroupMembershipHistoryUpdateOne) Save(ctx context.Context) (*GroupMembershipHistory, error) {
-	if err := gmhuo.defaults(); err != nil {
+func (_u *GroupMembershipHistoryUpdateOne) Save(ctx context.Context) (*GroupMembershipHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, gmhuo.sqlSave, gmhuo.mutation, gmhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SaveX(ctx context.Context) *GroupMembershipHistory {
-	node, err := gmhuo.Save(ctx)
+func (_u *GroupMembershipHistoryUpdateOne) SaveX(ctx context.Context) *GroupMembershipHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -283,33 +283,33 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) SaveX(ctx context.Context) *GroupM
 }
 
 // Exec executes the query on the entity.
-func (gmhuo *GroupMembershipHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := gmhuo.Save(ctx)
+func (_u *GroupMembershipHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gmhuo *GroupMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := gmhuo.Exec(ctx); err != nil {
+func (_u *GroupMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gmhuo *GroupMembershipHistoryUpdateOne) defaults() error {
-	if _, ok := gmhuo.mutation.UpdatedAt(); !ok && !gmhuo.mutation.UpdatedAtCleared() {
+func (_u *GroupMembershipHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if groupmembershiphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupmembershiphistory.UpdateDefaultUpdatedAt()
-		gmhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gmhuo *GroupMembershipHistoryUpdateOne) check() error {
-	if v, ok := gmhuo.mutation.Role(); ok {
+func (_u *GroupMembershipHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := groupmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "GroupMembershipHistory.role": %w`, err)}
 		}
@@ -318,22 +318,22 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (gmhuo *GroupMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdateOne {
-	gmhuo.modifiers = append(gmhuo.modifiers, modifiers...)
-	return gmhuo
+func (_u *GroupMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupMembershipHistory, err error) {
-	if err := gmhuo.check(); err != nil {
+func (_u *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupMembershipHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(groupmembershiphistory.Table, groupmembershiphistory.Columns, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
-	id, ok := gmhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "GroupMembershipHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := gmhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, groupmembershiphistory.FieldID)
 		for _, f := range fields {
@@ -345,44 +345,44 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 			}
 		}
 	}
-	if ps := gmhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if gmhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldRef, field.TypeString)
 	}
-	if gmhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := gmhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if gmhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if gmhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := gmhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if gmhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := gmhuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = gmhuo.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, gmhuo.schemaConfig)
-	_spec.AddModifiers(gmhuo.modifiers...)
-	_node = &GroupMembershipHistory{config: gmhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.GroupMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &GroupMembershipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, gmhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupmembershiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -390,6 +390,6 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		return nil, err
 	}
-	gmhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -24,184 +24,184 @@ type NoteCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (nc *NoteCreate) SetCreatedAt(t time.Time) *NoteCreate {
-	nc.mutation.SetCreatedAt(t)
-	return nc
+func (_c *NoteCreate) SetCreatedAt(v time.Time) *NoteCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableCreatedAt(t *time.Time) *NoteCreate {
-	if t != nil {
-		nc.SetCreatedAt(*t)
+func (_c *NoteCreate) SetNillableCreatedAt(v *time.Time) *NoteCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nc *NoteCreate) SetUpdatedAt(t time.Time) *NoteCreate {
-	nc.mutation.SetUpdatedAt(t)
-	return nc
+func (_c *NoteCreate) SetUpdatedAt(v time.Time) *NoteCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableUpdatedAt(t *time.Time) *NoteCreate {
-	if t != nil {
-		nc.SetUpdatedAt(*t)
+func (_c *NoteCreate) SetNillableUpdatedAt(v *time.Time) *NoteCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (nc *NoteCreate) SetCreatedBy(s string) *NoteCreate {
-	nc.mutation.SetCreatedBy(s)
-	return nc
+func (_c *NoteCreate) SetCreatedBy(v string) *NoteCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableCreatedBy(s *string) *NoteCreate {
-	if s != nil {
-		nc.SetCreatedBy(*s)
+func (_c *NoteCreate) SetNillableCreatedBy(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nc *NoteCreate) SetUpdatedBy(s string) *NoteCreate {
-	nc.mutation.SetUpdatedBy(s)
-	return nc
+func (_c *NoteCreate) SetUpdatedBy(v string) *NoteCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableUpdatedBy(s *string) *NoteCreate {
-	if s != nil {
-		nc.SetUpdatedBy(*s)
+func (_c *NoteCreate) SetNillableUpdatedBy(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nc *NoteCreate) SetDeletedAt(t time.Time) *NoteCreate {
-	nc.mutation.SetDeletedAt(t)
-	return nc
+func (_c *NoteCreate) SetDeletedAt(v time.Time) *NoteCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableDeletedAt(t *time.Time) *NoteCreate {
-	if t != nil {
-		nc.SetDeletedAt(*t)
+func (_c *NoteCreate) SetNillableDeletedAt(v *time.Time) *NoteCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nc *NoteCreate) SetDeletedBy(s string) *NoteCreate {
-	nc.mutation.SetDeletedBy(s)
-	return nc
+func (_c *NoteCreate) SetDeletedBy(v string) *NoteCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableDeletedBy(s *string) *NoteCreate {
-	if s != nil {
-		nc.SetDeletedBy(*s)
+func (_c *NoteCreate) SetNillableDeletedBy(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (nc *NoteCreate) SetDisplayID(s string) *NoteCreate {
-	nc.mutation.SetDisplayID(s)
-	return nc
+func (_c *NoteCreate) SetDisplayID(v string) *NoteCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (nc *NoteCreate) SetOwnerID(s string) *NoteCreate {
-	nc.mutation.SetOwnerID(s)
-	return nc
+func (_c *NoteCreate) SetOwnerID(v string) *NoteCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableOwnerID(s *string) *NoteCreate {
-	if s != nil {
-		nc.SetOwnerID(*s)
+func (_c *NoteCreate) SetNillableOwnerID(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetText sets the "text" field.
-func (nc *NoteCreate) SetText(s string) *NoteCreate {
-	nc.mutation.SetText(s)
-	return nc
+func (_c *NoteCreate) SetText(v string) *NoteCreate {
+	_c.mutation.SetText(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (nc *NoteCreate) SetID(s string) *NoteCreate {
-	nc.mutation.SetID(s)
-	return nc
+func (_c *NoteCreate) SetID(v string) *NoteCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (nc *NoteCreate) SetNillableID(s *string) *NoteCreate {
-	if s != nil {
-		nc.SetID(*s)
+func (_c *NoteCreate) SetNillableID(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return nc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (nc *NoteCreate) SetOwner(o *Organization) *NoteCreate {
-	return nc.SetOwnerID(o.ID)
+func (_c *NoteCreate) SetOwner(v *Organization) *NoteCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // SetTaskID sets the "task" edge to the Task entity by ID.
-func (nc *NoteCreate) SetTaskID(id string) *NoteCreate {
-	nc.mutation.SetTaskID(id)
-	return nc
+func (_c *NoteCreate) SetTaskID(id string) *NoteCreate {
+	_c.mutation.SetTaskID(id)
+	return _c
 }
 
 // SetNillableTaskID sets the "task" edge to the Task entity by ID if the given value is not nil.
-func (nc *NoteCreate) SetNillableTaskID(id *string) *NoteCreate {
+func (_c *NoteCreate) SetNillableTaskID(id *string) *NoteCreate {
 	if id != nil {
-		nc = nc.SetTaskID(*id)
+		_c = _c.SetTaskID(*id)
 	}
-	return nc
+	return _c
 }
 
 // SetTask sets the "task" edge to the Task entity.
-func (nc *NoteCreate) SetTask(t *Task) *NoteCreate {
-	return nc.SetTaskID(t.ID)
+func (_c *NoteCreate) SetTask(v *Task) *NoteCreate {
+	return _c.SetTaskID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (nc *NoteCreate) AddFileIDs(ids ...string) *NoteCreate {
-	nc.mutation.AddFileIDs(ids...)
-	return nc
+func (_c *NoteCreate) AddFileIDs(ids ...string) *NoteCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (nc *NoteCreate) AddFiles(f ...*File) *NoteCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *NoteCreate) AddFiles(v ...*File) *NoteCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return nc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // Mutation returns the NoteMutation object of the builder.
-func (nc *NoteCreate) Mutation() *NoteMutation {
-	return nc.mutation
+func (_c *NoteCreate) Mutation() *NoteMutation {
+	return _c.mutation
 }
 
 // Save creates the Note in the database.
-func (nc *NoteCreate) Save(ctx context.Context) (*Note, error) {
-	if err := nc.defaults(); err != nil {
+func (_c *NoteCreate) Save(ctx context.Context) (*Note, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, nc.sqlSave, nc.mutation, nc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (nc *NoteCreate) SaveX(ctx context.Context) *Note {
-	v, err := nc.Save(ctx)
+func (_c *NoteCreate) SaveX(ctx context.Context) *Note {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -209,63 +209,63 @@ func (nc *NoteCreate) SaveX(ctx context.Context) *Note {
 }
 
 // Exec executes the query.
-func (nc *NoteCreate) Exec(ctx context.Context) error {
-	_, err := nc.Save(ctx)
+func (_c *NoteCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nc *NoteCreate) ExecX(ctx context.Context) {
-	if err := nc.Exec(ctx); err != nil {
+func (_c *NoteCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nc *NoteCreate) defaults() error {
-	if _, ok := nc.mutation.CreatedAt(); !ok {
+func (_c *NoteCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if note.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized note.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := note.DefaultCreatedAt()
-		nc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := nc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if note.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized note.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := note.DefaultUpdatedAt()
-		nc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := nc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if note.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized note.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := note.DefaultID()
-		nc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nc *NoteCreate) check() error {
-	if _, ok := nc.mutation.DisplayID(); !ok {
+func (_c *NoteCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Note.display_id"`)}
 	}
-	if v, ok := nc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := note.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Note.display_id": %w`, err)}
 		}
 	}
-	if v, ok := nc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := note.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Note.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := nc.mutation.Text(); !ok {
+	if _, ok := _c.mutation.Text(); !ok {
 		return &ValidationError{Name: "text", err: errors.New(`generated: missing required field "Note.text"`)}
 	}
-	if v, ok := nc.mutation.Text(); ok {
+	if v, ok := _c.mutation.Text(); ok {
 		if err := note.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "Note.text": %w`, err)}
 		}
@@ -273,12 +273,12 @@ func (nc *NoteCreate) check() error {
 	return nil
 }
 
-func (nc *NoteCreate) sqlSave(ctx context.Context) (*Note, error) {
-	if err := nc.check(); err != nil {
+func (_c *NoteCreate) sqlSave(ctx context.Context) (*Note, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := nc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, nc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -291,54 +291,54 @@ func (nc *NoteCreate) sqlSave(ctx context.Context) (*Note, error) {
 			return nil, fmt.Errorf("unexpected Note.ID type: %T", _spec.ID.Value)
 		}
 	}
-	nc.mutation.id = &_node.ID
-	nc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
+func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Note{config: nc.config}
+		_node = &Note{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(note.Table, sqlgraph.NewFieldSpec(note.FieldID, field.TypeString))
 	)
-	_spec.Schema = nc.schemaConfig.Note
-	if id, ok := nc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Note
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := nc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(note.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := nc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := nc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(note.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := nc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(note.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := nc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := nc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := nc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(note.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := nc.mutation.Text(); ok {
+	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 		_node.Text = value
 	}
-	if nodes := nc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -349,14 +349,14 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.TaskIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TaskIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -367,14 +367,14 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.task_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -385,7 +385,7 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = nc.schemaConfig.File
+		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -402,16 +402,16 @@ type NoteCreateBulk struct {
 }
 
 // Save creates the Note entities in the database.
-func (ncb *NoteCreateBulk) Save(ctx context.Context) ([]*Note, error) {
-	if ncb.err != nil {
-		return nil, ncb.err
+func (_c *NoteCreateBulk) Save(ctx context.Context) ([]*Note, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ncb.builders))
-	nodes := make([]*Note, len(ncb.builders))
-	mutators := make([]Mutator, len(ncb.builders))
-	for i := range ncb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Note, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ncb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*NoteMutation)
@@ -425,11 +425,11 @@ func (ncb *NoteCreateBulk) Save(ctx context.Context) ([]*Note, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ncb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ncb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -449,7 +449,7 @@ func (ncb *NoteCreateBulk) Save(ctx context.Context) ([]*Note, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ncb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -457,8 +457,8 @@ func (ncb *NoteCreateBulk) Save(ctx context.Context) ([]*Note, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ncb *NoteCreateBulk) SaveX(ctx context.Context) []*Note {
-	v, err := ncb.Save(ctx)
+func (_c *NoteCreateBulk) SaveX(ctx context.Context) []*Note {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -466,14 +466,14 @@ func (ncb *NoteCreateBulk) SaveX(ctx context.Context) []*Note {
 }
 
 // Exec executes the query.
-func (ncb *NoteCreateBulk) Exec(ctx context.Context) error {
-	_, err := ncb.Save(ctx)
+func (_c *NoteCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ncb *NoteCreateBulk) ExecX(ctx context.Context) {
-	if err := ncb.Exec(ctx); err != nil {
+func (_c *NoteCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

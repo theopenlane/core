@@ -68,7 +68,7 @@ func (*MappableDomainHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the MappableDomainHistory fields.
-func (mdh *MappableDomainHistory) assignValues(columns []string, values []any) error {
+func (_m *MappableDomainHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -78,67 +78,67 @@ func (mdh *MappableDomainHistory) assignValues(columns []string, values []any) e
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				mdh.ID = value.String
+				_m.ID = value.String
 			}
 		case mappabledomainhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				mdh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case mappabledomainhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				mdh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case mappabledomainhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				mdh.Operation = *value
+				_m.Operation = *value
 			}
 		case mappabledomainhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				mdh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case mappabledomainhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				mdh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case mappabledomainhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				mdh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case mappabledomainhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				mdh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case mappabledomainhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				mdh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case mappabledomainhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				mdh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case mappabledomainhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &mdh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -146,16 +146,16 @@ func (mdh *MappableDomainHistory) assignValues(columns []string, values []any) e
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				mdh.Name = value.String
+				_m.Name = value.String
 			}
 		case mappabledomainhistory.FieldZoneID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field zone_id", values[i])
 			} else if value.Valid {
-				mdh.ZoneID = value.String
+				_m.ZoneID = value.String
 			}
 		default:
-			mdh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -163,68 +163,68 @@ func (mdh *MappableDomainHistory) assignValues(columns []string, values []any) e
 
 // Value returns the ent.Value that was dynamically selected and assigned to the MappableDomainHistory.
 // This includes values selected through modifiers, order, etc.
-func (mdh *MappableDomainHistory) Value(name string) (ent.Value, error) {
-	return mdh.selectValues.Get(name)
+func (_m *MappableDomainHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this MappableDomainHistory.
 // Note that you need to call MappableDomainHistory.Unwrap() before calling this method if this MappableDomainHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (mdh *MappableDomainHistory) Update() *MappableDomainHistoryUpdateOne {
-	return NewMappableDomainHistoryClient(mdh.config).UpdateOne(mdh)
+func (_m *MappableDomainHistory) Update() *MappableDomainHistoryUpdateOne {
+	return NewMappableDomainHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the MappableDomainHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (mdh *MappableDomainHistory) Unwrap() *MappableDomainHistory {
-	_tx, ok := mdh.config.driver.(*txDriver)
+func (_m *MappableDomainHistory) Unwrap() *MappableDomainHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: MappableDomainHistory is not a transactional entity")
 	}
-	mdh.config.driver = _tx.drv
-	return mdh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (mdh *MappableDomainHistory) String() string {
+func (_m *MappableDomainHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("MappableDomainHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", mdh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(mdh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(mdh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", mdh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(mdh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(mdh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(mdh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(mdh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(mdh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(mdh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", mdh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(mdh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("zone_id=")
-	builder.WriteString(mdh.ZoneID)
+	builder.WriteString(_m.ZoneID)
 	builder.WriteByte(')')
 	return builder.String()
 }

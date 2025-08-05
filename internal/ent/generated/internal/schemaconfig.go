@@ -219,8 +219,11 @@ type SchemaConfig struct {
 	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.
 	TrustCenterSubprocessorHistory     string // TrustCenterSubprocessorHistory table.
 	User                               string // User table.
+	UserGroups                         string // User-groups->Group table.
+	UserOrganizations                  string // User-organizations->Organization table.
 	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.
+	UserPrograms                       string // User-programs->Program table.
 	UserHistory                        string // UserHistory table.
 	UserSetting                        string // UserSetting table.
 	UserSettingFiles                   string // UserSetting-files->File table.

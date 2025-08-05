@@ -88,7 +88,7 @@ func (*PasswordResetToken) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the PasswordResetToken fields.
-func (prt *PasswordResetToken) assignValues(columns []string, values []any) error {
+func (_m *PasswordResetToken) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -98,77 +98,77 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				prt.ID = value.String
+				_m.ID = value.String
 			}
 		case passwordresettoken.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				prt.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case passwordresettoken.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				prt.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case passwordresettoken.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				prt.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case passwordresettoken.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				prt.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case passwordresettoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				prt.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case passwordresettoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				prt.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case passwordresettoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				prt.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case passwordresettoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				prt.Token = value.String
+				_m.Token = value.String
 			}
 		case passwordresettoken.FieldTTL:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field ttl", values[i])
 			} else if value.Valid {
-				prt.TTL = new(time.Time)
-				*prt.TTL = value.Time
+				_m.TTL = new(time.Time)
+				*_m.TTL = value.Time
 			}
 		case passwordresettoken.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				prt.Email = value.String
+				_m.Email = value.String
 			}
 		case passwordresettoken.FieldSecret:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field secret", values[i])
 			} else if value != nil {
-				prt.Secret = value
+				_m.Secret = value
 			}
 		default:
-			prt.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -176,71 +176,71 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 
 // Value returns the ent.Value that was dynamically selected and assigned to the PasswordResetToken.
 // This includes values selected through modifiers, order, etc.
-func (prt *PasswordResetToken) Value(name string) (ent.Value, error) {
-	return prt.selectValues.Get(name)
+func (_m *PasswordResetToken) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the PasswordResetToken entity.
-func (prt *PasswordResetToken) QueryOwner() *UserQuery {
-	return NewPasswordResetTokenClient(prt.config).QueryOwner(prt)
+func (_m *PasswordResetToken) QueryOwner() *UserQuery {
+	return NewPasswordResetTokenClient(_m.config).QueryOwner(_m)
 }
 
 // Update returns a builder for updating this PasswordResetToken.
 // Note that you need to call PasswordResetToken.Unwrap() before calling this method if this PasswordResetToken
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (prt *PasswordResetToken) Update() *PasswordResetTokenUpdateOne {
-	return NewPasswordResetTokenClient(prt.config).UpdateOne(prt)
+func (_m *PasswordResetToken) Update() *PasswordResetTokenUpdateOne {
+	return NewPasswordResetTokenClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the PasswordResetToken entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (prt *PasswordResetToken) Unwrap() *PasswordResetToken {
-	_tx, ok := prt.config.driver.(*txDriver)
+func (_m *PasswordResetToken) Unwrap() *PasswordResetToken {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: PasswordResetToken is not a transactional entity")
 	}
-	prt.config.driver = _tx.drv
-	return prt
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (prt *PasswordResetToken) String() string {
+func (_m *PasswordResetToken) String() string {
 	var builder strings.Builder
 	builder.WriteString("PasswordResetToken(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", prt.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(prt.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(prt.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(prt.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(prt.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(prt.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(prt.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(prt.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(prt.Token)
+	builder.WriteString(_m.Token)
 	builder.WriteString(", ")
-	if v := prt.TTL; v != nil {
+	if v := _m.TTL; v != nil {
 		builder.WriteString("ttl=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("email=")
-	builder.WriteString(prt.Email)
+	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
-	if v := prt.Secret; v != nil {
+	if v := _m.Secret; v != nil {
 		builder.WriteString("secret=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}

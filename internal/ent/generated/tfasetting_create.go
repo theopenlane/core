@@ -22,214 +22,214 @@ type TFASettingCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tsc *TFASettingCreate) SetCreatedAt(t time.Time) *TFASettingCreate {
-	tsc.mutation.SetCreatedAt(t)
-	return tsc
+func (_c *TFASettingCreate) SetCreatedAt(v time.Time) *TFASettingCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableCreatedAt(t *time.Time) *TFASettingCreate {
-	if t != nil {
-		tsc.SetCreatedAt(*t)
+func (_c *TFASettingCreate) SetNillableCreatedAt(v *time.Time) *TFASettingCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tsc *TFASettingCreate) SetUpdatedAt(t time.Time) *TFASettingCreate {
-	tsc.mutation.SetUpdatedAt(t)
-	return tsc
+func (_c *TFASettingCreate) SetUpdatedAt(v time.Time) *TFASettingCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableUpdatedAt(t *time.Time) *TFASettingCreate {
-	if t != nil {
-		tsc.SetUpdatedAt(*t)
+func (_c *TFASettingCreate) SetNillableUpdatedAt(v *time.Time) *TFASettingCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tsc *TFASettingCreate) SetCreatedBy(s string) *TFASettingCreate {
-	tsc.mutation.SetCreatedBy(s)
-	return tsc
+func (_c *TFASettingCreate) SetCreatedBy(v string) *TFASettingCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableCreatedBy(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetCreatedBy(*s)
+func (_c *TFASettingCreate) SetNillableCreatedBy(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tsc *TFASettingCreate) SetUpdatedBy(s string) *TFASettingCreate {
-	tsc.mutation.SetUpdatedBy(s)
-	return tsc
+func (_c *TFASettingCreate) SetUpdatedBy(v string) *TFASettingCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableUpdatedBy(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetUpdatedBy(*s)
+func (_c *TFASettingCreate) SetNillableUpdatedBy(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tsc *TFASettingCreate) SetDeletedAt(t time.Time) *TFASettingCreate {
-	tsc.mutation.SetDeletedAt(t)
-	return tsc
+func (_c *TFASettingCreate) SetDeletedAt(v time.Time) *TFASettingCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableDeletedAt(t *time.Time) *TFASettingCreate {
-	if t != nil {
-		tsc.SetDeletedAt(*t)
+func (_c *TFASettingCreate) SetNillableDeletedAt(v *time.Time) *TFASettingCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tsc *TFASettingCreate) SetDeletedBy(s string) *TFASettingCreate {
-	tsc.mutation.SetDeletedBy(s)
-	return tsc
+func (_c *TFASettingCreate) SetDeletedBy(v string) *TFASettingCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableDeletedBy(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetDeletedBy(*s)
+func (_c *TFASettingCreate) SetNillableDeletedBy(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tsc *TFASettingCreate) SetOwnerID(s string) *TFASettingCreate {
-	tsc.mutation.SetOwnerID(s)
-	return tsc
+func (_c *TFASettingCreate) SetOwnerID(v string) *TFASettingCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableOwnerID(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetOwnerID(*s)
+func (_c *TFASettingCreate) SetNillableOwnerID(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetTfaSecret sets the "tfa_secret" field.
-func (tsc *TFASettingCreate) SetTfaSecret(s string) *TFASettingCreate {
-	tsc.mutation.SetTfaSecret(s)
-	return tsc
+func (_c *TFASettingCreate) SetTfaSecret(v string) *TFASettingCreate {
+	_c.mutation.SetTfaSecret(v)
+	return _c
 }
 
 // SetNillableTfaSecret sets the "tfa_secret" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableTfaSecret(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetTfaSecret(*s)
+func (_c *TFASettingCreate) SetNillableTfaSecret(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetTfaSecret(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetVerified sets the "verified" field.
-func (tsc *TFASettingCreate) SetVerified(b bool) *TFASettingCreate {
-	tsc.mutation.SetVerified(b)
-	return tsc
+func (_c *TFASettingCreate) SetVerified(v bool) *TFASettingCreate {
+	_c.mutation.SetVerified(v)
+	return _c
 }
 
 // SetNillableVerified sets the "verified" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableVerified(b *bool) *TFASettingCreate {
-	if b != nil {
-		tsc.SetVerified(*b)
+func (_c *TFASettingCreate) SetNillableVerified(v *bool) *TFASettingCreate {
+	if v != nil {
+		_c.SetVerified(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetRecoveryCodes sets the "recovery_codes" field.
-func (tsc *TFASettingCreate) SetRecoveryCodes(s []string) *TFASettingCreate {
-	tsc.mutation.SetRecoveryCodes(s)
-	return tsc
+func (_c *TFASettingCreate) SetRecoveryCodes(v []string) *TFASettingCreate {
+	_c.mutation.SetRecoveryCodes(v)
+	return _c
 }
 
 // SetPhoneOtpAllowed sets the "phone_otp_allowed" field.
-func (tsc *TFASettingCreate) SetPhoneOtpAllowed(b bool) *TFASettingCreate {
-	tsc.mutation.SetPhoneOtpAllowed(b)
-	return tsc
+func (_c *TFASettingCreate) SetPhoneOtpAllowed(v bool) *TFASettingCreate {
+	_c.mutation.SetPhoneOtpAllowed(v)
+	return _c
 }
 
 // SetNillablePhoneOtpAllowed sets the "phone_otp_allowed" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillablePhoneOtpAllowed(b *bool) *TFASettingCreate {
-	if b != nil {
-		tsc.SetPhoneOtpAllowed(*b)
+func (_c *TFASettingCreate) SetNillablePhoneOtpAllowed(v *bool) *TFASettingCreate {
+	if v != nil {
+		_c.SetPhoneOtpAllowed(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetEmailOtpAllowed sets the "email_otp_allowed" field.
-func (tsc *TFASettingCreate) SetEmailOtpAllowed(b bool) *TFASettingCreate {
-	tsc.mutation.SetEmailOtpAllowed(b)
-	return tsc
+func (_c *TFASettingCreate) SetEmailOtpAllowed(v bool) *TFASettingCreate {
+	_c.mutation.SetEmailOtpAllowed(v)
+	return _c
 }
 
 // SetNillableEmailOtpAllowed sets the "email_otp_allowed" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableEmailOtpAllowed(b *bool) *TFASettingCreate {
-	if b != nil {
-		tsc.SetEmailOtpAllowed(*b)
+func (_c *TFASettingCreate) SetNillableEmailOtpAllowed(v *bool) *TFASettingCreate {
+	if v != nil {
+		_c.SetEmailOtpAllowed(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetTotpAllowed sets the "totp_allowed" field.
-func (tsc *TFASettingCreate) SetTotpAllowed(b bool) *TFASettingCreate {
-	tsc.mutation.SetTotpAllowed(b)
-	return tsc
+func (_c *TFASettingCreate) SetTotpAllowed(v bool) *TFASettingCreate {
+	_c.mutation.SetTotpAllowed(v)
+	return _c
 }
 
 // SetNillableTotpAllowed sets the "totp_allowed" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableTotpAllowed(b *bool) *TFASettingCreate {
-	if b != nil {
-		tsc.SetTotpAllowed(*b)
+func (_c *TFASettingCreate) SetNillableTotpAllowed(v *bool) *TFASettingCreate {
+	if v != nil {
+		_c.SetTotpAllowed(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tsc *TFASettingCreate) SetID(s string) *TFASettingCreate {
-	tsc.mutation.SetID(s)
-	return tsc
+func (_c *TFASettingCreate) SetID(v string) *TFASettingCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tsc *TFASettingCreate) SetNillableID(s *string) *TFASettingCreate {
-	if s != nil {
-		tsc.SetID(*s)
+func (_c *TFASettingCreate) SetNillableID(v *string) *TFASettingCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (tsc *TFASettingCreate) SetOwner(u *User) *TFASettingCreate {
-	return tsc.SetOwnerID(u.ID)
+func (_c *TFASettingCreate) SetOwner(v *User) *TFASettingCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // Mutation returns the TFASettingMutation object of the builder.
-func (tsc *TFASettingCreate) Mutation() *TFASettingMutation {
-	return tsc.mutation
+func (_c *TFASettingCreate) Mutation() *TFASettingMutation {
+	return _c.mutation
 }
 
 // Save creates the TFASetting in the database.
-func (tsc *TFASettingCreate) Save(ctx context.Context) (*TFASetting, error) {
-	if err := tsc.defaults(); err != nil {
+func (_c *TFASettingCreate) Save(ctx context.Context) (*TFASetting, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tsc.sqlSave, tsc.mutation, tsc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tsc *TFASettingCreate) SaveX(ctx context.Context) *TFASetting {
-	v, err := tsc.Save(ctx)
+func (_c *TFASettingCreate) SaveX(ctx context.Context) *TFASetting {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -237,74 +237,74 @@ func (tsc *TFASettingCreate) SaveX(ctx context.Context) *TFASetting {
 }
 
 // Exec executes the query.
-func (tsc *TFASettingCreate) Exec(ctx context.Context) error {
-	_, err := tsc.Save(ctx)
+func (_c *TFASettingCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tsc *TFASettingCreate) ExecX(ctx context.Context) {
-	if err := tsc.Exec(ctx); err != nil {
+func (_c *TFASettingCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tsc *TFASettingCreate) defaults() error {
-	if _, ok := tsc.mutation.CreatedAt(); !ok {
+func (_c *TFASettingCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if tfasetting.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized tfasetting.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := tfasetting.DefaultCreatedAt()
-		tsc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if tfasetting.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized tfasetting.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := tfasetting.DefaultUpdatedAt()
-		tsc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tsc.mutation.Verified(); !ok {
+	if _, ok := _c.mutation.Verified(); !ok {
 		v := tfasetting.DefaultVerified
-		tsc.mutation.SetVerified(v)
+		_c.mutation.SetVerified(v)
 	}
-	if _, ok := tsc.mutation.PhoneOtpAllowed(); !ok {
+	if _, ok := _c.mutation.PhoneOtpAllowed(); !ok {
 		v := tfasetting.DefaultPhoneOtpAllowed
-		tsc.mutation.SetPhoneOtpAllowed(v)
+		_c.mutation.SetPhoneOtpAllowed(v)
 	}
-	if _, ok := tsc.mutation.EmailOtpAllowed(); !ok {
+	if _, ok := _c.mutation.EmailOtpAllowed(); !ok {
 		v := tfasetting.DefaultEmailOtpAllowed
-		tsc.mutation.SetEmailOtpAllowed(v)
+		_c.mutation.SetEmailOtpAllowed(v)
 	}
-	if _, ok := tsc.mutation.TotpAllowed(); !ok {
+	if _, ok := _c.mutation.TotpAllowed(); !ok {
 		v := tfasetting.DefaultTotpAllowed
-		tsc.mutation.SetTotpAllowed(v)
+		_c.mutation.SetTotpAllowed(v)
 	}
-	if _, ok := tsc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if tfasetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized tfasetting.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := tfasetting.DefaultID()
-		tsc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tsc *TFASettingCreate) check() error {
-	if _, ok := tsc.mutation.Verified(); !ok {
+func (_c *TFASettingCreate) check() error {
+	if _, ok := _c.mutation.Verified(); !ok {
 		return &ValidationError{Name: "verified", err: errors.New(`generated: missing required field "TFASetting.verified"`)}
 	}
 	return nil
 }
 
-func (tsc *TFASettingCreate) sqlSave(ctx context.Context) (*TFASetting, error) {
-	if err := tsc.check(); err != nil {
+func (_c *TFASettingCreate) sqlSave(ctx context.Context) (*TFASetting, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tsc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tsc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -317,70 +317,70 @@ func (tsc *TFASettingCreate) sqlSave(ctx context.Context) (*TFASetting, error) {
 			return nil, fmt.Errorf("unexpected TFASetting.ID type: %T", _spec.ID.Value)
 		}
 	}
-	tsc.mutation.id = &_node.ID
-	tsc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
+func (_c *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TFASetting{config: tsc.config}
+		_node = &TFASetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tfasetting.Table, sqlgraph.NewFieldSpec(tfasetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = tsc.schemaConfig.TFASetting
-	if id, ok := tsc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.TFASetting
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tsc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(tfasetting.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tsc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(tfasetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tsc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(tfasetting.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := tsc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(tfasetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := tsc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tsc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tsc.mutation.TfaSecret(); ok {
+	if value, ok := _c.mutation.TfaSecret(); ok {
 		_spec.SetField(tfasetting.FieldTfaSecret, field.TypeString, value)
 		_node.TfaSecret = &value
 	}
-	if value, ok := tsc.mutation.Verified(); ok {
+	if value, ok := _c.mutation.Verified(); ok {
 		_spec.SetField(tfasetting.FieldVerified, field.TypeBool, value)
 		_node.Verified = value
 	}
-	if value, ok := tsc.mutation.RecoveryCodes(); ok {
+	if value, ok := _c.mutation.RecoveryCodes(); ok {
 		_spec.SetField(tfasetting.FieldRecoveryCodes, field.TypeJSON, value)
 		_node.RecoveryCodes = value
 	}
-	if value, ok := tsc.mutation.PhoneOtpAllowed(); ok {
+	if value, ok := _c.mutation.PhoneOtpAllowed(); ok {
 		_spec.SetField(tfasetting.FieldPhoneOtpAllowed, field.TypeBool, value)
 		_node.PhoneOtpAllowed = value
 	}
-	if value, ok := tsc.mutation.EmailOtpAllowed(); ok {
+	if value, ok := _c.mutation.EmailOtpAllowed(); ok {
 		_spec.SetField(tfasetting.FieldEmailOtpAllowed, field.TypeBool, value)
 		_node.EmailOtpAllowed = value
 	}
-	if value, ok := tsc.mutation.TotpAllowed(); ok {
+	if value, ok := _c.mutation.TotpAllowed(); ok {
 		_spec.SetField(tfasetting.FieldTotpAllowed, field.TypeBool, value)
 		_node.TotpAllowed = value
 	}
-	if nodes := tsc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -391,7 +391,7 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tsc.schemaConfig.TFASetting
+		edge.Schema = _c.schemaConfig.TFASetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -409,16 +409,16 @@ type TFASettingCreateBulk struct {
 }
 
 // Save creates the TFASetting entities in the database.
-func (tscb *TFASettingCreateBulk) Save(ctx context.Context) ([]*TFASetting, error) {
-	if tscb.err != nil {
-		return nil, tscb.err
+func (_c *TFASettingCreateBulk) Save(ctx context.Context) ([]*TFASetting, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tscb.builders))
-	nodes := make([]*TFASetting, len(tscb.builders))
-	mutators := make([]Mutator, len(tscb.builders))
-	for i := range tscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TFASetting, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TFASettingMutation)
@@ -432,11 +432,11 @@ func (tscb *TFASettingCreateBulk) Save(ctx context.Context) ([]*TFASetting, erro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -456,7 +456,7 @@ func (tscb *TFASettingCreateBulk) Save(ctx context.Context) ([]*TFASetting, erro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -464,8 +464,8 @@ func (tscb *TFASettingCreateBulk) Save(ctx context.Context) ([]*TFASetting, erro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tscb *TFASettingCreateBulk) SaveX(ctx context.Context) []*TFASetting {
-	v, err := tscb.Save(ctx)
+func (_c *TFASettingCreateBulk) SaveX(ctx context.Context) []*TFASetting {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -473,14 +473,14 @@ func (tscb *TFASettingCreateBulk) SaveX(ctx context.Context) []*TFASetting {
 }
 
 // Exec executes the query.
-func (tscb *TFASettingCreateBulk) Exec(ctx context.Context) error {
-	_, err := tscb.Save(ctx)
+func (_c *TFASettingCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tscb *TFASettingCreateBulk) ExecX(ctx context.Context) {
-	if err := tscb.Exec(ctx); err != nil {
+func (_c *TFASettingCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

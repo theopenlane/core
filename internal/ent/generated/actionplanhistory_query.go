@@ -33,40 +33,40 @@ type ActionPlanHistoryQuery struct {
 }
 
 // Where adds a new predicate for the ActionPlanHistoryQuery builder.
-func (aphq *ActionPlanHistoryQuery) Where(ps ...predicate.ActionPlanHistory) *ActionPlanHistoryQuery {
-	aphq.predicates = append(aphq.predicates, ps...)
-	return aphq
+func (_q *ActionPlanHistoryQuery) Where(ps ...predicate.ActionPlanHistory) *ActionPlanHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (aphq *ActionPlanHistoryQuery) Limit(limit int) *ActionPlanHistoryQuery {
-	aphq.ctx.Limit = &limit
-	return aphq
+func (_q *ActionPlanHistoryQuery) Limit(limit int) *ActionPlanHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (aphq *ActionPlanHistoryQuery) Offset(offset int) *ActionPlanHistoryQuery {
-	aphq.ctx.Offset = &offset
-	return aphq
+func (_q *ActionPlanHistoryQuery) Offset(offset int) *ActionPlanHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (aphq *ActionPlanHistoryQuery) Unique(unique bool) *ActionPlanHistoryQuery {
-	aphq.ctx.Unique = &unique
-	return aphq
+func (_q *ActionPlanHistoryQuery) Unique(unique bool) *ActionPlanHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (aphq *ActionPlanHistoryQuery) Order(o ...actionplanhistory.OrderOption) *ActionPlanHistoryQuery {
-	aphq.order = append(aphq.order, o...)
-	return aphq
+func (_q *ActionPlanHistoryQuery) Order(o ...actionplanhistory.OrderOption) *ActionPlanHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ActionPlanHistory entity from the query.
 // Returns a *NotFoundError when no ActionPlanHistory was found.
-func (aphq *ActionPlanHistoryQuery) First(ctx context.Context) (*ActionPlanHistory, error) {
-	nodes, err := aphq.Limit(1).All(setContextOp(ctx, aphq.ctx, ent.OpQueryFirst))
+func (_q *ActionPlanHistoryQuery) First(ctx context.Context) (*ActionPlanHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (aphq *ActionPlanHistoryQuery) First(ctx context.Context) (*ActionPlanHisto
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) FirstX(ctx context.Context) *ActionPlanHistory {
-	node, err := aphq.First(ctx)
+func (_q *ActionPlanHistoryQuery) FirstX(ctx context.Context) *ActionPlanHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (aphq *ActionPlanHistoryQuery) FirstX(ctx context.Context) *ActionPlanHisto
 
 // FirstID returns the first ActionPlanHistory ID from the query.
 // Returns a *NotFoundError when no ActionPlanHistory ID was found.
-func (aphq *ActionPlanHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ActionPlanHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = aphq.Limit(1).IDs(setContextOp(ctx, aphq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (aphq *ActionPlanHistoryQuery) FirstID(ctx context.Context) (id string, err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := aphq.FirstID(ctx)
+func (_q *ActionPlanHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (aphq *ActionPlanHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ActionPlanHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ActionPlanHistory entity is found.
 // Returns a *NotFoundError when no ActionPlanHistory entities are found.
-func (aphq *ActionPlanHistoryQuery) Only(ctx context.Context) (*ActionPlanHistory, error) {
-	nodes, err := aphq.Limit(2).All(setContextOp(ctx, aphq.ctx, ent.OpQueryOnly))
+func (_q *ActionPlanHistoryQuery) Only(ctx context.Context) (*ActionPlanHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (aphq *ActionPlanHistoryQuery) Only(ctx context.Context) (*ActionPlanHistor
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) OnlyX(ctx context.Context) *ActionPlanHistory {
-	node, err := aphq.Only(ctx)
+func (_q *ActionPlanHistoryQuery) OnlyX(ctx context.Context) *ActionPlanHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (aphq *ActionPlanHistoryQuery) OnlyX(ctx context.Context) *ActionPlanHistor
 // OnlyID is like Only, but returns the only ActionPlanHistory ID in the query.
 // Returns a *NotSingularError when more than one ActionPlanHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (aphq *ActionPlanHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ActionPlanHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = aphq.Limit(2).IDs(setContextOp(ctx, aphq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (aphq *ActionPlanHistoryQuery) OnlyID(ctx context.Context) (id string, err 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := aphq.OnlyID(ctx)
+func (_q *ActionPlanHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (aphq *ActionPlanHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ActionPlanHistories.
-func (aphq *ActionPlanHistoryQuery) All(ctx context.Context) ([]*ActionPlanHistory, error) {
-	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryAll)
-	if err := aphq.prepareQuery(ctx); err != nil {
+func (_q *ActionPlanHistoryQuery) All(ctx context.Context) ([]*ActionPlanHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ActionPlanHistory, *ActionPlanHistoryQuery]()
-	return withInterceptors[[]*ActionPlanHistory](ctx, aphq, qr, aphq.inters)
+	return withInterceptors[[]*ActionPlanHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) AllX(ctx context.Context) []*ActionPlanHistory {
-	nodes, err := aphq.All(ctx)
+func (_q *ActionPlanHistoryQuery) AllX(ctx context.Context) []*ActionPlanHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (aphq *ActionPlanHistoryQuery) AllX(ctx context.Context) []*ActionPlanHisto
 }
 
 // IDs executes the query and returns a list of ActionPlanHistory IDs.
-func (aphq *ActionPlanHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if aphq.ctx.Unique == nil && aphq.path != nil {
-		aphq.Unique(true)
+func (_q *ActionPlanHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryIDs)
-	if err = aphq.Select(actionplanhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(actionplanhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := aphq.IDs(ctx)
+func (_q *ActionPlanHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (aphq *ActionPlanHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (aphq *ActionPlanHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryCount)
-	if err := aphq.prepareQuery(ctx); err != nil {
+func (_q *ActionPlanHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, aphq, querierCount[*ActionPlanHistoryQuery](), aphq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ActionPlanHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) CountX(ctx context.Context) int {
-	count, err := aphq.Count(ctx)
+func (_q *ActionPlanHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (aphq *ActionPlanHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (aphq *ActionPlanHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryExist)
-	switch _, err := aphq.FirstID(ctx); {
+func (_q *ActionPlanHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (aphq *ActionPlanHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (aphq *ActionPlanHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := aphq.Exist(ctx)
+func (_q *ActionPlanHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (aphq *ActionPlanHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ActionPlanHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (aphq *ActionPlanHistoryQuery) Clone() *ActionPlanHistoryQuery {
-	if aphq == nil {
+func (_q *ActionPlanHistoryQuery) Clone() *ActionPlanHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ActionPlanHistoryQuery{
-		config:     aphq.config,
-		ctx:        aphq.ctx.Clone(),
-		order:      append([]actionplanhistory.OrderOption{}, aphq.order...),
-		inters:     append([]Interceptor{}, aphq.inters...),
-		predicates: append([]predicate.ActionPlanHistory{}, aphq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]actionplanhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ActionPlanHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       aphq.sql.Clone(),
-		path:      aphq.path,
-		modifiers: append([]func(*sql.Selector){}, aphq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (aphq *ActionPlanHistoryQuery) Clone() *ActionPlanHistoryQuery {
 //		GroupBy(actionplanhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (aphq *ActionPlanHistoryQuery) GroupBy(field string, fields ...string) *ActionPlanHistoryGroupBy {
-	aphq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ActionPlanHistoryGroupBy{build: aphq}
-	grbuild.flds = &aphq.ctx.Fields
+func (_q *ActionPlanHistoryQuery) GroupBy(field string, fields ...string) *ActionPlanHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ActionPlanHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = actionplanhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (aphq *ActionPlanHistoryQuery) GroupBy(field string, fields ...string) *Act
 //	client.ActionPlanHistory.Query().
 //		Select(actionplanhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (aphq *ActionPlanHistoryQuery) Select(fields ...string) *ActionPlanHistorySelect {
-	aphq.ctx.Fields = append(aphq.ctx.Fields, fields...)
-	sbuild := &ActionPlanHistorySelect{ActionPlanHistoryQuery: aphq}
+func (_q *ActionPlanHistoryQuery) Select(fields ...string) *ActionPlanHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ActionPlanHistorySelect{ActionPlanHistoryQuery: _q}
 	sbuild.label = actionplanhistory.Label
-	sbuild.flds, sbuild.scan = &aphq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ActionPlanHistorySelect configured with the given aggregations.
-func (aphq *ActionPlanHistoryQuery) Aggregate(fns ...AggregateFunc) *ActionPlanHistorySelect {
-	return aphq.Select().Aggregate(fns...)
+func (_q *ActionPlanHistoryQuery) Aggregate(fns ...AggregateFunc) *ActionPlanHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (aphq *ActionPlanHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range aphq.inters {
+func (_q *ActionPlanHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, aphq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range aphq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !actionplanhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if aphq.path != nil {
-		prev, err := aphq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		aphq.sql = prev
+		_q.sql = prev
 	}
 	if actionplanhistory.Policy == nil {
 		return errors.New("generated: uninitialized actionplanhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := actionplanhistory.Policy.EvalQuery(ctx, aphq); err != nil {
+	if err := actionplanhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (aphq *ActionPlanHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ActionPlanHistory, error) {
+func (_q *ActionPlanHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ActionPlanHistory, error) {
 	var (
 		nodes = []*ActionPlanHistory{}
-		_spec = aphq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ActionPlanHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ActionPlanHistory{config: aphq.config}
+		node := &ActionPlanHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = aphq.schemaConfig.ActionPlanHistory
-	ctx = internal.NewSchemaConfigContext(ctx, aphq.schemaConfig)
-	if len(aphq.modifiers) > 0 {
-		_spec.Modifiers = aphq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ActionPlanHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, aphq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range aphq.loadTotal {
-		if err := aphq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (aphq *ActionPlanHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := aphq.querySpec()
-	_spec.Node.Schema = aphq.schemaConfig.ActionPlanHistory
-	ctx = internal.NewSchemaConfigContext(ctx, aphq.schemaConfig)
-	if len(aphq.modifiers) > 0 {
-		_spec.Modifiers = aphq.modifiers
+func (_q *ActionPlanHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ActionPlanHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = aphq.ctx.Fields
-	if len(aphq.ctx.Fields) > 0 {
-		_spec.Unique = aphq.ctx.Unique != nil && *aphq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, aphq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (aphq *ActionPlanHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ActionPlanHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(actionplanhistory.Table, actionplanhistory.Columns, sqlgraph.NewFieldSpec(actionplanhistory.FieldID, field.TypeString))
-	_spec.From = aphq.sql
-	if unique := aphq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if aphq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := aphq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, actionplanhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (aphq *ActionPlanHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := aphq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := aphq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := aphq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := aphq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (aphq *ActionPlanHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (aphq *ActionPlanHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(aphq.driver.Dialect())
+func (_q *ActionPlanHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(actionplanhistory.Table)
-	columns := aphq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = actionplanhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if aphq.sql != nil {
-		selector = aphq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if aphq.ctx.Unique != nil && *aphq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(aphq.schemaConfig.ActionPlanHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, aphq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ActionPlanHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range aphq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range aphq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range aphq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := aphq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := aphq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (aphq *ActionPlanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ActionPlanHistorySelect {
-	aphq.modifiers = append(aphq.modifiers, modifiers...)
-	return aphq.Select()
+func (_q *ActionPlanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ActionPlanHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type ActionPlanHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (aphgb *ActionPlanHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ActionPlanHistoryGroupBy {
-	aphgb.fns = append(aphgb.fns, fns...)
-	return aphgb
+func (_g *ActionPlanHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ActionPlanHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (aphgb *ActionPlanHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, aphgb.build.ctx, ent.OpQueryGroupBy)
-	if err := aphgb.build.prepareQuery(ctx); err != nil {
+func (_g *ActionPlanHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ActionPlanHistoryQuery, *ActionPlanHistoryGroupBy](ctx, aphgb.build, aphgb, aphgb.build.inters, v)
+	return scanWithInterceptors[*ActionPlanHistoryQuery, *ActionPlanHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (aphgb *ActionPlanHistoryGroupBy) sqlScan(ctx context.Context, root *ActionPlanHistoryQuery, v any) error {
+func (_g *ActionPlanHistoryGroupBy) sqlScan(ctx context.Context, root *ActionPlanHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(aphgb.fns))
-	for _, fn := range aphgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*aphgb.flds)+len(aphgb.fns))
-		for _, f := range *aphgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*aphgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := aphgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type ActionPlanHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (aphs *ActionPlanHistorySelect) Aggregate(fns ...AggregateFunc) *ActionPlanHistorySelect {
-	aphs.fns = append(aphs.fns, fns...)
-	return aphs
+func (_s *ActionPlanHistorySelect) Aggregate(fns ...AggregateFunc) *ActionPlanHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (aphs *ActionPlanHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, aphs.ctx, ent.OpQuerySelect)
-	if err := aphs.prepareQuery(ctx); err != nil {
+func (_s *ActionPlanHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ActionPlanHistoryQuery, *ActionPlanHistorySelect](ctx, aphs.ActionPlanHistoryQuery, aphs, aphs.inters, v)
+	return scanWithInterceptors[*ActionPlanHistoryQuery, *ActionPlanHistorySelect](ctx, _s.ActionPlanHistoryQuery, _s, _s.inters, v)
 }
 
-func (aphs *ActionPlanHistorySelect) sqlScan(ctx context.Context, root *ActionPlanHistoryQuery, v any) error {
+func (_s *ActionPlanHistorySelect) sqlScan(ctx context.Context, root *ActionPlanHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(aphs.fns))
-	for _, fn := range aphs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*aphs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (aphs *ActionPlanHistorySelect) sqlScan(ctx context.Context, root *ActionPl
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := aphs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (aphs *ActionPlanHistorySelect) sqlScan(ctx context.Context, root *ActionPl
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (aphs *ActionPlanHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ActionPlanHistorySelect {
-	aphs.modifiers = append(aphs.modifiers, modifiers...)
-	return aphs
+func (_s *ActionPlanHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ActionPlanHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

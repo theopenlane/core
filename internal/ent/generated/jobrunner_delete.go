@@ -22,58 +22,58 @@ type JobRunnerDelete struct {
 }
 
 // Where appends a list predicates to the JobRunnerDelete builder.
-func (jrd *JobRunnerDelete) Where(ps ...predicate.JobRunner) *JobRunnerDelete {
-	jrd.mutation.Where(ps...)
-	return jrd
+func (_d *JobRunnerDelete) Where(ps ...predicate.JobRunner) *JobRunnerDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (jrd *JobRunnerDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, jrd.sqlExec, jrd.mutation, jrd.hooks)
+func (_d *JobRunnerDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrd *JobRunnerDelete) ExecX(ctx context.Context) int {
-	n, err := jrd.Exec(ctx)
+func (_d *JobRunnerDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (jrd *JobRunnerDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *JobRunnerDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(jobrunner.Table, sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString))
-	_spec.Node.Schema = jrd.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, jrd.schemaConfig)
-	if ps := jrd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.JobRunner
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, jrd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	jrd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // JobRunnerDeleteOne is the builder for deleting a single JobRunner entity.
 type JobRunnerDeleteOne struct {
-	jrd *JobRunnerDelete
+	_d *JobRunnerDelete
 }
 
 // Where appends a list predicates to the JobRunnerDelete builder.
-func (jrdo *JobRunnerDeleteOne) Where(ps ...predicate.JobRunner) *JobRunnerDeleteOne {
-	jrdo.jrd.mutation.Where(ps...)
-	return jrdo
+func (_d *JobRunnerDeleteOne) Where(ps ...predicate.JobRunner) *JobRunnerDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (jrdo *JobRunnerDeleteOne) Exec(ctx context.Context) error {
-	n, err := jrdo.jrd.Exec(ctx)
+func (_d *JobRunnerDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (jrdo *JobRunnerDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrdo *JobRunnerDeleteOne) ExecX(ctx context.Context) {
-	if err := jrdo.Exec(ctx); err != nil {
+func (_d *JobRunnerDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

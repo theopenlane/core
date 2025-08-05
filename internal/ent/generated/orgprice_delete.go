@@ -22,58 +22,58 @@ type OrgPriceDelete struct {
 }
 
 // Where appends a list predicates to the OrgPriceDelete builder.
-func (opd *OrgPriceDelete) Where(ps ...predicate.OrgPrice) *OrgPriceDelete {
-	opd.mutation.Where(ps...)
-	return opd
+func (_d *OrgPriceDelete) Where(ps ...predicate.OrgPrice) *OrgPriceDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (opd *OrgPriceDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, opd.sqlExec, opd.mutation, opd.hooks)
+func (_d *OrgPriceDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opd *OrgPriceDelete) ExecX(ctx context.Context) int {
-	n, err := opd.Exec(ctx)
+func (_d *OrgPriceDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (opd *OrgPriceDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrgPriceDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orgprice.Table, sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString))
-	_spec.Node.Schema = opd.schemaConfig.OrgPrice
-	ctx = internal.NewSchemaConfigContext(ctx, opd.schemaConfig)
-	if ps := opd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrgPrice
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, opd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	opd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrgPriceDeleteOne is the builder for deleting a single OrgPrice entity.
 type OrgPriceDeleteOne struct {
-	opd *OrgPriceDelete
+	_d *OrgPriceDelete
 }
 
 // Where appends a list predicates to the OrgPriceDelete builder.
-func (opdo *OrgPriceDeleteOne) Where(ps ...predicate.OrgPrice) *OrgPriceDeleteOne {
-	opdo.opd.mutation.Where(ps...)
-	return opdo
+func (_d *OrgPriceDeleteOne) Where(ps ...predicate.OrgPrice) *OrgPriceDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (opdo *OrgPriceDeleteOne) Exec(ctx context.Context) error {
-	n, err := opdo.opd.Exec(ctx)
+func (_d *OrgPriceDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (opdo *OrgPriceDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opdo *OrgPriceDeleteOne) ExecX(ctx context.Context) {
-	if err := opdo.Exec(ctx); err != nil {
+func (_d *OrgPriceDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -33,40 +33,40 @@ type AssetHistoryQuery struct {
 }
 
 // Where adds a new predicate for the AssetHistoryQuery builder.
-func (ahq *AssetHistoryQuery) Where(ps ...predicate.AssetHistory) *AssetHistoryQuery {
-	ahq.predicates = append(ahq.predicates, ps...)
-	return ahq
+func (_q *AssetHistoryQuery) Where(ps ...predicate.AssetHistory) *AssetHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ahq *AssetHistoryQuery) Limit(limit int) *AssetHistoryQuery {
-	ahq.ctx.Limit = &limit
-	return ahq
+func (_q *AssetHistoryQuery) Limit(limit int) *AssetHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ahq *AssetHistoryQuery) Offset(offset int) *AssetHistoryQuery {
-	ahq.ctx.Offset = &offset
-	return ahq
+func (_q *AssetHistoryQuery) Offset(offset int) *AssetHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ahq *AssetHistoryQuery) Unique(unique bool) *AssetHistoryQuery {
-	ahq.ctx.Unique = &unique
-	return ahq
+func (_q *AssetHistoryQuery) Unique(unique bool) *AssetHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ahq *AssetHistoryQuery) Order(o ...assethistory.OrderOption) *AssetHistoryQuery {
-	ahq.order = append(ahq.order, o...)
-	return ahq
+func (_q *AssetHistoryQuery) Order(o ...assethistory.OrderOption) *AssetHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first AssetHistory entity from the query.
 // Returns a *NotFoundError when no AssetHistory was found.
-func (ahq *AssetHistoryQuery) First(ctx context.Context) (*AssetHistory, error) {
-	nodes, err := ahq.Limit(1).All(setContextOp(ctx, ahq.ctx, ent.OpQueryFirst))
+func (_q *AssetHistoryQuery) First(ctx context.Context) (*AssetHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (ahq *AssetHistoryQuery) First(ctx context.Context) (*AssetHistory, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) FirstX(ctx context.Context) *AssetHistory {
-	node, err := ahq.First(ctx)
+func (_q *AssetHistoryQuery) FirstX(ctx context.Context) *AssetHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (ahq *AssetHistoryQuery) FirstX(ctx context.Context) *AssetHistory {
 
 // FirstID returns the first AssetHistory ID from the query.
 // Returns a *NotFoundError when no AssetHistory ID was found.
-func (ahq *AssetHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *AssetHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ahq.Limit(1).IDs(setContextOp(ctx, ahq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (ahq *AssetHistoryQuery) FirstID(ctx context.Context) (id string, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := ahq.FirstID(ctx)
+func (_q *AssetHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (ahq *AssetHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single AssetHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one AssetHistory entity is found.
 // Returns a *NotFoundError when no AssetHistory entities are found.
-func (ahq *AssetHistoryQuery) Only(ctx context.Context) (*AssetHistory, error) {
-	nodes, err := ahq.Limit(2).All(setContextOp(ctx, ahq.ctx, ent.OpQueryOnly))
+func (_q *AssetHistoryQuery) Only(ctx context.Context) (*AssetHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (ahq *AssetHistoryQuery) Only(ctx context.Context) (*AssetHistory, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) OnlyX(ctx context.Context) *AssetHistory {
-	node, err := ahq.Only(ctx)
+func (_q *AssetHistoryQuery) OnlyX(ctx context.Context) *AssetHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (ahq *AssetHistoryQuery) OnlyX(ctx context.Context) *AssetHistory {
 // OnlyID is like Only, but returns the only AssetHistory ID in the query.
 // Returns a *NotSingularError when more than one AssetHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ahq *AssetHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *AssetHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ahq.Limit(2).IDs(setContextOp(ctx, ahq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (ahq *AssetHistoryQuery) OnlyID(ctx context.Context) (id string, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := ahq.OnlyID(ctx)
+func (_q *AssetHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (ahq *AssetHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of AssetHistories.
-func (ahq *AssetHistoryQuery) All(ctx context.Context) ([]*AssetHistory, error) {
-	ctx = setContextOp(ctx, ahq.ctx, ent.OpQueryAll)
-	if err := ahq.prepareQuery(ctx); err != nil {
+func (_q *AssetHistoryQuery) All(ctx context.Context) ([]*AssetHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*AssetHistory, *AssetHistoryQuery]()
-	return withInterceptors[[]*AssetHistory](ctx, ahq, qr, ahq.inters)
+	return withInterceptors[[]*AssetHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) AllX(ctx context.Context) []*AssetHistory {
-	nodes, err := ahq.All(ctx)
+func (_q *AssetHistoryQuery) AllX(ctx context.Context) []*AssetHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (ahq *AssetHistoryQuery) AllX(ctx context.Context) []*AssetHistory {
 }
 
 // IDs executes the query and returns a list of AssetHistory IDs.
-func (ahq *AssetHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if ahq.ctx.Unique == nil && ahq.path != nil {
-		ahq.Unique(true)
+func (_q *AssetHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ahq.ctx, ent.OpQueryIDs)
-	if err = ahq.Select(assethistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(assethistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := ahq.IDs(ctx)
+func (_q *AssetHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (ahq *AssetHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (ahq *AssetHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ahq.ctx, ent.OpQueryCount)
-	if err := ahq.prepareQuery(ctx); err != nil {
+func (_q *AssetHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ahq, querierCount[*AssetHistoryQuery](), ahq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*AssetHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) CountX(ctx context.Context) int {
-	count, err := ahq.Count(ctx)
+func (_q *AssetHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (ahq *AssetHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ahq *AssetHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ahq.ctx, ent.OpQueryExist)
-	switch _, err := ahq.FirstID(ctx); {
+func (_q *AssetHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (ahq *AssetHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ahq *AssetHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := ahq.Exist(ctx)
+func (_q *AssetHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (ahq *AssetHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the AssetHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ahq *AssetHistoryQuery) Clone() *AssetHistoryQuery {
-	if ahq == nil {
+func (_q *AssetHistoryQuery) Clone() *AssetHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &AssetHistoryQuery{
-		config:     ahq.config,
-		ctx:        ahq.ctx.Clone(),
-		order:      append([]assethistory.OrderOption{}, ahq.order...),
-		inters:     append([]Interceptor{}, ahq.inters...),
-		predicates: append([]predicate.AssetHistory{}, ahq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]assethistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.AssetHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       ahq.sql.Clone(),
-		path:      ahq.path,
-		modifiers: append([]func(*sql.Selector){}, ahq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (ahq *AssetHistoryQuery) Clone() *AssetHistoryQuery {
 //		GroupBy(assethistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (ahq *AssetHistoryQuery) GroupBy(field string, fields ...string) *AssetHistoryGroupBy {
-	ahq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &AssetHistoryGroupBy{build: ahq}
-	grbuild.flds = &ahq.ctx.Fields
+func (_q *AssetHistoryQuery) GroupBy(field string, fields ...string) *AssetHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &AssetHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = assethistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (ahq *AssetHistoryQuery) GroupBy(field string, fields ...string) *AssetHist
 //	client.AssetHistory.Query().
 //		Select(assethistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (ahq *AssetHistoryQuery) Select(fields ...string) *AssetHistorySelect {
-	ahq.ctx.Fields = append(ahq.ctx.Fields, fields...)
-	sbuild := &AssetHistorySelect{AssetHistoryQuery: ahq}
+func (_q *AssetHistoryQuery) Select(fields ...string) *AssetHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &AssetHistorySelect{AssetHistoryQuery: _q}
 	sbuild.label = assethistory.Label
-	sbuild.flds, sbuild.scan = &ahq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a AssetHistorySelect configured with the given aggregations.
-func (ahq *AssetHistoryQuery) Aggregate(fns ...AggregateFunc) *AssetHistorySelect {
-	return ahq.Select().Aggregate(fns...)
+func (_q *AssetHistoryQuery) Aggregate(fns ...AggregateFunc) *AssetHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ahq *AssetHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ahq.inters {
+func (_q *AssetHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ahq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ahq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !assethistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if ahq.path != nil {
-		prev, err := ahq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ahq.sql = prev
+		_q.sql = prev
 	}
 	if assethistory.Policy == nil {
 		return errors.New("generated: uninitialized assethistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := assethistory.Policy.EvalQuery(ctx, ahq); err != nil {
+	if err := assethistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ahq *AssetHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AssetHistory, error) {
+func (_q *AssetHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AssetHistory, error) {
 	var (
 		nodes = []*AssetHistory{}
-		_spec = ahq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*AssetHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &AssetHistory{config: ahq.config}
+		node := &AssetHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = ahq.schemaConfig.AssetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ahq.schemaConfig)
-	if len(ahq.modifiers) > 0 {
-		_spec.Modifiers = ahq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.AssetHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ahq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range ahq.loadTotal {
-		if err := ahq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (ahq *AssetHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ahq.querySpec()
-	_spec.Node.Schema = ahq.schemaConfig.AssetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ahq.schemaConfig)
-	if len(ahq.modifiers) > 0 {
-		_spec.Modifiers = ahq.modifiers
+func (_q *AssetHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.AssetHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = ahq.ctx.Fields
-	if len(ahq.ctx.Fields) > 0 {
-		_spec.Unique = ahq.ctx.Unique != nil && *ahq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ahq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ahq *AssetHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *AssetHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(assethistory.Table, assethistory.Columns, sqlgraph.NewFieldSpec(assethistory.FieldID, field.TypeString))
-	_spec.From = ahq.sql
-	if unique := ahq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ahq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ahq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, assethistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (ahq *AssetHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := ahq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ahq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ahq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ahq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (ahq *AssetHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ahq *AssetHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ahq.driver.Dialect())
+func (_q *AssetHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(assethistory.Table)
-	columns := ahq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = assethistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ahq.sql != nil {
-		selector = ahq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ahq.ctx.Unique != nil && *ahq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(ahq.schemaConfig.AssetHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, ahq.schemaConfig)
+	t1.Schema(_q.schemaConfig.AssetHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range ahq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range ahq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ahq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ahq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ahq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ahq *AssetHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *AssetHistorySelect {
-	ahq.modifiers = append(ahq.modifiers, modifiers...)
-	return ahq.Select()
+func (_q *AssetHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *AssetHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type AssetHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ahgb *AssetHistoryGroupBy) Aggregate(fns ...AggregateFunc) *AssetHistoryGroupBy {
-	ahgb.fns = append(ahgb.fns, fns...)
-	return ahgb
+func (_g *AssetHistoryGroupBy) Aggregate(fns ...AggregateFunc) *AssetHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ahgb *AssetHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ahgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ahgb.build.prepareQuery(ctx); err != nil {
+func (_g *AssetHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*AssetHistoryQuery, *AssetHistoryGroupBy](ctx, ahgb.build, ahgb, ahgb.build.inters, v)
+	return scanWithInterceptors[*AssetHistoryQuery, *AssetHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ahgb *AssetHistoryGroupBy) sqlScan(ctx context.Context, root *AssetHistoryQuery, v any) error {
+func (_g *AssetHistoryGroupBy) sqlScan(ctx context.Context, root *AssetHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ahgb.fns))
-	for _, fn := range ahgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ahgb.flds)+len(ahgb.fns))
-		for _, f := range *ahgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ahgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ahgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type AssetHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ahs *AssetHistorySelect) Aggregate(fns ...AggregateFunc) *AssetHistorySelect {
-	ahs.fns = append(ahs.fns, fns...)
-	return ahs
+func (_s *AssetHistorySelect) Aggregate(fns ...AggregateFunc) *AssetHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ahs *AssetHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ahs.ctx, ent.OpQuerySelect)
-	if err := ahs.prepareQuery(ctx); err != nil {
+func (_s *AssetHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*AssetHistoryQuery, *AssetHistorySelect](ctx, ahs.AssetHistoryQuery, ahs, ahs.inters, v)
+	return scanWithInterceptors[*AssetHistoryQuery, *AssetHistorySelect](ctx, _s.AssetHistoryQuery, _s, _s.inters, v)
 }
 
-func (ahs *AssetHistorySelect) sqlScan(ctx context.Context, root *AssetHistoryQuery, v any) error {
+func (_s *AssetHistorySelect) sqlScan(ctx context.Context, root *AssetHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ahs.fns))
-	for _, fn := range ahs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ahs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (ahs *AssetHistorySelect) sqlScan(ctx context.Context, root *AssetHistoryQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ahs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (ahs *AssetHistorySelect) sqlScan(ctx context.Context, root *AssetHistoryQu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ahs *AssetHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *AssetHistorySelect {
-	ahs.modifiers = append(ahs.modifiers, modifiers...)
-	return ahs
+func (_s *AssetHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *AssetHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

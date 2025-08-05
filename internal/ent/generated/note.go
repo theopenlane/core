@@ -118,7 +118,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Note fields.
-func (n *Note) assignValues(columns []string, values []any) error {
+func (_m *Note) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -128,85 +128,85 @@ func (n *Note) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				n.ID = value.String
+				_m.ID = value.String
 			}
 		case note.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				n.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case note.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				n.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case note.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				n.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case note.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				n.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case note.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				n.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case note.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				n.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case note.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				n.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case note.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				n.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case note.FieldText:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field text", values[i])
 			} else if value.Valid {
-				n.Text = value.String
+				_m.Text = value.String
 			}
 		case note.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_notes", values[i])
 			} else if value.Valid {
-				n.entity_notes = new(string)
-				*n.entity_notes = value.String
+				_m.entity_notes = new(string)
+				*_m.entity_notes = value.String
 			}
 		case note.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_notes", values[i])
 			} else if value.Valid {
-				n.program_notes = new(string)
-				*n.program_notes = value.String
+				_m.program_notes = new(string)
+				*_m.program_notes = value.String
 			}
 		case note.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field task_comments", values[i])
 			} else if value.Valid {
-				n.task_comments = new(string)
-				*n.task_comments = value.String
+				_m.task_comments = new(string)
+				*_m.task_comments = value.String
 			}
 		default:
-			n.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -214,99 +214,99 @@ func (n *Note) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Note.
 // This includes values selected through modifiers, order, etc.
-func (n *Note) Value(name string) (ent.Value, error) {
-	return n.selectValues.Get(name)
+func (_m *Note) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Note entity.
-func (n *Note) QueryOwner() *OrganizationQuery {
-	return NewNoteClient(n.config).QueryOwner(n)
+func (_m *Note) QueryOwner() *OrganizationQuery {
+	return NewNoteClient(_m.config).QueryOwner(_m)
 }
 
 // QueryTask queries the "task" edge of the Note entity.
-func (n *Note) QueryTask() *TaskQuery {
-	return NewNoteClient(n.config).QueryTask(n)
+func (_m *Note) QueryTask() *TaskQuery {
+	return NewNoteClient(_m.config).QueryTask(_m)
 }
 
 // QueryFiles queries the "files" edge of the Note entity.
-func (n *Note) QueryFiles() *FileQuery {
-	return NewNoteClient(n.config).QueryFiles(n)
+func (_m *Note) QueryFiles() *FileQuery {
+	return NewNoteClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this Note.
 // Note that you need to call Note.Unwrap() before calling this method if this Note
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (n *Note) Update() *NoteUpdateOne {
-	return NewNoteClient(n.config).UpdateOne(n)
+func (_m *Note) Update() *NoteUpdateOne {
+	return NewNoteClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Note entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (n *Note) Unwrap() *Note {
-	_tx, ok := n.config.driver.(*txDriver)
+func (_m *Note) Unwrap() *Note {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Note is not a transactional entity")
 	}
-	n.config.driver = _tx.drv
-	return n
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (n *Note) String() string {
+func (_m *Note) String() string {
 	var builder strings.Builder
 	builder.WriteString("Note(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", n.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(n.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(n.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(n.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(n.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(n.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(n.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(n.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(n.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("text=")
-	builder.WriteString(n.Text)
+	builder.WriteString(_m.Text)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (n *Note) NamedFiles(name string) ([]*File, error) {
-	if n.Edges.namedFiles == nil {
+func (_m *Note) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := n.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (n *Note) appendNamedFiles(name string, edges ...*File) {
-	if n.Edges.namedFiles == nil {
-		n.Edges.namedFiles = make(map[string][]*File)
+func (_m *Note) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		n.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		n.Edges.namedFiles[name] = append(n.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

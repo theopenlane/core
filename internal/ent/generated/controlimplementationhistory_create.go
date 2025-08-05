@@ -23,243 +23,243 @@ type ControlImplementationHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (cihc *ControlImplementationHistoryCreate) SetHistoryTime(t time.Time) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetHistoryTime(t)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetHistoryTime(v time.Time) *ControlImplementationHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableHistoryTime(t *time.Time) *ControlImplementationHistoryCreate {
-	if t != nil {
-		cihc.SetHistoryTime(*t)
+func (_c *ControlImplementationHistoryCreate) SetNillableHistoryTime(v *time.Time) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (cihc *ControlImplementationHistoryCreate) SetRef(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetRef(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetRef(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableRef(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetRef(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableRef(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (cihc *ControlImplementationHistoryCreate) SetOperation(ht history.OpType) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetOperation(ht)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetOperation(v history.OpType) *ControlImplementationHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cihc *ControlImplementationHistoryCreate) SetCreatedAt(t time.Time) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetCreatedAt(t)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetCreatedAt(v time.Time) *ControlImplementationHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableCreatedAt(t *time.Time) *ControlImplementationHistoryCreate {
-	if t != nil {
-		cihc.SetCreatedAt(*t)
+func (_c *ControlImplementationHistoryCreate) SetNillableCreatedAt(v *time.Time) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cihc *ControlImplementationHistoryCreate) SetUpdatedAt(t time.Time) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetUpdatedAt(t)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetUpdatedAt(v time.Time) *ControlImplementationHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ControlImplementationHistoryCreate {
-	if t != nil {
-		cihc.SetUpdatedAt(*t)
+func (_c *ControlImplementationHistoryCreate) SetNillableUpdatedAt(v *time.Time) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (cihc *ControlImplementationHistoryCreate) SetCreatedBy(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetCreatedBy(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetCreatedBy(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableCreatedBy(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetCreatedBy(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableCreatedBy(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cihc *ControlImplementationHistoryCreate) SetUpdatedBy(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetUpdatedBy(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetUpdatedBy(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableUpdatedBy(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetUpdatedBy(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableUpdatedBy(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cihc *ControlImplementationHistoryCreate) SetDeletedAt(t time.Time) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetDeletedAt(t)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetDeletedAt(v time.Time) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableDeletedAt(t *time.Time) *ControlImplementationHistoryCreate {
-	if t != nil {
-		cihc.SetDeletedAt(*t)
+func (_c *ControlImplementationHistoryCreate) SetNillableDeletedAt(v *time.Time) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cihc *ControlImplementationHistoryCreate) SetDeletedBy(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetDeletedBy(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetDeletedBy(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableDeletedBy(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetDeletedBy(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableDeletedBy(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (cihc *ControlImplementationHistoryCreate) SetTags(s []string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetTags(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetTags(v []string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cihc *ControlImplementationHistoryCreate) SetOwnerID(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetOwnerID(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetOwnerID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableOwnerID(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetOwnerID(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableOwnerID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (cihc *ControlImplementationHistoryCreate) SetStatus(es enums.DocumentStatus) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetStatus(es)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetStatus(v enums.DocumentStatus) *ControlImplementationHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationHistoryCreate {
-	if es != nil {
-		cihc.SetStatus(*es)
+func (_c *ControlImplementationHistoryCreate) SetNillableStatus(v *enums.DocumentStatus) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetImplementationDate sets the "implementation_date" field.
-func (cihc *ControlImplementationHistoryCreate) SetImplementationDate(t time.Time) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetImplementationDate(t)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetImplementationDate(v time.Time) *ControlImplementationHistoryCreate {
+	_c.mutation.SetImplementationDate(v)
+	return _c
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableImplementationDate(t *time.Time) *ControlImplementationHistoryCreate {
-	if t != nil {
-		cihc.SetImplementationDate(*t)
+func (_c *ControlImplementationHistoryCreate) SetNillableImplementationDate(v *time.Time) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetImplementationDate(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetVerified sets the "verified" field.
-func (cihc *ControlImplementationHistoryCreate) SetVerified(b bool) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetVerified(b)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetVerified(v bool) *ControlImplementationHistoryCreate {
+	_c.mutation.SetVerified(v)
+	return _c
 }
 
 // SetNillableVerified sets the "verified" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableVerified(b *bool) *ControlImplementationHistoryCreate {
-	if b != nil {
-		cihc.SetVerified(*b)
+func (_c *ControlImplementationHistoryCreate) SetNillableVerified(v *bool) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetVerified(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetVerificationDate sets the "verification_date" field.
-func (cihc *ControlImplementationHistoryCreate) SetVerificationDate(t time.Time) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetVerificationDate(t)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetVerificationDate(v time.Time) *ControlImplementationHistoryCreate {
+	_c.mutation.SetVerificationDate(v)
+	return _c
 }
 
 // SetNillableVerificationDate sets the "verification_date" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableVerificationDate(t *time.Time) *ControlImplementationHistoryCreate {
-	if t != nil {
-		cihc.SetVerificationDate(*t)
+func (_c *ControlImplementationHistoryCreate) SetNillableVerificationDate(v *time.Time) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetVerificationDate(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetDetails sets the "details" field.
-func (cihc *ControlImplementationHistoryCreate) SetDetails(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetDetails(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetDetails(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDetails(v)
+	return _c
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableDetails(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetDetails(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableDetails(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDetails(*v)
 	}
-	return cihc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cihc *ControlImplementationHistoryCreate) SetID(s string) *ControlImplementationHistoryCreate {
-	cihc.mutation.SetID(s)
-	return cihc
+func (_c *ControlImplementationHistoryCreate) SetID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cihc *ControlImplementationHistoryCreate) SetNillableID(s *string) *ControlImplementationHistoryCreate {
-	if s != nil {
-		cihc.SetID(*s)
+func (_c *ControlImplementationHistoryCreate) SetNillableID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cihc
+	return _c
 }
 
 // Mutation returns the ControlImplementationHistoryMutation object of the builder.
-func (cihc *ControlImplementationHistoryCreate) Mutation() *ControlImplementationHistoryMutation {
-	return cihc.mutation
+func (_c *ControlImplementationHistoryCreate) Mutation() *ControlImplementationHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the ControlImplementationHistory in the database.
-func (cihc *ControlImplementationHistoryCreate) Save(ctx context.Context) (*ControlImplementationHistory, error) {
-	if err := cihc.defaults(); err != nil {
+func (_c *ControlImplementationHistoryCreate) Save(ctx context.Context) (*ControlImplementationHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cihc.sqlSave, cihc.mutation, cihc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cihc *ControlImplementationHistoryCreate) SaveX(ctx context.Context) *ControlImplementationHistory {
-	v, err := cihc.Save(ctx)
+func (_c *ControlImplementationHistoryCreate) SaveX(ctx context.Context) *ControlImplementationHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,73 +267,73 @@ func (cihc *ControlImplementationHistoryCreate) SaveX(ctx context.Context) *Cont
 }
 
 // Exec executes the query.
-func (cihc *ControlImplementationHistoryCreate) Exec(ctx context.Context) error {
-	_, err := cihc.Save(ctx)
+func (_c *ControlImplementationHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cihc *ControlImplementationHistoryCreate) ExecX(ctx context.Context) {
-	if err := cihc.Exec(ctx); err != nil {
+func (_c *ControlImplementationHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cihc *ControlImplementationHistoryCreate) defaults() error {
-	if _, ok := cihc.mutation.HistoryTime(); !ok {
+func (_c *ControlImplementationHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if controlimplementationhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := controlimplementationhistory.DefaultHistoryTime()
-		cihc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := cihc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if controlimplementationhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlimplementationhistory.DefaultCreatedAt()
-		cihc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cihc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if controlimplementationhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlimplementationhistory.DefaultUpdatedAt()
-		cihc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cihc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := controlimplementationhistory.DefaultTags
-		cihc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := cihc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := controlimplementationhistory.DefaultStatus
-		cihc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := cihc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if controlimplementationhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := controlimplementationhistory.DefaultID()
-		cihc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cihc *ControlImplementationHistoryCreate) check() error {
-	if _, ok := cihc.mutation.HistoryTime(); !ok {
+func (_c *ControlImplementationHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "ControlImplementationHistory.history_time"`)}
 	}
-	if _, ok := cihc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "ControlImplementationHistory.operation"`)}
 	}
-	if v, ok := cihc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := controlimplementationhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.operation": %w`, err)}
 		}
 	}
-	if v, ok := cihc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := controlimplementationhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
 		}
@@ -341,12 +341,12 @@ func (cihc *ControlImplementationHistoryCreate) check() error {
 	return nil
 }
 
-func (cihc *ControlImplementationHistoryCreate) sqlSave(ctx context.Context) (*ControlImplementationHistory, error) {
-	if err := cihc.check(); err != nil {
+func (_c *ControlImplementationHistoryCreate) sqlSave(ctx context.Context) (*ControlImplementationHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cihc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cihc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -359,82 +359,82 @@ func (cihc *ControlImplementationHistoryCreate) sqlSave(ctx context.Context) (*C
 			return nil, fmt.Errorf("unexpected ControlImplementationHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	cihc.mutation.id = &_node.ID
-	cihc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cihc *ControlImplementationHistoryCreate) createSpec() (*ControlImplementationHistory, *sqlgraph.CreateSpec) {
+func (_c *ControlImplementationHistoryCreate) createSpec() (*ControlImplementationHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ControlImplementationHistory{config: cihc.config}
+		_node = &ControlImplementationHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlimplementationhistory.Table, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = cihc.schemaConfig.ControlImplementationHistory
-	if id, ok := cihc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ControlImplementationHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cihc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(controlimplementationhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := cihc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(controlimplementationhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := cihc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(controlimplementationhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := cihc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cihc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cihc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := cihc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cihc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cihc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cihc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cihc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(controlimplementationhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := cihc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := cihc.mutation.ImplementationDate(); ok {
+	if value, ok := _c.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)
 		_node.ImplementationDate = value
 	}
-	if value, ok := cihc.mutation.Verified(); ok {
+	if value, ok := _c.mutation.Verified(); ok {
 		_spec.SetField(controlimplementationhistory.FieldVerified, field.TypeBool, value)
 		_node.Verified = value
 	}
-	if value, ok := cihc.mutation.VerificationDate(); ok {
+	if value, ok := _c.mutation.VerificationDate(); ok {
 		_spec.SetField(controlimplementationhistory.FieldVerificationDate, field.TypeTime, value)
 		_node.VerificationDate = value
 	}
-	if value, ok := cihc.mutation.Details(); ok {
+	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(controlimplementationhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
@@ -449,16 +449,16 @@ type ControlImplementationHistoryCreateBulk struct {
 }
 
 // Save creates the ControlImplementationHistory entities in the database.
-func (cihcb *ControlImplementationHistoryCreateBulk) Save(ctx context.Context) ([]*ControlImplementationHistory, error) {
-	if cihcb.err != nil {
-		return nil, cihcb.err
+func (_c *ControlImplementationHistoryCreateBulk) Save(ctx context.Context) ([]*ControlImplementationHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(cihcb.builders))
-	nodes := make([]*ControlImplementationHistory, len(cihcb.builders))
-	mutators := make([]Mutator, len(cihcb.builders))
-	for i := range cihcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ControlImplementationHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cihcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ControlImplementationHistoryMutation)
@@ -472,11 +472,11 @@ func (cihcb *ControlImplementationHistoryCreateBulk) Save(ctx context.Context) (
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cihcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cihcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -496,7 +496,7 @@ func (cihcb *ControlImplementationHistoryCreateBulk) Save(ctx context.Context) (
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cihcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -504,8 +504,8 @@ func (cihcb *ControlImplementationHistoryCreateBulk) Save(ctx context.Context) (
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cihcb *ControlImplementationHistoryCreateBulk) SaveX(ctx context.Context) []*ControlImplementationHistory {
-	v, err := cihcb.Save(ctx)
+func (_c *ControlImplementationHistoryCreateBulk) SaveX(ctx context.Context) []*ControlImplementationHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -513,14 +513,14 @@ func (cihcb *ControlImplementationHistoryCreateBulk) SaveX(ctx context.Context) 
 }
 
 // Exec executes the query.
-func (cihcb *ControlImplementationHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := cihcb.Save(ctx)
+func (_c *ControlImplementationHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cihcb *ControlImplementationHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := cihcb.Exec(ctx); err != nil {
+func (_c *ControlImplementationHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

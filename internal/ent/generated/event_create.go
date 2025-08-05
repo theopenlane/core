@@ -33,317 +33,317 @@ type EventCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ec *EventCreate) SetCreatedAt(t time.Time) *EventCreate {
-	ec.mutation.SetCreatedAt(t)
-	return ec
+func (_c *EventCreate) SetCreatedAt(v time.Time) *EventCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ec *EventCreate) SetNillableCreatedAt(t *time.Time) *EventCreate {
-	if t != nil {
-		ec.SetCreatedAt(*t)
+func (_c *EventCreate) SetNillableCreatedAt(v *time.Time) *EventCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ec *EventCreate) SetUpdatedAt(t time.Time) *EventCreate {
-	ec.mutation.SetUpdatedAt(t)
-	return ec
+func (_c *EventCreate) SetUpdatedAt(v time.Time) *EventCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ec *EventCreate) SetNillableUpdatedAt(t *time.Time) *EventCreate {
-	if t != nil {
-		ec.SetUpdatedAt(*t)
+func (_c *EventCreate) SetNillableUpdatedAt(v *time.Time) *EventCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ec *EventCreate) SetCreatedBy(s string) *EventCreate {
-	ec.mutation.SetCreatedBy(s)
-	return ec
+func (_c *EventCreate) SetCreatedBy(v string) *EventCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ec *EventCreate) SetNillableCreatedBy(s *string) *EventCreate {
-	if s != nil {
-		ec.SetCreatedBy(*s)
+func (_c *EventCreate) SetNillableCreatedBy(v *string) *EventCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ec *EventCreate) SetUpdatedBy(s string) *EventCreate {
-	ec.mutation.SetUpdatedBy(s)
-	return ec
+func (_c *EventCreate) SetUpdatedBy(v string) *EventCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ec *EventCreate) SetNillableUpdatedBy(s *string) *EventCreate {
-	if s != nil {
-		ec.SetUpdatedBy(*s)
+func (_c *EventCreate) SetNillableUpdatedBy(v *string) *EventCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ec *EventCreate) SetTags(s []string) *EventCreate {
-	ec.mutation.SetTags(s)
-	return ec
+func (_c *EventCreate) SetTags(v []string) *EventCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetEventID sets the "event_id" field.
-func (ec *EventCreate) SetEventID(s string) *EventCreate {
-	ec.mutation.SetEventID(s)
-	return ec
+func (_c *EventCreate) SetEventID(v string) *EventCreate {
+	_c.mutation.SetEventID(v)
+	return _c
 }
 
 // SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (ec *EventCreate) SetNillableEventID(s *string) *EventCreate {
-	if s != nil {
-		ec.SetEventID(*s)
+func (_c *EventCreate) SetNillableEventID(v *string) *EventCreate {
+	if v != nil {
+		_c.SetEventID(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetCorrelationID sets the "correlation_id" field.
-func (ec *EventCreate) SetCorrelationID(s string) *EventCreate {
-	ec.mutation.SetCorrelationID(s)
-	return ec
+func (_c *EventCreate) SetCorrelationID(v string) *EventCreate {
+	_c.mutation.SetCorrelationID(v)
+	return _c
 }
 
 // SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
-func (ec *EventCreate) SetNillableCorrelationID(s *string) *EventCreate {
-	if s != nil {
-		ec.SetCorrelationID(*s)
+func (_c *EventCreate) SetNillableCorrelationID(v *string) *EventCreate {
+	if v != nil {
+		_c.SetCorrelationID(*v)
 	}
-	return ec
+	return _c
 }
 
 // SetEventType sets the "event_type" field.
-func (ec *EventCreate) SetEventType(s string) *EventCreate {
-	ec.mutation.SetEventType(s)
-	return ec
+func (_c *EventCreate) SetEventType(v string) *EventCreate {
+	_c.mutation.SetEventType(v)
+	return _c
 }
 
 // SetMetadata sets the "metadata" field.
-func (ec *EventCreate) SetMetadata(m map[string]interface{}) *EventCreate {
-	ec.mutation.SetMetadata(m)
-	return ec
+func (_c *EventCreate) SetMetadata(v map[string]interface{}) *EventCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ec *EventCreate) SetID(s string) *EventCreate {
-	ec.mutation.SetID(s)
-	return ec
+func (_c *EventCreate) SetID(v string) *EventCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ec *EventCreate) SetNillableID(s *string) *EventCreate {
-	if s != nil {
-		ec.SetID(*s)
+func (_c *EventCreate) SetNillableID(v *string) *EventCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ec
+	return _c
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (ec *EventCreate) AddUserIDs(ids ...string) *EventCreate {
-	ec.mutation.AddUserIDs(ids...)
-	return ec
+func (_c *EventCreate) AddUserIDs(ids ...string) *EventCreate {
+	_c.mutation.AddUserIDs(ids...)
+	return _c
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (ec *EventCreate) AddUsers(u ...*User) *EventCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *EventCreate) AddUsers(v ...*User) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddUserIDs(ids...)
+	return _c.AddUserIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (ec *EventCreate) AddGroupIDs(ids ...string) *EventCreate {
-	ec.mutation.AddGroupIDs(ids...)
-	return ec
+func (_c *EventCreate) AddGroupIDs(ids ...string) *EventCreate {
+	_c.mutation.AddGroupIDs(ids...)
+	return _c
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (ec *EventCreate) AddGroups(g ...*Group) *EventCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *EventCreate) AddGroups(v ...*Group) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddGroupIDs(ids...)
+	return _c.AddGroupIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (ec *EventCreate) AddIntegrationIDs(ids ...string) *EventCreate {
-	ec.mutation.AddIntegrationIDs(ids...)
-	return ec
+func (_c *EventCreate) AddIntegrationIDs(ids ...string) *EventCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
 }
 
 // AddIntegrations adds the "integrations" edges to the Integration entity.
-func (ec *EventCreate) AddIntegrations(i ...*Integration) *EventCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *EventCreate) AddIntegrations(v ...*Integration) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddIntegrationIDs(ids...)
+	return _c.AddIntegrationIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
-func (ec *EventCreate) AddOrganizationIDs(ids ...string) *EventCreate {
-	ec.mutation.AddOrganizationIDs(ids...)
-	return ec
+func (_c *EventCreate) AddOrganizationIDs(ids ...string) *EventCreate {
+	_c.mutation.AddOrganizationIDs(ids...)
+	return _c
 }
 
 // AddOrganizations adds the "organizations" edges to the Organization entity.
-func (ec *EventCreate) AddOrganizations(o ...*Organization) *EventCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *EventCreate) AddOrganizations(v ...*Organization) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddOrganizationIDs(ids...)
+	return _c.AddOrganizationIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (ec *EventCreate) AddInviteIDs(ids ...string) *EventCreate {
-	ec.mutation.AddInviteIDs(ids...)
-	return ec
+func (_c *EventCreate) AddInviteIDs(ids ...string) *EventCreate {
+	_c.mutation.AddInviteIDs(ids...)
+	return _c
 }
 
 // AddInvites adds the "invites" edges to the Invite entity.
-func (ec *EventCreate) AddInvites(i ...*Invite) *EventCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *EventCreate) AddInvites(v ...*Invite) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddInviteIDs(ids...)
+	return _c.AddInviteIDs(ids...)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
-func (ec *EventCreate) AddPersonalAccessTokenIDs(ids ...string) *EventCreate {
-	ec.mutation.AddPersonalAccessTokenIDs(ids...)
-	return ec
+func (_c *EventCreate) AddPersonalAccessTokenIDs(ids ...string) *EventCreate {
+	_c.mutation.AddPersonalAccessTokenIDs(ids...)
+	return _c
 }
 
 // AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
-func (ec *EventCreate) AddPersonalAccessTokens(p ...*PersonalAccessToken) *EventCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *EventCreate) AddPersonalAccessTokens(v ...*PersonalAccessToken) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddPersonalAccessTokenIDs(ids...)
+	return _c.AddPersonalAccessTokenIDs(ids...)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (ec *EventCreate) AddSecretIDs(ids ...string) *EventCreate {
-	ec.mutation.AddSecretIDs(ids...)
-	return ec
+func (_c *EventCreate) AddSecretIDs(ids ...string) *EventCreate {
+	_c.mutation.AddSecretIDs(ids...)
+	return _c
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (ec *EventCreate) AddSecrets(h ...*Hush) *EventCreate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_c *EventCreate) AddSecrets(v ...*Hush) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddSecretIDs(ids...)
+	return _c.AddSecretIDs(ids...)
 }
 
 // AddOrgMembershipIDs adds the "org_memberships" edge to the OrgMembership entity by IDs.
-func (ec *EventCreate) AddOrgMembershipIDs(ids ...string) *EventCreate {
-	ec.mutation.AddOrgMembershipIDs(ids...)
-	return ec
+func (_c *EventCreate) AddOrgMembershipIDs(ids ...string) *EventCreate {
+	_c.mutation.AddOrgMembershipIDs(ids...)
+	return _c
 }
 
 // AddOrgMemberships adds the "org_memberships" edges to the OrgMembership entity.
-func (ec *EventCreate) AddOrgMemberships(o ...*OrgMembership) *EventCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *EventCreate) AddOrgMemberships(v ...*OrgMembership) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddOrgMembershipIDs(ids...)
+	return _c.AddOrgMembershipIDs(ids...)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
-func (ec *EventCreate) AddGroupMembershipIDs(ids ...string) *EventCreate {
-	ec.mutation.AddGroupMembershipIDs(ids...)
-	return ec
+func (_c *EventCreate) AddGroupMembershipIDs(ids ...string) *EventCreate {
+	_c.mutation.AddGroupMembershipIDs(ids...)
+	return _c
 }
 
 // AddGroupMemberships adds the "group_memberships" edges to the GroupMembership entity.
-func (ec *EventCreate) AddGroupMemberships(g ...*GroupMembership) *EventCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *EventCreate) AddGroupMemberships(v ...*GroupMembership) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddGroupMembershipIDs(ids...)
+	return _c.AddGroupMembershipIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
-func (ec *EventCreate) AddSubscriberIDs(ids ...string) *EventCreate {
-	ec.mutation.AddSubscriberIDs(ids...)
-	return ec
+func (_c *EventCreate) AddSubscriberIDs(ids ...string) *EventCreate {
+	_c.mutation.AddSubscriberIDs(ids...)
+	return _c
 }
 
 // AddSubscribers adds the "subscribers" edges to the Subscriber entity.
-func (ec *EventCreate) AddSubscribers(s ...*Subscriber) *EventCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *EventCreate) AddSubscribers(v ...*Subscriber) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddSubscriberIDs(ids...)
+	return _c.AddSubscriberIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (ec *EventCreate) AddFileIDs(ids ...string) *EventCreate {
-	ec.mutation.AddFileIDs(ids...)
-	return ec
+func (_c *EventCreate) AddFileIDs(ids ...string) *EventCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (ec *EventCreate) AddFiles(f ...*File) *EventCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *EventCreate) AddFiles(v ...*File) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
-func (ec *EventCreate) AddOrgSubscriptionIDs(ids ...string) *EventCreate {
-	ec.mutation.AddOrgSubscriptionIDs(ids...)
-	return ec
+func (_c *EventCreate) AddOrgSubscriptionIDs(ids ...string) *EventCreate {
+	_c.mutation.AddOrgSubscriptionIDs(ids...)
+	return _c
 }
 
 // AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
-func (ec *EventCreate) AddOrgSubscriptions(o ...*OrgSubscription) *EventCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *EventCreate) AddOrgSubscriptions(v ...*OrgSubscription) *EventCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ec.AddOrgSubscriptionIDs(ids...)
+	return _c.AddOrgSubscriptionIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
-func (ec *EventCreate) Mutation() *EventMutation {
-	return ec.mutation
+func (_c *EventCreate) Mutation() *EventMutation {
+	return _c.mutation
 }
 
 // Save creates the Event in the database.
-func (ec *EventCreate) Save(ctx context.Context) (*Event, error) {
-	if err := ec.defaults(); err != nil {
+func (_c *EventCreate) Save(ctx context.Context) (*Event, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ec.sqlSave, ec.mutation, ec.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ec *EventCreate) SaveX(ctx context.Context) *Event {
-	v, err := ec.Save(ctx)
+func (_c *EventCreate) SaveX(ctx context.Context) *Event {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -351,62 +351,62 @@ func (ec *EventCreate) SaveX(ctx context.Context) *Event {
 }
 
 // Exec executes the query.
-func (ec *EventCreate) Exec(ctx context.Context) error {
-	_, err := ec.Save(ctx)
+func (_c *EventCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ec *EventCreate) ExecX(ctx context.Context) {
-	if err := ec.Exec(ctx); err != nil {
+func (_c *EventCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ec *EventCreate) defaults() error {
-	if _, ok := ec.mutation.CreatedAt(); !ok {
+func (_c *EventCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if event.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized event.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := event.DefaultCreatedAt()
-		ec.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ec.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if event.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized event.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := event.DefaultUpdatedAt()
-		ec.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ec.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := event.DefaultTags
-		ec.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ec.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if event.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized event.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := event.DefaultID()
-		ec.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ec *EventCreate) check() error {
-	if _, ok := ec.mutation.EventType(); !ok {
+func (_c *EventCreate) check() error {
+	if _, ok := _c.mutation.EventType(); !ok {
 		return &ValidationError{Name: "event_type", err: errors.New(`generated: missing required field "Event.event_type"`)}
 	}
 	return nil
 }
 
-func (ec *EventCreate) sqlSave(ctx context.Context) (*Event, error) {
-	if err := ec.check(); err != nil {
+func (_c *EventCreate) sqlSave(ctx context.Context) (*Event, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ec.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ec.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -419,58 +419,58 @@ func (ec *EventCreate) sqlSave(ctx context.Context) (*Event, error) {
 			return nil, fmt.Errorf("unexpected Event.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ec.mutation.id = &_node.ID
-	ec.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
+func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Event{config: ec.config}
+		_node = &Event{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(event.Table, sqlgraph.NewFieldSpec(event.FieldID, field.TypeString))
 	)
-	_spec.Schema = ec.schemaConfig.Event
-	if id, ok := ec.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Event
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ec.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(event.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ec.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(event.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ec.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(event.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ec.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(event.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ec.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(event.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ec.mutation.EventID(); ok {
+	if value, ok := _c.mutation.EventID(); ok {
 		_spec.SetField(event.FieldEventID, field.TypeString, value)
 		_node.EventID = value
 	}
-	if value, ok := ec.mutation.CorrelationID(); ok {
+	if value, ok := _c.mutation.CorrelationID(); ok {
 		_spec.SetField(event.FieldCorrelationID, field.TypeString, value)
 		_node.CorrelationID = value
 	}
-	if value, ok := ec.mutation.EventType(); ok {
+	if value, ok := _c.mutation.EventType(); ok {
 		_spec.SetField(event.FieldEventType, field.TypeString, value)
 		_node.EventType = value
 	}
-	if value, ok := ec.mutation.Metadata(); ok {
+	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(event.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
-	if nodes := ec.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -481,13 +481,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.UserEvents
+		edge.Schema = _c.schemaConfig.UserEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -498,13 +498,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.GroupEvents
+		edge.Schema = _c.schemaConfig.GroupEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.IntegrationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -515,13 +515,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.IntegrationEvents
+		edge.Schema = _c.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrganizationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -532,13 +532,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.OrganizationEvents
+		edge.Schema = _c.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.InvitesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -549,13 +549,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.InviteEvents
+		edge.Schema = _c.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -566,13 +566,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _c.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -583,13 +583,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.HushEvents
+		edge.Schema = _c.schemaConfig.HushEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrgMembershipsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -600,13 +600,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.OrgMembershipEvents
+		edge.Schema = _c.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.GroupMembershipsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupMembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -617,13 +617,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.GroupMembershipEvents
+		edge.Schema = _c.schemaConfig.GroupMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.SubscribersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -634,13 +634,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.SubscriberEvents
+		edge.Schema = _c.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -651,13 +651,13 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.FileEvents
+		edge.Schema = _c.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ec.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -668,7 +668,7 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ec.schemaConfig.OrgSubscriptionEvents
+		edge.Schema = _c.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -685,16 +685,16 @@ type EventCreateBulk struct {
 }
 
 // Save creates the Event entities in the database.
-func (ecb *EventCreateBulk) Save(ctx context.Context) ([]*Event, error) {
-	if ecb.err != nil {
-		return nil, ecb.err
+func (_c *EventCreateBulk) Save(ctx context.Context) ([]*Event, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ecb.builders))
-	nodes := make([]*Event, len(ecb.builders))
-	mutators := make([]Mutator, len(ecb.builders))
-	for i := range ecb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Event, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ecb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*EventMutation)
@@ -708,11 +708,11 @@ func (ecb *EventCreateBulk) Save(ctx context.Context) ([]*Event, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ecb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ecb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -732,7 +732,7 @@ func (ecb *EventCreateBulk) Save(ctx context.Context) ([]*Event, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ecb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -740,8 +740,8 @@ func (ecb *EventCreateBulk) Save(ctx context.Context) ([]*Event, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ecb *EventCreateBulk) SaveX(ctx context.Context) []*Event {
-	v, err := ecb.Save(ctx)
+func (_c *EventCreateBulk) SaveX(ctx context.Context) []*Event {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -749,14 +749,14 @@ func (ecb *EventCreateBulk) SaveX(ctx context.Context) []*Event {
 }
 
 // Exec executes the query.
-func (ecb *EventCreateBulk) Exec(ctx context.Context) error {
-	_, err := ecb.Save(ctx)
+func (_c *EventCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ecb *EventCreateBulk) ExecX(ctx context.Context) {
-	if err := ecb.Exec(ctx); err != nil {
+func (_c *EventCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

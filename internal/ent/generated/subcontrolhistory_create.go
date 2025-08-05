@@ -24,401 +24,401 @@ type SubcontrolHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (shc *SubcontrolHistoryCreate) SetHistoryTime(t time.Time) *SubcontrolHistoryCreate {
-	shc.mutation.SetHistoryTime(t)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetHistoryTime(v time.Time) *SubcontrolHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableHistoryTime(t *time.Time) *SubcontrolHistoryCreate {
-	if t != nil {
-		shc.SetHistoryTime(*t)
+func (_c *SubcontrolHistoryCreate) SetNillableHistoryTime(v *time.Time) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (shc *SubcontrolHistoryCreate) SetRef(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetRef(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetRef(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableRef(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetRef(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableRef(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (shc *SubcontrolHistoryCreate) SetOperation(ht history.OpType) *SubcontrolHistoryCreate {
-	shc.mutation.SetOperation(ht)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetOperation(v history.OpType) *SubcontrolHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (shc *SubcontrolHistoryCreate) SetCreatedAt(t time.Time) *SubcontrolHistoryCreate {
-	shc.mutation.SetCreatedAt(t)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetCreatedAt(v time.Time) *SubcontrolHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableCreatedAt(t *time.Time) *SubcontrolHistoryCreate {
-	if t != nil {
-		shc.SetCreatedAt(*t)
+func (_c *SubcontrolHistoryCreate) SetNillableCreatedAt(v *time.Time) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shc *SubcontrolHistoryCreate) SetUpdatedAt(t time.Time) *SubcontrolHistoryCreate {
-	shc.mutation.SetUpdatedAt(t)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetUpdatedAt(v time.Time) *SubcontrolHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableUpdatedAt(t *time.Time) *SubcontrolHistoryCreate {
-	if t != nil {
-		shc.SetUpdatedAt(*t)
+func (_c *SubcontrolHistoryCreate) SetNillableUpdatedAt(v *time.Time) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (shc *SubcontrolHistoryCreate) SetCreatedBy(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetCreatedBy(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetCreatedBy(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableCreatedBy(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetCreatedBy(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableCreatedBy(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shc *SubcontrolHistoryCreate) SetUpdatedBy(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetUpdatedBy(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetUpdatedBy(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableUpdatedBy(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetUpdatedBy(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableUpdatedBy(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shc *SubcontrolHistoryCreate) SetDeletedAt(t time.Time) *SubcontrolHistoryCreate {
-	shc.mutation.SetDeletedAt(t)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetDeletedAt(v time.Time) *SubcontrolHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableDeletedAt(t *time.Time) *SubcontrolHistoryCreate {
-	if t != nil {
-		shc.SetDeletedAt(*t)
+func (_c *SubcontrolHistoryCreate) SetNillableDeletedAt(v *time.Time) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shc *SubcontrolHistoryCreate) SetDeletedBy(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetDeletedBy(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetDeletedBy(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableDeletedBy(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetDeletedBy(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableDeletedBy(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (shc *SubcontrolHistoryCreate) SetDisplayID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetDisplayID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetDisplayID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (shc *SubcontrolHistoryCreate) SetTags(s []string) *SubcontrolHistoryCreate {
-	shc.mutation.SetTags(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetTags(v []string) *SubcontrolHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (shc *SubcontrolHistoryCreate) SetDescription(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetDescription(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetDescription(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableDescription(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetDescription(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableDescription(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetReferenceID sets the "reference_id" field.
-func (shc *SubcontrolHistoryCreate) SetReferenceID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetReferenceID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetReferenceID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetReferenceID(v)
+	return _c
 }
 
 // SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableReferenceID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetReferenceID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableReferenceID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetReferenceID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetAuditorReferenceID sets the "auditor_reference_id" field.
-func (shc *SubcontrolHistoryCreate) SetAuditorReferenceID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetAuditorReferenceID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetAuditorReferenceID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetAuditorReferenceID(v)
+	return _c
 }
 
 // SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableAuditorReferenceID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetAuditorReferenceID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableAuditorReferenceID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetAuditorReferenceID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (shc *SubcontrolHistoryCreate) SetStatus(es enums.ControlStatus) *SubcontrolHistoryCreate {
-	shc.mutation.SetStatus(es)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetStatus(v enums.ControlStatus) *SubcontrolHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableStatus(es *enums.ControlStatus) *SubcontrolHistoryCreate {
-	if es != nil {
-		shc.SetStatus(*es)
+func (_c *SubcontrolHistoryCreate) SetNillableStatus(v *enums.ControlStatus) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetSource sets the "source" field.
-func (shc *SubcontrolHistoryCreate) SetSource(es enums.ControlSource) *SubcontrolHistoryCreate {
-	shc.mutation.SetSource(es)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetSource(v enums.ControlSource) *SubcontrolHistoryCreate {
+	_c.mutation.SetSource(v)
+	return _c
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableSource(es *enums.ControlSource) *SubcontrolHistoryCreate {
-	if es != nil {
-		shc.SetSource(*es)
+func (_c *SubcontrolHistoryCreate) SetNillableSource(v *enums.ControlSource) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSource(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetReferenceFramework sets the "reference_framework" field.
-func (shc *SubcontrolHistoryCreate) SetReferenceFramework(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetReferenceFramework(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetReferenceFramework(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetReferenceFramework(v)
+	return _c
 }
 
 // SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableReferenceFramework(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetReferenceFramework(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableReferenceFramework(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetReferenceFramework(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetControlType sets the "control_type" field.
-func (shc *SubcontrolHistoryCreate) SetControlType(et enums.ControlType) *SubcontrolHistoryCreate {
-	shc.mutation.SetControlType(et)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetControlType(v enums.ControlType) *SubcontrolHistoryCreate {
+	_c.mutation.SetControlType(v)
+	return _c
 }
 
 // SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableControlType(et *enums.ControlType) *SubcontrolHistoryCreate {
-	if et != nil {
-		shc.SetControlType(*et)
+func (_c *SubcontrolHistoryCreate) SetNillableControlType(v *enums.ControlType) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetControlType(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetCategory sets the "category" field.
-func (shc *SubcontrolHistoryCreate) SetCategory(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetCategory(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetCategory(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetCategory(v)
+	return _c
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableCategory(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetCategory(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableCategory(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetCategory(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetCategoryID sets the "category_id" field.
-func (shc *SubcontrolHistoryCreate) SetCategoryID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetCategoryID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetCategoryID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetCategoryID(v)
+	return _c
 }
 
 // SetNillableCategoryID sets the "category_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableCategoryID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetCategoryID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableCategoryID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetCategoryID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetSubcategory sets the "subcategory" field.
-func (shc *SubcontrolHistoryCreate) SetSubcategory(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetSubcategory(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetSubcategory(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSubcategory(v)
+	return _c
 }
 
 // SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableSubcategory(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetSubcategory(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableSubcategory(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSubcategory(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetMappedCategories sets the "mapped_categories" field.
-func (shc *SubcontrolHistoryCreate) SetMappedCategories(s []string) *SubcontrolHistoryCreate {
-	shc.mutation.SetMappedCategories(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetMappedCategories(v []string) *SubcontrolHistoryCreate {
+	_c.mutation.SetMappedCategories(v)
+	return _c
 }
 
 // SetAssessmentObjectives sets the "assessment_objectives" field.
-func (shc *SubcontrolHistoryCreate) SetAssessmentObjectives(mo []models.AssessmentObjective) *SubcontrolHistoryCreate {
-	shc.mutation.SetAssessmentObjectives(mo)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetAssessmentObjectives(v []models.AssessmentObjective) *SubcontrolHistoryCreate {
+	_c.mutation.SetAssessmentObjectives(v)
+	return _c
 }
 
 // SetAssessmentMethods sets the "assessment_methods" field.
-func (shc *SubcontrolHistoryCreate) SetAssessmentMethods(mm []models.AssessmentMethod) *SubcontrolHistoryCreate {
-	shc.mutation.SetAssessmentMethods(mm)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetAssessmentMethods(v []models.AssessmentMethod) *SubcontrolHistoryCreate {
+	_c.mutation.SetAssessmentMethods(v)
+	return _c
 }
 
 // SetControlQuestions sets the "control_questions" field.
-func (shc *SubcontrolHistoryCreate) SetControlQuestions(s []string) *SubcontrolHistoryCreate {
-	shc.mutation.SetControlQuestions(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetControlQuestions(v []string) *SubcontrolHistoryCreate {
+	_c.mutation.SetControlQuestions(v)
+	return _c
 }
 
 // SetImplementationGuidance sets the "implementation_guidance" field.
-func (shc *SubcontrolHistoryCreate) SetImplementationGuidance(mg []models.ImplementationGuidance) *SubcontrolHistoryCreate {
-	shc.mutation.SetImplementationGuidance(mg)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetImplementationGuidance(v []models.ImplementationGuidance) *SubcontrolHistoryCreate {
+	_c.mutation.SetImplementationGuidance(v)
+	return _c
 }
 
 // SetExampleEvidence sets the "example_evidence" field.
-func (shc *SubcontrolHistoryCreate) SetExampleEvidence(me []models.ExampleEvidence) *SubcontrolHistoryCreate {
-	shc.mutation.SetExampleEvidence(me)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetExampleEvidence(v []models.ExampleEvidence) *SubcontrolHistoryCreate {
+	_c.mutation.SetExampleEvidence(v)
+	return _c
 }
 
 // SetReferences sets the "references" field.
-func (shc *SubcontrolHistoryCreate) SetReferences(m []models.Reference) *SubcontrolHistoryCreate {
-	shc.mutation.SetReferences(m)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetReferences(v []models.Reference) *SubcontrolHistoryCreate {
+	_c.mutation.SetReferences(v)
+	return _c
 }
 
 // SetControlOwnerID sets the "control_owner_id" field.
-func (shc *SubcontrolHistoryCreate) SetControlOwnerID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetControlOwnerID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetControlOwnerID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetControlOwnerID(v)
+	return _c
 }
 
 // SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableControlOwnerID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetControlOwnerID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableControlOwnerID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetControlOwnerID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (shc *SubcontrolHistoryCreate) SetDelegateID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetDelegateID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetDelegateID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetDelegateID(v)
+	return _c
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableDelegateID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetDelegateID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableDelegateID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetDelegateID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shc *SubcontrolHistoryCreate) SetOwnerID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetOwnerID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetOwnerID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableOwnerID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetOwnerID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableOwnerID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetRefCode sets the "ref_code" field.
-func (shc *SubcontrolHistoryCreate) SetRefCode(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetRefCode(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetRefCode(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetRefCode(v)
+	return _c
 }
 
 // SetControlID sets the "control_id" field.
-func (shc *SubcontrolHistoryCreate) SetControlID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetControlID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetControlID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetControlID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (shc *SubcontrolHistoryCreate) SetID(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetID(s)
-	return shc
+func (_c *SubcontrolHistoryCreate) SetID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableID(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetID(*s)
+func (_c *SubcontrolHistoryCreate) SetNillableID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return shc
+	return _c
 }
 
 // Mutation returns the SubcontrolHistoryMutation object of the builder.
-func (shc *SubcontrolHistoryCreate) Mutation() *SubcontrolHistoryMutation {
-	return shc.mutation
+func (_c *SubcontrolHistoryCreate) Mutation() *SubcontrolHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the SubcontrolHistory in the database.
-func (shc *SubcontrolHistoryCreate) Save(ctx context.Context) (*SubcontrolHistory, error) {
-	if err := shc.defaults(); err != nil {
+func (_c *SubcontrolHistoryCreate) Save(ctx context.Context) (*SubcontrolHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (shc *SubcontrolHistoryCreate) SaveX(ctx context.Context) *SubcontrolHistory {
-	v, err := shc.Save(ctx)
+func (_c *SubcontrolHistoryCreate) SaveX(ctx context.Context) *SubcontrolHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -426,113 +426,113 @@ func (shc *SubcontrolHistoryCreate) SaveX(ctx context.Context) *SubcontrolHistor
 }
 
 // Exec executes the query.
-func (shc *SubcontrolHistoryCreate) Exec(ctx context.Context) error {
-	_, err := shc.Save(ctx)
+func (_c *SubcontrolHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shc *SubcontrolHistoryCreate) ExecX(ctx context.Context) {
-	if err := shc.Exec(ctx); err != nil {
+func (_c *SubcontrolHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *SubcontrolHistoryCreate) defaults() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *SubcontrolHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if subcontrolhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := subcontrolhistory.DefaultHistoryTime()
-		shc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := shc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if subcontrolhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := subcontrolhistory.DefaultCreatedAt()
-		shc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if subcontrolhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subcontrolhistory.DefaultUpdatedAt()
-		shc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := subcontrolhistory.DefaultTags
-		shc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := shc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := subcontrolhistory.DefaultStatus
-		shc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := shc.mutation.Source(); !ok {
+	if _, ok := _c.mutation.Source(); !ok {
 		v := subcontrolhistory.DefaultSource
-		shc.mutation.SetSource(v)
+		_c.mutation.SetSource(v)
 	}
-	if _, ok := shc.mutation.ControlType(); !ok {
+	if _, ok := _c.mutation.ControlType(); !ok {
 		v := subcontrolhistory.DefaultControlType
-		shc.mutation.SetControlType(v)
+		_c.mutation.SetControlType(v)
 	}
-	if _, ok := shc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if subcontrolhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subcontrolhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := subcontrolhistory.DefaultID()
-		shc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shc *SubcontrolHistoryCreate) check() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *SubcontrolHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "SubcontrolHistory.history_time"`)}
 	}
-	if _, ok := shc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "SubcontrolHistory.operation"`)}
 	}
-	if v, ok := shc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := subcontrolhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.DisplayID(); !ok {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "SubcontrolHistory.display_id"`)}
 	}
-	if v, ok := shc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := subcontrolhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := shc.mutation.Source(); ok {
+	if v, ok := _c.mutation.Source(); ok {
 		if err := subcontrolhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := shc.mutation.ControlType(); ok {
+	if v, ok := _c.mutation.ControlType(); ok {
 		if err := subcontrolhistory.ControlTypeValidator(v); err != nil {
 			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "SubcontrolHistory.control_type": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.RefCode(); !ok {
+	if _, ok := _c.mutation.RefCode(); !ok {
 		return &ValidationError{Name: "ref_code", err: errors.New(`generated: missing required field "SubcontrolHistory.ref_code"`)}
 	}
-	if _, ok := shc.mutation.ControlID(); !ok {
+	if _, ok := _c.mutation.ControlID(); !ok {
 		return &ValidationError{Name: "control_id", err: errors.New(`generated: missing required field "SubcontrolHistory.control_id"`)}
 	}
 	return nil
 }
 
-func (shc *SubcontrolHistoryCreate) sqlSave(ctx context.Context) (*SubcontrolHistory, error) {
-	if err := shc.check(); err != nil {
+func (_c *SubcontrolHistoryCreate) sqlSave(ctx context.Context) (*SubcontrolHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := shc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, shc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -545,150 +545,150 @@ func (shc *SubcontrolHistoryCreate) sqlSave(ctx context.Context) (*SubcontrolHis
 			return nil, fmt.Errorf("unexpected SubcontrolHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	shc.mutation.id = &_node.ID
-	shc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.CreateSpec) {
+func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &SubcontrolHistory{config: shc.config}
+		_node = &SubcontrolHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subcontrolhistory.Table, sqlgraph.NewFieldSpec(subcontrolhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = shc.schemaConfig.SubcontrolHistory
-	if id, ok := shc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.SubcontrolHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := shc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(subcontrolhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := shc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(subcontrolhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := shc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(subcontrolhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := shc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(subcontrolhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := shc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(subcontrolhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := shc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(subcontrolhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := shc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subcontrolhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := shc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subcontrolhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := shc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(subcontrolhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := shc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(subcontrolhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := shc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := shc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(subcontrolhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := shc.mutation.ReferenceID(); ok {
+	if value, ok := _c.mutation.ReferenceID(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceID, field.TypeString, value)
 		_node.ReferenceID = value
 	}
-	if value, ok := shc.mutation.AuditorReferenceID(); ok {
+	if value, ok := _c.mutation.AuditorReferenceID(); ok {
 		_spec.SetField(subcontrolhistory.FieldAuditorReferenceID, field.TypeString, value)
 		_node.AuditorReferenceID = value
 	}
-	if value, ok := shc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := shc.mutation.Source(); ok {
+	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if value, ok := shc.mutation.ReferenceFramework(); ok {
+	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)
 		_node.ReferenceFramework = &value
 	}
-	if value, ok := shc.mutation.ControlType(); ok {
+	if value, ok := _c.mutation.ControlType(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)
 		_node.ControlType = value
 	}
-	if value, ok := shc.mutation.Category(); ok {
+	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(subcontrolhistory.FieldCategory, field.TypeString, value)
 		_node.Category = value
 	}
-	if value, ok := shc.mutation.CategoryID(); ok {
+	if value, ok := _c.mutation.CategoryID(); ok {
 		_spec.SetField(subcontrolhistory.FieldCategoryID, field.TypeString, value)
 		_node.CategoryID = value
 	}
-	if value, ok := shc.mutation.Subcategory(); ok {
+	if value, ok := _c.mutation.Subcategory(); ok {
 		_spec.SetField(subcontrolhistory.FieldSubcategory, field.TypeString, value)
 		_node.Subcategory = value
 	}
-	if value, ok := shc.mutation.MappedCategories(); ok {
+	if value, ok := _c.mutation.MappedCategories(); ok {
 		_spec.SetField(subcontrolhistory.FieldMappedCategories, field.TypeJSON, value)
 		_node.MappedCategories = value
 	}
-	if value, ok := shc.mutation.AssessmentObjectives(); ok {
+	if value, ok := _c.mutation.AssessmentObjectives(); ok {
 		_spec.SetField(subcontrolhistory.FieldAssessmentObjectives, field.TypeJSON, value)
 		_node.AssessmentObjectives = value
 	}
-	if value, ok := shc.mutation.AssessmentMethods(); ok {
+	if value, ok := _c.mutation.AssessmentMethods(); ok {
 		_spec.SetField(subcontrolhistory.FieldAssessmentMethods, field.TypeJSON, value)
 		_node.AssessmentMethods = value
 	}
-	if value, ok := shc.mutation.ControlQuestions(); ok {
+	if value, ok := _c.mutation.ControlQuestions(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlQuestions, field.TypeJSON, value)
 		_node.ControlQuestions = value
 	}
-	if value, ok := shc.mutation.ImplementationGuidance(); ok {
+	if value, ok := _c.mutation.ImplementationGuidance(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationGuidance, field.TypeJSON, value)
 		_node.ImplementationGuidance = value
 	}
-	if value, ok := shc.mutation.ExampleEvidence(); ok {
+	if value, ok := _c.mutation.ExampleEvidence(); ok {
 		_spec.SetField(subcontrolhistory.FieldExampleEvidence, field.TypeJSON, value)
 		_node.ExampleEvidence = value
 	}
-	if value, ok := shc.mutation.References(); ok {
+	if value, ok := _c.mutation.References(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferences, field.TypeJSON, value)
 		_node.References = value
 	}
-	if value, ok := shc.mutation.ControlOwnerID(); ok {
+	if value, ok := _c.mutation.ControlOwnerID(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlOwnerID, field.TypeString, value)
 		_node.ControlOwnerID = &value
 	}
-	if value, ok := shc.mutation.DelegateID(); ok {
+	if value, ok := _c.mutation.DelegateID(); ok {
 		_spec.SetField(subcontrolhistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
 	}
-	if value, ok := shc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := shc.mutation.RefCode(); ok {
+	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
 	}
-	if value, ok := shc.mutation.ControlID(); ok {
+	if value, ok := _c.mutation.ControlID(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlID, field.TypeString, value)
 		_node.ControlID = value
 	}
@@ -703,16 +703,16 @@ type SubcontrolHistoryCreateBulk struct {
 }
 
 // Save creates the SubcontrolHistory entities in the database.
-func (shcb *SubcontrolHistoryCreateBulk) Save(ctx context.Context) ([]*SubcontrolHistory, error) {
-	if shcb.err != nil {
-		return nil, shcb.err
+func (_c *SubcontrolHistoryCreateBulk) Save(ctx context.Context) ([]*SubcontrolHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(shcb.builders))
-	nodes := make([]*SubcontrolHistory, len(shcb.builders))
-	mutators := make([]Mutator, len(shcb.builders))
-	for i := range shcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*SubcontrolHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := shcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SubcontrolHistoryMutation)
@@ -726,11 +726,11 @@ func (shcb *SubcontrolHistoryCreateBulk) Save(ctx context.Context) ([]*Subcontro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, shcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, shcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -750,7 +750,7 @@ func (shcb *SubcontrolHistoryCreateBulk) Save(ctx context.Context) ([]*Subcontro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, shcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -758,8 +758,8 @@ func (shcb *SubcontrolHistoryCreateBulk) Save(ctx context.Context) ([]*Subcontro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shcb *SubcontrolHistoryCreateBulk) SaveX(ctx context.Context) []*SubcontrolHistory {
-	v, err := shcb.Save(ctx)
+func (_c *SubcontrolHistoryCreateBulk) SaveX(ctx context.Context) []*SubcontrolHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -767,14 +767,14 @@ func (shcb *SubcontrolHistoryCreateBulk) SaveX(ctx context.Context) []*Subcontro
 }
 
 // Exec executes the query.
-func (shcb *SubcontrolHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := shcb.Save(ctx)
+func (_c *SubcontrolHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shcb *SubcontrolHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := shcb.Exec(ctx); err != nil {
+func (_c *SubcontrolHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

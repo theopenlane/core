@@ -22,58 +22,58 @@ type FileHistoryDelete struct {
 }
 
 // Where appends a list predicates to the FileHistoryDelete builder.
-func (fhd *FileHistoryDelete) Where(ps ...predicate.FileHistory) *FileHistoryDelete {
-	fhd.mutation.Where(ps...)
-	return fhd
+func (_d *FileHistoryDelete) Where(ps ...predicate.FileHistory) *FileHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (fhd *FileHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, fhd.sqlExec, fhd.mutation, fhd.hooks)
+func (_d *FileHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhd *FileHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := fhd.Exec(ctx)
+func (_d *FileHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (fhd *FileHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *FileHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(filehistory.Table, sqlgraph.NewFieldSpec(filehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = fhd.schemaConfig.FileHistory
-	ctx = internal.NewSchemaConfigContext(ctx, fhd.schemaConfig)
-	if ps := fhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.FileHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, fhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	fhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // FileHistoryDeleteOne is the builder for deleting a single FileHistory entity.
 type FileHistoryDeleteOne struct {
-	fhd *FileHistoryDelete
+	_d *FileHistoryDelete
 }
 
 // Where appends a list predicates to the FileHistoryDelete builder.
-func (fhdo *FileHistoryDeleteOne) Where(ps ...predicate.FileHistory) *FileHistoryDeleteOne {
-	fhdo.fhd.mutation.Where(ps...)
-	return fhdo
+func (_d *FileHistoryDeleteOne) Where(ps ...predicate.FileHistory) *FileHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (fhdo *FileHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := fhdo.fhd.Exec(ctx)
+func (_d *FileHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (fhdo *FileHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhdo *FileHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := fhdo.Exec(ctx); err != nil {
+func (_d *FileHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

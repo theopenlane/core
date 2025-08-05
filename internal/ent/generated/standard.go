@@ -129,7 +129,7 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Standard fields.
-func (s *Standard) assignValues(columns []string, values []any) error {
+func (_m *Standard) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -139,49 +139,49 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				s.ID = value.String
+				_m.ID = value.String
 			}
 		case standard.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case standard.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case standard.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case standard.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case standard.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				s.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case standard.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case standard.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -189,61 +189,61 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				s.Revision = value.String
+				_m.Revision = value.String
 			}
 		case standard.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				s.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case standard.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
-				s.SystemOwned = value.Bool
+				_m.SystemOwned = value.Bool
 			}
 		case standard.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				s.Name = value.String
+				_m.Name = value.String
 			}
 		case standard.FieldShortName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field short_name", values[i])
 			} else if value.Valid {
-				s.ShortName = value.String
+				_m.ShortName = value.String
 			}
 		case standard.FieldFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field framework", values[i])
 			} else if value.Valid {
-				s.Framework = value.String
+				_m.Framework = value.String
 			}
 		case standard.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				s.Description = value.String
+				_m.Description = value.String
 			}
 		case standard.FieldGoverningBodyLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field governing_body_logo_url", values[i])
 			} else if value.Valid {
-				s.GoverningBodyLogoURL = value.String
+				_m.GoverningBodyLogoURL = value.String
 			}
 		case standard.FieldGoverningBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field governing_body", values[i])
 			} else if value.Valid {
-				s.GoverningBody = value.String
+				_m.GoverningBody = value.String
 			}
 		case standard.FieldDomains:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field domains", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Domains); err != nil {
+				if err := json.Unmarshal(*value, &_m.Domains); err != nil {
 					return fmt.Errorf("unmarshal field domains: %w", err)
 				}
 			}
@@ -251,40 +251,40 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field link", values[i])
 			} else if value.Valid {
-				s.Link = value.String
+				_m.Link = value.String
 			}
 		case standard.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				s.Status = enums.StandardStatus(value.String)
+				_m.Status = enums.StandardStatus(value.String)
 			}
 		case standard.FieldIsPublic:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_public", values[i])
 			} else if value.Valid {
-				s.IsPublic = value.Bool
+				_m.IsPublic = value.Bool
 			}
 		case standard.FieldFreeToUse:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field free_to_use", values[i])
 			} else if value.Valid {
-				s.FreeToUse = value.Bool
+				_m.FreeToUse = value.Bool
 			}
 		case standard.FieldStandardType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field standard_type", values[i])
 			} else if value.Valid {
-				s.StandardType = value.String
+				_m.StandardType = value.String
 			}
 		case standard.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				s.Version = value.String
+				_m.Version = value.String
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -292,136 +292,136 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Standard.
 // This includes values selected through modifiers, order, etc.
-func (s *Standard) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Standard) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Standard entity.
-func (s *Standard) QueryOwner() *OrganizationQuery {
-	return NewStandardClient(s.config).QueryOwner(s)
+func (_m *Standard) QueryOwner() *OrganizationQuery {
+	return NewStandardClient(_m.config).QueryOwner(_m)
 }
 
 // QueryControls queries the "controls" edge of the Standard entity.
-func (s *Standard) QueryControls() *ControlQuery {
-	return NewStandardClient(s.config).QueryControls(s)
+func (_m *Standard) QueryControls() *ControlQuery {
+	return NewStandardClient(_m.config).QueryControls(_m)
 }
 
 // Update returns a builder for updating this Standard.
 // Note that you need to call Standard.Unwrap() before calling this method if this Standard
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Standard) Update() *StandardUpdateOne {
-	return NewStandardClient(s.config).UpdateOne(s)
+func (_m *Standard) Update() *StandardUpdateOne {
+	return NewStandardClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Standard entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Standard) Unwrap() *Standard {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Standard) Unwrap() *Standard {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Standard is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Standard) String() string {
+func (_m *Standard) String() string {
 	var builder strings.Builder
 	builder.WriteString("Standard(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", s.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(s.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(s.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", s.SystemOwned))
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(s.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("short_name=")
-	builder.WriteString(s.ShortName)
+	builder.WriteString(_m.ShortName)
 	builder.WriteString(", ")
 	builder.WriteString("framework=")
-	builder.WriteString(s.Framework)
+	builder.WriteString(_m.Framework)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(s.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("governing_body_logo_url=")
-	builder.WriteString(s.GoverningBodyLogoURL)
+	builder.WriteString(_m.GoverningBodyLogoURL)
 	builder.WriteString(", ")
 	builder.WriteString("governing_body=")
-	builder.WriteString(s.GoverningBody)
+	builder.WriteString(_m.GoverningBody)
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
-	builder.WriteString(fmt.Sprintf("%v", s.Domains))
+	builder.WriteString(fmt.Sprintf("%v", _m.Domains))
 	builder.WriteString(", ")
 	builder.WriteString("link=")
-	builder.WriteString(s.Link)
+	builder.WriteString(_m.Link)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", s.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("is_public=")
-	builder.WriteString(fmt.Sprintf("%v", s.IsPublic))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsPublic))
 	builder.WriteString(", ")
 	builder.WriteString("free_to_use=")
-	builder.WriteString(fmt.Sprintf("%v", s.FreeToUse))
+	builder.WriteString(fmt.Sprintf("%v", _m.FreeToUse))
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
-	builder.WriteString(s.StandardType)
+	builder.WriteString(_m.StandardType)
 	builder.WriteString(", ")
 	builder.WriteString("version=")
-	builder.WriteString(s.Version)
+	builder.WriteString(_m.Version)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Standard) NamedControls(name string) ([]*Control, error) {
-	if s.Edges.namedControls == nil {
+func (_m *Standard) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Standard) appendNamedControls(name string, edges ...*Control) {
-	if s.Edges.namedControls == nil {
-		s.Edges.namedControls = make(map[string][]*Control)
+func (_m *Standard) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		s.Edges.namedControls[name] = append(s.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 

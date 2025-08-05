@@ -143,7 +143,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenterSetting fields.
-func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) error {
+func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -153,128 +153,128 @@ func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tcs.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcentersetting.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcs.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcentersetting.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcs.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcentersetting.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tcs.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcentersetting.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tcs.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcentersetting.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tcs.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcentersetting.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tcs.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcentersetting.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
-				tcs.TrustCenterID = value.String
+				_m.TrustCenterID = value.String
 			}
 		case trustcentersetting.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				tcs.Title = value.String
+				_m.Title = value.String
 			}
 		case trustcentersetting.FieldOverview:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field overview", values[i])
 			} else if value.Valid {
-				tcs.Overview = value.String
+				_m.Overview = value.String
 			}
 		case trustcentersetting.FieldLogoRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
 			} else if value.Valid {
-				tcs.LogoRemoteURL = new(string)
-				*tcs.LogoRemoteURL = value.String
+				_m.LogoRemoteURL = new(string)
+				*_m.LogoRemoteURL = value.String
 			}
 		case trustcentersetting.FieldLogoLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
 			} else if value.Valid {
-				tcs.LogoLocalFileID = new(string)
-				*tcs.LogoLocalFileID = value.String
+				_m.LogoLocalFileID = new(string)
+				*_m.LogoLocalFileID = value.String
 			}
 		case trustcentersetting.FieldFaviconRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field favicon_remote_url", values[i])
 			} else if value.Valid {
-				tcs.FaviconRemoteURL = new(string)
-				*tcs.FaviconRemoteURL = value.String
+				_m.FaviconRemoteURL = new(string)
+				*_m.FaviconRemoteURL = value.String
 			}
 		case trustcentersetting.FieldFaviconLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field favicon_local_file_id", values[i])
 			} else if value.Valid {
-				tcs.FaviconLocalFileID = new(string)
-				*tcs.FaviconLocalFileID = value.String
+				_m.FaviconLocalFileID = new(string)
+				*_m.FaviconLocalFileID = value.String
 			}
 		case trustcentersetting.FieldThemeMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field theme_mode", values[i])
 			} else if value.Valid {
-				tcs.ThemeMode = enums.TrustCenterThemeMode(value.String)
+				_m.ThemeMode = enums.TrustCenterThemeMode(value.String)
 			}
 		case trustcentersetting.FieldPrimaryColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field primary_color", values[i])
 			} else if value.Valid {
-				tcs.PrimaryColor = value.String
+				_m.PrimaryColor = value.String
 			}
 		case trustcentersetting.FieldFont:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field font", values[i])
 			} else if value.Valid {
-				tcs.Font = value.String
+				_m.Font = value.String
 			}
 		case trustcentersetting.FieldForegroundColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field foreground_color", values[i])
 			} else if value.Valid {
-				tcs.ForegroundColor = value.String
+				_m.ForegroundColor = value.String
 			}
 		case trustcentersetting.FieldBackgroundColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field background_color", values[i])
 			} else if value.Valid {
-				tcs.BackgroundColor = value.String
+				_m.BackgroundColor = value.String
 			}
 		case trustcentersetting.FieldAccentColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field accent_color", values[i])
 			} else if value.Valid {
-				tcs.AccentColor = value.String
+				_m.AccentColor = value.String
 			}
 		default:
-			tcs.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -282,142 +282,142 @@ func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) erro
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterSetting.
 // This includes values selected through modifiers, order, etc.
-func (tcs *TrustCenterSetting) Value(name string) (ent.Value, error) {
-	return tcs.selectValues.Get(name)
+func (_m *TrustCenterSetting) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterSetting entity.
-func (tcs *TrustCenterSetting) QueryTrustCenter() *TrustCenterQuery {
-	return NewTrustCenterSettingClient(tcs.config).QueryTrustCenter(tcs)
+func (_m *TrustCenterSetting) QueryTrustCenter() *TrustCenterQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryTrustCenter(_m)
 }
 
 // QueryFiles queries the "files" edge of the TrustCenterSetting entity.
-func (tcs *TrustCenterSetting) QueryFiles() *FileQuery {
-	return NewTrustCenterSettingClient(tcs.config).QueryFiles(tcs)
+func (_m *TrustCenterSetting) QueryFiles() *FileQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryFiles(_m)
 }
 
 // QueryLogoFile queries the "logo_file" edge of the TrustCenterSetting entity.
-func (tcs *TrustCenterSetting) QueryLogoFile() *FileQuery {
-	return NewTrustCenterSettingClient(tcs.config).QueryLogoFile(tcs)
+func (_m *TrustCenterSetting) QueryLogoFile() *FileQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryLogoFile(_m)
 }
 
 // QueryFaviconFile queries the "favicon_file" edge of the TrustCenterSetting entity.
-func (tcs *TrustCenterSetting) QueryFaviconFile() *FileQuery {
-	return NewTrustCenterSettingClient(tcs.config).QueryFaviconFile(tcs)
+func (_m *TrustCenterSetting) QueryFaviconFile() *FileQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryFaviconFile(_m)
 }
 
 // Update returns a builder for updating this TrustCenterSetting.
 // Note that you need to call TrustCenterSetting.Unwrap() before calling this method if this TrustCenterSetting
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcs *TrustCenterSetting) Update() *TrustCenterSettingUpdateOne {
-	return NewTrustCenterSettingClient(tcs.config).UpdateOne(tcs)
+func (_m *TrustCenterSetting) Update() *TrustCenterSettingUpdateOne {
+	return NewTrustCenterSettingClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenterSetting entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcs *TrustCenterSetting) Unwrap() *TrustCenterSetting {
-	_tx, ok := tcs.config.driver.(*txDriver)
+func (_m *TrustCenterSetting) Unwrap() *TrustCenterSetting {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenterSetting is not a transactional entity")
 	}
-	tcs.config.driver = _tx.drv
-	return tcs
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcs *TrustCenterSetting) String() string {
+func (_m *TrustCenterSetting) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenterSetting(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcs.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(tcs.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tcs.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tcs.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tcs.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tcs.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tcs.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
-	builder.WriteString(tcs.TrustCenterID)
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(tcs.Title)
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("overview=")
-	builder.WriteString(tcs.Overview)
+	builder.WriteString(_m.Overview)
 	builder.WriteString(", ")
-	if v := tcs.LogoRemoteURL; v != nil {
+	if v := _m.LogoRemoteURL; v != nil {
 		builder.WriteString("logo_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := tcs.LogoLocalFileID; v != nil {
+	if v := _m.LogoLocalFileID; v != nil {
 		builder.WriteString("logo_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := tcs.FaviconRemoteURL; v != nil {
+	if v := _m.FaviconRemoteURL; v != nil {
 		builder.WriteString("favicon_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := tcs.FaviconLocalFileID; v != nil {
+	if v := _m.FaviconLocalFileID; v != nil {
 		builder.WriteString("favicon_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("theme_mode=")
-	builder.WriteString(fmt.Sprintf("%v", tcs.ThemeMode))
+	builder.WriteString(fmt.Sprintf("%v", _m.ThemeMode))
 	builder.WriteString(", ")
 	builder.WriteString("primary_color=")
-	builder.WriteString(tcs.PrimaryColor)
+	builder.WriteString(_m.PrimaryColor)
 	builder.WriteString(", ")
 	builder.WriteString("font=")
-	builder.WriteString(tcs.Font)
+	builder.WriteString(_m.Font)
 	builder.WriteString(", ")
 	builder.WriteString("foreground_color=")
-	builder.WriteString(tcs.ForegroundColor)
+	builder.WriteString(_m.ForegroundColor)
 	builder.WriteString(", ")
 	builder.WriteString("background_color=")
-	builder.WriteString(tcs.BackgroundColor)
+	builder.WriteString(_m.BackgroundColor)
 	builder.WriteString(", ")
 	builder.WriteString("accent_color=")
-	builder.WriteString(tcs.AccentColor)
+	builder.WriteString(_m.AccentColor)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (tcs *TrustCenterSetting) NamedFiles(name string) ([]*File, error) {
-	if tcs.Edges.namedFiles == nil {
+func (_m *TrustCenterSetting) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := tcs.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (tcs *TrustCenterSetting) appendNamedFiles(name string, edges ...*File) {
-	if tcs.Edges.namedFiles == nil {
-		tcs.Edges.namedFiles = make(map[string][]*File)
+func (_m *TrustCenterSetting) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		tcs.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		tcs.Edges.namedFiles[name] = append(tcs.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

@@ -22,58 +22,58 @@ type CustomDomainDelete struct {
 }
 
 // Where appends a list predicates to the CustomDomainDelete builder.
-func (cdd *CustomDomainDelete) Where(ps ...predicate.CustomDomain) *CustomDomainDelete {
-	cdd.mutation.Where(ps...)
-	return cdd
+func (_d *CustomDomainDelete) Where(ps ...predicate.CustomDomain) *CustomDomainDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cdd *CustomDomainDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cdd.sqlExec, cdd.mutation, cdd.hooks)
+func (_d *CustomDomainDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdd *CustomDomainDelete) ExecX(ctx context.Context) int {
-	n, err := cdd.Exec(ctx)
+func (_d *CustomDomainDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cdd *CustomDomainDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *CustomDomainDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(customdomain.Table, sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString))
-	_spec.Node.Schema = cdd.schemaConfig.CustomDomain
-	ctx = internal.NewSchemaConfigContext(ctx, cdd.schemaConfig)
-	if ps := cdd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.CustomDomain
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cdd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cdd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // CustomDomainDeleteOne is the builder for deleting a single CustomDomain entity.
 type CustomDomainDeleteOne struct {
-	cdd *CustomDomainDelete
+	_d *CustomDomainDelete
 }
 
 // Where appends a list predicates to the CustomDomainDelete builder.
-func (cddo *CustomDomainDeleteOne) Where(ps ...predicate.CustomDomain) *CustomDomainDeleteOne {
-	cddo.cdd.mutation.Where(ps...)
-	return cddo
+func (_d *CustomDomainDeleteOne) Where(ps ...predicate.CustomDomain) *CustomDomainDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cddo *CustomDomainDeleteOne) Exec(ctx context.Context) error {
-	n, err := cddo.cdd.Exec(ctx)
+func (_d *CustomDomainDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (cddo *CustomDomainDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cddo *CustomDomainDeleteOne) ExecX(ctx context.Context) {
-	if err := cddo.Exec(ctx); err != nil {
+func (_d *CustomDomainDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

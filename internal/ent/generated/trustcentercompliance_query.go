@@ -33,40 +33,40 @@ type TrustCenterComplianceQuery struct {
 }
 
 // Where adds a new predicate for the TrustCenterComplianceQuery builder.
-func (tccq *TrustCenterComplianceQuery) Where(ps ...predicate.TrustCenterCompliance) *TrustCenterComplianceQuery {
-	tccq.predicates = append(tccq.predicates, ps...)
-	return tccq
+func (_q *TrustCenterComplianceQuery) Where(ps ...predicate.TrustCenterCompliance) *TrustCenterComplianceQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tccq *TrustCenterComplianceQuery) Limit(limit int) *TrustCenterComplianceQuery {
-	tccq.ctx.Limit = &limit
-	return tccq
+func (_q *TrustCenterComplianceQuery) Limit(limit int) *TrustCenterComplianceQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tccq *TrustCenterComplianceQuery) Offset(offset int) *TrustCenterComplianceQuery {
-	tccq.ctx.Offset = &offset
-	return tccq
+func (_q *TrustCenterComplianceQuery) Offset(offset int) *TrustCenterComplianceQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tccq *TrustCenterComplianceQuery) Unique(unique bool) *TrustCenterComplianceQuery {
-	tccq.ctx.Unique = &unique
-	return tccq
+func (_q *TrustCenterComplianceQuery) Unique(unique bool) *TrustCenterComplianceQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tccq *TrustCenterComplianceQuery) Order(o ...trustcentercompliance.OrderOption) *TrustCenterComplianceQuery {
-	tccq.order = append(tccq.order, o...)
-	return tccq
+func (_q *TrustCenterComplianceQuery) Order(o ...trustcentercompliance.OrderOption) *TrustCenterComplianceQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TrustCenterCompliance entity from the query.
 // Returns a *NotFoundError when no TrustCenterCompliance was found.
-func (tccq *TrustCenterComplianceQuery) First(ctx context.Context) (*TrustCenterCompliance, error) {
-	nodes, err := tccq.Limit(1).All(setContextOp(ctx, tccq.ctx, ent.OpQueryFirst))
+func (_q *TrustCenterComplianceQuery) First(ctx context.Context) (*TrustCenterCompliance, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (tccq *TrustCenterComplianceQuery) First(ctx context.Context) (*TrustCenter
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) FirstX(ctx context.Context) *TrustCenterCompliance {
-	node, err := tccq.First(ctx)
+func (_q *TrustCenterComplianceQuery) FirstX(ctx context.Context) *TrustCenterCompliance {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (tccq *TrustCenterComplianceQuery) FirstX(ctx context.Context) *TrustCenter
 
 // FirstID returns the first TrustCenterCompliance ID from the query.
 // Returns a *NotFoundError when no TrustCenterCompliance ID was found.
-func (tccq *TrustCenterComplianceQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterComplianceQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tccq.Limit(1).IDs(setContextOp(ctx, tccq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (tccq *TrustCenterComplianceQuery) FirstID(ctx context.Context) (id string,
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) FirstIDX(ctx context.Context) string {
-	id, err := tccq.FirstID(ctx)
+func (_q *TrustCenterComplianceQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (tccq *TrustCenterComplianceQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single TrustCenterCompliance entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TrustCenterCompliance entity is found.
 // Returns a *NotFoundError when no TrustCenterCompliance entities are found.
-func (tccq *TrustCenterComplianceQuery) Only(ctx context.Context) (*TrustCenterCompliance, error) {
-	nodes, err := tccq.Limit(2).All(setContextOp(ctx, tccq.ctx, ent.OpQueryOnly))
+func (_q *TrustCenterComplianceQuery) Only(ctx context.Context) (*TrustCenterCompliance, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (tccq *TrustCenterComplianceQuery) Only(ctx context.Context) (*TrustCenterC
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) OnlyX(ctx context.Context) *TrustCenterCompliance {
-	node, err := tccq.Only(ctx)
+func (_q *TrustCenterComplianceQuery) OnlyX(ctx context.Context) *TrustCenterCompliance {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (tccq *TrustCenterComplianceQuery) OnlyX(ctx context.Context) *TrustCenterC
 // OnlyID is like Only, but returns the only TrustCenterCompliance ID in the query.
 // Returns a *NotSingularError when more than one TrustCenterCompliance ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tccq *TrustCenterComplianceQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterComplianceQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tccq.Limit(2).IDs(setContextOp(ctx, tccq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (tccq *TrustCenterComplianceQuery) OnlyID(ctx context.Context) (id string, 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) OnlyIDX(ctx context.Context) string {
-	id, err := tccq.OnlyID(ctx)
+func (_q *TrustCenterComplianceQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (tccq *TrustCenterComplianceQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of TrustCenterCompliances.
-func (tccq *TrustCenterComplianceQuery) All(ctx context.Context) ([]*TrustCenterCompliance, error) {
-	ctx = setContextOp(ctx, tccq.ctx, ent.OpQueryAll)
-	if err := tccq.prepareQuery(ctx); err != nil {
+func (_q *TrustCenterComplianceQuery) All(ctx context.Context) ([]*TrustCenterCompliance, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TrustCenterCompliance, *TrustCenterComplianceQuery]()
-	return withInterceptors[[]*TrustCenterCompliance](ctx, tccq, qr, tccq.inters)
+	return withInterceptors[[]*TrustCenterCompliance](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) AllX(ctx context.Context) []*TrustCenterCompliance {
-	nodes, err := tccq.All(ctx)
+func (_q *TrustCenterComplianceQuery) AllX(ctx context.Context) []*TrustCenterCompliance {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (tccq *TrustCenterComplianceQuery) AllX(ctx context.Context) []*TrustCenter
 }
 
 // IDs executes the query and returns a list of TrustCenterCompliance IDs.
-func (tccq *TrustCenterComplianceQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if tccq.ctx.Unique == nil && tccq.path != nil {
-		tccq.Unique(true)
+func (_q *TrustCenterComplianceQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tccq.ctx, ent.OpQueryIDs)
-	if err = tccq.Select(trustcentercompliance.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(trustcentercompliance.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) IDsX(ctx context.Context) []string {
-	ids, err := tccq.IDs(ctx)
+func (_q *TrustCenterComplianceQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (tccq *TrustCenterComplianceQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (tccq *TrustCenterComplianceQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tccq.ctx, ent.OpQueryCount)
-	if err := tccq.prepareQuery(ctx); err != nil {
+func (_q *TrustCenterComplianceQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tccq, querierCount[*TrustCenterComplianceQuery](), tccq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TrustCenterComplianceQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) CountX(ctx context.Context) int {
-	count, err := tccq.Count(ctx)
+func (_q *TrustCenterComplianceQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (tccq *TrustCenterComplianceQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tccq *TrustCenterComplianceQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tccq.ctx, ent.OpQueryExist)
-	switch _, err := tccq.FirstID(ctx); {
+func (_q *TrustCenterComplianceQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (tccq *TrustCenterComplianceQuery) Exist(ctx context.Context) (bool, error)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tccq *TrustCenterComplianceQuery) ExistX(ctx context.Context) bool {
-	exist, err := tccq.Exist(ctx)
+func (_q *TrustCenterComplianceQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (tccq *TrustCenterComplianceQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TrustCenterComplianceQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tccq *TrustCenterComplianceQuery) Clone() *TrustCenterComplianceQuery {
-	if tccq == nil {
+func (_q *TrustCenterComplianceQuery) Clone() *TrustCenterComplianceQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TrustCenterComplianceQuery{
-		config:     tccq.config,
-		ctx:        tccq.ctx.Clone(),
-		order:      append([]trustcentercompliance.OrderOption{}, tccq.order...),
-		inters:     append([]Interceptor{}, tccq.inters...),
-		predicates: append([]predicate.TrustCenterCompliance{}, tccq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]trustcentercompliance.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TrustCenterCompliance{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       tccq.sql.Clone(),
-		path:      tccq.path,
-		modifiers: append([]func(*sql.Selector){}, tccq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (tccq *TrustCenterComplianceQuery) Clone() *TrustCenterComplianceQuery {
 //		GroupBy(trustcentercompliance.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (tccq *TrustCenterComplianceQuery) GroupBy(field string, fields ...string) *TrustCenterComplianceGroupBy {
-	tccq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TrustCenterComplianceGroupBy{build: tccq}
-	grbuild.flds = &tccq.ctx.Fields
+func (_q *TrustCenterComplianceQuery) GroupBy(field string, fields ...string) *TrustCenterComplianceGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TrustCenterComplianceGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = trustcentercompliance.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (tccq *TrustCenterComplianceQuery) GroupBy(field string, fields ...string) 
 //	client.TrustCenterCompliance.Query().
 //		Select(trustcentercompliance.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (tccq *TrustCenterComplianceQuery) Select(fields ...string) *TrustCenterComplianceSelect {
-	tccq.ctx.Fields = append(tccq.ctx.Fields, fields...)
-	sbuild := &TrustCenterComplianceSelect{TrustCenterComplianceQuery: tccq}
+func (_q *TrustCenterComplianceQuery) Select(fields ...string) *TrustCenterComplianceSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TrustCenterComplianceSelect{TrustCenterComplianceQuery: _q}
 	sbuild.label = trustcentercompliance.Label
-	sbuild.flds, sbuild.scan = &tccq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TrustCenterComplianceSelect configured with the given aggregations.
-func (tccq *TrustCenterComplianceQuery) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceSelect {
-	return tccq.Select().Aggregate(fns...)
+func (_q *TrustCenterComplianceQuery) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tccq *TrustCenterComplianceQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tccq.inters {
+func (_q *TrustCenterComplianceQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tccq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tccq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !trustcentercompliance.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if tccq.path != nil {
-		prev, err := tccq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tccq.sql = prev
+		_q.sql = prev
 	}
 	if trustcentercompliance.Policy == nil {
 		return errors.New("generated: uninitialized trustcentercompliance.Policy (forgotten import generated/runtime?)")
 	}
-	if err := trustcentercompliance.Policy.EvalQuery(ctx, tccq); err != nil {
+	if err := trustcentercompliance.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (tccq *TrustCenterComplianceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterCompliance, error) {
+func (_q *TrustCenterComplianceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterCompliance, error) {
 	var (
 		nodes = []*TrustCenterCompliance{}
-		_spec = tccq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenterCompliance).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TrustCenterCompliance{config: tccq.config}
+		node := &TrustCenterCompliance{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tccq.schemaConfig.TrustCenterCompliance
-	ctx = internal.NewSchemaConfigContext(ctx, tccq.schemaConfig)
-	if len(tccq.modifiers) > 0 {
-		_spec.Modifiers = tccq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterCompliance
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tccq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range tccq.loadTotal {
-		if err := tccq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (tccq *TrustCenterComplianceQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tccq.querySpec()
-	_spec.Node.Schema = tccq.schemaConfig.TrustCenterCompliance
-	ctx = internal.NewSchemaConfigContext(ctx, tccq.schemaConfig)
-	if len(tccq.modifiers) > 0 {
-		_spec.Modifiers = tccq.modifiers
+func (_q *TrustCenterComplianceQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterCompliance
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = tccq.ctx.Fields
-	if len(tccq.ctx.Fields) > 0 {
-		_spec.Unique = tccq.ctx.Unique != nil && *tccq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tccq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tccq *TrustCenterComplianceQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TrustCenterComplianceQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(trustcentercompliance.Table, trustcentercompliance.Columns, sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString))
-	_spec.From = tccq.sql
-	if unique := tccq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tccq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tccq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcentercompliance.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (tccq *TrustCenterComplianceQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := tccq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tccq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tccq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tccq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (tccq *TrustCenterComplianceQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tccq *TrustCenterComplianceQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tccq.driver.Dialect())
+func (_q *TrustCenterComplianceQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(trustcentercompliance.Table)
-	columns := tccq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = trustcentercompliance.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tccq.sql != nil {
-		selector = tccq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tccq.ctx.Unique != nil && *tccq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tccq.schemaConfig.TrustCenterCompliance)
-	ctx = internal.NewSchemaConfigContext(ctx, tccq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TrustCenterCompliance)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range tccq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range tccq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tccq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tccq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tccq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tccq *TrustCenterComplianceQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceSelect {
-	tccq.modifiers = append(tccq.modifiers, modifiers...)
-	return tccq.Select()
+func (_q *TrustCenterComplianceQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type TrustCenterComplianceGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tccgb *TrustCenterComplianceGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceGroupBy {
-	tccgb.fns = append(tccgb.fns, fns...)
-	return tccgb
+func (_g *TrustCenterComplianceGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tccgb *TrustCenterComplianceGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tccgb.build.ctx, ent.OpQueryGroupBy)
-	if err := tccgb.build.prepareQuery(ctx); err != nil {
+func (_g *TrustCenterComplianceGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustCenterComplianceQuery, *TrustCenterComplianceGroupBy](ctx, tccgb.build, tccgb, tccgb.build.inters, v)
+	return scanWithInterceptors[*TrustCenterComplianceQuery, *TrustCenterComplianceGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tccgb *TrustCenterComplianceGroupBy) sqlScan(ctx context.Context, root *TrustCenterComplianceQuery, v any) error {
+func (_g *TrustCenterComplianceGroupBy) sqlScan(ctx context.Context, root *TrustCenterComplianceQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tccgb.fns))
-	for _, fn := range tccgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tccgb.flds)+len(tccgb.fns))
-		for _, f := range *tccgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tccgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tccgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type TrustCenterComplianceSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tccs *TrustCenterComplianceSelect) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceSelect {
-	tccs.fns = append(tccs.fns, fns...)
-	return tccs
+func (_s *TrustCenterComplianceSelect) Aggregate(fns ...AggregateFunc) *TrustCenterComplianceSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tccs *TrustCenterComplianceSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tccs.ctx, ent.OpQuerySelect)
-	if err := tccs.prepareQuery(ctx); err != nil {
+func (_s *TrustCenterComplianceSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustCenterComplianceQuery, *TrustCenterComplianceSelect](ctx, tccs.TrustCenterComplianceQuery, tccs, tccs.inters, v)
+	return scanWithInterceptors[*TrustCenterComplianceQuery, *TrustCenterComplianceSelect](ctx, _s.TrustCenterComplianceQuery, _s, _s.inters, v)
 }
 
-func (tccs *TrustCenterComplianceSelect) sqlScan(ctx context.Context, root *TrustCenterComplianceQuery, v any) error {
+func (_s *TrustCenterComplianceSelect) sqlScan(ctx context.Context, root *TrustCenterComplianceQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tccs.fns))
-	for _, fn := range tccs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tccs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (tccs *TrustCenterComplianceSelect) sqlScan(ctx context.Context, root *Trus
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tccs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (tccs *TrustCenterComplianceSelect) sqlScan(ctx context.Context, root *Trus
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tccs *TrustCenterComplianceSelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceSelect {
-	tccs.modifiers = append(tccs.modifiers, modifiers...)
-	return tccs
+func (_s *TrustCenterComplianceSelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterComplianceSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

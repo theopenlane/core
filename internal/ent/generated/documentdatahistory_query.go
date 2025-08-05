@@ -33,40 +33,40 @@ type DocumentDataHistoryQuery struct {
 }
 
 // Where adds a new predicate for the DocumentDataHistoryQuery builder.
-func (ddhq *DocumentDataHistoryQuery) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryQuery {
-	ddhq.predicates = append(ddhq.predicates, ps...)
-	return ddhq
+func (_q *DocumentDataHistoryQuery) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ddhq *DocumentDataHistoryQuery) Limit(limit int) *DocumentDataHistoryQuery {
-	ddhq.ctx.Limit = &limit
-	return ddhq
+func (_q *DocumentDataHistoryQuery) Limit(limit int) *DocumentDataHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ddhq *DocumentDataHistoryQuery) Offset(offset int) *DocumentDataHistoryQuery {
-	ddhq.ctx.Offset = &offset
-	return ddhq
+func (_q *DocumentDataHistoryQuery) Offset(offset int) *DocumentDataHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ddhq *DocumentDataHistoryQuery) Unique(unique bool) *DocumentDataHistoryQuery {
-	ddhq.ctx.Unique = &unique
-	return ddhq
+func (_q *DocumentDataHistoryQuery) Unique(unique bool) *DocumentDataHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ddhq *DocumentDataHistoryQuery) Order(o ...documentdatahistory.OrderOption) *DocumentDataHistoryQuery {
-	ddhq.order = append(ddhq.order, o...)
-	return ddhq
+func (_q *DocumentDataHistoryQuery) Order(o ...documentdatahistory.OrderOption) *DocumentDataHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first DocumentDataHistory entity from the query.
 // Returns a *NotFoundError when no DocumentDataHistory was found.
-func (ddhq *DocumentDataHistoryQuery) First(ctx context.Context) (*DocumentDataHistory, error) {
-	nodes, err := ddhq.Limit(1).All(setContextOp(ctx, ddhq.ctx, ent.OpQueryFirst))
+func (_q *DocumentDataHistoryQuery) First(ctx context.Context) (*DocumentDataHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (ddhq *DocumentDataHistoryQuery) First(ctx context.Context) (*DocumentDataH
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) FirstX(ctx context.Context) *DocumentDataHistory {
-	node, err := ddhq.First(ctx)
+func (_q *DocumentDataHistoryQuery) FirstX(ctx context.Context) *DocumentDataHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (ddhq *DocumentDataHistoryQuery) FirstX(ctx context.Context) *DocumentDataH
 
 // FirstID returns the first DocumentDataHistory ID from the query.
 // Returns a *NotFoundError when no DocumentDataHistory ID was found.
-func (ddhq *DocumentDataHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *DocumentDataHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ddhq.Limit(1).IDs(setContextOp(ctx, ddhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (ddhq *DocumentDataHistoryQuery) FirstID(ctx context.Context) (id string, e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := ddhq.FirstID(ctx)
+func (_q *DocumentDataHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (ddhq *DocumentDataHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single DocumentDataHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one DocumentDataHistory entity is found.
 // Returns a *NotFoundError when no DocumentDataHistory entities are found.
-func (ddhq *DocumentDataHistoryQuery) Only(ctx context.Context) (*DocumentDataHistory, error) {
-	nodes, err := ddhq.Limit(2).All(setContextOp(ctx, ddhq.ctx, ent.OpQueryOnly))
+func (_q *DocumentDataHistoryQuery) Only(ctx context.Context) (*DocumentDataHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (ddhq *DocumentDataHistoryQuery) Only(ctx context.Context) (*DocumentDataHi
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) OnlyX(ctx context.Context) *DocumentDataHistory {
-	node, err := ddhq.Only(ctx)
+func (_q *DocumentDataHistoryQuery) OnlyX(ctx context.Context) *DocumentDataHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (ddhq *DocumentDataHistoryQuery) OnlyX(ctx context.Context) *DocumentDataHi
 // OnlyID is like Only, but returns the only DocumentDataHistory ID in the query.
 // Returns a *NotSingularError when more than one DocumentDataHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ddhq *DocumentDataHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *DocumentDataHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ddhq.Limit(2).IDs(setContextOp(ctx, ddhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (ddhq *DocumentDataHistoryQuery) OnlyID(ctx context.Context) (id string, er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := ddhq.OnlyID(ctx)
+func (_q *DocumentDataHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (ddhq *DocumentDataHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of DocumentDataHistories.
-func (ddhq *DocumentDataHistoryQuery) All(ctx context.Context) ([]*DocumentDataHistory, error) {
-	ctx = setContextOp(ctx, ddhq.ctx, ent.OpQueryAll)
-	if err := ddhq.prepareQuery(ctx); err != nil {
+func (_q *DocumentDataHistoryQuery) All(ctx context.Context) ([]*DocumentDataHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*DocumentDataHistory, *DocumentDataHistoryQuery]()
-	return withInterceptors[[]*DocumentDataHistory](ctx, ddhq, qr, ddhq.inters)
+	return withInterceptors[[]*DocumentDataHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) AllX(ctx context.Context) []*DocumentDataHistory {
-	nodes, err := ddhq.All(ctx)
+func (_q *DocumentDataHistoryQuery) AllX(ctx context.Context) []*DocumentDataHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (ddhq *DocumentDataHistoryQuery) AllX(ctx context.Context) []*DocumentDataH
 }
 
 // IDs executes the query and returns a list of DocumentDataHistory IDs.
-func (ddhq *DocumentDataHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if ddhq.ctx.Unique == nil && ddhq.path != nil {
-		ddhq.Unique(true)
+func (_q *DocumentDataHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ddhq.ctx, ent.OpQueryIDs)
-	if err = ddhq.Select(documentdatahistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(documentdatahistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := ddhq.IDs(ctx)
+func (_q *DocumentDataHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (ddhq *DocumentDataHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (ddhq *DocumentDataHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ddhq.ctx, ent.OpQueryCount)
-	if err := ddhq.prepareQuery(ctx); err != nil {
+func (_q *DocumentDataHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ddhq, querierCount[*DocumentDataHistoryQuery](), ddhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*DocumentDataHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) CountX(ctx context.Context) int {
-	count, err := ddhq.Count(ctx)
+func (_q *DocumentDataHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (ddhq *DocumentDataHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ddhq *DocumentDataHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ddhq.ctx, ent.OpQueryExist)
-	switch _, err := ddhq.FirstID(ctx); {
+func (_q *DocumentDataHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (ddhq *DocumentDataHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ddhq *DocumentDataHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := ddhq.Exist(ctx)
+func (_q *DocumentDataHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (ddhq *DocumentDataHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the DocumentDataHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ddhq *DocumentDataHistoryQuery) Clone() *DocumentDataHistoryQuery {
-	if ddhq == nil {
+func (_q *DocumentDataHistoryQuery) Clone() *DocumentDataHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &DocumentDataHistoryQuery{
-		config:     ddhq.config,
-		ctx:        ddhq.ctx.Clone(),
-		order:      append([]documentdatahistory.OrderOption{}, ddhq.order...),
-		inters:     append([]Interceptor{}, ddhq.inters...),
-		predicates: append([]predicate.DocumentDataHistory{}, ddhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]documentdatahistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.DocumentDataHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       ddhq.sql.Clone(),
-		path:      ddhq.path,
-		modifiers: append([]func(*sql.Selector){}, ddhq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (ddhq *DocumentDataHistoryQuery) Clone() *DocumentDataHistoryQuery {
 //		GroupBy(documentdatahistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (ddhq *DocumentDataHistoryQuery) GroupBy(field string, fields ...string) *DocumentDataHistoryGroupBy {
-	ddhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &DocumentDataHistoryGroupBy{build: ddhq}
-	grbuild.flds = &ddhq.ctx.Fields
+func (_q *DocumentDataHistoryQuery) GroupBy(field string, fields ...string) *DocumentDataHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &DocumentDataHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = documentdatahistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (ddhq *DocumentDataHistoryQuery) GroupBy(field string, fields ...string) *D
 //	client.DocumentDataHistory.Query().
 //		Select(documentdatahistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (ddhq *DocumentDataHistoryQuery) Select(fields ...string) *DocumentDataHistorySelect {
-	ddhq.ctx.Fields = append(ddhq.ctx.Fields, fields...)
-	sbuild := &DocumentDataHistorySelect{DocumentDataHistoryQuery: ddhq}
+func (_q *DocumentDataHistoryQuery) Select(fields ...string) *DocumentDataHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &DocumentDataHistorySelect{DocumentDataHistoryQuery: _q}
 	sbuild.label = documentdatahistory.Label
-	sbuild.flds, sbuild.scan = &ddhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a DocumentDataHistorySelect configured with the given aggregations.
-func (ddhq *DocumentDataHistoryQuery) Aggregate(fns ...AggregateFunc) *DocumentDataHistorySelect {
-	return ddhq.Select().Aggregate(fns...)
+func (_q *DocumentDataHistoryQuery) Aggregate(fns ...AggregateFunc) *DocumentDataHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ddhq *DocumentDataHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ddhq.inters {
+func (_q *DocumentDataHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ddhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ddhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !documentdatahistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if ddhq.path != nil {
-		prev, err := ddhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ddhq.sql = prev
+		_q.sql = prev
 	}
 	if documentdatahistory.Policy == nil {
 		return errors.New("generated: uninitialized documentdatahistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := documentdatahistory.Policy.EvalQuery(ctx, ddhq); err != nil {
+	if err := documentdatahistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ddhq *DocumentDataHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DocumentDataHistory, error) {
+func (_q *DocumentDataHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DocumentDataHistory, error) {
 	var (
 		nodes = []*DocumentDataHistory{}
-		_spec = ddhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DocumentDataHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &DocumentDataHistory{config: ddhq.config}
+		node := &DocumentDataHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = ddhq.schemaConfig.DocumentDataHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ddhq.schemaConfig)
-	if len(ddhq.modifiers) > 0 {
-		_spec.Modifiers = ddhq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.DocumentDataHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ddhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range ddhq.loadTotal {
-		if err := ddhq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (ddhq *DocumentDataHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ddhq.querySpec()
-	_spec.Node.Schema = ddhq.schemaConfig.DocumentDataHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ddhq.schemaConfig)
-	if len(ddhq.modifiers) > 0 {
-		_spec.Modifiers = ddhq.modifiers
+func (_q *DocumentDataHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.DocumentDataHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = ddhq.ctx.Fields
-	if len(ddhq.ctx.Fields) > 0 {
-		_spec.Unique = ddhq.ctx.Unique != nil && *ddhq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ddhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ddhq *DocumentDataHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *DocumentDataHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(documentdatahistory.Table, documentdatahistory.Columns, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
-	_spec.From = ddhq.sql
-	if unique := ddhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ddhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ddhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, documentdatahistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (ddhq *DocumentDataHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := ddhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ddhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ddhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ddhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (ddhq *DocumentDataHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ddhq *DocumentDataHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ddhq.driver.Dialect())
+func (_q *DocumentDataHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(documentdatahistory.Table)
-	columns := ddhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = documentdatahistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ddhq.sql != nil {
-		selector = ddhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ddhq.ctx.Unique != nil && *ddhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(ddhq.schemaConfig.DocumentDataHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, ddhq.schemaConfig)
+	t1.Schema(_q.schemaConfig.DocumentDataHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range ddhq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range ddhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ddhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ddhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ddhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ddhq *DocumentDataHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataHistorySelect {
-	ddhq.modifiers = append(ddhq.modifiers, modifiers...)
-	return ddhq.Select()
+func (_q *DocumentDataHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type DocumentDataHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ddhgb *DocumentDataHistoryGroupBy) Aggregate(fns ...AggregateFunc) *DocumentDataHistoryGroupBy {
-	ddhgb.fns = append(ddhgb.fns, fns...)
-	return ddhgb
+func (_g *DocumentDataHistoryGroupBy) Aggregate(fns ...AggregateFunc) *DocumentDataHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ddhgb *DocumentDataHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ddhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ddhgb.build.prepareQuery(ctx); err != nil {
+func (_g *DocumentDataHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DocumentDataHistoryQuery, *DocumentDataHistoryGroupBy](ctx, ddhgb.build, ddhgb, ddhgb.build.inters, v)
+	return scanWithInterceptors[*DocumentDataHistoryQuery, *DocumentDataHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ddhgb *DocumentDataHistoryGroupBy) sqlScan(ctx context.Context, root *DocumentDataHistoryQuery, v any) error {
+func (_g *DocumentDataHistoryGroupBy) sqlScan(ctx context.Context, root *DocumentDataHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ddhgb.fns))
-	for _, fn := range ddhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ddhgb.flds)+len(ddhgb.fns))
-		for _, f := range *ddhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ddhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ddhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type DocumentDataHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ddhs *DocumentDataHistorySelect) Aggregate(fns ...AggregateFunc) *DocumentDataHistorySelect {
-	ddhs.fns = append(ddhs.fns, fns...)
-	return ddhs
+func (_s *DocumentDataHistorySelect) Aggregate(fns ...AggregateFunc) *DocumentDataHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ddhs *DocumentDataHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ddhs.ctx, ent.OpQuerySelect)
-	if err := ddhs.prepareQuery(ctx); err != nil {
+func (_s *DocumentDataHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DocumentDataHistoryQuery, *DocumentDataHistorySelect](ctx, ddhs.DocumentDataHistoryQuery, ddhs, ddhs.inters, v)
+	return scanWithInterceptors[*DocumentDataHistoryQuery, *DocumentDataHistorySelect](ctx, _s.DocumentDataHistoryQuery, _s, _s.inters, v)
 }
 
-func (ddhs *DocumentDataHistorySelect) sqlScan(ctx context.Context, root *DocumentDataHistoryQuery, v any) error {
+func (_s *DocumentDataHistorySelect) sqlScan(ctx context.Context, root *DocumentDataHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ddhs.fns))
-	for _, fn := range ddhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ddhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (ddhs *DocumentDataHistorySelect) sqlScan(ctx context.Context, root *Docume
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ddhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (ddhs *DocumentDataHistorySelect) sqlScan(ctx context.Context, root *Docume
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ddhs *DocumentDataHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataHistorySelect {
-	ddhs.modifiers = append(ddhs.modifiers, modifiers...)
-	return ddhs
+func (_s *DocumentDataHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

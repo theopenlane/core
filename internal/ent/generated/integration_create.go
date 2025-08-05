@@ -24,208 +24,208 @@ type IntegrationCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ic *IntegrationCreate) SetCreatedAt(t time.Time) *IntegrationCreate {
-	ic.mutation.SetCreatedAt(t)
-	return ic
+func (_c *IntegrationCreate) SetCreatedAt(v time.Time) *IntegrationCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableCreatedAt(t *time.Time) *IntegrationCreate {
-	if t != nil {
-		ic.SetCreatedAt(*t)
+func (_c *IntegrationCreate) SetNillableCreatedAt(v *time.Time) *IntegrationCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ic *IntegrationCreate) SetUpdatedAt(t time.Time) *IntegrationCreate {
-	ic.mutation.SetUpdatedAt(t)
-	return ic
+func (_c *IntegrationCreate) SetUpdatedAt(v time.Time) *IntegrationCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableUpdatedAt(t *time.Time) *IntegrationCreate {
-	if t != nil {
-		ic.SetUpdatedAt(*t)
+func (_c *IntegrationCreate) SetNillableUpdatedAt(v *time.Time) *IntegrationCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ic *IntegrationCreate) SetCreatedBy(s string) *IntegrationCreate {
-	ic.mutation.SetCreatedBy(s)
-	return ic
+func (_c *IntegrationCreate) SetCreatedBy(v string) *IntegrationCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableCreatedBy(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetCreatedBy(*s)
+func (_c *IntegrationCreate) SetNillableCreatedBy(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ic *IntegrationCreate) SetUpdatedBy(s string) *IntegrationCreate {
-	ic.mutation.SetUpdatedBy(s)
-	return ic
+func (_c *IntegrationCreate) SetUpdatedBy(v string) *IntegrationCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableUpdatedBy(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetUpdatedBy(*s)
+func (_c *IntegrationCreate) SetNillableUpdatedBy(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ic *IntegrationCreate) SetDeletedAt(t time.Time) *IntegrationCreate {
-	ic.mutation.SetDeletedAt(t)
-	return ic
+func (_c *IntegrationCreate) SetDeletedAt(v time.Time) *IntegrationCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableDeletedAt(t *time.Time) *IntegrationCreate {
-	if t != nil {
-		ic.SetDeletedAt(*t)
+func (_c *IntegrationCreate) SetNillableDeletedAt(v *time.Time) *IntegrationCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ic *IntegrationCreate) SetDeletedBy(s string) *IntegrationCreate {
-	ic.mutation.SetDeletedBy(s)
-	return ic
+func (_c *IntegrationCreate) SetDeletedBy(v string) *IntegrationCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableDeletedBy(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetDeletedBy(*s)
+func (_c *IntegrationCreate) SetNillableDeletedBy(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ic *IntegrationCreate) SetTags(s []string) *IntegrationCreate {
-	ic.mutation.SetTags(s)
-	return ic
+func (_c *IntegrationCreate) SetTags(v []string) *IntegrationCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ic *IntegrationCreate) SetOwnerID(s string) *IntegrationCreate {
-	ic.mutation.SetOwnerID(s)
-	return ic
+func (_c *IntegrationCreate) SetOwnerID(v string) *IntegrationCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableOwnerID(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetOwnerID(*s)
+func (_c *IntegrationCreate) SetNillableOwnerID(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ic *IntegrationCreate) SetName(s string) *IntegrationCreate {
-	ic.mutation.SetName(s)
-	return ic
+func (_c *IntegrationCreate) SetName(v string) *IntegrationCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (ic *IntegrationCreate) SetDescription(s string) *IntegrationCreate {
-	ic.mutation.SetDescription(s)
-	return ic
+func (_c *IntegrationCreate) SetDescription(v string) *IntegrationCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableDescription(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetDescription(*s)
+func (_c *IntegrationCreate) SetNillableDescription(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetKind sets the "kind" field.
-func (ic *IntegrationCreate) SetKind(s string) *IntegrationCreate {
-	ic.mutation.SetKind(s)
-	return ic
+func (_c *IntegrationCreate) SetKind(v string) *IntegrationCreate {
+	_c.mutation.SetKind(v)
+	return _c
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableKind(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetKind(*s)
+func (_c *IntegrationCreate) SetNillableKind(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetKind(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ic *IntegrationCreate) SetID(s string) *IntegrationCreate {
-	ic.mutation.SetID(s)
-	return ic
+func (_c *IntegrationCreate) SetID(v string) *IntegrationCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ic *IntegrationCreate) SetNillableID(s *string) *IntegrationCreate {
-	if s != nil {
-		ic.SetID(*s)
+func (_c *IntegrationCreate) SetNillableID(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ic
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (ic *IntegrationCreate) SetOwner(o *Organization) *IntegrationCreate {
-	return ic.SetOwnerID(o.ID)
+func (_c *IntegrationCreate) SetOwner(v *Organization) *IntegrationCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (ic *IntegrationCreate) AddSecretIDs(ids ...string) *IntegrationCreate {
-	ic.mutation.AddSecretIDs(ids...)
-	return ic
+func (_c *IntegrationCreate) AddSecretIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddSecretIDs(ids...)
+	return _c
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (ic *IntegrationCreate) AddSecrets(h ...*Hush) *IntegrationCreate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_c *IntegrationCreate) AddSecrets(v ...*Hush) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ic.AddSecretIDs(ids...)
+	return _c.AddSecretIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (ic *IntegrationCreate) AddEventIDs(ids ...string) *IntegrationCreate {
-	ic.mutation.AddEventIDs(ids...)
-	return ic
+func (_c *IntegrationCreate) AddEventIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (ic *IntegrationCreate) AddEvents(e ...*Event) *IntegrationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *IntegrationCreate) AddEvents(v ...*Event) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ic.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // Mutation returns the IntegrationMutation object of the builder.
-func (ic *IntegrationCreate) Mutation() *IntegrationMutation {
-	return ic.mutation
+func (_c *IntegrationCreate) Mutation() *IntegrationMutation {
+	return _c.mutation
 }
 
 // Save creates the Integration in the database.
-func (ic *IntegrationCreate) Save(ctx context.Context) (*Integration, error) {
-	if err := ic.defaults(); err != nil {
+func (_c *IntegrationCreate) Save(ctx context.Context) (*Integration, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ic.sqlSave, ic.mutation, ic.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ic *IntegrationCreate) SaveX(ctx context.Context) *Integration {
-	v, err := ic.Save(ctx)
+func (_c *IntegrationCreate) SaveX(ctx context.Context) *Integration {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -233,59 +233,59 @@ func (ic *IntegrationCreate) SaveX(ctx context.Context) *Integration {
 }
 
 // Exec executes the query.
-func (ic *IntegrationCreate) Exec(ctx context.Context) error {
-	_, err := ic.Save(ctx)
+func (_c *IntegrationCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ic *IntegrationCreate) ExecX(ctx context.Context) {
-	if err := ic.Exec(ctx); err != nil {
+func (_c *IntegrationCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ic *IntegrationCreate) defaults() error {
-	if _, ok := ic.mutation.CreatedAt(); !ok {
+func (_c *IntegrationCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if integration.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := integration.DefaultCreatedAt()
-		ic.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ic.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if integration.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := integration.DefaultUpdatedAt()
-		ic.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ic.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := integration.DefaultTags
-		ic.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ic.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if integration.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := integration.DefaultID()
-		ic.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ic *IntegrationCreate) check() error {
-	if v, ok := ic.mutation.OwnerID(); ok {
+func (_c *IntegrationCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := integration.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Integration.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Integration.name"`)}
 	}
-	if v, ok := ic.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := integration.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
 		}
@@ -293,12 +293,12 @@ func (ic *IntegrationCreate) check() error {
 	return nil
 }
 
-func (ic *IntegrationCreate) sqlSave(ctx context.Context) (*Integration, error) {
-	if err := ic.check(); err != nil {
+func (_c *IntegrationCreate) sqlSave(ctx context.Context) (*Integration, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ic.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ic.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -311,62 +311,62 @@ func (ic *IntegrationCreate) sqlSave(ctx context.Context) (*Integration, error) 
 			return nil, fmt.Errorf("unexpected Integration.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ic.mutation.id = &_node.ID
-	ic.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
+func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Integration{config: ic.config}
+		_node = &Integration{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(integration.Table, sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString))
 	)
-	_spec.Schema = ic.schemaConfig.Integration
-	if id, ok := ic.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Integration
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ic.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(integration.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ic.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(integration.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ic.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(integration.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ic.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ic.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ic.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ic.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ic.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ic.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(integration.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ic.mutation.Kind(); ok {
+	if value, ok := _c.mutation.Kind(); ok {
 		_spec.SetField(integration.FieldKind, field.TypeString, value)
 		_node.Kind = value
 	}
-	if nodes := ic.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -377,14 +377,14 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ic.schemaConfig.Integration
+		edge.Schema = _c.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ic.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -395,13 +395,13 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ic.schemaConfig.IntegrationSecrets
+		edge.Schema = _c.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ic.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -412,7 +412,7 @@ func (ic *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ic.schemaConfig.IntegrationEvents
+		edge.Schema = _c.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -429,16 +429,16 @@ type IntegrationCreateBulk struct {
 }
 
 // Save creates the Integration entities in the database.
-func (icb *IntegrationCreateBulk) Save(ctx context.Context) ([]*Integration, error) {
-	if icb.err != nil {
-		return nil, icb.err
+func (_c *IntegrationCreateBulk) Save(ctx context.Context) ([]*Integration, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(icb.builders))
-	nodes := make([]*Integration, len(icb.builders))
-	mutators := make([]Mutator, len(icb.builders))
-	for i := range icb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Integration, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := icb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*IntegrationMutation)
@@ -452,11 +452,11 @@ func (icb *IntegrationCreateBulk) Save(ctx context.Context) ([]*Integration, err
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, icb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, icb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -476,7 +476,7 @@ func (icb *IntegrationCreateBulk) Save(ctx context.Context) ([]*Integration, err
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, icb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -484,8 +484,8 @@ func (icb *IntegrationCreateBulk) Save(ctx context.Context) ([]*Integration, err
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (icb *IntegrationCreateBulk) SaveX(ctx context.Context) []*Integration {
-	v, err := icb.Save(ctx)
+func (_c *IntegrationCreateBulk) SaveX(ctx context.Context) []*Integration {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -493,14 +493,14 @@ func (icb *IntegrationCreateBulk) SaveX(ctx context.Context) []*Integration {
 }
 
 // Exec executes the query.
-func (icb *IntegrationCreateBulk) Exec(ctx context.Context) error {
-	_, err := icb.Save(ctx)
+func (_c *IntegrationCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (icb *IntegrationCreateBulk) ExecX(ctx context.Context) {
-	if err := icb.Exec(ctx); err != nil {
+func (_c *IntegrationCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

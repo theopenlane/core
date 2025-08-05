@@ -27,165 +27,165 @@ type TrustCenterSubprocessorHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the TrustCenterSubprocessorHistoryUpdate builder.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) Where(ps ...predicate.TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.Where(ps...)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) Where(ps ...predicate.TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetUpdatedAt(t time.Time) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetUpdatedAt(t)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedAt() *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.ClearUpdatedAt()
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedAt() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetUpdatedBy(s string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetUpdatedBy(s)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetUpdatedBy(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetNillableUpdatedBy(s *string) *TrustCenterSubprocessorHistoryUpdate {
-	if s != nil {
-		tcshu.SetUpdatedBy(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterSubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tcshu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedBy() *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.ClearUpdatedBy()
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedBy() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetDeletedAt(t time.Time) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetDeletedAt(t)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetNillableDeletedAt(t *time.Time) *TrustCenterSubprocessorHistoryUpdate {
-	if t != nil {
-		tcshu.SetDeletedAt(*t)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterSubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tcshu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ClearDeletedAt() *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.ClearDeletedAt()
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearDeletedAt() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetDeletedBy(s string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetDeletedBy(s)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetDeletedBy(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetNillableDeletedBy(s *string) *TrustCenterSubprocessorHistoryUpdate {
-	if s != nil {
-		tcshu.SetDeletedBy(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterSubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tcshu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ClearDeletedBy() *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.ClearDeletedBy()
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearDeletedBy() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetSubprocessorID sets the "subprocessor_id" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetSubprocessorID(s string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetSubprocessorID(s)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetSubprocessorID(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetSubprocessorID(v)
+	return _u
 }
 
 // SetNillableSubprocessorID sets the "subprocessor_id" field if the given value is not nil.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetNillableSubprocessorID(s *string) *TrustCenterSubprocessorHistoryUpdate {
-	if s != nil {
-		tcshu.SetSubprocessorID(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableSubprocessorID(v *string) *TrustCenterSubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetSubprocessorID(*v)
 	}
-	return tcshu
+	return _u
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterID(s string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetTrustCenterID(s)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterID(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterID(s *string) *TrustCenterSubprocessorHistoryUpdate {
-	if s != nil {
-		tcshu.SetTrustCenterID(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterSubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
 	}
-	return tcshu
+	return _u
 }
 
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterID() *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.ClearTrustCenterID()
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterID() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
 }
 
 // SetCountries sets the "countries" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetCountries(s []string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetCountries(s)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetCountries(v []string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetCountries(v)
+	return _u
 }
 
-// AppendCountries appends s to the "countries" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) AppendCountries(s []string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.AppendCountries(s)
-	return tcshu
+// AppendCountries appends value to the "countries" field.
+func (_u *TrustCenterSubprocessorHistoryUpdate) AppendCountries(v []string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.AppendCountries(v)
+	return _u
 }
 
 // ClearCountries clears the value of the "countries" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ClearCountries() *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.ClearCountries()
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearCountries() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearCountries()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetCategory(s string) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.mutation.SetCategory(s)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetCategory(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SetNillableCategory(s *string) *TrustCenterSubprocessorHistoryUpdate {
-	if s != nil {
-		tcshu.SetCategory(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableCategory(v *string) *TrustCenterSubprocessorHistoryUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return tcshu
+	return _u
 }
 
 // Mutation returns the TrustCenterSubprocessorHistoryMutation object of the builder.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) Mutation() *TrustCenterSubprocessorHistoryMutation {
-	return tcshu.mutation
+func (_u *TrustCenterSubprocessorHistoryUpdate) Mutation() *TrustCenterSubprocessorHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := tcshu.defaults(); err != nil {
+func (_u *TrustCenterSubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, tcshu.sqlSave, tcshu.mutation, tcshu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := tcshu.Save(ctx)
+func (_u *TrustCenterSubprocessorHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -193,105 +193,105 @@ func (tcshu *TrustCenterSubprocessorHistoryUpdate) SaveX(ctx context.Context) in
 }
 
 // Exec executes the query.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := tcshu.Save(ctx)
+func (_u *TrustCenterSubprocessorHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) ExecX(ctx context.Context) {
-	if err := tcshu.Exec(ctx); err != nil {
+func (_u *TrustCenterSubprocessorHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) defaults() error {
-	if _, ok := tcshu.mutation.UpdatedAt(); !ok && !tcshu.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterSubprocessorHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcentersubprocessorhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentersubprocessorhistory.UpdateDefaultUpdatedAt()
-		tcshu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorHistoryUpdate {
-	tcshu.modifiers = append(tcshu.modifiers, modifiers...)
-	return tcshu
+func (_u *TrustCenterSubprocessorHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcentersubprocessorhistory.Table, trustcentersubprocessorhistory.Columns, sqlgraph.NewFieldSpec(trustcentersubprocessorhistory.FieldID, field.TypeString))
-	if ps := tcshu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tcshu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldRef, field.TypeString)
 	}
-	if tcshu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tcshu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tcshu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if tcshu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tcshu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tcshu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tcshu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tcshu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tcshu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if tcshu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcshu.mutation.SubprocessorID(); ok {
+	if value, ok := _u.mutation.SubprocessorID(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldSubprocessorID, field.TypeString, value)
 	}
-	if value, ok := tcshu.mutation.TrustCenterID(); ok {
+	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString, value)
 	}
-	if tcshu.mutation.TrustCenterIDCleared() {
+	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := tcshu.mutation.Countries(); ok {
+	if value, ok := _u.mutation.Countries(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
 	}
-	if value, ok := tcshu.mutation.AppendedCountries(); ok {
+	if value, ok := _u.mutation.AppendedCountries(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, trustcentersubprocessorhistory.FieldCountries, value)
 		})
 	}
-	if tcshu.mutation.CountriesCleared() {
+	if _u.mutation.CountriesCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON)
 	}
-	if value, ok := tcshu.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldCategory, field.TypeString, value)
 	}
-	_spec.Node.Schema = tcshu.schemaConfig.TrustCenterSubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tcshu.schemaConfig)
-	_spec.AddModifiers(tcshu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tcshu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterSubprocessorHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersubprocessorhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -299,8 +299,8 @@ func (tcshu *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) 
 		}
 		return 0, err
 	}
-	tcshu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TrustCenterSubprocessorHistoryUpdateOne is the builder for updating a single TrustCenterSubprocessorHistory entity.
@@ -313,172 +313,172 @@ type TrustCenterSubprocessorHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedAt(t time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetUpdatedAt(t)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedAt() *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.ClearUpdatedAt()
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedAt() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedBy(s string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetUpdatedBy(s)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetNillableUpdatedBy(s *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if s != nil {
-		tcshuo.SetUpdatedBy(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tcshuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedBy() *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.ClearUpdatedBy()
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedBy() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetDeletedAt(t time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetDeletedAt(t)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
-	if t != nil {
-		tcshuo.SetDeletedAt(*t)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tcshuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedAt() *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.ClearDeletedAt()
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedAt() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetDeletedBy(s string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetDeletedBy(s)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetNillableDeletedBy(s *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if s != nil {
-		tcshuo.SetDeletedBy(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tcshuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedBy() *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.ClearDeletedBy()
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedBy() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetSubprocessorID sets the "subprocessor_id" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetSubprocessorID(s string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetSubprocessorID(s)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetSubprocessorID(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetSubprocessorID(v)
+	return _u
 }
 
 // SetNillableSubprocessorID sets the "subprocessor_id" field if the given value is not nil.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetNillableSubprocessorID(s *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if s != nil {
-		tcshuo.SetSubprocessorID(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableSubprocessorID(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubprocessorID(*v)
 	}
-	return tcshuo
+	return _u
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterID(s string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetTrustCenterID(s)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterID(s *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if s != nil {
-		tcshuo.SetTrustCenterID(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
 	}
-	return tcshuo
+	return _u
 }
 
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterID() *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.ClearTrustCenterID()
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterID() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
 }
 
 // SetCountries sets the "countries" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetCountries(s []string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetCountries(s)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetCountries(v []string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetCountries(v)
+	return _u
 }
 
-// AppendCountries appends s to the "countries" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) AppendCountries(s []string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.AppendCountries(s)
-	return tcshuo
+// AppendCountries appends value to the "countries" field.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) AppendCountries(v []string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.AppendCountries(v)
+	return _u
 }
 
 // ClearCountries clears the value of the "countries" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ClearCountries() *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.ClearCountries()
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearCountries() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearCountries()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetCategory(s string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.SetCategory(s)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetCategory(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SetNillableCategory(s *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if s != nil {
-		tcshuo.SetCategory(*s)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableCategory(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return tcshuo
+	return _u
 }
 
 // Mutation returns the TrustCenterSubprocessorHistoryMutation object of the builder.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Mutation() *TrustCenterSubprocessorHistoryMutation {
-	return tcshuo.mutation
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) Mutation() *TrustCenterSubprocessorHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TrustCenterSubprocessorHistoryUpdate builder.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Where(ps ...predicate.TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.mutation.Where(ps...)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) Where(ps ...predicate.TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Select(field string, fields ...string) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.fields = append([]string{field}, fields...)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) Select(field string, fields ...string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TrustCenterSubprocessorHistory entity.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
-	if err := tcshuo.defaults(); err != nil {
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tcshuo.sqlSave, tcshuo.mutation, tcshuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SaveX(ctx context.Context) *TrustCenterSubprocessorHistory {
-	node, err := tcshuo.Save(ctx)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SaveX(ctx context.Context) *TrustCenterSubprocessorHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -486,44 +486,44 @@ func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) SaveX(ctx context.Context
 }
 
 // Exec executes the query on the entity.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := tcshuo.Save(ctx)
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := tcshuo.Exec(ctx); err != nil {
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) defaults() error {
-	if _, ok := tcshuo.mutation.UpdatedAt(); !ok && !tcshuo.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcentersubprocessorhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentersubprocessorhistory.UpdateDefaultUpdatedAt()
-		tcshuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorHistoryUpdateOne {
-	tcshuo.modifiers = append(tcshuo.modifiers, modifiers...)
-	return tcshuo
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSubprocessorHistory, err error) {
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSubprocessorHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcentersubprocessorhistory.Table, trustcentersubprocessorhistory.Columns, sqlgraph.NewFieldSpec(trustcentersubprocessorhistory.FieldID, field.TypeString))
-	id, ok := tcshuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TrustCenterSubprocessorHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tcshuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcentersubprocessorhistory.FieldID)
 		for _, f := range fields {
@@ -535,76 +535,76 @@ func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Conte
 			}
 		}
 	}
-	if ps := tcshuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tcshuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldRef, field.TypeString)
 	}
-	if tcshuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tcshuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tcshuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if tcshuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tcshuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tcshuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tcshuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tcshuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tcshuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if tcshuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcshuo.mutation.SubprocessorID(); ok {
+	if value, ok := _u.mutation.SubprocessorID(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldSubprocessorID, field.TypeString, value)
 	}
-	if value, ok := tcshuo.mutation.TrustCenterID(); ok {
+	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString, value)
 	}
-	if tcshuo.mutation.TrustCenterIDCleared() {
+	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := tcshuo.mutation.Countries(); ok {
+	if value, ok := _u.mutation.Countries(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
 	}
-	if value, ok := tcshuo.mutation.AppendedCountries(); ok {
+	if value, ok := _u.mutation.AppendedCountries(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, trustcentersubprocessorhistory.FieldCountries, value)
 		})
 	}
-	if tcshuo.mutation.CountriesCleared() {
+	if _u.mutation.CountriesCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON)
 	}
-	if value, ok := tcshuo.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldCategory, field.TypeString, value)
 	}
-	_spec.Node.Schema = tcshuo.schemaConfig.TrustCenterSubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, tcshuo.schemaConfig)
-	_spec.AddModifiers(tcshuo.modifiers...)
-	_node = &TrustCenterSubprocessorHistory{config: tcshuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterSubprocessorHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TrustCenterSubprocessorHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tcshuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersubprocessorhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -612,6 +612,6 @@ func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Conte
 		}
 		return nil, err
 	}
-	tcshuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -33,40 +33,40 @@ type EntityTypeHistoryQuery struct {
 }
 
 // Where adds a new predicate for the EntityTypeHistoryQuery builder.
-func (ethq *EntityTypeHistoryQuery) Where(ps ...predicate.EntityTypeHistory) *EntityTypeHistoryQuery {
-	ethq.predicates = append(ethq.predicates, ps...)
-	return ethq
+func (_q *EntityTypeHistoryQuery) Where(ps ...predicate.EntityTypeHistory) *EntityTypeHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ethq *EntityTypeHistoryQuery) Limit(limit int) *EntityTypeHistoryQuery {
-	ethq.ctx.Limit = &limit
-	return ethq
+func (_q *EntityTypeHistoryQuery) Limit(limit int) *EntityTypeHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ethq *EntityTypeHistoryQuery) Offset(offset int) *EntityTypeHistoryQuery {
-	ethq.ctx.Offset = &offset
-	return ethq
+func (_q *EntityTypeHistoryQuery) Offset(offset int) *EntityTypeHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ethq *EntityTypeHistoryQuery) Unique(unique bool) *EntityTypeHistoryQuery {
-	ethq.ctx.Unique = &unique
-	return ethq
+func (_q *EntityTypeHistoryQuery) Unique(unique bool) *EntityTypeHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ethq *EntityTypeHistoryQuery) Order(o ...entitytypehistory.OrderOption) *EntityTypeHistoryQuery {
-	ethq.order = append(ethq.order, o...)
-	return ethq
+func (_q *EntityTypeHistoryQuery) Order(o ...entitytypehistory.OrderOption) *EntityTypeHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first EntityTypeHistory entity from the query.
 // Returns a *NotFoundError when no EntityTypeHistory was found.
-func (ethq *EntityTypeHistoryQuery) First(ctx context.Context) (*EntityTypeHistory, error) {
-	nodes, err := ethq.Limit(1).All(setContextOp(ctx, ethq.ctx, ent.OpQueryFirst))
+func (_q *EntityTypeHistoryQuery) First(ctx context.Context) (*EntityTypeHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (ethq *EntityTypeHistoryQuery) First(ctx context.Context) (*EntityTypeHisto
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) FirstX(ctx context.Context) *EntityTypeHistory {
-	node, err := ethq.First(ctx)
+func (_q *EntityTypeHistoryQuery) FirstX(ctx context.Context) *EntityTypeHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (ethq *EntityTypeHistoryQuery) FirstX(ctx context.Context) *EntityTypeHisto
 
 // FirstID returns the first EntityTypeHistory ID from the query.
 // Returns a *NotFoundError when no EntityTypeHistory ID was found.
-func (ethq *EntityTypeHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *EntityTypeHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ethq.Limit(1).IDs(setContextOp(ctx, ethq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (ethq *EntityTypeHistoryQuery) FirstID(ctx context.Context) (id string, err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := ethq.FirstID(ctx)
+func (_q *EntityTypeHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (ethq *EntityTypeHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single EntityTypeHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one EntityTypeHistory entity is found.
 // Returns a *NotFoundError when no EntityTypeHistory entities are found.
-func (ethq *EntityTypeHistoryQuery) Only(ctx context.Context) (*EntityTypeHistory, error) {
-	nodes, err := ethq.Limit(2).All(setContextOp(ctx, ethq.ctx, ent.OpQueryOnly))
+func (_q *EntityTypeHistoryQuery) Only(ctx context.Context) (*EntityTypeHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (ethq *EntityTypeHistoryQuery) Only(ctx context.Context) (*EntityTypeHistor
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) OnlyX(ctx context.Context) *EntityTypeHistory {
-	node, err := ethq.Only(ctx)
+func (_q *EntityTypeHistoryQuery) OnlyX(ctx context.Context) *EntityTypeHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (ethq *EntityTypeHistoryQuery) OnlyX(ctx context.Context) *EntityTypeHistor
 // OnlyID is like Only, but returns the only EntityTypeHistory ID in the query.
 // Returns a *NotSingularError when more than one EntityTypeHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ethq *EntityTypeHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *EntityTypeHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ethq.Limit(2).IDs(setContextOp(ctx, ethq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (ethq *EntityTypeHistoryQuery) OnlyID(ctx context.Context) (id string, err 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := ethq.OnlyID(ctx)
+func (_q *EntityTypeHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (ethq *EntityTypeHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of EntityTypeHistories.
-func (ethq *EntityTypeHistoryQuery) All(ctx context.Context) ([]*EntityTypeHistory, error) {
-	ctx = setContextOp(ctx, ethq.ctx, ent.OpQueryAll)
-	if err := ethq.prepareQuery(ctx); err != nil {
+func (_q *EntityTypeHistoryQuery) All(ctx context.Context) ([]*EntityTypeHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*EntityTypeHistory, *EntityTypeHistoryQuery]()
-	return withInterceptors[[]*EntityTypeHistory](ctx, ethq, qr, ethq.inters)
+	return withInterceptors[[]*EntityTypeHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) AllX(ctx context.Context) []*EntityTypeHistory {
-	nodes, err := ethq.All(ctx)
+func (_q *EntityTypeHistoryQuery) AllX(ctx context.Context) []*EntityTypeHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (ethq *EntityTypeHistoryQuery) AllX(ctx context.Context) []*EntityTypeHisto
 }
 
 // IDs executes the query and returns a list of EntityTypeHistory IDs.
-func (ethq *EntityTypeHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if ethq.ctx.Unique == nil && ethq.path != nil {
-		ethq.Unique(true)
+func (_q *EntityTypeHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ethq.ctx, ent.OpQueryIDs)
-	if err = ethq.Select(entitytypehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(entitytypehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := ethq.IDs(ctx)
+func (_q *EntityTypeHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (ethq *EntityTypeHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (ethq *EntityTypeHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ethq.ctx, ent.OpQueryCount)
-	if err := ethq.prepareQuery(ctx); err != nil {
+func (_q *EntityTypeHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ethq, querierCount[*EntityTypeHistoryQuery](), ethq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*EntityTypeHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) CountX(ctx context.Context) int {
-	count, err := ethq.Count(ctx)
+func (_q *EntityTypeHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (ethq *EntityTypeHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ethq *EntityTypeHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ethq.ctx, ent.OpQueryExist)
-	switch _, err := ethq.FirstID(ctx); {
+func (_q *EntityTypeHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (ethq *EntityTypeHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ethq *EntityTypeHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := ethq.Exist(ctx)
+func (_q *EntityTypeHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (ethq *EntityTypeHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the EntityTypeHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ethq *EntityTypeHistoryQuery) Clone() *EntityTypeHistoryQuery {
-	if ethq == nil {
+func (_q *EntityTypeHistoryQuery) Clone() *EntityTypeHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &EntityTypeHistoryQuery{
-		config:     ethq.config,
-		ctx:        ethq.ctx.Clone(),
-		order:      append([]entitytypehistory.OrderOption{}, ethq.order...),
-		inters:     append([]Interceptor{}, ethq.inters...),
-		predicates: append([]predicate.EntityTypeHistory{}, ethq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]entitytypehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.EntityTypeHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       ethq.sql.Clone(),
-		path:      ethq.path,
-		modifiers: append([]func(*sql.Selector){}, ethq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (ethq *EntityTypeHistoryQuery) Clone() *EntityTypeHistoryQuery {
 //		GroupBy(entitytypehistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (ethq *EntityTypeHistoryQuery) GroupBy(field string, fields ...string) *EntityTypeHistoryGroupBy {
-	ethq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &EntityTypeHistoryGroupBy{build: ethq}
-	grbuild.flds = &ethq.ctx.Fields
+func (_q *EntityTypeHistoryQuery) GroupBy(field string, fields ...string) *EntityTypeHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &EntityTypeHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = entitytypehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (ethq *EntityTypeHistoryQuery) GroupBy(field string, fields ...string) *Ent
 //	client.EntityTypeHistory.Query().
 //		Select(entitytypehistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (ethq *EntityTypeHistoryQuery) Select(fields ...string) *EntityTypeHistorySelect {
-	ethq.ctx.Fields = append(ethq.ctx.Fields, fields...)
-	sbuild := &EntityTypeHistorySelect{EntityTypeHistoryQuery: ethq}
+func (_q *EntityTypeHistoryQuery) Select(fields ...string) *EntityTypeHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &EntityTypeHistorySelect{EntityTypeHistoryQuery: _q}
 	sbuild.label = entitytypehistory.Label
-	sbuild.flds, sbuild.scan = &ethq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a EntityTypeHistorySelect configured with the given aggregations.
-func (ethq *EntityTypeHistoryQuery) Aggregate(fns ...AggregateFunc) *EntityTypeHistorySelect {
-	return ethq.Select().Aggregate(fns...)
+func (_q *EntityTypeHistoryQuery) Aggregate(fns ...AggregateFunc) *EntityTypeHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ethq *EntityTypeHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ethq.inters {
+func (_q *EntityTypeHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ethq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ethq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !entitytypehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if ethq.path != nil {
-		prev, err := ethq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ethq.sql = prev
+		_q.sql = prev
 	}
 	if entitytypehistory.Policy == nil {
 		return errors.New("generated: uninitialized entitytypehistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := entitytypehistory.Policy.EvalQuery(ctx, ethq); err != nil {
+	if err := entitytypehistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ethq *EntityTypeHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntityTypeHistory, error) {
+func (_q *EntityTypeHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntityTypeHistory, error) {
 	var (
 		nodes = []*EntityTypeHistory{}
-		_spec = ethq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EntityTypeHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &EntityTypeHistory{config: ethq.config}
+		node := &EntityTypeHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = ethq.schemaConfig.EntityTypeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ethq.schemaConfig)
-	if len(ethq.modifiers) > 0 {
-		_spec.Modifiers = ethq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.EntityTypeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ethq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range ethq.loadTotal {
-		if err := ethq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (ethq *EntityTypeHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ethq.querySpec()
-	_spec.Node.Schema = ethq.schemaConfig.EntityTypeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ethq.schemaConfig)
-	if len(ethq.modifiers) > 0 {
-		_spec.Modifiers = ethq.modifiers
+func (_q *EntityTypeHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.EntityTypeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = ethq.ctx.Fields
-	if len(ethq.ctx.Fields) > 0 {
-		_spec.Unique = ethq.ctx.Unique != nil && *ethq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ethq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ethq *EntityTypeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *EntityTypeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(entitytypehistory.Table, entitytypehistory.Columns, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
-	_spec.From = ethq.sql
-	if unique := ethq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ethq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ethq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, entitytypehistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (ethq *EntityTypeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := ethq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ethq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ethq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ethq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (ethq *EntityTypeHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ethq *EntityTypeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ethq.driver.Dialect())
+func (_q *EntityTypeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(entitytypehistory.Table)
-	columns := ethq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = entitytypehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ethq.sql != nil {
-		selector = ethq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ethq.ctx.Unique != nil && *ethq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(ethq.schemaConfig.EntityTypeHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, ethq.schemaConfig)
+	t1.Schema(_q.schemaConfig.EntityTypeHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range ethq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range ethq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ethq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ethq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ethq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ethq *EntityTypeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
-	ethq.modifiers = append(ethq.modifiers, modifiers...)
-	return ethq.Select()
+func (_q *EntityTypeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type EntityTypeHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ethgb *EntityTypeHistoryGroupBy) Aggregate(fns ...AggregateFunc) *EntityTypeHistoryGroupBy {
-	ethgb.fns = append(ethgb.fns, fns...)
-	return ethgb
+func (_g *EntityTypeHistoryGroupBy) Aggregate(fns ...AggregateFunc) *EntityTypeHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ethgb *EntityTypeHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ethgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ethgb.build.prepareQuery(ctx); err != nil {
+func (_g *EntityTypeHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EntityTypeHistoryQuery, *EntityTypeHistoryGroupBy](ctx, ethgb.build, ethgb, ethgb.build.inters, v)
+	return scanWithInterceptors[*EntityTypeHistoryQuery, *EntityTypeHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ethgb *EntityTypeHistoryGroupBy) sqlScan(ctx context.Context, root *EntityTypeHistoryQuery, v any) error {
+func (_g *EntityTypeHistoryGroupBy) sqlScan(ctx context.Context, root *EntityTypeHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ethgb.fns))
-	for _, fn := range ethgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ethgb.flds)+len(ethgb.fns))
-		for _, f := range *ethgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ethgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ethgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type EntityTypeHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (eths *EntityTypeHistorySelect) Aggregate(fns ...AggregateFunc) *EntityTypeHistorySelect {
-	eths.fns = append(eths.fns, fns...)
-	return eths
+func (_s *EntityTypeHistorySelect) Aggregate(fns ...AggregateFunc) *EntityTypeHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (eths *EntityTypeHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, eths.ctx, ent.OpQuerySelect)
-	if err := eths.prepareQuery(ctx); err != nil {
+func (_s *EntityTypeHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EntityTypeHistoryQuery, *EntityTypeHistorySelect](ctx, eths.EntityTypeHistoryQuery, eths, eths.inters, v)
+	return scanWithInterceptors[*EntityTypeHistoryQuery, *EntityTypeHistorySelect](ctx, _s.EntityTypeHistoryQuery, _s, _s.inters, v)
 }
 
-func (eths *EntityTypeHistorySelect) sqlScan(ctx context.Context, root *EntityTypeHistoryQuery, v any) error {
+func (_s *EntityTypeHistorySelect) sqlScan(ctx context.Context, root *EntityTypeHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(eths.fns))
-	for _, fn := range eths.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*eths.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (eths *EntityTypeHistorySelect) sqlScan(ctx context.Context, root *EntityTy
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := eths.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (eths *EntityTypeHistorySelect) sqlScan(ctx context.Context, root *EntityTy
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (eths *EntityTypeHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
-	eths.modifiers = append(eths.modifiers, modifiers...)
-	return eths
+func (_s *EntityTypeHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

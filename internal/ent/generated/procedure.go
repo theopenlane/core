@@ -261,7 +261,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Procedure fields.
-func (pr *Procedure) assignValues(columns []string, values []any) error {
+func (_m *Procedure) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -271,55 +271,55 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				pr.ID = value.String
+				_m.ID = value.String
 			}
 		case procedure.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				pr.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case procedure.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				pr.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case procedure.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				pr.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case procedure.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				pr.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case procedure.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				pr.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case procedure.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				pr.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case procedure.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				pr.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case procedure.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -327,79 +327,79 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				pr.Revision = value.String
+				_m.Revision = value.String
 			}
 		case procedure.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				pr.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case procedure.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				pr.Name = value.String
+				_m.Name = value.String
 			}
 		case procedure.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				pr.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case procedure.FieldProcedureType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field procedure_type", values[i])
 			} else if value.Valid {
-				pr.ProcedureType = value.String
+				_m.ProcedureType = value.String
 			}
 		case procedure.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				pr.Details = value.String
+				_m.Details = value.String
 			}
 		case procedure.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
 			} else if value.Valid {
-				pr.ApprovalRequired = value.Bool
+				_m.ApprovalRequired = value.Bool
 			}
 		case procedure.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
-				pr.ReviewDue = value.Time
+				_m.ReviewDue = value.Time
 			}
 		case procedure.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				pr.ReviewFrequency = enums.Frequency(value.String)
+				_m.ReviewFrequency = enums.Frequency(value.String)
 			}
 		case procedure.FieldApproverID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
 			} else if value.Valid {
-				pr.ApproverID = value.String
+				_m.ApproverID = value.String
 			}
 		case procedure.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				pr.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case procedure.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
-				pr.Summary = value.String
+				_m.Summary = value.String
 			}
 		case procedure.FieldTagSuggestions:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.TagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.TagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
 				}
 			}
@@ -407,7 +407,7 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.DismissedTagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedTagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
 				}
 			}
@@ -415,7 +415,7 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.ControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
 				}
 			}
@@ -423,7 +423,7 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.DismissedControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
 				}
 			}
@@ -431,7 +431,7 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.ImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
 				}
 			}
@@ -439,7 +439,7 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.DismissedImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
@@ -447,11 +447,11 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_procedures", values[i])
 			} else if value.Valid {
-				pr.control_objective_procedures = new(string)
-				*pr.control_objective_procedures = value.String
+				_m.control_objective_procedures = new(string)
+				*_m.control_objective_procedures = value.String
 			}
 		default:
-			pr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -459,387 +459,387 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Procedure.
 // This includes values selected through modifiers, order, etc.
-func (pr *Procedure) Value(name string) (ent.Value, error) {
-	return pr.selectValues.Get(name)
+func (_m *Procedure) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Procedure entity.
-func (pr *Procedure) QueryOwner() *OrganizationQuery {
-	return NewProcedureClient(pr.config).QueryOwner(pr)
+func (_m *Procedure) QueryOwner() *OrganizationQuery {
+	return NewProcedureClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Procedure entity.
-func (pr *Procedure) QueryBlockedGroups() *GroupQuery {
-	return NewProcedureClient(pr.config).QueryBlockedGroups(pr)
+func (_m *Procedure) QueryBlockedGroups() *GroupQuery {
+	return NewProcedureClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Procedure entity.
-func (pr *Procedure) QueryEditors() *GroupQuery {
-	return NewProcedureClient(pr.config).QueryEditors(pr)
+func (_m *Procedure) QueryEditors() *GroupQuery {
+	return NewProcedureClient(_m.config).QueryEditors(_m)
 }
 
 // QueryApprover queries the "approver" edge of the Procedure entity.
-func (pr *Procedure) QueryApprover() *GroupQuery {
-	return NewProcedureClient(pr.config).QueryApprover(pr)
+func (_m *Procedure) QueryApprover() *GroupQuery {
+	return NewProcedureClient(_m.config).QueryApprover(_m)
 }
 
 // QueryDelegate queries the "delegate" edge of the Procedure entity.
-func (pr *Procedure) QueryDelegate() *GroupQuery {
-	return NewProcedureClient(pr.config).QueryDelegate(pr)
+func (_m *Procedure) QueryDelegate() *GroupQuery {
+	return NewProcedureClient(_m.config).QueryDelegate(_m)
 }
 
 // QueryControls queries the "controls" edge of the Procedure entity.
-func (pr *Procedure) QueryControls() *ControlQuery {
-	return NewProcedureClient(pr.config).QueryControls(pr)
+func (_m *Procedure) QueryControls() *ControlQuery {
+	return NewProcedureClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Procedure entity.
-func (pr *Procedure) QuerySubcontrols() *SubcontrolQuery {
-	return NewProcedureClient(pr.config).QuerySubcontrols(pr)
+func (_m *Procedure) QuerySubcontrols() *SubcontrolQuery {
+	return NewProcedureClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Procedure entity.
-func (pr *Procedure) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewProcedureClient(pr.config).QueryInternalPolicies(pr)
+func (_m *Procedure) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewProcedureClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Procedure entity.
-func (pr *Procedure) QueryPrograms() *ProgramQuery {
-	return NewProcedureClient(pr.config).QueryPrograms(pr)
+func (_m *Procedure) QueryPrograms() *ProgramQuery {
+	return NewProcedureClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryNarratives queries the "narratives" edge of the Procedure entity.
-func (pr *Procedure) QueryNarratives() *NarrativeQuery {
-	return NewProcedureClient(pr.config).QueryNarratives(pr)
+func (_m *Procedure) QueryNarratives() *NarrativeQuery {
+	return NewProcedureClient(_m.config).QueryNarratives(_m)
 }
 
 // QueryRisks queries the "risks" edge of the Procedure entity.
-func (pr *Procedure) QueryRisks() *RiskQuery {
-	return NewProcedureClient(pr.config).QueryRisks(pr)
+func (_m *Procedure) QueryRisks() *RiskQuery {
+	return NewProcedureClient(_m.config).QueryRisks(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Procedure entity.
-func (pr *Procedure) QueryTasks() *TaskQuery {
-	return NewProcedureClient(pr.config).QueryTasks(pr)
+func (_m *Procedure) QueryTasks() *TaskQuery {
+	return NewProcedureClient(_m.config).QueryTasks(_m)
 }
 
 // Update returns a builder for updating this Procedure.
 // Note that you need to call Procedure.Unwrap() before calling this method if this Procedure
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (pr *Procedure) Update() *ProcedureUpdateOne {
-	return NewProcedureClient(pr.config).UpdateOne(pr)
+func (_m *Procedure) Update() *ProcedureUpdateOne {
+	return NewProcedureClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Procedure entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (pr *Procedure) Unwrap() *Procedure {
-	_tx, ok := pr.config.driver.(*txDriver)
+func (_m *Procedure) Unwrap() *Procedure {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Procedure is not a transactional entity")
 	}
-	pr.config.driver = _tx.drv
-	return pr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (pr *Procedure) String() string {
+func (_m *Procedure) String() string {
 	var builder strings.Builder
 	builder.WriteString("Procedure(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(pr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(pr.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(pr.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(pr.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(pr.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(pr.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(pr.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(pr.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("procedure_type=")
-	builder.WriteString(pr.ProcedureType)
+	builder.WriteString(_m.ProcedureType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(pr.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
-	builder.WriteString(fmt.Sprintf("%v", pr.ApprovalRequired))
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
 	builder.WriteString(", ")
 	builder.WriteString("review_due=")
-	builder.WriteString(pr.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(_m.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
-	builder.WriteString(fmt.Sprintf("%v", pr.ReviewFrequency))
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
 	builder.WriteString(", ")
 	builder.WriteString("approver_id=")
-	builder.WriteString(pr.ApproverID)
+	builder.WriteString(_m.ApproverID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(pr.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
-	builder.WriteString(pr.Summary)
+	builder.WriteString(_m.Summary)
 	builder.WriteString(", ")
 	builder.WriteString("tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", pr.TagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", pr.DismissedTagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedTagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", pr.ControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", pr.DismissedControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", pr.ImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", pr.DismissedImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedBlockedGroups(name string) ([]*Group, error) {
-	if pr.Edges.namedBlockedGroups == nil {
+func (_m *Procedure) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if pr.Edges.namedBlockedGroups == nil {
-		pr.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Procedure) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		pr.Edges.namedBlockedGroups[name] = append(pr.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedEditors(name string) ([]*Group, error) {
-	if pr.Edges.namedEditors == nil {
+func (_m *Procedure) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedEditors(name string, edges ...*Group) {
-	if pr.Edges.namedEditors == nil {
-		pr.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Procedure) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		pr.Edges.namedEditors[name] = append(pr.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedControls(name string) ([]*Control, error) {
-	if pr.Edges.namedControls == nil {
+func (_m *Procedure) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedControls(name string, edges ...*Control) {
-	if pr.Edges.namedControls == nil {
-		pr.Edges.namedControls = make(map[string][]*Control)
+func (_m *Procedure) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		pr.Edges.namedControls[name] = append(pr.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if pr.Edges.namedSubcontrols == nil {
+func (_m *Procedure) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if pr.Edges.namedSubcontrols == nil {
-		pr.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *Procedure) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		pr.Edges.namedSubcontrols[name] = append(pr.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if pr.Edges.namedInternalPolicies == nil {
+func (_m *Procedure) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if pr.Edges.namedInternalPolicies == nil {
-		pr.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Procedure) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		pr.Edges.namedInternalPolicies[name] = append(pr.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedPrograms(name string) ([]*Program, error) {
-	if pr.Edges.namedPrograms == nil {
+func (_m *Procedure) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedPrograms(name string, edges ...*Program) {
-	if pr.Edges.namedPrograms == nil {
-		pr.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *Procedure) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		pr.Edges.namedPrograms[name] = append(pr.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedNarratives(name string) ([]*Narrative, error) {
-	if pr.Edges.namedNarratives == nil {
+func (_m *Procedure) NamedNarratives(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedNarratives[name]
+	nodes, ok := _m.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedNarratives(name string, edges ...*Narrative) {
-	if pr.Edges.namedNarratives == nil {
-		pr.Edges.namedNarratives = make(map[string][]*Narrative)
+func (_m *Procedure) appendNamedNarratives(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarratives == nil {
+		_m.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedNarratives[name] = []*Narrative{}
+		_m.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		pr.Edges.namedNarratives[name] = append(pr.Edges.namedNarratives[name], edges...)
+		_m.Edges.namedNarratives[name] = append(_m.Edges.namedNarratives[name], edges...)
 	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedRisks(name string) ([]*Risk, error) {
-	if pr.Edges.namedRisks == nil {
+func (_m *Procedure) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedRisks(name string, edges ...*Risk) {
-	if pr.Edges.namedRisks == nil {
-		pr.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *Procedure) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		pr.Edges.namedRisks[name] = append(pr.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Procedure) NamedTasks(name string) ([]*Task, error) {
-	if pr.Edges.namedTasks == nil {
+func (_m *Procedure) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Procedure) appendNamedTasks(name string, edges ...*Task) {
-	if pr.Edges.namedTasks == nil {
-		pr.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Procedure) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		pr.Edges.namedTasks[name] = append(pr.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 

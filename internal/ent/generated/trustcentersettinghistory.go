@@ -86,7 +86,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenterSettingHistory fields.
-func (tcsh *TrustCenterSettingHistory) assignValues(columns []string, values []any) error {
+func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -96,146 +96,146 @@ func (tcsh *TrustCenterSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tcsh.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcentersettinghistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				tcsh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case trustcentersettinghistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				tcsh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case trustcentersettinghistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				tcsh.Operation = *value
+				_m.Operation = *value
 			}
 		case trustcentersettinghistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcsh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcentersettinghistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcsh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcentersettinghistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tcsh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcentersettinghistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tcsh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcentersettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tcsh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcentersettinghistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tcsh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcentersettinghistory.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
-				tcsh.TrustCenterID = value.String
+				_m.TrustCenterID = value.String
 			}
 		case trustcentersettinghistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				tcsh.Title = value.String
+				_m.Title = value.String
 			}
 		case trustcentersettinghistory.FieldOverview:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field overview", values[i])
 			} else if value.Valid {
-				tcsh.Overview = value.String
+				_m.Overview = value.String
 			}
 		case trustcentersettinghistory.FieldLogoRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
 			} else if value.Valid {
-				tcsh.LogoRemoteURL = new(string)
-				*tcsh.LogoRemoteURL = value.String
+				_m.LogoRemoteURL = new(string)
+				*_m.LogoRemoteURL = value.String
 			}
 		case trustcentersettinghistory.FieldLogoLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
 			} else if value.Valid {
-				tcsh.LogoLocalFileID = new(string)
-				*tcsh.LogoLocalFileID = value.String
+				_m.LogoLocalFileID = new(string)
+				*_m.LogoLocalFileID = value.String
 			}
 		case trustcentersettinghistory.FieldFaviconRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field favicon_remote_url", values[i])
 			} else if value.Valid {
-				tcsh.FaviconRemoteURL = new(string)
-				*tcsh.FaviconRemoteURL = value.String
+				_m.FaviconRemoteURL = new(string)
+				*_m.FaviconRemoteURL = value.String
 			}
 		case trustcentersettinghistory.FieldFaviconLocalFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field favicon_local_file_id", values[i])
 			} else if value.Valid {
-				tcsh.FaviconLocalFileID = new(string)
-				*tcsh.FaviconLocalFileID = value.String
+				_m.FaviconLocalFileID = new(string)
+				*_m.FaviconLocalFileID = value.String
 			}
 		case trustcentersettinghistory.FieldThemeMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field theme_mode", values[i])
 			} else if value.Valid {
-				tcsh.ThemeMode = enums.TrustCenterThemeMode(value.String)
+				_m.ThemeMode = enums.TrustCenterThemeMode(value.String)
 			}
 		case trustcentersettinghistory.FieldPrimaryColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field primary_color", values[i])
 			} else if value.Valid {
-				tcsh.PrimaryColor = value.String
+				_m.PrimaryColor = value.String
 			}
 		case trustcentersettinghistory.FieldFont:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field font", values[i])
 			} else if value.Valid {
-				tcsh.Font = value.String
+				_m.Font = value.String
 			}
 		case trustcentersettinghistory.FieldForegroundColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field foreground_color", values[i])
 			} else if value.Valid {
-				tcsh.ForegroundColor = value.String
+				_m.ForegroundColor = value.String
 			}
 		case trustcentersettinghistory.FieldBackgroundColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field background_color", values[i])
 			} else if value.Valid {
-				tcsh.BackgroundColor = value.String
+				_m.BackgroundColor = value.String
 			}
 		case trustcentersettinghistory.FieldAccentColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field accent_color", values[i])
 			} else if value.Valid {
-				tcsh.AccentColor = value.String
+				_m.AccentColor = value.String
 			}
 		default:
-			tcsh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -243,106 +243,106 @@ func (tcsh *TrustCenterSettingHistory) assignValues(columns []string, values []a
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterSettingHistory.
 // This includes values selected through modifiers, order, etc.
-func (tcsh *TrustCenterSettingHistory) Value(name string) (ent.Value, error) {
-	return tcsh.selectValues.Get(name)
+func (_m *TrustCenterSettingHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TrustCenterSettingHistory.
 // Note that you need to call TrustCenterSettingHistory.Unwrap() before calling this method if this TrustCenterSettingHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcsh *TrustCenterSettingHistory) Update() *TrustCenterSettingHistoryUpdateOne {
-	return NewTrustCenterSettingHistoryClient(tcsh.config).UpdateOne(tcsh)
+func (_m *TrustCenterSettingHistory) Update() *TrustCenterSettingHistoryUpdateOne {
+	return NewTrustCenterSettingHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenterSettingHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcsh *TrustCenterSettingHistory) Unwrap() *TrustCenterSettingHistory {
-	_tx, ok := tcsh.config.driver.(*txDriver)
+func (_m *TrustCenterSettingHistory) Unwrap() *TrustCenterSettingHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenterSettingHistory is not a transactional entity")
 	}
-	tcsh.config.driver = _tx.drv
-	return tcsh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcsh *TrustCenterSettingHistory) String() string {
+func (_m *TrustCenterSettingHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenterSettingHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcsh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(tcsh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(tcsh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", tcsh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(tcsh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tcsh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tcsh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tcsh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tcsh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tcsh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
-	builder.WriteString(tcsh.TrustCenterID)
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(tcsh.Title)
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("overview=")
-	builder.WriteString(tcsh.Overview)
+	builder.WriteString(_m.Overview)
 	builder.WriteString(", ")
-	if v := tcsh.LogoRemoteURL; v != nil {
+	if v := _m.LogoRemoteURL; v != nil {
 		builder.WriteString("logo_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := tcsh.LogoLocalFileID; v != nil {
+	if v := _m.LogoLocalFileID; v != nil {
 		builder.WriteString("logo_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := tcsh.FaviconRemoteURL; v != nil {
+	if v := _m.FaviconRemoteURL; v != nil {
 		builder.WriteString("favicon_remote_url=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := tcsh.FaviconLocalFileID; v != nil {
+	if v := _m.FaviconLocalFileID; v != nil {
 		builder.WriteString("favicon_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("theme_mode=")
-	builder.WriteString(fmt.Sprintf("%v", tcsh.ThemeMode))
+	builder.WriteString(fmt.Sprintf("%v", _m.ThemeMode))
 	builder.WriteString(", ")
 	builder.WriteString("primary_color=")
-	builder.WriteString(tcsh.PrimaryColor)
+	builder.WriteString(_m.PrimaryColor)
 	builder.WriteString(", ")
 	builder.WriteString("font=")
-	builder.WriteString(tcsh.Font)
+	builder.WriteString(_m.Font)
 	builder.WriteString(", ")
 	builder.WriteString("foreground_color=")
-	builder.WriteString(tcsh.ForegroundColor)
+	builder.WriteString(_m.ForegroundColor)
 	builder.WriteString(", ")
 	builder.WriteString("background_color=")
-	builder.WriteString(tcsh.BackgroundColor)
+	builder.WriteString(_m.BackgroundColor)
 	builder.WriteString(", ")
 	builder.WriteString("accent_color=")
-	builder.WriteString(tcsh.AccentColor)
+	builder.WriteString(_m.AccentColor)
 	builder.WriteByte(')')
 	return builder.String()
 }

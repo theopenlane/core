@@ -27,225 +27,225 @@ type GroupHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the GroupHistoryUpdate builder.
-func (ghu *GroupHistoryUpdate) Where(ps ...predicate.GroupHistory) *GroupHistoryUpdate {
-	ghu.mutation.Where(ps...)
-	return ghu
+func (_u *GroupHistoryUpdate) Where(ps ...predicate.GroupHistory) *GroupHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ghu *GroupHistoryUpdate) SetUpdatedAt(t time.Time) *GroupHistoryUpdate {
-	ghu.mutation.SetUpdatedAt(t)
-	return ghu
+func (_u *GroupHistoryUpdate) SetUpdatedAt(v time.Time) *GroupHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ghu *GroupHistoryUpdate) ClearUpdatedAt() *GroupHistoryUpdate {
-	ghu.mutation.ClearUpdatedAt()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearUpdatedAt() *GroupHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ghu *GroupHistoryUpdate) SetUpdatedBy(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetUpdatedBy(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetUpdatedBy(v string) *GroupHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableUpdatedBy(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetUpdatedBy(*s)
+func (_u *GroupHistoryUpdate) SetNillableUpdatedBy(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ghu *GroupHistoryUpdate) ClearUpdatedBy() *GroupHistoryUpdate {
-	ghu.mutation.ClearUpdatedBy()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearUpdatedBy() *GroupHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ghu *GroupHistoryUpdate) SetDeletedAt(t time.Time) *GroupHistoryUpdate {
-	ghu.mutation.SetDeletedAt(t)
-	return ghu
+func (_u *GroupHistoryUpdate) SetDeletedAt(v time.Time) *GroupHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableDeletedAt(t *time.Time) *GroupHistoryUpdate {
-	if t != nil {
-		ghu.SetDeletedAt(*t)
+func (_u *GroupHistoryUpdate) SetNillableDeletedAt(v *time.Time) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ghu *GroupHistoryUpdate) ClearDeletedAt() *GroupHistoryUpdate {
-	ghu.mutation.ClearDeletedAt()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearDeletedAt() *GroupHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ghu *GroupHistoryUpdate) SetDeletedBy(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetDeletedBy(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetDeletedBy(v string) *GroupHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableDeletedBy(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetDeletedBy(*s)
+func (_u *GroupHistoryUpdate) SetNillableDeletedBy(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ghu *GroupHistoryUpdate) ClearDeletedBy() *GroupHistoryUpdate {
-	ghu.mutation.ClearDeletedBy()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearDeletedBy() *GroupHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ghu *GroupHistoryUpdate) SetTags(s []string) *GroupHistoryUpdate {
-	ghu.mutation.SetTags(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetTags(v []string) *GroupHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ghu *GroupHistoryUpdate) AppendTags(s []string) *GroupHistoryUpdate {
-	ghu.mutation.AppendTags(s)
-	return ghu
+// AppendTags appends value to the "tags" field.
+func (_u *GroupHistoryUpdate) AppendTags(v []string) *GroupHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ghu *GroupHistoryUpdate) ClearTags() *GroupHistoryUpdate {
-	ghu.mutation.ClearTags()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearTags() *GroupHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ghu *GroupHistoryUpdate) SetOwnerID(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetOwnerID(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetOwnerID(v string) *GroupHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableOwnerID(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetOwnerID(*s)
+func (_u *GroupHistoryUpdate) SetNillableOwnerID(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ghu *GroupHistoryUpdate) ClearOwnerID() *GroupHistoryUpdate {
-	ghu.mutation.ClearOwnerID()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearOwnerID() *GroupHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ghu *GroupHistoryUpdate) SetName(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetName(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetName(v string) *GroupHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableName(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetName(*s)
+func (_u *GroupHistoryUpdate) SetNillableName(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ghu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ghu *GroupHistoryUpdate) SetDescription(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetDescription(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetDescription(v string) *GroupHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableDescription(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetDescription(*s)
+func (_u *GroupHistoryUpdate) SetNillableDescription(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ghu *GroupHistoryUpdate) ClearDescription() *GroupHistoryUpdate {
-	ghu.mutation.ClearDescription()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearDescription() *GroupHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
-func (ghu *GroupHistoryUpdate) SetGravatarLogoURL(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetGravatarLogoURL(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetGravatarLogoURL(v string) *GroupHistoryUpdate {
+	_u.mutation.SetGravatarLogoURL(v)
+	return _u
 }
 
 // SetNillableGravatarLogoURL sets the "gravatar_logo_url" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableGravatarLogoURL(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetGravatarLogoURL(*s)
+func (_u *GroupHistoryUpdate) SetNillableGravatarLogoURL(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetGravatarLogoURL(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearGravatarLogoURL clears the value of the "gravatar_logo_url" field.
-func (ghu *GroupHistoryUpdate) ClearGravatarLogoURL() *GroupHistoryUpdate {
-	ghu.mutation.ClearGravatarLogoURL()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearGravatarLogoURL() *GroupHistoryUpdate {
+	_u.mutation.ClearGravatarLogoURL()
+	return _u
 }
 
 // SetLogoURL sets the "logo_url" field.
-func (ghu *GroupHistoryUpdate) SetLogoURL(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetLogoURL(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetLogoURL(v string) *GroupHistoryUpdate {
+	_u.mutation.SetLogoURL(v)
+	return _u
 }
 
 // SetNillableLogoURL sets the "logo_url" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableLogoURL(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetLogoURL(*s)
+func (_u *GroupHistoryUpdate) SetNillableLogoURL(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetLogoURL(*v)
 	}
-	return ghu
+	return _u
 }
 
 // ClearLogoURL clears the value of the "logo_url" field.
-func (ghu *GroupHistoryUpdate) ClearLogoURL() *GroupHistoryUpdate {
-	ghu.mutation.ClearLogoURL()
-	return ghu
+func (_u *GroupHistoryUpdate) ClearLogoURL() *GroupHistoryUpdate {
+	_u.mutation.ClearLogoURL()
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ghu *GroupHistoryUpdate) SetDisplayName(s string) *GroupHistoryUpdate {
-	ghu.mutation.SetDisplayName(s)
-	return ghu
+func (_u *GroupHistoryUpdate) SetDisplayName(v string) *GroupHistoryUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ghu *GroupHistoryUpdate) SetNillableDisplayName(s *string) *GroupHistoryUpdate {
-	if s != nil {
-		ghu.SetDisplayName(*s)
+func (_u *GroupHistoryUpdate) SetNillableDisplayName(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return ghu
+	return _u
 }
 
 // Mutation returns the GroupHistoryMutation object of the builder.
-func (ghu *GroupHistoryUpdate) Mutation() *GroupHistoryMutation {
-	return ghu.mutation
+func (_u *GroupHistoryUpdate) Mutation() *GroupHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ghu *GroupHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ghu.defaults(); err != nil {
+func (_u *GroupHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ghu.sqlSave, ghu.mutation, ghu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ghu *GroupHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ghu.Save(ctx)
+func (_u *GroupHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -253,126 +253,126 @@ func (ghu *GroupHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ghu *GroupHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ghu.Save(ctx)
+func (_u *GroupHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ghu *GroupHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ghu.Exec(ctx); err != nil {
+func (_u *GroupHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ghu *GroupHistoryUpdate) defaults() error {
-	if _, ok := ghu.mutation.UpdatedAt(); !ok && !ghu.mutation.UpdatedAtCleared() {
+func (_u *GroupHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if grouphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized grouphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := grouphistory.UpdateDefaultUpdatedAt()
-		ghu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ghu *GroupHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdate {
-	ghu.modifiers = append(ghu.modifiers, modifiers...)
-	return ghu
+func (_u *GroupHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ghu *GroupHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(grouphistory.Table, grouphistory.Columns, sqlgraph.NewFieldSpec(grouphistory.FieldID, field.TypeString))
-	if ps := ghu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ghu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(grouphistory.FieldRef, field.TypeString)
 	}
-	if ghu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ghu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(grouphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ghu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ghu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ghu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(grouphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ghu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ghu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ghu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ghu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ghu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ghu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(grouphistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ghu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, grouphistory.FieldTags, value)
 		})
 	}
-	if ghu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(grouphistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ghu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(grouphistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ghu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(grouphistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ghu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(grouphistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ghu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(grouphistory.FieldDescription, field.TypeString, value)
 	}
-	if ghu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(grouphistory.FieldDescription, field.TypeString)
 	}
-	if ghu.mutation.IsManagedCleared() {
+	if _u.mutation.IsManagedCleared() {
 		_spec.ClearField(grouphistory.FieldIsManaged, field.TypeBool)
 	}
-	if value, ok := ghu.mutation.GravatarLogoURL(); ok {
+	if value, ok := _u.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)
 	}
-	if ghu.mutation.GravatarLogoURLCleared() {
+	if _u.mutation.GravatarLogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldGravatarLogoURL, field.TypeString)
 	}
-	if value, ok := ghu.mutation.LogoURL(); ok {
+	if value, ok := _u.mutation.LogoURL(); ok {
 		_spec.SetField(grouphistory.FieldLogoURL, field.TypeString, value)
 	}
-	if ghu.mutation.LogoURLCleared() {
+	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
-	if value, ok := ghu.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
 	}
-	_spec.Node.Schema = ghu.schemaConfig.GroupHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ghu.schemaConfig)
-	_spec.AddModifiers(ghu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ghu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.GroupHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{grouphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -380,8 +380,8 @@ func (ghu *GroupHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ghu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // GroupHistoryUpdateOne is the builder for updating a single GroupHistory entity.
@@ -394,232 +394,232 @@ type GroupHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ghuo *GroupHistoryUpdateOne) SetUpdatedAt(t time.Time) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetUpdatedAt(t)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetUpdatedAt(v time.Time) *GroupHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ghuo *GroupHistoryUpdateOne) ClearUpdatedAt() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearUpdatedAt()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearUpdatedAt() *GroupHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ghuo *GroupHistoryUpdateOne) SetUpdatedBy(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetUpdatedBy(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetUpdatedBy(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableUpdatedBy(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetUpdatedBy(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableUpdatedBy(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ghuo *GroupHistoryUpdateOne) ClearUpdatedBy() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearUpdatedBy()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearUpdatedBy() *GroupHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ghuo *GroupHistoryUpdateOne) SetDeletedAt(t time.Time) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetDeletedAt(t)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetDeletedAt(v time.Time) *GroupHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupHistoryUpdateOne {
-	if t != nil {
-		ghuo.SetDeletedAt(*t)
+func (_u *GroupHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ghuo *GroupHistoryUpdateOne) ClearDeletedAt() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearDeletedAt()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearDeletedAt() *GroupHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ghuo *GroupHistoryUpdateOne) SetDeletedBy(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetDeletedBy(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetDeletedBy(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableDeletedBy(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetDeletedBy(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableDeletedBy(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ghuo *GroupHistoryUpdateOne) ClearDeletedBy() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearDeletedBy()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearDeletedBy() *GroupHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ghuo *GroupHistoryUpdateOne) SetTags(s []string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetTags(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetTags(v []string) *GroupHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ghuo *GroupHistoryUpdateOne) AppendTags(s []string) *GroupHistoryUpdateOne {
-	ghuo.mutation.AppendTags(s)
-	return ghuo
+// AppendTags appends value to the "tags" field.
+func (_u *GroupHistoryUpdateOne) AppendTags(v []string) *GroupHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ghuo *GroupHistoryUpdateOne) ClearTags() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearTags()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearTags() *GroupHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ghuo *GroupHistoryUpdateOne) SetOwnerID(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetOwnerID(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetOwnerID(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableOwnerID(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetOwnerID(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableOwnerID(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ghuo *GroupHistoryUpdateOne) ClearOwnerID() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearOwnerID()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearOwnerID() *GroupHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ghuo *GroupHistoryUpdateOne) SetName(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetName(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetName(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableName(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetName(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableName(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ghuo *GroupHistoryUpdateOne) SetDescription(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetDescription(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetDescription(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableDescription(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetDescription(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableDescription(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ghuo *GroupHistoryUpdateOne) ClearDescription() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearDescription()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearDescription() *GroupHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetGravatarLogoURL sets the "gravatar_logo_url" field.
-func (ghuo *GroupHistoryUpdateOne) SetGravatarLogoURL(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetGravatarLogoURL(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetGravatarLogoURL(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetGravatarLogoURL(v)
+	return _u
 }
 
 // SetNillableGravatarLogoURL sets the "gravatar_logo_url" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableGravatarLogoURL(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetGravatarLogoURL(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableGravatarLogoURL(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetGravatarLogoURL(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearGravatarLogoURL clears the value of the "gravatar_logo_url" field.
-func (ghuo *GroupHistoryUpdateOne) ClearGravatarLogoURL() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearGravatarLogoURL()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearGravatarLogoURL() *GroupHistoryUpdateOne {
+	_u.mutation.ClearGravatarLogoURL()
+	return _u
 }
 
 // SetLogoURL sets the "logo_url" field.
-func (ghuo *GroupHistoryUpdateOne) SetLogoURL(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetLogoURL(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetLogoURL(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetLogoURL(v)
+	return _u
 }
 
 // SetNillableLogoURL sets the "logo_url" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableLogoURL(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetLogoURL(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableLogoURL(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoURL(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // ClearLogoURL clears the value of the "logo_url" field.
-func (ghuo *GroupHistoryUpdateOne) ClearLogoURL() *GroupHistoryUpdateOne {
-	ghuo.mutation.ClearLogoURL()
-	return ghuo
+func (_u *GroupHistoryUpdateOne) ClearLogoURL() *GroupHistoryUpdateOne {
+	_u.mutation.ClearLogoURL()
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ghuo *GroupHistoryUpdateOne) SetDisplayName(s string) *GroupHistoryUpdateOne {
-	ghuo.mutation.SetDisplayName(s)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) SetDisplayName(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ghuo *GroupHistoryUpdateOne) SetNillableDisplayName(s *string) *GroupHistoryUpdateOne {
-	if s != nil {
-		ghuo.SetDisplayName(*s)
+func (_u *GroupHistoryUpdateOne) SetNillableDisplayName(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return ghuo
+	return _u
 }
 
 // Mutation returns the GroupHistoryMutation object of the builder.
-func (ghuo *GroupHistoryUpdateOne) Mutation() *GroupHistoryMutation {
-	return ghuo.mutation
+func (_u *GroupHistoryUpdateOne) Mutation() *GroupHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the GroupHistoryUpdate builder.
-func (ghuo *GroupHistoryUpdateOne) Where(ps ...predicate.GroupHistory) *GroupHistoryUpdateOne {
-	ghuo.mutation.Where(ps...)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) Where(ps ...predicate.GroupHistory) *GroupHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ghuo *GroupHistoryUpdateOne) Select(field string, fields ...string) *GroupHistoryUpdateOne {
-	ghuo.fields = append([]string{field}, fields...)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) Select(field string, fields ...string) *GroupHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated GroupHistory entity.
-func (ghuo *GroupHistoryUpdateOne) Save(ctx context.Context) (*GroupHistory, error) {
-	if err := ghuo.defaults(); err != nil {
+func (_u *GroupHistoryUpdateOne) Save(ctx context.Context) (*GroupHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ghuo.sqlSave, ghuo.mutation, ghuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ghuo *GroupHistoryUpdateOne) SaveX(ctx context.Context) *GroupHistory {
-	node, err := ghuo.Save(ctx)
+func (_u *GroupHistoryUpdateOne) SaveX(ctx context.Context) *GroupHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -627,44 +627,44 @@ func (ghuo *GroupHistoryUpdateOne) SaveX(ctx context.Context) *GroupHistory {
 }
 
 // Exec executes the query on the entity.
-func (ghuo *GroupHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ghuo.Save(ctx)
+func (_u *GroupHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ghuo *GroupHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ghuo.Exec(ctx); err != nil {
+func (_u *GroupHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ghuo *GroupHistoryUpdateOne) defaults() error {
-	if _, ok := ghuo.mutation.UpdatedAt(); !ok && !ghuo.mutation.UpdatedAtCleared() {
+func (_u *GroupHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if grouphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized grouphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := grouphistory.UpdateDefaultUpdatedAt()
-		ghuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ghuo *GroupHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdateOne {
-	ghuo.modifiers = append(ghuo.modifiers, modifiers...)
-	return ghuo
+func (_u *GroupHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ghuo *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHistory, err error) {
+func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(grouphistory.Table, grouphistory.Columns, sqlgraph.NewFieldSpec(grouphistory.FieldID, field.TypeString))
-	id, ok := ghuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "GroupHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ghuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, grouphistory.FieldID)
 		for _, f := range fields {
@@ -676,97 +676,97 @@ func (ghuo *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHis
 			}
 		}
 	}
-	if ps := ghuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ghuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(grouphistory.FieldRef, field.TypeString)
 	}
-	if ghuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ghuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(grouphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ghuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ghuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ghuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(grouphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ghuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ghuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ghuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ghuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ghuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ghuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(grouphistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ghuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, grouphistory.FieldTags, value)
 		})
 	}
-	if ghuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(grouphistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ghuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(grouphistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ghuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(grouphistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ghuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(grouphistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ghuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(grouphistory.FieldDescription, field.TypeString, value)
 	}
-	if ghuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(grouphistory.FieldDescription, field.TypeString)
 	}
-	if ghuo.mutation.IsManagedCleared() {
+	if _u.mutation.IsManagedCleared() {
 		_spec.ClearField(grouphistory.FieldIsManaged, field.TypeBool)
 	}
-	if value, ok := ghuo.mutation.GravatarLogoURL(); ok {
+	if value, ok := _u.mutation.GravatarLogoURL(); ok {
 		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)
 	}
-	if ghuo.mutation.GravatarLogoURLCleared() {
+	if _u.mutation.GravatarLogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldGravatarLogoURL, field.TypeString)
 	}
-	if value, ok := ghuo.mutation.LogoURL(); ok {
+	if value, ok := _u.mutation.LogoURL(); ok {
 		_spec.SetField(grouphistory.FieldLogoURL, field.TypeString, value)
 	}
-	if ghuo.mutation.LogoURLCleared() {
+	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
-	if value, ok := ghuo.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
 	}
-	_spec.Node.Schema = ghuo.schemaConfig.GroupHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ghuo.schemaConfig)
-	_spec.AddModifiers(ghuo.modifiers...)
-	_node = &GroupHistory{config: ghuo.config}
+	_spec.Node.Schema = _u.schemaConfig.GroupHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &GroupHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ghuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{grouphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -774,6 +774,6 @@ func (ghuo *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHis
 		}
 		return nil, err
 	}
-	ghuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -25,289 +25,289 @@ type ControlImplementationCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cic *ControlImplementationCreate) SetCreatedAt(t time.Time) *ControlImplementationCreate {
-	cic.mutation.SetCreatedAt(t)
-	return cic
+func (_c *ControlImplementationCreate) SetCreatedAt(v time.Time) *ControlImplementationCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableCreatedAt(t *time.Time) *ControlImplementationCreate {
-	if t != nil {
-		cic.SetCreatedAt(*t)
+func (_c *ControlImplementationCreate) SetNillableCreatedAt(v *time.Time) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cic *ControlImplementationCreate) SetUpdatedAt(t time.Time) *ControlImplementationCreate {
-	cic.mutation.SetUpdatedAt(t)
-	return cic
+func (_c *ControlImplementationCreate) SetUpdatedAt(v time.Time) *ControlImplementationCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableUpdatedAt(t *time.Time) *ControlImplementationCreate {
-	if t != nil {
-		cic.SetUpdatedAt(*t)
+func (_c *ControlImplementationCreate) SetNillableUpdatedAt(v *time.Time) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (cic *ControlImplementationCreate) SetCreatedBy(s string) *ControlImplementationCreate {
-	cic.mutation.SetCreatedBy(s)
-	return cic
+func (_c *ControlImplementationCreate) SetCreatedBy(v string) *ControlImplementationCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableCreatedBy(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetCreatedBy(*s)
+func (_c *ControlImplementationCreate) SetNillableCreatedBy(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cic *ControlImplementationCreate) SetUpdatedBy(s string) *ControlImplementationCreate {
-	cic.mutation.SetUpdatedBy(s)
-	return cic
+func (_c *ControlImplementationCreate) SetUpdatedBy(v string) *ControlImplementationCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableUpdatedBy(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetUpdatedBy(*s)
+func (_c *ControlImplementationCreate) SetNillableUpdatedBy(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cic *ControlImplementationCreate) SetDeletedAt(t time.Time) *ControlImplementationCreate {
-	cic.mutation.SetDeletedAt(t)
-	return cic
+func (_c *ControlImplementationCreate) SetDeletedAt(v time.Time) *ControlImplementationCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableDeletedAt(t *time.Time) *ControlImplementationCreate {
-	if t != nil {
-		cic.SetDeletedAt(*t)
+func (_c *ControlImplementationCreate) SetNillableDeletedAt(v *time.Time) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cic *ControlImplementationCreate) SetDeletedBy(s string) *ControlImplementationCreate {
-	cic.mutation.SetDeletedBy(s)
-	return cic
+func (_c *ControlImplementationCreate) SetDeletedBy(v string) *ControlImplementationCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableDeletedBy(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetDeletedBy(*s)
+func (_c *ControlImplementationCreate) SetNillableDeletedBy(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (cic *ControlImplementationCreate) SetTags(s []string) *ControlImplementationCreate {
-	cic.mutation.SetTags(s)
-	return cic
+func (_c *ControlImplementationCreate) SetTags(v []string) *ControlImplementationCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cic *ControlImplementationCreate) SetOwnerID(s string) *ControlImplementationCreate {
-	cic.mutation.SetOwnerID(s)
-	return cic
+func (_c *ControlImplementationCreate) SetOwnerID(v string) *ControlImplementationCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableOwnerID(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetOwnerID(*s)
+func (_c *ControlImplementationCreate) SetNillableOwnerID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (cic *ControlImplementationCreate) SetStatus(es enums.DocumentStatus) *ControlImplementationCreate {
-	cic.mutation.SetStatus(es)
-	return cic
+func (_c *ControlImplementationCreate) SetStatus(v enums.DocumentStatus) *ControlImplementationCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableStatus(es *enums.DocumentStatus) *ControlImplementationCreate {
-	if es != nil {
-		cic.SetStatus(*es)
+func (_c *ControlImplementationCreate) SetNillableStatus(v *enums.DocumentStatus) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetImplementationDate sets the "implementation_date" field.
-func (cic *ControlImplementationCreate) SetImplementationDate(t time.Time) *ControlImplementationCreate {
-	cic.mutation.SetImplementationDate(t)
-	return cic
+func (_c *ControlImplementationCreate) SetImplementationDate(v time.Time) *ControlImplementationCreate {
+	_c.mutation.SetImplementationDate(v)
+	return _c
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableImplementationDate(t *time.Time) *ControlImplementationCreate {
-	if t != nil {
-		cic.SetImplementationDate(*t)
+func (_c *ControlImplementationCreate) SetNillableImplementationDate(v *time.Time) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetImplementationDate(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetVerified sets the "verified" field.
-func (cic *ControlImplementationCreate) SetVerified(b bool) *ControlImplementationCreate {
-	cic.mutation.SetVerified(b)
-	return cic
+func (_c *ControlImplementationCreate) SetVerified(v bool) *ControlImplementationCreate {
+	_c.mutation.SetVerified(v)
+	return _c
 }
 
 // SetNillableVerified sets the "verified" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableVerified(b *bool) *ControlImplementationCreate {
-	if b != nil {
-		cic.SetVerified(*b)
+func (_c *ControlImplementationCreate) SetNillableVerified(v *bool) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetVerified(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetVerificationDate sets the "verification_date" field.
-func (cic *ControlImplementationCreate) SetVerificationDate(t time.Time) *ControlImplementationCreate {
-	cic.mutation.SetVerificationDate(t)
-	return cic
+func (_c *ControlImplementationCreate) SetVerificationDate(v time.Time) *ControlImplementationCreate {
+	_c.mutation.SetVerificationDate(v)
+	return _c
 }
 
 // SetNillableVerificationDate sets the "verification_date" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableVerificationDate(t *time.Time) *ControlImplementationCreate {
-	if t != nil {
-		cic.SetVerificationDate(*t)
+func (_c *ControlImplementationCreate) SetNillableVerificationDate(v *time.Time) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetVerificationDate(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetDetails sets the "details" field.
-func (cic *ControlImplementationCreate) SetDetails(s string) *ControlImplementationCreate {
-	cic.mutation.SetDetails(s)
-	return cic
+func (_c *ControlImplementationCreate) SetDetails(v string) *ControlImplementationCreate {
+	_c.mutation.SetDetails(v)
+	return _c
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableDetails(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetDetails(*s)
+func (_c *ControlImplementationCreate) SetNillableDetails(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDetails(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cic *ControlImplementationCreate) SetID(s string) *ControlImplementationCreate {
-	cic.mutation.SetID(s)
-	return cic
+func (_c *ControlImplementationCreate) SetID(v string) *ControlImplementationCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cic *ControlImplementationCreate) SetNillableID(s *string) *ControlImplementationCreate {
-	if s != nil {
-		cic.SetID(*s)
+func (_c *ControlImplementationCreate) SetNillableID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cic *ControlImplementationCreate) SetOwner(o *Organization) *ControlImplementationCreate {
-	return cic.SetOwnerID(o.ID)
+func (_c *ControlImplementationCreate) SetOwner(v *Organization) *ControlImplementationCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (cic *ControlImplementationCreate) AddBlockedGroupIDs(ids ...string) *ControlImplementationCreate {
-	cic.mutation.AddBlockedGroupIDs(ids...)
-	return cic
+func (_c *ControlImplementationCreate) AddBlockedGroupIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (cic *ControlImplementationCreate) AddBlockedGroups(g ...*Group) *ControlImplementationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlImplementationCreate) AddBlockedGroups(v ...*Group) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cic.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (cic *ControlImplementationCreate) AddEditorIDs(ids ...string) *ControlImplementationCreate {
-	cic.mutation.AddEditorIDs(ids...)
-	return cic
+func (_c *ControlImplementationCreate) AddEditorIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (cic *ControlImplementationCreate) AddEditors(g ...*Group) *ControlImplementationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlImplementationCreate) AddEditors(v ...*Group) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cic.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (cic *ControlImplementationCreate) AddViewerIDs(ids ...string) *ControlImplementationCreate {
-	cic.mutation.AddViewerIDs(ids...)
-	return cic
+func (_c *ControlImplementationCreate) AddViewerIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (cic *ControlImplementationCreate) AddViewers(g ...*Group) *ControlImplementationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlImplementationCreate) AddViewers(v ...*Group) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cic.AddViewerIDs(ids...)
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (cic *ControlImplementationCreate) AddControlIDs(ids ...string) *ControlImplementationCreate {
-	cic.mutation.AddControlIDs(ids...)
-	return cic
+func (_c *ControlImplementationCreate) AddControlIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (cic *ControlImplementationCreate) AddControls(c ...*Control) *ControlImplementationCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ControlImplementationCreate) AddControls(v ...*Control) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cic.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (cic *ControlImplementationCreate) AddSubcontrolIDs(ids ...string) *ControlImplementationCreate {
-	cic.mutation.AddSubcontrolIDs(ids...)
-	return cic
+func (_c *ControlImplementationCreate) AddSubcontrolIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (cic *ControlImplementationCreate) AddSubcontrols(s ...*Subcontrol) *ControlImplementationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ControlImplementationCreate) AddSubcontrols(v ...*Subcontrol) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cic.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // Mutation returns the ControlImplementationMutation object of the builder.
-func (cic *ControlImplementationCreate) Mutation() *ControlImplementationMutation {
-	return cic.mutation
+func (_c *ControlImplementationCreate) Mutation() *ControlImplementationMutation {
+	return _c.mutation
 }
 
 // Save creates the ControlImplementation in the database.
-func (cic *ControlImplementationCreate) Save(ctx context.Context) (*ControlImplementation, error) {
-	if err := cic.defaults(); err != nil {
+func (_c *ControlImplementationCreate) Save(ctx context.Context) (*ControlImplementation, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cic.sqlSave, cic.mutation, cic.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cic *ControlImplementationCreate) SaveX(ctx context.Context) *ControlImplementation {
-	v, err := cic.Save(ctx)
+func (_c *ControlImplementationCreate) SaveX(ctx context.Context) *ControlImplementation {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -315,60 +315,60 @@ func (cic *ControlImplementationCreate) SaveX(ctx context.Context) *ControlImple
 }
 
 // Exec executes the query.
-func (cic *ControlImplementationCreate) Exec(ctx context.Context) error {
-	_, err := cic.Save(ctx)
+func (_c *ControlImplementationCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cic *ControlImplementationCreate) ExecX(ctx context.Context) {
-	if err := cic.Exec(ctx); err != nil {
+func (_c *ControlImplementationCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cic *ControlImplementationCreate) defaults() error {
-	if _, ok := cic.mutation.CreatedAt(); !ok {
+func (_c *ControlImplementationCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if controlimplementation.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementation.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlimplementation.DefaultCreatedAt()
-		cic.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cic.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if controlimplementation.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementation.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlimplementation.DefaultUpdatedAt()
-		cic.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cic.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := controlimplementation.DefaultTags
-		cic.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := cic.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := controlimplementation.DefaultStatus
-		cic.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := cic.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if controlimplementation.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized controlimplementation.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := controlimplementation.DefaultID()
-		cic.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cic *ControlImplementationCreate) check() error {
-	if v, ok := cic.mutation.OwnerID(); ok {
+func (_c *ControlImplementationCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := controlimplementation.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := cic.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := controlimplementation.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlImplementation.status": %w`, err)}
 		}
@@ -376,12 +376,12 @@ func (cic *ControlImplementationCreate) check() error {
 	return nil
 }
 
-func (cic *ControlImplementationCreate) sqlSave(ctx context.Context) (*ControlImplementation, error) {
-	if err := cic.check(); err != nil {
+func (_c *ControlImplementationCreate) sqlSave(ctx context.Context) (*ControlImplementation, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cic.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cic.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -394,70 +394,70 @@ func (cic *ControlImplementationCreate) sqlSave(ctx context.Context) (*ControlIm
 			return nil, fmt.Errorf("unexpected ControlImplementation.ID type: %T", _spec.ID.Value)
 		}
 	}
-	cic.mutation.id = &_node.ID
-	cic.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *sqlgraph.CreateSpec) {
+func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ControlImplementation{config: cic.config}
+		_node = &ControlImplementation{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlimplementation.Table, sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString))
 	)
-	_spec.Schema = cic.schemaConfig.ControlImplementation
-	if id, ok := cic.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ControlImplementation
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cic.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(controlimplementation.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cic.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlimplementation.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cic.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(controlimplementation.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := cic.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlimplementation.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cic.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(controlimplementation.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cic.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(controlimplementation.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cic.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(controlimplementation.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cic.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlimplementation.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := cic.mutation.ImplementationDate(); ok {
+	if value, ok := _c.mutation.ImplementationDate(); ok {
 		_spec.SetField(controlimplementation.FieldImplementationDate, field.TypeTime, value)
 		_node.ImplementationDate = value
 	}
-	if value, ok := cic.mutation.Verified(); ok {
+	if value, ok := _c.mutation.Verified(); ok {
 		_spec.SetField(controlimplementation.FieldVerified, field.TypeBool, value)
 		_node.Verified = value
 	}
-	if value, ok := cic.mutation.VerificationDate(); ok {
+	if value, ok := _c.mutation.VerificationDate(); ok {
 		_spec.SetField(controlimplementation.FieldVerificationDate, field.TypeTime, value)
 		_node.VerificationDate = value
 	}
-	if value, ok := cic.mutation.Details(); ok {
+	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(controlimplementation.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
-	if nodes := cic.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -468,14 +468,14 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.ControlImplementation
+		edge.Schema = _c.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cic.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -486,13 +486,13 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.ControlImplementationBlockedGroups
+		edge.Schema = _c.schemaConfig.ControlImplementationBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cic.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -503,13 +503,13 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.ControlImplementationEditors
+		edge.Schema = _c.schemaConfig.ControlImplementationEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cic.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -520,13 +520,13 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.ControlImplementationViewers
+		edge.Schema = _c.schemaConfig.ControlImplementationViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cic.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -537,13 +537,13 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.ControlControlImplementations
+		edge.Schema = _c.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cic.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -554,7 +554,7 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cic.schemaConfig.SubcontrolControlImplementations
+		edge.Schema = _c.schemaConfig.SubcontrolControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -571,16 +571,16 @@ type ControlImplementationCreateBulk struct {
 }
 
 // Save creates the ControlImplementation entities in the database.
-func (cicb *ControlImplementationCreateBulk) Save(ctx context.Context) ([]*ControlImplementation, error) {
-	if cicb.err != nil {
-		return nil, cicb.err
+func (_c *ControlImplementationCreateBulk) Save(ctx context.Context) ([]*ControlImplementation, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(cicb.builders))
-	nodes := make([]*ControlImplementation, len(cicb.builders))
-	mutators := make([]Mutator, len(cicb.builders))
-	for i := range cicb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ControlImplementation, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cicb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ControlImplementationMutation)
@@ -594,11 +594,11 @@ func (cicb *ControlImplementationCreateBulk) Save(ctx context.Context) ([]*Contr
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cicb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cicb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -618,7 +618,7 @@ func (cicb *ControlImplementationCreateBulk) Save(ctx context.Context) ([]*Contr
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cicb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -626,8 +626,8 @@ func (cicb *ControlImplementationCreateBulk) Save(ctx context.Context) ([]*Contr
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cicb *ControlImplementationCreateBulk) SaveX(ctx context.Context) []*ControlImplementation {
-	v, err := cicb.Save(ctx)
+func (_c *ControlImplementationCreateBulk) SaveX(ctx context.Context) []*ControlImplementation {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -635,14 +635,14 @@ func (cicb *ControlImplementationCreateBulk) SaveX(ctx context.Context) []*Contr
 }
 
 // Exec executes the query.
-func (cicb *ControlImplementationCreateBulk) Exec(ctx context.Context) error {
-	_, err := cicb.Save(ctx)
+func (_c *ControlImplementationCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cicb *ControlImplementationCreateBulk) ExecX(ctx context.Context) {
-	if err := cicb.Exec(ctx); err != nil {
+func (_c *ControlImplementationCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

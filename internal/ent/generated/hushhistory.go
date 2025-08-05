@@ -71,7 +71,7 @@ func (*HushHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the HushHistory fields.
-func (hh *HushHistory) assignValues(columns []string, values []any) error {
+func (_m *HushHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -81,100 +81,100 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				hh.ID = value.String
+				_m.ID = value.String
 			}
 		case hushhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				hh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case hushhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				hh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case hushhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				hh.Operation = *value
+				_m.Operation = *value
 			}
 		case hushhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				hh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case hushhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				hh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case hushhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				hh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case hushhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				hh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case hushhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				hh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case hushhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				hh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case hushhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				hh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case hushhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				hh.Name = value.String
+				_m.Name = value.String
 			}
 		case hushhistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				hh.Description = value.String
+				_m.Description = value.String
 			}
 		case hushhistory.FieldKind:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field kind", values[i])
 			} else if value.Valid {
-				hh.Kind = value.String
+				_m.Kind = value.String
 			}
 		case hushhistory.FieldSecretName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field secret_name", values[i])
 			} else if value.Valid {
-				hh.SecretName = value.String
+				_m.SecretName = value.String
 			}
 		case hushhistory.FieldSecretValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field secret_value", values[i])
 			} else if value.Valid {
-				hh.SecretValue = value.String
+				_m.SecretValue = value.String
 			}
 		default:
-			hh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -182,74 +182,74 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the HushHistory.
 // This includes values selected through modifiers, order, etc.
-func (hh *HushHistory) Value(name string) (ent.Value, error) {
-	return hh.selectValues.Get(name)
+func (_m *HushHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this HushHistory.
 // Note that you need to call HushHistory.Unwrap() before calling this method if this HushHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (hh *HushHistory) Update() *HushHistoryUpdateOne {
-	return NewHushHistoryClient(hh.config).UpdateOne(hh)
+func (_m *HushHistory) Update() *HushHistoryUpdateOne {
+	return NewHushHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the HushHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (hh *HushHistory) Unwrap() *HushHistory {
-	_tx, ok := hh.config.driver.(*txDriver)
+func (_m *HushHistory) Unwrap() *HushHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: HushHistory is not a transactional entity")
 	}
-	hh.config.driver = _tx.drv
-	return hh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (hh *HushHistory) String() string {
+func (_m *HushHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("HushHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", hh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(hh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(hh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", hh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(hh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(hh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(hh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(hh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(hh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(hh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(hh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(hh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(hh.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("kind=")
-	builder.WriteString(hh.Kind)
+	builder.WriteString(_m.Kind)
 	builder.WriteString(", ")
 	builder.WriteString("secret_name=")
-	builder.WriteString(hh.SecretName)
+	builder.WriteString(_m.SecretName)
 	builder.WriteString(", ")
 	builder.WriteString("secret_value=<sensitive>")
 	builder.WriteByte(')')

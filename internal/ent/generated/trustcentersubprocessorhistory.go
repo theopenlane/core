@@ -70,7 +70,7 @@ func (*TrustCenterSubprocessorHistory) scanValues(columns []string) ([]any, erro
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenterSubprocessorHistory fields.
-func (tcsh *TrustCenterSubprocessorHistory) assignValues(columns []string, values []any) error {
+func (_m *TrustCenterSubprocessorHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -80,79 +80,79 @@ func (tcsh *TrustCenterSubprocessorHistory) assignValues(columns []string, value
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tcsh.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcentersubprocessorhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				tcsh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case trustcentersubprocessorhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				tcsh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case trustcentersubprocessorhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				tcsh.Operation = *value
+				_m.Operation = *value
 			}
 		case trustcentersubprocessorhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcsh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcentersubprocessorhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcsh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcentersubprocessorhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tcsh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcentersubprocessorhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tcsh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcentersubprocessorhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tcsh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcentersubprocessorhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tcsh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcentersubprocessorhistory.FieldSubprocessorID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subprocessor_id", values[i])
 			} else if value.Valid {
-				tcsh.SubprocessorID = value.String
+				_m.SubprocessorID = value.String
 			}
 		case trustcentersubprocessorhistory.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
-				tcsh.TrustCenterID = value.String
+				_m.TrustCenterID = value.String
 			}
 		case trustcentersubprocessorhistory.FieldCountries:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field countries", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tcsh.Countries); err != nil {
+				if err := json.Unmarshal(*value, &_m.Countries); err != nil {
 					return fmt.Errorf("unmarshal field countries: %w", err)
 				}
 			}
@@ -160,10 +160,10 @@ func (tcsh *TrustCenterSubprocessorHistory) assignValues(columns []string, value
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				tcsh.Category = value.String
+				_m.Category = value.String
 			}
 		default:
-			tcsh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -171,71 +171,71 @@ func (tcsh *TrustCenterSubprocessorHistory) assignValues(columns []string, value
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterSubprocessorHistory.
 // This includes values selected through modifiers, order, etc.
-func (tcsh *TrustCenterSubprocessorHistory) Value(name string) (ent.Value, error) {
-	return tcsh.selectValues.Get(name)
+func (_m *TrustCenterSubprocessorHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TrustCenterSubprocessorHistory.
 // Note that you need to call TrustCenterSubprocessorHistory.Unwrap() before calling this method if this TrustCenterSubprocessorHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcsh *TrustCenterSubprocessorHistory) Update() *TrustCenterSubprocessorHistoryUpdateOne {
-	return NewTrustCenterSubprocessorHistoryClient(tcsh.config).UpdateOne(tcsh)
+func (_m *TrustCenterSubprocessorHistory) Update() *TrustCenterSubprocessorHistoryUpdateOne {
+	return NewTrustCenterSubprocessorHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenterSubprocessorHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcsh *TrustCenterSubprocessorHistory) Unwrap() *TrustCenterSubprocessorHistory {
-	_tx, ok := tcsh.config.driver.(*txDriver)
+func (_m *TrustCenterSubprocessorHistory) Unwrap() *TrustCenterSubprocessorHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenterSubprocessorHistory is not a transactional entity")
 	}
-	tcsh.config.driver = _tx.drv
-	return tcsh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcsh *TrustCenterSubprocessorHistory) String() string {
+func (_m *TrustCenterSubprocessorHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenterSubprocessorHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcsh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(tcsh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(tcsh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", tcsh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(tcsh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tcsh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tcsh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tcsh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tcsh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tcsh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("subprocessor_id=")
-	builder.WriteString(tcsh.SubprocessorID)
+	builder.WriteString(_m.SubprocessorID)
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
-	builder.WriteString(tcsh.TrustCenterID)
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("countries=")
-	builder.WriteString(fmt.Sprintf("%v", tcsh.Countries))
+	builder.WriteString(fmt.Sprintf("%v", _m.Countries))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(tcsh.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -22,58 +22,58 @@ type HushDelete struct {
 }
 
 // Where appends a list predicates to the HushDelete builder.
-func (hd *HushDelete) Where(ps ...predicate.Hush) *HushDelete {
-	hd.mutation.Where(ps...)
-	return hd
+func (_d *HushDelete) Where(ps ...predicate.Hush) *HushDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (hd *HushDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, hd.sqlExec, hd.mutation, hd.hooks)
+func (_d *HushDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hd *HushDelete) ExecX(ctx context.Context) int {
-	n, err := hd.Exec(ctx)
+func (_d *HushDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (hd *HushDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *HushDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(hush.Table, sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString))
-	_spec.Node.Schema = hd.schemaConfig.Hush
-	ctx = internal.NewSchemaConfigContext(ctx, hd.schemaConfig)
-	if ps := hd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Hush
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, hd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	hd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // HushDeleteOne is the builder for deleting a single Hush entity.
 type HushDeleteOne struct {
-	hd *HushDelete
+	_d *HushDelete
 }
 
 // Where appends a list predicates to the HushDelete builder.
-func (hdo *HushDeleteOne) Where(ps ...predicate.Hush) *HushDeleteOne {
-	hdo.hd.mutation.Where(ps...)
-	return hdo
+func (_d *HushDeleteOne) Where(ps ...predicate.Hush) *HushDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (hdo *HushDeleteOne) Exec(ctx context.Context) error {
-	n, err := hdo.hd.Exec(ctx)
+func (_d *HushDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (hdo *HushDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hdo *HushDeleteOne) ExecX(ctx context.Context) {
-	if err := hdo.Exec(ctx); err != nil {
+func (_d *HushDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -28,185 +28,185 @@ type ScheduledJobHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ScheduledJobHistoryUpdate builder.
-func (sjhu *ScheduledJobHistoryUpdate) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.Where(ps...)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetUpdatedAt(t time.Time) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetUpdatedAt(t)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetUpdatedAt(v time.Time) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearUpdatedAt() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearUpdatedAt()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearUpdatedAt() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetUpdatedBy(s string) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetUpdatedBy(s)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetUpdatedBy(v string) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableUpdatedBy(s *string) *ScheduledJobHistoryUpdate {
-	if s != nil {
-		sjhu.SetUpdatedBy(*s)
+func (_u *ScheduledJobHistoryUpdate) SetNillableUpdatedBy(v *string) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearUpdatedBy() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearUpdatedBy()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearUpdatedBy() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetDeletedAt(t time.Time) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetDeletedAt(t)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetDeletedAt(v time.Time) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ScheduledJobHistoryUpdate {
-	if t != nil {
-		sjhu.SetDeletedAt(*t)
+func (_u *ScheduledJobHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearDeletedAt() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearDeletedAt()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearDeletedAt() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetDeletedBy(s string) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetDeletedBy(s)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetDeletedBy(v string) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableDeletedBy(s *string) *ScheduledJobHistoryUpdate {
-	if s != nil {
-		sjhu.SetDeletedBy(*s)
+func (_u *ScheduledJobHistoryUpdate) SetNillableDeletedBy(v *string) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearDeletedBy() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearDeletedBy()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearDeletedBy() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetJobID sets the "job_id" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetJobID(s string) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetJobID(s)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetJobID(v string) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetJobID(v)
+	return _u
 }
 
 // SetNillableJobID sets the "job_id" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableJobID(s *string) *ScheduledJobHistoryUpdate {
-	if s != nil {
-		sjhu.SetJobID(*s)
+func (_u *ScheduledJobHistoryUpdate) SetNillableJobID(v *string) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetJobID(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetActive(b bool) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetActive(b)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetActive(v bool) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableActive(b *bool) *ScheduledJobHistoryUpdate {
-	if b != nil {
-		sjhu.SetActive(*b)
+func (_u *ScheduledJobHistoryUpdate) SetNillableActive(v *bool) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetConfiguration(mc)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetConfiguration(v models.JobConfiguration) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (sjhu *ScheduledJobHistoryUpdate) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.AppendConfiguration(mc)
-	return sjhu
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *ScheduledJobHistoryUpdate) AppendConfiguration(v models.JobConfiguration) *ScheduledJobHistoryUpdate {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearConfiguration() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearConfiguration()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearConfiguration() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetCron(m models.Cron) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetCron(m)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetCron(v models.Cron) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableCron(m *models.Cron) *ScheduledJobHistoryUpdate {
-	if m != nil {
-		sjhu.SetCron(*m)
+func (_u *ScheduledJobHistoryUpdate) SetNillableCron(v *models.Cron) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearCron() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearCron()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearCron() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetJobRunnerID(s string) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetJobRunnerID(s)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) SetJobRunnerID(v string) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetJobRunnerID(v)
+	return _u
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableJobRunnerID(s *string) *ScheduledJobHistoryUpdate {
-	if s != nil {
-		sjhu.SetJobRunnerID(*s)
+func (_u *ScheduledJobHistoryUpdate) SetNillableJobRunnerID(v *string) *ScheduledJobHistoryUpdate {
+	if v != nil {
+		_u.SetJobRunnerID(*v)
 	}
-	return sjhu
+	return _u
 }
 
 // ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearJobRunnerID() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearJobRunnerID()
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) ClearJobRunnerID() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearJobRunnerID()
+	return _u
 }
 
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
-func (sjhu *ScheduledJobHistoryUpdate) Mutation() *ScheduledJobHistoryMutation {
-	return sjhu.mutation
+func (_u *ScheduledJobHistoryUpdate) Mutation() *ScheduledJobHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (sjhu *ScheduledJobHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := sjhu.defaults(); err != nil {
+func (_u *ScheduledJobHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, sjhu.sqlSave, sjhu.mutation, sjhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sjhu *ScheduledJobHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := sjhu.Save(ctx)
+func (_u *ScheduledJobHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -214,114 +214,114 @@ func (sjhu *ScheduledJobHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (sjhu *ScheduledJobHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := sjhu.Save(ctx)
+func (_u *ScheduledJobHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjhu *ScheduledJobHistoryUpdate) ExecX(ctx context.Context) {
-	if err := sjhu.Exec(ctx); err != nil {
+func (_u *ScheduledJobHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sjhu *ScheduledJobHistoryUpdate) defaults() error {
-	if _, ok := sjhu.mutation.UpdatedAt(); !ok && !sjhu.mutation.UpdatedAtCleared() {
+func (_u *ScheduledJobHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scheduledjobhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scheduledjobhistory.UpdateDefaultUpdatedAt()
-		sjhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (sjhu *ScheduledJobHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobHistoryUpdate {
-	sjhu.modifiers = append(sjhu.modifiers, modifiers...)
-	return sjhu
+func (_u *ScheduledJobHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(scheduledjobhistory.Table, scheduledjobhistory.Columns, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
-	if ps := sjhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if sjhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldRef, field.TypeString)
 	}
-	if sjhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := sjhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if sjhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if sjhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := sjhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if sjhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := sjhu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if sjhu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := sjhu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if sjhu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDeletedBy, field.TypeString)
 	}
-	if sjhu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := sjhu.mutation.JobID(); ok {
+	if value, ok := _u.mutation.JobID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
 	}
-	if value, ok := sjhu.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := sjhu.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := sjhu.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
 		})
 	}
-	if sjhu.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := sjhu.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCron, field.TypeString, value)
 	}
-	if sjhu.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldCron, field.TypeString)
 	}
-	if value, ok := sjhu.mutation.JobRunnerID(); ok {
+	if value, ok := _u.mutation.JobRunnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
 	}
-	if sjhu.mutation.JobRunnerIDCleared() {
+	if _u.mutation.JobRunnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldJobRunnerID, field.TypeString)
 	}
-	_spec.Node.Schema = sjhu.schemaConfig.ScheduledJobHistory
-	ctx = internal.NewSchemaConfigContext(ctx, sjhu.schemaConfig)
-	_spec.AddModifiers(sjhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, sjhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ScheduledJobHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scheduledjobhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -329,8 +329,8 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		return 0, err
 	}
-	sjhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ScheduledJobHistoryUpdateOne is the builder for updating a single ScheduledJobHistory entity.
@@ -343,192 +343,192 @@ type ScheduledJobHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetUpdatedAt(t time.Time) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetUpdatedAt(t)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetUpdatedAt(v time.Time) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearUpdatedAt() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearUpdatedAt()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearUpdatedAt() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetUpdatedBy(s string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetUpdatedBy(s)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetUpdatedBy(v string) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ScheduledJobHistoryUpdateOne {
-	if s != nil {
-		sjhuo.SetUpdatedBy(*s)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearUpdatedBy() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearUpdatedBy()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearUpdatedBy() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetDeletedAt(t time.Time) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetDeletedAt(t)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetDeletedAt(v time.Time) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ScheduledJobHistoryUpdateOne {
-	if t != nil {
-		sjhuo.SetDeletedAt(*t)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearDeletedAt() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearDeletedAt()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearDeletedAt() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetDeletedBy(s string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetDeletedBy(s)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetDeletedBy(v string) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableDeletedBy(s *string) *ScheduledJobHistoryUpdateOne {
-	if s != nil {
-		sjhuo.SetDeletedBy(*s)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableDeletedBy(v *string) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearDeletedBy() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearDeletedBy()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearDeletedBy() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetJobID sets the "job_id" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetJobID(s string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetJobID(s)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetJobID(v string) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetJobID(v)
+	return _u
 }
 
 // SetNillableJobID sets the "job_id" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableJobID(s *string) *ScheduledJobHistoryUpdateOne {
-	if s != nil {
-		sjhuo.SetJobID(*s)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableJobID(v *string) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetJobID(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetActive(b bool) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetActive(b)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetActive(v bool) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableActive(b *bool) *ScheduledJobHistoryUpdateOne {
-	if b != nil {
-		sjhuo.SetActive(*b)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableActive(v *bool) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetConfiguration(mc)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetConfiguration(v models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.AppendConfiguration(mc)
-	return sjhuo
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *ScheduledJobHistoryUpdateOne) AppendConfiguration(v models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearConfiguration() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearConfiguration()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearConfiguration() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetCron(m models.Cron) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetCron(m)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetCron(v models.Cron) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableCron(m *models.Cron) *ScheduledJobHistoryUpdateOne {
-	if m != nil {
-		sjhuo.SetCron(*m)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableCron(v *models.Cron) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearCron() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearCron()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearCron() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetJobRunnerID(s string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetJobRunnerID(s)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) SetJobRunnerID(v string) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetJobRunnerID(v)
+	return _u
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableJobRunnerID(s *string) *ScheduledJobHistoryUpdateOne {
-	if s != nil {
-		sjhuo.SetJobRunnerID(*s)
+func (_u *ScheduledJobHistoryUpdateOne) SetNillableJobRunnerID(v *string) *ScheduledJobHistoryUpdateOne {
+	if v != nil {
+		_u.SetJobRunnerID(*v)
 	}
-	return sjhuo
+	return _u
 }
 
 // ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearJobRunnerID() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearJobRunnerID()
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) ClearJobRunnerID() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearJobRunnerID()
+	return _u
 }
 
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
-func (sjhuo *ScheduledJobHistoryUpdateOne) Mutation() *ScheduledJobHistoryMutation {
-	return sjhuo.mutation
+func (_u *ScheduledJobHistoryUpdateOne) Mutation() *ScheduledJobHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ScheduledJobHistoryUpdate builder.
-func (sjhuo *ScheduledJobHistoryUpdateOne) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.Where(ps...)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (sjhuo *ScheduledJobHistoryUpdateOne) Select(field string, fields ...string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.fields = append([]string{field}, fields...)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) Select(field string, fields ...string) *ScheduledJobHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ScheduledJobHistory entity.
-func (sjhuo *ScheduledJobHistoryUpdateOne) Save(ctx context.Context) (*ScheduledJobHistory, error) {
-	if err := sjhuo.defaults(); err != nil {
+func (_u *ScheduledJobHistoryUpdateOne) Save(ctx context.Context) (*ScheduledJobHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sjhuo.sqlSave, sjhuo.mutation, sjhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SaveX(ctx context.Context) *ScheduledJobHistory {
-	node, err := sjhuo.Save(ctx)
+func (_u *ScheduledJobHistoryUpdateOne) SaveX(ctx context.Context) *ScheduledJobHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -536,44 +536,44 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) SaveX(ctx context.Context) *Scheduled
 }
 
 // Exec executes the query on the entity.
-func (sjhuo *ScheduledJobHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := sjhuo.Save(ctx)
+func (_u *ScheduledJobHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := sjhuo.Exec(ctx); err != nil {
+func (_u *ScheduledJobHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sjhuo *ScheduledJobHistoryUpdateOne) defaults() error {
-	if _, ok := sjhuo.mutation.UpdatedAt(); !ok && !sjhuo.mutation.UpdatedAtCleared() {
+func (_u *ScheduledJobHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scheduledjobhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scheduledjobhistory.UpdateDefaultUpdatedAt()
-		sjhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (sjhuo *ScheduledJobHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobHistoryUpdateOne {
-	sjhuo.modifiers = append(sjhuo.modifiers, modifiers...)
-	return sjhuo
+func (_u *ScheduledJobHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJobHistory, err error) {
+func (_u *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJobHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(scheduledjobhistory.Table, scheduledjobhistory.Columns, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
-	id, ok := sjhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ScheduledJobHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := sjhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scheduledjobhistory.FieldID)
 		for _, f := range fields {
@@ -585,85 +585,85 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 			}
 		}
 	}
-	if ps := sjhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if sjhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldRef, field.TypeString)
 	}
-	if sjhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := sjhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if sjhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if sjhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := sjhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if sjhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := sjhuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if sjhuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := sjhuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if sjhuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDeletedBy, field.TypeString)
 	}
-	if sjhuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := sjhuo.mutation.JobID(); ok {
+	if value, ok := _u.mutation.JobID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
 	}
-	if value, ok := sjhuo.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := sjhuo.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := sjhuo.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
 		})
 	}
-	if sjhuo.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := sjhuo.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCron, field.TypeString, value)
 	}
-	if sjhuo.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldCron, field.TypeString)
 	}
-	if value, ok := sjhuo.mutation.JobRunnerID(); ok {
+	if value, ok := _u.mutation.JobRunnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
 	}
-	if sjhuo.mutation.JobRunnerIDCleared() {
+	if _u.mutation.JobRunnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldJobRunnerID, field.TypeString)
 	}
-	_spec.Node.Schema = sjhuo.schemaConfig.ScheduledJobHistory
-	ctx = internal.NewSchemaConfigContext(ctx, sjhuo.schemaConfig)
-	_spec.AddModifiers(sjhuo.modifiers...)
-	_node = &ScheduledJobHistory{config: sjhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ScheduledJobHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ScheduledJobHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, sjhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scheduledjobhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -671,6 +671,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		return nil, err
 	}
-	sjhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

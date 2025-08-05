@@ -27,73 +27,73 @@ type OrgMembershipHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the OrgMembershipHistoryUpdate builder.
-func (omhu *OrgMembershipHistoryUpdate) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryUpdate {
-	omhu.mutation.Where(ps...)
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omhu *OrgMembershipHistoryUpdate) SetUpdatedAt(t time.Time) *OrgMembershipHistoryUpdate {
-	omhu.mutation.SetUpdatedAt(t)
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) SetUpdatedAt(v time.Time) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (omhu *OrgMembershipHistoryUpdate) ClearUpdatedAt() *OrgMembershipHistoryUpdate {
-	omhu.mutation.ClearUpdatedAt()
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) ClearUpdatedAt() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omhu *OrgMembershipHistoryUpdate) SetUpdatedBy(s string) *OrgMembershipHistoryUpdate {
-	omhu.mutation.SetUpdatedBy(s)
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) SetUpdatedBy(v string) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omhu *OrgMembershipHistoryUpdate) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryUpdate {
-	if s != nil {
-		omhu.SetUpdatedBy(*s)
+func (_u *OrgMembershipHistoryUpdate) SetNillableUpdatedBy(v *string) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return omhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (omhu *OrgMembershipHistoryUpdate) ClearUpdatedBy() *OrgMembershipHistoryUpdate {
-	omhu.mutation.ClearUpdatedBy()
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) ClearUpdatedBy() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (omhu *OrgMembershipHistoryUpdate) SetRole(e enums.Role) *OrgMembershipHistoryUpdate {
-	omhu.mutation.SetRole(e)
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) SetRole(v enums.Role) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (omhu *OrgMembershipHistoryUpdate) SetNillableRole(e *enums.Role) *OrgMembershipHistoryUpdate {
-	if e != nil {
-		omhu.SetRole(*e)
+func (_u *OrgMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return omhu
+	return _u
 }
 
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
-func (omhu *OrgMembershipHistoryUpdate) Mutation() *OrgMembershipHistoryMutation {
-	return omhu.mutation
+func (_u *OrgMembershipHistoryUpdate) Mutation() *OrgMembershipHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (omhu *OrgMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := omhu.defaults(); err != nil {
+func (_u *OrgMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, omhu.sqlSave, omhu.mutation, omhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omhu *OrgMembershipHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := omhu.Save(ctx)
+func (_u *OrgMembershipHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -101,33 +101,33 @@ func (omhu *OrgMembershipHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (omhu *OrgMembershipHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := omhu.Save(ctx)
+func (_u *OrgMembershipHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omhu *OrgMembershipHistoryUpdate) ExecX(ctx context.Context) {
-	if err := omhu.Exec(ctx); err != nil {
+func (_u *OrgMembershipHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omhu *OrgMembershipHistoryUpdate) defaults() error {
-	if _, ok := omhu.mutation.UpdatedAt(); !ok && !omhu.mutation.UpdatedAtCleared() {
+func (_u *OrgMembershipHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgmembershiphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmembershiphistory.UpdateDefaultUpdatedAt()
-		omhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omhu *OrgMembershipHistoryUpdate) check() error {
-	if v, ok := omhu.mutation.Role(); ok {
+func (_u *OrgMembershipHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := orgmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "OrgMembershipHistory.role": %w`, err)}
 		}
@@ -136,51 +136,51 @@ func (omhu *OrgMembershipHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (omhu *OrgMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdate {
-	omhu.modifiers = append(omhu.modifiers, modifiers...)
-	return omhu
+func (_u *OrgMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := omhu.check(); err != nil {
-		return n, err
+func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgmembershiphistory.Table, orgmembershiphistory.Columns, sqlgraph.NewFieldSpec(orgmembershiphistory.FieldID, field.TypeString))
-	if ps := omhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if omhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldRef, field.TypeString)
 	}
-	if omhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := omhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if omhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if omhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := omhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if omhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omhu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = omhu.schemaConfig.OrgMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, omhu.schemaConfig)
-	_spec.AddModifiers(omhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, omhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembershiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -188,8 +188,8 @@ func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		return 0, err
 	}
-	omhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrgMembershipHistoryUpdateOne is the builder for updating a single OrgMembershipHistory entity.
@@ -202,80 +202,80 @@ type OrgMembershipHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetUpdatedAt(t time.Time) *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.SetUpdatedAt(t)
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) SetUpdatedAt(v time.Time) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) ClearUpdatedAt() *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.ClearUpdatedAt()
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedAt() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetUpdatedBy(s string) *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.SetUpdatedBy(s)
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) SetUpdatedBy(v string) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryUpdateOne {
-	if s != nil {
-		omhuo.SetUpdatedBy(*s)
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return omhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) ClearUpdatedBy() *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.ClearUpdatedBy()
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedBy() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetRole(e enums.Role) *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.SetRole(e)
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) SetRole(v enums.Role) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (omhuo *OrgMembershipHistoryUpdateOne) SetNillableRole(e *enums.Role) *OrgMembershipHistoryUpdateOne {
-	if e != nil {
-		omhuo.SetRole(*e)
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return omhuo
+	return _u
 }
 
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
-func (omhuo *OrgMembershipHistoryUpdateOne) Mutation() *OrgMembershipHistoryMutation {
-	return omhuo.mutation
+func (_u *OrgMembershipHistoryUpdateOne) Mutation() *OrgMembershipHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the OrgMembershipHistoryUpdate builder.
-func (omhuo *OrgMembershipHistoryUpdateOne) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryUpdateOne {
-	omhuo.mutation.Where(ps...)
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (omhuo *OrgMembershipHistoryUpdateOne) Select(field string, fields ...string) *OrgMembershipHistoryUpdateOne {
-	omhuo.fields = append([]string{field}, fields...)
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) Select(field string, fields ...string) *OrgMembershipHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrgMembershipHistory entity.
-func (omhuo *OrgMembershipHistoryUpdateOne) Save(ctx context.Context) (*OrgMembershipHistory, error) {
-	if err := omhuo.defaults(); err != nil {
+func (_u *OrgMembershipHistoryUpdateOne) Save(ctx context.Context) (*OrgMembershipHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, omhuo.sqlSave, omhuo.mutation, omhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omhuo *OrgMembershipHistoryUpdateOne) SaveX(ctx context.Context) *OrgMembershipHistory {
-	node, err := omhuo.Save(ctx)
+func (_u *OrgMembershipHistoryUpdateOne) SaveX(ctx context.Context) *OrgMembershipHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -283,33 +283,33 @@ func (omhuo *OrgMembershipHistoryUpdateOne) SaveX(ctx context.Context) *OrgMembe
 }
 
 // Exec executes the query on the entity.
-func (omhuo *OrgMembershipHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := omhuo.Save(ctx)
+func (_u *OrgMembershipHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omhuo *OrgMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := omhuo.Exec(ctx); err != nil {
+func (_u *OrgMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omhuo *OrgMembershipHistoryUpdateOne) defaults() error {
-	if _, ok := omhuo.mutation.UpdatedAt(); !ok && !omhuo.mutation.UpdatedAtCleared() {
+func (_u *OrgMembershipHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgmembershiphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmembershiphistory.UpdateDefaultUpdatedAt()
-		omhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omhuo *OrgMembershipHistoryUpdateOne) check() error {
-	if v, ok := omhuo.mutation.Role(); ok {
+func (_u *OrgMembershipHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := orgmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "OrgMembershipHistory.role": %w`, err)}
 		}
@@ -318,22 +318,22 @@ func (omhuo *OrgMembershipHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (omhuo *OrgMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdateOne {
-	omhuo.modifiers = append(omhuo.modifiers, modifiers...)
-	return omhuo
+func (_u *OrgMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembershipHistory, err error) {
-	if err := omhuo.check(); err != nil {
+func (_u *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembershipHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgmembershiphistory.Table, orgmembershiphistory.Columns, sqlgraph.NewFieldSpec(orgmembershiphistory.FieldID, field.TypeString))
-	id, ok := omhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrgMembershipHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := omhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgmembershiphistory.FieldID)
 		for _, f := range fields {
@@ -345,44 +345,44 @@ func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 			}
 		}
 	}
-	if ps := omhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if omhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldRef, field.TypeString)
 	}
-	if omhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := omhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if omhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if omhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := omhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if omhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omhuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = omhuo.schemaConfig.OrgMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, omhuo.schemaConfig)
-	_spec.AddModifiers(omhuo.modifiers...)
-	_node = &OrgMembershipHistory{config: omhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrgMembershipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, omhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembershiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -390,6 +390,6 @@ func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		return nil, err
 	}
-	omhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

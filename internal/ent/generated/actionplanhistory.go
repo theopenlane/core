@@ -109,7 +109,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ActionPlanHistory fields.
-func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error {
+func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -119,67 +119,67 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				aph.ID = value.String
+				_m.ID = value.String
 			}
 		case actionplanhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				aph.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case actionplanhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				aph.Ref = value.String
+				_m.Ref = value.String
 			}
 		case actionplanhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				aph.Operation = *value
+				_m.Operation = *value
 			}
 		case actionplanhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				aph.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case actionplanhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				aph.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case actionplanhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				aph.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case actionplanhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				aph.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case actionplanhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				aph.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case actionplanhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				aph.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case actionplanhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -187,73 +187,73 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				aph.Revision = value.String
+				_m.Revision = value.String
 			}
 		case actionplanhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				aph.Name = value.String
+				_m.Name = value.String
 			}
 		case actionplanhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				aph.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case actionplanhistory.FieldActionPlanType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field action_plan_type", values[i])
 			} else if value.Valid {
-				aph.ActionPlanType = value.String
+				_m.ActionPlanType = value.String
 			}
 		case actionplanhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				aph.Details = value.String
+				_m.Details = value.String
 			}
 		case actionplanhistory.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
 			} else if value.Valid {
-				aph.ApprovalRequired = value.Bool
+				_m.ApprovalRequired = value.Bool
 			}
 		case actionplanhistory.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
-				aph.ReviewDue = value.Time
+				_m.ReviewDue = value.Time
 			}
 		case actionplanhistory.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				aph.ReviewFrequency = enums.Frequency(value.String)
+				_m.ReviewFrequency = enums.Frequency(value.String)
 			}
 		case actionplanhistory.FieldApproverID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
 			} else if value.Valid {
-				aph.ApproverID = value.String
+				_m.ApproverID = value.String
 			}
 		case actionplanhistory.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				aph.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case actionplanhistory.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
-				aph.Summary = value.String
+				_m.Summary = value.String
 			}
 		case actionplanhistory.FieldTagSuggestions:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.TagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.TagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
 				}
 			}
@@ -261,7 +261,7 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.DismissedTagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedTagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
 				}
 			}
@@ -269,7 +269,7 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.ControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
 				}
 			}
@@ -277,7 +277,7 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.DismissedControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
 				}
 			}
@@ -285,7 +285,7 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.ImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
 				}
 			}
@@ -293,7 +293,7 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.DismissedImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
@@ -301,28 +301,28 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				aph.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case actionplanhistory.FieldDueDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
 			} else if value.Valid {
-				aph.DueDate = value.Time
+				_m.DueDate = value.Time
 			}
 		case actionplanhistory.FieldPriority:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
-				aph.Priority = enums.Priority(value.String)
+				_m.Priority = enums.Priority(value.String)
 			}
 		case actionplanhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				aph.Source = value.String
+				_m.Source = value.String
 			}
 		default:
-			aph.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -330,125 +330,125 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ActionPlanHistory.
 // This includes values selected through modifiers, order, etc.
-func (aph *ActionPlanHistory) Value(name string) (ent.Value, error) {
-	return aph.selectValues.Get(name)
+func (_m *ActionPlanHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ActionPlanHistory.
 // Note that you need to call ActionPlanHistory.Unwrap() before calling this method if this ActionPlanHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (aph *ActionPlanHistory) Update() *ActionPlanHistoryUpdateOne {
-	return NewActionPlanHistoryClient(aph.config).UpdateOne(aph)
+func (_m *ActionPlanHistory) Update() *ActionPlanHistoryUpdateOne {
+	return NewActionPlanHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ActionPlanHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (aph *ActionPlanHistory) Unwrap() *ActionPlanHistory {
-	_tx, ok := aph.config.driver.(*txDriver)
+func (_m *ActionPlanHistory) Unwrap() *ActionPlanHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ActionPlanHistory is not a transactional entity")
 	}
-	aph.config.driver = _tx.drv
-	return aph
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (aph *ActionPlanHistory) String() string {
+func (_m *ActionPlanHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ActionPlanHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", aph.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(aph.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(aph.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", aph.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(aph.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(aph.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(aph.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(aph.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(aph.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(aph.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", aph.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(aph.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(aph.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", aph.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("action_plan_type=")
-	builder.WriteString(aph.ActionPlanType)
+	builder.WriteString(_m.ActionPlanType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(aph.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
-	builder.WriteString(fmt.Sprintf("%v", aph.ApprovalRequired))
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
 	builder.WriteString(", ")
 	builder.WriteString("review_due=")
-	builder.WriteString(aph.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(_m.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
-	builder.WriteString(fmt.Sprintf("%v", aph.ReviewFrequency))
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
 	builder.WriteString(", ")
 	builder.WriteString("approver_id=")
-	builder.WriteString(aph.ApproverID)
+	builder.WriteString(_m.ApproverID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(aph.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
-	builder.WriteString(aph.Summary)
+	builder.WriteString(_m.Summary)
 	builder.WriteString(", ")
 	builder.WriteString("tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", aph.TagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", aph.DismissedTagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedTagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", aph.ControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", aph.DismissedControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", aph.ImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", aph.DismissedImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(aph.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
-	builder.WriteString(aph.DueDate.Format(time.ANSIC))
+	builder.WriteString(_m.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
-	builder.WriteString(fmt.Sprintf("%v", aph.Priority))
+	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(aph.Source)
+	builder.WriteString(_m.Source)
 	builder.WriteByte(')')
 	return builder.String()
 }

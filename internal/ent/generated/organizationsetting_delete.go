@@ -22,58 +22,58 @@ type OrganizationSettingDelete struct {
 }
 
 // Where appends a list predicates to the OrganizationSettingDelete builder.
-func (osd *OrganizationSettingDelete) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingDelete {
-	osd.mutation.Where(ps...)
-	return osd
+func (_d *OrganizationSettingDelete) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (osd *OrganizationSettingDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, osd.sqlExec, osd.mutation, osd.hooks)
+func (_d *OrganizationSettingDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osd *OrganizationSettingDelete) ExecX(ctx context.Context) int {
-	n, err := osd.Exec(ctx)
+func (_d *OrganizationSettingDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (osd *OrganizationSettingDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrganizationSettingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(organizationsetting.Table, sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString))
-	_spec.Node.Schema = osd.schemaConfig.OrganizationSetting
-	ctx = internal.NewSchemaConfigContext(ctx, osd.schemaConfig)
-	if ps := osd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrganizationSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, osd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	osd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrganizationSettingDeleteOne is the builder for deleting a single OrganizationSetting entity.
 type OrganizationSettingDeleteOne struct {
-	osd *OrganizationSettingDelete
+	_d *OrganizationSettingDelete
 }
 
 // Where appends a list predicates to the OrganizationSettingDelete builder.
-func (osdo *OrganizationSettingDeleteOne) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingDeleteOne {
-	osdo.osd.mutation.Where(ps...)
-	return osdo
+func (_d *OrganizationSettingDeleteOne) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (osdo *OrganizationSettingDeleteOne) Exec(ctx context.Context) error {
-	n, err := osdo.osd.Exec(ctx)
+func (_d *OrganizationSettingDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (osdo *OrganizationSettingDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osdo *OrganizationSettingDeleteOne) ExecX(ctx context.Context) {
-	if err := osdo.Exec(ctx); err != nil {
+func (_d *OrganizationSettingDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

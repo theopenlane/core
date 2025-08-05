@@ -55,7 +55,7 @@ func (*TrustCenterCompliance) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenterCompliance fields.
-func (tcc *TrustCenterCompliance) assignValues(columns []string, values []any) error {
+func (_m *TrustCenterCompliance) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -65,54 +65,54 @@ func (tcc *TrustCenterCompliance) assignValues(columns []string, values []any) e
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tcc.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcentercompliance.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcc.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcentercompliance.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcc.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcentercompliance.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tcc.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcentercompliance.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tcc.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcentercompliance.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tcc.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcentercompliance.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tcc.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcentercompliance.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tcc.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
 		default:
-			tcc.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -120,53 +120,53 @@ func (tcc *TrustCenterCompliance) assignValues(columns []string, values []any) e
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterCompliance.
 // This includes values selected through modifiers, order, etc.
-func (tcc *TrustCenterCompliance) Value(name string) (ent.Value, error) {
-	return tcc.selectValues.Get(name)
+func (_m *TrustCenterCompliance) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TrustCenterCompliance.
 // Note that you need to call TrustCenterCompliance.Unwrap() before calling this method if this TrustCenterCompliance
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcc *TrustCenterCompliance) Update() *TrustCenterComplianceUpdateOne {
-	return NewTrustCenterComplianceClient(tcc.config).UpdateOne(tcc)
+func (_m *TrustCenterCompliance) Update() *TrustCenterComplianceUpdateOne {
+	return NewTrustCenterComplianceClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenterCompliance entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcc *TrustCenterCompliance) Unwrap() *TrustCenterCompliance {
-	_tx, ok := tcc.config.driver.(*txDriver)
+func (_m *TrustCenterCompliance) Unwrap() *TrustCenterCompliance {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenterCompliance is not a transactional entity")
 	}
-	tcc.config.driver = _tx.drv
-	return tcc
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcc *TrustCenterCompliance) String() string {
+func (_m *TrustCenterCompliance) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenterCompliance(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcc.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(tcc.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tcc.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tcc.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tcc.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tcc.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tcc.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", tcc.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteByte(')')
 	return builder.String()
 }

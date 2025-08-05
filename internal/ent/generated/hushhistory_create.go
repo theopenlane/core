@@ -22,229 +22,229 @@ type HushHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (hhc *HushHistoryCreate) SetHistoryTime(t time.Time) *HushHistoryCreate {
-	hhc.mutation.SetHistoryTime(t)
-	return hhc
+func (_c *HushHistoryCreate) SetHistoryTime(v time.Time) *HushHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableHistoryTime(t *time.Time) *HushHistoryCreate {
-	if t != nil {
-		hhc.SetHistoryTime(*t)
+func (_c *HushHistoryCreate) SetNillableHistoryTime(v *time.Time) *HushHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (hhc *HushHistoryCreate) SetRef(s string) *HushHistoryCreate {
-	hhc.mutation.SetRef(s)
-	return hhc
+func (_c *HushHistoryCreate) SetRef(v string) *HushHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableRef(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetRef(*s)
+func (_c *HushHistoryCreate) SetNillableRef(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (hhc *HushHistoryCreate) SetOperation(ht history.OpType) *HushHistoryCreate {
-	hhc.mutation.SetOperation(ht)
-	return hhc
+func (_c *HushHistoryCreate) SetOperation(v history.OpType) *HushHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (hhc *HushHistoryCreate) SetCreatedAt(t time.Time) *HushHistoryCreate {
-	hhc.mutation.SetCreatedAt(t)
-	return hhc
+func (_c *HushHistoryCreate) SetCreatedAt(v time.Time) *HushHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableCreatedAt(t *time.Time) *HushHistoryCreate {
-	if t != nil {
-		hhc.SetCreatedAt(*t)
+func (_c *HushHistoryCreate) SetNillableCreatedAt(v *time.Time) *HushHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (hhc *HushHistoryCreate) SetUpdatedAt(t time.Time) *HushHistoryCreate {
-	hhc.mutation.SetUpdatedAt(t)
-	return hhc
+func (_c *HushHistoryCreate) SetUpdatedAt(v time.Time) *HushHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableUpdatedAt(t *time.Time) *HushHistoryCreate {
-	if t != nil {
-		hhc.SetUpdatedAt(*t)
+func (_c *HushHistoryCreate) SetNillableUpdatedAt(v *time.Time) *HushHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (hhc *HushHistoryCreate) SetCreatedBy(s string) *HushHistoryCreate {
-	hhc.mutation.SetCreatedBy(s)
-	return hhc
+func (_c *HushHistoryCreate) SetCreatedBy(v string) *HushHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableCreatedBy(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetCreatedBy(*s)
+func (_c *HushHistoryCreate) SetNillableCreatedBy(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (hhc *HushHistoryCreate) SetUpdatedBy(s string) *HushHistoryCreate {
-	hhc.mutation.SetUpdatedBy(s)
-	return hhc
+func (_c *HushHistoryCreate) SetUpdatedBy(v string) *HushHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableUpdatedBy(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetUpdatedBy(*s)
+func (_c *HushHistoryCreate) SetNillableUpdatedBy(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (hhc *HushHistoryCreate) SetDeletedAt(t time.Time) *HushHistoryCreate {
-	hhc.mutation.SetDeletedAt(t)
-	return hhc
+func (_c *HushHistoryCreate) SetDeletedAt(v time.Time) *HushHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableDeletedAt(t *time.Time) *HushHistoryCreate {
-	if t != nil {
-		hhc.SetDeletedAt(*t)
+func (_c *HushHistoryCreate) SetNillableDeletedAt(v *time.Time) *HushHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (hhc *HushHistoryCreate) SetDeletedBy(s string) *HushHistoryCreate {
-	hhc.mutation.SetDeletedBy(s)
-	return hhc
+func (_c *HushHistoryCreate) SetDeletedBy(v string) *HushHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableDeletedBy(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetDeletedBy(*s)
+func (_c *HushHistoryCreate) SetNillableDeletedBy(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (hhc *HushHistoryCreate) SetOwnerID(s string) *HushHistoryCreate {
-	hhc.mutation.SetOwnerID(s)
-	return hhc
+func (_c *HushHistoryCreate) SetOwnerID(v string) *HushHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableOwnerID(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetOwnerID(*s)
+func (_c *HushHistoryCreate) SetNillableOwnerID(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (hhc *HushHistoryCreate) SetName(s string) *HushHistoryCreate {
-	hhc.mutation.SetName(s)
-	return hhc
+func (_c *HushHistoryCreate) SetName(v string) *HushHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (hhc *HushHistoryCreate) SetDescription(s string) *HushHistoryCreate {
-	hhc.mutation.SetDescription(s)
-	return hhc
+func (_c *HushHistoryCreate) SetDescription(v string) *HushHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableDescription(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetDescription(*s)
+func (_c *HushHistoryCreate) SetNillableDescription(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetKind sets the "kind" field.
-func (hhc *HushHistoryCreate) SetKind(s string) *HushHistoryCreate {
-	hhc.mutation.SetKind(s)
-	return hhc
+func (_c *HushHistoryCreate) SetKind(v string) *HushHistoryCreate {
+	_c.mutation.SetKind(v)
+	return _c
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableKind(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetKind(*s)
+func (_c *HushHistoryCreate) SetNillableKind(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetKind(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetSecretName sets the "secret_name" field.
-func (hhc *HushHistoryCreate) SetSecretName(s string) *HushHistoryCreate {
-	hhc.mutation.SetSecretName(s)
-	return hhc
+func (_c *HushHistoryCreate) SetSecretName(v string) *HushHistoryCreate {
+	_c.mutation.SetSecretName(v)
+	return _c
 }
 
 // SetNillableSecretName sets the "secret_name" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableSecretName(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetSecretName(*s)
+func (_c *HushHistoryCreate) SetNillableSecretName(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetSecretName(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetSecretValue sets the "secret_value" field.
-func (hhc *HushHistoryCreate) SetSecretValue(s string) *HushHistoryCreate {
-	hhc.mutation.SetSecretValue(s)
-	return hhc
+func (_c *HushHistoryCreate) SetSecretValue(v string) *HushHistoryCreate {
+	_c.mutation.SetSecretValue(v)
+	return _c
 }
 
 // SetNillableSecretValue sets the "secret_value" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableSecretValue(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetSecretValue(*s)
+func (_c *HushHistoryCreate) SetNillableSecretValue(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetSecretValue(*v)
 	}
-	return hhc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (hhc *HushHistoryCreate) SetID(s string) *HushHistoryCreate {
-	hhc.mutation.SetID(s)
-	return hhc
+func (_c *HushHistoryCreate) SetID(v string) *HushHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (hhc *HushHistoryCreate) SetNillableID(s *string) *HushHistoryCreate {
-	if s != nil {
-		hhc.SetID(*s)
+func (_c *HushHistoryCreate) SetNillableID(v *string) *HushHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return hhc
+	return _c
 }
 
 // Mutation returns the HushHistoryMutation object of the builder.
-func (hhc *HushHistoryCreate) Mutation() *HushHistoryMutation {
-	return hhc.mutation
+func (_c *HushHistoryCreate) Mutation() *HushHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the HushHistory in the database.
-func (hhc *HushHistoryCreate) Save(ctx context.Context) (*HushHistory, error) {
-	if err := hhc.defaults(); err != nil {
+func (_c *HushHistoryCreate) Save(ctx context.Context) (*HushHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, hhc.sqlSave, hhc.mutation, hhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (hhc *HushHistoryCreate) SaveX(ctx context.Context) *HushHistory {
-	v, err := hhc.Save(ctx)
+func (_c *HushHistoryCreate) SaveX(ctx context.Context) *HushHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -252,76 +252,76 @@ func (hhc *HushHistoryCreate) SaveX(ctx context.Context) *HushHistory {
 }
 
 // Exec executes the query.
-func (hhc *HushHistoryCreate) Exec(ctx context.Context) error {
-	_, err := hhc.Save(ctx)
+func (_c *HushHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hhc *HushHistoryCreate) ExecX(ctx context.Context) {
-	if err := hhc.Exec(ctx); err != nil {
+func (_c *HushHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (hhc *HushHistoryCreate) defaults() error {
-	if _, ok := hhc.mutation.HistoryTime(); !ok {
+func (_c *HushHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if hushhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized hushhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := hushhistory.DefaultHistoryTime()
-		hhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := hhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if hushhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized hushhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := hushhistory.DefaultCreatedAt()
-		hhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := hhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if hushhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized hushhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := hushhistory.DefaultUpdatedAt()
-		hhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := hhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if hushhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized hushhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := hushhistory.DefaultID()
-		hhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (hhc *HushHistoryCreate) check() error {
-	if _, ok := hhc.mutation.HistoryTime(); !ok {
+func (_c *HushHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "HushHistory.history_time"`)}
 	}
-	if _, ok := hhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "HushHistory.operation"`)}
 	}
-	if v, ok := hhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := hushhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "HushHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := hhc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "HushHistory.name"`)}
 	}
 	return nil
 }
 
-func (hhc *HushHistoryCreate) sqlSave(ctx context.Context) (*HushHistory, error) {
-	if err := hhc.check(); err != nil {
+func (_c *HushHistoryCreate) sqlSave(ctx context.Context) (*HushHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := hhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, hhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -334,78 +334,78 @@ func (hhc *HushHistoryCreate) sqlSave(ctx context.Context) (*HushHistory, error)
 			return nil, fmt.Errorf("unexpected HushHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	hhc.mutation.id = &_node.ID
-	hhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (hhc *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) {
+func (_c *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &HushHistory{config: hhc.config}
+		_node = &HushHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(hushhistory.Table, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = hhc.schemaConfig.HushHistory
-	if id, ok := hhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.HushHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := hhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(hushhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := hhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(hushhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := hhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(hushhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := hhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(hushhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := hhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(hushhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := hhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(hushhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := hhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := hhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := hhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := hhc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := hhc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(hushhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := hhc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(hushhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := hhc.mutation.Kind(); ok {
+	if value, ok := _c.mutation.Kind(); ok {
 		_spec.SetField(hushhistory.FieldKind, field.TypeString, value)
 		_node.Kind = value
 	}
-	if value, ok := hhc.mutation.SecretName(); ok {
+	if value, ok := _c.mutation.SecretName(); ok {
 		_spec.SetField(hushhistory.FieldSecretName, field.TypeString, value)
 		_node.SecretName = value
 	}
-	if value, ok := hhc.mutation.SecretValue(); ok {
+	if value, ok := _c.mutation.SecretValue(); ok {
 		_spec.SetField(hushhistory.FieldSecretValue, field.TypeString, value)
 		_node.SecretValue = value
 	}
@@ -420,16 +420,16 @@ type HushHistoryCreateBulk struct {
 }
 
 // Save creates the HushHistory entities in the database.
-func (hhcb *HushHistoryCreateBulk) Save(ctx context.Context) ([]*HushHistory, error) {
-	if hhcb.err != nil {
-		return nil, hhcb.err
+func (_c *HushHistoryCreateBulk) Save(ctx context.Context) ([]*HushHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(hhcb.builders))
-	nodes := make([]*HushHistory, len(hhcb.builders))
-	mutators := make([]Mutator, len(hhcb.builders))
-	for i := range hhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*HushHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := hhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HushHistoryMutation)
@@ -443,11 +443,11 @@ func (hhcb *HushHistoryCreateBulk) Save(ctx context.Context) ([]*HushHistory, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, hhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, hhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -467,7 +467,7 @@ func (hhcb *HushHistoryCreateBulk) Save(ctx context.Context) ([]*HushHistory, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, hhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -475,8 +475,8 @@ func (hhcb *HushHistoryCreateBulk) Save(ctx context.Context) ([]*HushHistory, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (hhcb *HushHistoryCreateBulk) SaveX(ctx context.Context) []*HushHistory {
-	v, err := hhcb.Save(ctx)
+func (_c *HushHistoryCreateBulk) SaveX(ctx context.Context) []*HushHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -484,14 +484,14 @@ func (hhcb *HushHistoryCreateBulk) SaveX(ctx context.Context) []*HushHistory {
 }
 
 // Exec executes the query.
-func (hhcb *HushHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := hhcb.Save(ctx)
+func (_c *HushHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hhcb *HushHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := hhcb.Exec(ctx); err != nil {
+func (_c *HushHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

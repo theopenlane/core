@@ -33,40 +33,40 @@ type EvidenceHistoryQuery struct {
 }
 
 // Where adds a new predicate for the EvidenceHistoryQuery builder.
-func (ehq *EvidenceHistoryQuery) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryQuery {
-	ehq.predicates = append(ehq.predicates, ps...)
-	return ehq
+func (_q *EvidenceHistoryQuery) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ehq *EvidenceHistoryQuery) Limit(limit int) *EvidenceHistoryQuery {
-	ehq.ctx.Limit = &limit
-	return ehq
+func (_q *EvidenceHistoryQuery) Limit(limit int) *EvidenceHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ehq *EvidenceHistoryQuery) Offset(offset int) *EvidenceHistoryQuery {
-	ehq.ctx.Offset = &offset
-	return ehq
+func (_q *EvidenceHistoryQuery) Offset(offset int) *EvidenceHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ehq *EvidenceHistoryQuery) Unique(unique bool) *EvidenceHistoryQuery {
-	ehq.ctx.Unique = &unique
-	return ehq
+func (_q *EvidenceHistoryQuery) Unique(unique bool) *EvidenceHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ehq *EvidenceHistoryQuery) Order(o ...evidencehistory.OrderOption) *EvidenceHistoryQuery {
-	ehq.order = append(ehq.order, o...)
-	return ehq
+func (_q *EvidenceHistoryQuery) Order(o ...evidencehistory.OrderOption) *EvidenceHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first EvidenceHistory entity from the query.
 // Returns a *NotFoundError when no EvidenceHistory was found.
-func (ehq *EvidenceHistoryQuery) First(ctx context.Context) (*EvidenceHistory, error) {
-	nodes, err := ehq.Limit(1).All(setContextOp(ctx, ehq.ctx, ent.OpQueryFirst))
+func (_q *EvidenceHistoryQuery) First(ctx context.Context) (*EvidenceHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (ehq *EvidenceHistoryQuery) First(ctx context.Context) (*EvidenceHistory, e
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) FirstX(ctx context.Context) *EvidenceHistory {
-	node, err := ehq.First(ctx)
+func (_q *EvidenceHistoryQuery) FirstX(ctx context.Context) *EvidenceHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (ehq *EvidenceHistoryQuery) FirstX(ctx context.Context) *EvidenceHistory {
 
 // FirstID returns the first EvidenceHistory ID from the query.
 // Returns a *NotFoundError when no EvidenceHistory ID was found.
-func (ehq *EvidenceHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *EvidenceHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ehq.Limit(1).IDs(setContextOp(ctx, ehq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (ehq *EvidenceHistoryQuery) FirstID(ctx context.Context) (id string, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := ehq.FirstID(ctx)
+func (_q *EvidenceHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (ehq *EvidenceHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single EvidenceHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one EvidenceHistory entity is found.
 // Returns a *NotFoundError when no EvidenceHistory entities are found.
-func (ehq *EvidenceHistoryQuery) Only(ctx context.Context) (*EvidenceHistory, error) {
-	nodes, err := ehq.Limit(2).All(setContextOp(ctx, ehq.ctx, ent.OpQueryOnly))
+func (_q *EvidenceHistoryQuery) Only(ctx context.Context) (*EvidenceHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (ehq *EvidenceHistoryQuery) Only(ctx context.Context) (*EvidenceHistory, er
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) OnlyX(ctx context.Context) *EvidenceHistory {
-	node, err := ehq.Only(ctx)
+func (_q *EvidenceHistoryQuery) OnlyX(ctx context.Context) *EvidenceHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (ehq *EvidenceHistoryQuery) OnlyX(ctx context.Context) *EvidenceHistory {
 // OnlyID is like Only, but returns the only EvidenceHistory ID in the query.
 // Returns a *NotSingularError when more than one EvidenceHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ehq *EvidenceHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *EvidenceHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ehq.Limit(2).IDs(setContextOp(ctx, ehq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (ehq *EvidenceHistoryQuery) OnlyID(ctx context.Context) (id string, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := ehq.OnlyID(ctx)
+func (_q *EvidenceHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (ehq *EvidenceHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of EvidenceHistories.
-func (ehq *EvidenceHistoryQuery) All(ctx context.Context) ([]*EvidenceHistory, error) {
-	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryAll)
-	if err := ehq.prepareQuery(ctx); err != nil {
+func (_q *EvidenceHistoryQuery) All(ctx context.Context) ([]*EvidenceHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*EvidenceHistory, *EvidenceHistoryQuery]()
-	return withInterceptors[[]*EvidenceHistory](ctx, ehq, qr, ehq.inters)
+	return withInterceptors[[]*EvidenceHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) AllX(ctx context.Context) []*EvidenceHistory {
-	nodes, err := ehq.All(ctx)
+func (_q *EvidenceHistoryQuery) AllX(ctx context.Context) []*EvidenceHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (ehq *EvidenceHistoryQuery) AllX(ctx context.Context) []*EvidenceHistory {
 }
 
 // IDs executes the query and returns a list of EvidenceHistory IDs.
-func (ehq *EvidenceHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if ehq.ctx.Unique == nil && ehq.path != nil {
-		ehq.Unique(true)
+func (_q *EvidenceHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryIDs)
-	if err = ehq.Select(evidencehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(evidencehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := ehq.IDs(ctx)
+func (_q *EvidenceHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (ehq *EvidenceHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (ehq *EvidenceHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryCount)
-	if err := ehq.prepareQuery(ctx); err != nil {
+func (_q *EvidenceHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ehq, querierCount[*EvidenceHistoryQuery](), ehq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*EvidenceHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) CountX(ctx context.Context) int {
-	count, err := ehq.Count(ctx)
+func (_q *EvidenceHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (ehq *EvidenceHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ehq *EvidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ehq.ctx, ent.OpQueryExist)
-	switch _, err := ehq.FirstID(ctx); {
+func (_q *EvidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (ehq *EvidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ehq *EvidenceHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := ehq.Exist(ctx)
+func (_q *EvidenceHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (ehq *EvidenceHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the EvidenceHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ehq *EvidenceHistoryQuery) Clone() *EvidenceHistoryQuery {
-	if ehq == nil {
+func (_q *EvidenceHistoryQuery) Clone() *EvidenceHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &EvidenceHistoryQuery{
-		config:     ehq.config,
-		ctx:        ehq.ctx.Clone(),
-		order:      append([]evidencehistory.OrderOption{}, ehq.order...),
-		inters:     append([]Interceptor{}, ehq.inters...),
-		predicates: append([]predicate.EvidenceHistory{}, ehq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]evidencehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.EvidenceHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       ehq.sql.Clone(),
-		path:      ehq.path,
-		modifiers: append([]func(*sql.Selector){}, ehq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (ehq *EvidenceHistoryQuery) Clone() *EvidenceHistoryQuery {
 //		GroupBy(evidencehistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (ehq *EvidenceHistoryQuery) GroupBy(field string, fields ...string) *EvidenceHistoryGroupBy {
-	ehq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &EvidenceHistoryGroupBy{build: ehq}
-	grbuild.flds = &ehq.ctx.Fields
+func (_q *EvidenceHistoryQuery) GroupBy(field string, fields ...string) *EvidenceHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &EvidenceHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = evidencehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (ehq *EvidenceHistoryQuery) GroupBy(field string, fields ...string) *Eviden
 //	client.EvidenceHistory.Query().
 //		Select(evidencehistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (ehq *EvidenceHistoryQuery) Select(fields ...string) *EvidenceHistorySelect {
-	ehq.ctx.Fields = append(ehq.ctx.Fields, fields...)
-	sbuild := &EvidenceHistorySelect{EvidenceHistoryQuery: ehq}
+func (_q *EvidenceHistoryQuery) Select(fields ...string) *EvidenceHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &EvidenceHistorySelect{EvidenceHistoryQuery: _q}
 	sbuild.label = evidencehistory.Label
-	sbuild.flds, sbuild.scan = &ehq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a EvidenceHistorySelect configured with the given aggregations.
-func (ehq *EvidenceHistoryQuery) Aggregate(fns ...AggregateFunc) *EvidenceHistorySelect {
-	return ehq.Select().Aggregate(fns...)
+func (_q *EvidenceHistoryQuery) Aggregate(fns ...AggregateFunc) *EvidenceHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ehq *EvidenceHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ehq.inters {
+func (_q *EvidenceHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ehq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ehq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !evidencehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if ehq.path != nil {
-		prev, err := ehq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ehq.sql = prev
+		_q.sql = prev
 	}
 	if evidencehistory.Policy == nil {
 		return errors.New("generated: uninitialized evidencehistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := evidencehistory.Policy.EvalQuery(ctx, ehq); err != nil {
+	if err := evidencehistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ehq *EvidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EvidenceHistory, error) {
+func (_q *EvidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EvidenceHistory, error) {
 	var (
 		nodes = []*EvidenceHistory{}
-		_spec = ehq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EvidenceHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &EvidenceHistory{config: ehq.config}
+		node := &EvidenceHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = ehq.schemaConfig.EvidenceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ehq.schemaConfig)
-	if len(ehq.modifiers) > 0 {
-		_spec.Modifiers = ehq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.EvidenceHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ehq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range ehq.loadTotal {
-		if err := ehq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (ehq *EvidenceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ehq.querySpec()
-	_spec.Node.Schema = ehq.schemaConfig.EvidenceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ehq.schemaConfig)
-	if len(ehq.modifiers) > 0 {
-		_spec.Modifiers = ehq.modifiers
+func (_q *EvidenceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.EvidenceHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = ehq.ctx.Fields
-	if len(ehq.ctx.Fields) > 0 {
-		_spec.Unique = ehq.ctx.Unique != nil && *ehq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ehq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ehq *EvidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *EvidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
-	_spec.From = ehq.sql
-	if unique := ehq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ehq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ehq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, evidencehistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (ehq *EvidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := ehq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ehq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ehq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ehq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (ehq *EvidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ehq *EvidenceHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ehq.driver.Dialect())
+func (_q *EvidenceHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(evidencehistory.Table)
-	columns := ehq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = evidencehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ehq.sql != nil {
-		selector = ehq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ehq.ctx.Unique != nil && *ehq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(ehq.schemaConfig.EvidenceHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, ehq.schemaConfig)
+	t1.Schema(_q.schemaConfig.EvidenceHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range ehq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range ehq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ehq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ehq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ehq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ehq *EvidenceHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EvidenceHistorySelect {
-	ehq.modifiers = append(ehq.modifiers, modifiers...)
-	return ehq.Select()
+func (_q *EvidenceHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EvidenceHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type EvidenceHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ehgb *EvidenceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *EvidenceHistoryGroupBy {
-	ehgb.fns = append(ehgb.fns, fns...)
-	return ehgb
+func (_g *EvidenceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *EvidenceHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ehgb *EvidenceHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ehgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ehgb.build.prepareQuery(ctx); err != nil {
+func (_g *EvidenceHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EvidenceHistoryQuery, *EvidenceHistoryGroupBy](ctx, ehgb.build, ehgb, ehgb.build.inters, v)
+	return scanWithInterceptors[*EvidenceHistoryQuery, *EvidenceHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ehgb *EvidenceHistoryGroupBy) sqlScan(ctx context.Context, root *EvidenceHistoryQuery, v any) error {
+func (_g *EvidenceHistoryGroupBy) sqlScan(ctx context.Context, root *EvidenceHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ehgb.fns))
-	for _, fn := range ehgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ehgb.flds)+len(ehgb.fns))
-		for _, f := range *ehgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ehgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ehgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type EvidenceHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ehs *EvidenceHistorySelect) Aggregate(fns ...AggregateFunc) *EvidenceHistorySelect {
-	ehs.fns = append(ehs.fns, fns...)
-	return ehs
+func (_s *EvidenceHistorySelect) Aggregate(fns ...AggregateFunc) *EvidenceHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ehs *EvidenceHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ehs.ctx, ent.OpQuerySelect)
-	if err := ehs.prepareQuery(ctx); err != nil {
+func (_s *EvidenceHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EvidenceHistoryQuery, *EvidenceHistorySelect](ctx, ehs.EvidenceHistoryQuery, ehs, ehs.inters, v)
+	return scanWithInterceptors[*EvidenceHistoryQuery, *EvidenceHistorySelect](ctx, _s.EvidenceHistoryQuery, _s, _s.inters, v)
 }
 
-func (ehs *EvidenceHistorySelect) sqlScan(ctx context.Context, root *EvidenceHistoryQuery, v any) error {
+func (_s *EvidenceHistorySelect) sqlScan(ctx context.Context, root *EvidenceHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ehs.fns))
-	for _, fn := range ehs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ehs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (ehs *EvidenceHistorySelect) sqlScan(ctx context.Context, root *EvidenceHis
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ehs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (ehs *EvidenceHistorySelect) sqlScan(ctx context.Context, root *EvidenceHis
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ehs *EvidenceHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EvidenceHistorySelect {
-	ehs.modifiers = append(ehs.modifiers, modifiers...)
-	return ehs
+func (_s *EvidenceHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EvidenceHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

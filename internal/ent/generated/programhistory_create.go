@@ -23,353 +23,353 @@ type ProgramHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (phc *ProgramHistoryCreate) SetHistoryTime(t time.Time) *ProgramHistoryCreate {
-	phc.mutation.SetHistoryTime(t)
-	return phc
+func (_c *ProgramHistoryCreate) SetHistoryTime(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableHistoryTime(t *time.Time) *ProgramHistoryCreate {
-	if t != nil {
-		phc.SetHistoryTime(*t)
+func (_c *ProgramHistoryCreate) SetNillableHistoryTime(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (phc *ProgramHistoryCreate) SetRef(s string) *ProgramHistoryCreate {
-	phc.mutation.SetRef(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetRef(v string) *ProgramHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableRef(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetRef(*s)
+func (_c *ProgramHistoryCreate) SetNillableRef(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (phc *ProgramHistoryCreate) SetOperation(ht history.OpType) *ProgramHistoryCreate {
-	phc.mutation.SetOperation(ht)
-	return phc
+func (_c *ProgramHistoryCreate) SetOperation(v history.OpType) *ProgramHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (phc *ProgramHistoryCreate) SetCreatedAt(t time.Time) *ProgramHistoryCreate {
-	phc.mutation.SetCreatedAt(t)
-	return phc
+func (_c *ProgramHistoryCreate) SetCreatedAt(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableCreatedAt(t *time.Time) *ProgramHistoryCreate {
-	if t != nil {
-		phc.SetCreatedAt(*t)
+func (_c *ProgramHistoryCreate) SetNillableCreatedAt(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (phc *ProgramHistoryCreate) SetUpdatedAt(t time.Time) *ProgramHistoryCreate {
-	phc.mutation.SetUpdatedAt(t)
-	return phc
+func (_c *ProgramHistoryCreate) SetUpdatedAt(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ProgramHistoryCreate {
-	if t != nil {
-		phc.SetUpdatedAt(*t)
+func (_c *ProgramHistoryCreate) SetNillableUpdatedAt(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (phc *ProgramHistoryCreate) SetCreatedBy(s string) *ProgramHistoryCreate {
-	phc.mutation.SetCreatedBy(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetCreatedBy(v string) *ProgramHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableCreatedBy(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetCreatedBy(*s)
+func (_c *ProgramHistoryCreate) SetNillableCreatedBy(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (phc *ProgramHistoryCreate) SetUpdatedBy(s string) *ProgramHistoryCreate {
-	phc.mutation.SetUpdatedBy(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetUpdatedBy(v string) *ProgramHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableUpdatedBy(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetUpdatedBy(*s)
+func (_c *ProgramHistoryCreate) SetNillableUpdatedBy(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (phc *ProgramHistoryCreate) SetDeletedAt(t time.Time) *ProgramHistoryCreate {
-	phc.mutation.SetDeletedAt(t)
-	return phc
+func (_c *ProgramHistoryCreate) SetDeletedAt(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableDeletedAt(t *time.Time) *ProgramHistoryCreate {
-	if t != nil {
-		phc.SetDeletedAt(*t)
+func (_c *ProgramHistoryCreate) SetNillableDeletedAt(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (phc *ProgramHistoryCreate) SetDeletedBy(s string) *ProgramHistoryCreate {
-	phc.mutation.SetDeletedBy(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetDeletedBy(v string) *ProgramHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableDeletedBy(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetDeletedBy(*s)
+func (_c *ProgramHistoryCreate) SetNillableDeletedBy(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (phc *ProgramHistoryCreate) SetDisplayID(s string) *ProgramHistoryCreate {
-	phc.mutation.SetDisplayID(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetDisplayID(v string) *ProgramHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (phc *ProgramHistoryCreate) SetTags(s []string) *ProgramHistoryCreate {
-	phc.mutation.SetTags(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetTags(v []string) *ProgramHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (phc *ProgramHistoryCreate) SetOwnerID(s string) *ProgramHistoryCreate {
-	phc.mutation.SetOwnerID(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetOwnerID(v string) *ProgramHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableOwnerID(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetOwnerID(*s)
+func (_c *ProgramHistoryCreate) SetNillableOwnerID(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (phc *ProgramHistoryCreate) SetName(s string) *ProgramHistoryCreate {
-	phc.mutation.SetName(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetName(v string) *ProgramHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (phc *ProgramHistoryCreate) SetDescription(s string) *ProgramHistoryCreate {
-	phc.mutation.SetDescription(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetDescription(v string) *ProgramHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableDescription(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetDescription(*s)
+func (_c *ProgramHistoryCreate) SetNillableDescription(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (phc *ProgramHistoryCreate) SetStatus(es enums.ProgramStatus) *ProgramHistoryCreate {
-	phc.mutation.SetStatus(es)
-	return phc
+func (_c *ProgramHistoryCreate) SetStatus(v enums.ProgramStatus) *ProgramHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableStatus(es *enums.ProgramStatus) *ProgramHistoryCreate {
-	if es != nil {
-		phc.SetStatus(*es)
+func (_c *ProgramHistoryCreate) SetNillableStatus(v *enums.ProgramStatus) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetProgramType sets the "program_type" field.
-func (phc *ProgramHistoryCreate) SetProgramType(et enums.ProgramType) *ProgramHistoryCreate {
-	phc.mutation.SetProgramType(et)
-	return phc
+func (_c *ProgramHistoryCreate) SetProgramType(v enums.ProgramType) *ProgramHistoryCreate {
+	_c.mutation.SetProgramType(v)
+	return _c
 }
 
 // SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryCreate {
-	if et != nil {
-		phc.SetProgramType(*et)
+func (_c *ProgramHistoryCreate) SetNillableProgramType(v *enums.ProgramType) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetProgramType(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetFrameworkName sets the "framework_name" field.
-func (phc *ProgramHistoryCreate) SetFrameworkName(s string) *ProgramHistoryCreate {
-	phc.mutation.SetFrameworkName(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetFrameworkName(v string) *ProgramHistoryCreate {
+	_c.mutation.SetFrameworkName(v)
+	return _c
 }
 
 // SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableFrameworkName(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetFrameworkName(*s)
+func (_c *ProgramHistoryCreate) SetNillableFrameworkName(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetFrameworkName(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetStartDate sets the "start_date" field.
-func (phc *ProgramHistoryCreate) SetStartDate(t time.Time) *ProgramHistoryCreate {
-	phc.mutation.SetStartDate(t)
-	return phc
+func (_c *ProgramHistoryCreate) SetStartDate(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetStartDate(v)
+	return _c
 }
 
 // SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableStartDate(t *time.Time) *ProgramHistoryCreate {
-	if t != nil {
-		phc.SetStartDate(*t)
+func (_c *ProgramHistoryCreate) SetNillableStartDate(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetStartDate(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetEndDate sets the "end_date" field.
-func (phc *ProgramHistoryCreate) SetEndDate(t time.Time) *ProgramHistoryCreate {
-	phc.mutation.SetEndDate(t)
-	return phc
+func (_c *ProgramHistoryCreate) SetEndDate(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetEndDate(v)
+	return _c
 }
 
 // SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableEndDate(t *time.Time) *ProgramHistoryCreate {
-	if t != nil {
-		phc.SetEndDate(*t)
+func (_c *ProgramHistoryCreate) SetNillableEndDate(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetEndDate(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
-func (phc *ProgramHistoryCreate) SetAuditorReady(b bool) *ProgramHistoryCreate {
-	phc.mutation.SetAuditorReady(b)
-	return phc
+func (_c *ProgramHistoryCreate) SetAuditorReady(v bool) *ProgramHistoryCreate {
+	_c.mutation.SetAuditorReady(v)
+	return _c
 }
 
 // SetNillableAuditorReady sets the "auditor_ready" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableAuditorReady(b *bool) *ProgramHistoryCreate {
-	if b != nil {
-		phc.SetAuditorReady(*b)
+func (_c *ProgramHistoryCreate) SetNillableAuditorReady(v *bool) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetAuditorReady(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetAuditorWriteComments sets the "auditor_write_comments" field.
-func (phc *ProgramHistoryCreate) SetAuditorWriteComments(b bool) *ProgramHistoryCreate {
-	phc.mutation.SetAuditorWriteComments(b)
-	return phc
+func (_c *ProgramHistoryCreate) SetAuditorWriteComments(v bool) *ProgramHistoryCreate {
+	_c.mutation.SetAuditorWriteComments(v)
+	return _c
 }
 
 // SetNillableAuditorWriteComments sets the "auditor_write_comments" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableAuditorWriteComments(b *bool) *ProgramHistoryCreate {
-	if b != nil {
-		phc.SetAuditorWriteComments(*b)
+func (_c *ProgramHistoryCreate) SetNillableAuditorWriteComments(v *bool) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetAuditorWriteComments(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetAuditorReadComments sets the "auditor_read_comments" field.
-func (phc *ProgramHistoryCreate) SetAuditorReadComments(b bool) *ProgramHistoryCreate {
-	phc.mutation.SetAuditorReadComments(b)
-	return phc
+func (_c *ProgramHistoryCreate) SetAuditorReadComments(v bool) *ProgramHistoryCreate {
+	_c.mutation.SetAuditorReadComments(v)
+	return _c
 }
 
 // SetNillableAuditorReadComments sets the "auditor_read_comments" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableAuditorReadComments(b *bool) *ProgramHistoryCreate {
-	if b != nil {
-		phc.SetAuditorReadComments(*b)
+func (_c *ProgramHistoryCreate) SetNillableAuditorReadComments(v *bool) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetAuditorReadComments(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetAuditFirm sets the "audit_firm" field.
-func (phc *ProgramHistoryCreate) SetAuditFirm(s string) *ProgramHistoryCreate {
-	phc.mutation.SetAuditFirm(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetAuditFirm(v string) *ProgramHistoryCreate {
+	_c.mutation.SetAuditFirm(v)
+	return _c
 }
 
 // SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableAuditFirm(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetAuditFirm(*s)
+func (_c *ProgramHistoryCreate) SetNillableAuditFirm(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetAuditFirm(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetAuditor sets the "auditor" field.
-func (phc *ProgramHistoryCreate) SetAuditor(s string) *ProgramHistoryCreate {
-	phc.mutation.SetAuditor(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetAuditor(v string) *ProgramHistoryCreate {
+	_c.mutation.SetAuditor(v)
+	return _c
 }
 
 // SetNillableAuditor sets the "auditor" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableAuditor(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetAuditor(*s)
+func (_c *ProgramHistoryCreate) SetNillableAuditor(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetAuditor(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetAuditorEmail sets the "auditor_email" field.
-func (phc *ProgramHistoryCreate) SetAuditorEmail(s string) *ProgramHistoryCreate {
-	phc.mutation.SetAuditorEmail(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetAuditorEmail(v string) *ProgramHistoryCreate {
+	_c.mutation.SetAuditorEmail(v)
+	return _c
 }
 
 // SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableAuditorEmail(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetAuditorEmail(*s)
+func (_c *ProgramHistoryCreate) SetNillableAuditorEmail(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetAuditorEmail(*v)
 	}
-	return phc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (phc *ProgramHistoryCreate) SetID(s string) *ProgramHistoryCreate {
-	phc.mutation.SetID(s)
-	return phc
+func (_c *ProgramHistoryCreate) SetID(v string) *ProgramHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (phc *ProgramHistoryCreate) SetNillableID(s *string) *ProgramHistoryCreate {
-	if s != nil {
-		phc.SetID(*s)
+func (_c *ProgramHistoryCreate) SetNillableID(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return phc
+	return _c
 }
 
 // Mutation returns the ProgramHistoryMutation object of the builder.
-func (phc *ProgramHistoryCreate) Mutation() *ProgramHistoryMutation {
-	return phc.mutation
+func (_c *ProgramHistoryCreate) Mutation() *ProgramHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the ProgramHistory in the database.
-func (phc *ProgramHistoryCreate) Save(ctx context.Context) (*ProgramHistory, error) {
-	if err := phc.defaults(); err != nil {
+func (_c *ProgramHistoryCreate) Save(ctx context.Context) (*ProgramHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, phc.sqlSave, phc.mutation, phc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (phc *ProgramHistoryCreate) SaveX(ctx context.Context) *ProgramHistory {
-	v, err := phc.Save(ctx)
+func (_c *ProgramHistoryCreate) SaveX(ctx context.Context) *ProgramHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -377,128 +377,128 @@ func (phc *ProgramHistoryCreate) SaveX(ctx context.Context) *ProgramHistory {
 }
 
 // Exec executes the query.
-func (phc *ProgramHistoryCreate) Exec(ctx context.Context) error {
-	_, err := phc.Save(ctx)
+func (_c *ProgramHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phc *ProgramHistoryCreate) ExecX(ctx context.Context) {
-	if err := phc.Exec(ctx); err != nil {
+func (_c *ProgramHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (phc *ProgramHistoryCreate) defaults() error {
-	if _, ok := phc.mutation.HistoryTime(); !ok {
+func (_c *ProgramHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if programhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized programhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := programhistory.DefaultHistoryTime()
-		phc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := phc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if programhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := programhistory.DefaultCreatedAt()
-		phc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := phc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if programhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programhistory.DefaultUpdatedAt()
-		phc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := phc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := programhistory.DefaultTags
-		phc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := phc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := programhistory.DefaultStatus
-		phc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := phc.mutation.ProgramType(); !ok {
+	if _, ok := _c.mutation.ProgramType(); !ok {
 		v := programhistory.DefaultProgramType
-		phc.mutation.SetProgramType(v)
+		_c.mutation.SetProgramType(v)
 	}
-	if _, ok := phc.mutation.AuditorReady(); !ok {
+	if _, ok := _c.mutation.AuditorReady(); !ok {
 		v := programhistory.DefaultAuditorReady
-		phc.mutation.SetAuditorReady(v)
+		_c.mutation.SetAuditorReady(v)
 	}
-	if _, ok := phc.mutation.AuditorWriteComments(); !ok {
+	if _, ok := _c.mutation.AuditorWriteComments(); !ok {
 		v := programhistory.DefaultAuditorWriteComments
-		phc.mutation.SetAuditorWriteComments(v)
+		_c.mutation.SetAuditorWriteComments(v)
 	}
-	if _, ok := phc.mutation.AuditorReadComments(); !ok {
+	if _, ok := _c.mutation.AuditorReadComments(); !ok {
 		v := programhistory.DefaultAuditorReadComments
-		phc.mutation.SetAuditorReadComments(v)
+		_c.mutation.SetAuditorReadComments(v)
 	}
-	if _, ok := phc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if programhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized programhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := programhistory.DefaultID()
-		phc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (phc *ProgramHistoryCreate) check() error {
-	if _, ok := phc.mutation.HistoryTime(); !ok {
+func (_c *ProgramHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "ProgramHistory.history_time"`)}
 	}
-	if _, ok := phc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "ProgramHistory.operation"`)}
 	}
-	if v, ok := phc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := programhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := phc.mutation.DisplayID(); !ok {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ProgramHistory.display_id"`)}
 	}
-	if _, ok := phc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ProgramHistory.name"`)}
 	}
-	if _, ok := phc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "ProgramHistory.status"`)}
 	}
-	if v, ok := phc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := programhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
-	if _, ok := phc.mutation.ProgramType(); !ok {
+	if _, ok := _c.mutation.ProgramType(); !ok {
 		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "ProgramHistory.program_type"`)}
 	}
-	if v, ok := phc.mutation.ProgramType(); ok {
+	if v, ok := _c.mutation.ProgramType(); ok {
 		if err := programhistory.ProgramTypeValidator(v); err != nil {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
 		}
 	}
-	if _, ok := phc.mutation.AuditorReady(); !ok {
+	if _, ok := _c.mutation.AuditorReady(); !ok {
 		return &ValidationError{Name: "auditor_ready", err: errors.New(`generated: missing required field "ProgramHistory.auditor_ready"`)}
 	}
-	if _, ok := phc.mutation.AuditorWriteComments(); !ok {
+	if _, ok := _c.mutation.AuditorWriteComments(); !ok {
 		return &ValidationError{Name: "auditor_write_comments", err: errors.New(`generated: missing required field "ProgramHistory.auditor_write_comments"`)}
 	}
-	if _, ok := phc.mutation.AuditorReadComments(); !ok {
+	if _, ok := _c.mutation.AuditorReadComments(); !ok {
 		return &ValidationError{Name: "auditor_read_comments", err: errors.New(`generated: missing required field "ProgramHistory.auditor_read_comments"`)}
 	}
 	return nil
 }
 
-func (phc *ProgramHistoryCreate) sqlSave(ctx context.Context) (*ProgramHistory, error) {
-	if err := phc.check(); err != nil {
+func (_c *ProgramHistoryCreate) sqlSave(ctx context.Context) (*ProgramHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := phc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, phc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -511,118 +511,118 @@ func (phc *ProgramHistoryCreate) sqlSave(ctx context.Context) (*ProgramHistory, 
 			return nil, fmt.Errorf("unexpected ProgramHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	phc.mutation.id = &_node.ID
-	phc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateSpec) {
+func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ProgramHistory{config: phc.config}
+		_node = &ProgramHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(programhistory.Table, sqlgraph.NewFieldSpec(programhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = phc.schemaConfig.ProgramHistory
-	if id, ok := phc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ProgramHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := phc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(programhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := phc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(programhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := phc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(programhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := phc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(programhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := phc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(programhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := phc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(programhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := phc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := phc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := phc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(programhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := phc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(programhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := phc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(programhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := phc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(programhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := phc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := phc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(programhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := phc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := phc.mutation.ProgramType(); ok {
+	if value, ok := _c.mutation.ProgramType(); ok {
 		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
 		_node.ProgramType = value
 	}
-	if value, ok := phc.mutation.FrameworkName(); ok {
+	if value, ok := _c.mutation.FrameworkName(); ok {
 		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
 		_node.FrameworkName = value
 	}
-	if value, ok := phc.mutation.StartDate(); ok {
+	if value, ok := _c.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)
 		_node.StartDate = value
 	}
-	if value, ok := phc.mutation.EndDate(); ok {
+	if value, ok := _c.mutation.EndDate(); ok {
 		_spec.SetField(programhistory.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
 	}
-	if value, ok := phc.mutation.AuditorReady(); ok {
+	if value, ok := _c.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)
 		_node.AuditorReady = value
 	}
-	if value, ok := phc.mutation.AuditorWriteComments(); ok {
+	if value, ok := _c.mutation.AuditorWriteComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorWriteComments, field.TypeBool, value)
 		_node.AuditorWriteComments = value
 	}
-	if value, ok := phc.mutation.AuditorReadComments(); ok {
+	if value, ok := _c.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
 	}
-	if value, ok := phc.mutation.AuditFirm(); ok {
+	if value, ok := _c.mutation.AuditFirm(); ok {
 		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
 		_node.AuditFirm = value
 	}
-	if value, ok := phc.mutation.Auditor(); ok {
+	if value, ok := _c.mutation.Auditor(); ok {
 		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
 		_node.Auditor = value
 	}
-	if value, ok := phc.mutation.AuditorEmail(); ok {
+	if value, ok := _c.mutation.AuditorEmail(); ok {
 		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
 		_node.AuditorEmail = value
 	}
@@ -637,16 +637,16 @@ type ProgramHistoryCreateBulk struct {
 }
 
 // Save creates the ProgramHistory entities in the database.
-func (phcb *ProgramHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramHistory, error) {
-	if phcb.err != nil {
-		return nil, phcb.err
+func (_c *ProgramHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(phcb.builders))
-	nodes := make([]*ProgramHistory, len(phcb.builders))
-	mutators := make([]Mutator, len(phcb.builders))
-	for i := range phcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ProgramHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := phcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProgramHistoryMutation)
@@ -660,11 +660,11 @@ func (phcb *ProgramHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramHisto
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, phcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, phcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -684,7 +684,7 @@ func (phcb *ProgramHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramHisto
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, phcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -692,8 +692,8 @@ func (phcb *ProgramHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramHisto
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (phcb *ProgramHistoryCreateBulk) SaveX(ctx context.Context) []*ProgramHistory {
-	v, err := phcb.Save(ctx)
+func (_c *ProgramHistoryCreateBulk) SaveX(ctx context.Context) []*ProgramHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -701,14 +701,14 @@ func (phcb *ProgramHistoryCreateBulk) SaveX(ctx context.Context) []*ProgramHisto
 }
 
 // Exec executes the query.
-func (phcb *ProgramHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := phcb.Save(ctx)
+func (_c *ProgramHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phcb *ProgramHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := phcb.Exec(ctx); err != nil {
+func (_c *ProgramHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

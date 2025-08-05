@@ -85,7 +85,7 @@ func (*UserSettingHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the UserSettingHistory fields.
-func (ush *UserSettingHistory) assignValues(columns []string, values []any) error {
+func (_m *UserSettingHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -95,67 +95,67 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ush.ID = value.String
+				_m.ID = value.String
 			}
 		case usersettinghistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ush.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case usersettinghistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ush.Ref = value.String
+				_m.Ref = value.String
 			}
 		case usersettinghistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ush.Operation = *value
+				_m.Operation = *value
 			}
 		case usersettinghistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ush.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case usersettinghistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ush.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case usersettinghistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ush.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case usersettinghistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ush.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case usersettinghistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ush.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case usersettinghistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ush.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case usersettinghistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ush.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -163,61 +163,61 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				ush.UserID = value.String
+				_m.UserID = value.String
 			}
 		case usersettinghistory.FieldLocked:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field locked", values[i])
 			} else if value.Valid {
-				ush.Locked = value.Bool
+				_m.Locked = value.Bool
 			}
 		case usersettinghistory.FieldSilencedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field silenced_at", values[i])
 			} else if value.Valid {
-				ush.SilencedAt = new(time.Time)
-				*ush.SilencedAt = value.Time
+				_m.SilencedAt = new(time.Time)
+				*_m.SilencedAt = value.Time
 			}
 		case usersettinghistory.FieldSuspendedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field suspended_at", values[i])
 			} else if value.Valid {
-				ush.SuspendedAt = new(time.Time)
-				*ush.SuspendedAt = value.Time
+				_m.SuspendedAt = new(time.Time)
+				*_m.SuspendedAt = value.Time
 			}
 		case usersettinghistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ush.Status = enums.UserStatus(value.String)
+				_m.Status = enums.UserStatus(value.String)
 			}
 		case usersettinghistory.FieldEmailConfirmed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field email_confirmed", values[i])
 			} else if value.Valid {
-				ush.EmailConfirmed = value.Bool
+				_m.EmailConfirmed = value.Bool
 			}
 		case usersettinghistory.FieldIsWebauthnAllowed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_webauthn_allowed", values[i])
 			} else if value.Valid {
-				ush.IsWebauthnAllowed = value.Bool
+				_m.IsWebauthnAllowed = value.Bool
 			}
 		case usersettinghistory.FieldIsTfaEnabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_tfa_enabled", values[i])
 			} else if value.Valid {
-				ush.IsTfaEnabled = value.Bool
+				_m.IsTfaEnabled = value.Bool
 			}
 		case usersettinghistory.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
-				ush.PhoneNumber = new(string)
-				*ush.PhoneNumber = value.String
+				_m.PhoneNumber = new(string)
+				*_m.PhoneNumber = value.String
 			}
 		default:
-			ush.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -225,92 +225,92 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 
 // Value returns the ent.Value that was dynamically selected and assigned to the UserSettingHistory.
 // This includes values selected through modifiers, order, etc.
-func (ush *UserSettingHistory) Value(name string) (ent.Value, error) {
-	return ush.selectValues.Get(name)
+func (_m *UserSettingHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this UserSettingHistory.
 // Note that you need to call UserSettingHistory.Unwrap() before calling this method if this UserSettingHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ush *UserSettingHistory) Update() *UserSettingHistoryUpdateOne {
-	return NewUserSettingHistoryClient(ush.config).UpdateOne(ush)
+func (_m *UserSettingHistory) Update() *UserSettingHistoryUpdateOne {
+	return NewUserSettingHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the UserSettingHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ush *UserSettingHistory) Unwrap() *UserSettingHistory {
-	_tx, ok := ush.config.driver.(*txDriver)
+func (_m *UserSettingHistory) Unwrap() *UserSettingHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: UserSettingHistory is not a transactional entity")
 	}
-	ush.config.driver = _tx.drv
-	return ush
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ush *UserSettingHistory) String() string {
+func (_m *UserSettingHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("UserSettingHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ush.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ush.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ush.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ush.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ush.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ush.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ush.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ush.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ush.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ush.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ush.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(ush.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteString(", ")
 	builder.WriteString("locked=")
-	builder.WriteString(fmt.Sprintf("%v", ush.Locked))
+	builder.WriteString(fmt.Sprintf("%v", _m.Locked))
 	builder.WriteString(", ")
-	if v := ush.SilencedAt; v != nil {
+	if v := _m.SilencedAt; v != nil {
 		builder.WriteString("silenced_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := ush.SuspendedAt; v != nil {
+	if v := _m.SuspendedAt; v != nil {
 		builder.WriteString("suspended_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ush.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("email_confirmed=")
-	builder.WriteString(fmt.Sprintf("%v", ush.EmailConfirmed))
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailConfirmed))
 	builder.WriteString(", ")
 	builder.WriteString("is_webauthn_allowed=")
-	builder.WriteString(fmt.Sprintf("%v", ush.IsWebauthnAllowed))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsWebauthnAllowed))
 	builder.WriteString(", ")
 	builder.WriteString("is_tfa_enabled=")
-	builder.WriteString(fmt.Sprintf("%v", ush.IsTfaEnabled))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTfaEnabled))
 	builder.WriteString(", ")
-	if v := ush.PhoneNumber; v != nil {
+	if v := _m.PhoneNumber; v != nil {
 		builder.WriteString("phone_number=")
 		builder.WriteString(*v)
 	}

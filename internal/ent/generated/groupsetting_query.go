@@ -35,44 +35,44 @@ type GroupSettingQuery struct {
 }
 
 // Where adds a new predicate for the GroupSettingQuery builder.
-func (gsq *GroupSettingQuery) Where(ps ...predicate.GroupSetting) *GroupSettingQuery {
-	gsq.predicates = append(gsq.predicates, ps...)
-	return gsq
+func (_q *GroupSettingQuery) Where(ps ...predicate.GroupSetting) *GroupSettingQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (gsq *GroupSettingQuery) Limit(limit int) *GroupSettingQuery {
-	gsq.ctx.Limit = &limit
-	return gsq
+func (_q *GroupSettingQuery) Limit(limit int) *GroupSettingQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (gsq *GroupSettingQuery) Offset(offset int) *GroupSettingQuery {
-	gsq.ctx.Offset = &offset
-	return gsq
+func (_q *GroupSettingQuery) Offset(offset int) *GroupSettingQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (gsq *GroupSettingQuery) Unique(unique bool) *GroupSettingQuery {
-	gsq.ctx.Unique = &unique
-	return gsq
+func (_q *GroupSettingQuery) Unique(unique bool) *GroupSettingQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (gsq *GroupSettingQuery) Order(o ...groupsetting.OrderOption) *GroupSettingQuery {
-	gsq.order = append(gsq.order, o...)
-	return gsq
+func (_q *GroupSettingQuery) Order(o ...groupsetting.OrderOption) *GroupSettingQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryGroup chains the current query on the "group" edge.
-func (gsq *GroupSettingQuery) QueryGroup() *GroupQuery {
-	query := (&GroupClient{config: gsq.config}).Query()
+func (_q *GroupSettingQuery) QueryGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := gsq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := gsq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -81,10 +81,10 @@ func (gsq *GroupSettingQuery) QueryGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, groupsetting.GroupTable, groupsetting.GroupColumn),
 		)
-		schemaConfig := gsq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.GroupSetting
-		fromU = sqlgraph.SetNeighbors(gsq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -92,8 +92,8 @@ func (gsq *GroupSettingQuery) QueryGroup() *GroupQuery {
 
 // First returns the first GroupSetting entity from the query.
 // Returns a *NotFoundError when no GroupSetting was found.
-func (gsq *GroupSettingQuery) First(ctx context.Context) (*GroupSetting, error) {
-	nodes, err := gsq.Limit(1).All(setContextOp(ctx, gsq.ctx, ent.OpQueryFirst))
+func (_q *GroupSettingQuery) First(ctx context.Context) (*GroupSetting, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -104,8 +104,8 @@ func (gsq *GroupSettingQuery) First(ctx context.Context) (*GroupSetting, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (gsq *GroupSettingQuery) FirstX(ctx context.Context) *GroupSetting {
-	node, err := gsq.First(ctx)
+func (_q *GroupSettingQuery) FirstX(ctx context.Context) *GroupSetting {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -114,9 +114,9 @@ func (gsq *GroupSettingQuery) FirstX(ctx context.Context) *GroupSetting {
 
 // FirstID returns the first GroupSetting ID from the query.
 // Returns a *NotFoundError when no GroupSetting ID was found.
-func (gsq *GroupSettingQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *GroupSettingQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = gsq.Limit(1).IDs(setContextOp(ctx, gsq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -127,8 +127,8 @@ func (gsq *GroupSettingQuery) FirstID(ctx context.Context) (id string, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (gsq *GroupSettingQuery) FirstIDX(ctx context.Context) string {
-	id, err := gsq.FirstID(ctx)
+func (_q *GroupSettingQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -138,8 +138,8 @@ func (gsq *GroupSettingQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single GroupSetting entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one GroupSetting entity is found.
 // Returns a *NotFoundError when no GroupSetting entities are found.
-func (gsq *GroupSettingQuery) Only(ctx context.Context) (*GroupSetting, error) {
-	nodes, err := gsq.Limit(2).All(setContextOp(ctx, gsq.ctx, ent.OpQueryOnly))
+func (_q *GroupSettingQuery) Only(ctx context.Context) (*GroupSetting, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -154,8 +154,8 @@ func (gsq *GroupSettingQuery) Only(ctx context.Context) (*GroupSetting, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (gsq *GroupSettingQuery) OnlyX(ctx context.Context) *GroupSetting {
-	node, err := gsq.Only(ctx)
+func (_q *GroupSettingQuery) OnlyX(ctx context.Context) *GroupSetting {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -165,9 +165,9 @@ func (gsq *GroupSettingQuery) OnlyX(ctx context.Context) *GroupSetting {
 // OnlyID is like Only, but returns the only GroupSetting ID in the query.
 // Returns a *NotSingularError when more than one GroupSetting ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (gsq *GroupSettingQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *GroupSettingQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = gsq.Limit(2).IDs(setContextOp(ctx, gsq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -182,8 +182,8 @@ func (gsq *GroupSettingQuery) OnlyID(ctx context.Context) (id string, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (gsq *GroupSettingQuery) OnlyIDX(ctx context.Context) string {
-	id, err := gsq.OnlyID(ctx)
+func (_q *GroupSettingQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -191,18 +191,18 @@ func (gsq *GroupSettingQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of GroupSettings.
-func (gsq *GroupSettingQuery) All(ctx context.Context) ([]*GroupSetting, error) {
-	ctx = setContextOp(ctx, gsq.ctx, ent.OpQueryAll)
-	if err := gsq.prepareQuery(ctx); err != nil {
+func (_q *GroupSettingQuery) All(ctx context.Context) ([]*GroupSetting, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*GroupSetting, *GroupSettingQuery]()
-	return withInterceptors[[]*GroupSetting](ctx, gsq, qr, gsq.inters)
+	return withInterceptors[[]*GroupSetting](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (gsq *GroupSettingQuery) AllX(ctx context.Context) []*GroupSetting {
-	nodes, err := gsq.All(ctx)
+func (_q *GroupSettingQuery) AllX(ctx context.Context) []*GroupSetting {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -210,20 +210,20 @@ func (gsq *GroupSettingQuery) AllX(ctx context.Context) []*GroupSetting {
 }
 
 // IDs executes the query and returns a list of GroupSetting IDs.
-func (gsq *GroupSettingQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if gsq.ctx.Unique == nil && gsq.path != nil {
-		gsq.Unique(true)
+func (_q *GroupSettingQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, gsq.ctx, ent.OpQueryIDs)
-	if err = gsq.Select(groupsetting.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(groupsetting.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (gsq *GroupSettingQuery) IDsX(ctx context.Context) []string {
-	ids, err := gsq.IDs(ctx)
+func (_q *GroupSettingQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -231,17 +231,17 @@ func (gsq *GroupSettingQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (gsq *GroupSettingQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, gsq.ctx, ent.OpQueryCount)
-	if err := gsq.prepareQuery(ctx); err != nil {
+func (_q *GroupSettingQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, gsq, querierCount[*GroupSettingQuery](), gsq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*GroupSettingQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (gsq *GroupSettingQuery) CountX(ctx context.Context) int {
-	count, err := gsq.Count(ctx)
+func (_q *GroupSettingQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,9 +249,9 @@ func (gsq *GroupSettingQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (gsq *GroupSettingQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, gsq.ctx, ent.OpQueryExist)
-	switch _, err := gsq.FirstID(ctx); {
+func (_q *GroupSettingQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -262,8 +262,8 @@ func (gsq *GroupSettingQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (gsq *GroupSettingQuery) ExistX(ctx context.Context) bool {
-	exist, err := gsq.Exist(ctx)
+func (_q *GroupSettingQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -272,33 +272,33 @@ func (gsq *GroupSettingQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the GroupSettingQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (gsq *GroupSettingQuery) Clone() *GroupSettingQuery {
-	if gsq == nil {
+func (_q *GroupSettingQuery) Clone() *GroupSettingQuery {
+	if _q == nil {
 		return nil
 	}
 	return &GroupSettingQuery{
-		config:     gsq.config,
-		ctx:        gsq.ctx.Clone(),
-		order:      append([]groupsetting.OrderOption{}, gsq.order...),
-		inters:     append([]Interceptor{}, gsq.inters...),
-		predicates: append([]predicate.GroupSetting{}, gsq.predicates...),
-		withGroup:  gsq.withGroup.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]groupsetting.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.GroupSetting{}, _q.predicates...),
+		withGroup:  _q.withGroup.Clone(),
 		// clone intermediate query.
-		sql:       gsq.sql.Clone(),
-		path:      gsq.path,
-		modifiers: append([]func(*sql.Selector){}, gsq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithGroup tells the query-builder to eager-load the nodes that are connected to
 // the "group" edge. The optional arguments are used to configure the query builder of the edge.
-func (gsq *GroupSettingQuery) WithGroup(opts ...func(*GroupQuery)) *GroupSettingQuery {
-	query := (&GroupClient{config: gsq.config}).Query()
+func (_q *GroupSettingQuery) WithGroup(opts ...func(*GroupQuery)) *GroupSettingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	gsq.withGroup = query
-	return gsq
+	_q.withGroup = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -315,10 +315,10 @@ func (gsq *GroupSettingQuery) WithGroup(opts ...func(*GroupQuery)) *GroupSetting
 //		GroupBy(groupsetting.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (gsq *GroupSettingQuery) GroupBy(field string, fields ...string) *GroupSettingGroupBy {
-	gsq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &GroupSettingGroupBy{build: gsq}
-	grbuild.flds = &gsq.ctx.Fields
+func (_q *GroupSettingQuery) GroupBy(field string, fields ...string) *GroupSettingGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &GroupSettingGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = groupsetting.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -336,97 +336,97 @@ func (gsq *GroupSettingQuery) GroupBy(field string, fields ...string) *GroupSett
 //	client.GroupSetting.Query().
 //		Select(groupsetting.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (gsq *GroupSettingQuery) Select(fields ...string) *GroupSettingSelect {
-	gsq.ctx.Fields = append(gsq.ctx.Fields, fields...)
-	sbuild := &GroupSettingSelect{GroupSettingQuery: gsq}
+func (_q *GroupSettingQuery) Select(fields ...string) *GroupSettingSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &GroupSettingSelect{GroupSettingQuery: _q}
 	sbuild.label = groupsetting.Label
-	sbuild.flds, sbuild.scan = &gsq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a GroupSettingSelect configured with the given aggregations.
-func (gsq *GroupSettingQuery) Aggregate(fns ...AggregateFunc) *GroupSettingSelect {
-	return gsq.Select().Aggregate(fns...)
+func (_q *GroupSettingQuery) Aggregate(fns ...AggregateFunc) *GroupSettingSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (gsq *GroupSettingQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range gsq.inters {
+func (_q *GroupSettingQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, gsq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range gsq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !groupsetting.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if gsq.path != nil {
-		prev, err := gsq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		gsq.sql = prev
+		_q.sql = prev
 	}
 	if groupsetting.Policy == nil {
 		return errors.New("generated: uninitialized groupsetting.Policy (forgotten import generated/runtime?)")
 	}
-	if err := groupsetting.Policy.EvalQuery(ctx, gsq); err != nil {
+	if err := groupsetting.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (gsq *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GroupSetting, error) {
+func (_q *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GroupSetting, error) {
 	var (
 		nodes       = []*GroupSetting{}
-		_spec       = gsq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
-			gsq.withGroup != nil,
+			_q.withGroup != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*GroupSetting).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &GroupSetting{config: gsq.config}
+		node := &GroupSetting{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = gsq.schemaConfig.GroupSetting
-	ctx = internal.NewSchemaConfigContext(ctx, gsq.schemaConfig)
-	if len(gsq.modifiers) > 0 {
-		_spec.Modifiers = gsq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.GroupSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, gsq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := gsq.withGroup; query != nil {
-		if err := gsq.loadGroup(ctx, query, nodes, nil,
+	if query := _q.withGroup; query != nil {
+		if err := _q.loadGroup(ctx, query, nodes, nil,
 			func(n *GroupSetting, e *Group) { n.Edges.Group = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range gsq.loadTotal {
-		if err := gsq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (gsq *GroupSettingQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *Group)) error {
+func (_q *GroupSettingQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*GroupSetting, init func(*GroupSetting), assign func(*GroupSetting, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*GroupSetting)
 	for i := range nodes {
@@ -456,29 +456,29 @@ func (gsq *GroupSettingQuery) loadGroup(ctx context.Context, query *GroupQuery, 
 	return nil
 }
 
-func (gsq *GroupSettingQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := gsq.querySpec()
-	_spec.Node.Schema = gsq.schemaConfig.GroupSetting
-	ctx = internal.NewSchemaConfigContext(ctx, gsq.schemaConfig)
-	if len(gsq.modifiers) > 0 {
-		_spec.Modifiers = gsq.modifiers
+func (_q *GroupSettingQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.GroupSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = gsq.ctx.Fields
-	if len(gsq.ctx.Fields) > 0 {
-		_spec.Unique = gsq.ctx.Unique != nil && *gsq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, gsq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (gsq *GroupSettingQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *GroupSettingQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(groupsetting.Table, groupsetting.Columns, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
-	_spec.From = gsq.sql
-	if unique := gsq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if gsq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := gsq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, groupsetting.FieldID)
 		for i := range fields {
@@ -486,24 +486,24 @@ func (gsq *GroupSettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if gsq.withGroup != nil {
+		if _q.withGroup != nil {
 			_spec.Node.AddColumnOnce(groupsetting.FieldGroupID)
 		}
 	}
-	if ps := gsq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := gsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := gsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := gsq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -513,48 +513,48 @@ func (gsq *GroupSettingQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (gsq *GroupSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(gsq.driver.Dialect())
+func (_q *GroupSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(groupsetting.Table)
-	columns := gsq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = groupsetting.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if gsq.sql != nil {
-		selector = gsq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if gsq.ctx.Unique != nil && *gsq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(gsq.schemaConfig.GroupSetting)
-	ctx = internal.NewSchemaConfigContext(ctx, gsq.schemaConfig)
+	t1.Schema(_q.schemaConfig.GroupSetting)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range gsq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range gsq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range gsq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := gsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := gsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (gsq *GroupSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingSelect {
-	gsq.modifiers = append(gsq.modifiers, modifiers...)
-	return gsq.Select()
+func (_q *GroupSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -583,41 +583,41 @@ type GroupSettingGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (gsgb *GroupSettingGroupBy) Aggregate(fns ...AggregateFunc) *GroupSettingGroupBy {
-	gsgb.fns = append(gsgb.fns, fns...)
-	return gsgb
+func (_g *GroupSettingGroupBy) Aggregate(fns ...AggregateFunc) *GroupSettingGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gsgb *GroupSettingGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gsgb.build.ctx, ent.OpQueryGroupBy)
-	if err := gsgb.build.prepareQuery(ctx); err != nil {
+func (_g *GroupSettingGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GroupSettingQuery, *GroupSettingGroupBy](ctx, gsgb.build, gsgb, gsgb.build.inters, v)
+	return scanWithInterceptors[*GroupSettingQuery, *GroupSettingGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (gsgb *GroupSettingGroupBy) sqlScan(ctx context.Context, root *GroupSettingQuery, v any) error {
+func (_g *GroupSettingGroupBy) sqlScan(ctx context.Context, root *GroupSettingQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(gsgb.fns))
-	for _, fn := range gsgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*gsgb.flds)+len(gsgb.fns))
-		for _, f := range *gsgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*gsgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gsgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -631,27 +631,27 @@ type GroupSettingSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (gss *GroupSettingSelect) Aggregate(fns ...AggregateFunc) *GroupSettingSelect {
-	gss.fns = append(gss.fns, fns...)
-	return gss
+func (_s *GroupSettingSelect) Aggregate(fns ...AggregateFunc) *GroupSettingSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gss *GroupSettingSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gss.ctx, ent.OpQuerySelect)
-	if err := gss.prepareQuery(ctx); err != nil {
+func (_s *GroupSettingSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GroupSettingQuery, *GroupSettingSelect](ctx, gss.GroupSettingQuery, gss, gss.inters, v)
+	return scanWithInterceptors[*GroupSettingQuery, *GroupSettingSelect](ctx, _s.GroupSettingQuery, _s, _s.inters, v)
 }
 
-func (gss *GroupSettingSelect) sqlScan(ctx context.Context, root *GroupSettingQuery, v any) error {
+func (_s *GroupSettingSelect) sqlScan(ctx context.Context, root *GroupSettingQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(gss.fns))
-	for _, fn := range gss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*gss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -659,7 +659,7 @@ func (gss *GroupSettingSelect) sqlScan(ctx context.Context, root *GroupSettingQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -667,7 +667,7 @@ func (gss *GroupSettingSelect) sqlScan(ctx context.Context, root *GroupSettingQu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (gss *GroupSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingSelect {
-	gss.modifiers = append(gss.modifiers, modifiers...)
-	return gss
+func (_s *GroupSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

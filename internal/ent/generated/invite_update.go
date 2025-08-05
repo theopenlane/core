@@ -30,291 +30,291 @@ type InviteUpdate struct {
 }
 
 // Where appends a list predicates to the InviteUpdate builder.
-func (iu *InviteUpdate) Where(ps ...predicate.Invite) *InviteUpdate {
-	iu.mutation.Where(ps...)
-	return iu
+func (_u *InviteUpdate) Where(ps ...predicate.Invite) *InviteUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (iu *InviteUpdate) SetUpdatedAt(t time.Time) *InviteUpdate {
-	iu.mutation.SetUpdatedAt(t)
-	return iu
+func (_u *InviteUpdate) SetUpdatedAt(v time.Time) *InviteUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (iu *InviteUpdate) ClearUpdatedAt() *InviteUpdate {
-	iu.mutation.ClearUpdatedAt()
-	return iu
+func (_u *InviteUpdate) ClearUpdatedAt() *InviteUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (iu *InviteUpdate) SetUpdatedBy(s string) *InviteUpdate {
-	iu.mutation.SetUpdatedBy(s)
-	return iu
+func (_u *InviteUpdate) SetUpdatedBy(v string) *InviteUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableUpdatedBy(s *string) *InviteUpdate {
-	if s != nil {
-		iu.SetUpdatedBy(*s)
+func (_u *InviteUpdate) SetNillableUpdatedBy(v *string) *InviteUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (iu *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
-	iu.mutation.ClearUpdatedBy()
-	return iu
+func (_u *InviteUpdate) ClearUpdatedBy() *InviteUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (iu *InviteUpdate) SetDeletedAt(t time.Time) *InviteUpdate {
-	iu.mutation.SetDeletedAt(t)
-	return iu
+func (_u *InviteUpdate) SetDeletedAt(v time.Time) *InviteUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableDeletedAt(t *time.Time) *InviteUpdate {
-	if t != nil {
-		iu.SetDeletedAt(*t)
+func (_u *InviteUpdate) SetNillableDeletedAt(v *time.Time) *InviteUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (iu *InviteUpdate) ClearDeletedAt() *InviteUpdate {
-	iu.mutation.ClearDeletedAt()
-	return iu
+func (_u *InviteUpdate) ClearDeletedAt() *InviteUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (iu *InviteUpdate) SetDeletedBy(s string) *InviteUpdate {
-	iu.mutation.SetDeletedBy(s)
-	return iu
+func (_u *InviteUpdate) SetDeletedBy(v string) *InviteUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableDeletedBy(s *string) *InviteUpdate {
-	if s != nil {
-		iu.SetDeletedBy(*s)
+func (_u *InviteUpdate) SetNillableDeletedBy(v *string) *InviteUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (iu *InviteUpdate) ClearDeletedBy() *InviteUpdate {
-	iu.mutation.ClearDeletedBy()
-	return iu
+func (_u *InviteUpdate) ClearDeletedBy() *InviteUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (iu *InviteUpdate) SetOwnerID(s string) *InviteUpdate {
-	iu.mutation.SetOwnerID(s)
-	return iu
+func (_u *InviteUpdate) SetOwnerID(v string) *InviteUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableOwnerID(s *string) *InviteUpdate {
-	if s != nil {
-		iu.SetOwnerID(*s)
+func (_u *InviteUpdate) SetNillableOwnerID(v *string) *InviteUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (iu *InviteUpdate) ClearOwnerID() *InviteUpdate {
-	iu.mutation.ClearOwnerID()
-	return iu
+func (_u *InviteUpdate) ClearOwnerID() *InviteUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (iu *InviteUpdate) SetToken(s string) *InviteUpdate {
-	iu.mutation.SetToken(s)
-	return iu
+func (_u *InviteUpdate) SetToken(v string) *InviteUpdate {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableToken(s *string) *InviteUpdate {
-	if s != nil {
-		iu.SetToken(*s)
+func (_u *InviteUpdate) SetNillableToken(v *string) *InviteUpdate {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return iu
+	return _u
 }
 
 // SetExpires sets the "expires" field.
-func (iu *InviteUpdate) SetExpires(t time.Time) *InviteUpdate {
-	iu.mutation.SetExpires(t)
-	return iu
+func (_u *InviteUpdate) SetExpires(v time.Time) *InviteUpdate {
+	_u.mutation.SetExpires(v)
+	return _u
 }
 
 // SetNillableExpires sets the "expires" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableExpires(t *time.Time) *InviteUpdate {
-	if t != nil {
-		iu.SetExpires(*t)
+func (_u *InviteUpdate) SetNillableExpires(v *time.Time) *InviteUpdate {
+	if v != nil {
+		_u.SetExpires(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearExpires clears the value of the "expires" field.
-func (iu *InviteUpdate) ClearExpires() *InviteUpdate {
-	iu.mutation.ClearExpires()
-	return iu
+func (_u *InviteUpdate) ClearExpires() *InviteUpdate {
+	_u.mutation.ClearExpires()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (iu *InviteUpdate) SetStatus(es enums.InviteStatus) *InviteUpdate {
-	iu.mutation.SetStatus(es)
-	return iu
+func (_u *InviteUpdate) SetStatus(v enums.InviteStatus) *InviteUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableStatus(es *enums.InviteStatus) *InviteUpdate {
-	if es != nil {
-		iu.SetStatus(*es)
+func (_u *InviteUpdate) SetNillableStatus(v *enums.InviteStatus) *InviteUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return iu
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (iu *InviteUpdate) SetRole(e enums.Role) *InviteUpdate {
-	iu.mutation.SetRole(e)
-	return iu
+func (_u *InviteUpdate) SetRole(v enums.Role) *InviteUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableRole(e *enums.Role) *InviteUpdate {
-	if e != nil {
-		iu.SetRole(*e)
+func (_u *InviteUpdate) SetNillableRole(v *enums.Role) *InviteUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return iu
+	return _u
 }
 
 // SetSendAttempts sets the "send_attempts" field.
-func (iu *InviteUpdate) SetSendAttempts(i int) *InviteUpdate {
-	iu.mutation.ResetSendAttempts()
-	iu.mutation.SetSendAttempts(i)
-	return iu
+func (_u *InviteUpdate) SetSendAttempts(v int) *InviteUpdate {
+	_u.mutation.ResetSendAttempts()
+	_u.mutation.SetSendAttempts(v)
+	return _u
 }
 
 // SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (iu *InviteUpdate) SetNillableSendAttempts(i *int) *InviteUpdate {
-	if i != nil {
-		iu.SetSendAttempts(*i)
+func (_u *InviteUpdate) SetNillableSendAttempts(v *int) *InviteUpdate {
+	if v != nil {
+		_u.SetSendAttempts(*v)
 	}
-	return iu
+	return _u
 }
 
-// AddSendAttempts adds i to the "send_attempts" field.
-func (iu *InviteUpdate) AddSendAttempts(i int) *InviteUpdate {
-	iu.mutation.AddSendAttempts(i)
-	return iu
+// AddSendAttempts adds value to the "send_attempts" field.
+func (_u *InviteUpdate) AddSendAttempts(v int) *InviteUpdate {
+	_u.mutation.AddSendAttempts(v)
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (iu *InviteUpdate) SetSecret(b []byte) *InviteUpdate {
-	iu.mutation.SetSecret(b)
-	return iu
+func (_u *InviteUpdate) SetSecret(v []byte) *InviteUpdate {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (iu *InviteUpdate) SetOwner(o *Organization) *InviteUpdate {
-	return iu.SetOwnerID(o.ID)
+func (_u *InviteUpdate) SetOwner(v *Organization) *InviteUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (iu *InviteUpdate) AddEventIDs(ids ...string) *InviteUpdate {
-	iu.mutation.AddEventIDs(ids...)
-	return iu
+func (_u *InviteUpdate) AddEventIDs(ids ...string) *InviteUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (iu *InviteUpdate) AddEvents(e ...*Event) *InviteUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *InviteUpdate) AddEvents(v ...*Event) *InviteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (iu *InviteUpdate) AddGroupIDs(ids ...string) *InviteUpdate {
-	iu.mutation.AddGroupIDs(ids...)
-	return iu
+func (_u *InviteUpdate) AddGroupIDs(ids ...string) *InviteUpdate {
+	_u.mutation.AddGroupIDs(ids...)
+	return _u
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (iu *InviteUpdate) AddGroups(g ...*Group) *InviteUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InviteUpdate) AddGroups(v ...*Group) *InviteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.AddGroupIDs(ids...)
+	return _u.AddGroupIDs(ids...)
 }
 
 // Mutation returns the InviteMutation object of the builder.
-func (iu *InviteUpdate) Mutation() *InviteMutation {
-	return iu.mutation
+func (_u *InviteUpdate) Mutation() *InviteMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (iu *InviteUpdate) ClearOwner() *InviteUpdate {
-	iu.mutation.ClearOwner()
-	return iu
+func (_u *InviteUpdate) ClearOwner() *InviteUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (iu *InviteUpdate) ClearEvents() *InviteUpdate {
-	iu.mutation.ClearEvents()
-	return iu
+func (_u *InviteUpdate) ClearEvents() *InviteUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (iu *InviteUpdate) RemoveEventIDs(ids ...string) *InviteUpdate {
-	iu.mutation.RemoveEventIDs(ids...)
-	return iu
+func (_u *InviteUpdate) RemoveEventIDs(ids ...string) *InviteUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (iu *InviteUpdate) RemoveEvents(e ...*Event) *InviteUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *InviteUpdate) RemoveEvents(v ...*Event) *InviteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
-func (iu *InviteUpdate) ClearGroups() *InviteUpdate {
-	iu.mutation.ClearGroups()
-	return iu
+func (_u *InviteUpdate) ClearGroups() *InviteUpdate {
+	_u.mutation.ClearGroups()
+	return _u
 }
 
 // RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
-func (iu *InviteUpdate) RemoveGroupIDs(ids ...string) *InviteUpdate {
-	iu.mutation.RemoveGroupIDs(ids...)
-	return iu
+func (_u *InviteUpdate) RemoveGroupIDs(ids ...string) *InviteUpdate {
+	_u.mutation.RemoveGroupIDs(ids...)
+	return _u
 }
 
 // RemoveGroups removes "groups" edges to Group entities.
-func (iu *InviteUpdate) RemoveGroups(g ...*Group) *InviteUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InviteUpdate) RemoveGroups(v ...*Group) *InviteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.RemoveGroupIDs(ids...)
+	return _u.RemoveGroupIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (iu *InviteUpdate) Save(ctx context.Context) (int, error) {
-	if err := iu.defaults(); err != nil {
+func (_u *InviteUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, iu.sqlSave, iu.mutation, iu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (iu *InviteUpdate) SaveX(ctx context.Context) int {
-	affected, err := iu.Save(ctx)
+func (_u *InviteUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -322,53 +322,53 @@ func (iu *InviteUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (iu *InviteUpdate) Exec(ctx context.Context) error {
-	_, err := iu.Save(ctx)
+func (_u *InviteUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (iu *InviteUpdate) ExecX(ctx context.Context) {
-	if err := iu.Exec(ctx); err != nil {
+func (_u *InviteUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (iu *InviteUpdate) defaults() error {
-	if _, ok := iu.mutation.UpdatedAt(); !ok && !iu.mutation.UpdatedAtCleared() {
+func (_u *InviteUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if invite.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized invite.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := invite.UpdateDefaultUpdatedAt()
-		iu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (iu *InviteUpdate) check() error {
-	if v, ok := iu.mutation.OwnerID(); ok {
+func (_u *InviteUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := invite.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Invite.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := iu.mutation.Token(); ok {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := invite.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "Invite.token": %w`, err)}
 		}
 	}
-	if v, ok := iu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := invite.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Invite.status": %w`, err)}
 		}
 	}
-	if v, ok := iu.mutation.Role(); ok {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := invite.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "Invite.role": %w`, err)}
 		}
 	}
-	if v, ok := iu.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := invite.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Invite.secret": %w`, err)}
 		}
@@ -377,81 +377,81 @@ func (iu *InviteUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (iu *InviteUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InviteUpdate {
-	iu.modifiers = append(iu.modifiers, modifiers...)
-	return iu
+func (_u *InviteUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InviteUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := iu.check(); err != nil {
-		return n, err
+func (_u *InviteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString))
-	if ps := iu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if iu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(invite.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(invite.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if iu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
-	if iu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(invite.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := iu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
 	}
-	if iu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := iu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 	}
-	if iu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
 	}
-	if iu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := iu.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
 	}
-	if value, ok := iu.mutation.Expires(); ok {
+	if value, ok := _u.mutation.Expires(); ok {
 		_spec.SetField(invite.FieldExpires, field.TypeTime, value)
 	}
-	if iu.mutation.ExpiresCleared() {
+	if _u.mutation.ExpiresCleared() {
 		_spec.ClearField(invite.FieldExpires, field.TypeTime)
 	}
-	if value, ok := iu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(invite.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := iu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(invite.FieldRole, field.TypeEnum, value)
 	}
-	if value, ok := iu.mutation.SendAttempts(); ok {
+	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(invite.FieldSendAttempts, field.TypeInt, value)
 	}
-	if value, ok := iu.mutation.AddedSendAttempts(); ok {
+	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(invite.FieldSendAttempts, field.TypeInt, value)
 	}
-	if iu.mutation.RequestorIDCleared() {
+	if _u.mutation.RequestorIDCleared() {
 		_spec.ClearField(invite.FieldRequestorID, field.TypeString)
 	}
-	if value, ok := iu.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 	}
-	if iu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -462,10 +462,10 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -476,13 +476,13 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iu.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -493,10 +493,10 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.InviteEvents
+		edge.Schema = _u.schemaConfig.InviteEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !iu.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -507,13 +507,13 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.InviteEvents
+		edge.Schema = _u.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -524,13 +524,13 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.InviteEvents
+		edge.Schema = _u.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iu.mutation.GroupsCleared() {
+	if _u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -541,10 +541,10 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.InviteGroups
+		edge.Schema = _u.schemaConfig.InviteGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !iu.mutation.GroupsCleared() {
+	if nodes := _u.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !_u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -555,13 +555,13 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.InviteGroups
+		edge.Schema = _u.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -572,16 +572,16 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.InviteGroups
+		edge.Schema = _u.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = iu.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, iu.schemaConfig)
-	_spec.AddModifiers(iu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Invite
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{invite.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -589,8 +589,8 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	iu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // InviteUpdateOne is the builder for updating a single Invite entity.
@@ -603,298 +603,298 @@ type InviteUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (iuo *InviteUpdateOne) SetUpdatedAt(t time.Time) *InviteUpdateOne {
-	iuo.mutation.SetUpdatedAt(t)
-	return iuo
+func (_u *InviteUpdateOne) SetUpdatedAt(v time.Time) *InviteUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (iuo *InviteUpdateOne) ClearUpdatedAt() *InviteUpdateOne {
-	iuo.mutation.ClearUpdatedAt()
-	return iuo
+func (_u *InviteUpdateOne) ClearUpdatedAt() *InviteUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (iuo *InviteUpdateOne) SetUpdatedBy(s string) *InviteUpdateOne {
-	iuo.mutation.SetUpdatedBy(s)
-	return iuo
+func (_u *InviteUpdateOne) SetUpdatedBy(v string) *InviteUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableUpdatedBy(s *string) *InviteUpdateOne {
-	if s != nil {
-		iuo.SetUpdatedBy(*s)
+func (_u *InviteUpdateOne) SetNillableUpdatedBy(v *string) *InviteUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (iuo *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
-	return iuo
+func (_u *InviteUpdateOne) ClearUpdatedBy() *InviteUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (iuo *InviteUpdateOne) SetDeletedAt(t time.Time) *InviteUpdateOne {
-	iuo.mutation.SetDeletedAt(t)
-	return iuo
+func (_u *InviteUpdateOne) SetDeletedAt(v time.Time) *InviteUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableDeletedAt(t *time.Time) *InviteUpdateOne {
-	if t != nil {
-		iuo.SetDeletedAt(*t)
+func (_u *InviteUpdateOne) SetNillableDeletedAt(v *time.Time) *InviteUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (iuo *InviteUpdateOne) ClearDeletedAt() *InviteUpdateOne {
-	iuo.mutation.ClearDeletedAt()
-	return iuo
+func (_u *InviteUpdateOne) ClearDeletedAt() *InviteUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (iuo *InviteUpdateOne) SetDeletedBy(s string) *InviteUpdateOne {
-	iuo.mutation.SetDeletedBy(s)
-	return iuo
+func (_u *InviteUpdateOne) SetDeletedBy(v string) *InviteUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableDeletedBy(s *string) *InviteUpdateOne {
-	if s != nil {
-		iuo.SetDeletedBy(*s)
+func (_u *InviteUpdateOne) SetNillableDeletedBy(v *string) *InviteUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (iuo *InviteUpdateOne) ClearDeletedBy() *InviteUpdateOne {
-	iuo.mutation.ClearDeletedBy()
-	return iuo
+func (_u *InviteUpdateOne) ClearDeletedBy() *InviteUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (iuo *InviteUpdateOne) SetOwnerID(s string) *InviteUpdateOne {
-	iuo.mutation.SetOwnerID(s)
-	return iuo
+func (_u *InviteUpdateOne) SetOwnerID(v string) *InviteUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableOwnerID(s *string) *InviteUpdateOne {
-	if s != nil {
-		iuo.SetOwnerID(*s)
+func (_u *InviteUpdateOne) SetNillableOwnerID(v *string) *InviteUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (iuo *InviteUpdateOne) ClearOwnerID() *InviteUpdateOne {
-	iuo.mutation.ClearOwnerID()
-	return iuo
+func (_u *InviteUpdateOne) ClearOwnerID() *InviteUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (iuo *InviteUpdateOne) SetToken(s string) *InviteUpdateOne {
-	iuo.mutation.SetToken(s)
-	return iuo
+func (_u *InviteUpdateOne) SetToken(v string) *InviteUpdateOne {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableToken(s *string) *InviteUpdateOne {
-	if s != nil {
-		iuo.SetToken(*s)
+func (_u *InviteUpdateOne) SetNillableToken(v *string) *InviteUpdateOne {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return iuo
+	return _u
 }
 
 // SetExpires sets the "expires" field.
-func (iuo *InviteUpdateOne) SetExpires(t time.Time) *InviteUpdateOne {
-	iuo.mutation.SetExpires(t)
-	return iuo
+func (_u *InviteUpdateOne) SetExpires(v time.Time) *InviteUpdateOne {
+	_u.mutation.SetExpires(v)
+	return _u
 }
 
 // SetNillableExpires sets the "expires" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableExpires(t *time.Time) *InviteUpdateOne {
-	if t != nil {
-		iuo.SetExpires(*t)
+func (_u *InviteUpdateOne) SetNillableExpires(v *time.Time) *InviteUpdateOne {
+	if v != nil {
+		_u.SetExpires(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearExpires clears the value of the "expires" field.
-func (iuo *InviteUpdateOne) ClearExpires() *InviteUpdateOne {
-	iuo.mutation.ClearExpires()
-	return iuo
+func (_u *InviteUpdateOne) ClearExpires() *InviteUpdateOne {
+	_u.mutation.ClearExpires()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (iuo *InviteUpdateOne) SetStatus(es enums.InviteStatus) *InviteUpdateOne {
-	iuo.mutation.SetStatus(es)
-	return iuo
+func (_u *InviteUpdateOne) SetStatus(v enums.InviteStatus) *InviteUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableStatus(es *enums.InviteStatus) *InviteUpdateOne {
-	if es != nil {
-		iuo.SetStatus(*es)
+func (_u *InviteUpdateOne) SetNillableStatus(v *enums.InviteStatus) *InviteUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return iuo
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (iuo *InviteUpdateOne) SetRole(e enums.Role) *InviteUpdateOne {
-	iuo.mutation.SetRole(e)
-	return iuo
+func (_u *InviteUpdateOne) SetRole(v enums.Role) *InviteUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableRole(e *enums.Role) *InviteUpdateOne {
-	if e != nil {
-		iuo.SetRole(*e)
+func (_u *InviteUpdateOne) SetNillableRole(v *enums.Role) *InviteUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return iuo
+	return _u
 }
 
 // SetSendAttempts sets the "send_attempts" field.
-func (iuo *InviteUpdateOne) SetSendAttempts(i int) *InviteUpdateOne {
-	iuo.mutation.ResetSendAttempts()
-	iuo.mutation.SetSendAttempts(i)
-	return iuo
+func (_u *InviteUpdateOne) SetSendAttempts(v int) *InviteUpdateOne {
+	_u.mutation.ResetSendAttempts()
+	_u.mutation.SetSendAttempts(v)
+	return _u
 }
 
 // SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (iuo *InviteUpdateOne) SetNillableSendAttempts(i *int) *InviteUpdateOne {
-	if i != nil {
-		iuo.SetSendAttempts(*i)
+func (_u *InviteUpdateOne) SetNillableSendAttempts(v *int) *InviteUpdateOne {
+	if v != nil {
+		_u.SetSendAttempts(*v)
 	}
-	return iuo
+	return _u
 }
 
-// AddSendAttempts adds i to the "send_attempts" field.
-func (iuo *InviteUpdateOne) AddSendAttempts(i int) *InviteUpdateOne {
-	iuo.mutation.AddSendAttempts(i)
-	return iuo
+// AddSendAttempts adds value to the "send_attempts" field.
+func (_u *InviteUpdateOne) AddSendAttempts(v int) *InviteUpdateOne {
+	_u.mutation.AddSendAttempts(v)
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (iuo *InviteUpdateOne) SetSecret(b []byte) *InviteUpdateOne {
-	iuo.mutation.SetSecret(b)
-	return iuo
+func (_u *InviteUpdateOne) SetSecret(v []byte) *InviteUpdateOne {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (iuo *InviteUpdateOne) SetOwner(o *Organization) *InviteUpdateOne {
-	return iuo.SetOwnerID(o.ID)
+func (_u *InviteUpdateOne) SetOwner(v *Organization) *InviteUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (iuo *InviteUpdateOne) AddEventIDs(ids ...string) *InviteUpdateOne {
-	iuo.mutation.AddEventIDs(ids...)
-	return iuo
+func (_u *InviteUpdateOne) AddEventIDs(ids ...string) *InviteUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (iuo *InviteUpdateOne) AddEvents(e ...*Event) *InviteUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *InviteUpdateOne) AddEvents(v ...*Event) *InviteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (iuo *InviteUpdateOne) AddGroupIDs(ids ...string) *InviteUpdateOne {
-	iuo.mutation.AddGroupIDs(ids...)
-	return iuo
+func (_u *InviteUpdateOne) AddGroupIDs(ids ...string) *InviteUpdateOne {
+	_u.mutation.AddGroupIDs(ids...)
+	return _u
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (iuo *InviteUpdateOne) AddGroups(g ...*Group) *InviteUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InviteUpdateOne) AddGroups(v ...*Group) *InviteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.AddGroupIDs(ids...)
+	return _u.AddGroupIDs(ids...)
 }
 
 // Mutation returns the InviteMutation object of the builder.
-func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
-	return iuo.mutation
+func (_u *InviteUpdateOne) Mutation() *InviteMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (iuo *InviteUpdateOne) ClearOwner() *InviteUpdateOne {
-	iuo.mutation.ClearOwner()
-	return iuo
+func (_u *InviteUpdateOne) ClearOwner() *InviteUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (iuo *InviteUpdateOne) ClearEvents() *InviteUpdateOne {
-	iuo.mutation.ClearEvents()
-	return iuo
+func (_u *InviteUpdateOne) ClearEvents() *InviteUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (iuo *InviteUpdateOne) RemoveEventIDs(ids ...string) *InviteUpdateOne {
-	iuo.mutation.RemoveEventIDs(ids...)
-	return iuo
+func (_u *InviteUpdateOne) RemoveEventIDs(ids ...string) *InviteUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (iuo *InviteUpdateOne) RemoveEvents(e ...*Event) *InviteUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *InviteUpdateOne) RemoveEvents(v ...*Event) *InviteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
-func (iuo *InviteUpdateOne) ClearGroups() *InviteUpdateOne {
-	iuo.mutation.ClearGroups()
-	return iuo
+func (_u *InviteUpdateOne) ClearGroups() *InviteUpdateOne {
+	_u.mutation.ClearGroups()
+	return _u
 }
 
 // RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
-func (iuo *InviteUpdateOne) RemoveGroupIDs(ids ...string) *InviteUpdateOne {
-	iuo.mutation.RemoveGroupIDs(ids...)
-	return iuo
+func (_u *InviteUpdateOne) RemoveGroupIDs(ids ...string) *InviteUpdateOne {
+	_u.mutation.RemoveGroupIDs(ids...)
+	return _u
 }
 
 // RemoveGroups removes "groups" edges to Group entities.
-func (iuo *InviteUpdateOne) RemoveGroups(g ...*Group) *InviteUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *InviteUpdateOne) RemoveGroups(v ...*Group) *InviteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.RemoveGroupIDs(ids...)
+	return _u.RemoveGroupIDs(ids...)
 }
 
 // Where appends a list predicates to the InviteUpdate builder.
-func (iuo *InviteUpdateOne) Where(ps ...predicate.Invite) *InviteUpdateOne {
-	iuo.mutation.Where(ps...)
-	return iuo
+func (_u *InviteUpdateOne) Where(ps ...predicate.Invite) *InviteUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (iuo *InviteUpdateOne) Select(field string, fields ...string) *InviteUpdateOne {
-	iuo.fields = append([]string{field}, fields...)
-	return iuo
+func (_u *InviteUpdateOne) Select(field string, fields ...string) *InviteUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Invite entity.
-func (iuo *InviteUpdateOne) Save(ctx context.Context) (*Invite, error) {
-	if err := iuo.defaults(); err != nil {
+func (_u *InviteUpdateOne) Save(ctx context.Context) (*Invite, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, iuo.sqlSave, iuo.mutation, iuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (iuo *InviteUpdateOne) SaveX(ctx context.Context) *Invite {
-	node, err := iuo.Save(ctx)
+func (_u *InviteUpdateOne) SaveX(ctx context.Context) *Invite {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -902,53 +902,53 @@ func (iuo *InviteUpdateOne) SaveX(ctx context.Context) *Invite {
 }
 
 // Exec executes the query on the entity.
-func (iuo *InviteUpdateOne) Exec(ctx context.Context) error {
-	_, err := iuo.Save(ctx)
+func (_u *InviteUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (iuo *InviteUpdateOne) ExecX(ctx context.Context) {
-	if err := iuo.Exec(ctx); err != nil {
+func (_u *InviteUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (iuo *InviteUpdateOne) defaults() error {
-	if _, ok := iuo.mutation.UpdatedAt(); !ok && !iuo.mutation.UpdatedAtCleared() {
+func (_u *InviteUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if invite.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized invite.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := invite.UpdateDefaultUpdatedAt()
-		iuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (iuo *InviteUpdateOne) check() error {
-	if v, ok := iuo.mutation.OwnerID(); ok {
+func (_u *InviteUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := invite.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Invite.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := iuo.mutation.Token(); ok {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := invite.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "Invite.token": %w`, err)}
 		}
 	}
-	if v, ok := iuo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := invite.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Invite.status": %w`, err)}
 		}
 	}
-	if v, ok := iuo.mutation.Role(); ok {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := invite.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "Invite.role": %w`, err)}
 		}
 	}
-	if v, ok := iuo.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := invite.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Invite.secret": %w`, err)}
 		}
@@ -957,22 +957,22 @@ func (iuo *InviteUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (iuo *InviteUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InviteUpdateOne {
-	iuo.modifiers = append(iuo.modifiers, modifiers...)
-	return iuo
+func (_u *InviteUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InviteUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err error) {
-	if err := iuo.check(); err != nil {
+func (_u *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString))
-	id, ok := iuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Invite.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := iuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, invite.FieldID)
 		for _, f := range fields {
@@ -984,71 +984,71 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 			}
 		}
 	}
-	if ps := iuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if iuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(invite.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(invite.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if iuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(invite.FieldUpdatedAt, field.TypeTime)
 	}
-	if iuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(invite.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := iuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(invite.FieldUpdatedBy, field.TypeString, value)
 	}
-	if iuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(invite.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := iuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
 	}
-	if iuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(invite.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
 	}
-	if iuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := iuo.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
 	}
-	if value, ok := iuo.mutation.Expires(); ok {
+	if value, ok := _u.mutation.Expires(); ok {
 		_spec.SetField(invite.FieldExpires, field.TypeTime, value)
 	}
-	if iuo.mutation.ExpiresCleared() {
+	if _u.mutation.ExpiresCleared() {
 		_spec.ClearField(invite.FieldExpires, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(invite.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := iuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(invite.FieldRole, field.TypeEnum, value)
 	}
-	if value, ok := iuo.mutation.SendAttempts(); ok {
+	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(invite.FieldSendAttempts, field.TypeInt, value)
 	}
-	if value, ok := iuo.mutation.AddedSendAttempts(); ok {
+	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(invite.FieldSendAttempts, field.TypeInt, value)
 	}
-	if iuo.mutation.RequestorIDCleared() {
+	if _u.mutation.RequestorIDCleared() {
 		_spec.ClearField(invite.FieldRequestorID, field.TypeString)
 	}
-	if value, ok := iuo.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
 	}
-	if iuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1059,10 +1059,10 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1073,13 +1073,13 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.Invite
+		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iuo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1090,10 +1090,10 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.InviteEvents
+		edge.Schema = _u.schemaConfig.InviteEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !iuo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1104,13 +1104,13 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.InviteEvents
+		edge.Schema = _u.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1121,13 +1121,13 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.InviteEvents
+		edge.Schema = _u.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iuo.mutation.GroupsCleared() {
+	if _u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1138,10 +1138,10 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.InviteGroups
+		edge.Schema = _u.schemaConfig.InviteGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !iuo.mutation.GroupsCleared() {
+	if nodes := _u.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !_u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1152,13 +1152,13 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.InviteGroups
+		edge.Schema = _u.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1169,19 +1169,19 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.InviteGroups
+		edge.Schema = _u.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = iuo.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, iuo.schemaConfig)
-	_spec.AddModifiers(iuo.modifiers...)
-	_node = &Invite{config: iuo.config}
+	_spec.Node.Schema = _u.schemaConfig.Invite
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Invite{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, iuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{invite.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1189,6 +1189,6 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 		}
 		return nil, err
 	}
-	iuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

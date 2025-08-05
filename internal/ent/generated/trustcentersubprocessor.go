@@ -101,7 +101,7 @@ func (*TrustCenterSubprocessor) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenterSubprocessor fields.
-func (tcs *TrustCenterSubprocessor) assignValues(columns []string, values []any) error {
+func (_m *TrustCenterSubprocessor) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -111,61 +111,61 @@ func (tcs *TrustCenterSubprocessor) assignValues(columns []string, values []any)
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tcs.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcentersubprocessor.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcs.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcentersubprocessor.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcs.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcentersubprocessor.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tcs.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcentersubprocessor.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tcs.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcentersubprocessor.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tcs.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcentersubprocessor.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tcs.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcentersubprocessor.FieldSubprocessorID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subprocessor_id", values[i])
 			} else if value.Valid {
-				tcs.SubprocessorID = value.String
+				_m.SubprocessorID = value.String
 			}
 		case trustcentersubprocessor.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
-				tcs.TrustCenterID = value.String
+				_m.TrustCenterID = value.String
 			}
 		case trustcentersubprocessor.FieldCountries:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field countries", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tcs.Countries); err != nil {
+				if err := json.Unmarshal(*value, &_m.Countries); err != nil {
 					return fmt.Errorf("unmarshal field countries: %w", err)
 				}
 			}
@@ -173,10 +173,10 @@ func (tcs *TrustCenterSubprocessor) assignValues(columns []string, values []any)
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				tcs.Category = value.String
+				_m.Category = value.String
 			}
 		default:
-			tcs.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -184,72 +184,72 @@ func (tcs *TrustCenterSubprocessor) assignValues(columns []string, values []any)
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterSubprocessor.
 // This includes values selected through modifiers, order, etc.
-func (tcs *TrustCenterSubprocessor) Value(name string) (ent.Value, error) {
-	return tcs.selectValues.Get(name)
+func (_m *TrustCenterSubprocessor) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterSubprocessor entity.
-func (tcs *TrustCenterSubprocessor) QueryTrustCenter() *TrustCenterQuery {
-	return NewTrustCenterSubprocessorClient(tcs.config).QueryTrustCenter(tcs)
+func (_m *TrustCenterSubprocessor) QueryTrustCenter() *TrustCenterQuery {
+	return NewTrustCenterSubprocessorClient(_m.config).QueryTrustCenter(_m)
 }
 
 // QuerySubprocessor queries the "subprocessor" edge of the TrustCenterSubprocessor entity.
-func (tcs *TrustCenterSubprocessor) QuerySubprocessor() *SubprocessorQuery {
-	return NewTrustCenterSubprocessorClient(tcs.config).QuerySubprocessor(tcs)
+func (_m *TrustCenterSubprocessor) QuerySubprocessor() *SubprocessorQuery {
+	return NewTrustCenterSubprocessorClient(_m.config).QuerySubprocessor(_m)
 }
 
 // Update returns a builder for updating this TrustCenterSubprocessor.
 // Note that you need to call TrustCenterSubprocessor.Unwrap() before calling this method if this TrustCenterSubprocessor
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcs *TrustCenterSubprocessor) Update() *TrustCenterSubprocessorUpdateOne {
-	return NewTrustCenterSubprocessorClient(tcs.config).UpdateOne(tcs)
+func (_m *TrustCenterSubprocessor) Update() *TrustCenterSubprocessorUpdateOne {
+	return NewTrustCenterSubprocessorClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenterSubprocessor entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcs *TrustCenterSubprocessor) Unwrap() *TrustCenterSubprocessor {
-	_tx, ok := tcs.config.driver.(*txDriver)
+func (_m *TrustCenterSubprocessor) Unwrap() *TrustCenterSubprocessor {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenterSubprocessor is not a transactional entity")
 	}
-	tcs.config.driver = _tx.drv
-	return tcs
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcs *TrustCenterSubprocessor) String() string {
+func (_m *TrustCenterSubprocessor) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenterSubprocessor(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcs.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(tcs.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tcs.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tcs.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tcs.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tcs.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tcs.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("subprocessor_id=")
-	builder.WriteString(tcs.SubprocessorID)
+	builder.WriteString(_m.SubprocessorID)
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
-	builder.WriteString(tcs.TrustCenterID)
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("countries=")
-	builder.WriteString(fmt.Sprintf("%v", tcs.Countries))
+	builder.WriteString(fmt.Sprintf("%v", _m.Countries))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(tcs.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }

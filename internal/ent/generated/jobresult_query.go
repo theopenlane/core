@@ -39,44 +39,44 @@ type JobResultQuery struct {
 }
 
 // Where adds a new predicate for the JobResultQuery builder.
-func (jrq *JobResultQuery) Where(ps ...predicate.JobResult) *JobResultQuery {
-	jrq.predicates = append(jrq.predicates, ps...)
-	return jrq
+func (_q *JobResultQuery) Where(ps ...predicate.JobResult) *JobResultQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (jrq *JobResultQuery) Limit(limit int) *JobResultQuery {
-	jrq.ctx.Limit = &limit
-	return jrq
+func (_q *JobResultQuery) Limit(limit int) *JobResultQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (jrq *JobResultQuery) Offset(offset int) *JobResultQuery {
-	jrq.ctx.Offset = &offset
-	return jrq
+func (_q *JobResultQuery) Offset(offset int) *JobResultQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (jrq *JobResultQuery) Unique(unique bool) *JobResultQuery {
-	jrq.ctx.Unique = &unique
-	return jrq
+func (_q *JobResultQuery) Unique(unique bool) *JobResultQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (jrq *JobResultQuery) Order(o ...jobresult.OrderOption) *JobResultQuery {
-	jrq.order = append(jrq.order, o...)
-	return jrq
+func (_q *JobResultQuery) Order(o ...jobresult.OrderOption) *JobResultQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (jrq *JobResultQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: jrq.config}).Query()
+func (_q *JobResultQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := jrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := jrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (jrq *JobResultQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, jobresult.OwnerTable, jobresult.OwnerColumn),
 		)
-		schemaConfig := jrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.JobResult
-		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryScheduledJob chains the current query on the "scheduled_job" edge.
-func (jrq *JobResultQuery) QueryScheduledJob() *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: jrq.config}).Query()
+func (_q *JobResultQuery) QueryScheduledJob() *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := jrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := jrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,23 +110,23 @@ func (jrq *JobResultQuery) QueryScheduledJob() *ScheduledJobQuery {
 			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.ScheduledJobTable, jobresult.ScheduledJobColumn),
 		)
-		schemaConfig := jrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ScheduledJob
 		step.Edge.Schema = schemaConfig.JobResult
-		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFile chains the current query on the "file" edge.
-func (jrq *JobResultQuery) QueryFile() *FileQuery {
-	query := (&FileClient{config: jrq.config}).Query()
+func (_q *JobResultQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := jrq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := jrq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -135,10 +135,10 @@ func (jrq *JobResultQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.FileTable, jobresult.FileColumn),
 		)
-		schemaConfig := jrq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.JobResult
-		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -146,8 +146,8 @@ func (jrq *JobResultQuery) QueryFile() *FileQuery {
 
 // First returns the first JobResult entity from the query.
 // Returns a *NotFoundError when no JobResult was found.
-func (jrq *JobResultQuery) First(ctx context.Context) (*JobResult, error) {
-	nodes, err := jrq.Limit(1).All(setContextOp(ctx, jrq.ctx, ent.OpQueryFirst))
+func (_q *JobResultQuery) First(ctx context.Context) (*JobResult, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -158,8 +158,8 @@ func (jrq *JobResultQuery) First(ctx context.Context) (*JobResult, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (jrq *JobResultQuery) FirstX(ctx context.Context) *JobResult {
-	node, err := jrq.First(ctx)
+func (_q *JobResultQuery) FirstX(ctx context.Context) *JobResult {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -168,9 +168,9 @@ func (jrq *JobResultQuery) FirstX(ctx context.Context) *JobResult {
 
 // FirstID returns the first JobResult ID from the query.
 // Returns a *NotFoundError when no JobResult ID was found.
-func (jrq *JobResultQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *JobResultQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = jrq.Limit(1).IDs(setContextOp(ctx, jrq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -181,8 +181,8 @@ func (jrq *JobResultQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (jrq *JobResultQuery) FirstIDX(ctx context.Context) string {
-	id, err := jrq.FirstID(ctx)
+func (_q *JobResultQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -192,8 +192,8 @@ func (jrq *JobResultQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single JobResult entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one JobResult entity is found.
 // Returns a *NotFoundError when no JobResult entities are found.
-func (jrq *JobResultQuery) Only(ctx context.Context) (*JobResult, error) {
-	nodes, err := jrq.Limit(2).All(setContextOp(ctx, jrq.ctx, ent.OpQueryOnly))
+func (_q *JobResultQuery) Only(ctx context.Context) (*JobResult, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -208,8 +208,8 @@ func (jrq *JobResultQuery) Only(ctx context.Context) (*JobResult, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (jrq *JobResultQuery) OnlyX(ctx context.Context) *JobResult {
-	node, err := jrq.Only(ctx)
+func (_q *JobResultQuery) OnlyX(ctx context.Context) *JobResult {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -219,9 +219,9 @@ func (jrq *JobResultQuery) OnlyX(ctx context.Context) *JobResult {
 // OnlyID is like Only, but returns the only JobResult ID in the query.
 // Returns a *NotSingularError when more than one JobResult ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (jrq *JobResultQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *JobResultQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = jrq.Limit(2).IDs(setContextOp(ctx, jrq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -236,8 +236,8 @@ func (jrq *JobResultQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (jrq *JobResultQuery) OnlyIDX(ctx context.Context) string {
-	id, err := jrq.OnlyID(ctx)
+func (_q *JobResultQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,18 +245,18 @@ func (jrq *JobResultQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of JobResults.
-func (jrq *JobResultQuery) All(ctx context.Context) ([]*JobResult, error) {
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryAll)
-	if err := jrq.prepareQuery(ctx); err != nil {
+func (_q *JobResultQuery) All(ctx context.Context) ([]*JobResult, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*JobResult, *JobResultQuery]()
-	return withInterceptors[[]*JobResult](ctx, jrq, qr, jrq.inters)
+	return withInterceptors[[]*JobResult](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (jrq *JobResultQuery) AllX(ctx context.Context) []*JobResult {
-	nodes, err := jrq.All(ctx)
+func (_q *JobResultQuery) AllX(ctx context.Context) []*JobResult {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -264,20 +264,20 @@ func (jrq *JobResultQuery) AllX(ctx context.Context) []*JobResult {
 }
 
 // IDs executes the query and returns a list of JobResult IDs.
-func (jrq *JobResultQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if jrq.ctx.Unique == nil && jrq.path != nil {
-		jrq.Unique(true)
+func (_q *JobResultQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryIDs)
-	if err = jrq.Select(jobresult.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(jobresult.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (jrq *JobResultQuery) IDsX(ctx context.Context) []string {
-	ids, err := jrq.IDs(ctx)
+func (_q *JobResultQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -285,17 +285,17 @@ func (jrq *JobResultQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (jrq *JobResultQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryCount)
-	if err := jrq.prepareQuery(ctx); err != nil {
+func (_q *JobResultQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, jrq, querierCount[*JobResultQuery](), jrq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*JobResultQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (jrq *JobResultQuery) CountX(ctx context.Context) int {
-	count, err := jrq.Count(ctx)
+func (_q *JobResultQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -303,9 +303,9 @@ func (jrq *JobResultQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (jrq *JobResultQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryExist)
-	switch _, err := jrq.FirstID(ctx); {
+func (_q *JobResultQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -316,8 +316,8 @@ func (jrq *JobResultQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (jrq *JobResultQuery) ExistX(ctx context.Context) bool {
-	exist, err := jrq.Exist(ctx)
+func (_q *JobResultQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -326,57 +326,57 @@ func (jrq *JobResultQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the JobResultQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (jrq *JobResultQuery) Clone() *JobResultQuery {
-	if jrq == nil {
+func (_q *JobResultQuery) Clone() *JobResultQuery {
+	if _q == nil {
 		return nil
 	}
 	return &JobResultQuery{
-		config:           jrq.config,
-		ctx:              jrq.ctx.Clone(),
-		order:            append([]jobresult.OrderOption{}, jrq.order...),
-		inters:           append([]Interceptor{}, jrq.inters...),
-		predicates:       append([]predicate.JobResult{}, jrq.predicates...),
-		withOwner:        jrq.withOwner.Clone(),
-		withScheduledJob: jrq.withScheduledJob.Clone(),
-		withFile:         jrq.withFile.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]jobresult.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.JobResult{}, _q.predicates...),
+		withOwner:        _q.withOwner.Clone(),
+		withScheduledJob: _q.withScheduledJob.Clone(),
+		withFile:         _q.withFile.Clone(),
 		// clone intermediate query.
-		sql:       jrq.sql.Clone(),
-		path:      jrq.path,
-		modifiers: append([]func(*sql.Selector){}, jrq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobResultQuery) WithOwner(opts ...func(*OrganizationQuery)) *JobResultQuery {
-	query := (&OrganizationClient{config: jrq.config}).Query()
+func (_q *JobResultQuery) WithOwner(opts ...func(*OrganizationQuery)) *JobResultQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	jrq.withOwner = query
-	return jrq
+	_q.withOwner = query
+	return _q
 }
 
 // WithScheduledJob tells the query-builder to eager-load the nodes that are connected to
 // the "scheduled_job" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobResultQuery) WithScheduledJob(opts ...func(*ScheduledJobQuery)) *JobResultQuery {
-	query := (&ScheduledJobClient{config: jrq.config}).Query()
+func (_q *JobResultQuery) WithScheduledJob(opts ...func(*ScheduledJobQuery)) *JobResultQuery {
+	query := (&ScheduledJobClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	jrq.withScheduledJob = query
-	return jrq
+	_q.withScheduledJob = query
+	return _q
 }
 
 // WithFile tells the query-builder to eager-load the nodes that are connected to
 // the "file" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobResultQuery) WithFile(opts ...func(*FileQuery)) *JobResultQuery {
-	query := (&FileClient{config: jrq.config}).Query()
+func (_q *JobResultQuery) WithFile(opts ...func(*FileQuery)) *JobResultQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	jrq.withFile = query
-	return jrq
+	_q.withFile = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -393,10 +393,10 @@ func (jrq *JobResultQuery) WithFile(opts ...func(*FileQuery)) *JobResultQuery {
 //		GroupBy(jobresult.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (jrq *JobResultQuery) GroupBy(field string, fields ...string) *JobResultGroupBy {
-	jrq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &JobResultGroupBy{build: jrq}
-	grbuild.flds = &jrq.ctx.Fields
+func (_q *JobResultQuery) GroupBy(field string, fields ...string) *JobResultGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &JobResultGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = jobresult.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -414,111 +414,111 @@ func (jrq *JobResultQuery) GroupBy(field string, fields ...string) *JobResultGro
 //	client.JobResult.Query().
 //		Select(jobresult.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (jrq *JobResultQuery) Select(fields ...string) *JobResultSelect {
-	jrq.ctx.Fields = append(jrq.ctx.Fields, fields...)
-	sbuild := &JobResultSelect{JobResultQuery: jrq}
+func (_q *JobResultQuery) Select(fields ...string) *JobResultSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &JobResultSelect{JobResultQuery: _q}
 	sbuild.label = jobresult.Label
-	sbuild.flds, sbuild.scan = &jrq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a JobResultSelect configured with the given aggregations.
-func (jrq *JobResultQuery) Aggregate(fns ...AggregateFunc) *JobResultSelect {
-	return jrq.Select().Aggregate(fns...)
+func (_q *JobResultQuery) Aggregate(fns ...AggregateFunc) *JobResultSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (jrq *JobResultQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range jrq.inters {
+func (_q *JobResultQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, jrq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range jrq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !jobresult.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if jrq.path != nil {
-		prev, err := jrq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		jrq.sql = prev
+		_q.sql = prev
 	}
 	if jobresult.Policy == nil {
 		return errors.New("generated: uninitialized jobresult.Policy (forgotten import generated/runtime?)")
 	}
-	if err := jobresult.Policy.EvalQuery(ctx, jrq); err != nil {
+	if err := jobresult.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (jrq *JobResultQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobResult, error) {
+func (_q *JobResultQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobResult, error) {
 	var (
 		nodes       = []*JobResult{}
-		_spec       = jrq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			jrq.withOwner != nil,
-			jrq.withScheduledJob != nil,
-			jrq.withFile != nil,
+			_q.withOwner != nil,
+			_q.withScheduledJob != nil,
+			_q.withFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*JobResult).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &JobResult{config: jrq.config}
+		node := &JobResult{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = jrq.schemaConfig.JobResult
-	ctx = internal.NewSchemaConfigContext(ctx, jrq.schemaConfig)
-	if len(jrq.modifiers) > 0 {
-		_spec.Modifiers = jrq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.JobResult
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, jrq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := jrq.withOwner; query != nil {
-		if err := jrq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *JobResult, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := jrq.withScheduledJob; query != nil {
-		if err := jrq.loadScheduledJob(ctx, query, nodes, nil,
+	if query := _q.withScheduledJob; query != nil {
+		if err := _q.loadScheduledJob(ctx, query, nodes, nil,
 			func(n *JobResult, e *ScheduledJob) { n.Edges.ScheduledJob = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := jrq.withFile; query != nil {
-		if err := jrq.loadFile(ctx, query, nodes, nil,
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *JobResult, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range jrq.loadTotal {
-		if err := jrq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (jrq *JobResultQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *Organization)) error {
+func (_q *JobResultQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*JobResult)
 	for i := range nodes {
@@ -547,7 +547,7 @@ func (jrq *JobResultQuery) loadOwner(ctx context.Context, query *OrganizationQue
 	}
 	return nil
 }
-func (jrq *JobResultQuery) loadScheduledJob(ctx context.Context, query *ScheduledJobQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *ScheduledJob)) error {
+func (_q *JobResultQuery) loadScheduledJob(ctx context.Context, query *ScheduledJobQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *ScheduledJob)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*JobResult)
 	for i := range nodes {
@@ -576,7 +576,7 @@ func (jrq *JobResultQuery) loadScheduledJob(ctx context.Context, query *Schedule
 	}
 	return nil
 }
-func (jrq *JobResultQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *File)) error {
+func (_q *JobResultQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*JobResult)
 	for i := range nodes {
@@ -606,29 +606,29 @@ func (jrq *JobResultQuery) loadFile(ctx context.Context, query *FileQuery, nodes
 	return nil
 }
 
-func (jrq *JobResultQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := jrq.querySpec()
-	_spec.Node.Schema = jrq.schemaConfig.JobResult
-	ctx = internal.NewSchemaConfigContext(ctx, jrq.schemaConfig)
-	if len(jrq.modifiers) > 0 {
-		_spec.Modifiers = jrq.modifiers
+func (_q *JobResultQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.JobResult
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = jrq.ctx.Fields
-	if len(jrq.ctx.Fields) > 0 {
-		_spec.Unique = jrq.ctx.Unique != nil && *jrq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, jrq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (jrq *JobResultQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *JobResultQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(jobresult.Table, jobresult.Columns, sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString))
-	_spec.From = jrq.sql
-	if unique := jrq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if jrq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := jrq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobresult.FieldID)
 		for i := range fields {
@@ -636,30 +636,30 @@ func (jrq *JobResultQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if jrq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(jobresult.FieldOwnerID)
 		}
-		if jrq.withScheduledJob != nil {
+		if _q.withScheduledJob != nil {
 			_spec.Node.AddColumnOnce(jobresult.FieldScheduledJobID)
 		}
-		if jrq.withFile != nil {
+		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(jobresult.FieldFileID)
 		}
 	}
-	if ps := jrq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := jrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := jrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := jrq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -669,48 +669,48 @@ func (jrq *JobResultQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (jrq *JobResultQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(jrq.driver.Dialect())
+func (_q *JobResultQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(jobresult.Table)
-	columns := jrq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = jobresult.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if jrq.sql != nil {
-		selector = jrq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if jrq.ctx.Unique != nil && *jrq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(jrq.schemaConfig.JobResult)
-	ctx = internal.NewSchemaConfigContext(ctx, jrq.schemaConfig)
+	t1.Schema(_q.schemaConfig.JobResult)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range jrq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range jrq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range jrq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := jrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := jrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (jrq *JobResultQuery) Modify(modifiers ...func(s *sql.Selector)) *JobResultSelect {
-	jrq.modifiers = append(jrq.modifiers, modifiers...)
-	return jrq.Select()
+func (_q *JobResultQuery) Modify(modifiers ...func(s *sql.Selector)) *JobResultSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -739,41 +739,41 @@ type JobResultGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (jrgb *JobResultGroupBy) Aggregate(fns ...AggregateFunc) *JobResultGroupBy {
-	jrgb.fns = append(jrgb.fns, fns...)
-	return jrgb
+func (_g *JobResultGroupBy) Aggregate(fns ...AggregateFunc) *JobResultGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (jrgb *JobResultGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, jrgb.build.ctx, ent.OpQueryGroupBy)
-	if err := jrgb.build.prepareQuery(ctx); err != nil {
+func (_g *JobResultGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*JobResultQuery, *JobResultGroupBy](ctx, jrgb.build, jrgb, jrgb.build.inters, v)
+	return scanWithInterceptors[*JobResultQuery, *JobResultGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (jrgb *JobResultGroupBy) sqlScan(ctx context.Context, root *JobResultQuery, v any) error {
+func (_g *JobResultGroupBy) sqlScan(ctx context.Context, root *JobResultQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(jrgb.fns))
-	for _, fn := range jrgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*jrgb.flds)+len(jrgb.fns))
-		for _, f := range *jrgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*jrgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := jrgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -787,27 +787,27 @@ type JobResultSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (jrs *JobResultSelect) Aggregate(fns ...AggregateFunc) *JobResultSelect {
-	jrs.fns = append(jrs.fns, fns...)
-	return jrs
+func (_s *JobResultSelect) Aggregate(fns ...AggregateFunc) *JobResultSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (jrs *JobResultSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, jrs.ctx, ent.OpQuerySelect)
-	if err := jrs.prepareQuery(ctx); err != nil {
+func (_s *JobResultSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*JobResultQuery, *JobResultSelect](ctx, jrs.JobResultQuery, jrs, jrs.inters, v)
+	return scanWithInterceptors[*JobResultQuery, *JobResultSelect](ctx, _s.JobResultQuery, _s, _s.inters, v)
 }
 
-func (jrs *JobResultSelect) sqlScan(ctx context.Context, root *JobResultQuery, v any) error {
+func (_s *JobResultSelect) sqlScan(ctx context.Context, root *JobResultQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(jrs.fns))
-	for _, fn := range jrs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*jrs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -815,7 +815,7 @@ func (jrs *JobResultSelect) sqlScan(ctx context.Context, root *JobResultQuery, v
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := jrs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -823,7 +823,7 @@ func (jrs *JobResultSelect) sqlScan(ctx context.Context, root *JobResultQuery, v
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (jrs *JobResultSelect) Modify(modifiers ...func(s *sql.Selector)) *JobResultSelect {
-	jrs.modifiers = append(jrs.modifiers, modifiers...)
-	return jrs
+func (_s *JobResultSelect) Modify(modifiers ...func(s *sql.Selector)) *JobResultSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

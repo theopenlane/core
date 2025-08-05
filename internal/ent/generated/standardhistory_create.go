@@ -23,367 +23,367 @@ type StandardHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (shc *StandardHistoryCreate) SetHistoryTime(t time.Time) *StandardHistoryCreate {
-	shc.mutation.SetHistoryTime(t)
-	return shc
+func (_c *StandardHistoryCreate) SetHistoryTime(v time.Time) *StandardHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableHistoryTime(t *time.Time) *StandardHistoryCreate {
-	if t != nil {
-		shc.SetHistoryTime(*t)
+func (_c *StandardHistoryCreate) SetNillableHistoryTime(v *time.Time) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (shc *StandardHistoryCreate) SetRef(s string) *StandardHistoryCreate {
-	shc.mutation.SetRef(s)
-	return shc
+func (_c *StandardHistoryCreate) SetRef(v string) *StandardHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableRef(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetRef(*s)
+func (_c *StandardHistoryCreate) SetNillableRef(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (shc *StandardHistoryCreate) SetOperation(ht history.OpType) *StandardHistoryCreate {
-	shc.mutation.SetOperation(ht)
-	return shc
+func (_c *StandardHistoryCreate) SetOperation(v history.OpType) *StandardHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (shc *StandardHistoryCreate) SetCreatedAt(t time.Time) *StandardHistoryCreate {
-	shc.mutation.SetCreatedAt(t)
-	return shc
+func (_c *StandardHistoryCreate) SetCreatedAt(v time.Time) *StandardHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableCreatedAt(t *time.Time) *StandardHistoryCreate {
-	if t != nil {
-		shc.SetCreatedAt(*t)
+func (_c *StandardHistoryCreate) SetNillableCreatedAt(v *time.Time) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shc *StandardHistoryCreate) SetUpdatedAt(t time.Time) *StandardHistoryCreate {
-	shc.mutation.SetUpdatedAt(t)
-	return shc
+func (_c *StandardHistoryCreate) SetUpdatedAt(v time.Time) *StandardHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableUpdatedAt(t *time.Time) *StandardHistoryCreate {
-	if t != nil {
-		shc.SetUpdatedAt(*t)
+func (_c *StandardHistoryCreate) SetNillableUpdatedAt(v *time.Time) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (shc *StandardHistoryCreate) SetCreatedBy(s string) *StandardHistoryCreate {
-	shc.mutation.SetCreatedBy(s)
-	return shc
+func (_c *StandardHistoryCreate) SetCreatedBy(v string) *StandardHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableCreatedBy(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetCreatedBy(*s)
+func (_c *StandardHistoryCreate) SetNillableCreatedBy(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shc *StandardHistoryCreate) SetUpdatedBy(s string) *StandardHistoryCreate {
-	shc.mutation.SetUpdatedBy(s)
-	return shc
+func (_c *StandardHistoryCreate) SetUpdatedBy(v string) *StandardHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableUpdatedBy(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetUpdatedBy(*s)
+func (_c *StandardHistoryCreate) SetNillableUpdatedBy(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shc *StandardHistoryCreate) SetDeletedAt(t time.Time) *StandardHistoryCreate {
-	shc.mutation.SetDeletedAt(t)
-	return shc
+func (_c *StandardHistoryCreate) SetDeletedAt(v time.Time) *StandardHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableDeletedAt(t *time.Time) *StandardHistoryCreate {
-	if t != nil {
-		shc.SetDeletedAt(*t)
+func (_c *StandardHistoryCreate) SetNillableDeletedAt(v *time.Time) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shc *StandardHistoryCreate) SetDeletedBy(s string) *StandardHistoryCreate {
-	shc.mutation.SetDeletedBy(s)
-	return shc
+func (_c *StandardHistoryCreate) SetDeletedBy(v string) *StandardHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableDeletedBy(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetDeletedBy(*s)
+func (_c *StandardHistoryCreate) SetNillableDeletedBy(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (shc *StandardHistoryCreate) SetTags(s []string) *StandardHistoryCreate {
-	shc.mutation.SetTags(s)
-	return shc
+func (_c *StandardHistoryCreate) SetTags(v []string) *StandardHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetRevision sets the "revision" field.
-func (shc *StandardHistoryCreate) SetRevision(s string) *StandardHistoryCreate {
-	shc.mutation.SetRevision(s)
-	return shc
+func (_c *StandardHistoryCreate) SetRevision(v string) *StandardHistoryCreate {
+	_c.mutation.SetRevision(v)
+	return _c
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableRevision(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetRevision(*s)
+func (_c *StandardHistoryCreate) SetNillableRevision(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetRevision(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shc *StandardHistoryCreate) SetOwnerID(s string) *StandardHistoryCreate {
-	shc.mutation.SetOwnerID(s)
-	return shc
+func (_c *StandardHistoryCreate) SetOwnerID(v string) *StandardHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableOwnerID(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetOwnerID(*s)
+func (_c *StandardHistoryCreate) SetNillableOwnerID(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetSystemOwned sets the "system_owned" field.
-func (shc *StandardHistoryCreate) SetSystemOwned(b bool) *StandardHistoryCreate {
-	shc.mutation.SetSystemOwned(b)
-	return shc
+func (_c *StandardHistoryCreate) SetSystemOwned(v bool) *StandardHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
 }
 
 // SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableSystemOwned(b *bool) *StandardHistoryCreate {
-	if b != nil {
-		shc.SetSystemOwned(*b)
+func (_c *StandardHistoryCreate) SetNillableSystemOwned(v *bool) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (shc *StandardHistoryCreate) SetName(s string) *StandardHistoryCreate {
-	shc.mutation.SetName(s)
-	return shc
+func (_c *StandardHistoryCreate) SetName(v string) *StandardHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetShortName sets the "short_name" field.
-func (shc *StandardHistoryCreate) SetShortName(s string) *StandardHistoryCreate {
-	shc.mutation.SetShortName(s)
-	return shc
+func (_c *StandardHistoryCreate) SetShortName(v string) *StandardHistoryCreate {
+	_c.mutation.SetShortName(v)
+	return _c
 }
 
 // SetNillableShortName sets the "short_name" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableShortName(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetShortName(*s)
+func (_c *StandardHistoryCreate) SetNillableShortName(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetShortName(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetFramework sets the "framework" field.
-func (shc *StandardHistoryCreate) SetFramework(s string) *StandardHistoryCreate {
-	shc.mutation.SetFramework(s)
-	return shc
+func (_c *StandardHistoryCreate) SetFramework(v string) *StandardHistoryCreate {
+	_c.mutation.SetFramework(v)
+	return _c
 }
 
 // SetNillableFramework sets the "framework" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableFramework(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetFramework(*s)
+func (_c *StandardHistoryCreate) SetNillableFramework(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetFramework(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (shc *StandardHistoryCreate) SetDescription(s string) *StandardHistoryCreate {
-	shc.mutation.SetDescription(s)
-	return shc
+func (_c *StandardHistoryCreate) SetDescription(v string) *StandardHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableDescription(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetDescription(*s)
+func (_c *StandardHistoryCreate) SetNillableDescription(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
-func (shc *StandardHistoryCreate) SetGoverningBodyLogoURL(s string) *StandardHistoryCreate {
-	shc.mutation.SetGoverningBodyLogoURL(s)
-	return shc
+func (_c *StandardHistoryCreate) SetGoverningBodyLogoURL(v string) *StandardHistoryCreate {
+	_c.mutation.SetGoverningBodyLogoURL(v)
+	return _c
 }
 
 // SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableGoverningBodyLogoURL(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetGoverningBodyLogoURL(*s)
+func (_c *StandardHistoryCreate) SetNillableGoverningBodyLogoURL(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetGoverningBodyLogoURL(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetGoverningBody sets the "governing_body" field.
-func (shc *StandardHistoryCreate) SetGoverningBody(s string) *StandardHistoryCreate {
-	shc.mutation.SetGoverningBody(s)
-	return shc
+func (_c *StandardHistoryCreate) SetGoverningBody(v string) *StandardHistoryCreate {
+	_c.mutation.SetGoverningBody(v)
+	return _c
 }
 
 // SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableGoverningBody(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetGoverningBody(*s)
+func (_c *StandardHistoryCreate) SetNillableGoverningBody(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetGoverningBody(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetDomains sets the "domains" field.
-func (shc *StandardHistoryCreate) SetDomains(s []string) *StandardHistoryCreate {
-	shc.mutation.SetDomains(s)
-	return shc
+func (_c *StandardHistoryCreate) SetDomains(v []string) *StandardHistoryCreate {
+	_c.mutation.SetDomains(v)
+	return _c
 }
 
 // SetLink sets the "link" field.
-func (shc *StandardHistoryCreate) SetLink(s string) *StandardHistoryCreate {
-	shc.mutation.SetLink(s)
-	return shc
+func (_c *StandardHistoryCreate) SetLink(v string) *StandardHistoryCreate {
+	_c.mutation.SetLink(v)
+	return _c
 }
 
 // SetNillableLink sets the "link" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableLink(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetLink(*s)
+func (_c *StandardHistoryCreate) SetNillableLink(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetLink(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (shc *StandardHistoryCreate) SetStatus(es enums.StandardStatus) *StandardHistoryCreate {
-	shc.mutation.SetStatus(es)
-	return shc
+func (_c *StandardHistoryCreate) SetStatus(v enums.StandardStatus) *StandardHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableStatus(es *enums.StandardStatus) *StandardHistoryCreate {
-	if es != nil {
-		shc.SetStatus(*es)
+func (_c *StandardHistoryCreate) SetNillableStatus(v *enums.StandardStatus) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetIsPublic sets the "is_public" field.
-func (shc *StandardHistoryCreate) SetIsPublic(b bool) *StandardHistoryCreate {
-	shc.mutation.SetIsPublic(b)
-	return shc
+func (_c *StandardHistoryCreate) SetIsPublic(v bool) *StandardHistoryCreate {
+	_c.mutation.SetIsPublic(v)
+	return _c
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableIsPublic(b *bool) *StandardHistoryCreate {
-	if b != nil {
-		shc.SetIsPublic(*b)
+func (_c *StandardHistoryCreate) SetNillableIsPublic(v *bool) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetIsPublic(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetFreeToUse sets the "free_to_use" field.
-func (shc *StandardHistoryCreate) SetFreeToUse(b bool) *StandardHistoryCreate {
-	shc.mutation.SetFreeToUse(b)
-	return shc
+func (_c *StandardHistoryCreate) SetFreeToUse(v bool) *StandardHistoryCreate {
+	_c.mutation.SetFreeToUse(v)
+	return _c
 }
 
 // SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableFreeToUse(b *bool) *StandardHistoryCreate {
-	if b != nil {
-		shc.SetFreeToUse(*b)
+func (_c *StandardHistoryCreate) SetNillableFreeToUse(v *bool) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetFreeToUse(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetStandardType sets the "standard_type" field.
-func (shc *StandardHistoryCreate) SetStandardType(s string) *StandardHistoryCreate {
-	shc.mutation.SetStandardType(s)
-	return shc
+func (_c *StandardHistoryCreate) SetStandardType(v string) *StandardHistoryCreate {
+	_c.mutation.SetStandardType(v)
+	return _c
 }
 
 // SetNillableStandardType sets the "standard_type" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableStandardType(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetStandardType(*s)
+func (_c *StandardHistoryCreate) SetNillableStandardType(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetStandardType(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetVersion sets the "version" field.
-func (shc *StandardHistoryCreate) SetVersion(s string) *StandardHistoryCreate {
-	shc.mutation.SetVersion(s)
-	return shc
+func (_c *StandardHistoryCreate) SetVersion(v string) *StandardHistoryCreate {
+	_c.mutation.SetVersion(v)
+	return _c
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableVersion(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetVersion(*s)
+func (_c *StandardHistoryCreate) SetNillableVersion(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetVersion(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (shc *StandardHistoryCreate) SetID(s string) *StandardHistoryCreate {
-	shc.mutation.SetID(s)
-	return shc
+func (_c *StandardHistoryCreate) SetID(v string) *StandardHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (shc *StandardHistoryCreate) SetNillableID(s *string) *StandardHistoryCreate {
-	if s != nil {
-		shc.SetID(*s)
+func (_c *StandardHistoryCreate) SetNillableID(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return shc
+	return _c
 }
 
 // Mutation returns the StandardHistoryMutation object of the builder.
-func (shc *StandardHistoryCreate) Mutation() *StandardHistoryMutation {
-	return shc.mutation
+func (_c *StandardHistoryCreate) Mutation() *StandardHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the StandardHistory in the database.
-func (shc *StandardHistoryCreate) Save(ctx context.Context) (*StandardHistory, error) {
-	if err := shc.defaults(); err != nil {
+func (_c *StandardHistoryCreate) Save(ctx context.Context) (*StandardHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (shc *StandardHistoryCreate) SaveX(ctx context.Context) *StandardHistory {
-	v, err := shc.Save(ctx)
+func (_c *StandardHistoryCreate) SaveX(ctx context.Context) *StandardHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -391,92 +391,92 @@ func (shc *StandardHistoryCreate) SaveX(ctx context.Context) *StandardHistory {
 }
 
 // Exec executes the query.
-func (shc *StandardHistoryCreate) Exec(ctx context.Context) error {
-	_, err := shc.Save(ctx)
+func (_c *StandardHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shc *StandardHistoryCreate) ExecX(ctx context.Context) {
-	if err := shc.Exec(ctx); err != nil {
+func (_c *StandardHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *StandardHistoryCreate) defaults() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *StandardHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if standardhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized standardhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := standardhistory.DefaultHistoryTime()
-		shc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := shc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if standardhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standardhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := standardhistory.DefaultCreatedAt()
-		shc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if standardhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standardhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := standardhistory.DefaultUpdatedAt()
-		shc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := standardhistory.DefaultTags
-		shc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := shc.mutation.Revision(); !ok {
+	if _, ok := _c.mutation.Revision(); !ok {
 		v := standardhistory.DefaultRevision
-		shc.mutation.SetRevision(v)
+		_c.mutation.SetRevision(v)
 	}
-	if _, ok := shc.mutation.SystemOwned(); !ok {
+	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := standardhistory.DefaultSystemOwned
-		shc.mutation.SetSystemOwned(v)
+		_c.mutation.SetSystemOwned(v)
 	}
-	if _, ok := shc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := standardhistory.DefaultStatus
-		shc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := shc.mutation.IsPublic(); !ok {
+	if _, ok := _c.mutation.IsPublic(); !ok {
 		v := standardhistory.DefaultIsPublic
-		shc.mutation.SetIsPublic(v)
+		_c.mutation.SetIsPublic(v)
 	}
-	if _, ok := shc.mutation.FreeToUse(); !ok {
+	if _, ok := _c.mutation.FreeToUse(); !ok {
 		v := standardhistory.DefaultFreeToUse
-		shc.mutation.SetFreeToUse(v)
+		_c.mutation.SetFreeToUse(v)
 	}
-	if _, ok := shc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if standardhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized standardhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := standardhistory.DefaultID()
-		shc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shc *StandardHistoryCreate) check() error {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+func (_c *StandardHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "StandardHistory.history_time"`)}
 	}
-	if _, ok := shc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "StandardHistory.operation"`)}
 	}
-	if v, ok := shc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := standardhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "StandardHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "StandardHistory.name"`)}
 	}
-	if v, ok := shc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := standardhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "StandardHistory.status": %w`, err)}
 		}
@@ -484,12 +484,12 @@ func (shc *StandardHistoryCreate) check() error {
 	return nil
 }
 
-func (shc *StandardHistoryCreate) sqlSave(ctx context.Context) (*StandardHistory, error) {
-	if err := shc.check(); err != nil {
+func (_c *StandardHistoryCreate) sqlSave(ctx context.Context) (*StandardHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := shc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, shc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -502,122 +502,122 @@ func (shc *StandardHistoryCreate) sqlSave(ctx context.Context) (*StandardHistory
 			return nil, fmt.Errorf("unexpected StandardHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	shc.mutation.id = &_node.ID
-	shc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.CreateSpec) {
+func (_c *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &StandardHistory{config: shc.config}
+		_node = &StandardHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(standardhistory.Table, sqlgraph.NewFieldSpec(standardhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = shc.schemaConfig.StandardHistory
-	if id, ok := shc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.StandardHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := shc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(standardhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := shc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(standardhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := shc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(standardhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := shc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(standardhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := shc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := shc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(standardhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := shc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := shc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(standardhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := shc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(standardhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := shc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := shc.mutation.Revision(); ok {
+	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(standardhistory.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
-	if value, ok := shc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(standardhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := shc.mutation.SystemOwned(); ok {
+	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(standardhistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
 	}
-	if value, ok := shc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := shc.mutation.ShortName(); ok {
+	if value, ok := _c.mutation.ShortName(); ok {
 		_spec.SetField(standardhistory.FieldShortName, field.TypeString, value)
 		_node.ShortName = value
 	}
-	if value, ok := shc.mutation.Framework(); ok {
+	if value, ok := _c.mutation.Framework(); ok {
 		_spec.SetField(standardhistory.FieldFramework, field.TypeString, value)
 		_node.Framework = value
 	}
-	if value, ok := shc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(standardhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := shc.mutation.GoverningBodyLogoURL(); ok {
+	if value, ok := _c.mutation.GoverningBodyLogoURL(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBodyLogoURL, field.TypeString, value)
 		_node.GoverningBodyLogoURL = value
 	}
-	if value, ok := shc.mutation.GoverningBody(); ok {
+	if value, ok := _c.mutation.GoverningBody(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBody, field.TypeString, value)
 		_node.GoverningBody = value
 	}
-	if value, ok := shc.mutation.Domains(); ok {
+	if value, ok := _c.mutation.Domains(); ok {
 		_spec.SetField(standardhistory.FieldDomains, field.TypeJSON, value)
 		_node.Domains = value
 	}
-	if value, ok := shc.mutation.Link(); ok {
+	if value, ok := _c.mutation.Link(); ok {
 		_spec.SetField(standardhistory.FieldLink, field.TypeString, value)
 		_node.Link = value
 	}
-	if value, ok := shc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(standardhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := shc.mutation.IsPublic(); ok {
+	if value, ok := _c.mutation.IsPublic(); ok {
 		_spec.SetField(standardhistory.FieldIsPublic, field.TypeBool, value)
 		_node.IsPublic = value
 	}
-	if value, ok := shc.mutation.FreeToUse(); ok {
+	if value, ok := _c.mutation.FreeToUse(); ok {
 		_spec.SetField(standardhistory.FieldFreeToUse, field.TypeBool, value)
 		_node.FreeToUse = value
 	}
-	if value, ok := shc.mutation.StandardType(); ok {
+	if value, ok := _c.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)
 		_node.StandardType = value
 	}
-	if value, ok := shc.mutation.Version(); ok {
+	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
@@ -632,16 +632,16 @@ type StandardHistoryCreateBulk struct {
 }
 
 // Save creates the StandardHistory entities in the database.
-func (shcb *StandardHistoryCreateBulk) Save(ctx context.Context) ([]*StandardHistory, error) {
-	if shcb.err != nil {
-		return nil, shcb.err
+func (_c *StandardHistoryCreateBulk) Save(ctx context.Context) ([]*StandardHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(shcb.builders))
-	nodes := make([]*StandardHistory, len(shcb.builders))
-	mutators := make([]Mutator, len(shcb.builders))
-	for i := range shcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*StandardHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := shcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*StandardHistoryMutation)
@@ -655,11 +655,11 @@ func (shcb *StandardHistoryCreateBulk) Save(ctx context.Context) ([]*StandardHis
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, shcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, shcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -679,7 +679,7 @@ func (shcb *StandardHistoryCreateBulk) Save(ctx context.Context) ([]*StandardHis
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, shcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -687,8 +687,8 @@ func (shcb *StandardHistoryCreateBulk) Save(ctx context.Context) ([]*StandardHis
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shcb *StandardHistoryCreateBulk) SaveX(ctx context.Context) []*StandardHistory {
-	v, err := shcb.Save(ctx)
+func (_c *StandardHistoryCreateBulk) SaveX(ctx context.Context) []*StandardHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -696,14 +696,14 @@ func (shcb *StandardHistoryCreateBulk) SaveX(ctx context.Context) []*StandardHis
 }
 
 // Exec executes the query.
-func (shcb *StandardHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := shcb.Save(ctx)
+func (_c *StandardHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shcb *StandardHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := shcb.Exec(ctx); err != nil {
+func (_c *StandardHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

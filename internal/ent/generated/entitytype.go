@@ -98,7 +98,7 @@ func (*EntityType) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the EntityType fields.
-func (et *EntityType) assignValues(columns []string, values []any) error {
+func (_m *EntityType) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -108,49 +108,49 @@ func (et *EntityType) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				et.ID = value.String
+				_m.ID = value.String
 			}
 		case entitytype.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				et.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case entitytype.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				et.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case entitytype.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				et.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case entitytype.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				et.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case entitytype.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				et.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case entitytype.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				et.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case entitytype.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &et.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -158,16 +158,16 @@ func (et *EntityType) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				et.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case entitytype.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				et.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			et.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -175,94 +175,94 @@ func (et *EntityType) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the EntityType.
 // This includes values selected through modifiers, order, etc.
-func (et *EntityType) Value(name string) (ent.Value, error) {
-	return et.selectValues.Get(name)
+func (_m *EntityType) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the EntityType entity.
-func (et *EntityType) QueryOwner() *OrganizationQuery {
-	return NewEntityTypeClient(et.config).QueryOwner(et)
+func (_m *EntityType) QueryOwner() *OrganizationQuery {
+	return NewEntityTypeClient(_m.config).QueryOwner(_m)
 }
 
 // QueryEntities queries the "entities" edge of the EntityType entity.
-func (et *EntityType) QueryEntities() *EntityQuery {
-	return NewEntityTypeClient(et.config).QueryEntities(et)
+func (_m *EntityType) QueryEntities() *EntityQuery {
+	return NewEntityTypeClient(_m.config).QueryEntities(_m)
 }
 
 // Update returns a builder for updating this EntityType.
 // Note that you need to call EntityType.Unwrap() before calling this method if this EntityType
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (et *EntityType) Update() *EntityTypeUpdateOne {
-	return NewEntityTypeClient(et.config).UpdateOne(et)
+func (_m *EntityType) Update() *EntityTypeUpdateOne {
+	return NewEntityTypeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the EntityType entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (et *EntityType) Unwrap() *EntityType {
-	_tx, ok := et.config.driver.(*txDriver)
+func (_m *EntityType) Unwrap() *EntityType {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: EntityType is not a transactional entity")
 	}
-	et.config.driver = _tx.drv
-	return et
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (et *EntityType) String() string {
+func (_m *EntityType) String() string {
 	var builder strings.Builder
 	builder.WriteString("EntityType(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", et.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(et.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(et.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(et.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(et.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(et.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(et.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", et.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(et.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(et.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (et *EntityType) NamedEntities(name string) ([]*Entity, error) {
-	if et.Edges.namedEntities == nil {
+func (_m *EntityType) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := et.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (et *EntityType) appendNamedEntities(name string, edges ...*Entity) {
-	if et.Edges.namedEntities == nil {
-		et.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *EntityType) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		et.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		et.Edges.namedEntities[name] = append(et.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 

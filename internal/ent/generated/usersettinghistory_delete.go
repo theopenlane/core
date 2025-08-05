@@ -22,58 +22,58 @@ type UserSettingHistoryDelete struct {
 }
 
 // Where appends a list predicates to the UserSettingHistoryDelete builder.
-func (ushd *UserSettingHistoryDelete) Where(ps ...predicate.UserSettingHistory) *UserSettingHistoryDelete {
-	ushd.mutation.Where(ps...)
-	return ushd
+func (_d *UserSettingHistoryDelete) Where(ps ...predicate.UserSettingHistory) *UserSettingHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (ushd *UserSettingHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, ushd.sqlExec, ushd.mutation, ushd.hooks)
+func (_d *UserSettingHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ushd *UserSettingHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := ushd.Exec(ctx)
+func (_d *UserSettingHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (ushd *UserSettingHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *UserSettingHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(usersettinghistory.Table, sqlgraph.NewFieldSpec(usersettinghistory.FieldID, field.TypeString))
-	_spec.Node.Schema = ushd.schemaConfig.UserSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ushd.schemaConfig)
-	if ps := ushd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.UserSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, ushd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	ushd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // UserSettingHistoryDeleteOne is the builder for deleting a single UserSettingHistory entity.
 type UserSettingHistoryDeleteOne struct {
-	ushd *UserSettingHistoryDelete
+	_d *UserSettingHistoryDelete
 }
 
 // Where appends a list predicates to the UserSettingHistoryDelete builder.
-func (ushdo *UserSettingHistoryDeleteOne) Where(ps ...predicate.UserSettingHistory) *UserSettingHistoryDeleteOne {
-	ushdo.ushd.mutation.Where(ps...)
-	return ushdo
+func (_d *UserSettingHistoryDeleteOne) Where(ps ...predicate.UserSettingHistory) *UserSettingHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (ushdo *UserSettingHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := ushdo.ushd.Exec(ctx)
+func (_d *UserSettingHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (ushdo *UserSettingHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ushdo *UserSettingHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := ushdo.Exec(ctx); err != nil {
+func (_d *UserSettingHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

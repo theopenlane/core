@@ -29,179 +29,179 @@ type CustomDomainUpdate struct {
 }
 
 // Where appends a list predicates to the CustomDomainUpdate builder.
-func (cdu *CustomDomainUpdate) Where(ps ...predicate.CustomDomain) *CustomDomainUpdate {
-	cdu.mutation.Where(ps...)
-	return cdu
+func (_u *CustomDomainUpdate) Where(ps ...predicate.CustomDomain) *CustomDomainUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cdu *CustomDomainUpdate) SetUpdatedAt(t time.Time) *CustomDomainUpdate {
-	cdu.mutation.SetUpdatedAt(t)
-	return cdu
+func (_u *CustomDomainUpdate) SetUpdatedAt(v time.Time) *CustomDomainUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (cdu *CustomDomainUpdate) ClearUpdatedAt() *CustomDomainUpdate {
-	cdu.mutation.ClearUpdatedAt()
-	return cdu
+func (_u *CustomDomainUpdate) ClearUpdatedAt() *CustomDomainUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cdu *CustomDomainUpdate) SetUpdatedBy(s string) *CustomDomainUpdate {
-	cdu.mutation.SetUpdatedBy(s)
-	return cdu
+func (_u *CustomDomainUpdate) SetUpdatedBy(v string) *CustomDomainUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cdu *CustomDomainUpdate) SetNillableUpdatedBy(s *string) *CustomDomainUpdate {
-	if s != nil {
-		cdu.SetUpdatedBy(*s)
+func (_u *CustomDomainUpdate) SetNillableUpdatedBy(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return cdu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (cdu *CustomDomainUpdate) ClearUpdatedBy() *CustomDomainUpdate {
-	cdu.mutation.ClearUpdatedBy()
-	return cdu
+func (_u *CustomDomainUpdate) ClearUpdatedBy() *CustomDomainUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cdu *CustomDomainUpdate) SetDeletedAt(t time.Time) *CustomDomainUpdate {
-	cdu.mutation.SetDeletedAt(t)
-	return cdu
+func (_u *CustomDomainUpdate) SetDeletedAt(v time.Time) *CustomDomainUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cdu *CustomDomainUpdate) SetNillableDeletedAt(t *time.Time) *CustomDomainUpdate {
-	if t != nil {
-		cdu.SetDeletedAt(*t)
+func (_u *CustomDomainUpdate) SetNillableDeletedAt(v *time.Time) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return cdu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (cdu *CustomDomainUpdate) ClearDeletedAt() *CustomDomainUpdate {
-	cdu.mutation.ClearDeletedAt()
-	return cdu
+func (_u *CustomDomainUpdate) ClearDeletedAt() *CustomDomainUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cdu *CustomDomainUpdate) SetDeletedBy(s string) *CustomDomainUpdate {
-	cdu.mutation.SetDeletedBy(s)
-	return cdu
+func (_u *CustomDomainUpdate) SetDeletedBy(v string) *CustomDomainUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cdu *CustomDomainUpdate) SetNillableDeletedBy(s *string) *CustomDomainUpdate {
-	if s != nil {
-		cdu.SetDeletedBy(*s)
+func (_u *CustomDomainUpdate) SetNillableDeletedBy(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return cdu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (cdu *CustomDomainUpdate) ClearDeletedBy() *CustomDomainUpdate {
-	cdu.mutation.ClearDeletedBy()
-	return cdu
+func (_u *CustomDomainUpdate) ClearDeletedBy() *CustomDomainUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (cdu *CustomDomainUpdate) SetTags(s []string) *CustomDomainUpdate {
-	cdu.mutation.SetTags(s)
-	return cdu
+func (_u *CustomDomainUpdate) SetTags(v []string) *CustomDomainUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (cdu *CustomDomainUpdate) AppendTags(s []string) *CustomDomainUpdate {
-	cdu.mutation.AppendTags(s)
-	return cdu
+// AppendTags appends value to the "tags" field.
+func (_u *CustomDomainUpdate) AppendTags(v []string) *CustomDomainUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (cdu *CustomDomainUpdate) ClearTags() *CustomDomainUpdate {
-	cdu.mutation.ClearTags()
-	return cdu
+func (_u *CustomDomainUpdate) ClearTags() *CustomDomainUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cdu *CustomDomainUpdate) SetOwnerID(s string) *CustomDomainUpdate {
-	cdu.mutation.SetOwnerID(s)
-	return cdu
+func (_u *CustomDomainUpdate) SetOwnerID(v string) *CustomDomainUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cdu *CustomDomainUpdate) SetNillableOwnerID(s *string) *CustomDomainUpdate {
-	if s != nil {
-		cdu.SetOwnerID(*s)
+func (_u *CustomDomainUpdate) SetNillableOwnerID(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return cdu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (cdu *CustomDomainUpdate) ClearOwnerID() *CustomDomainUpdate {
-	cdu.mutation.ClearOwnerID()
-	return cdu
+func (_u *CustomDomainUpdate) ClearOwnerID() *CustomDomainUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetDNSVerificationID sets the "dns_verification_id" field.
-func (cdu *CustomDomainUpdate) SetDNSVerificationID(s string) *CustomDomainUpdate {
-	cdu.mutation.SetDNSVerificationID(s)
-	return cdu
+func (_u *CustomDomainUpdate) SetDNSVerificationID(v string) *CustomDomainUpdate {
+	_u.mutation.SetDNSVerificationID(v)
+	return _u
 }
 
 // SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
-func (cdu *CustomDomainUpdate) SetNillableDNSVerificationID(s *string) *CustomDomainUpdate {
-	if s != nil {
-		cdu.SetDNSVerificationID(*s)
+func (_u *CustomDomainUpdate) SetNillableDNSVerificationID(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetDNSVerificationID(*v)
 	}
-	return cdu
+	return _u
 }
 
 // ClearDNSVerificationID clears the value of the "dns_verification_id" field.
-func (cdu *CustomDomainUpdate) ClearDNSVerificationID() *CustomDomainUpdate {
-	cdu.mutation.ClearDNSVerificationID()
-	return cdu
+func (_u *CustomDomainUpdate) ClearDNSVerificationID() *CustomDomainUpdate {
+	_u.mutation.ClearDNSVerificationID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cdu *CustomDomainUpdate) SetOwner(o *Organization) *CustomDomainUpdate {
-	return cdu.SetOwnerID(o.ID)
+func (_u *CustomDomainUpdate) SetOwner(v *Organization) *CustomDomainUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
-func (cdu *CustomDomainUpdate) SetDNSVerification(d *DNSVerification) *CustomDomainUpdate {
-	return cdu.SetDNSVerificationID(d.ID)
+func (_u *CustomDomainUpdate) SetDNSVerification(v *DNSVerification) *CustomDomainUpdate {
+	return _u.SetDNSVerificationID(v.ID)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
-func (cdu *CustomDomainUpdate) Mutation() *CustomDomainMutation {
-	return cdu.mutation
+func (_u *CustomDomainUpdate) Mutation() *CustomDomainMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (cdu *CustomDomainUpdate) ClearOwner() *CustomDomainUpdate {
-	cdu.mutation.ClearOwner()
-	return cdu
+func (_u *CustomDomainUpdate) ClearOwner() *CustomDomainUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearDNSVerification clears the "dns_verification" edge to the DNSVerification entity.
-func (cdu *CustomDomainUpdate) ClearDNSVerification() *CustomDomainUpdate {
-	cdu.mutation.ClearDNSVerification()
-	return cdu
+func (_u *CustomDomainUpdate) ClearDNSVerification() *CustomDomainUpdate {
+	_u.mutation.ClearDNSVerification()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cdu *CustomDomainUpdate) Save(ctx context.Context) (int, error) {
-	if err := cdu.defaults(); err != nil {
+func (_u *CustomDomainUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, cdu.sqlSave, cdu.mutation, cdu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cdu *CustomDomainUpdate) SaveX(ctx context.Context) int {
-	affected, err := cdu.Save(ctx)
+func (_u *CustomDomainUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -209,98 +209,98 @@ func (cdu *CustomDomainUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cdu *CustomDomainUpdate) Exec(ctx context.Context) error {
-	_, err := cdu.Save(ctx)
+func (_u *CustomDomainUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdu *CustomDomainUpdate) ExecX(ctx context.Context) {
-	if err := cdu.Exec(ctx); err != nil {
+func (_u *CustomDomainUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cdu *CustomDomainUpdate) defaults() error {
-	if _, ok := cdu.mutation.UpdatedAt(); !ok && !cdu.mutation.UpdatedAtCleared() {
+func (_u *CustomDomainUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if customdomain.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := customdomain.UpdateDefaultUpdatedAt()
-		cdu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cdu *CustomDomainUpdate) check() error {
-	if cdu.mutation.MappableDomainCleared() && len(cdu.mutation.MappableDomainIDs()) > 0 {
+func (_u *CustomDomainUpdate) check() error {
+	if _u.mutation.MappableDomainCleared() && len(_u.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (cdu *CustomDomainUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainUpdate {
-	cdu.modifiers = append(cdu.modifiers, modifiers...)
-	return cdu
+func (_u *CustomDomainUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cdu.check(); err != nil {
-		return n, err
+func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(customdomain.Table, customdomain.Columns, sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString))
-	if ps := cdu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if cdu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(customdomain.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := cdu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(customdomain.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if cdu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(customdomain.FieldUpdatedAt, field.TypeTime)
 	}
-	if cdu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(customdomain.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := cdu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(customdomain.FieldUpdatedBy, field.TypeString, value)
 	}
-	if cdu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customdomain.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cdu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomain.FieldDeletedAt, field.TypeTime, value)
 	}
-	if cdu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(customdomain.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cdu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(customdomain.FieldDeletedBy, field.TypeString, value)
 	}
-	if cdu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(customdomain.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cdu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(customdomain.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := cdu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, customdomain.FieldTags, value)
 		})
 	}
-	if cdu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(customdomain.FieldTags, field.TypeJSON)
 	}
-	if cdu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -311,10 +311,10 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdu.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cdu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -325,13 +325,13 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdu.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cdu.mutation.DNSVerificationCleared() {
+	if _u.mutation.DNSVerificationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -342,10 +342,10 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdu.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cdu.mutation.DNSVerificationIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DNSVerificationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -356,16 +356,16 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cdu.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = cdu.schemaConfig.CustomDomain
-	ctx = internal.NewSchemaConfigContext(ctx, cdu.schemaConfig)
-	_spec.AddModifiers(cdu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, cdu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.CustomDomain
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{customdomain.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -373,8 +373,8 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	cdu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CustomDomainUpdateOne is the builder for updating a single CustomDomain entity.
@@ -387,186 +387,186 @@ type CustomDomainUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cduo *CustomDomainUpdateOne) SetUpdatedAt(t time.Time) *CustomDomainUpdateOne {
-	cduo.mutation.SetUpdatedAt(t)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetUpdatedAt(v time.Time) *CustomDomainUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (cduo *CustomDomainUpdateOne) ClearUpdatedAt() *CustomDomainUpdateOne {
-	cduo.mutation.ClearUpdatedAt()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearUpdatedAt() *CustomDomainUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cduo *CustomDomainUpdateOne) SetUpdatedBy(s string) *CustomDomainUpdateOne {
-	cduo.mutation.SetUpdatedBy(s)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetUpdatedBy(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cduo *CustomDomainUpdateOne) SetNillableUpdatedBy(s *string) *CustomDomainUpdateOne {
-	if s != nil {
-		cduo.SetUpdatedBy(*s)
+func (_u *CustomDomainUpdateOne) SetNillableUpdatedBy(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return cduo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (cduo *CustomDomainUpdateOne) ClearUpdatedBy() *CustomDomainUpdateOne {
-	cduo.mutation.ClearUpdatedBy()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearUpdatedBy() *CustomDomainUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cduo *CustomDomainUpdateOne) SetDeletedAt(t time.Time) *CustomDomainUpdateOne {
-	cduo.mutation.SetDeletedAt(t)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetDeletedAt(v time.Time) *CustomDomainUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cduo *CustomDomainUpdateOne) SetNillableDeletedAt(t *time.Time) *CustomDomainUpdateOne {
-	if t != nil {
-		cduo.SetDeletedAt(*t)
+func (_u *CustomDomainUpdateOne) SetNillableDeletedAt(v *time.Time) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return cduo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (cduo *CustomDomainUpdateOne) ClearDeletedAt() *CustomDomainUpdateOne {
-	cduo.mutation.ClearDeletedAt()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearDeletedAt() *CustomDomainUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cduo *CustomDomainUpdateOne) SetDeletedBy(s string) *CustomDomainUpdateOne {
-	cduo.mutation.SetDeletedBy(s)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetDeletedBy(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cduo *CustomDomainUpdateOne) SetNillableDeletedBy(s *string) *CustomDomainUpdateOne {
-	if s != nil {
-		cduo.SetDeletedBy(*s)
+func (_u *CustomDomainUpdateOne) SetNillableDeletedBy(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return cduo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (cduo *CustomDomainUpdateOne) ClearDeletedBy() *CustomDomainUpdateOne {
-	cduo.mutation.ClearDeletedBy()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearDeletedBy() *CustomDomainUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (cduo *CustomDomainUpdateOne) SetTags(s []string) *CustomDomainUpdateOne {
-	cduo.mutation.SetTags(s)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetTags(v []string) *CustomDomainUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (cduo *CustomDomainUpdateOne) AppendTags(s []string) *CustomDomainUpdateOne {
-	cduo.mutation.AppendTags(s)
-	return cduo
+// AppendTags appends value to the "tags" field.
+func (_u *CustomDomainUpdateOne) AppendTags(v []string) *CustomDomainUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (cduo *CustomDomainUpdateOne) ClearTags() *CustomDomainUpdateOne {
-	cduo.mutation.ClearTags()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearTags() *CustomDomainUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cduo *CustomDomainUpdateOne) SetOwnerID(s string) *CustomDomainUpdateOne {
-	cduo.mutation.SetOwnerID(s)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetOwnerID(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cduo *CustomDomainUpdateOne) SetNillableOwnerID(s *string) *CustomDomainUpdateOne {
-	if s != nil {
-		cduo.SetOwnerID(*s)
+func (_u *CustomDomainUpdateOne) SetNillableOwnerID(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return cduo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (cduo *CustomDomainUpdateOne) ClearOwnerID() *CustomDomainUpdateOne {
-	cduo.mutation.ClearOwnerID()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearOwnerID() *CustomDomainUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetDNSVerificationID sets the "dns_verification_id" field.
-func (cduo *CustomDomainUpdateOne) SetDNSVerificationID(s string) *CustomDomainUpdateOne {
-	cduo.mutation.SetDNSVerificationID(s)
-	return cduo
+func (_u *CustomDomainUpdateOne) SetDNSVerificationID(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetDNSVerificationID(v)
+	return _u
 }
 
 // SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
-func (cduo *CustomDomainUpdateOne) SetNillableDNSVerificationID(s *string) *CustomDomainUpdateOne {
-	if s != nil {
-		cduo.SetDNSVerificationID(*s)
+func (_u *CustomDomainUpdateOne) SetNillableDNSVerificationID(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetDNSVerificationID(*v)
 	}
-	return cduo
+	return _u
 }
 
 // ClearDNSVerificationID clears the value of the "dns_verification_id" field.
-func (cduo *CustomDomainUpdateOne) ClearDNSVerificationID() *CustomDomainUpdateOne {
-	cduo.mutation.ClearDNSVerificationID()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearDNSVerificationID() *CustomDomainUpdateOne {
+	_u.mutation.ClearDNSVerificationID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cduo *CustomDomainUpdateOne) SetOwner(o *Organization) *CustomDomainUpdateOne {
-	return cduo.SetOwnerID(o.ID)
+func (_u *CustomDomainUpdateOne) SetOwner(v *Organization) *CustomDomainUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
-func (cduo *CustomDomainUpdateOne) SetDNSVerification(d *DNSVerification) *CustomDomainUpdateOne {
-	return cduo.SetDNSVerificationID(d.ID)
+func (_u *CustomDomainUpdateOne) SetDNSVerification(v *DNSVerification) *CustomDomainUpdateOne {
+	return _u.SetDNSVerificationID(v.ID)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
-func (cduo *CustomDomainUpdateOne) Mutation() *CustomDomainMutation {
-	return cduo.mutation
+func (_u *CustomDomainUpdateOne) Mutation() *CustomDomainMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (cduo *CustomDomainUpdateOne) ClearOwner() *CustomDomainUpdateOne {
-	cduo.mutation.ClearOwner()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearOwner() *CustomDomainUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearDNSVerification clears the "dns_verification" edge to the DNSVerification entity.
-func (cduo *CustomDomainUpdateOne) ClearDNSVerification() *CustomDomainUpdateOne {
-	cduo.mutation.ClearDNSVerification()
-	return cduo
+func (_u *CustomDomainUpdateOne) ClearDNSVerification() *CustomDomainUpdateOne {
+	_u.mutation.ClearDNSVerification()
+	return _u
 }
 
 // Where appends a list predicates to the CustomDomainUpdate builder.
-func (cduo *CustomDomainUpdateOne) Where(ps ...predicate.CustomDomain) *CustomDomainUpdateOne {
-	cduo.mutation.Where(ps...)
-	return cduo
+func (_u *CustomDomainUpdateOne) Where(ps ...predicate.CustomDomain) *CustomDomainUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cduo *CustomDomainUpdateOne) Select(field string, fields ...string) *CustomDomainUpdateOne {
-	cduo.fields = append([]string{field}, fields...)
-	return cduo
+func (_u *CustomDomainUpdateOne) Select(field string, fields ...string) *CustomDomainUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated CustomDomain entity.
-func (cduo *CustomDomainUpdateOne) Save(ctx context.Context) (*CustomDomain, error) {
-	if err := cduo.defaults(); err != nil {
+func (_u *CustomDomainUpdateOne) Save(ctx context.Context) (*CustomDomain, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cduo.sqlSave, cduo.mutation, cduo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cduo *CustomDomainUpdateOne) SaveX(ctx context.Context) *CustomDomain {
-	node, err := cduo.Save(ctx)
+func (_u *CustomDomainUpdateOne) SaveX(ctx context.Context) *CustomDomain {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -574,55 +574,55 @@ func (cduo *CustomDomainUpdateOne) SaveX(ctx context.Context) *CustomDomain {
 }
 
 // Exec executes the query on the entity.
-func (cduo *CustomDomainUpdateOne) Exec(ctx context.Context) error {
-	_, err := cduo.Save(ctx)
+func (_u *CustomDomainUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cduo *CustomDomainUpdateOne) ExecX(ctx context.Context) {
-	if err := cduo.Exec(ctx); err != nil {
+func (_u *CustomDomainUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cduo *CustomDomainUpdateOne) defaults() error {
-	if _, ok := cduo.mutation.UpdatedAt(); !ok && !cduo.mutation.UpdatedAtCleared() {
+func (_u *CustomDomainUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if customdomain.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := customdomain.UpdateDefaultUpdatedAt()
-		cduo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cduo *CustomDomainUpdateOne) check() error {
-	if cduo.mutation.MappableDomainCleared() && len(cduo.mutation.MappableDomainIDs()) > 0 {
+func (_u *CustomDomainUpdateOne) check() error {
+	if _u.mutation.MappableDomainCleared() && len(_u.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (cduo *CustomDomainUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainUpdateOne {
-	cduo.modifiers = append(cduo.modifiers, modifiers...)
-	return cduo
+func (_u *CustomDomainUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDomain, err error) {
-	if err := cduo.check(); err != nil {
+func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDomain, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(customdomain.Table, customdomain.Columns, sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString))
-	id, ok := cduo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "CustomDomain.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cduo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, customdomain.FieldID)
 		for _, f := range fields {
@@ -634,55 +634,55 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 			}
 		}
 	}
-	if ps := cduo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if cduo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(customdomain.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := cduo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(customdomain.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if cduo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(customdomain.FieldUpdatedAt, field.TypeTime)
 	}
-	if cduo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(customdomain.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := cduo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(customdomain.FieldUpdatedBy, field.TypeString, value)
 	}
-	if cduo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customdomain.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cduo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomain.FieldDeletedAt, field.TypeTime, value)
 	}
-	if cduo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(customdomain.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cduo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(customdomain.FieldDeletedBy, field.TypeString, value)
 	}
-	if cduo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(customdomain.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cduo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(customdomain.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := cduo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, customdomain.FieldTags, value)
 		})
 	}
-	if cduo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(customdomain.FieldTags, field.TypeJSON)
 	}
-	if cduo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -693,10 +693,10 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cduo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cduo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -707,13 +707,13 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cduo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cduo.mutation.DNSVerificationCleared() {
+	if _u.mutation.DNSVerificationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -724,10 +724,10 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cduo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cduo.mutation.DNSVerificationIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DNSVerificationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -738,19 +738,19 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cduo.schemaConfig.CustomDomain
+		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = cduo.schemaConfig.CustomDomain
-	ctx = internal.NewSchemaConfigContext(ctx, cduo.schemaConfig)
-	_spec.AddModifiers(cduo.modifiers...)
-	_node = &CustomDomain{config: cduo.config}
+	_spec.Node.Schema = _u.schemaConfig.CustomDomain
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &CustomDomain{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cduo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{customdomain.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -758,6 +758,6 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 		}
 		return nil, err
 	}
-	cduo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

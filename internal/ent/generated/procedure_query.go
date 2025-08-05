@@ -65,44 +65,44 @@ type ProcedureQuery struct {
 }
 
 // Where adds a new predicate for the ProcedureQuery builder.
-func (pq *ProcedureQuery) Where(ps ...predicate.Procedure) *ProcedureQuery {
-	pq.predicates = append(pq.predicates, ps...)
-	return pq
+func (_q *ProcedureQuery) Where(ps ...predicate.Procedure) *ProcedureQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (pq *ProcedureQuery) Limit(limit int) *ProcedureQuery {
-	pq.ctx.Limit = &limit
-	return pq
+func (_q *ProcedureQuery) Limit(limit int) *ProcedureQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (pq *ProcedureQuery) Offset(offset int) *ProcedureQuery {
-	pq.ctx.Offset = &offset
-	return pq
+func (_q *ProcedureQuery) Offset(offset int) *ProcedureQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (pq *ProcedureQuery) Unique(unique bool) *ProcedureQuery {
-	pq.ctx.Unique = &unique
-	return pq
+func (_q *ProcedureQuery) Unique(unique bool) *ProcedureQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (pq *ProcedureQuery) Order(o ...procedure.OrderOption) *ProcedureQuery {
-	pq.order = append(pq.order, o...)
-	return pq
+func (_q *ProcedureQuery) Order(o ...procedure.OrderOption) *ProcedureQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (pq *ProcedureQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -111,23 +111,23 @@ func (pq *ProcedureQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, procedure.OwnerTable, procedure.OwnerColumn),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Procedure
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (pq *ProcedureQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -136,23 +136,23 @@ func (pq *ProcedureQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.BlockedGroupsTable, procedure.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEditors chains the current query on the "editors" edge.
-func (pq *ProcedureQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -161,23 +161,23 @@ func (pq *ProcedureQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.EditorsTable, procedure.EditorsPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ProcedureEditors
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryApprover chains the current query on the "approver" edge.
-func (pq *ProcedureQuery) QueryApprover() *GroupQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryApprover() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -186,23 +186,23 @@ func (pq *ProcedureQuery) QueryApprover() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ApproverTable, procedure.ApproverColumn),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Procedure
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryDelegate chains the current query on the "delegate" edge.
-func (pq *ProcedureQuery) QueryDelegate() *GroupQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryDelegate() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -211,23 +211,23 @@ func (pq *ProcedureQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.DelegateTable, procedure.DelegateColumn),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Procedure
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControls chains the current query on the "controls" edge.
-func (pq *ProcedureQuery) QueryControls() *ControlQuery {
-	query := (&ControlClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -236,23 +236,23 @@ func (pq *ProcedureQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ControlsTable, procedure.ControlsPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlProcedures
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubcontrols chains the current query on the "subcontrols" edge.
-func (pq *ProcedureQuery) QuerySubcontrols() *SubcontrolQuery {
-	query := (&SubcontrolClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -261,23 +261,23 @@ func (pq *ProcedureQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.SubcontrolsTable, procedure.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolProcedures
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
-func (pq *ProcedureQuery) QueryInternalPolicies() *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -286,23 +286,23 @@ func (pq *ProcedureQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.InternalPoliciesTable, procedure.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyProcedures
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryPrograms chains the current query on the "programs" edge.
-func (pq *ProcedureQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -311,23 +311,23 @@ func (pq *ProcedureQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramProcedures
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryNarratives chains the current query on the "narratives" edge.
-func (pq *ProcedureQuery) QueryNarratives() *NarrativeQuery {
-	query := (&NarrativeClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryNarratives() *NarrativeQuery {
+	query := (&NarrativeClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -336,23 +336,23 @@ func (pq *ProcedureQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.NarrativesTable, procedure.NarrativesPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
 		step.Edge.Schema = schemaConfig.ProcedureNarratives
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryRisks chains the current query on the "risks" edge.
-func (pq *ProcedureQuery) QueryRisks() *RiskQuery {
-	query := (&RiskClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -361,23 +361,23 @@ func (pq *ProcedureQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.RisksTable, procedure.RisksPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.ProcedureRisks
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTasks chains the current query on the "tasks" edge.
-func (pq *ProcedureQuery) QueryTasks() *TaskQuery {
-	query := (&TaskClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -386,10 +386,10 @@ func (pq *ProcedureQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.TasksTable, procedure.TasksPrimaryKey...),
 		)
-		schemaConfig := pq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ProcedureTasks
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -397,8 +397,8 @@ func (pq *ProcedureQuery) QueryTasks() *TaskQuery {
 
 // First returns the first Procedure entity from the query.
 // Returns a *NotFoundError when no Procedure was found.
-func (pq *ProcedureQuery) First(ctx context.Context) (*Procedure, error) {
-	nodes, err := pq.Limit(1).All(setContextOp(ctx, pq.ctx, ent.OpQueryFirst))
+func (_q *ProcedureQuery) First(ctx context.Context) (*Procedure, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -409,8 +409,8 @@ func (pq *ProcedureQuery) First(ctx context.Context) (*Procedure, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (pq *ProcedureQuery) FirstX(ctx context.Context) *Procedure {
-	node, err := pq.First(ctx)
+func (_q *ProcedureQuery) FirstX(ctx context.Context) *Procedure {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -419,9 +419,9 @@ func (pq *ProcedureQuery) FirstX(ctx context.Context) *Procedure {
 
 // FirstID returns the first Procedure ID from the query.
 // Returns a *NotFoundError when no Procedure ID was found.
-func (pq *ProcedureQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ProcedureQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = pq.Limit(1).IDs(setContextOp(ctx, pq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -432,8 +432,8 @@ func (pq *ProcedureQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (pq *ProcedureQuery) FirstIDX(ctx context.Context) string {
-	id, err := pq.FirstID(ctx)
+func (_q *ProcedureQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -443,8 +443,8 @@ func (pq *ProcedureQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Procedure entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Procedure entity is found.
 // Returns a *NotFoundError when no Procedure entities are found.
-func (pq *ProcedureQuery) Only(ctx context.Context) (*Procedure, error) {
-	nodes, err := pq.Limit(2).All(setContextOp(ctx, pq.ctx, ent.OpQueryOnly))
+func (_q *ProcedureQuery) Only(ctx context.Context) (*Procedure, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -459,8 +459,8 @@ func (pq *ProcedureQuery) Only(ctx context.Context) (*Procedure, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (pq *ProcedureQuery) OnlyX(ctx context.Context) *Procedure {
-	node, err := pq.Only(ctx)
+func (_q *ProcedureQuery) OnlyX(ctx context.Context) *Procedure {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -470,9 +470,9 @@ func (pq *ProcedureQuery) OnlyX(ctx context.Context) *Procedure {
 // OnlyID is like Only, but returns the only Procedure ID in the query.
 // Returns a *NotSingularError when more than one Procedure ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (pq *ProcedureQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ProcedureQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = pq.Limit(2).IDs(setContextOp(ctx, pq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -487,8 +487,8 @@ func (pq *ProcedureQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (pq *ProcedureQuery) OnlyIDX(ctx context.Context) string {
-	id, err := pq.OnlyID(ctx)
+func (_q *ProcedureQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -496,18 +496,18 @@ func (pq *ProcedureQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Procedures.
-func (pq *ProcedureQuery) All(ctx context.Context) ([]*Procedure, error) {
-	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryAll)
-	if err := pq.prepareQuery(ctx); err != nil {
+func (_q *ProcedureQuery) All(ctx context.Context) ([]*Procedure, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Procedure, *ProcedureQuery]()
-	return withInterceptors[[]*Procedure](ctx, pq, qr, pq.inters)
+	return withInterceptors[[]*Procedure](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (pq *ProcedureQuery) AllX(ctx context.Context) []*Procedure {
-	nodes, err := pq.All(ctx)
+func (_q *ProcedureQuery) AllX(ctx context.Context) []*Procedure {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -515,20 +515,20 @@ func (pq *ProcedureQuery) AllX(ctx context.Context) []*Procedure {
 }
 
 // IDs executes the query and returns a list of Procedure IDs.
-func (pq *ProcedureQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if pq.ctx.Unique == nil && pq.path != nil {
-		pq.Unique(true)
+func (_q *ProcedureQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryIDs)
-	if err = pq.Select(procedure.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(procedure.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (pq *ProcedureQuery) IDsX(ctx context.Context) []string {
-	ids, err := pq.IDs(ctx)
+func (_q *ProcedureQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -536,17 +536,17 @@ func (pq *ProcedureQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (pq *ProcedureQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryCount)
-	if err := pq.prepareQuery(ctx); err != nil {
+func (_q *ProcedureQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, pq, querierCount[*ProcedureQuery](), pq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ProcedureQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (pq *ProcedureQuery) CountX(ctx context.Context) int {
-	count, err := pq.Count(ctx)
+func (_q *ProcedureQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -554,9 +554,9 @@ func (pq *ProcedureQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (pq *ProcedureQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryExist)
-	switch _, err := pq.FirstID(ctx); {
+func (_q *ProcedureQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -567,8 +567,8 @@ func (pq *ProcedureQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (pq *ProcedureQuery) ExistX(ctx context.Context) bool {
-	exist, err := pq.Exist(ctx)
+func (_q *ProcedureQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -577,165 +577,165 @@ func (pq *ProcedureQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ProcedureQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (pq *ProcedureQuery) Clone() *ProcedureQuery {
-	if pq == nil {
+func (_q *ProcedureQuery) Clone() *ProcedureQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ProcedureQuery{
-		config:               pq.config,
-		ctx:                  pq.ctx.Clone(),
-		order:                append([]procedure.OrderOption{}, pq.order...),
-		inters:               append([]Interceptor{}, pq.inters...),
-		predicates:           append([]predicate.Procedure{}, pq.predicates...),
-		withOwner:            pq.withOwner.Clone(),
-		withBlockedGroups:    pq.withBlockedGroups.Clone(),
-		withEditors:          pq.withEditors.Clone(),
-		withApprover:         pq.withApprover.Clone(),
-		withDelegate:         pq.withDelegate.Clone(),
-		withControls:         pq.withControls.Clone(),
-		withSubcontrols:      pq.withSubcontrols.Clone(),
-		withInternalPolicies: pq.withInternalPolicies.Clone(),
-		withPrograms:         pq.withPrograms.Clone(),
-		withNarratives:       pq.withNarratives.Clone(),
-		withRisks:            pq.withRisks.Clone(),
-		withTasks:            pq.withTasks.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]procedure.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.Procedure{}, _q.predicates...),
+		withOwner:            _q.withOwner.Clone(),
+		withBlockedGroups:    _q.withBlockedGroups.Clone(),
+		withEditors:          _q.withEditors.Clone(),
+		withApprover:         _q.withApprover.Clone(),
+		withDelegate:         _q.withDelegate.Clone(),
+		withControls:         _q.withControls.Clone(),
+		withSubcontrols:      _q.withSubcontrols.Clone(),
+		withInternalPolicies: _q.withInternalPolicies.Clone(),
+		withPrograms:         _q.withPrograms.Clone(),
+		withNarratives:       _q.withNarratives.Clone(),
+		withRisks:            _q.withRisks.Clone(),
+		withTasks:            _q.withTasks.Clone(),
 		// clone intermediate query.
-		sql:       pq.sql.Clone(),
-		path:      pq.path,
-		modifiers: append([]func(*sql.Selector){}, pq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithOwner(opts ...func(*OrganizationQuery)) *ProcedureQuery {
-	query := (&OrganizationClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithOwner(opts ...func(*OrganizationQuery)) *ProcedureQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withOwner = query
-	return pq
+	_q.withOwner = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
 // the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withBlockedGroups = query
-	return pq
+	_q.withBlockedGroups = query
+	return _q
 }
 
 // WithEditors tells the query-builder to eager-load the nodes that are connected to
 // the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithEditors(opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithEditors(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withEditors = query
-	return pq
+	_q.withEditors = query
+	return _q
 }
 
 // WithApprover tells the query-builder to eager-load the nodes that are connected to
 // the "approver" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithApprover(opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithApprover(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withApprover = query
-	return pq
+	_q.withApprover = query
+	return _q
 }
 
 // WithDelegate tells the query-builder to eager-load the nodes that are connected to
 // the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithDelegate(opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithDelegate(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withDelegate = query
-	return pq
+	_q.withDelegate = query
+	return _q
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithControls(opts ...func(*ControlQuery)) *ProcedureQuery {
-	query := (&ControlClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithControls(opts ...func(*ControlQuery)) *ProcedureQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withControls = query
-	return pq
+	_q.withControls = query
+	return _q
 }
 
 // WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ProcedureQuery {
-	query := (&SubcontrolClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ProcedureQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withSubcontrols = query
-	return pq
+	_q.withSubcontrols = query
+	return _q
 }
 
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
-	query := (&InternalPolicyClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withInternalPolicies = query
-	return pq
+	_q.withInternalPolicies = query
+	return _q
 }
 
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithPrograms(opts ...func(*ProgramQuery)) *ProcedureQuery {
-	query := (&ProgramClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithPrograms(opts ...func(*ProgramQuery)) *ProcedureQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withPrograms = query
-	return pq
+	_q.withPrograms = query
+	return _q
 }
 
 // WithNarratives tells the query-builder to eager-load the nodes that are connected to
 // the "narratives" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ProcedureQuery {
-	query := (&NarrativeClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ProcedureQuery {
+	query := (&NarrativeClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withNarratives = query
-	return pq
+	_q.withNarratives = query
+	return _q
 }
 
 // WithRisks tells the query-builder to eager-load the nodes that are connected to
 // the "risks" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithRisks(opts ...func(*RiskQuery)) *ProcedureQuery {
-	query := (&RiskClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithRisks(opts ...func(*RiskQuery)) *ProcedureQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withRisks = query
-	return pq
+	_q.withRisks = query
+	return _q
 }
 
 // WithTasks tells the query-builder to eager-load the nodes that are connected to
 // the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
-	query := (&TaskClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withTasks = query
-	return pq
+	_q.withTasks = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -752,10 +752,10 @@ func (pq *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
 //		GroupBy(procedure.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (pq *ProcedureQuery) GroupBy(field string, fields ...string) *ProcedureGroupBy {
-	pq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ProcedureGroupBy{build: pq}
-	grbuild.flds = &pq.ctx.Fields
+func (_q *ProcedureQuery) GroupBy(field string, fields ...string) *ProcedureGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ProcedureGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = procedure.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -773,69 +773,69 @@ func (pq *ProcedureQuery) GroupBy(field string, fields ...string) *ProcedureGrou
 //	client.Procedure.Query().
 //		Select(procedure.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (pq *ProcedureQuery) Select(fields ...string) *ProcedureSelect {
-	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
-	sbuild := &ProcedureSelect{ProcedureQuery: pq}
+func (_q *ProcedureQuery) Select(fields ...string) *ProcedureSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ProcedureSelect{ProcedureQuery: _q}
 	sbuild.label = procedure.Label
-	sbuild.flds, sbuild.scan = &pq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ProcedureSelect configured with the given aggregations.
-func (pq *ProcedureQuery) Aggregate(fns ...AggregateFunc) *ProcedureSelect {
-	return pq.Select().Aggregate(fns...)
+func (_q *ProcedureQuery) Aggregate(fns ...AggregateFunc) *ProcedureSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (pq *ProcedureQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range pq.inters {
+func (_q *ProcedureQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, pq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range pq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !procedure.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if pq.path != nil {
-		prev, err := pq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		pq.sql = prev
+		_q.sql = prev
 	}
 	if procedure.Policy == nil {
 		return errors.New("generated: uninitialized procedure.Policy (forgotten import generated/runtime?)")
 	}
-	if err := procedure.Policy.EvalQuery(ctx, pq); err != nil {
+	if err := procedure.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Procedure, error) {
+func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Procedure, error) {
 	var (
 		nodes       = []*Procedure{}
-		withFKs     = pq.withFKs
-		_spec       = pq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [12]bool{
-			pq.withOwner != nil,
-			pq.withBlockedGroups != nil,
-			pq.withEditors != nil,
-			pq.withApprover != nil,
-			pq.withDelegate != nil,
-			pq.withControls != nil,
-			pq.withSubcontrols != nil,
-			pq.withInternalPolicies != nil,
-			pq.withPrograms != nil,
-			pq.withNarratives != nil,
-			pq.withRisks != nil,
-			pq.withTasks != nil,
+			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withApprover != nil,
+			_q.withDelegate != nil,
+			_q.withControls != nil,
+			_q.withSubcontrols != nil,
+			_q.withInternalPolicies != nil,
+			_q.withPrograms != nil,
+			_q.withNarratives != nil,
+			_q.withRisks != nil,
+			_q.withTasks != nil,
 		}
 	)
 	if withFKs {
@@ -845,178 +845,178 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		return (*Procedure).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Procedure{config: pq.config}
+		node := &Procedure{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = pq.schemaConfig.Procedure
-	ctx = internal.NewSchemaConfigContext(ctx, pq.schemaConfig)
-	if len(pq.modifiers) > 0 {
-		_spec.Modifiers = pq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Procedure
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, pq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withOwner; query != nil {
-		if err := pq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Procedure, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withBlockedGroups; query != nil {
-		if err := pq.loadBlockedGroups(ctx, query, nodes,
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.BlockedGroups = []*Group{} },
 			func(n *Procedure, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withEditors; query != nil {
-		if err := pq.loadEditors(ctx, query, nodes,
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Editors = []*Group{} },
 			func(n *Procedure, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withApprover; query != nil {
-		if err := pq.loadApprover(ctx, query, nodes, nil,
+	if query := _q.withApprover; query != nil {
+		if err := _q.loadApprover(ctx, query, nodes, nil,
 			func(n *Procedure, e *Group) { n.Edges.Approver = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withDelegate; query != nil {
-		if err := pq.loadDelegate(ctx, query, nodes, nil,
+	if query := _q.withDelegate; query != nil {
+		if err := _q.loadDelegate(ctx, query, nodes, nil,
 			func(n *Procedure, e *Group) { n.Edges.Delegate = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withControls; query != nil {
-		if err := pq.loadControls(ctx, query, nodes,
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Controls = []*Control{} },
 			func(n *Procedure, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withSubcontrols; query != nil {
-		if err := pq.loadSubcontrols(ctx, query, nodes,
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *Procedure, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withInternalPolicies; query != nil {
-		if err := pq.loadInternalPolicies(ctx, query, nodes,
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.InternalPolicies = []*InternalPolicy{} },
 			func(n *Procedure, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withPrograms; query != nil {
-		if err := pq.loadPrograms(ctx, query, nodes,
+	if query := _q.withPrograms; query != nil {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Programs = []*Program{} },
 			func(n *Procedure, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withNarratives; query != nil {
-		if err := pq.loadNarratives(ctx, query, nodes,
+	if query := _q.withNarratives; query != nil {
+		if err := _q.loadNarratives(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Narratives = []*Narrative{} },
 			func(n *Procedure, e *Narrative) { n.Edges.Narratives = append(n.Edges.Narratives, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withRisks; query != nil {
-		if err := pq.loadRisks(ctx, query, nodes,
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Risks = []*Risk{} },
 			func(n *Procedure, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withTasks; query != nil {
-		if err := pq.loadTasks(ctx, query, nodes,
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Tasks = []*Task{} },
 			func(n *Procedure, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedBlockedGroups {
-		if err := pq.loadBlockedGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedBlockedGroups(name) },
 			func(n *Procedure, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedEditors {
-		if err := pq.loadEditors(ctx, query, nodes,
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedEditors(name) },
 			func(n *Procedure, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedControls {
-		if err := pq.loadControls(ctx, query, nodes,
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedControls(name) },
 			func(n *Procedure, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedSubcontrols {
-		if err := pq.loadSubcontrols(ctx, query, nodes,
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedSubcontrols(name) },
 			func(n *Procedure, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedInternalPolicies {
-		if err := pq.loadInternalPolicies(ctx, query, nodes,
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedInternalPolicies(name) },
 			func(n *Procedure, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedPrograms {
-		if err := pq.loadPrograms(ctx, query, nodes,
+	for name, query := range _q.withNamedPrograms {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedPrograms(name) },
 			func(n *Procedure, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedNarratives {
-		if err := pq.loadNarratives(ctx, query, nodes,
+	for name, query := range _q.withNamedNarratives {
+		if err := _q.loadNarratives(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedNarratives(name) },
 			func(n *Procedure, e *Narrative) { n.appendNamedNarratives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedRisks {
-		if err := pq.loadRisks(ctx, query, nodes,
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedRisks(name) },
 			func(n *Procedure, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedTasks {
-		if err := pq.loadTasks(ctx, query, nodes,
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedTasks(name) },
 			func(n *Procedure, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range pq.loadTotal {
-		if err := pq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (pq *ProcedureQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Organization)) error {
+func (_q *ProcedureQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
@@ -1045,7 +1045,7 @@ func (pq *ProcedureQuery) loadOwner(ctx context.Context, query *OrganizationQuer
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+func (_q *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1058,7 +1058,7 @@ func (pq *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.BlockedGroupsTable)
-		joinT.Schema(pq.schemaConfig.ProcedureBlockedGroups)
+		joinT.Schema(_q.schemaConfig.ProcedureBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1107,7 +1107,7 @@ func (pq *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQue
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+func (_q *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1120,7 +1120,7 @@ func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.EditorsTable)
-		joinT.Schema(pq.schemaConfig.ProcedureEditors)
+		joinT.Schema(_q.schemaConfig.ProcedureEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1169,7 +1169,7 @@ func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadApprover(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+func (_q *ProcedureQuery) loadApprover(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
@@ -1198,7 +1198,7 @@ func (pq *ProcedureQuery) loadApprover(ctx context.Context, query *GroupQuery, n
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+func (_q *ProcedureQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
 	for i := range nodes {
@@ -1227,7 +1227,7 @@ func (pq *ProcedureQuery) loadDelegate(ctx context.Context, query *GroupQuery, n
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Control)) error {
+func (_q *ProcedureQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1240,7 +1240,7 @@ func (pq *ProcedureQuery) loadControls(ctx context.Context, query *ControlQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.ControlsTable)
-		joinT.Schema(pq.schemaConfig.ControlProcedures)
+		joinT.Schema(_q.schemaConfig.ControlProcedures)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(procedure.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1289,7 +1289,7 @@ func (pq *ProcedureQuery) loadControls(ctx context.Context, query *ControlQuery,
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Subcontrol)) error {
+func (_q *ProcedureQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Subcontrol)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1302,7 +1302,7 @@ func (pq *ProcedureQuery) loadSubcontrols(ctx context.Context, query *Subcontrol
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.SubcontrolsTable)
-		joinT.Schema(pq.schemaConfig.SubcontrolProcedures)
+		joinT.Schema(_q.schemaConfig.SubcontrolProcedures)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(procedure.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1351,7 +1351,7 @@ func (pq *ProcedureQuery) loadSubcontrols(ctx context.Context, query *Subcontrol
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *InternalPolicy)) error {
+func (_q *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1364,7 +1364,7 @@ func (pq *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.InternalPoliciesTable)
-		joinT.Schema(pq.schemaConfig.InternalPolicyProcedures)
+		joinT.Schema(_q.schemaConfig.InternalPolicyProcedures)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(procedure.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1413,7 +1413,7 @@ func (pq *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Program)) error {
+func (_q *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1426,7 +1426,7 @@ func (pq *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.ProgramsTable)
-		joinT.Schema(pq.schemaConfig.ProgramProcedures)
+		joinT.Schema(_q.schemaConfig.ProgramProcedures)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(procedure.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1475,7 +1475,7 @@ func (pq *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Narrative)) error {
+func (_q *ProcedureQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Narrative)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1488,7 +1488,7 @@ func (pq *ProcedureQuery) loadNarratives(ctx context.Context, query *NarrativeQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.NarrativesTable)
-		joinT.Schema(pq.schemaConfig.ProcedureNarratives)
+		joinT.Schema(_q.schemaConfig.ProcedureNarratives)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(procedure.NarrativesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.NarrativesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1537,7 +1537,7 @@ func (pq *ProcedureQuery) loadNarratives(ctx context.Context, query *NarrativeQu
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Risk)) error {
+func (_q *ProcedureQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Risk)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1550,7 +1550,7 @@ func (pq *ProcedureQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.RisksTable)
-		joinT.Schema(pq.schemaConfig.ProcedureRisks)
+		joinT.Schema(_q.schemaConfig.ProcedureRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(procedure.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1599,7 +1599,7 @@ func (pq *ProcedureQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Task)) error {
+func (_q *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Task)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Procedure)
 	nids := make(map[string]map[*Procedure]struct{})
@@ -1612,7 +1612,7 @@ func (pq *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.TasksTable)
-		joinT.Schema(pq.schemaConfig.ProcedureTasks)
+		joinT.Schema(_q.schemaConfig.ProcedureTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(procedure.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1662,29 +1662,29 @@ func (pq *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes
 	return nil
 }
 
-func (pq *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := pq.querySpec()
-	_spec.Node.Schema = pq.schemaConfig.Procedure
-	ctx = internal.NewSchemaConfigContext(ctx, pq.schemaConfig)
-	if len(pq.modifiers) > 0 {
-		_spec.Modifiers = pq.modifiers
+func (_q *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Procedure
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = pq.ctx.Fields
-	if len(pq.ctx.Fields) > 0 {
-		_spec.Unique = pq.ctx.Unique != nil && *pq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, pq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (pq *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(procedure.Table, procedure.Columns, sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString))
-	_spec.From = pq.sql
-	if unique := pq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if pq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := pq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, procedure.FieldID)
 		for i := range fields {
@@ -1692,30 +1692,30 @@ func (pq *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldOwnerID)
 		}
-		if pq.withApprover != nil {
+		if _q.withApprover != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldApproverID)
 		}
-		if pq.withDelegate != nil {
+		if _q.withDelegate != nil {
 			_spec.Node.AddColumnOnce(procedure.FieldDelegateID)
 		}
 	}
-	if ps := pq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := pq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := pq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := pq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -1725,174 +1725,174 @@ func (pq *ProcedureQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (pq *ProcedureQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(pq.driver.Dialect())
+func (_q *ProcedureQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(procedure.Table)
-	columns := pq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = procedure.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if pq.sql != nil {
-		selector = pq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if pq.ctx.Unique != nil && *pq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(pq.schemaConfig.Procedure)
-	ctx = internal.NewSchemaConfigContext(ctx, pq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Procedure)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range pq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range pq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range pq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := pq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := pq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (pq *ProcedureQuery) Modify(modifiers ...func(s *sql.Selector)) *ProcedureSelect {
-	pq.modifiers = append(pq.modifiers, modifiers...)
-	return pq.Select()
+func (_q *ProcedureQuery) Modify(modifiers ...func(s *sql.Selector)) *ProcedureSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedBlockedGroups == nil {
-		pq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
 	}
-	pq.withNamedBlockedGroups[name] = query
-	return pq
+	_q.withNamedBlockedGroups[name] = query
+	return _q
 }
 
 // WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedEditors == nil {
-		pq.withNamedEditors = make(map[string]*GroupQuery)
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
-	pq.withNamedEditors[name] = query
-	return pq
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ProcedureQuery {
-	query := (&ControlClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ProcedureQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedControls == nil {
-		pq.withNamedControls = make(map[string]*ControlQuery)
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
-	pq.withNamedControls[name] = query
-	return pq
+	_q.withNamedControls[name] = query
+	return _q
 }
 
 // WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ProcedureQuery {
-	query := (&SubcontrolClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ProcedureQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedSubcontrols == nil {
-		pq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	pq.withNamedSubcontrols[name] = query
-	return pq
+	_q.withNamedSubcontrols[name] = query
+	return _q
 }
 
 // WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
-	query := (&InternalPolicyClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ProcedureQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedInternalPolicies == nil {
-		pq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	pq.withNamedInternalPolicies[name] = query
-	return pq
+	_q.withNamedInternalPolicies[name] = query
+	return _q
 }
 
 // WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ProcedureQuery {
-	query := (&ProgramClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ProcedureQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedPrograms == nil {
-		pq.withNamedPrograms = make(map[string]*ProgramQuery)
+	if _q.withNamedPrograms == nil {
+		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	pq.withNamedPrograms[name] = query
-	return pq
+	_q.withNamedPrograms[name] = query
+	return _q
 }
 
 // WithNamedNarratives tells the query-builder to eager-load the nodes that are connected to the "narratives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedNarratives(name string, opts ...func(*NarrativeQuery)) *ProcedureQuery {
-	query := (&NarrativeClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedNarratives(name string, opts ...func(*NarrativeQuery)) *ProcedureQuery {
+	query := (&NarrativeClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedNarratives == nil {
-		pq.withNamedNarratives = make(map[string]*NarrativeQuery)
+	if _q.withNamedNarratives == nil {
+		_q.withNamedNarratives = make(map[string]*NarrativeQuery)
 	}
-	pq.withNamedNarratives[name] = query
-	return pq
+	_q.withNamedNarratives[name] = query
+	return _q
 }
 
 // WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *ProcedureQuery {
-	query := (&RiskClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *ProcedureQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedRisks == nil {
-		pq.withNamedRisks = make(map[string]*RiskQuery)
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
 	}
-	pq.withNamedRisks[name] = query
-	return pq
+	_q.withNamedRisks[name] = query
+	return _q
 }
 
 // WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ProcedureQuery {
-	query := (&TaskClient{config: pq.config}).Query()
+func (_q *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ProcedureQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedTasks == nil {
-		pq.withNamedTasks = make(map[string]*TaskQuery)
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
-	pq.withNamedTasks[name] = query
-	return pq
+	_q.withNamedTasks[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -1921,41 +1921,41 @@ type ProcedureGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (pgb *ProcedureGroupBy) Aggregate(fns ...AggregateFunc) *ProcedureGroupBy {
-	pgb.fns = append(pgb.fns, fns...)
-	return pgb
+func (_g *ProcedureGroupBy) Aggregate(fns ...AggregateFunc) *ProcedureGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (pgb *ProcedureGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, pgb.build.ctx, ent.OpQueryGroupBy)
-	if err := pgb.build.prepareQuery(ctx); err != nil {
+func (_g *ProcedureGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ProcedureQuery, *ProcedureGroupBy](ctx, pgb.build, pgb, pgb.build.inters, v)
+	return scanWithInterceptors[*ProcedureQuery, *ProcedureGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (pgb *ProcedureGroupBy) sqlScan(ctx context.Context, root *ProcedureQuery, v any) error {
+func (_g *ProcedureGroupBy) sqlScan(ctx context.Context, root *ProcedureQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(pgb.fns))
-	for _, fn := range pgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*pgb.flds)+len(pgb.fns))
-		for _, f := range *pgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*pgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := pgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1969,27 +1969,27 @@ type ProcedureSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ps *ProcedureSelect) Aggregate(fns ...AggregateFunc) *ProcedureSelect {
-	ps.fns = append(ps.fns, fns...)
-	return ps
+func (_s *ProcedureSelect) Aggregate(fns ...AggregateFunc) *ProcedureSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ps *ProcedureSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ps.ctx, ent.OpQuerySelect)
-	if err := ps.prepareQuery(ctx); err != nil {
+func (_s *ProcedureSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ProcedureQuery, *ProcedureSelect](ctx, ps.ProcedureQuery, ps, ps.inters, v)
+	return scanWithInterceptors[*ProcedureQuery, *ProcedureSelect](ctx, _s.ProcedureQuery, _s, _s.inters, v)
 }
 
-func (ps *ProcedureSelect) sqlScan(ctx context.Context, root *ProcedureQuery, v any) error {
+func (_s *ProcedureSelect) sqlScan(ctx context.Context, root *ProcedureQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ps.fns))
-	for _, fn := range ps.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ps.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -1997,7 +1997,7 @@ func (ps *ProcedureSelect) sqlScan(ctx context.Context, root *ProcedureQuery, v 
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ps.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2005,7 +2005,7 @@ func (ps *ProcedureSelect) sqlScan(ctx context.Context, root *ProcedureQuery, v 
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ps *ProcedureSelect) Modify(modifiers ...func(s *sql.Selector)) *ProcedureSelect {
-	ps.modifiers = append(ps.modifiers, modifiers...)
-	return ps
+func (_s *ProcedureSelect) Modify(modifiers ...func(s *sql.Selector)) *ProcedureSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -43,44 +43,44 @@ type SubprocessorQuery struct {
 }
 
 // Where adds a new predicate for the SubprocessorQuery builder.
-func (sq *SubprocessorQuery) Where(ps ...predicate.Subprocessor) *SubprocessorQuery {
-	sq.predicates = append(sq.predicates, ps...)
-	return sq
+func (_q *SubprocessorQuery) Where(ps ...predicate.Subprocessor) *SubprocessorQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sq *SubprocessorQuery) Limit(limit int) *SubprocessorQuery {
-	sq.ctx.Limit = &limit
-	return sq
+func (_q *SubprocessorQuery) Limit(limit int) *SubprocessorQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sq *SubprocessorQuery) Offset(offset int) *SubprocessorQuery {
-	sq.ctx.Offset = &offset
-	return sq
+func (_q *SubprocessorQuery) Offset(offset int) *SubprocessorQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sq *SubprocessorQuery) Unique(unique bool) *SubprocessorQuery {
-	sq.ctx.Unique = &unique
-	return sq
+func (_q *SubprocessorQuery) Unique(unique bool) *SubprocessorQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sq *SubprocessorQuery) Order(o ...subprocessor.OrderOption) *SubprocessorQuery {
-	sq.order = append(sq.order, o...)
-	return sq
+func (_q *SubprocessorQuery) Order(o ...subprocessor.OrderOption) *SubprocessorQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (sq *SubprocessorQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -89,23 +89,23 @@ func (sq *SubprocessorQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subprocessor.OwnerTable, subprocessor.OwnerColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Subprocessor
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (sq *SubprocessorQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -114,23 +114,23 @@ func (sq *SubprocessorQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subprocessor.FilesTable, subprocessor.FilesPrimaryKey...),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.SubprocessorFiles
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryLogoFile chains the current query on the "logo_file" edge.
-func (sq *SubprocessorQuery) QueryLogoFile() *FileQuery {
-	query := (&FileClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) QueryLogoFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -139,23 +139,23 @@ func (sq *SubprocessorQuery) QueryLogoFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subprocessor.LogoFileTable, subprocessor.LogoFileColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Subprocessor
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTrustCenterSubprocessors chains the current query on the "trust_center_subprocessors" edge.
-func (sq *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
-	query := (&TrustCenterSubprocessorClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -164,10 +164,10 @@ func (sq *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubproc
 			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subprocessor.TrustCenterSubprocessorsTable, subprocessor.TrustCenterSubprocessorsColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterSubprocessor
 		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -175,8 +175,8 @@ func (sq *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubproc
 
 // First returns the first Subprocessor entity from the query.
 // Returns a *NotFoundError when no Subprocessor was found.
-func (sq *SubprocessorQuery) First(ctx context.Context) (*Subprocessor, error) {
-	nodes, err := sq.Limit(1).All(setContextOp(ctx, sq.ctx, ent.OpQueryFirst))
+func (_q *SubprocessorQuery) First(ctx context.Context) (*Subprocessor, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -187,8 +187,8 @@ func (sq *SubprocessorQuery) First(ctx context.Context) (*Subprocessor, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sq *SubprocessorQuery) FirstX(ctx context.Context) *Subprocessor {
-	node, err := sq.First(ctx)
+func (_q *SubprocessorQuery) FirstX(ctx context.Context) *Subprocessor {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -197,9 +197,9 @@ func (sq *SubprocessorQuery) FirstX(ctx context.Context) *Subprocessor {
 
 // FirstID returns the first Subprocessor ID from the query.
 // Returns a *NotFoundError when no Subprocessor ID was found.
-func (sq *SubprocessorQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *SubprocessorQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -210,8 +210,8 @@ func (sq *SubprocessorQuery) FirstID(ctx context.Context) (id string, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sq *SubprocessorQuery) FirstIDX(ctx context.Context) string {
-	id, err := sq.FirstID(ctx)
+func (_q *SubprocessorQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -221,8 +221,8 @@ func (sq *SubprocessorQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Subprocessor entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Subprocessor entity is found.
 // Returns a *NotFoundError when no Subprocessor entities are found.
-func (sq *SubprocessorQuery) Only(ctx context.Context) (*Subprocessor, error) {
-	nodes, err := sq.Limit(2).All(setContextOp(ctx, sq.ctx, ent.OpQueryOnly))
+func (_q *SubprocessorQuery) Only(ctx context.Context) (*Subprocessor, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -237,8 +237,8 @@ func (sq *SubprocessorQuery) Only(ctx context.Context) (*Subprocessor, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sq *SubprocessorQuery) OnlyX(ctx context.Context) *Subprocessor {
-	node, err := sq.Only(ctx)
+func (_q *SubprocessorQuery) OnlyX(ctx context.Context) *Subprocessor {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,9 +248,9 @@ func (sq *SubprocessorQuery) OnlyX(ctx context.Context) *Subprocessor {
 // OnlyID is like Only, but returns the only Subprocessor ID in the query.
 // Returns a *NotSingularError when more than one Subprocessor ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sq *SubprocessorQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *SubprocessorQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -265,8 +265,8 @@ func (sq *SubprocessorQuery) OnlyID(ctx context.Context) (id string, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sq *SubprocessorQuery) OnlyIDX(ctx context.Context) string {
-	id, err := sq.OnlyID(ctx)
+func (_q *SubprocessorQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -274,18 +274,18 @@ func (sq *SubprocessorQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Subprocessors.
-func (sq *SubprocessorQuery) All(ctx context.Context) ([]*Subprocessor, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryAll)
-	if err := sq.prepareQuery(ctx); err != nil {
+func (_q *SubprocessorQuery) All(ctx context.Context) ([]*Subprocessor, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Subprocessor, *SubprocessorQuery]()
-	return withInterceptors[[]*Subprocessor](ctx, sq, qr, sq.inters)
+	return withInterceptors[[]*Subprocessor](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sq *SubprocessorQuery) AllX(ctx context.Context) []*Subprocessor {
-	nodes, err := sq.All(ctx)
+func (_q *SubprocessorQuery) AllX(ctx context.Context) []*Subprocessor {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -293,20 +293,20 @@ func (sq *SubprocessorQuery) AllX(ctx context.Context) []*Subprocessor {
 }
 
 // IDs executes the query and returns a list of Subprocessor IDs.
-func (sq *SubprocessorQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if sq.ctx.Unique == nil && sq.path != nil {
-		sq.Unique(true)
+func (_q *SubprocessorQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
-	if err = sq.Select(subprocessor.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(subprocessor.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sq *SubprocessorQuery) IDsX(ctx context.Context) []string {
-	ids, err := sq.IDs(ctx)
+func (_q *SubprocessorQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,17 +314,17 @@ func (sq *SubprocessorQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (sq *SubprocessorQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryCount)
-	if err := sq.prepareQuery(ctx); err != nil {
+func (_q *SubprocessorQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sq, querierCount[*SubprocessorQuery](), sq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*SubprocessorQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sq *SubprocessorQuery) CountX(ctx context.Context) int {
-	count, err := sq.Count(ctx)
+func (_q *SubprocessorQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -332,9 +332,9 @@ func (sq *SubprocessorQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sq *SubprocessorQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryExist)
-	switch _, err := sq.FirstID(ctx); {
+func (_q *SubprocessorQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -345,8 +345,8 @@ func (sq *SubprocessorQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sq *SubprocessorQuery) ExistX(ctx context.Context) bool {
-	exist, err := sq.Exist(ctx)
+func (_q *SubprocessorQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -355,69 +355,69 @@ func (sq *SubprocessorQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the SubprocessorQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sq *SubprocessorQuery) Clone() *SubprocessorQuery {
-	if sq == nil {
+func (_q *SubprocessorQuery) Clone() *SubprocessorQuery {
+	if _q == nil {
 		return nil
 	}
 	return &SubprocessorQuery{
-		config:                       sq.config,
-		ctx:                          sq.ctx.Clone(),
-		order:                        append([]subprocessor.OrderOption{}, sq.order...),
-		inters:                       append([]Interceptor{}, sq.inters...),
-		predicates:                   append([]predicate.Subprocessor{}, sq.predicates...),
-		withOwner:                    sq.withOwner.Clone(),
-		withFiles:                    sq.withFiles.Clone(),
-		withLogoFile:                 sq.withLogoFile.Clone(),
-		withTrustCenterSubprocessors: sq.withTrustCenterSubprocessors.Clone(),
+		config:                       _q.config,
+		ctx:                          _q.ctx.Clone(),
+		order:                        append([]subprocessor.OrderOption{}, _q.order...),
+		inters:                       append([]Interceptor{}, _q.inters...),
+		predicates:                   append([]predicate.Subprocessor{}, _q.predicates...),
+		withOwner:                    _q.withOwner.Clone(),
+		withFiles:                    _q.withFiles.Clone(),
+		withLogoFile:                 _q.withLogoFile.Clone(),
+		withTrustCenterSubprocessors: _q.withTrustCenterSubprocessors.Clone(),
 		// clone intermediate query.
-		sql:       sq.sql.Clone(),
-		path:      sq.path,
-		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubprocessorQuery) WithOwner(opts ...func(*OrganizationQuery)) *SubprocessorQuery {
-	query := (&OrganizationClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) WithOwner(opts ...func(*OrganizationQuery)) *SubprocessorQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withOwner = query
-	return sq
+	_q.withOwner = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubprocessorQuery) WithFiles(opts ...func(*FileQuery)) *SubprocessorQuery {
-	query := (&FileClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) WithFiles(opts ...func(*FileQuery)) *SubprocessorQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withFiles = query
-	return sq
+	_q.withFiles = query
+	return _q
 }
 
 // WithLogoFile tells the query-builder to eager-load the nodes that are connected to
 // the "logo_file" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubprocessorQuery) WithLogoFile(opts ...func(*FileQuery)) *SubprocessorQuery {
-	query := (&FileClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) WithLogoFile(opts ...func(*FileQuery)) *SubprocessorQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withLogoFile = query
-	return sq
+	_q.withLogoFile = query
+	return _q
 }
 
 // WithTrustCenterSubprocessors tells the query-builder to eager-load the nodes that are connected to
 // the "trust_center_subprocessors" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubprocessorQuery) WithTrustCenterSubprocessors(opts ...func(*TrustCenterSubprocessorQuery)) *SubprocessorQuery {
-	query := (&TrustCenterSubprocessorClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) WithTrustCenterSubprocessors(opts ...func(*TrustCenterSubprocessorQuery)) *SubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withTrustCenterSubprocessors = query
-	return sq
+	_q.withTrustCenterSubprocessors = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -434,10 +434,10 @@ func (sq *SubprocessorQuery) WithTrustCenterSubprocessors(opts ...func(*TrustCen
 //		GroupBy(subprocessor.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (sq *SubprocessorQuery) GroupBy(field string, fields ...string) *SubprocessorGroupBy {
-	sq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &SubprocessorGroupBy{build: sq}
-	grbuild.flds = &sq.ctx.Fields
+func (_q *SubprocessorQuery) GroupBy(field string, fields ...string) *SubprocessorGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &SubprocessorGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = subprocessor.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -455,106 +455,106 @@ func (sq *SubprocessorQuery) GroupBy(field string, fields ...string) *Subprocess
 //	client.Subprocessor.Query().
 //		Select(subprocessor.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (sq *SubprocessorQuery) Select(fields ...string) *SubprocessorSelect {
-	sq.ctx.Fields = append(sq.ctx.Fields, fields...)
-	sbuild := &SubprocessorSelect{SubprocessorQuery: sq}
+func (_q *SubprocessorQuery) Select(fields ...string) *SubprocessorSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &SubprocessorSelect{SubprocessorQuery: _q}
 	sbuild.label = subprocessor.Label
-	sbuild.flds, sbuild.scan = &sq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a SubprocessorSelect configured with the given aggregations.
-func (sq *SubprocessorQuery) Aggregate(fns ...AggregateFunc) *SubprocessorSelect {
-	return sq.Select().Aggregate(fns...)
+func (_q *SubprocessorQuery) Aggregate(fns ...AggregateFunc) *SubprocessorSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sq *SubprocessorQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sq.inters {
+func (_q *SubprocessorQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !subprocessor.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if sq.path != nil {
-		prev, err := sq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sq.sql = prev
+		_q.sql = prev
 	}
 	if subprocessor.Policy == nil {
 		return errors.New("generated: uninitialized subprocessor.Policy (forgotten import generated/runtime?)")
 	}
-	if err := subprocessor.Policy.EvalQuery(ctx, sq); err != nil {
+	if err := subprocessor.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sq *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Subprocessor, error) {
+func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Subprocessor, error) {
 	var (
 		nodes       = []*Subprocessor{}
-		_spec       = sq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
-			sq.withOwner != nil,
-			sq.withFiles != nil,
-			sq.withLogoFile != nil,
-			sq.withTrustCenterSubprocessors != nil,
+			_q.withOwner != nil,
+			_q.withFiles != nil,
+			_q.withLogoFile != nil,
+			_q.withTrustCenterSubprocessors != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Subprocessor).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Subprocessor{config: sq.config}
+		node := &Subprocessor{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = sq.schemaConfig.Subprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
-	if len(sq.modifiers) > 0 {
-		_spec.Modifiers = sq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Subprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withOwner; query != nil {
-		if err := sq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Subprocessor, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withFiles; query != nil {
-		if err := sq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Subprocessor) { n.Edges.Files = []*File{} },
 			func(n *Subprocessor, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withLogoFile; query != nil {
-		if err := sq.loadLogoFile(ctx, query, nodes, nil,
+	if query := _q.withLogoFile; query != nil {
+		if err := _q.loadLogoFile(ctx, query, nodes, nil,
 			func(n *Subprocessor, e *File) { n.Edges.LogoFile = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withTrustCenterSubprocessors; query != nil {
-		if err := sq.loadTrustCenterSubprocessors(ctx, query, nodes,
+	if query := _q.withTrustCenterSubprocessors; query != nil {
+		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *Subprocessor) { n.Edges.TrustCenterSubprocessors = []*TrustCenterSubprocessor{} },
 			func(n *Subprocessor, e *TrustCenterSubprocessor) {
 				n.Edges.TrustCenterSubprocessors = append(n.Edges.TrustCenterSubprocessors, e)
@@ -562,29 +562,29 @@ func (sq *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedFiles {
-		if err := sq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Subprocessor) { n.appendNamedFiles(name) },
 			func(n *Subprocessor, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedTrustCenterSubprocessors {
-		if err := sq.loadTrustCenterSubprocessors(ctx, query, nodes,
+	for name, query := range _q.withNamedTrustCenterSubprocessors {
+		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *Subprocessor) { n.appendNamedTrustCenterSubprocessors(name) },
 			func(n *Subprocessor, e *TrustCenterSubprocessor) { n.appendNamedTrustCenterSubprocessors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range sq.loadTotal {
-		if err := sq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sq *SubprocessorQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *Organization)) error {
+func (_q *SubprocessorQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subprocessor)
 	for i := range nodes {
@@ -613,7 +613,7 @@ func (sq *SubprocessorQuery) loadOwner(ctx context.Context, query *OrganizationQ
 	}
 	return nil
 }
-func (sq *SubprocessorQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *File)) error {
+func (_q *SubprocessorQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Subprocessor)
 	nids := make(map[string]map[*Subprocessor]struct{})
@@ -626,7 +626,7 @@ func (sq *SubprocessorQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subprocessor.FilesTable)
-		joinT.Schema(sq.schemaConfig.SubprocessorFiles)
+		joinT.Schema(_q.schemaConfig.SubprocessorFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(subprocessor.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subprocessor.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -675,7 +675,7 @@ func (sq *SubprocessorQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	}
 	return nil
 }
-func (sq *SubprocessorQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *File)) error {
+func (_q *SubprocessorQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subprocessor)
 	for i := range nodes {
@@ -707,7 +707,7 @@ func (sq *SubprocessorQuery) loadLogoFile(ctx context.Context, query *FileQuery,
 	}
 	return nil
 }
-func (sq *SubprocessorQuery) loadTrustCenterSubprocessors(ctx context.Context, query *TrustCenterSubprocessorQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *TrustCenterSubprocessor)) error {
+func (_q *SubprocessorQuery) loadTrustCenterSubprocessors(ctx context.Context, query *TrustCenterSubprocessorQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *TrustCenterSubprocessor)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Subprocessor)
 	for i := range nodes {
@@ -738,29 +738,29 @@ func (sq *SubprocessorQuery) loadTrustCenterSubprocessors(ctx context.Context, q
 	return nil
 }
 
-func (sq *SubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sq.querySpec()
-	_spec.Node.Schema = sq.schemaConfig.Subprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
-	if len(sq.modifiers) > 0 {
-		_spec.Modifiers = sq.modifiers
+func (_q *SubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Subprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sq.ctx.Fields
-	if len(sq.ctx.Fields) > 0 {
-		_spec.Unique = sq.ctx.Unique != nil && *sq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sq *SubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *SubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(subprocessor.Table, subprocessor.Columns, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
-	_spec.From = sq.sql
-	if unique := sq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, subprocessor.FieldID)
 		for i := range fields {
@@ -768,27 +768,27 @@ func (sq *SubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(subprocessor.FieldOwnerID)
 		}
-		if sq.withLogoFile != nil {
+		if _q.withLogoFile != nil {
 			_spec.Node.AddColumnOnce(subprocessor.FieldLogoLocalFileID)
 		}
 	}
-	if ps := sq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -798,76 +798,76 @@ func (sq *SubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sq *SubprocessorQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sq.driver.Dialect())
+func (_q *SubprocessorQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(subprocessor.Table)
-	columns := sq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = subprocessor.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sq.sql != nil {
-		selector = sq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sq.ctx.Unique != nil && *sq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(sq.schemaConfig.Subprocessor)
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Subprocessor)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range sq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sq *SubprocessorQuery) Modify(modifiers ...func(s *sql.Selector)) *SubprocessorSelect {
-	sq.modifiers = append(sq.modifiers, modifiers...)
-	return sq.Select()
+func (_q *SubprocessorQuery) Modify(modifiers ...func(s *sql.Selector)) *SubprocessorSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubprocessorQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *SubprocessorQuery {
-	query := (&FileClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *SubprocessorQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedFiles == nil {
-		sq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	sq.withNamedFiles[name] = query
-	return sq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // WithNamedTrustCenterSubprocessors tells the query-builder to eager-load the nodes that are connected to the "trust_center_subprocessors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *SubprocessorQuery) WithNamedTrustCenterSubprocessors(name string, opts ...func(*TrustCenterSubprocessorQuery)) *SubprocessorQuery {
-	query := (&TrustCenterSubprocessorClient{config: sq.config}).Query()
+func (_q *SubprocessorQuery) WithNamedTrustCenterSubprocessors(name string, opts ...func(*TrustCenterSubprocessorQuery)) *SubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedTrustCenterSubprocessors == nil {
-		sq.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery)
+	if _q.withNamedTrustCenterSubprocessors == nil {
+		_q.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery)
 	}
-	sq.withNamedTrustCenterSubprocessors[name] = query
-	return sq
+	_q.withNamedTrustCenterSubprocessors[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -896,41 +896,41 @@ type SubprocessorGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sgb *SubprocessorGroupBy) Aggregate(fns ...AggregateFunc) *SubprocessorGroupBy {
-	sgb.fns = append(sgb.fns, fns...)
-	return sgb
+func (_g *SubprocessorGroupBy) Aggregate(fns ...AggregateFunc) *SubprocessorGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sgb *SubprocessorGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sgb.build.prepareQuery(ctx); err != nil {
+func (_g *SubprocessorGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*SubprocessorQuery, *SubprocessorGroupBy](ctx, sgb.build, sgb, sgb.build.inters, v)
+	return scanWithInterceptors[*SubprocessorQuery, *SubprocessorGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sgb *SubprocessorGroupBy) sqlScan(ctx context.Context, root *SubprocessorQuery, v any) error {
+func (_g *SubprocessorGroupBy) sqlScan(ctx context.Context, root *SubprocessorQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sgb.fns))
-	for _, fn := range sgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sgb.flds)+len(sgb.fns))
-		for _, f := range *sgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -944,27 +944,27 @@ type SubprocessorSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ss *SubprocessorSelect) Aggregate(fns ...AggregateFunc) *SubprocessorSelect {
-	ss.fns = append(ss.fns, fns...)
-	return ss
+func (_s *SubprocessorSelect) Aggregate(fns ...AggregateFunc) *SubprocessorSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ss *SubprocessorSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ss.ctx, ent.OpQuerySelect)
-	if err := ss.prepareQuery(ctx); err != nil {
+func (_s *SubprocessorSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*SubprocessorQuery, *SubprocessorSelect](ctx, ss.SubprocessorQuery, ss, ss.inters, v)
+	return scanWithInterceptors[*SubprocessorQuery, *SubprocessorSelect](ctx, _s.SubprocessorQuery, _s, _s.inters, v)
 }
 
-func (ss *SubprocessorSelect) sqlScan(ctx context.Context, root *SubprocessorQuery, v any) error {
+func (_s *SubprocessorSelect) sqlScan(ctx context.Context, root *SubprocessorQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ss.fns))
-	for _, fn := range ss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -972,7 +972,7 @@ func (ss *SubprocessorSelect) sqlScan(ctx context.Context, root *SubprocessorQue
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -980,7 +980,7 @@ func (ss *SubprocessorSelect) sqlScan(ctx context.Context, root *SubprocessorQue
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ss *SubprocessorSelect) Modify(modifiers ...func(s *sql.Selector)) *SubprocessorSelect {
-	ss.modifiers = append(ss.modifiers, modifiers...)
-	return ss
+func (_s *SubprocessorSelect) Modify(modifiers ...func(s *sql.Selector)) *SubprocessorSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -23,151 +23,151 @@ type OrgMembershipHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (omhc *OrgMembershipHistoryCreate) SetHistoryTime(t time.Time) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetHistoryTime(t)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetHistoryTime(v time.Time) *OrgMembershipHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableHistoryTime(t *time.Time) *OrgMembershipHistoryCreate {
-	if t != nil {
-		omhc.SetHistoryTime(*t)
+func (_c *OrgMembershipHistoryCreate) SetNillableHistoryTime(v *time.Time) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (omhc *OrgMembershipHistoryCreate) SetRef(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetRef(s)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetRef(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableRef(s *string) *OrgMembershipHistoryCreate {
-	if s != nil {
-		omhc.SetRef(*s)
+func (_c *OrgMembershipHistoryCreate) SetNillableRef(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (omhc *OrgMembershipHistoryCreate) SetOperation(ht history.OpType) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetOperation(ht)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetOperation(v history.OpType) *OrgMembershipHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (omhc *OrgMembershipHistoryCreate) SetCreatedAt(t time.Time) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetCreatedAt(t)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetCreatedAt(v time.Time) *OrgMembershipHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableCreatedAt(t *time.Time) *OrgMembershipHistoryCreate {
-	if t != nil {
-		omhc.SetCreatedAt(*t)
+func (_c *OrgMembershipHistoryCreate) SetNillableCreatedAt(v *time.Time) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omhc *OrgMembershipHistoryCreate) SetUpdatedAt(t time.Time) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetUpdatedAt(t)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetUpdatedAt(v time.Time) *OrgMembershipHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrgMembershipHistoryCreate {
-	if t != nil {
-		omhc.SetUpdatedAt(*t)
+func (_c *OrgMembershipHistoryCreate) SetNillableUpdatedAt(v *time.Time) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (omhc *OrgMembershipHistoryCreate) SetCreatedBy(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetCreatedBy(s)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetCreatedBy(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableCreatedBy(s *string) *OrgMembershipHistoryCreate {
-	if s != nil {
-		omhc.SetCreatedBy(*s)
+func (_c *OrgMembershipHistoryCreate) SetNillableCreatedBy(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omhc *OrgMembershipHistoryCreate) SetUpdatedBy(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetUpdatedBy(s)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetUpdatedBy(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *OrgMembershipHistoryCreate {
-	if s != nil {
-		omhc.SetUpdatedBy(*s)
+func (_c *OrgMembershipHistoryCreate) SetNillableUpdatedBy(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (omhc *OrgMembershipHistoryCreate) SetRole(e enums.Role) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetRole(e)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetRole(v enums.Role) *OrgMembershipHistoryCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableRole(e *enums.Role) *OrgMembershipHistoryCreate {
-	if e != nil {
-		omhc.SetRole(*e)
+func (_c *OrgMembershipHistoryCreate) SetNillableRole(v *enums.Role) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRole(*v)
 	}
-	return omhc
+	return _c
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (omhc *OrgMembershipHistoryCreate) SetOrganizationID(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetOrganizationID(s)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetOrganizationID(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetOrganizationID(v)
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (omhc *OrgMembershipHistoryCreate) SetUserID(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetUserID(s)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetUserID(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (omhc *OrgMembershipHistoryCreate) SetID(s string) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetID(s)
-	return omhc
+func (_c *OrgMembershipHistoryCreate) SetID(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (omhc *OrgMembershipHistoryCreate) SetNillableID(s *string) *OrgMembershipHistoryCreate {
-	if s != nil {
-		omhc.SetID(*s)
+func (_c *OrgMembershipHistoryCreate) SetNillableID(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return omhc
+	return _c
 }
 
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
-func (omhc *OrgMembershipHistoryCreate) Mutation() *OrgMembershipHistoryMutation {
-	return omhc.mutation
+func (_c *OrgMembershipHistoryCreate) Mutation() *OrgMembershipHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the OrgMembershipHistory in the database.
-func (omhc *OrgMembershipHistoryCreate) Save(ctx context.Context) (*OrgMembershipHistory, error) {
-	if err := omhc.defaults(); err != nil {
+func (_c *OrgMembershipHistoryCreate) Save(ctx context.Context) (*OrgMembershipHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, omhc.sqlSave, omhc.mutation, omhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (omhc *OrgMembershipHistoryCreate) SaveX(ctx context.Context) *OrgMembershipHistory {
-	v, err := omhc.Save(ctx)
+func (_c *OrgMembershipHistoryCreate) SaveX(ctx context.Context) *OrgMembershipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -175,91 +175,91 @@ func (omhc *OrgMembershipHistoryCreate) SaveX(ctx context.Context) *OrgMembershi
 }
 
 // Exec executes the query.
-func (omhc *OrgMembershipHistoryCreate) Exec(ctx context.Context) error {
-	_, err := omhc.Save(ctx)
+func (_c *OrgMembershipHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omhc *OrgMembershipHistoryCreate) ExecX(ctx context.Context) {
-	if err := omhc.Exec(ctx); err != nil {
+func (_c *OrgMembershipHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omhc *OrgMembershipHistoryCreate) defaults() error {
-	if _, ok := omhc.mutation.HistoryTime(); !ok {
+func (_c *OrgMembershipHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if orgmembershiphistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := orgmembershiphistory.DefaultHistoryTime()
-		omhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := omhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if orgmembershiphistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmembershiphistory.DefaultCreatedAt()
-		omhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := omhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if orgmembershiphistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmembershiphistory.DefaultUpdatedAt()
-		omhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := omhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		v := orgmembershiphistory.DefaultRole
-		omhc.mutation.SetRole(v)
+		_c.mutation.SetRole(v)
 	}
-	if _, ok := omhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if orgmembershiphistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized orgmembershiphistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := orgmembershiphistory.DefaultID()
-		omhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omhc *OrgMembershipHistoryCreate) check() error {
-	if _, ok := omhc.mutation.HistoryTime(); !ok {
+func (_c *OrgMembershipHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "OrgMembershipHistory.history_time"`)}
 	}
-	if _, ok := omhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "OrgMembershipHistory.operation"`)}
 	}
-	if v, ok := omhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := orgmembershiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrgMembershipHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := omhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "OrgMembershipHistory.role"`)}
 	}
-	if v, ok := omhc.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := orgmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "OrgMembershipHistory.role": %w`, err)}
 		}
 	}
-	if _, ok := omhc.mutation.OrganizationID(); !ok {
+	if _, ok := _c.mutation.OrganizationID(); !ok {
 		return &ValidationError{Name: "organization_id", err: errors.New(`generated: missing required field "OrgMembershipHistory.organization_id"`)}
 	}
-	if _, ok := omhc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`generated: missing required field "OrgMembershipHistory.user_id"`)}
 	}
 	return nil
 }
 
-func (omhc *OrgMembershipHistoryCreate) sqlSave(ctx context.Context) (*OrgMembershipHistory, error) {
-	if err := omhc.check(); err != nil {
+func (_c *OrgMembershipHistoryCreate) sqlSave(ctx context.Context) (*OrgMembershipHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := omhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, omhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -272,58 +272,58 @@ func (omhc *OrgMembershipHistoryCreate) sqlSave(ctx context.Context) (*OrgMember
 			return nil, fmt.Errorf("unexpected OrgMembershipHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	omhc.mutation.id = &_node.ID
-	omhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sqlgraph.CreateSpec) {
+func (_c *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OrgMembershipHistory{config: omhc.config}
+		_node = &OrgMembershipHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(orgmembershiphistory.Table, sqlgraph.NewFieldSpec(orgmembershiphistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = omhc.schemaConfig.OrgMembershipHistory
-	if id, ok := omhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.OrgMembershipHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := omhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(orgmembershiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := omhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := omhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(orgmembershiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := omhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := omhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := omhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(orgmembershiphistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := omhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := omhc.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if value, ok := omhc.mutation.OrganizationID(); ok {
+	if value, ok := _c.mutation.OrganizationID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldOrganizationID, field.TypeString, value)
 		_node.OrganizationID = value
 	}
-	if value, ok := omhc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(orgmembershiphistory.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
@@ -338,16 +338,16 @@ type OrgMembershipHistoryCreateBulk struct {
 }
 
 // Save creates the OrgMembershipHistory entities in the database.
-func (omhcb *OrgMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*OrgMembershipHistory, error) {
-	if omhcb.err != nil {
-		return nil, omhcb.err
+func (_c *OrgMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*OrgMembershipHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(omhcb.builders))
-	nodes := make([]*OrgMembershipHistory, len(omhcb.builders))
-	mutators := make([]Mutator, len(omhcb.builders))
-	for i := range omhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OrgMembershipHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := omhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrgMembershipHistoryMutation)
@@ -361,11 +361,11 @@ func (omhcb *OrgMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*OrgMe
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, omhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, omhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -385,7 +385,7 @@ func (omhcb *OrgMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*OrgMe
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, omhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -393,8 +393,8 @@ func (omhcb *OrgMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*OrgMe
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omhcb *OrgMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*OrgMembershipHistory {
-	v, err := omhcb.Save(ctx)
+func (_c *OrgMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*OrgMembershipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -402,14 +402,14 @@ func (omhcb *OrgMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*OrgMe
 }
 
 // Exec executes the query.
-func (omhcb *OrgMembershipHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := omhcb.Save(ctx)
+func (_c *OrgMembershipHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omhcb *OrgMembershipHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := omhcb.Exec(ctx); err != nil {
+func (_c *OrgMembershipHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -33,40 +33,40 @@ type InternalPolicyHistoryQuery struct {
 }
 
 // Where adds a new predicate for the InternalPolicyHistoryQuery builder.
-func (iphq *InternalPolicyHistoryQuery) Where(ps ...predicate.InternalPolicyHistory) *InternalPolicyHistoryQuery {
-	iphq.predicates = append(iphq.predicates, ps...)
-	return iphq
+func (_q *InternalPolicyHistoryQuery) Where(ps ...predicate.InternalPolicyHistory) *InternalPolicyHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (iphq *InternalPolicyHistoryQuery) Limit(limit int) *InternalPolicyHistoryQuery {
-	iphq.ctx.Limit = &limit
-	return iphq
+func (_q *InternalPolicyHistoryQuery) Limit(limit int) *InternalPolicyHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (iphq *InternalPolicyHistoryQuery) Offset(offset int) *InternalPolicyHistoryQuery {
-	iphq.ctx.Offset = &offset
-	return iphq
+func (_q *InternalPolicyHistoryQuery) Offset(offset int) *InternalPolicyHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (iphq *InternalPolicyHistoryQuery) Unique(unique bool) *InternalPolicyHistoryQuery {
-	iphq.ctx.Unique = &unique
-	return iphq
+func (_q *InternalPolicyHistoryQuery) Unique(unique bool) *InternalPolicyHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (iphq *InternalPolicyHistoryQuery) Order(o ...internalpolicyhistory.OrderOption) *InternalPolicyHistoryQuery {
-	iphq.order = append(iphq.order, o...)
-	return iphq
+func (_q *InternalPolicyHistoryQuery) Order(o ...internalpolicyhistory.OrderOption) *InternalPolicyHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first InternalPolicyHistory entity from the query.
 // Returns a *NotFoundError when no InternalPolicyHistory was found.
-func (iphq *InternalPolicyHistoryQuery) First(ctx context.Context) (*InternalPolicyHistory, error) {
-	nodes, err := iphq.Limit(1).All(setContextOp(ctx, iphq.ctx, ent.OpQueryFirst))
+func (_q *InternalPolicyHistoryQuery) First(ctx context.Context) (*InternalPolicyHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (iphq *InternalPolicyHistoryQuery) First(ctx context.Context) (*InternalPol
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) FirstX(ctx context.Context) *InternalPolicyHistory {
-	node, err := iphq.First(ctx)
+func (_q *InternalPolicyHistoryQuery) FirstX(ctx context.Context) *InternalPolicyHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (iphq *InternalPolicyHistoryQuery) FirstX(ctx context.Context) *InternalPol
 
 // FirstID returns the first InternalPolicyHistory ID from the query.
 // Returns a *NotFoundError when no InternalPolicyHistory ID was found.
-func (iphq *InternalPolicyHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *InternalPolicyHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = iphq.Limit(1).IDs(setContextOp(ctx, iphq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (iphq *InternalPolicyHistoryQuery) FirstID(ctx context.Context) (id string,
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := iphq.FirstID(ctx)
+func (_q *InternalPolicyHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (iphq *InternalPolicyHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single InternalPolicyHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one InternalPolicyHistory entity is found.
 // Returns a *NotFoundError when no InternalPolicyHistory entities are found.
-func (iphq *InternalPolicyHistoryQuery) Only(ctx context.Context) (*InternalPolicyHistory, error) {
-	nodes, err := iphq.Limit(2).All(setContextOp(ctx, iphq.ctx, ent.OpQueryOnly))
+func (_q *InternalPolicyHistoryQuery) Only(ctx context.Context) (*InternalPolicyHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (iphq *InternalPolicyHistoryQuery) Only(ctx context.Context) (*InternalPoli
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) OnlyX(ctx context.Context) *InternalPolicyHistory {
-	node, err := iphq.Only(ctx)
+func (_q *InternalPolicyHistoryQuery) OnlyX(ctx context.Context) *InternalPolicyHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (iphq *InternalPolicyHistoryQuery) OnlyX(ctx context.Context) *InternalPoli
 // OnlyID is like Only, but returns the only InternalPolicyHistory ID in the query.
 // Returns a *NotSingularError when more than one InternalPolicyHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (iphq *InternalPolicyHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *InternalPolicyHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = iphq.Limit(2).IDs(setContextOp(ctx, iphq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (iphq *InternalPolicyHistoryQuery) OnlyID(ctx context.Context) (id string, 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := iphq.OnlyID(ctx)
+func (_q *InternalPolicyHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (iphq *InternalPolicyHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of InternalPolicyHistories.
-func (iphq *InternalPolicyHistoryQuery) All(ctx context.Context) ([]*InternalPolicyHistory, error) {
-	ctx = setContextOp(ctx, iphq.ctx, ent.OpQueryAll)
-	if err := iphq.prepareQuery(ctx); err != nil {
+func (_q *InternalPolicyHistoryQuery) All(ctx context.Context) ([]*InternalPolicyHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*InternalPolicyHistory, *InternalPolicyHistoryQuery]()
-	return withInterceptors[[]*InternalPolicyHistory](ctx, iphq, qr, iphq.inters)
+	return withInterceptors[[]*InternalPolicyHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) AllX(ctx context.Context) []*InternalPolicyHistory {
-	nodes, err := iphq.All(ctx)
+func (_q *InternalPolicyHistoryQuery) AllX(ctx context.Context) []*InternalPolicyHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (iphq *InternalPolicyHistoryQuery) AllX(ctx context.Context) []*InternalPol
 }
 
 // IDs executes the query and returns a list of InternalPolicyHistory IDs.
-func (iphq *InternalPolicyHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if iphq.ctx.Unique == nil && iphq.path != nil {
-		iphq.Unique(true)
+func (_q *InternalPolicyHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, iphq.ctx, ent.OpQueryIDs)
-	if err = iphq.Select(internalpolicyhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(internalpolicyhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := iphq.IDs(ctx)
+func (_q *InternalPolicyHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (iphq *InternalPolicyHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (iphq *InternalPolicyHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, iphq.ctx, ent.OpQueryCount)
-	if err := iphq.prepareQuery(ctx); err != nil {
+func (_q *InternalPolicyHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, iphq, querierCount[*InternalPolicyHistoryQuery](), iphq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*InternalPolicyHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) CountX(ctx context.Context) int {
-	count, err := iphq.Count(ctx)
+func (_q *InternalPolicyHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (iphq *InternalPolicyHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (iphq *InternalPolicyHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, iphq.ctx, ent.OpQueryExist)
-	switch _, err := iphq.FirstID(ctx); {
+func (_q *InternalPolicyHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (iphq *InternalPolicyHistoryQuery) Exist(ctx context.Context) (bool, error)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (iphq *InternalPolicyHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := iphq.Exist(ctx)
+func (_q *InternalPolicyHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (iphq *InternalPolicyHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the InternalPolicyHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (iphq *InternalPolicyHistoryQuery) Clone() *InternalPolicyHistoryQuery {
-	if iphq == nil {
+func (_q *InternalPolicyHistoryQuery) Clone() *InternalPolicyHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &InternalPolicyHistoryQuery{
-		config:     iphq.config,
-		ctx:        iphq.ctx.Clone(),
-		order:      append([]internalpolicyhistory.OrderOption{}, iphq.order...),
-		inters:     append([]Interceptor{}, iphq.inters...),
-		predicates: append([]predicate.InternalPolicyHistory{}, iphq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]internalpolicyhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.InternalPolicyHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       iphq.sql.Clone(),
-		path:      iphq.path,
-		modifiers: append([]func(*sql.Selector){}, iphq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (iphq *InternalPolicyHistoryQuery) Clone() *InternalPolicyHistoryQuery {
 //		GroupBy(internalpolicyhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (iphq *InternalPolicyHistoryQuery) GroupBy(field string, fields ...string) *InternalPolicyHistoryGroupBy {
-	iphq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &InternalPolicyHistoryGroupBy{build: iphq}
-	grbuild.flds = &iphq.ctx.Fields
+func (_q *InternalPolicyHistoryQuery) GroupBy(field string, fields ...string) *InternalPolicyHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &InternalPolicyHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = internalpolicyhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (iphq *InternalPolicyHistoryQuery) GroupBy(field string, fields ...string) 
 //	client.InternalPolicyHistory.Query().
 //		Select(internalpolicyhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (iphq *InternalPolicyHistoryQuery) Select(fields ...string) *InternalPolicyHistorySelect {
-	iphq.ctx.Fields = append(iphq.ctx.Fields, fields...)
-	sbuild := &InternalPolicyHistorySelect{InternalPolicyHistoryQuery: iphq}
+func (_q *InternalPolicyHistoryQuery) Select(fields ...string) *InternalPolicyHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &InternalPolicyHistorySelect{InternalPolicyHistoryQuery: _q}
 	sbuild.label = internalpolicyhistory.Label
-	sbuild.flds, sbuild.scan = &iphq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a InternalPolicyHistorySelect configured with the given aggregations.
-func (iphq *InternalPolicyHistoryQuery) Aggregate(fns ...AggregateFunc) *InternalPolicyHistorySelect {
-	return iphq.Select().Aggregate(fns...)
+func (_q *InternalPolicyHistoryQuery) Aggregate(fns ...AggregateFunc) *InternalPolicyHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (iphq *InternalPolicyHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range iphq.inters {
+func (_q *InternalPolicyHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, iphq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range iphq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !internalpolicyhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if iphq.path != nil {
-		prev, err := iphq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		iphq.sql = prev
+		_q.sql = prev
 	}
 	if internalpolicyhistory.Policy == nil {
 		return errors.New("generated: uninitialized internalpolicyhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := internalpolicyhistory.Policy.EvalQuery(ctx, iphq); err != nil {
+	if err := internalpolicyhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (iphq *InternalPolicyHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*InternalPolicyHistory, error) {
+func (_q *InternalPolicyHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*InternalPolicyHistory, error) {
 	var (
 		nodes = []*InternalPolicyHistory{}
-		_spec = iphq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*InternalPolicyHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &InternalPolicyHistory{config: iphq.config}
+		node := &InternalPolicyHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = iphq.schemaConfig.InternalPolicyHistory
-	ctx = internal.NewSchemaConfigContext(ctx, iphq.schemaConfig)
-	if len(iphq.modifiers) > 0 {
-		_spec.Modifiers = iphq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.InternalPolicyHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, iphq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range iphq.loadTotal {
-		if err := iphq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (iphq *InternalPolicyHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := iphq.querySpec()
-	_spec.Node.Schema = iphq.schemaConfig.InternalPolicyHistory
-	ctx = internal.NewSchemaConfigContext(ctx, iphq.schemaConfig)
-	if len(iphq.modifiers) > 0 {
-		_spec.Modifiers = iphq.modifiers
+func (_q *InternalPolicyHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.InternalPolicyHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = iphq.ctx.Fields
-	if len(iphq.ctx.Fields) > 0 {
-		_spec.Unique = iphq.ctx.Unique != nil && *iphq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, iphq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (iphq *InternalPolicyHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *InternalPolicyHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(internalpolicyhistory.Table, internalpolicyhistory.Columns, sqlgraph.NewFieldSpec(internalpolicyhistory.FieldID, field.TypeString))
-	_spec.From = iphq.sql
-	if unique := iphq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if iphq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := iphq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, internalpolicyhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (iphq *InternalPolicyHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := iphq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := iphq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := iphq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := iphq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (iphq *InternalPolicyHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (iphq *InternalPolicyHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(iphq.driver.Dialect())
+func (_q *InternalPolicyHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(internalpolicyhistory.Table)
-	columns := iphq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = internalpolicyhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if iphq.sql != nil {
-		selector = iphq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if iphq.ctx.Unique != nil && *iphq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(iphq.schemaConfig.InternalPolicyHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, iphq.schemaConfig)
+	t1.Schema(_q.schemaConfig.InternalPolicyHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range iphq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range iphq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range iphq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := iphq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := iphq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (iphq *InternalPolicyHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *InternalPolicyHistorySelect {
-	iphq.modifiers = append(iphq.modifiers, modifiers...)
-	return iphq.Select()
+func (_q *InternalPolicyHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *InternalPolicyHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type InternalPolicyHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (iphgb *InternalPolicyHistoryGroupBy) Aggregate(fns ...AggregateFunc) *InternalPolicyHistoryGroupBy {
-	iphgb.fns = append(iphgb.fns, fns...)
-	return iphgb
+func (_g *InternalPolicyHistoryGroupBy) Aggregate(fns ...AggregateFunc) *InternalPolicyHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (iphgb *InternalPolicyHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, iphgb.build.ctx, ent.OpQueryGroupBy)
-	if err := iphgb.build.prepareQuery(ctx); err != nil {
+func (_g *InternalPolicyHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*InternalPolicyHistoryQuery, *InternalPolicyHistoryGroupBy](ctx, iphgb.build, iphgb, iphgb.build.inters, v)
+	return scanWithInterceptors[*InternalPolicyHistoryQuery, *InternalPolicyHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (iphgb *InternalPolicyHistoryGroupBy) sqlScan(ctx context.Context, root *InternalPolicyHistoryQuery, v any) error {
+func (_g *InternalPolicyHistoryGroupBy) sqlScan(ctx context.Context, root *InternalPolicyHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(iphgb.fns))
-	for _, fn := range iphgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*iphgb.flds)+len(iphgb.fns))
-		for _, f := range *iphgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*iphgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := iphgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type InternalPolicyHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (iphs *InternalPolicyHistorySelect) Aggregate(fns ...AggregateFunc) *InternalPolicyHistorySelect {
-	iphs.fns = append(iphs.fns, fns...)
-	return iphs
+func (_s *InternalPolicyHistorySelect) Aggregate(fns ...AggregateFunc) *InternalPolicyHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (iphs *InternalPolicyHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, iphs.ctx, ent.OpQuerySelect)
-	if err := iphs.prepareQuery(ctx); err != nil {
+func (_s *InternalPolicyHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*InternalPolicyHistoryQuery, *InternalPolicyHistorySelect](ctx, iphs.InternalPolicyHistoryQuery, iphs, iphs.inters, v)
+	return scanWithInterceptors[*InternalPolicyHistoryQuery, *InternalPolicyHistorySelect](ctx, _s.InternalPolicyHistoryQuery, _s, _s.inters, v)
 }
 
-func (iphs *InternalPolicyHistorySelect) sqlScan(ctx context.Context, root *InternalPolicyHistoryQuery, v any) error {
+func (_s *InternalPolicyHistorySelect) sqlScan(ctx context.Context, root *InternalPolicyHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(iphs.fns))
-	for _, fn := range iphs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*iphs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (iphs *InternalPolicyHistorySelect) sqlScan(ctx context.Context, root *Inte
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := iphs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (iphs *InternalPolicyHistorySelect) sqlScan(ctx context.Context, root *Inte
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (iphs *InternalPolicyHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *InternalPolicyHistorySelect {
-	iphs.modifiers = append(iphs.modifiers, modifiers...)
-	return iphs
+func (_s *InternalPolicyHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *InternalPolicyHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

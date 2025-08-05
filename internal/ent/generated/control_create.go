@@ -41,665 +41,665 @@ type ControlCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cc *ControlCreate) SetCreatedAt(t time.Time) *ControlCreate {
-	cc.mutation.SetCreatedAt(t)
-	return cc
+func (_c *ControlCreate) SetCreatedAt(v time.Time) *ControlCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableCreatedAt(t *time.Time) *ControlCreate {
-	if t != nil {
-		cc.SetCreatedAt(*t)
+func (_c *ControlCreate) SetNillableCreatedAt(v *time.Time) *ControlCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cc *ControlCreate) SetUpdatedAt(t time.Time) *ControlCreate {
-	cc.mutation.SetUpdatedAt(t)
-	return cc
+func (_c *ControlCreate) SetUpdatedAt(v time.Time) *ControlCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableUpdatedAt(t *time.Time) *ControlCreate {
-	if t != nil {
-		cc.SetUpdatedAt(*t)
+func (_c *ControlCreate) SetNillableUpdatedAt(v *time.Time) *ControlCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (cc *ControlCreate) SetCreatedBy(s string) *ControlCreate {
-	cc.mutation.SetCreatedBy(s)
-	return cc
+func (_c *ControlCreate) SetCreatedBy(v string) *ControlCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableCreatedBy(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetCreatedBy(*s)
+func (_c *ControlCreate) SetNillableCreatedBy(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cc *ControlCreate) SetUpdatedBy(s string) *ControlCreate {
-	cc.mutation.SetUpdatedBy(s)
-	return cc
+func (_c *ControlCreate) SetUpdatedBy(v string) *ControlCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableUpdatedBy(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetUpdatedBy(*s)
+func (_c *ControlCreate) SetNillableUpdatedBy(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cc *ControlCreate) SetDeletedAt(t time.Time) *ControlCreate {
-	cc.mutation.SetDeletedAt(t)
-	return cc
+func (_c *ControlCreate) SetDeletedAt(v time.Time) *ControlCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableDeletedAt(t *time.Time) *ControlCreate {
-	if t != nil {
-		cc.SetDeletedAt(*t)
+func (_c *ControlCreate) SetNillableDeletedAt(v *time.Time) *ControlCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cc *ControlCreate) SetDeletedBy(s string) *ControlCreate {
-	cc.mutation.SetDeletedBy(s)
-	return cc
+func (_c *ControlCreate) SetDeletedBy(v string) *ControlCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableDeletedBy(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetDeletedBy(*s)
+func (_c *ControlCreate) SetNillableDeletedBy(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (cc *ControlCreate) SetDisplayID(s string) *ControlCreate {
-	cc.mutation.SetDisplayID(s)
-	return cc
+func (_c *ControlCreate) SetDisplayID(v string) *ControlCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (cc *ControlCreate) SetTags(s []string) *ControlCreate {
-	cc.mutation.SetTags(s)
-	return cc
+func (_c *ControlCreate) SetTags(v []string) *ControlCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (cc *ControlCreate) SetDescription(s string) *ControlCreate {
-	cc.mutation.SetDescription(s)
-	return cc
+func (_c *ControlCreate) SetDescription(v string) *ControlCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableDescription(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetDescription(*s)
+func (_c *ControlCreate) SetNillableDescription(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetReferenceID sets the "reference_id" field.
-func (cc *ControlCreate) SetReferenceID(s string) *ControlCreate {
-	cc.mutation.SetReferenceID(s)
-	return cc
+func (_c *ControlCreate) SetReferenceID(v string) *ControlCreate {
+	_c.mutation.SetReferenceID(v)
+	return _c
 }
 
 // SetNillableReferenceID sets the "reference_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableReferenceID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetReferenceID(*s)
+func (_c *ControlCreate) SetNillableReferenceID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetReferenceID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetAuditorReferenceID sets the "auditor_reference_id" field.
-func (cc *ControlCreate) SetAuditorReferenceID(s string) *ControlCreate {
-	cc.mutation.SetAuditorReferenceID(s)
-	return cc
+func (_c *ControlCreate) SetAuditorReferenceID(v string) *ControlCreate {
+	_c.mutation.SetAuditorReferenceID(v)
+	return _c
 }
 
 // SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableAuditorReferenceID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetAuditorReferenceID(*s)
+func (_c *ControlCreate) SetNillableAuditorReferenceID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetAuditorReferenceID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (cc *ControlCreate) SetStatus(es enums.ControlStatus) *ControlCreate {
-	cc.mutation.SetStatus(es)
-	return cc
+func (_c *ControlCreate) SetStatus(v enums.ControlStatus) *ControlCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableStatus(es *enums.ControlStatus) *ControlCreate {
-	if es != nil {
-		cc.SetStatus(*es)
+func (_c *ControlCreate) SetNillableStatus(v *enums.ControlStatus) *ControlCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetSource sets the "source" field.
-func (cc *ControlCreate) SetSource(es enums.ControlSource) *ControlCreate {
-	cc.mutation.SetSource(es)
-	return cc
+func (_c *ControlCreate) SetSource(v enums.ControlSource) *ControlCreate {
+	_c.mutation.SetSource(v)
+	return _c
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableSource(es *enums.ControlSource) *ControlCreate {
-	if es != nil {
-		cc.SetSource(*es)
+func (_c *ControlCreate) SetNillableSource(v *enums.ControlSource) *ControlCreate {
+	if v != nil {
+		_c.SetSource(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetReferenceFramework sets the "reference_framework" field.
-func (cc *ControlCreate) SetReferenceFramework(s string) *ControlCreate {
-	cc.mutation.SetReferenceFramework(s)
-	return cc
+func (_c *ControlCreate) SetReferenceFramework(v string) *ControlCreate {
+	_c.mutation.SetReferenceFramework(v)
+	return _c
 }
 
 // SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableReferenceFramework(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetReferenceFramework(*s)
+func (_c *ControlCreate) SetNillableReferenceFramework(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetReferenceFramework(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetControlType sets the "control_type" field.
-func (cc *ControlCreate) SetControlType(et enums.ControlType) *ControlCreate {
-	cc.mutation.SetControlType(et)
-	return cc
+func (_c *ControlCreate) SetControlType(v enums.ControlType) *ControlCreate {
+	_c.mutation.SetControlType(v)
+	return _c
 }
 
 // SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableControlType(et *enums.ControlType) *ControlCreate {
-	if et != nil {
-		cc.SetControlType(*et)
+func (_c *ControlCreate) SetNillableControlType(v *enums.ControlType) *ControlCreate {
+	if v != nil {
+		_c.SetControlType(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetCategory sets the "category" field.
-func (cc *ControlCreate) SetCategory(s string) *ControlCreate {
-	cc.mutation.SetCategory(s)
-	return cc
+func (_c *ControlCreate) SetCategory(v string) *ControlCreate {
+	_c.mutation.SetCategory(v)
+	return _c
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableCategory(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetCategory(*s)
+func (_c *ControlCreate) SetNillableCategory(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetCategory(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetCategoryID sets the "category_id" field.
-func (cc *ControlCreate) SetCategoryID(s string) *ControlCreate {
-	cc.mutation.SetCategoryID(s)
-	return cc
+func (_c *ControlCreate) SetCategoryID(v string) *ControlCreate {
+	_c.mutation.SetCategoryID(v)
+	return _c
 }
 
 // SetNillableCategoryID sets the "category_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableCategoryID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetCategoryID(*s)
+func (_c *ControlCreate) SetNillableCategoryID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetCategoryID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetSubcategory sets the "subcategory" field.
-func (cc *ControlCreate) SetSubcategory(s string) *ControlCreate {
-	cc.mutation.SetSubcategory(s)
-	return cc
+func (_c *ControlCreate) SetSubcategory(v string) *ControlCreate {
+	_c.mutation.SetSubcategory(v)
+	return _c
 }
 
 // SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableSubcategory(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetSubcategory(*s)
+func (_c *ControlCreate) SetNillableSubcategory(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetSubcategory(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetMappedCategories sets the "mapped_categories" field.
-func (cc *ControlCreate) SetMappedCategories(s []string) *ControlCreate {
-	cc.mutation.SetMappedCategories(s)
-	return cc
+func (_c *ControlCreate) SetMappedCategories(v []string) *ControlCreate {
+	_c.mutation.SetMappedCategories(v)
+	return _c
 }
 
 // SetAssessmentObjectives sets the "assessment_objectives" field.
-func (cc *ControlCreate) SetAssessmentObjectives(mo []models.AssessmentObjective) *ControlCreate {
-	cc.mutation.SetAssessmentObjectives(mo)
-	return cc
+func (_c *ControlCreate) SetAssessmentObjectives(v []models.AssessmentObjective) *ControlCreate {
+	_c.mutation.SetAssessmentObjectives(v)
+	return _c
 }
 
 // SetAssessmentMethods sets the "assessment_methods" field.
-func (cc *ControlCreate) SetAssessmentMethods(mm []models.AssessmentMethod) *ControlCreate {
-	cc.mutation.SetAssessmentMethods(mm)
-	return cc
+func (_c *ControlCreate) SetAssessmentMethods(v []models.AssessmentMethod) *ControlCreate {
+	_c.mutation.SetAssessmentMethods(v)
+	return _c
 }
 
 // SetControlQuestions sets the "control_questions" field.
-func (cc *ControlCreate) SetControlQuestions(s []string) *ControlCreate {
-	cc.mutation.SetControlQuestions(s)
-	return cc
+func (_c *ControlCreate) SetControlQuestions(v []string) *ControlCreate {
+	_c.mutation.SetControlQuestions(v)
+	return _c
 }
 
 // SetImplementationGuidance sets the "implementation_guidance" field.
-func (cc *ControlCreate) SetImplementationGuidance(mg []models.ImplementationGuidance) *ControlCreate {
-	cc.mutation.SetImplementationGuidance(mg)
-	return cc
+func (_c *ControlCreate) SetImplementationGuidance(v []models.ImplementationGuidance) *ControlCreate {
+	_c.mutation.SetImplementationGuidance(v)
+	return _c
 }
 
 // SetExampleEvidence sets the "example_evidence" field.
-func (cc *ControlCreate) SetExampleEvidence(me []models.ExampleEvidence) *ControlCreate {
-	cc.mutation.SetExampleEvidence(me)
-	return cc
+func (_c *ControlCreate) SetExampleEvidence(v []models.ExampleEvidence) *ControlCreate {
+	_c.mutation.SetExampleEvidence(v)
+	return _c
 }
 
 // SetReferences sets the "references" field.
-func (cc *ControlCreate) SetReferences(m []models.Reference) *ControlCreate {
-	cc.mutation.SetReferences(m)
-	return cc
+func (_c *ControlCreate) SetReferences(v []models.Reference) *ControlCreate {
+	_c.mutation.SetReferences(v)
+	return _c
 }
 
 // SetControlOwnerID sets the "control_owner_id" field.
-func (cc *ControlCreate) SetControlOwnerID(s string) *ControlCreate {
-	cc.mutation.SetControlOwnerID(s)
-	return cc
+func (_c *ControlCreate) SetControlOwnerID(v string) *ControlCreate {
+	_c.mutation.SetControlOwnerID(v)
+	return _c
 }
 
 // SetNillableControlOwnerID sets the "control_owner_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableControlOwnerID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetControlOwnerID(*s)
+func (_c *ControlCreate) SetNillableControlOwnerID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetControlOwnerID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (cc *ControlCreate) SetDelegateID(s string) *ControlCreate {
-	cc.mutation.SetDelegateID(s)
-	return cc
+func (_c *ControlCreate) SetDelegateID(v string) *ControlCreate {
+	_c.mutation.SetDelegateID(v)
+	return _c
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableDelegateID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetDelegateID(*s)
+func (_c *ControlCreate) SetNillableDelegateID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetDelegateID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cc *ControlCreate) SetOwnerID(s string) *ControlCreate {
-	cc.mutation.SetOwnerID(s)
-	return cc
+func (_c *ControlCreate) SetOwnerID(v string) *ControlCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableOwnerID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetOwnerID(*s)
+func (_c *ControlCreate) SetNillableOwnerID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetRefCode sets the "ref_code" field.
-func (cc *ControlCreate) SetRefCode(s string) *ControlCreate {
-	cc.mutation.SetRefCode(s)
-	return cc
+func (_c *ControlCreate) SetRefCode(v string) *ControlCreate {
+	_c.mutation.SetRefCode(v)
+	return _c
 }
 
 // SetStandardID sets the "standard_id" field.
-func (cc *ControlCreate) SetStandardID(s string) *ControlCreate {
-	cc.mutation.SetStandardID(s)
-	return cc
+func (_c *ControlCreate) SetStandardID(v string) *ControlCreate {
+	_c.mutation.SetStandardID(v)
+	return _c
 }
 
 // SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableStandardID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetStandardID(*s)
+func (_c *ControlCreate) SetNillableStandardID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetStandardID(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cc *ControlCreate) SetID(s string) *ControlCreate {
-	cc.mutation.SetID(s)
-	return cc
+func (_c *ControlCreate) SetID(v string) *ControlCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableID(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetID(*s)
+func (_c *ControlCreate) SetNillableID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cc
+	return _c
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (cc *ControlCreate) AddEvidenceIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddEvidenceIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddEvidenceIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (cc *ControlCreate) AddEvidence(e ...*Evidence) *ControlCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *ControlCreate) AddEvidence(v ...*Evidence) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddEvidenceIDs(ids...)
+	return _c.AddEvidenceIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (cc *ControlCreate) AddControlObjectiveIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddControlObjectiveIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddControlObjectiveIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddControlObjectiveIDs(ids...)
+	return _c
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (cc *ControlCreate) AddControlObjectives(c ...*ControlObjective) *ControlCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ControlCreate) AddControlObjectives(v ...*ControlObjective) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddControlObjectiveIDs(ids...)
+	return _c.AddControlObjectiveIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (cc *ControlCreate) AddTaskIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddTaskIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddTaskIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (cc *ControlCreate) AddTasks(t ...*Task) *ControlCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *ControlCreate) AddTasks(v ...*Task) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddTaskIDs(ids...)
+	return _c.AddTaskIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (cc *ControlCreate) AddNarrativeIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddNarrativeIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddNarrativeIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddNarrativeIDs(ids...)
+	return _c
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (cc *ControlCreate) AddNarratives(n ...*Narrative) *ControlCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *ControlCreate) AddNarratives(v ...*Narrative) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddNarrativeIDs(ids...)
+	return _c.AddNarrativeIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (cc *ControlCreate) AddRiskIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddRiskIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddRiskIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (cc *ControlCreate) AddRisks(r ...*Risk) *ControlCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *ControlCreate) AddRisks(v ...*Risk) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddRiskIDs(ids...)
+	return _c.AddRiskIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (cc *ControlCreate) AddActionPlanIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddActionPlanIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddActionPlanIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (cc *ControlCreate) AddActionPlans(a ...*ActionPlan) *ControlCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *ControlCreate) AddActionPlans(v ...*ActionPlan) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddActionPlanIDs(ids...)
+	return _c.AddActionPlanIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (cc *ControlCreate) AddProcedureIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddProcedureIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddProcedureIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (cc *ControlCreate) AddProcedures(p ...*Procedure) *ControlCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *ControlCreate) AddProcedures(v ...*Procedure) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (cc *ControlCreate) AddInternalPolicyIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddInternalPolicyIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddInternalPolicyIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (cc *ControlCreate) AddInternalPolicies(i ...*InternalPolicy) *ControlCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *ControlCreate) AddInternalPolicies(v ...*InternalPolicy) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddInternalPolicyIDs(ids...)
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // SetControlOwner sets the "control_owner" edge to the Group entity.
-func (cc *ControlCreate) SetControlOwner(g *Group) *ControlCreate {
-	return cc.SetControlOwnerID(g.ID)
+func (_c *ControlCreate) SetControlOwner(v *Group) *ControlCreate {
+	return _c.SetControlOwnerID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (cc *ControlCreate) SetDelegate(g *Group) *ControlCreate {
-	return cc.SetDelegateID(g.ID)
+func (_c *ControlCreate) SetDelegate(v *Group) *ControlCreate {
+	return _c.SetDelegateID(v.ID)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cc *ControlCreate) SetOwner(o *Organization) *ControlCreate {
-	return cc.SetOwnerID(o.ID)
+func (_c *ControlCreate) SetOwner(v *Organization) *ControlCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (cc *ControlCreate) AddBlockedGroupIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddBlockedGroupIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddBlockedGroupIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (cc *ControlCreate) AddBlockedGroups(g ...*Group) *ControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlCreate) AddBlockedGroups(v ...*Group) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (cc *ControlCreate) AddEditorIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddEditorIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddEditorIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (cc *ControlCreate) AddEditors(g ...*Group) *ControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlCreate) AddEditors(v ...*Group) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // SetStandard sets the "standard" edge to the Standard entity.
-func (cc *ControlCreate) SetStandard(s *Standard) *ControlCreate {
-	return cc.SetStandardID(s.ID)
+func (_c *ControlCreate) SetStandard(v *Standard) *ControlCreate {
+	return _c.SetStandardID(v.ID)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (cc *ControlCreate) AddProgramIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddProgramIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddProgramIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (cc *ControlCreate) AddPrograms(p ...*Program) *ControlCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *ControlCreate) AddPrograms(v ...*Program) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (cc *ControlCreate) AddAssetIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddAssetIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddAssetIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (cc *ControlCreate) AddAssets(a ...*Asset) *ControlCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *ControlCreate) AddAssets(v ...*Asset) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddAssetIDs(ids...)
+	return _c.AddAssetIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (cc *ControlCreate) AddScanIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddScanIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddScanIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (cc *ControlCreate) AddScans(s ...*Scan) *ControlCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ControlCreate) AddScans(v ...*Scan) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddScanIDs(ids...)
+	return _c.AddScanIDs(ids...)
 }
 
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
-func (cc *ControlCreate) AddControlImplementationIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddControlImplementationIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddControlImplementationIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddControlImplementationIDs(ids...)
+	return _c
 }
 
 // AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
-func (cc *ControlCreate) AddControlImplementations(c ...*ControlImplementation) *ControlCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ControlCreate) AddControlImplementations(v ...*ControlImplementation) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddControlImplementationIDs(ids...)
+	return _c.AddControlImplementationIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (cc *ControlCreate) AddSubcontrolIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddSubcontrolIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddSubcontrolIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (cc *ControlCreate) AddSubcontrols(s ...*Subcontrol) *ControlCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ControlCreate) AddSubcontrols(v ...*Subcontrol) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (cc *ControlCreate) AddScheduledJobIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddScheduledJobIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddScheduledJobIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddScheduledJobIDs(ids...)
+	return _c
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (cc *ControlCreate) AddScheduledJobs(s ...*ScheduledJob) *ControlCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ControlCreate) AddScheduledJobs(v ...*ScheduledJob) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddScheduledJobIDs(ids...)
+	return _c.AddScheduledJobIDs(ids...)
 }
 
 // AddMappedToControlIDs adds the "mapped_to_controls" edge to the MappedControl entity by IDs.
-func (cc *ControlCreate) AddMappedToControlIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddMappedToControlIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddMappedToControlIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddMappedToControlIDs(ids...)
+	return _c
 }
 
 // AddMappedToControls adds the "mapped_to_controls" edges to the MappedControl entity.
-func (cc *ControlCreate) AddMappedToControls(m ...*MappedControl) *ControlCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *ControlCreate) AddMappedToControls(v ...*MappedControl) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddMappedToControlIDs(ids...)
+	return _c.AddMappedToControlIDs(ids...)
 }
 
 // AddMappedFromControlIDs adds the "mapped_from_controls" edge to the MappedControl entity by IDs.
-func (cc *ControlCreate) AddMappedFromControlIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddMappedFromControlIDs(ids...)
-	return cc
+func (_c *ControlCreate) AddMappedFromControlIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddMappedFromControlIDs(ids...)
+	return _c
 }
 
 // AddMappedFromControls adds the "mapped_from_controls" edges to the MappedControl entity.
-func (cc *ControlCreate) AddMappedFromControls(m ...*MappedControl) *ControlCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *ControlCreate) AddMappedFromControls(v ...*MappedControl) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddMappedFromControlIDs(ids...)
+	return _c.AddMappedFromControlIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
-func (cc *ControlCreate) Mutation() *ControlMutation {
-	return cc.mutation
+func (_c *ControlCreate) Mutation() *ControlMutation {
+	return _c.mutation
 }
 
 // Save creates the Control in the database.
-func (cc *ControlCreate) Save(ctx context.Context) (*Control, error) {
-	if err := cc.defaults(); err != nil {
+func (_c *ControlCreate) Save(ctx context.Context) (*Control, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cc *ControlCreate) SaveX(ctx context.Context) *Control {
-	v, err := cc.Save(ctx)
+func (_c *ControlCreate) SaveX(ctx context.Context) *Control {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -707,94 +707,94 @@ func (cc *ControlCreate) SaveX(ctx context.Context) *Control {
 }
 
 // Exec executes the query.
-func (cc *ControlCreate) Exec(ctx context.Context) error {
-	_, err := cc.Save(ctx)
+func (_c *ControlCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cc *ControlCreate) ExecX(ctx context.Context) {
-	if err := cc.Exec(ctx); err != nil {
+func (_c *ControlCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cc *ControlCreate) defaults() error {
-	if _, ok := cc.mutation.CreatedAt(); !ok {
+func (_c *ControlCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if control.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := control.DefaultCreatedAt()
-		cc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if control.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := control.DefaultUpdatedAt()
-		cc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := control.DefaultTags
-		cc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := cc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := control.DefaultStatus
-		cc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := cc.mutation.Source(); !ok {
+	if _, ok := _c.mutation.Source(); !ok {
 		v := control.DefaultSource
-		cc.mutation.SetSource(v)
+		_c.mutation.SetSource(v)
 	}
-	if _, ok := cc.mutation.ControlType(); !ok {
+	if _, ok := _c.mutation.ControlType(); !ok {
 		v := control.DefaultControlType
-		cc.mutation.SetControlType(v)
+		_c.mutation.SetControlType(v)
 	}
-	if _, ok := cc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if control.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := control.DefaultID()
-		cc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cc *ControlCreate) check() error {
-	if _, ok := cc.mutation.DisplayID(); !ok {
+func (_c *ControlCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "Control.display_id"`)}
 	}
-	if v, ok := cc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := control.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "Control.display_id": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := control.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.Source(); ok {
+	if v, ok := _c.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.ControlType(); ok {
+	if v, ok := _c.mutation.ControlType(); ok {
 		if err := control.ControlTypeValidator(v); err != nil {
 			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "Control.control_type": %w`, err)}
 		}
 	}
-	if v, ok := cc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := control.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := cc.mutation.RefCode(); !ok {
+	if _, ok := _c.mutation.RefCode(); !ok {
 		return &ValidationError{Name: "ref_code", err: errors.New(`generated: missing required field "Control.ref_code"`)}
 	}
-	if v, ok := cc.mutation.RefCode(); ok {
+	if v, ok := _c.mutation.RefCode(); ok {
 		if err := control.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
 		}
@@ -802,12 +802,12 @@ func (cc *ControlCreate) check() error {
 	return nil
 }
 
-func (cc *ControlCreate) sqlSave(ctx context.Context) (*Control, error) {
-	if err := cc.check(); err != nil {
+func (_c *ControlCreate) sqlSave(ctx context.Context) (*Control, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -820,126 +820,126 @@ func (cc *ControlCreate) sqlSave(ctx context.Context) (*Control, error) {
 			return nil, fmt.Errorf("unexpected Control.ID type: %T", _spec.ID.Value)
 		}
 	}
-	cc.mutation.id = &_node.ID
-	cc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
+func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Control{config: cc.config}
+		_node = &Control{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(control.Table, sqlgraph.NewFieldSpec(control.FieldID, field.TypeString))
 	)
-	_spec.Schema = cc.schemaConfig.Control
-	if id, ok := cc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Control
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(control.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(control.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(control.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := cc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(control.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(control.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(control.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(control.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := cc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(control.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := cc.mutation.ReferenceID(); ok {
+	if value, ok := _c.mutation.ReferenceID(); ok {
 		_spec.SetField(control.FieldReferenceID, field.TypeString, value)
 		_node.ReferenceID = value
 	}
-	if value, ok := cc.mutation.AuditorReferenceID(); ok {
+	if value, ok := _c.mutation.AuditorReferenceID(); ok {
 		_spec.SetField(control.FieldAuditorReferenceID, field.TypeString, value)
 		_node.AuditorReferenceID = value
 	}
-	if value, ok := cc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(control.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := cc.mutation.Source(); ok {
+	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if value, ok := cc.mutation.ReferenceFramework(); ok {
+	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(control.FieldReferenceFramework, field.TypeString, value)
 		_node.ReferenceFramework = &value
 	}
-	if value, ok := cc.mutation.ControlType(); ok {
+	if value, ok := _c.mutation.ControlType(); ok {
 		_spec.SetField(control.FieldControlType, field.TypeEnum, value)
 		_node.ControlType = value
 	}
-	if value, ok := cc.mutation.Category(); ok {
+	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(control.FieldCategory, field.TypeString, value)
 		_node.Category = value
 	}
-	if value, ok := cc.mutation.CategoryID(); ok {
+	if value, ok := _c.mutation.CategoryID(); ok {
 		_spec.SetField(control.FieldCategoryID, field.TypeString, value)
 		_node.CategoryID = value
 	}
-	if value, ok := cc.mutation.Subcategory(); ok {
+	if value, ok := _c.mutation.Subcategory(); ok {
 		_spec.SetField(control.FieldSubcategory, field.TypeString, value)
 		_node.Subcategory = value
 	}
-	if value, ok := cc.mutation.MappedCategories(); ok {
+	if value, ok := _c.mutation.MappedCategories(); ok {
 		_spec.SetField(control.FieldMappedCategories, field.TypeJSON, value)
 		_node.MappedCategories = value
 	}
-	if value, ok := cc.mutation.AssessmentObjectives(); ok {
+	if value, ok := _c.mutation.AssessmentObjectives(); ok {
 		_spec.SetField(control.FieldAssessmentObjectives, field.TypeJSON, value)
 		_node.AssessmentObjectives = value
 	}
-	if value, ok := cc.mutation.AssessmentMethods(); ok {
+	if value, ok := _c.mutation.AssessmentMethods(); ok {
 		_spec.SetField(control.FieldAssessmentMethods, field.TypeJSON, value)
 		_node.AssessmentMethods = value
 	}
-	if value, ok := cc.mutation.ControlQuestions(); ok {
+	if value, ok := _c.mutation.ControlQuestions(); ok {
 		_spec.SetField(control.FieldControlQuestions, field.TypeJSON, value)
 		_node.ControlQuestions = value
 	}
-	if value, ok := cc.mutation.ImplementationGuidance(); ok {
+	if value, ok := _c.mutation.ImplementationGuidance(); ok {
 		_spec.SetField(control.FieldImplementationGuidance, field.TypeJSON, value)
 		_node.ImplementationGuidance = value
 	}
-	if value, ok := cc.mutation.ExampleEvidence(); ok {
+	if value, ok := _c.mutation.ExampleEvidence(); ok {
 		_spec.SetField(control.FieldExampleEvidence, field.TypeJSON, value)
 		_node.ExampleEvidence = value
 	}
-	if value, ok := cc.mutation.References(); ok {
+	if value, ok := _c.mutation.References(); ok {
 		_spec.SetField(control.FieldReferences, field.TypeJSON, value)
 		_node.References = value
 	}
-	if value, ok := cc.mutation.RefCode(); ok {
+	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
 	}
-	if nodes := cc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -950,13 +950,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.EvidenceControls
+		edge.Schema = _c.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -967,13 +967,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlControlObjectives
+		edge.Schema = _c.schemaConfig.ControlControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -984,13 +984,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlTasks
+		edge.Schema = _c.schemaConfig.ControlTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1001,13 +1001,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlNarratives
+		edge.Schema = _c.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1018,13 +1018,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlRisks
+		edge.Schema = _c.schemaConfig.ControlRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1035,13 +1035,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlActionPlans
+		edge.Schema = _c.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1052,13 +1052,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlProcedures
+		edge.Schema = _c.schemaConfig.ControlProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1069,13 +1069,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.InternalPolicyControls
+		edge.Schema = _c.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ControlOwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1086,14 +1086,14 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Control
+		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ControlOwnerID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1104,14 +1104,14 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Control
+		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DelegateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1122,14 +1122,14 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Control
+		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1140,13 +1140,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlBlockedGroups
+		edge.Schema = _c.schemaConfig.ControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1157,13 +1157,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlEditors
+		edge.Schema = _c.schemaConfig.ControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.StandardIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.StandardIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1174,14 +1174,14 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Control
+		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.StandardID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1192,13 +1192,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ProgramControls
+		edge.Schema = _c.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1209,13 +1209,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlAssets
+		edge.Schema = _c.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1226,13 +1226,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Scan
+		edge.Schema = _c.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1243,13 +1243,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ControlControlImplementations
+		edge.Schema = _c.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1260,13 +1260,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.Subcontrol
+		edge.Schema = _c.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1277,13 +1277,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.ScheduledJobControls
+		edge.Schema = _c.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.MappedToControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappedToControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1294,13 +1294,13 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.MappedControlToControls
+		edge.Schema = _c.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.MappedFromControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappedFromControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1311,7 +1311,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cc.schemaConfig.MappedControlFromControls
+		edge.Schema = _c.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1328,16 +1328,16 @@ type ControlCreateBulk struct {
 }
 
 // Save creates the Control entities in the database.
-func (ccb *ControlCreateBulk) Save(ctx context.Context) ([]*Control, error) {
-	if ccb.err != nil {
-		return nil, ccb.err
+func (_c *ControlCreateBulk) Save(ctx context.Context) ([]*Control, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
-	nodes := make([]*Control, len(ccb.builders))
-	mutators := make([]Mutator, len(ccb.builders))
-	for i := range ccb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Control, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ControlMutation)
@@ -1351,11 +1351,11 @@ func (ccb *ControlCreateBulk) Save(ctx context.Context) ([]*Control, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -1375,7 +1375,7 @@ func (ccb *ControlCreateBulk) Save(ctx context.Context) ([]*Control, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -1383,8 +1383,8 @@ func (ccb *ControlCreateBulk) Save(ctx context.Context) ([]*Control, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ccb *ControlCreateBulk) SaveX(ctx context.Context) []*Control {
-	v, err := ccb.Save(ctx)
+func (_c *ControlCreateBulk) SaveX(ctx context.Context) []*Control {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1392,14 +1392,14 @@ func (ccb *ControlCreateBulk) SaveX(ctx context.Context) []*Control {
 }
 
 // Exec executes the query.
-func (ccb *ControlCreateBulk) Exec(ctx context.Context) error {
-	_, err := ccb.Save(ctx)
+func (_c *ControlCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ccb *ControlCreateBulk) ExecX(ctx context.Context) {
-	if err := ccb.Exec(ctx); err != nil {
+func (_c *ControlCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -23,227 +23,227 @@ type ScheduledJobHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (sjhc *ScheduledJobHistoryCreate) SetHistoryTime(t time.Time) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetHistoryTime(t)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetHistoryTime(v time.Time) *ScheduledJobHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableHistoryTime(t *time.Time) *ScheduledJobHistoryCreate {
-	if t != nil {
-		sjhc.SetHistoryTime(*t)
+func (_c *ScheduledJobHistoryCreate) SetNillableHistoryTime(v *time.Time) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (sjhc *ScheduledJobHistoryCreate) SetRef(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetRef(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetRef(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableRef(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetRef(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableRef(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (sjhc *ScheduledJobHistoryCreate) SetOperation(ht history.OpType) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetOperation(ht)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetOperation(v history.OpType) *ScheduledJobHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (sjhc *ScheduledJobHistoryCreate) SetCreatedAt(t time.Time) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetCreatedAt(t)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetCreatedAt(v time.Time) *ScheduledJobHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableCreatedAt(t *time.Time) *ScheduledJobHistoryCreate {
-	if t != nil {
-		sjhc.SetCreatedAt(*t)
+func (_c *ScheduledJobHistoryCreate) SetNillableCreatedAt(v *time.Time) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sjhc *ScheduledJobHistoryCreate) SetUpdatedAt(t time.Time) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetUpdatedAt(t)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetUpdatedAt(v time.Time) *ScheduledJobHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ScheduledJobHistoryCreate {
-	if t != nil {
-		sjhc.SetUpdatedAt(*t)
+func (_c *ScheduledJobHistoryCreate) SetNillableUpdatedAt(v *time.Time) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (sjhc *ScheduledJobHistoryCreate) SetCreatedBy(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetCreatedBy(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetCreatedBy(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableCreatedBy(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetCreatedBy(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableCreatedBy(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sjhc *ScheduledJobHistoryCreate) SetUpdatedBy(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetUpdatedBy(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetUpdatedBy(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableUpdatedBy(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetUpdatedBy(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableUpdatedBy(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sjhc *ScheduledJobHistoryCreate) SetDeletedAt(t time.Time) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetDeletedAt(t)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetDeletedAt(v time.Time) *ScheduledJobHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableDeletedAt(t *time.Time) *ScheduledJobHistoryCreate {
-	if t != nil {
-		sjhc.SetDeletedAt(*t)
+func (_c *ScheduledJobHistoryCreate) SetNillableDeletedAt(v *time.Time) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sjhc *ScheduledJobHistoryCreate) SetDeletedBy(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetDeletedBy(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetDeletedBy(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableDeletedBy(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetDeletedBy(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableDeletedBy(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (sjhc *ScheduledJobHistoryCreate) SetDisplayID(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetDisplayID(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetDisplayID(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (sjhc *ScheduledJobHistoryCreate) SetOwnerID(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetOwnerID(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetOwnerID(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableOwnerID(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetOwnerID(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableOwnerID(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetJobID sets the "job_id" field.
-func (sjhc *ScheduledJobHistoryCreate) SetJobID(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetJobID(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetJobID(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetJobID(v)
+	return _c
 }
 
 // SetActive sets the "active" field.
-func (sjhc *ScheduledJobHistoryCreate) SetActive(b bool) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetActive(b)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetActive(v bool) *ScheduledJobHistoryCreate {
+	_c.mutation.SetActive(v)
+	return _c
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableActive(b *bool) *ScheduledJobHistoryCreate {
-	if b != nil {
-		sjhc.SetActive(*b)
+func (_c *ScheduledJobHistoryCreate) SetNillableActive(v *bool) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetActive(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetConfiguration sets the "configuration" field.
-func (sjhc *ScheduledJobHistoryCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetConfiguration(mc)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetConfiguration(v models.JobConfiguration) *ScheduledJobHistoryCreate {
+	_c.mutation.SetConfiguration(v)
+	return _c
 }
 
 // SetCron sets the "cron" field.
-func (sjhc *ScheduledJobHistoryCreate) SetCron(m models.Cron) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetCron(m)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetCron(v models.Cron) *ScheduledJobHistoryCreate {
+	_c.mutation.SetCron(v)
+	return _c
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableCron(m *models.Cron) *ScheduledJobHistoryCreate {
-	if m != nil {
-		sjhc.SetCron(*m)
+func (_c *ScheduledJobHistoryCreate) SetNillableCron(v *models.Cron) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetCron(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (sjhc *ScheduledJobHistoryCreate) SetJobRunnerID(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetJobRunnerID(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetJobRunnerID(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetJobRunnerID(v)
+	return _c
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableJobRunnerID(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetJobRunnerID(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableJobRunnerID(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetJobRunnerID(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sjhc *ScheduledJobHistoryCreate) SetID(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetID(s)
-	return sjhc
+func (_c *ScheduledJobHistoryCreate) SetID(v string) *ScheduledJobHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableID(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetID(*s)
+func (_c *ScheduledJobHistoryCreate) SetNillableID(v *string) *ScheduledJobHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sjhc
+	return _c
 }
 
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
-func (sjhc *ScheduledJobHistoryCreate) Mutation() *ScheduledJobHistoryMutation {
-	return sjhc.mutation
+func (_c *ScheduledJobHistoryCreate) Mutation() *ScheduledJobHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the ScheduledJobHistory in the database.
-func (sjhc *ScheduledJobHistoryCreate) Save(ctx context.Context) (*ScheduledJobHistory, error) {
-	if err := sjhc.defaults(); err != nil {
+func (_c *ScheduledJobHistoryCreate) Save(ctx context.Context) (*ScheduledJobHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sjhc.sqlSave, sjhc.mutation, sjhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sjhc *ScheduledJobHistoryCreate) SaveX(ctx context.Context) *ScheduledJobHistory {
-	v, err := sjhc.Save(ctx)
+func (_c *ScheduledJobHistoryCreate) SaveX(ctx context.Context) *ScheduledJobHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -251,78 +251,78 @@ func (sjhc *ScheduledJobHistoryCreate) SaveX(ctx context.Context) *ScheduledJobH
 }
 
 // Exec executes the query.
-func (sjhc *ScheduledJobHistoryCreate) Exec(ctx context.Context) error {
-	_, err := sjhc.Save(ctx)
+func (_c *ScheduledJobHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjhc *ScheduledJobHistoryCreate) ExecX(ctx context.Context) {
-	if err := sjhc.Exec(ctx); err != nil {
+func (_c *ScheduledJobHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sjhc *ScheduledJobHistoryCreate) defaults() error {
-	if _, ok := sjhc.mutation.HistoryTime(); !ok {
+func (_c *ScheduledJobHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if scheduledjobhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := scheduledjobhistory.DefaultHistoryTime()
-		sjhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := sjhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if scheduledjobhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := scheduledjobhistory.DefaultCreatedAt()
-		sjhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := sjhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if scheduledjobhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scheduledjobhistory.DefaultUpdatedAt()
-		sjhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sjhc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		v := scheduledjobhistory.DefaultActive
-		sjhc.mutation.SetActive(v)
+		_c.mutation.SetActive(v)
 	}
-	if _, ok := sjhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if scheduledjobhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := scheduledjobhistory.DefaultID()
-		sjhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sjhc *ScheduledJobHistoryCreate) check() error {
-	if _, ok := sjhc.mutation.HistoryTime(); !ok {
+func (_c *ScheduledJobHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "ScheduledJobHistory.history_time"`)}
 	}
-	if _, ok := sjhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "ScheduledJobHistory.operation"`)}
 	}
-	if v, ok := sjhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := scheduledjobhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := sjhc.mutation.DisplayID(); !ok {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ScheduledJobHistory.display_id"`)}
 	}
-	if _, ok := sjhc.mutation.JobID(); !ok {
+	if _, ok := _c.mutation.JobID(); !ok {
 		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ScheduledJobHistory.job_id"`)}
 	}
-	if _, ok := sjhc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "ScheduledJobHistory.active"`)}
 	}
-	if v, ok := sjhc.mutation.Cron(); ok {
+	if v, ok := _c.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cron": %w`, err)}
 		}
@@ -330,12 +330,12 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 	return nil
 }
 
-func (sjhc *ScheduledJobHistoryCreate) sqlSave(ctx context.Context) (*ScheduledJobHistory, error) {
-	if err := sjhc.check(); err != nil {
+func (_c *ScheduledJobHistoryCreate) sqlSave(ctx context.Context) (*ScheduledJobHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sjhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sjhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -348,82 +348,82 @@ func (sjhc *ScheduledJobHistoryCreate) sqlSave(ctx context.Context) (*ScheduledJ
 			return nil, fmt.Errorf("unexpected ScheduledJobHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	sjhc.mutation.id = &_node.ID
-	sjhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlgraph.CreateSpec) {
+func (_c *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ScheduledJobHistory{config: sjhc.config}
+		_node = &ScheduledJobHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(scheduledjobhistory.Table, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = sjhc.schemaConfig.ScheduledJobHistory
-	if id, ok := sjhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ScheduledJobHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sjhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(scheduledjobhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := sjhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(scheduledjobhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := sjhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(scheduledjobhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := sjhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := sjhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sjhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := sjhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := sjhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sjhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sjhc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := sjhc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := sjhc.mutation.JobID(); ok {
+	if value, ok := _c.mutation.JobID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
 		_node.JobID = value
 	}
-	if value, ok := sjhc.mutation.Active(); ok {
+	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := sjhc.mutation.Configuration(); ok {
+	if value, ok := _c.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
 	}
-	if value, ok := sjhc.mutation.Cron(); ok {
+	if value, ok := _c.mutation.Cron(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCron, field.TypeString, value)
 		_node.Cron = &value
 	}
-	if value, ok := sjhc.mutation.JobRunnerID(); ok {
+	if value, ok := _c.mutation.JobRunnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
 		_node.JobRunnerID = value
 	}
@@ -438,16 +438,16 @@ type ScheduledJobHistoryCreateBulk struct {
 }
 
 // Save creates the ScheduledJobHistory entities in the database.
-func (sjhcb *ScheduledJobHistoryCreateBulk) Save(ctx context.Context) ([]*ScheduledJobHistory, error) {
-	if sjhcb.err != nil {
-		return nil, sjhcb.err
+func (_c *ScheduledJobHistoryCreateBulk) Save(ctx context.Context) ([]*ScheduledJobHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(sjhcb.builders))
-	nodes := make([]*ScheduledJobHistory, len(sjhcb.builders))
-	mutators := make([]Mutator, len(sjhcb.builders))
-	for i := range sjhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ScheduledJobHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := sjhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ScheduledJobHistoryMutation)
@@ -461,11 +461,11 @@ func (sjhcb *ScheduledJobHistoryCreateBulk) Save(ctx context.Context) ([]*Schedu
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, sjhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, sjhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -485,7 +485,7 @@ func (sjhcb *ScheduledJobHistoryCreateBulk) Save(ctx context.Context) ([]*Schedu
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, sjhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -493,8 +493,8 @@ func (sjhcb *ScheduledJobHistoryCreateBulk) Save(ctx context.Context) ([]*Schedu
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sjhcb *ScheduledJobHistoryCreateBulk) SaveX(ctx context.Context) []*ScheduledJobHistory {
-	v, err := sjhcb.Save(ctx)
+func (_c *ScheduledJobHistoryCreateBulk) SaveX(ctx context.Context) []*ScheduledJobHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -502,14 +502,14 @@ func (sjhcb *ScheduledJobHistoryCreateBulk) SaveX(ctx context.Context) []*Schedu
 }
 
 // Exec executes the query.
-func (sjhcb *ScheduledJobHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := sjhcb.Save(ctx)
+func (_c *ScheduledJobHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjhcb *ScheduledJobHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := sjhcb.Exec(ctx); err != nil {
+func (_c *ScheduledJobHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

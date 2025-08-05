@@ -85,7 +85,7 @@ func (*DNSVerificationHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the DNSVerificationHistory fields.
-func (dvh *DNSVerificationHistory) assignValues(columns []string, values []any) error {
+func (_m *DNSVerificationHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -95,67 +95,67 @@ func (dvh *DNSVerificationHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				dvh.ID = value.String
+				_m.ID = value.String
 			}
 		case dnsverificationhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				dvh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case dnsverificationhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				dvh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case dnsverificationhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				dvh.Operation = *value
+				_m.Operation = *value
 			}
 		case dnsverificationhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				dvh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case dnsverificationhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				dvh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case dnsverificationhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				dvh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case dnsverificationhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				dvh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case dnsverificationhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				dvh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case dnsverificationhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				dvh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case dnsverificationhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &dvh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -163,64 +163,64 @@ func (dvh *DNSVerificationHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				dvh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case dnsverificationhistory.FieldCloudflareHostnameID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cloudflare_hostname_id", values[i])
 			} else if value.Valid {
-				dvh.CloudflareHostnameID = value.String
+				_m.CloudflareHostnameID = value.String
 			}
 		case dnsverificationhistory.FieldDNSTxtRecord:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_txt_record", values[i])
 			} else if value.Valid {
-				dvh.DNSTxtRecord = value.String
+				_m.DNSTxtRecord = value.String
 			}
 		case dnsverificationhistory.FieldDNSTxtValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_txt_value", values[i])
 			} else if value.Valid {
-				dvh.DNSTxtValue = value.String
+				_m.DNSTxtValue = value.String
 			}
 		case dnsverificationhistory.FieldDNSVerificationStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_status", values[i])
 			} else if value.Valid {
-				dvh.DNSVerificationStatus = enums.DNSVerificationStatus(value.String)
+				_m.DNSVerificationStatus = enums.DNSVerificationStatus(value.String)
 			}
 		case dnsverificationhistory.FieldDNSVerificationStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_status_reason", values[i])
 			} else if value.Valid {
-				dvh.DNSVerificationStatusReason = value.String
+				_m.DNSVerificationStatusReason = value.String
 			}
 		case dnsverificationhistory.FieldAcmeChallengePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_path", values[i])
 			} else if value.Valid {
-				dvh.AcmeChallengePath = value.String
+				_m.AcmeChallengePath = value.String
 			}
 		case dnsverificationhistory.FieldExpectedAcmeChallengeValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field expected_acme_challenge_value", values[i])
 			} else if value.Valid {
-				dvh.ExpectedAcmeChallengeValue = value.String
+				_m.ExpectedAcmeChallengeValue = value.String
 			}
 		case dnsverificationhistory.FieldAcmeChallengeStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_status", values[i])
 			} else if value.Valid {
-				dvh.AcmeChallengeStatus = enums.SSLVerificationStatus(value.String)
+				_m.AcmeChallengeStatus = enums.SSLVerificationStatus(value.String)
 			}
 		case dnsverificationhistory.FieldAcmeChallengeStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_status_reason", values[i])
 			} else if value.Valid {
-				dvh.AcmeChallengeStatusReason = value.String
+				_m.AcmeChallengeStatusReason = value.String
 			}
 		default:
-			dvh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -228,92 +228,92 @@ func (dvh *DNSVerificationHistory) assignValues(columns []string, values []any) 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the DNSVerificationHistory.
 // This includes values selected through modifiers, order, etc.
-func (dvh *DNSVerificationHistory) Value(name string) (ent.Value, error) {
-	return dvh.selectValues.Get(name)
+func (_m *DNSVerificationHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this DNSVerificationHistory.
 // Note that you need to call DNSVerificationHistory.Unwrap() before calling this method if this DNSVerificationHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (dvh *DNSVerificationHistory) Update() *DNSVerificationHistoryUpdateOne {
-	return NewDNSVerificationHistoryClient(dvh.config).UpdateOne(dvh)
+func (_m *DNSVerificationHistory) Update() *DNSVerificationHistoryUpdateOne {
+	return NewDNSVerificationHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the DNSVerificationHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (dvh *DNSVerificationHistory) Unwrap() *DNSVerificationHistory {
-	_tx, ok := dvh.config.driver.(*txDriver)
+func (_m *DNSVerificationHistory) Unwrap() *DNSVerificationHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: DNSVerificationHistory is not a transactional entity")
 	}
-	dvh.config.driver = _tx.drv
-	return dvh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (dvh *DNSVerificationHistory) String() string {
+func (_m *DNSVerificationHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("DNSVerificationHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", dvh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(dvh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(dvh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", dvh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(dvh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(dvh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(dvh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(dvh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(dvh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(dvh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", dvh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(dvh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("cloudflare_hostname_id=")
-	builder.WriteString(dvh.CloudflareHostnameID)
+	builder.WriteString(_m.CloudflareHostnameID)
 	builder.WriteString(", ")
 	builder.WriteString("dns_txt_record=")
-	builder.WriteString(dvh.DNSTxtRecord)
+	builder.WriteString(_m.DNSTxtRecord)
 	builder.WriteString(", ")
 	builder.WriteString("dns_txt_value=")
-	builder.WriteString(dvh.DNSTxtValue)
+	builder.WriteString(_m.DNSTxtValue)
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_status=")
-	builder.WriteString(fmt.Sprintf("%v", dvh.DNSVerificationStatus))
+	builder.WriteString(fmt.Sprintf("%v", _m.DNSVerificationStatus))
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_status_reason=")
-	builder.WriteString(dvh.DNSVerificationStatusReason)
+	builder.WriteString(_m.DNSVerificationStatusReason)
 	builder.WriteString(", ")
 	builder.WriteString("acme_challenge_path=")
-	builder.WriteString(dvh.AcmeChallengePath)
+	builder.WriteString(_m.AcmeChallengePath)
 	builder.WriteString(", ")
 	builder.WriteString("expected_acme_challenge_value=")
-	builder.WriteString(dvh.ExpectedAcmeChallengeValue)
+	builder.WriteString(_m.ExpectedAcmeChallengeValue)
 	builder.WriteString(", ")
 	builder.WriteString("acme_challenge_status=")
-	builder.WriteString(fmt.Sprintf("%v", dvh.AcmeChallengeStatus))
+	builder.WriteString(fmt.Sprintf("%v", _m.AcmeChallengeStatus))
 	builder.WriteString(", ")
 	builder.WriteString("acme_challenge_status_reason=")
-	builder.WriteString(dvh.AcmeChallengeStatusReason)
+	builder.WriteString(_m.AcmeChallengeStatusReason)
 	builder.WriteByte(')')
 	return builder.String()
 }

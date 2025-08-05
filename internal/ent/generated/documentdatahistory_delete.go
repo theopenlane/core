@@ -22,58 +22,58 @@ type DocumentDataHistoryDelete struct {
 }
 
 // Where appends a list predicates to the DocumentDataHistoryDelete builder.
-func (ddhd *DocumentDataHistoryDelete) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryDelete {
-	ddhd.mutation.Where(ps...)
-	return ddhd
+func (_d *DocumentDataHistoryDelete) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (ddhd *DocumentDataHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, ddhd.sqlExec, ddhd.mutation, ddhd.hooks)
+func (_d *DocumentDataHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ddhd *DocumentDataHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := ddhd.Exec(ctx)
+func (_d *DocumentDataHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (ddhd *DocumentDataHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *DocumentDataHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(documentdatahistory.Table, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
-	_spec.Node.Schema = ddhd.schemaConfig.DocumentDataHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ddhd.schemaConfig)
-	if ps := ddhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.DocumentDataHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, ddhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	ddhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // DocumentDataHistoryDeleteOne is the builder for deleting a single DocumentDataHistory entity.
 type DocumentDataHistoryDeleteOne struct {
-	ddhd *DocumentDataHistoryDelete
+	_d *DocumentDataHistoryDelete
 }
 
 // Where appends a list predicates to the DocumentDataHistoryDelete builder.
-func (ddhdo *DocumentDataHistoryDeleteOne) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryDeleteOne {
-	ddhdo.ddhd.mutation.Where(ps...)
-	return ddhdo
+func (_d *DocumentDataHistoryDeleteOne) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (ddhdo *DocumentDataHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := ddhdo.ddhd.Exec(ctx)
+func (_d *DocumentDataHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (ddhdo *DocumentDataHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ddhdo *DocumentDataHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := ddhdo.Exec(ctx); err != nil {
+func (_d *DocumentDataHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

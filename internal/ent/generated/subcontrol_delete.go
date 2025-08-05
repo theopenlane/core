@@ -22,58 +22,58 @@ type SubcontrolDelete struct {
 }
 
 // Where appends a list predicates to the SubcontrolDelete builder.
-func (sd *SubcontrolDelete) Where(ps ...predicate.Subcontrol) *SubcontrolDelete {
-	sd.mutation.Where(ps...)
-	return sd
+func (_d *SubcontrolDelete) Where(ps ...predicate.Subcontrol) *SubcontrolDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (sd *SubcontrolDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, sd.sqlExec, sd.mutation, sd.hooks)
+func (_d *SubcontrolDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sd *SubcontrolDelete) ExecX(ctx context.Context) int {
-	n, err := sd.Exec(ctx)
+func (_d *SubcontrolDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (sd *SubcontrolDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SubcontrolDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(subcontrol.Table, sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString))
-	_spec.Node.Schema = sd.schemaConfig.Subcontrol
-	ctx = internal.NewSchemaConfigContext(ctx, sd.schemaConfig)
-	if ps := sd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Subcontrol
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, sd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	sd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SubcontrolDeleteOne is the builder for deleting a single Subcontrol entity.
 type SubcontrolDeleteOne struct {
-	sd *SubcontrolDelete
+	_d *SubcontrolDelete
 }
 
 // Where appends a list predicates to the SubcontrolDelete builder.
-func (sdo *SubcontrolDeleteOne) Where(ps ...predicate.Subcontrol) *SubcontrolDeleteOne {
-	sdo.sd.mutation.Where(ps...)
-	return sdo
+func (_d *SubcontrolDeleteOne) Where(ps ...predicate.Subcontrol) *SubcontrolDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (sdo *SubcontrolDeleteOne) Exec(ctx context.Context) error {
-	n, err := sdo.sd.Exec(ctx)
+func (_d *SubcontrolDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (sdo *SubcontrolDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sdo *SubcontrolDeleteOne) ExecX(ctx context.Context) {
-	if err := sdo.Exec(ctx); err != nil {
+func (_d *SubcontrolDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

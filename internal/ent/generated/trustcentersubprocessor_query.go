@@ -37,44 +37,44 @@ type TrustCenterSubprocessorQuery struct {
 }
 
 // Where adds a new predicate for the TrustCenterSubprocessorQuery builder.
-func (tcsq *TrustCenterSubprocessorQuery) Where(ps ...predicate.TrustCenterSubprocessor) *TrustCenterSubprocessorQuery {
-	tcsq.predicates = append(tcsq.predicates, ps...)
-	return tcsq
+func (_q *TrustCenterSubprocessorQuery) Where(ps ...predicate.TrustCenterSubprocessor) *TrustCenterSubprocessorQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tcsq *TrustCenterSubprocessorQuery) Limit(limit int) *TrustCenterSubprocessorQuery {
-	tcsq.ctx.Limit = &limit
-	return tcsq
+func (_q *TrustCenterSubprocessorQuery) Limit(limit int) *TrustCenterSubprocessorQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tcsq *TrustCenterSubprocessorQuery) Offset(offset int) *TrustCenterSubprocessorQuery {
-	tcsq.ctx.Offset = &offset
-	return tcsq
+func (_q *TrustCenterSubprocessorQuery) Offset(offset int) *TrustCenterSubprocessorQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tcsq *TrustCenterSubprocessorQuery) Unique(unique bool) *TrustCenterSubprocessorQuery {
-	tcsq.ctx.Unique = &unique
-	return tcsq
+func (_q *TrustCenterSubprocessorQuery) Unique(unique bool) *TrustCenterSubprocessorQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tcsq *TrustCenterSubprocessorQuery) Order(o ...trustcentersubprocessor.OrderOption) *TrustCenterSubprocessorQuery {
-	tcsq.order = append(tcsq.order, o...)
-	return tcsq
+func (_q *TrustCenterSubprocessorQuery) Order(o ...trustcentersubprocessor.OrderOption) *TrustCenterSubprocessorQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryTrustCenter chains the current query on the "trust_center" edge.
-func (tcsq *TrustCenterSubprocessorQuery) QueryTrustCenter() *TrustCenterQuery {
-	query := (&TrustCenterClient{config: tcsq.config}).Query()
+func (_q *TrustCenterSubprocessorQuery) QueryTrustCenter() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tcsq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tcsq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -83,23 +83,23 @@ func (tcsq *TrustCenterSubprocessorQuery) QueryTrustCenter() *TrustCenterQuery {
 			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.TrustCenterTable, trustcentersubprocessor.TrustCenterColumn),
 		)
-		schemaConfig := tcsq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
-		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubprocessor chains the current query on the "subprocessor" edge.
-func (tcsq *TrustCenterSubprocessorQuery) QuerySubprocessor() *SubprocessorQuery {
-	query := (&SubprocessorClient{config: tcsq.config}).Query()
+func (_q *TrustCenterSubprocessorQuery) QuerySubprocessor() *SubprocessorQuery {
+	query := (&SubprocessorClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tcsq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tcsq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -108,10 +108,10 @@ func (tcsq *TrustCenterSubprocessorQuery) QuerySubprocessor() *SubprocessorQuery
 			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.SubprocessorTable, trustcentersubprocessor.SubprocessorColumn),
 		)
-		schemaConfig := tcsq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subprocessor
 		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
-		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -119,8 +119,8 @@ func (tcsq *TrustCenterSubprocessorQuery) QuerySubprocessor() *SubprocessorQuery
 
 // First returns the first TrustCenterSubprocessor entity from the query.
 // Returns a *NotFoundError when no TrustCenterSubprocessor was found.
-func (tcsq *TrustCenterSubprocessorQuery) First(ctx context.Context) (*TrustCenterSubprocessor, error) {
-	nodes, err := tcsq.Limit(1).All(setContextOp(ctx, tcsq.ctx, ent.OpQueryFirst))
+func (_q *TrustCenterSubprocessorQuery) First(ctx context.Context) (*TrustCenterSubprocessor, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -131,8 +131,8 @@ func (tcsq *TrustCenterSubprocessorQuery) First(ctx context.Context) (*TrustCent
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) FirstX(ctx context.Context) *TrustCenterSubprocessor {
-	node, err := tcsq.First(ctx)
+func (_q *TrustCenterSubprocessorQuery) FirstX(ctx context.Context) *TrustCenterSubprocessor {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -141,9 +141,9 @@ func (tcsq *TrustCenterSubprocessorQuery) FirstX(ctx context.Context) *TrustCent
 
 // FirstID returns the first TrustCenterSubprocessor ID from the query.
 // Returns a *NotFoundError when no TrustCenterSubprocessor ID was found.
-func (tcsq *TrustCenterSubprocessorQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterSubprocessorQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tcsq.Limit(1).IDs(setContextOp(ctx, tcsq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -154,8 +154,8 @@ func (tcsq *TrustCenterSubprocessorQuery) FirstID(ctx context.Context) (id strin
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) FirstIDX(ctx context.Context) string {
-	id, err := tcsq.FirstID(ctx)
+func (_q *TrustCenterSubprocessorQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -165,8 +165,8 @@ func (tcsq *TrustCenterSubprocessorQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single TrustCenterSubprocessor entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TrustCenterSubprocessor entity is found.
 // Returns a *NotFoundError when no TrustCenterSubprocessor entities are found.
-func (tcsq *TrustCenterSubprocessorQuery) Only(ctx context.Context) (*TrustCenterSubprocessor, error) {
-	nodes, err := tcsq.Limit(2).All(setContextOp(ctx, tcsq.ctx, ent.OpQueryOnly))
+func (_q *TrustCenterSubprocessorQuery) Only(ctx context.Context) (*TrustCenterSubprocessor, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -181,8 +181,8 @@ func (tcsq *TrustCenterSubprocessorQuery) Only(ctx context.Context) (*TrustCente
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) OnlyX(ctx context.Context) *TrustCenterSubprocessor {
-	node, err := tcsq.Only(ctx)
+func (_q *TrustCenterSubprocessorQuery) OnlyX(ctx context.Context) *TrustCenterSubprocessor {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -192,9 +192,9 @@ func (tcsq *TrustCenterSubprocessorQuery) OnlyX(ctx context.Context) *TrustCente
 // OnlyID is like Only, but returns the only TrustCenterSubprocessor ID in the query.
 // Returns a *NotSingularError when more than one TrustCenterSubprocessor ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tcsq *TrustCenterSubprocessorQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterSubprocessorQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = tcsq.Limit(2).IDs(setContextOp(ctx, tcsq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -209,8 +209,8 @@ func (tcsq *TrustCenterSubprocessorQuery) OnlyID(ctx context.Context) (id string
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) OnlyIDX(ctx context.Context) string {
-	id, err := tcsq.OnlyID(ctx)
+func (_q *TrustCenterSubprocessorQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,18 +218,18 @@ func (tcsq *TrustCenterSubprocessorQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of TrustCenterSubprocessors.
-func (tcsq *TrustCenterSubprocessorQuery) All(ctx context.Context) ([]*TrustCenterSubprocessor, error) {
-	ctx = setContextOp(ctx, tcsq.ctx, ent.OpQueryAll)
-	if err := tcsq.prepareQuery(ctx); err != nil {
+func (_q *TrustCenterSubprocessorQuery) All(ctx context.Context) ([]*TrustCenterSubprocessor, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TrustCenterSubprocessor, *TrustCenterSubprocessorQuery]()
-	return withInterceptors[[]*TrustCenterSubprocessor](ctx, tcsq, qr, tcsq.inters)
+	return withInterceptors[[]*TrustCenterSubprocessor](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) AllX(ctx context.Context) []*TrustCenterSubprocessor {
-	nodes, err := tcsq.All(ctx)
+func (_q *TrustCenterSubprocessorQuery) AllX(ctx context.Context) []*TrustCenterSubprocessor {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -237,20 +237,20 @@ func (tcsq *TrustCenterSubprocessorQuery) AllX(ctx context.Context) []*TrustCent
 }
 
 // IDs executes the query and returns a list of TrustCenterSubprocessor IDs.
-func (tcsq *TrustCenterSubprocessorQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if tcsq.ctx.Unique == nil && tcsq.path != nil {
-		tcsq.Unique(true)
+func (_q *TrustCenterSubprocessorQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tcsq.ctx, ent.OpQueryIDs)
-	if err = tcsq.Select(trustcentersubprocessor.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(trustcentersubprocessor.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) IDsX(ctx context.Context) []string {
-	ids, err := tcsq.IDs(ctx)
+func (_q *TrustCenterSubprocessorQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -258,17 +258,17 @@ func (tcsq *TrustCenterSubprocessorQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (tcsq *TrustCenterSubprocessorQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tcsq.ctx, ent.OpQueryCount)
-	if err := tcsq.prepareQuery(ctx); err != nil {
+func (_q *TrustCenterSubprocessorQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tcsq, querierCount[*TrustCenterSubprocessorQuery](), tcsq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TrustCenterSubprocessorQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) CountX(ctx context.Context) int {
-	count, err := tcsq.Count(ctx)
+func (_q *TrustCenterSubprocessorQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -276,9 +276,9 @@ func (tcsq *TrustCenterSubprocessorQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tcsq *TrustCenterSubprocessorQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tcsq.ctx, ent.OpQueryExist)
-	switch _, err := tcsq.FirstID(ctx); {
+func (_q *TrustCenterSubprocessorQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -289,8 +289,8 @@ func (tcsq *TrustCenterSubprocessorQuery) Exist(ctx context.Context) (bool, erro
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tcsq *TrustCenterSubprocessorQuery) ExistX(ctx context.Context) bool {
-	exist, err := tcsq.Exist(ctx)
+func (_q *TrustCenterSubprocessorQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -299,45 +299,45 @@ func (tcsq *TrustCenterSubprocessorQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TrustCenterSubprocessorQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tcsq *TrustCenterSubprocessorQuery) Clone() *TrustCenterSubprocessorQuery {
-	if tcsq == nil {
+func (_q *TrustCenterSubprocessorQuery) Clone() *TrustCenterSubprocessorQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TrustCenterSubprocessorQuery{
-		config:           tcsq.config,
-		ctx:              tcsq.ctx.Clone(),
-		order:            append([]trustcentersubprocessor.OrderOption{}, tcsq.order...),
-		inters:           append([]Interceptor{}, tcsq.inters...),
-		predicates:       append([]predicate.TrustCenterSubprocessor{}, tcsq.predicates...),
-		withTrustCenter:  tcsq.withTrustCenter.Clone(),
-		withSubprocessor: tcsq.withSubprocessor.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]trustcentersubprocessor.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.TrustCenterSubprocessor{}, _q.predicates...),
+		withTrustCenter:  _q.withTrustCenter.Clone(),
+		withSubprocessor: _q.withSubprocessor.Clone(),
 		// clone intermediate query.
-		sql:       tcsq.sql.Clone(),
-		path:      tcsq.path,
-		modifiers: append([]func(*sql.Selector){}, tcsq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
 // the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
-func (tcsq *TrustCenterSubprocessorQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustCenterSubprocessorQuery {
-	query := (&TrustCenterClient{config: tcsq.config}).Query()
+func (_q *TrustCenterSubprocessorQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tcsq.withTrustCenter = query
-	return tcsq
+	_q.withTrustCenter = query
+	return _q
 }
 
 // WithSubprocessor tells the query-builder to eager-load the nodes that are connected to
 // the "subprocessor" edge. The optional arguments are used to configure the query builder of the edge.
-func (tcsq *TrustCenterSubprocessorQuery) WithSubprocessor(opts ...func(*SubprocessorQuery)) *TrustCenterSubprocessorQuery {
-	query := (&SubprocessorClient{config: tcsq.config}).Query()
+func (_q *TrustCenterSubprocessorQuery) WithSubprocessor(opts ...func(*SubprocessorQuery)) *TrustCenterSubprocessorQuery {
+	query := (&SubprocessorClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tcsq.withSubprocessor = query
-	return tcsq
+	_q.withSubprocessor = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -354,10 +354,10 @@ func (tcsq *TrustCenterSubprocessorQuery) WithSubprocessor(opts ...func(*Subproc
 //		GroupBy(trustcentersubprocessor.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (tcsq *TrustCenterSubprocessorQuery) GroupBy(field string, fields ...string) *TrustCenterSubprocessorGroupBy {
-	tcsq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TrustCenterSubprocessorGroupBy{build: tcsq}
-	grbuild.flds = &tcsq.ctx.Fields
+func (_q *TrustCenterSubprocessorQuery) GroupBy(field string, fields ...string) *TrustCenterSubprocessorGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TrustCenterSubprocessorGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = trustcentersubprocessor.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -375,104 +375,104 @@ func (tcsq *TrustCenterSubprocessorQuery) GroupBy(field string, fields ...string
 //	client.TrustCenterSubprocessor.Query().
 //		Select(trustcentersubprocessor.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (tcsq *TrustCenterSubprocessorQuery) Select(fields ...string) *TrustCenterSubprocessorSelect {
-	tcsq.ctx.Fields = append(tcsq.ctx.Fields, fields...)
-	sbuild := &TrustCenterSubprocessorSelect{TrustCenterSubprocessorQuery: tcsq}
+func (_q *TrustCenterSubprocessorQuery) Select(fields ...string) *TrustCenterSubprocessorSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TrustCenterSubprocessorSelect{TrustCenterSubprocessorQuery: _q}
 	sbuild.label = trustcentersubprocessor.Label
-	sbuild.flds, sbuild.scan = &tcsq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TrustCenterSubprocessorSelect configured with the given aggregations.
-func (tcsq *TrustCenterSubprocessorQuery) Aggregate(fns ...AggregateFunc) *TrustCenterSubprocessorSelect {
-	return tcsq.Select().Aggregate(fns...)
+func (_q *TrustCenterSubprocessorQuery) Aggregate(fns ...AggregateFunc) *TrustCenterSubprocessorSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tcsq *TrustCenterSubprocessorQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tcsq.inters {
+func (_q *TrustCenterSubprocessorQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tcsq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tcsq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !trustcentersubprocessor.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if tcsq.path != nil {
-		prev, err := tcsq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tcsq.sql = prev
+		_q.sql = prev
 	}
 	if trustcentersubprocessor.Policy == nil {
 		return errors.New("generated: uninitialized trustcentersubprocessor.Policy (forgotten import generated/runtime?)")
 	}
-	if err := trustcentersubprocessor.Policy.EvalQuery(ctx, tcsq); err != nil {
+	if err := trustcentersubprocessor.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (tcsq *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterSubprocessor, error) {
+func (_q *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterSubprocessor, error) {
 	var (
 		nodes       = []*TrustCenterSubprocessor{}
-		_spec       = tcsq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			tcsq.withTrustCenter != nil,
-			tcsq.withSubprocessor != nil,
+			_q.withTrustCenter != nil,
+			_q.withSubprocessor != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenterSubprocessor).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TrustCenterSubprocessor{config: tcsq.config}
+		node := &TrustCenterSubprocessor{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tcsq.schemaConfig.TrustCenterSubprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, tcsq.schemaConfig)
-	if len(tcsq.modifiers) > 0 {
-		_spec.Modifiers = tcsq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterSubprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tcsq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tcsq.withTrustCenter; query != nil {
-		if err := tcsq.loadTrustCenter(ctx, query, nodes, nil,
+	if query := _q.withTrustCenter; query != nil {
+		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
 			func(n *TrustCenterSubprocessor, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tcsq.withSubprocessor; query != nil {
-		if err := tcsq.loadSubprocessor(ctx, query, nodes, nil,
+	if query := _q.withSubprocessor; query != nil {
+		if err := _q.loadSubprocessor(ctx, query, nodes, nil,
 			func(n *TrustCenterSubprocessor, e *Subprocessor) { n.Edges.Subprocessor = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range tcsq.loadTotal {
-		if err := tcsq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (tcsq *TrustCenterSubprocessorQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *TrustCenter)) error {
+func (_q *TrustCenterSubprocessorQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *TrustCenter)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TrustCenterSubprocessor)
 	for i := range nodes {
@@ -501,7 +501,7 @@ func (tcsq *TrustCenterSubprocessorQuery) loadTrustCenter(ctx context.Context, q
 	}
 	return nil
 }
-func (tcsq *TrustCenterSubprocessorQuery) loadSubprocessor(ctx context.Context, query *SubprocessorQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *Subprocessor)) error {
+func (_q *TrustCenterSubprocessorQuery) loadSubprocessor(ctx context.Context, query *SubprocessorQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *Subprocessor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TrustCenterSubprocessor)
 	for i := range nodes {
@@ -531,29 +531,29 @@ func (tcsq *TrustCenterSubprocessorQuery) loadSubprocessor(ctx context.Context, 
 	return nil
 }
 
-func (tcsq *TrustCenterSubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tcsq.querySpec()
-	_spec.Node.Schema = tcsq.schemaConfig.TrustCenterSubprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, tcsq.schemaConfig)
-	if len(tcsq.modifiers) > 0 {
-		_spec.Modifiers = tcsq.modifiers
+func (_q *TrustCenterSubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterSubprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = tcsq.ctx.Fields
-	if len(tcsq.ctx.Fields) > 0 {
-		_spec.Unique = tcsq.ctx.Unique != nil && *tcsq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tcsq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tcsq *TrustCenterSubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TrustCenterSubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(trustcentersubprocessor.Table, trustcentersubprocessor.Columns, sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString))
-	_spec.From = tcsq.sql
-	if unique := tcsq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tcsq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tcsq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcentersubprocessor.FieldID)
 		for i := range fields {
@@ -561,27 +561,27 @@ func (tcsq *TrustCenterSubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tcsq.withTrustCenter != nil {
+		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcentersubprocessor.FieldTrustCenterID)
 		}
-		if tcsq.withSubprocessor != nil {
+		if _q.withSubprocessor != nil {
 			_spec.Node.AddColumnOnce(trustcentersubprocessor.FieldSubprocessorID)
 		}
 	}
-	if ps := tcsq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tcsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tcsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tcsq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -591,48 +591,48 @@ func (tcsq *TrustCenterSubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tcsq *TrustCenterSubprocessorQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tcsq.driver.Dialect())
+func (_q *TrustCenterSubprocessorQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(trustcentersubprocessor.Table)
-	columns := tcsq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = trustcentersubprocessor.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tcsq.sql != nil {
-		selector = tcsq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tcsq.ctx.Unique != nil && *tcsq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tcsq.schemaConfig.TrustCenterSubprocessor)
-	ctx = internal.NewSchemaConfigContext(ctx, tcsq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TrustCenterSubprocessor)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range tcsq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range tcsq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tcsq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tcsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tcsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tcsq *TrustCenterSubprocessorQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterSubprocessorSelect {
-	tcsq.modifiers = append(tcsq.modifiers, modifiers...)
-	return tcsq.Select()
+func (_q *TrustCenterSubprocessorQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterSubprocessorSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -661,41 +661,41 @@ type TrustCenterSubprocessorGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tcsgb *TrustCenterSubprocessorGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterSubprocessorGroupBy {
-	tcsgb.fns = append(tcsgb.fns, fns...)
-	return tcsgb
+func (_g *TrustCenterSubprocessorGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterSubprocessorGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcsgb *TrustCenterSubprocessorGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcsgb.build.ctx, ent.OpQueryGroupBy)
-	if err := tcsgb.build.prepareQuery(ctx); err != nil {
+func (_g *TrustCenterSubprocessorGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustCenterSubprocessorQuery, *TrustCenterSubprocessorGroupBy](ctx, tcsgb.build, tcsgb, tcsgb.build.inters, v)
+	return scanWithInterceptors[*TrustCenterSubprocessorQuery, *TrustCenterSubprocessorGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tcsgb *TrustCenterSubprocessorGroupBy) sqlScan(ctx context.Context, root *TrustCenterSubprocessorQuery, v any) error {
+func (_g *TrustCenterSubprocessorGroupBy) sqlScan(ctx context.Context, root *TrustCenterSubprocessorQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tcsgb.fns))
-	for _, fn := range tcsgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tcsgb.flds)+len(tcsgb.fns))
-		for _, f := range *tcsgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tcsgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcsgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -709,27 +709,27 @@ type TrustCenterSubprocessorSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tcss *TrustCenterSubprocessorSelect) Aggregate(fns ...AggregateFunc) *TrustCenterSubprocessorSelect {
-	tcss.fns = append(tcss.fns, fns...)
-	return tcss
+func (_s *TrustCenterSubprocessorSelect) Aggregate(fns ...AggregateFunc) *TrustCenterSubprocessorSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcss *TrustCenterSubprocessorSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcss.ctx, ent.OpQuerySelect)
-	if err := tcss.prepareQuery(ctx); err != nil {
+func (_s *TrustCenterSubprocessorSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustCenterSubprocessorQuery, *TrustCenterSubprocessorSelect](ctx, tcss.TrustCenterSubprocessorQuery, tcss, tcss.inters, v)
+	return scanWithInterceptors[*TrustCenterSubprocessorQuery, *TrustCenterSubprocessorSelect](ctx, _s.TrustCenterSubprocessorQuery, _s, _s.inters, v)
 }
 
-func (tcss *TrustCenterSubprocessorSelect) sqlScan(ctx context.Context, root *TrustCenterSubprocessorQuery, v any) error {
+func (_s *TrustCenterSubprocessorSelect) sqlScan(ctx context.Context, root *TrustCenterSubprocessorQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tcss.fns))
-	for _, fn := range tcss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tcss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -737,7 +737,7 @@ func (tcss *TrustCenterSubprocessorSelect) sqlScan(ctx context.Context, root *Tr
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -745,7 +745,7 @@ func (tcss *TrustCenterSubprocessorSelect) sqlScan(ctx context.Context, root *Tr
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tcss *TrustCenterSubprocessorSelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterSubprocessorSelect {
-	tcss.modifiers = append(tcss.modifiers, modifiers...)
-	return tcss
+func (_s *TrustCenterSubprocessorSelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterSubprocessorSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

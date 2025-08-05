@@ -275,7 +275,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the File fields.
-func (f *File) assignValues(columns []string, values []any) error {
+func (_m *File) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -285,49 +285,49 @@ func (f *File) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				f.ID = value.String
+				_m.ID = value.String
 			}
 		case file.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				f.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case file.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				f.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case file.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				f.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case file.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				f.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case file.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				f.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case file.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				f.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case file.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &f.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -335,102 +335,102 @@ func (f *File) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provided_file_name", values[i])
 			} else if value.Valid {
-				f.ProvidedFileName = value.String
+				_m.ProvidedFileName = value.String
 			}
 		case file.FieldProvidedFileExtension:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provided_file_extension", values[i])
 			} else if value.Valid {
-				f.ProvidedFileExtension = value.String
+				_m.ProvidedFileExtension = value.String
 			}
 		case file.FieldProvidedFileSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field provided_file_size", values[i])
 			} else if value.Valid {
-				f.ProvidedFileSize = value.Int64
+				_m.ProvidedFileSize = value.Int64
 			}
 		case file.FieldPersistedFileSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field persisted_file_size", values[i])
 			} else if value.Valid {
-				f.PersistedFileSize = value.Int64
+				_m.PersistedFileSize = value.Int64
 			}
 		case file.FieldDetectedMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detected_mime_type", values[i])
 			} else if value.Valid {
-				f.DetectedMimeType = value.String
+				_m.DetectedMimeType = value.String
 			}
 		case file.FieldMd5Hash:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field md5_hash", values[i])
 			} else if value.Valid {
-				f.Md5Hash = value.String
+				_m.Md5Hash = value.String
 			}
 		case file.FieldDetectedContentType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field detected_content_type", values[i])
 			} else if value.Valid {
-				f.DetectedContentType = value.String
+				_m.DetectedContentType = value.String
 			}
 		case file.FieldStoreKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field store_key", values[i])
 			} else if value.Valid {
-				f.StoreKey = value.String
+				_m.StoreKey = value.String
 			}
 		case file.FieldCategoryType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category_type", values[i])
 			} else if value.Valid {
-				f.CategoryType = value.String
+				_m.CategoryType = value.String
 			}
 		case file.FieldURI:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field uri", values[i])
 			} else if value.Valid {
-				f.URI = value.String
+				_m.URI = value.String
 			}
 		case file.FieldStorageScheme:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_scheme", values[i])
 			} else if value.Valid {
-				f.StorageScheme = value.String
+				_m.StorageScheme = value.String
 			}
 		case file.FieldStorageVolume:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_volume", values[i])
 			} else if value.Valid {
-				f.StorageVolume = value.String
+				_m.StorageVolume = value.String
 			}
 		case file.FieldStoragePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_path", values[i])
 			} else if value.Valid {
-				f.StoragePath = value.String
+				_m.StoragePath = value.String
 			}
 		case file.FieldFileContents:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field file_contents", values[i])
 			} else if value != nil {
-				f.FileContents = *value
+				_m.FileContents = *value
 			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field export_files", values[i])
 			} else if value.Valid {
-				f.export_files = new(string)
-				*f.export_files = value.String
+				_m.export_files = new(string)
+				*_m.export_files = value.String
 			}
 		case file.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
 			} else if value.Valid {
-				f.note_files = new(string)
-				*f.note_files = value.String
+				_m.note_files = new(string)
+				*_m.note_files = value.String
 			}
 		default:
-			f.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -438,502 +438,502 @@ func (f *File) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the File.
 // This includes values selected through modifiers, order, etc.
-func (f *File) Value(name string) (ent.Value, error) {
-	return f.selectValues.Get(name)
+func (_m *File) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryUser queries the "user" edge of the File entity.
-func (f *File) QueryUser() *UserQuery {
-	return NewFileClient(f.config).QueryUser(f)
+func (_m *File) QueryUser() *UserQuery {
+	return NewFileClient(_m.config).QueryUser(_m)
 }
 
 // QueryOrganization queries the "organization" edge of the File entity.
-func (f *File) QueryOrganization() *OrganizationQuery {
-	return NewFileClient(f.config).QueryOrganization(f)
+func (_m *File) QueryOrganization() *OrganizationQuery {
+	return NewFileClient(_m.config).QueryOrganization(_m)
 }
 
 // QueryGroups queries the "groups" edge of the File entity.
-func (f *File) QueryGroups() *GroupQuery {
-	return NewFileClient(f.config).QueryGroups(f)
+func (_m *File) QueryGroups() *GroupQuery {
+	return NewFileClient(_m.config).QueryGroups(_m)
 }
 
 // QueryContact queries the "contact" edge of the File entity.
-func (f *File) QueryContact() *ContactQuery {
-	return NewFileClient(f.config).QueryContact(f)
+func (_m *File) QueryContact() *ContactQuery {
+	return NewFileClient(_m.config).QueryContact(_m)
 }
 
 // QueryEntity queries the "entity" edge of the File entity.
-func (f *File) QueryEntity() *EntityQuery {
-	return NewFileClient(f.config).QueryEntity(f)
+func (_m *File) QueryEntity() *EntityQuery {
+	return NewFileClient(_m.config).QueryEntity(_m)
 }
 
 // QueryUserSetting queries the "user_setting" edge of the File entity.
-func (f *File) QueryUserSetting() *UserSettingQuery {
-	return NewFileClient(f.config).QueryUserSetting(f)
+func (_m *File) QueryUserSetting() *UserSettingQuery {
+	return NewFileClient(_m.config).QueryUserSetting(_m)
 }
 
 // QueryOrganizationSetting queries the "organization_setting" edge of the File entity.
-func (f *File) QueryOrganizationSetting() *OrganizationSettingQuery {
-	return NewFileClient(f.config).QueryOrganizationSetting(f)
+func (_m *File) QueryOrganizationSetting() *OrganizationSettingQuery {
+	return NewFileClient(_m.config).QueryOrganizationSetting(_m)
 }
 
 // QueryTemplate queries the "template" edge of the File entity.
-func (f *File) QueryTemplate() *TemplateQuery {
-	return NewFileClient(f.config).QueryTemplate(f)
+func (_m *File) QueryTemplate() *TemplateQuery {
+	return NewFileClient(_m.config).QueryTemplate(_m)
 }
 
 // QueryDocument queries the "document" edge of the File entity.
-func (f *File) QueryDocument() *DocumentDataQuery {
-	return NewFileClient(f.config).QueryDocument(f)
+func (_m *File) QueryDocument() *DocumentDataQuery {
+	return NewFileClient(_m.config).QueryDocument(_m)
 }
 
 // QueryProgram queries the "program" edge of the File entity.
-func (f *File) QueryProgram() *ProgramQuery {
-	return NewFileClient(f.config).QueryProgram(f)
+func (_m *File) QueryProgram() *ProgramQuery {
+	return NewFileClient(_m.config).QueryProgram(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the File entity.
-func (f *File) QueryEvidence() *EvidenceQuery {
-	return NewFileClient(f.config).QueryEvidence(f)
+func (_m *File) QueryEvidence() *EvidenceQuery {
+	return NewFileClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryEvents queries the "events" edge of the File entity.
-func (f *File) QueryEvents() *EventQuery {
-	return NewFileClient(f.config).QueryEvents(f)
+func (_m *File) QueryEvents() *EventQuery {
+	return NewFileClient(_m.config).QueryEvents(_m)
 }
 
 // QueryTrustCenterSetting queries the "trust_center_setting" edge of the File entity.
-func (f *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
-	return NewFileClient(f.config).QueryTrustCenterSetting(f)
+func (_m *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
+	return NewFileClient(_m.config).QueryTrustCenterSetting(_m)
 }
 
 // QuerySubprocessor queries the "subprocessor" edge of the File entity.
-func (f *File) QuerySubprocessor() *SubprocessorQuery {
-	return NewFileClient(f.config).QuerySubprocessor(f)
+func (_m *File) QuerySubprocessor() *SubprocessorQuery {
+	return NewFileClient(_m.config).QuerySubprocessor(_m)
 }
 
 // Update returns a builder for updating this File.
 // Note that you need to call File.Unwrap() before calling this method if this File
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (f *File) Update() *FileUpdateOne {
-	return NewFileClient(f.config).UpdateOne(f)
+func (_m *File) Update() *FileUpdateOne {
+	return NewFileClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the File entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (f *File) Unwrap() *File {
-	_tx, ok := f.config.driver.(*txDriver)
+func (_m *File) Unwrap() *File {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: File is not a transactional entity")
 	}
-	f.config.driver = _tx.drv
-	return f
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (f *File) String() string {
+func (_m *File) String() string {
 	var builder strings.Builder
 	builder.WriteString("File(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", f.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(f.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(f.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(f.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(f.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(f.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(f.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", f.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
-	builder.WriteString(f.ProvidedFileName)
+	builder.WriteString(_m.ProvidedFileName)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_extension=")
-	builder.WriteString(f.ProvidedFileExtension)
+	builder.WriteString(_m.ProvidedFileExtension)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_size=")
-	builder.WriteString(fmt.Sprintf("%v", f.ProvidedFileSize))
+	builder.WriteString(fmt.Sprintf("%v", _m.ProvidedFileSize))
 	builder.WriteString(", ")
 	builder.WriteString("persisted_file_size=")
-	builder.WriteString(fmt.Sprintf("%v", f.PersistedFileSize))
+	builder.WriteString(fmt.Sprintf("%v", _m.PersistedFileSize))
 	builder.WriteString(", ")
 	builder.WriteString("detected_mime_type=")
-	builder.WriteString(f.DetectedMimeType)
+	builder.WriteString(_m.DetectedMimeType)
 	builder.WriteString(", ")
 	builder.WriteString("md5_hash=")
-	builder.WriteString(f.Md5Hash)
+	builder.WriteString(_m.Md5Hash)
 	builder.WriteString(", ")
 	builder.WriteString("detected_content_type=")
-	builder.WriteString(f.DetectedContentType)
+	builder.WriteString(_m.DetectedContentType)
 	builder.WriteString(", ")
 	builder.WriteString("store_key=")
-	builder.WriteString(f.StoreKey)
+	builder.WriteString(_m.StoreKey)
 	builder.WriteString(", ")
 	builder.WriteString("category_type=")
-	builder.WriteString(f.CategoryType)
+	builder.WriteString(_m.CategoryType)
 	builder.WriteString(", ")
 	builder.WriteString("uri=")
-	builder.WriteString(f.URI)
+	builder.WriteString(_m.URI)
 	builder.WriteString(", ")
 	builder.WriteString("storage_scheme=")
-	builder.WriteString(f.StorageScheme)
+	builder.WriteString(_m.StorageScheme)
 	builder.WriteString(", ")
 	builder.WriteString("storage_volume=")
-	builder.WriteString(f.StorageVolume)
+	builder.WriteString(_m.StorageVolume)
 	builder.WriteString(", ")
 	builder.WriteString("storage_path=")
-	builder.WriteString(f.StoragePath)
+	builder.WriteString(_m.StoragePath)
 	builder.WriteString(", ")
 	builder.WriteString("file_contents=")
-	builder.WriteString(fmt.Sprintf("%v", f.FileContents))
+	builder.WriteString(fmt.Sprintf("%v", _m.FileContents))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedUser returns the User named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedUser(name string) ([]*User, error) {
-	if f.Edges.namedUser == nil {
+func (_m *File) NamedUser(name string) ([]*User, error) {
+	if _m.Edges.namedUser == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedUser[name]
+	nodes, ok := _m.Edges.namedUser[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedUser(name string, edges ...*User) {
-	if f.Edges.namedUser == nil {
-		f.Edges.namedUser = make(map[string][]*User)
+func (_m *File) appendNamedUser(name string, edges ...*User) {
+	if _m.Edges.namedUser == nil {
+		_m.Edges.namedUser = make(map[string][]*User)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedUser[name] = []*User{}
+		_m.Edges.namedUser[name] = []*User{}
 	} else {
-		f.Edges.namedUser[name] = append(f.Edges.namedUser[name], edges...)
+		_m.Edges.namedUser[name] = append(_m.Edges.namedUser[name], edges...)
 	}
 }
 
 // NamedOrganization returns the Organization named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedOrganization(name string) ([]*Organization, error) {
-	if f.Edges.namedOrganization == nil {
+func (_m *File) NamedOrganization(name string) ([]*Organization, error) {
+	if _m.Edges.namedOrganization == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedOrganization[name]
+	nodes, ok := _m.Edges.namedOrganization[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedOrganization(name string, edges ...*Organization) {
-	if f.Edges.namedOrganization == nil {
-		f.Edges.namedOrganization = make(map[string][]*Organization)
+func (_m *File) appendNamedOrganization(name string, edges ...*Organization) {
+	if _m.Edges.namedOrganization == nil {
+		_m.Edges.namedOrganization = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedOrganization[name] = []*Organization{}
+		_m.Edges.namedOrganization[name] = []*Organization{}
 	} else {
-		f.Edges.namedOrganization[name] = append(f.Edges.namedOrganization[name], edges...)
+		_m.Edges.namedOrganization[name] = append(_m.Edges.namedOrganization[name], edges...)
 	}
 }
 
 // NamedGroups returns the Groups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedGroups(name string) ([]*Group, error) {
-	if f.Edges.namedGroups == nil {
+func (_m *File) NamedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedGroups[name]
+	nodes, ok := _m.Edges.namedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedGroups(name string, edges ...*Group) {
-	if f.Edges.namedGroups == nil {
-		f.Edges.namedGroups = make(map[string][]*Group)
+func (_m *File) appendNamedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedGroups == nil {
+		_m.Edges.namedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedGroups[name] = []*Group{}
+		_m.Edges.namedGroups[name] = []*Group{}
 	} else {
-		f.Edges.namedGroups[name] = append(f.Edges.namedGroups[name], edges...)
+		_m.Edges.namedGroups[name] = append(_m.Edges.namedGroups[name], edges...)
 	}
 }
 
 // NamedContact returns the Contact named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedContact(name string) ([]*Contact, error) {
-	if f.Edges.namedContact == nil {
+func (_m *File) NamedContact(name string) ([]*Contact, error) {
+	if _m.Edges.namedContact == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedContact[name]
+	nodes, ok := _m.Edges.namedContact[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedContact(name string, edges ...*Contact) {
-	if f.Edges.namedContact == nil {
-		f.Edges.namedContact = make(map[string][]*Contact)
+func (_m *File) appendNamedContact(name string, edges ...*Contact) {
+	if _m.Edges.namedContact == nil {
+		_m.Edges.namedContact = make(map[string][]*Contact)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedContact[name] = []*Contact{}
+		_m.Edges.namedContact[name] = []*Contact{}
 	} else {
-		f.Edges.namedContact[name] = append(f.Edges.namedContact[name], edges...)
+		_m.Edges.namedContact[name] = append(_m.Edges.namedContact[name], edges...)
 	}
 }
 
 // NamedEntity returns the Entity named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedEntity(name string) ([]*Entity, error) {
-	if f.Edges.namedEntity == nil {
+func (_m *File) NamedEntity(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntity == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedEntity[name]
+	nodes, ok := _m.Edges.namedEntity[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedEntity(name string, edges ...*Entity) {
-	if f.Edges.namedEntity == nil {
-		f.Edges.namedEntity = make(map[string][]*Entity)
+func (_m *File) appendNamedEntity(name string, edges ...*Entity) {
+	if _m.Edges.namedEntity == nil {
+		_m.Edges.namedEntity = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedEntity[name] = []*Entity{}
+		_m.Edges.namedEntity[name] = []*Entity{}
 	} else {
-		f.Edges.namedEntity[name] = append(f.Edges.namedEntity[name], edges...)
+		_m.Edges.namedEntity[name] = append(_m.Edges.namedEntity[name], edges...)
 	}
 }
 
 // NamedUserSetting returns the UserSetting named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedUserSetting(name string) ([]*UserSetting, error) {
-	if f.Edges.namedUserSetting == nil {
+func (_m *File) NamedUserSetting(name string) ([]*UserSetting, error) {
+	if _m.Edges.namedUserSetting == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedUserSetting[name]
+	nodes, ok := _m.Edges.namedUserSetting[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedUserSetting(name string, edges ...*UserSetting) {
-	if f.Edges.namedUserSetting == nil {
-		f.Edges.namedUserSetting = make(map[string][]*UserSetting)
+func (_m *File) appendNamedUserSetting(name string, edges ...*UserSetting) {
+	if _m.Edges.namedUserSetting == nil {
+		_m.Edges.namedUserSetting = make(map[string][]*UserSetting)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedUserSetting[name] = []*UserSetting{}
+		_m.Edges.namedUserSetting[name] = []*UserSetting{}
 	} else {
-		f.Edges.namedUserSetting[name] = append(f.Edges.namedUserSetting[name], edges...)
+		_m.Edges.namedUserSetting[name] = append(_m.Edges.namedUserSetting[name], edges...)
 	}
 }
 
 // NamedOrganizationSetting returns the OrganizationSetting named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedOrganizationSetting(name string) ([]*OrganizationSetting, error) {
-	if f.Edges.namedOrganizationSetting == nil {
+func (_m *File) NamedOrganizationSetting(name string) ([]*OrganizationSetting, error) {
+	if _m.Edges.namedOrganizationSetting == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedOrganizationSetting[name]
+	nodes, ok := _m.Edges.namedOrganizationSetting[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedOrganizationSetting(name string, edges ...*OrganizationSetting) {
-	if f.Edges.namedOrganizationSetting == nil {
-		f.Edges.namedOrganizationSetting = make(map[string][]*OrganizationSetting)
+func (_m *File) appendNamedOrganizationSetting(name string, edges ...*OrganizationSetting) {
+	if _m.Edges.namedOrganizationSetting == nil {
+		_m.Edges.namedOrganizationSetting = make(map[string][]*OrganizationSetting)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedOrganizationSetting[name] = []*OrganizationSetting{}
+		_m.Edges.namedOrganizationSetting[name] = []*OrganizationSetting{}
 	} else {
-		f.Edges.namedOrganizationSetting[name] = append(f.Edges.namedOrganizationSetting[name], edges...)
+		_m.Edges.namedOrganizationSetting[name] = append(_m.Edges.namedOrganizationSetting[name], edges...)
 	}
 }
 
 // NamedTemplate returns the Template named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedTemplate(name string) ([]*Template, error) {
-	if f.Edges.namedTemplate == nil {
+func (_m *File) NamedTemplate(name string) ([]*Template, error) {
+	if _m.Edges.namedTemplate == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedTemplate[name]
+	nodes, ok := _m.Edges.namedTemplate[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedTemplate(name string, edges ...*Template) {
-	if f.Edges.namedTemplate == nil {
-		f.Edges.namedTemplate = make(map[string][]*Template)
+func (_m *File) appendNamedTemplate(name string, edges ...*Template) {
+	if _m.Edges.namedTemplate == nil {
+		_m.Edges.namedTemplate = make(map[string][]*Template)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedTemplate[name] = []*Template{}
+		_m.Edges.namedTemplate[name] = []*Template{}
 	} else {
-		f.Edges.namedTemplate[name] = append(f.Edges.namedTemplate[name], edges...)
+		_m.Edges.namedTemplate[name] = append(_m.Edges.namedTemplate[name], edges...)
 	}
 }
 
 // NamedDocument returns the Document named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedDocument(name string) ([]*DocumentData, error) {
-	if f.Edges.namedDocument == nil {
+func (_m *File) NamedDocument(name string) ([]*DocumentData, error) {
+	if _m.Edges.namedDocument == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedDocument[name]
+	nodes, ok := _m.Edges.namedDocument[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedDocument(name string, edges ...*DocumentData) {
-	if f.Edges.namedDocument == nil {
-		f.Edges.namedDocument = make(map[string][]*DocumentData)
+func (_m *File) appendNamedDocument(name string, edges ...*DocumentData) {
+	if _m.Edges.namedDocument == nil {
+		_m.Edges.namedDocument = make(map[string][]*DocumentData)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedDocument[name] = []*DocumentData{}
+		_m.Edges.namedDocument[name] = []*DocumentData{}
 	} else {
-		f.Edges.namedDocument[name] = append(f.Edges.namedDocument[name], edges...)
+		_m.Edges.namedDocument[name] = append(_m.Edges.namedDocument[name], edges...)
 	}
 }
 
 // NamedProgram returns the Program named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedProgram(name string) ([]*Program, error) {
-	if f.Edges.namedProgram == nil {
+func (_m *File) NamedProgram(name string) ([]*Program, error) {
+	if _m.Edges.namedProgram == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedProgram[name]
+	nodes, ok := _m.Edges.namedProgram[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedProgram(name string, edges ...*Program) {
-	if f.Edges.namedProgram == nil {
-		f.Edges.namedProgram = make(map[string][]*Program)
+func (_m *File) appendNamedProgram(name string, edges ...*Program) {
+	if _m.Edges.namedProgram == nil {
+		_m.Edges.namedProgram = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedProgram[name] = []*Program{}
+		_m.Edges.namedProgram[name] = []*Program{}
 	} else {
-		f.Edges.namedProgram[name] = append(f.Edges.namedProgram[name], edges...)
+		_m.Edges.namedProgram[name] = append(_m.Edges.namedProgram[name], edges...)
 	}
 }
 
 // NamedEvidence returns the Evidence named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedEvidence(name string) ([]*Evidence, error) {
-	if f.Edges.namedEvidence == nil {
+func (_m *File) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedEvidence[name]
+	nodes, ok := _m.Edges.namedEvidence[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedEvidence(name string, edges ...*Evidence) {
-	if f.Edges.namedEvidence == nil {
-		f.Edges.namedEvidence = make(map[string][]*Evidence)
+func (_m *File) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedEvidence[name] = []*Evidence{}
+		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
-		f.Edges.namedEvidence[name] = append(f.Edges.namedEvidence[name], edges...)
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedEvents(name string) ([]*Event, error) {
-	if f.Edges.namedEvents == nil {
+func (_m *File) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedEvents(name string, edges ...*Event) {
-	if f.Edges.namedEvents == nil {
-		f.Edges.namedEvents = make(map[string][]*Event)
+func (_m *File) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		f.Edges.namedEvents[name] = append(f.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedTrustCenterSetting returns the TrustCenterSetting named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedTrustCenterSetting(name string) ([]*TrustCenterSetting, error) {
-	if f.Edges.namedTrustCenterSetting == nil {
+func (_m *File) NamedTrustCenterSetting(name string) ([]*TrustCenterSetting, error) {
+	if _m.Edges.namedTrustCenterSetting == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedTrustCenterSetting[name]
+	nodes, ok := _m.Edges.namedTrustCenterSetting[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedTrustCenterSetting(name string, edges ...*TrustCenterSetting) {
-	if f.Edges.namedTrustCenterSetting == nil {
-		f.Edges.namedTrustCenterSetting = make(map[string][]*TrustCenterSetting)
+func (_m *File) appendNamedTrustCenterSetting(name string, edges ...*TrustCenterSetting) {
+	if _m.Edges.namedTrustCenterSetting == nil {
+		_m.Edges.namedTrustCenterSetting = make(map[string][]*TrustCenterSetting)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedTrustCenterSetting[name] = []*TrustCenterSetting{}
+		_m.Edges.namedTrustCenterSetting[name] = []*TrustCenterSetting{}
 	} else {
-		f.Edges.namedTrustCenterSetting[name] = append(f.Edges.namedTrustCenterSetting[name], edges...)
+		_m.Edges.namedTrustCenterSetting[name] = append(_m.Edges.namedTrustCenterSetting[name], edges...)
 	}
 }
 
 // NamedSubprocessor returns the Subprocessor named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (f *File) NamedSubprocessor(name string) ([]*Subprocessor, error) {
-	if f.Edges.namedSubprocessor == nil {
+func (_m *File) NamedSubprocessor(name string) ([]*Subprocessor, error) {
+	if _m.Edges.namedSubprocessor == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := f.Edges.namedSubprocessor[name]
+	nodes, ok := _m.Edges.namedSubprocessor[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (f *File) appendNamedSubprocessor(name string, edges ...*Subprocessor) {
-	if f.Edges.namedSubprocessor == nil {
-		f.Edges.namedSubprocessor = make(map[string][]*Subprocessor)
+func (_m *File) appendNamedSubprocessor(name string, edges ...*Subprocessor) {
+	if _m.Edges.namedSubprocessor == nil {
+		_m.Edges.namedSubprocessor = make(map[string][]*Subprocessor)
 	}
 	if len(edges) == 0 {
-		f.Edges.namedSubprocessor[name] = []*Subprocessor{}
+		_m.Edges.namedSubprocessor[name] = []*Subprocessor{}
 	} else {
-		f.Edges.namedSubprocessor[name] = append(f.Edges.namedSubprocessor[name], edges...)
+		_m.Edges.namedSubprocessor[name] = append(_m.Edges.namedSubprocessor[name], edges...)
 	}
 }
 

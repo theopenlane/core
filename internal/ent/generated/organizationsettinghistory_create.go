@@ -24,395 +24,395 @@ type OrganizationSettingHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (oshc *OrganizationSettingHistoryCreate) SetHistoryTime(t time.Time) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetHistoryTime(t)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetHistoryTime(v time.Time) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableHistoryTime(t *time.Time) *OrganizationSettingHistoryCreate {
-	if t != nil {
-		oshc.SetHistoryTime(*t)
+func (_c *OrganizationSettingHistoryCreate) SetNillableHistoryTime(v *time.Time) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (oshc *OrganizationSettingHistoryCreate) SetRef(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetRef(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetRef(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableRef(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetRef(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableRef(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (oshc *OrganizationSettingHistoryCreate) SetOperation(ht history.OpType) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetOperation(ht)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetOperation(v history.OpType) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (oshc *OrganizationSettingHistoryCreate) SetCreatedAt(t time.Time) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetCreatedAt(t)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetCreatedAt(v time.Time) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableCreatedAt(t *time.Time) *OrganizationSettingHistoryCreate {
-	if t != nil {
-		oshc.SetCreatedAt(*t)
+func (_c *OrganizationSettingHistoryCreate) SetNillableCreatedAt(v *time.Time) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oshc *OrganizationSettingHistoryCreate) SetUpdatedAt(t time.Time) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetUpdatedAt(t)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetUpdatedAt(v time.Time) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationSettingHistoryCreate {
-	if t != nil {
-		oshc.SetUpdatedAt(*t)
+func (_c *OrganizationSettingHistoryCreate) SetNillableUpdatedAt(v *time.Time) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (oshc *OrganizationSettingHistoryCreate) SetCreatedBy(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetCreatedBy(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetCreatedBy(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableCreatedBy(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetCreatedBy(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableCreatedBy(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (oshc *OrganizationSettingHistoryCreate) SetUpdatedBy(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetUpdatedBy(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetUpdatedBy(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableUpdatedBy(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetUpdatedBy(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableUpdatedBy(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (oshc *OrganizationSettingHistoryCreate) SetDeletedAt(t time.Time) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetDeletedAt(t)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetDeletedAt(v time.Time) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableDeletedAt(t *time.Time) *OrganizationSettingHistoryCreate {
-	if t != nil {
-		oshc.SetDeletedAt(*t)
+func (_c *OrganizationSettingHistoryCreate) SetNillableDeletedAt(v *time.Time) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (oshc *OrganizationSettingHistoryCreate) SetDeletedBy(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetDeletedBy(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetDeletedBy(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableDeletedBy(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetDeletedBy(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableDeletedBy(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (oshc *OrganizationSettingHistoryCreate) SetTags(s []string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetTags(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetTags(v []string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetDomains sets the "domains" field.
-func (oshc *OrganizationSettingHistoryCreate) SetDomains(s []string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetDomains(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetDomains(v []string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetDomains(v)
+	return _c
 }
 
 // SetBillingContact sets the "billing_contact" field.
-func (oshc *OrganizationSettingHistoryCreate) SetBillingContact(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetBillingContact(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetBillingContact(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetBillingContact(v)
+	return _c
 }
 
 // SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingContact(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetBillingContact(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableBillingContact(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetBillingContact(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetBillingEmail sets the "billing_email" field.
-func (oshc *OrganizationSettingHistoryCreate) SetBillingEmail(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetBillingEmail(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetBillingEmail(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetBillingEmail(v)
+	return _c
 }
 
 // SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingEmail(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetBillingEmail(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableBillingEmail(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetBillingEmail(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetBillingPhone sets the "billing_phone" field.
-func (oshc *OrganizationSettingHistoryCreate) SetBillingPhone(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetBillingPhone(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetBillingPhone(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetBillingPhone(v)
+	return _c
 }
 
 // SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingPhone(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetBillingPhone(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableBillingPhone(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetBillingPhone(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (oshc *OrganizationSettingHistoryCreate) SetBillingAddress(m models.Address) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetBillingAddress(m)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetBillingAddress(v models.Address) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetBillingAddress(v)
+	return _c
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingHistoryCreate {
-	if m != nil {
-		oshc.SetBillingAddress(*m)
+func (_c *OrganizationSettingHistoryCreate) SetNillableBillingAddress(v *models.Address) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetBillingAddress(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetTaxIdentifier sets the "tax_identifier" field.
-func (oshc *OrganizationSettingHistoryCreate) SetTaxIdentifier(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetTaxIdentifier(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetTaxIdentifier(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetTaxIdentifier(v)
+	return _c
 }
 
 // SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableTaxIdentifier(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetTaxIdentifier(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableTaxIdentifier(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetTaxIdentifier(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetGeoLocation sets the "geo_location" field.
-func (oshc *OrganizationSettingHistoryCreate) SetGeoLocation(e enums.Region) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetGeoLocation(e)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetGeoLocation(v enums.Region) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetGeoLocation(v)
+	return _c
 }
 
 // SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableGeoLocation(e *enums.Region) *OrganizationSettingHistoryCreate {
-	if e != nil {
-		oshc.SetGeoLocation(*e)
+func (_c *OrganizationSettingHistoryCreate) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetGeoLocation(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (oshc *OrganizationSettingHistoryCreate) SetOrganizationID(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetOrganizationID(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetOrganizationID(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetOrganizationID(v)
+	return _c
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableOrganizationID(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetOrganizationID(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableOrganizationID(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetOrganizationID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (oshc *OrganizationSettingHistoryCreate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetBillingNotificationsEnabled(b)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetBillingNotificationsEnabled(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetBillingNotificationsEnabled(v)
+	return _c
 }
 
 // SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingHistoryCreate {
-	if b != nil {
-		oshc.SetBillingNotificationsEnabled(*b)
+func (_c *OrganizationSettingHistoryCreate) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetBillingNotificationsEnabled(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (oshc *OrganizationSettingHistoryCreate) SetAllowedEmailDomains(s []string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetAllowedEmailDomains(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetAllowedEmailDomains(v []string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetAllowedEmailDomains(v)
+	return _c
 }
 
 // SetIdentityProvider sets the "identity_provider" field.
-func (oshc *OrganizationSettingHistoryCreate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetIdentityProvider(ep)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProvider(v)
+	return _c
 }
 
 // SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingHistoryCreate {
-	if ep != nil {
-		oshc.SetIdentityProvider(*ep)
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProvider(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderClientID(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetIdentityProviderClientID(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderClientID(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderClientID(v)
+	return _c
 }
 
 // SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetIdentityProviderClientID(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderClientID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderClientSecret(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetIdentityProviderClientSecret(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderClientSecret(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderClientSecret(v)
+	return _c
 }
 
 // SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetIdentityProviderClientSecret(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderClientSecret(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetIdentityProviderMetadataEndpoint(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderMetadataEndpoint(v)
+	return _c
 }
 
 // SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetIdentityProviderMetadataEndpoint(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderMetadataEndpoint(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderEntityID(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetIdentityProviderEntityID(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderEntityID(v)
+	return _c
 }
 
 // SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetIdentityProviderEntityID(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderEntityID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (oshc *OrganizationSettingHistoryCreate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetOidcDiscoveryEndpoint(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetOidcDiscoveryEndpoint(v)
+	return _c
 }
 
 // SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetOidcDiscoveryEndpoint(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetOidcDiscoveryEndpoint(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetIdentityProviderLoginEnforced(b)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetIdentityProviderLoginEnforced(v)
+	return _c
 }
 
 // SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingHistoryCreate {
-	if b != nil {
-		oshc.SetIdentityProviderLoginEnforced(*b)
+func (_c *OrganizationSettingHistoryCreate) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetIdentityProviderLoginEnforced(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (oshc *OrganizationSettingHistoryCreate) SetComplianceWebhookToken(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetComplianceWebhookToken(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetComplianceWebhookToken(v)
+	return _c
 }
 
 // SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetComplianceWebhookToken(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetComplianceWebhookToken(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (oshc *OrganizationSettingHistoryCreate) SetID(s string) *OrganizationSettingHistoryCreate {
-	oshc.mutation.SetID(s)
-	return oshc
+func (_c *OrganizationSettingHistoryCreate) SetID(v string) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (oshc *OrganizationSettingHistoryCreate) SetNillableID(s *string) *OrganizationSettingHistoryCreate {
-	if s != nil {
-		oshc.SetID(*s)
+func (_c *OrganizationSettingHistoryCreate) SetNillableID(v *string) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
-func (oshc *OrganizationSettingHistoryCreate) Mutation() *OrganizationSettingHistoryMutation {
-	return oshc.mutation
+func (_c *OrganizationSettingHistoryCreate) Mutation() *OrganizationSettingHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the OrganizationSettingHistory in the database.
-func (oshc *OrganizationSettingHistoryCreate) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
-	if err := oshc.defaults(); err != nil {
+func (_c *OrganizationSettingHistoryCreate) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, oshc.sqlSave, oshc.mutation, oshc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (oshc *OrganizationSettingHistoryCreate) SaveX(ctx context.Context) *OrganizationSettingHistory {
-	v, err := oshc.Save(ctx)
+func (_c *OrganizationSettingHistoryCreate) SaveX(ctx context.Context) *OrganizationSettingHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -420,116 +420,116 @@ func (oshc *OrganizationSettingHistoryCreate) SaveX(ctx context.Context) *Organi
 }
 
 // Exec executes the query.
-func (oshc *OrganizationSettingHistoryCreate) Exec(ctx context.Context) error {
-	_, err := oshc.Save(ctx)
+func (_c *OrganizationSettingHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshc *OrganizationSettingHistoryCreate) ExecX(ctx context.Context) {
-	if err := oshc.Exec(ctx); err != nil {
+func (_c *OrganizationSettingHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oshc *OrganizationSettingHistoryCreate) defaults() error {
-	if _, ok := oshc.mutation.HistoryTime(); !ok {
+func (_c *OrganizationSettingHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if organizationsettinghistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.DefaultHistoryTime()
-		oshc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := oshc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if organizationsettinghistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.DefaultCreatedAt()
-		oshc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := oshc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if organizationsettinghistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.DefaultUpdatedAt()
-		oshc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := oshc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := organizationsettinghistory.DefaultTags
-		oshc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := oshc.mutation.GeoLocation(); !ok {
+	if _, ok := _c.mutation.GeoLocation(); !ok {
 		v := organizationsettinghistory.DefaultGeoLocation
-		oshc.mutation.SetGeoLocation(v)
+		_c.mutation.SetGeoLocation(v)
 	}
-	if _, ok := oshc.mutation.BillingNotificationsEnabled(); !ok {
+	if _, ok := _c.mutation.BillingNotificationsEnabled(); !ok {
 		v := organizationsettinghistory.DefaultBillingNotificationsEnabled
-		oshc.mutation.SetBillingNotificationsEnabled(v)
+		_c.mutation.SetBillingNotificationsEnabled(v)
 	}
-	if _, ok := oshc.mutation.IdentityProvider(); !ok {
+	if _, ok := _c.mutation.IdentityProvider(); !ok {
 		v := organizationsettinghistory.DefaultIdentityProvider
-		oshc.mutation.SetIdentityProvider(v)
+		_c.mutation.SetIdentityProvider(v)
 	}
-	if _, ok := oshc.mutation.IdentityProviderLoginEnforced(); !ok {
+	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		v := organizationsettinghistory.DefaultIdentityProviderLoginEnforced
-		oshc.mutation.SetIdentityProviderLoginEnforced(v)
+		_c.mutation.SetIdentityProviderLoginEnforced(v)
 	}
-	if _, ok := oshc.mutation.ComplianceWebhookToken(); !ok {
+	if _, ok := _c.mutation.ComplianceWebhookToken(); !ok {
 		if organizationsettinghistory.DefaultComplianceWebhookToken == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultComplianceWebhookToken (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.DefaultComplianceWebhookToken()
-		oshc.mutation.SetComplianceWebhookToken(v)
+		_c.mutation.SetComplianceWebhookToken(v)
 	}
-	if _, ok := oshc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if organizationsettinghistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := organizationsettinghistory.DefaultID()
-		oshc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oshc *OrganizationSettingHistoryCreate) check() error {
-	if _, ok := oshc.mutation.HistoryTime(); !ok {
+func (_c *OrganizationSettingHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "OrganizationSettingHistory.history_time"`)}
 	}
-	if _, ok := oshc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "OrganizationSettingHistory.operation"`)}
 	}
-	if v, ok := oshc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := organizationsettinghistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.operation": %w`, err)}
 		}
 	}
-	if v, ok := oshc.mutation.GeoLocation(); ok {
+	if v, ok := _c.mutation.GeoLocation(); ok {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
 		}
 	}
-	if _, ok := oshc.mutation.BillingNotificationsEnabled(); !ok {
+	if _, ok := _c.mutation.BillingNotificationsEnabled(); !ok {
 		return &ValidationError{Name: "billing_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSettingHistory.billing_notifications_enabled"`)}
 	}
-	if v, ok := oshc.mutation.IdentityProvider(); ok {
+	if v, ok := _c.mutation.IdentityProvider(); ok {
 		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
 		}
 	}
-	if _, ok := oshc.mutation.IdentityProviderLoginEnforced(); !ok {
+	if _, ok := _c.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSettingHistory.identity_provider_login_enforced"`)}
 	}
 	return nil
 }
 
-func (oshc *OrganizationSettingHistoryCreate) sqlSave(ctx context.Context) (*OrganizationSettingHistory, error) {
-	if err := oshc.check(); err != nil {
+func (_c *OrganizationSettingHistoryCreate) sqlSave(ctx context.Context) (*OrganizationSettingHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := oshc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, oshc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -542,130 +542,130 @@ func (oshc *OrganizationSettingHistoryCreate) sqlSave(ctx context.Context) (*Org
 			return nil, fmt.Errorf("unexpected OrganizationSettingHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	oshc.mutation.id = &_node.ID
-	oshc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHistory, *sqlgraph.CreateSpec) {
+func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OrganizationSettingHistory{config: oshc.config}
+		_node = &OrganizationSettingHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(organizationsettinghistory.Table, sqlgraph.NewFieldSpec(organizationsettinghistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = oshc.schemaConfig.OrganizationSettingHistory
-	if id, ok := oshc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.OrganizationSettingHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := oshc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(organizationsettinghistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := oshc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(organizationsettinghistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := oshc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := oshc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := oshc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oshc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := oshc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := oshc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := oshc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := oshc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := oshc.mutation.Domains(); ok {
+	if value, ok := _c.mutation.Domains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldDomains, field.TypeJSON, value)
 		_node.Domains = value
 	}
-	if value, ok := oshc.mutation.BillingContact(); ok {
+	if value, ok := _c.mutation.BillingContact(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingContact, field.TypeString, value)
 		_node.BillingContact = value
 	}
-	if value, ok := oshc.mutation.BillingEmail(); ok {
+	if value, ok := _c.mutation.BillingEmail(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingEmail, field.TypeString, value)
 		_node.BillingEmail = value
 	}
-	if value, ok := oshc.mutation.BillingPhone(); ok {
+	if value, ok := _c.mutation.BillingPhone(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingPhone, field.TypeString, value)
 		_node.BillingPhone = value
 	}
-	if value, ok := oshc.mutation.BillingAddress(); ok {
+	if value, ok := _c.mutation.BillingAddress(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 		_node.BillingAddress = value
 	}
-	if value, ok := oshc.mutation.TaxIdentifier(); ok {
+	if value, ok := _c.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
 		_node.TaxIdentifier = value
 	}
-	if value, ok := oshc.mutation.GeoLocation(); ok {
+	if value, ok := _c.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum, value)
 		_node.GeoLocation = value
 	}
-	if value, ok := oshc.mutation.OrganizationID(); ok {
+	if value, ok := _c.mutation.OrganizationID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 		_node.OrganizationID = value
 	}
-	if value, ok := oshc.mutation.BillingNotificationsEnabled(); ok {
+	if value, ok := _c.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
 		_node.BillingNotificationsEnabled = value
 	}
-	if value, ok := oshc.mutation.AllowedEmailDomains(); ok {
+	if value, ok := _c.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
 		_node.AllowedEmailDomains = value
 	}
-	if value, ok := oshc.mutation.IdentityProvider(); ok {
+	if value, ok := _c.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 		_node.IdentityProvider = value
 	}
-	if value, ok := oshc.mutation.IdentityProviderClientID(); ok {
+	if value, ok := _c.mutation.IdentityProviderClientID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
 		_node.IdentityProviderClientID = &value
 	}
-	if value, ok := oshc.mutation.IdentityProviderClientSecret(); ok {
+	if value, ok := _c.mutation.IdentityProviderClientSecret(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
 		_node.IdentityProviderClientSecret = &value
 	}
-	if value, ok := oshc.mutation.IdentityProviderMetadataEndpoint(); ok {
+	if value, ok := _c.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 		_node.IdentityProviderMetadataEndpoint = value
 	}
-	if value, ok := oshc.mutation.IdentityProviderEntityID(); ok {
+	if value, ok := _c.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
 		_node.IdentityProviderEntityID = value
 	}
-	if value, ok := oshc.mutation.OidcDiscoveryEndpoint(); ok {
+	if value, ok := _c.mutation.OidcDiscoveryEndpoint(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
 		_node.OidcDiscoveryEndpoint = value
 	}
-	if value, ok := oshc.mutation.IdentityProviderLoginEnforced(); ok {
+	if value, ok := _c.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 		_node.IdentityProviderLoginEnforced = value
 	}
-	if value, ok := oshc.mutation.ComplianceWebhookToken(); ok {
+	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 		_node.ComplianceWebhookToken = value
 	}
@@ -680,16 +680,16 @@ type OrganizationSettingHistoryCreateBulk struct {
 }
 
 // Save creates the OrganizationSettingHistory entities in the database.
-func (oshcb *OrganizationSettingHistoryCreateBulk) Save(ctx context.Context) ([]*OrganizationSettingHistory, error) {
-	if oshcb.err != nil {
-		return nil, oshcb.err
+func (_c *OrganizationSettingHistoryCreateBulk) Save(ctx context.Context) ([]*OrganizationSettingHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(oshcb.builders))
-	nodes := make([]*OrganizationSettingHistory, len(oshcb.builders))
-	mutators := make([]Mutator, len(oshcb.builders))
-	for i := range oshcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OrganizationSettingHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := oshcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrganizationSettingHistoryMutation)
@@ -703,11 +703,11 @@ func (oshcb *OrganizationSettingHistoryCreateBulk) Save(ctx context.Context) ([]
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, oshcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, oshcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -727,7 +727,7 @@ func (oshcb *OrganizationSettingHistoryCreateBulk) Save(ctx context.Context) ([]
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, oshcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -735,8 +735,8 @@ func (oshcb *OrganizationSettingHistoryCreateBulk) Save(ctx context.Context) ([]
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oshcb *OrganizationSettingHistoryCreateBulk) SaveX(ctx context.Context) []*OrganizationSettingHistory {
-	v, err := oshcb.Save(ctx)
+func (_c *OrganizationSettingHistoryCreateBulk) SaveX(ctx context.Context) []*OrganizationSettingHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -744,14 +744,14 @@ func (oshcb *OrganizationSettingHistoryCreateBulk) SaveX(ctx context.Context) []
 }
 
 // Exec executes the query.
-func (oshcb *OrganizationSettingHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := oshcb.Save(ctx)
+func (_c *OrganizationSettingHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshcb *OrganizationSettingHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := oshcb.Exec(ctx); err != nil {
+func (_c *OrganizationSettingHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

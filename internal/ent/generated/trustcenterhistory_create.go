@@ -22,201 +22,201 @@ type TrustCenterHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (tchc *TrustCenterHistoryCreate) SetHistoryTime(t time.Time) *TrustCenterHistoryCreate {
-	tchc.mutation.SetHistoryTime(t)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetHistoryTime(v time.Time) *TrustCenterHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableHistoryTime(t *time.Time) *TrustCenterHistoryCreate {
-	if t != nil {
-		tchc.SetHistoryTime(*t)
+func (_c *TrustCenterHistoryCreate) SetNillableHistoryTime(v *time.Time) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (tchc *TrustCenterHistoryCreate) SetRef(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetRef(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetRef(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableRef(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetRef(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableRef(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (tchc *TrustCenterHistoryCreate) SetOperation(ht history.OpType) *TrustCenterHistoryCreate {
-	tchc.mutation.SetOperation(ht)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetOperation(v history.OpType) *TrustCenterHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tchc *TrustCenterHistoryCreate) SetCreatedAt(t time.Time) *TrustCenterHistoryCreate {
-	tchc.mutation.SetCreatedAt(t)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetCreatedAt(v time.Time) *TrustCenterHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableCreatedAt(t *time.Time) *TrustCenterHistoryCreate {
-	if t != nil {
-		tchc.SetCreatedAt(*t)
+func (_c *TrustCenterHistoryCreate) SetNillableCreatedAt(v *time.Time) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tchc *TrustCenterHistoryCreate) SetUpdatedAt(t time.Time) *TrustCenterHistoryCreate {
-	tchc.mutation.SetUpdatedAt(t)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetUpdatedAt(v time.Time) *TrustCenterHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableUpdatedAt(t *time.Time) *TrustCenterHistoryCreate {
-	if t != nil {
-		tchc.SetUpdatedAt(*t)
+func (_c *TrustCenterHistoryCreate) SetNillableUpdatedAt(v *time.Time) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tchc *TrustCenterHistoryCreate) SetCreatedBy(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetCreatedBy(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetCreatedBy(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableCreatedBy(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetCreatedBy(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableCreatedBy(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tchc *TrustCenterHistoryCreate) SetUpdatedBy(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetUpdatedBy(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetUpdatedBy(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableUpdatedBy(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetUpdatedBy(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableUpdatedBy(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tchc *TrustCenterHistoryCreate) SetDeletedAt(t time.Time) *TrustCenterHistoryCreate {
-	tchc.mutation.SetDeletedAt(t)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetDeletedAt(v time.Time) *TrustCenterHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableDeletedAt(t *time.Time) *TrustCenterHistoryCreate {
-	if t != nil {
-		tchc.SetDeletedAt(*t)
+func (_c *TrustCenterHistoryCreate) SetNillableDeletedAt(v *time.Time) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tchc *TrustCenterHistoryCreate) SetDeletedBy(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetDeletedBy(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetDeletedBy(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableDeletedBy(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetDeletedBy(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableDeletedBy(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (tchc *TrustCenterHistoryCreate) SetTags(s []string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetTags(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetTags(v []string) *TrustCenterHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tchc *TrustCenterHistoryCreate) SetOwnerID(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetOwnerID(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetOwnerID(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableOwnerID(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetOwnerID(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableOwnerID(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetSlug sets the "slug" field.
-func (tchc *TrustCenterHistoryCreate) SetSlug(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetSlug(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetSlug(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetSlug(v)
+	return _c
 }
 
 // SetNillableSlug sets the "slug" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableSlug(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetSlug(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableSlug(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetSlug(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetCustomDomainID sets the "custom_domain_id" field.
-func (tchc *TrustCenterHistoryCreate) SetCustomDomainID(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetCustomDomainID(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetCustomDomainID(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetCustomDomainID(v)
+	return _c
 }
 
 // SetNillableCustomDomainID sets the "custom_domain_id" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableCustomDomainID(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetCustomDomainID(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableCustomDomainID(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetCustomDomainID(*v)
 	}
-	return tchc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tchc *TrustCenterHistoryCreate) SetID(s string) *TrustCenterHistoryCreate {
-	tchc.mutation.SetID(s)
-	return tchc
+func (_c *TrustCenterHistoryCreate) SetID(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tchc *TrustCenterHistoryCreate) SetNillableID(s *string) *TrustCenterHistoryCreate {
-	if s != nil {
-		tchc.SetID(*s)
+func (_c *TrustCenterHistoryCreate) SetNillableID(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tchc
+	return _c
 }
 
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
-func (tchc *TrustCenterHistoryCreate) Mutation() *TrustCenterHistoryMutation {
-	return tchc.mutation
+func (_c *TrustCenterHistoryCreate) Mutation() *TrustCenterHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the TrustCenterHistory in the database.
-func (tchc *TrustCenterHistoryCreate) Save(ctx context.Context) (*TrustCenterHistory, error) {
-	if err := tchc.defaults(); err != nil {
+func (_c *TrustCenterHistoryCreate) Save(ctx context.Context) (*TrustCenterHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tchc.sqlSave, tchc.mutation, tchc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tchc *TrustCenterHistoryCreate) SaveX(ctx context.Context) *TrustCenterHistory {
-	v, err := tchc.Save(ctx)
+func (_c *TrustCenterHistoryCreate) SaveX(ctx context.Context) *TrustCenterHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -224,64 +224,64 @@ func (tchc *TrustCenterHistoryCreate) SaveX(ctx context.Context) *TrustCenterHis
 }
 
 // Exec executes the query.
-func (tchc *TrustCenterHistoryCreate) Exec(ctx context.Context) error {
-	_, err := tchc.Save(ctx)
+func (_c *TrustCenterHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tchc *TrustCenterHistoryCreate) ExecX(ctx context.Context) {
-	if err := tchc.Exec(ctx); err != nil {
+func (_c *TrustCenterHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tchc *TrustCenterHistoryCreate) defaults() error {
-	if _, ok := tchc.mutation.HistoryTime(); !ok {
+func (_c *TrustCenterHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if trustcenterhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := trustcenterhistory.DefaultHistoryTime()
-		tchc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := tchc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if trustcenterhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcenterhistory.DefaultCreatedAt()
-		tchc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tchc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if trustcenterhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcenterhistory.DefaultUpdatedAt()
-		tchc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tchc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := trustcenterhistory.DefaultTags
-		tchc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := tchc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := trustcenterhistory.DefaultID()
-		tchc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tchc *TrustCenterHistoryCreate) check() error {
-	if _, ok := tchc.mutation.HistoryTime(); !ok {
+func (_c *TrustCenterHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "TrustCenterHistory.history_time"`)}
 	}
-	if _, ok := tchc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "TrustCenterHistory.operation"`)}
 	}
-	if v, ok := tchc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := trustcenterhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterHistory.operation": %w`, err)}
 		}
@@ -289,12 +289,12 @@ func (tchc *TrustCenterHistoryCreate) check() error {
 	return nil
 }
 
-func (tchc *TrustCenterHistoryCreate) sqlSave(ctx context.Context) (*TrustCenterHistory, error) {
-	if err := tchc.check(); err != nil {
+func (_c *TrustCenterHistoryCreate) sqlSave(ctx context.Context) (*TrustCenterHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tchc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tchc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -307,70 +307,70 @@ func (tchc *TrustCenterHistoryCreate) sqlSave(ctx context.Context) (*TrustCenter
 			return nil, fmt.Errorf("unexpected TrustCenterHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	tchc.mutation.id = &_node.ID
-	tchc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tchc *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph.CreateSpec) {
+func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TrustCenterHistory{config: tchc.config}
+		_node = &TrustCenterHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterhistory.Table, sqlgraph.NewFieldSpec(trustcenterhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = tchc.schemaConfig.TrustCenterHistory
-	if id, ok := tchc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.TrustCenterHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tchc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(trustcenterhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := tchc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(trustcenterhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := tchc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(trustcenterhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := tchc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tchc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tchc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := tchc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := tchc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenterhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tchc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcenterhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tchc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcenterhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := tchc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(trustcenterhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := tchc.mutation.Slug(); ok {
+	if value, ok := _c.mutation.Slug(); ok {
 		_spec.SetField(trustcenterhistory.FieldSlug, field.TypeString, value)
 		_node.Slug = value
 	}
-	if value, ok := tchc.mutation.CustomDomainID(); ok {
+	if value, ok := _c.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
 		_node.CustomDomainID = value
 	}
@@ -385,16 +385,16 @@ type TrustCenterHistoryCreateBulk struct {
 }
 
 // Save creates the TrustCenterHistory entities in the database.
-func (tchcb *TrustCenterHistoryCreateBulk) Save(ctx context.Context) ([]*TrustCenterHistory, error) {
-	if tchcb.err != nil {
-		return nil, tchcb.err
+func (_c *TrustCenterHistoryCreateBulk) Save(ctx context.Context) ([]*TrustCenterHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tchcb.builders))
-	nodes := make([]*TrustCenterHistory, len(tchcb.builders))
-	mutators := make([]Mutator, len(tchcb.builders))
-	for i := range tchcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TrustCenterHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tchcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TrustCenterHistoryMutation)
@@ -408,11 +408,11 @@ func (tchcb *TrustCenterHistoryCreateBulk) Save(ctx context.Context) ([]*TrustCe
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tchcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tchcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -432,7 +432,7 @@ func (tchcb *TrustCenterHistoryCreateBulk) Save(ctx context.Context) ([]*TrustCe
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tchcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -440,8 +440,8 @@ func (tchcb *TrustCenterHistoryCreateBulk) Save(ctx context.Context) ([]*TrustCe
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tchcb *TrustCenterHistoryCreateBulk) SaveX(ctx context.Context) []*TrustCenterHistory {
-	v, err := tchcb.Save(ctx)
+func (_c *TrustCenterHistoryCreateBulk) SaveX(ctx context.Context) []*TrustCenterHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -449,14 +449,14 @@ func (tchcb *TrustCenterHistoryCreateBulk) SaveX(ctx context.Context) []*TrustCe
 }
 
 // Exec executes the query.
-func (tchcb *TrustCenterHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := tchcb.Save(ctx)
+func (_c *TrustCenterHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tchcb *TrustCenterHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := tchcb.Exec(ctx); err != nil {
+func (_c *TrustCenterHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

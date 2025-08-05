@@ -70,7 +70,7 @@ func (*DocumentDataHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the DocumentDataHistory fields.
-func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) error {
+func (_m *DocumentDataHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -80,67 +80,67 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ddh.ID = value.String
+				_m.ID = value.String
 			}
 		case documentdatahistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ddh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case documentdatahistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ddh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case documentdatahistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ddh.Operation = *value
+				_m.Operation = *value
 			}
 		case documentdatahistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ddh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case documentdatahistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ddh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case documentdatahistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ddh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case documentdatahistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ddh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case documentdatahistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ddh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case documentdatahistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ddh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case documentdatahistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ddh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -148,24 +148,24 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ddh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case documentdatahistory.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_id", values[i])
 			} else if value.Valid {
-				ddh.TemplateID = value.String
+				_m.TemplateID = value.String
 			}
 		case documentdatahistory.FieldData:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field data", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ddh.Data); err != nil {
+				if err := json.Unmarshal(*value, &_m.Data); err != nil {
 					return fmt.Errorf("unmarshal field data: %w", err)
 				}
 			}
 		default:
-			ddh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -173,71 +173,71 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the DocumentDataHistory.
 // This includes values selected through modifiers, order, etc.
-func (ddh *DocumentDataHistory) Value(name string) (ent.Value, error) {
-	return ddh.selectValues.Get(name)
+func (_m *DocumentDataHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this DocumentDataHistory.
 // Note that you need to call DocumentDataHistory.Unwrap() before calling this method if this DocumentDataHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ddh *DocumentDataHistory) Update() *DocumentDataHistoryUpdateOne {
-	return NewDocumentDataHistoryClient(ddh.config).UpdateOne(ddh)
+func (_m *DocumentDataHistory) Update() *DocumentDataHistoryUpdateOne {
+	return NewDocumentDataHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the DocumentDataHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ddh *DocumentDataHistory) Unwrap() *DocumentDataHistory {
-	_tx, ok := ddh.config.driver.(*txDriver)
+func (_m *DocumentDataHistory) Unwrap() *DocumentDataHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: DocumentDataHistory is not a transactional entity")
 	}
-	ddh.config.driver = _tx.drv
-	return ddh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ddh *DocumentDataHistory) String() string {
+func (_m *DocumentDataHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("DocumentDataHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ddh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ddh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ddh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ddh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ddh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ddh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ddh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ddh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ddh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ddh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ddh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ddh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("template_id=")
-	builder.WriteString(ddh.TemplateID)
+	builder.WriteString(_m.TemplateID)
 	builder.WriteString(", ")
 	builder.WriteString("data=")
-	builder.WriteString(fmt.Sprintf("%v", ddh.Data))
+	builder.WriteString(fmt.Sprintf("%v", _m.Data))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -39,44 +39,44 @@ type StandardQuery struct {
 }
 
 // Where adds a new predicate for the StandardQuery builder.
-func (sq *StandardQuery) Where(ps ...predicate.Standard) *StandardQuery {
-	sq.predicates = append(sq.predicates, ps...)
-	return sq
+func (_q *StandardQuery) Where(ps ...predicate.Standard) *StandardQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sq *StandardQuery) Limit(limit int) *StandardQuery {
-	sq.ctx.Limit = &limit
-	return sq
+func (_q *StandardQuery) Limit(limit int) *StandardQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sq *StandardQuery) Offset(offset int) *StandardQuery {
-	sq.ctx.Offset = &offset
-	return sq
+func (_q *StandardQuery) Offset(offset int) *StandardQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sq *StandardQuery) Unique(unique bool) *StandardQuery {
-	sq.ctx.Unique = &unique
-	return sq
+func (_q *StandardQuery) Unique(unique bool) *StandardQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sq *StandardQuery) Order(o ...standard.OrderOption) *StandardQuery {
-	sq.order = append(sq.order, o...)
-	return sq
+func (_q *StandardQuery) Order(o ...standard.OrderOption) *StandardQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (sq *StandardQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: sq.config}).Query()
+func (_q *StandardQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (sq *StandardQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, standard.OwnerTable, standard.OwnerColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Standard
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControls chains the current query on the "controls" edge.
-func (sq *StandardQuery) QueryControls() *ControlQuery {
-	query := (&ControlClient{config: sq.config}).Query()
+func (_q *StandardQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func (sq *StandardQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, standard.ControlsTable, standard.ControlsColumn),
 		)
-		schemaConfig := sq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.Control
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -121,8 +121,8 @@ func (sq *StandardQuery) QueryControls() *ControlQuery {
 
 // First returns the first Standard entity from the query.
 // Returns a *NotFoundError when no Standard was found.
-func (sq *StandardQuery) First(ctx context.Context) (*Standard, error) {
-	nodes, err := sq.Limit(1).All(setContextOp(ctx, sq.ctx, ent.OpQueryFirst))
+func (_q *StandardQuery) First(ctx context.Context) (*Standard, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -133,8 +133,8 @@ func (sq *StandardQuery) First(ctx context.Context) (*Standard, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sq *StandardQuery) FirstX(ctx context.Context) *Standard {
-	node, err := sq.First(ctx)
+func (_q *StandardQuery) FirstX(ctx context.Context) *Standard {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -143,9 +143,9 @@ func (sq *StandardQuery) FirstX(ctx context.Context) *Standard {
 
 // FirstID returns the first Standard ID from the query.
 // Returns a *NotFoundError when no Standard ID was found.
-func (sq *StandardQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *StandardQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,8 +156,8 @@ func (sq *StandardQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sq *StandardQuery) FirstIDX(ctx context.Context) string {
-	id, err := sq.FirstID(ctx)
+func (_q *StandardQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -167,8 +167,8 @@ func (sq *StandardQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Standard entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Standard entity is found.
 // Returns a *NotFoundError when no Standard entities are found.
-func (sq *StandardQuery) Only(ctx context.Context) (*Standard, error) {
-	nodes, err := sq.Limit(2).All(setContextOp(ctx, sq.ctx, ent.OpQueryOnly))
+func (_q *StandardQuery) Only(ctx context.Context) (*Standard, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,8 +183,8 @@ func (sq *StandardQuery) Only(ctx context.Context) (*Standard, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sq *StandardQuery) OnlyX(ctx context.Context) *Standard {
-	node, err := sq.Only(ctx)
+func (_q *StandardQuery) OnlyX(ctx context.Context) *Standard {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,9 +194,9 @@ func (sq *StandardQuery) OnlyX(ctx context.Context) *Standard {
 // OnlyID is like Only, but returns the only Standard ID in the query.
 // Returns a *NotSingularError when more than one Standard ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sq *StandardQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *StandardQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -211,8 +211,8 @@ func (sq *StandardQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sq *StandardQuery) OnlyIDX(ctx context.Context) string {
-	id, err := sq.OnlyID(ctx)
+func (_q *StandardQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,18 +220,18 @@ func (sq *StandardQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Standards.
-func (sq *StandardQuery) All(ctx context.Context) ([]*Standard, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryAll)
-	if err := sq.prepareQuery(ctx); err != nil {
+func (_q *StandardQuery) All(ctx context.Context) ([]*Standard, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Standard, *StandardQuery]()
-	return withInterceptors[[]*Standard](ctx, sq, qr, sq.inters)
+	return withInterceptors[[]*Standard](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sq *StandardQuery) AllX(ctx context.Context) []*Standard {
-	nodes, err := sq.All(ctx)
+func (_q *StandardQuery) AllX(ctx context.Context) []*Standard {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,20 +239,20 @@ func (sq *StandardQuery) AllX(ctx context.Context) []*Standard {
 }
 
 // IDs executes the query and returns a list of Standard IDs.
-func (sq *StandardQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if sq.ctx.Unique == nil && sq.path != nil {
-		sq.Unique(true)
+func (_q *StandardQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
-	if err = sq.Select(standard.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(standard.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sq *StandardQuery) IDsX(ctx context.Context) []string {
-	ids, err := sq.IDs(ctx)
+func (_q *StandardQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -260,17 +260,17 @@ func (sq *StandardQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (sq *StandardQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryCount)
-	if err := sq.prepareQuery(ctx); err != nil {
+func (_q *StandardQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sq, querierCount[*StandardQuery](), sq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*StandardQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sq *StandardQuery) CountX(ctx context.Context) int {
-	count, err := sq.Count(ctx)
+func (_q *StandardQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -278,9 +278,9 @@ func (sq *StandardQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sq *StandardQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryExist)
-	switch _, err := sq.FirstID(ctx); {
+func (_q *StandardQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -291,8 +291,8 @@ func (sq *StandardQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sq *StandardQuery) ExistX(ctx context.Context) bool {
-	exist, err := sq.Exist(ctx)
+func (_q *StandardQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -301,45 +301,45 @@ func (sq *StandardQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the StandardQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sq *StandardQuery) Clone() *StandardQuery {
-	if sq == nil {
+func (_q *StandardQuery) Clone() *StandardQuery {
+	if _q == nil {
 		return nil
 	}
 	return &StandardQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]standard.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Standard{}, sq.predicates...),
-		withOwner:    sq.withOwner.Clone(),
-		withControls: sq.withControls.Clone(),
+		config:       _q.config,
+		ctx:          _q.ctx.Clone(),
+		order:        append([]standard.OrderOption{}, _q.order...),
+		inters:       append([]Interceptor{}, _q.inters...),
+		predicates:   append([]predicate.Standard{}, _q.predicates...),
+		withOwner:    _q.withOwner.Clone(),
+		withControls: _q.withControls.Clone(),
 		// clone intermediate query.
-		sql:       sq.sql.Clone(),
-		path:      sq.path,
-		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithOwner(opts ...func(*OrganizationQuery)) *StandardQuery {
-	query := (&OrganizationClient{config: sq.config}).Query()
+func (_q *StandardQuery) WithOwner(opts ...func(*OrganizationQuery)) *StandardQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withOwner = query
-	return sq
+	_q.withOwner = query
+	return _q
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithControls(opts ...func(*ControlQuery)) *StandardQuery {
-	query := (&ControlClient{config: sq.config}).Query()
+func (_q *StandardQuery) WithControls(opts ...func(*ControlQuery)) *StandardQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withControls = query
-	return sq
+	_q.withControls = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -356,10 +356,10 @@ func (sq *StandardQuery) WithControls(opts ...func(*ControlQuery)) *StandardQuer
 //		GroupBy(standard.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (sq *StandardQuery) GroupBy(field string, fields ...string) *StandardGroupBy {
-	sq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &StandardGroupBy{build: sq}
-	grbuild.flds = &sq.ctx.Fields
+func (_q *StandardQuery) GroupBy(field string, fields ...string) *StandardGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &StandardGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = standard.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -377,112 +377,112 @@ func (sq *StandardQuery) GroupBy(field string, fields ...string) *StandardGroupB
 //	client.Standard.Query().
 //		Select(standard.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (sq *StandardQuery) Select(fields ...string) *StandardSelect {
-	sq.ctx.Fields = append(sq.ctx.Fields, fields...)
-	sbuild := &StandardSelect{StandardQuery: sq}
+func (_q *StandardQuery) Select(fields ...string) *StandardSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &StandardSelect{StandardQuery: _q}
 	sbuild.label = standard.Label
-	sbuild.flds, sbuild.scan = &sq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a StandardSelect configured with the given aggregations.
-func (sq *StandardQuery) Aggregate(fns ...AggregateFunc) *StandardSelect {
-	return sq.Select().Aggregate(fns...)
+func (_q *StandardQuery) Aggregate(fns ...AggregateFunc) *StandardSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sq *StandardQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sq.inters {
+func (_q *StandardQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !standard.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if sq.path != nil {
-		prev, err := sq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sq.sql = prev
+		_q.sql = prev
 	}
 	if standard.Policy == nil {
 		return errors.New("generated: uninitialized standard.Policy (forgotten import generated/runtime?)")
 	}
-	if err := standard.Policy.EvalQuery(ctx, sq); err != nil {
+	if err := standard.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Standard, error) {
+func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Standard, error) {
 	var (
 		nodes       = []*Standard{}
-		_spec       = sq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			sq.withOwner != nil,
-			sq.withControls != nil,
+			_q.withOwner != nil,
+			_q.withControls != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Standard).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Standard{config: sq.config}
+		node := &Standard{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = sq.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
-	if len(sq.modifiers) > 0 {
-		_spec.Modifiers = sq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Standard
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withOwner; query != nil {
-		if err := sq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Standard, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sq.withControls; query != nil {
-		if err := sq.loadControls(ctx, query, nodes,
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Standard) { n.Edges.Controls = []*Control{} },
 			func(n *Standard, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sq.withNamedControls {
-		if err := sq.loadControls(ctx, query, nodes,
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedControls(name) },
 			func(n *Standard, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range sq.loadTotal {
-		if err := sq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sq *StandardQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Organization)) error {
+func (_q *StandardQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Standard)
 	for i := range nodes {
@@ -511,7 +511,7 @@ func (sq *StandardQuery) loadOwner(ctx context.Context, query *OrganizationQuery
 	}
 	return nil
 }
-func (sq *StandardQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Control)) error {
+func (_q *StandardQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Control)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Standard)
 	for i := range nodes {
@@ -542,29 +542,29 @@ func (sq *StandardQuery) loadControls(ctx context.Context, query *ControlQuery, 
 	return nil
 }
 
-func (sq *StandardQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sq.querySpec()
-	_spec.Node.Schema = sq.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
-	if len(sq.modifiers) > 0 {
-		_spec.Modifiers = sq.modifiers
+func (_q *StandardQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Standard
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sq.ctx.Fields
-	if len(sq.ctx.Fields) > 0 {
-		_spec.Unique = sq.ctx.Unique != nil && *sq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sq *StandardQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *StandardQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(standard.Table, standard.Columns, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
-	_spec.From = sq.sql
-	if unique := sq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, standard.FieldID)
 		for i := range fields {
@@ -572,24 +572,24 @@ func (sq *StandardQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(standard.FieldOwnerID)
 		}
 	}
-	if ps := sq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -599,62 +599,62 @@ func (sq *StandardQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sq *StandardQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sq.driver.Dialect())
+func (_q *StandardQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(standard.Table)
-	columns := sq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = standard.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sq.sql != nil {
-		selector = sq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sq.ctx.Unique != nil && *sq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(sq.schemaConfig.Standard)
-	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Standard)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range sq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sq *StandardQuery) Modify(modifiers ...func(s *sql.Selector)) *StandardSelect {
-	sq.modifiers = append(sq.modifiers, modifiers...)
-	return sq.Select()
+func (_q *StandardQuery) Modify(modifiers ...func(s *sql.Selector)) *StandardSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sq *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *StandardQuery {
-	query := (&ControlClient{config: sq.config}).Query()
+func (_q *StandardQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *StandardQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sq.withNamedControls == nil {
-		sq.withNamedControls = make(map[string]*ControlQuery)
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
-	sq.withNamedControls[name] = query
-	return sq
+	_q.withNamedControls[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -683,41 +683,41 @@ type StandardGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sgb *StandardGroupBy) Aggregate(fns ...AggregateFunc) *StandardGroupBy {
-	sgb.fns = append(sgb.fns, fns...)
-	return sgb
+func (_g *StandardGroupBy) Aggregate(fns ...AggregateFunc) *StandardGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sgb *StandardGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sgb.build.prepareQuery(ctx); err != nil {
+func (_g *StandardGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*StandardQuery, *StandardGroupBy](ctx, sgb.build, sgb, sgb.build.inters, v)
+	return scanWithInterceptors[*StandardQuery, *StandardGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sgb *StandardGroupBy) sqlScan(ctx context.Context, root *StandardQuery, v any) error {
+func (_g *StandardGroupBy) sqlScan(ctx context.Context, root *StandardQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sgb.fns))
-	for _, fn := range sgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sgb.flds)+len(sgb.fns))
-		for _, f := range *sgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -731,27 +731,27 @@ type StandardSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ss *StandardSelect) Aggregate(fns ...AggregateFunc) *StandardSelect {
-	ss.fns = append(ss.fns, fns...)
-	return ss
+func (_s *StandardSelect) Aggregate(fns ...AggregateFunc) *StandardSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ss *StandardSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ss.ctx, ent.OpQuerySelect)
-	if err := ss.prepareQuery(ctx); err != nil {
+func (_s *StandardSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*StandardQuery, *StandardSelect](ctx, ss.StandardQuery, ss, ss.inters, v)
+	return scanWithInterceptors[*StandardQuery, *StandardSelect](ctx, _s.StandardQuery, _s, _s.inters, v)
 }
 
-func (ss *StandardSelect) sqlScan(ctx context.Context, root *StandardQuery, v any) error {
+func (_s *StandardSelect) sqlScan(ctx context.Context, root *StandardQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ss.fns))
-	for _, fn := range ss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -759,7 +759,7 @@ func (ss *StandardSelect) sqlScan(ctx context.Context, root *StandardQuery, v an
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -767,7 +767,7 @@ func (ss *StandardSelect) sqlScan(ctx context.Context, root *StandardQuery, v an
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ss *StandardSelect) Modify(modifiers ...func(s *sql.Selector)) *StandardSelect {
-	ss.modifiers = append(ss.modifiers, modifiers...)
-	return ss
+func (_s *StandardSelect) Modify(modifiers ...func(s *sql.Selector)) *StandardSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

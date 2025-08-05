@@ -110,7 +110,7 @@ func (*ProgramMembership) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ProgramMembership fields.
-func (pm *ProgramMembership) assignValues(columns []string, values []any) error {
+func (_m *ProgramMembership) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -120,59 +120,59 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				pm.ID = value.String
+				_m.ID = value.String
 			}
 		case programmembership.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				pm.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case programmembership.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				pm.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case programmembership.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				pm.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case programmembership.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				pm.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case programmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
-				pm.Role = enums.Role(value.String)
+				_m.Role = enums.Role(value.String)
 			}
 		case programmembership.FieldProgramID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_id", values[i])
 			} else if value.Valid {
-				pm.ProgramID = value.String
+				_m.ProgramID = value.String
 			}
 		case programmembership.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				pm.UserID = value.String
+				_m.UserID = value.String
 			}
 		case programmembership.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_membership_org_membership", values[i])
 			} else if value.Valid {
-				pm.program_membership_org_membership = new(string)
-				*pm.program_membership_org_membership = value.String
+				_m.program_membership_org_membership = new(string)
+				*_m.program_membership_org_membership = value.String
 			}
 		default:
-			pm.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -180,68 +180,68 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ProgramMembership.
 // This includes values selected through modifiers, order, etc.
-func (pm *ProgramMembership) Value(name string) (ent.Value, error) {
-	return pm.selectValues.Get(name)
+func (_m *ProgramMembership) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryProgram queries the "program" edge of the ProgramMembership entity.
-func (pm *ProgramMembership) QueryProgram() *ProgramQuery {
-	return NewProgramMembershipClient(pm.config).QueryProgram(pm)
+func (_m *ProgramMembership) QueryProgram() *ProgramQuery {
+	return NewProgramMembershipClient(_m.config).QueryProgram(_m)
 }
 
 // QueryUser queries the "user" edge of the ProgramMembership entity.
-func (pm *ProgramMembership) QueryUser() *UserQuery {
-	return NewProgramMembershipClient(pm.config).QueryUser(pm)
+func (_m *ProgramMembership) QueryUser() *UserQuery {
+	return NewProgramMembershipClient(_m.config).QueryUser(_m)
 }
 
 // QueryOrgMembership queries the "org_membership" edge of the ProgramMembership entity.
-func (pm *ProgramMembership) QueryOrgMembership() *OrgMembershipQuery {
-	return NewProgramMembershipClient(pm.config).QueryOrgMembership(pm)
+func (_m *ProgramMembership) QueryOrgMembership() *OrgMembershipQuery {
+	return NewProgramMembershipClient(_m.config).QueryOrgMembership(_m)
 }
 
 // Update returns a builder for updating this ProgramMembership.
 // Note that you need to call ProgramMembership.Unwrap() before calling this method if this ProgramMembership
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (pm *ProgramMembership) Update() *ProgramMembershipUpdateOne {
-	return NewProgramMembershipClient(pm.config).UpdateOne(pm)
+func (_m *ProgramMembership) Update() *ProgramMembershipUpdateOne {
+	return NewProgramMembershipClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ProgramMembership entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (pm *ProgramMembership) Unwrap() *ProgramMembership {
-	_tx, ok := pm.config.driver.(*txDriver)
+func (_m *ProgramMembership) Unwrap() *ProgramMembership {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ProgramMembership is not a transactional entity")
 	}
-	pm.config.driver = _tx.drv
-	return pm
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (pm *ProgramMembership) String() string {
+func (_m *ProgramMembership) String() string {
 	var builder strings.Builder
 	builder.WriteString("ProgramMembership(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", pm.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(pm.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(pm.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(pm.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(pm.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", pm.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
 	builder.WriteString("program_id=")
-	builder.WriteString(pm.ProgramID)
+	builder.WriteString(_m.ProgramID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(pm.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteByte(')')
 	return builder.String()
 }

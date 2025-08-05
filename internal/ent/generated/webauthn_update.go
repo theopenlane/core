@@ -28,221 +28,221 @@ type WebauthnUpdate struct {
 }
 
 // Where appends a list predicates to the WebauthnUpdate builder.
-func (wu *WebauthnUpdate) Where(ps ...predicate.Webauthn) *WebauthnUpdate {
-	wu.mutation.Where(ps...)
-	return wu
+func (_u *WebauthnUpdate) Where(ps ...predicate.Webauthn) *WebauthnUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (wu *WebauthnUpdate) SetUpdatedAt(t time.Time) *WebauthnUpdate {
-	wu.mutation.SetUpdatedAt(t)
-	return wu
+func (_u *WebauthnUpdate) SetUpdatedAt(v time.Time) *WebauthnUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (wu *WebauthnUpdate) ClearUpdatedAt() *WebauthnUpdate {
-	wu.mutation.ClearUpdatedAt()
-	return wu
+func (_u *WebauthnUpdate) ClearUpdatedAt() *WebauthnUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (wu *WebauthnUpdate) SetUpdatedBy(s string) *WebauthnUpdate {
-	wu.mutation.SetUpdatedBy(s)
-	return wu
+func (_u *WebauthnUpdate) SetUpdatedBy(v string) *WebauthnUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableUpdatedBy(s *string) *WebauthnUpdate {
-	if s != nil {
-		wu.SetUpdatedBy(*s)
+func (_u *WebauthnUpdate) SetNillableUpdatedBy(v *string) *WebauthnUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return wu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (wu *WebauthnUpdate) ClearUpdatedBy() *WebauthnUpdate {
-	wu.mutation.ClearUpdatedBy()
-	return wu
+func (_u *WebauthnUpdate) ClearUpdatedBy() *WebauthnUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (wu *WebauthnUpdate) SetTags(s []string) *WebauthnUpdate {
-	wu.mutation.SetTags(s)
-	return wu
+func (_u *WebauthnUpdate) SetTags(v []string) *WebauthnUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (wu *WebauthnUpdate) AppendTags(s []string) *WebauthnUpdate {
-	wu.mutation.AppendTags(s)
-	return wu
+// AppendTags appends value to the "tags" field.
+func (_u *WebauthnUpdate) AppendTags(v []string) *WebauthnUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (wu *WebauthnUpdate) ClearTags() *WebauthnUpdate {
-	wu.mutation.ClearTags()
-	return wu
+func (_u *WebauthnUpdate) ClearTags() *WebauthnUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (wu *WebauthnUpdate) SetOwnerID(s string) *WebauthnUpdate {
-	wu.mutation.SetOwnerID(s)
-	return wu
+func (_u *WebauthnUpdate) SetOwnerID(v string) *WebauthnUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableOwnerID(s *string) *WebauthnUpdate {
-	if s != nil {
-		wu.SetOwnerID(*s)
+func (_u *WebauthnUpdate) SetNillableOwnerID(v *string) *WebauthnUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return wu
+	return _u
 }
 
 // SetCredentialID sets the "credential_id" field.
-func (wu *WebauthnUpdate) SetCredentialID(b []byte) *WebauthnUpdate {
-	wu.mutation.SetCredentialID(b)
-	return wu
+func (_u *WebauthnUpdate) SetCredentialID(v []byte) *WebauthnUpdate {
+	_u.mutation.SetCredentialID(v)
+	return _u
 }
 
 // ClearCredentialID clears the value of the "credential_id" field.
-func (wu *WebauthnUpdate) ClearCredentialID() *WebauthnUpdate {
-	wu.mutation.ClearCredentialID()
-	return wu
+func (_u *WebauthnUpdate) ClearCredentialID() *WebauthnUpdate {
+	_u.mutation.ClearCredentialID()
+	return _u
 }
 
 // SetPublicKey sets the "public_key" field.
-func (wu *WebauthnUpdate) SetPublicKey(b []byte) *WebauthnUpdate {
-	wu.mutation.SetPublicKey(b)
-	return wu
+func (_u *WebauthnUpdate) SetPublicKey(v []byte) *WebauthnUpdate {
+	_u.mutation.SetPublicKey(v)
+	return _u
 }
 
 // ClearPublicKey clears the value of the "public_key" field.
-func (wu *WebauthnUpdate) ClearPublicKey() *WebauthnUpdate {
-	wu.mutation.ClearPublicKey()
-	return wu
+func (_u *WebauthnUpdate) ClearPublicKey() *WebauthnUpdate {
+	_u.mutation.ClearPublicKey()
+	return _u
 }
 
 // SetAttestationType sets the "attestation_type" field.
-func (wu *WebauthnUpdate) SetAttestationType(s string) *WebauthnUpdate {
-	wu.mutation.SetAttestationType(s)
-	return wu
+func (_u *WebauthnUpdate) SetAttestationType(v string) *WebauthnUpdate {
+	_u.mutation.SetAttestationType(v)
+	return _u
 }
 
 // SetNillableAttestationType sets the "attestation_type" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableAttestationType(s *string) *WebauthnUpdate {
-	if s != nil {
-		wu.SetAttestationType(*s)
+func (_u *WebauthnUpdate) SetNillableAttestationType(v *string) *WebauthnUpdate {
+	if v != nil {
+		_u.SetAttestationType(*v)
 	}
-	return wu
+	return _u
 }
 
 // ClearAttestationType clears the value of the "attestation_type" field.
-func (wu *WebauthnUpdate) ClearAttestationType() *WebauthnUpdate {
-	wu.mutation.ClearAttestationType()
-	return wu
+func (_u *WebauthnUpdate) ClearAttestationType() *WebauthnUpdate {
+	_u.mutation.ClearAttestationType()
+	return _u
 }
 
 // SetSignCount sets the "sign_count" field.
-func (wu *WebauthnUpdate) SetSignCount(i int32) *WebauthnUpdate {
-	wu.mutation.ResetSignCount()
-	wu.mutation.SetSignCount(i)
-	return wu
+func (_u *WebauthnUpdate) SetSignCount(v int32) *WebauthnUpdate {
+	_u.mutation.ResetSignCount()
+	_u.mutation.SetSignCount(v)
+	return _u
 }
 
 // SetNillableSignCount sets the "sign_count" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableSignCount(i *int32) *WebauthnUpdate {
-	if i != nil {
-		wu.SetSignCount(*i)
+func (_u *WebauthnUpdate) SetNillableSignCount(v *int32) *WebauthnUpdate {
+	if v != nil {
+		_u.SetSignCount(*v)
 	}
-	return wu
+	return _u
 }
 
-// AddSignCount adds i to the "sign_count" field.
-func (wu *WebauthnUpdate) AddSignCount(i int32) *WebauthnUpdate {
-	wu.mutation.AddSignCount(i)
-	return wu
+// AddSignCount adds value to the "sign_count" field.
+func (_u *WebauthnUpdate) AddSignCount(v int32) *WebauthnUpdate {
+	_u.mutation.AddSignCount(v)
+	return _u
 }
 
 // SetTransports sets the "transports" field.
-func (wu *WebauthnUpdate) SetTransports(s []string) *WebauthnUpdate {
-	wu.mutation.SetTransports(s)
-	return wu
+func (_u *WebauthnUpdate) SetTransports(v []string) *WebauthnUpdate {
+	_u.mutation.SetTransports(v)
+	return _u
 }
 
-// AppendTransports appends s to the "transports" field.
-func (wu *WebauthnUpdate) AppendTransports(s []string) *WebauthnUpdate {
-	wu.mutation.AppendTransports(s)
-	return wu
+// AppendTransports appends value to the "transports" field.
+func (_u *WebauthnUpdate) AppendTransports(v []string) *WebauthnUpdate {
+	_u.mutation.AppendTransports(v)
+	return _u
 }
 
 // SetBackupState sets the "backup_state" field.
-func (wu *WebauthnUpdate) SetBackupState(b bool) *WebauthnUpdate {
-	wu.mutation.SetBackupState(b)
-	return wu
+func (_u *WebauthnUpdate) SetBackupState(v bool) *WebauthnUpdate {
+	_u.mutation.SetBackupState(v)
+	return _u
 }
 
 // SetNillableBackupState sets the "backup_state" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableBackupState(b *bool) *WebauthnUpdate {
-	if b != nil {
-		wu.SetBackupState(*b)
+func (_u *WebauthnUpdate) SetNillableBackupState(v *bool) *WebauthnUpdate {
+	if v != nil {
+		_u.SetBackupState(*v)
 	}
-	return wu
+	return _u
 }
 
 // SetUserPresent sets the "user_present" field.
-func (wu *WebauthnUpdate) SetUserPresent(b bool) *WebauthnUpdate {
-	wu.mutation.SetUserPresent(b)
-	return wu
+func (_u *WebauthnUpdate) SetUserPresent(v bool) *WebauthnUpdate {
+	_u.mutation.SetUserPresent(v)
+	return _u
 }
 
 // SetNillableUserPresent sets the "user_present" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableUserPresent(b *bool) *WebauthnUpdate {
-	if b != nil {
-		wu.SetUserPresent(*b)
+func (_u *WebauthnUpdate) SetNillableUserPresent(v *bool) *WebauthnUpdate {
+	if v != nil {
+		_u.SetUserPresent(*v)
 	}
-	return wu
+	return _u
 }
 
 // SetUserVerified sets the "user_verified" field.
-func (wu *WebauthnUpdate) SetUserVerified(b bool) *WebauthnUpdate {
-	wu.mutation.SetUserVerified(b)
-	return wu
+func (_u *WebauthnUpdate) SetUserVerified(v bool) *WebauthnUpdate {
+	_u.mutation.SetUserVerified(v)
+	return _u
 }
 
 // SetNillableUserVerified sets the "user_verified" field if the given value is not nil.
-func (wu *WebauthnUpdate) SetNillableUserVerified(b *bool) *WebauthnUpdate {
-	if b != nil {
-		wu.SetUserVerified(*b)
+func (_u *WebauthnUpdate) SetNillableUserVerified(v *bool) *WebauthnUpdate {
+	if v != nil {
+		_u.SetUserVerified(*v)
 	}
-	return wu
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (wu *WebauthnUpdate) SetOwner(u *User) *WebauthnUpdate {
-	return wu.SetOwnerID(u.ID)
+func (_u *WebauthnUpdate) SetOwner(v *User) *WebauthnUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the WebauthnMutation object of the builder.
-func (wu *WebauthnUpdate) Mutation() *WebauthnMutation {
-	return wu.mutation
+func (_u *WebauthnUpdate) Mutation() *WebauthnMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (wu *WebauthnUpdate) ClearOwner() *WebauthnUpdate {
-	wu.mutation.ClearOwner()
-	return wu
+func (_u *WebauthnUpdate) ClearOwner() *WebauthnUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (wu *WebauthnUpdate) Save(ctx context.Context) (int, error) {
-	if err := wu.defaults(); err != nil {
+func (_u *WebauthnUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, wu.sqlSave, wu.mutation, wu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (wu *WebauthnUpdate) SaveX(ctx context.Context) int {
-	affected, err := wu.Save(ctx)
+func (_u *WebauthnUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -250,127 +250,127 @@ func (wu *WebauthnUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (wu *WebauthnUpdate) Exec(ctx context.Context) error {
-	_, err := wu.Save(ctx)
+func (_u *WebauthnUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (wu *WebauthnUpdate) ExecX(ctx context.Context) {
-	if err := wu.Exec(ctx); err != nil {
+func (_u *WebauthnUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (wu *WebauthnUpdate) defaults() error {
-	if _, ok := wu.mutation.UpdatedAt(); !ok && !wu.mutation.UpdatedAtCleared() {
+func (_u *WebauthnUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if webauthn.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized webauthn.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := webauthn.UpdateDefaultUpdatedAt()
-		wu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (wu *WebauthnUpdate) check() error {
-	if wu.mutation.OwnerCleared() && len(wu.mutation.OwnerIDs()) > 0 {
+func (_u *WebauthnUpdate) check() error {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "Webauthn.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (wu *WebauthnUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebauthnUpdate {
-	wu.modifiers = append(wu.modifiers, modifiers...)
-	return wu
+func (_u *WebauthnUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebauthnUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := wu.check(); err != nil {
-		return n, err
+func (_u *WebauthnUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(webauthn.Table, webauthn.Columns, sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString))
-	if ps := wu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if wu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(webauthn.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := wu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(webauthn.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if wu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedAt, field.TypeTime)
 	}
-	if wu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(webauthn.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := wu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
 	}
-	if wu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := wu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(webauthn.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := wu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, webauthn.FieldTags, value)
 		})
 	}
-	if wu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(webauthn.FieldTags, field.TypeJSON)
 	}
-	if value, ok := wu.mutation.CredentialID(); ok {
+	if value, ok := _u.mutation.CredentialID(); ok {
 		_spec.SetField(webauthn.FieldCredentialID, field.TypeBytes, value)
 	}
-	if wu.mutation.CredentialIDCleared() {
+	if _u.mutation.CredentialIDCleared() {
 		_spec.ClearField(webauthn.FieldCredentialID, field.TypeBytes)
 	}
-	if value, ok := wu.mutation.PublicKey(); ok {
+	if value, ok := _u.mutation.PublicKey(); ok {
 		_spec.SetField(webauthn.FieldPublicKey, field.TypeBytes, value)
 	}
-	if wu.mutation.PublicKeyCleared() {
+	if _u.mutation.PublicKeyCleared() {
 		_spec.ClearField(webauthn.FieldPublicKey, field.TypeBytes)
 	}
-	if value, ok := wu.mutation.AttestationType(); ok {
+	if value, ok := _u.mutation.AttestationType(); ok {
 		_spec.SetField(webauthn.FieldAttestationType, field.TypeString, value)
 	}
-	if wu.mutation.AttestationTypeCleared() {
+	if _u.mutation.AttestationTypeCleared() {
 		_spec.ClearField(webauthn.FieldAttestationType, field.TypeString)
 	}
-	if value, ok := wu.mutation.SignCount(); ok {
+	if value, ok := _u.mutation.SignCount(); ok {
 		_spec.SetField(webauthn.FieldSignCount, field.TypeInt32, value)
 	}
-	if value, ok := wu.mutation.AddedSignCount(); ok {
+	if value, ok := _u.mutation.AddedSignCount(); ok {
 		_spec.AddField(webauthn.FieldSignCount, field.TypeInt32, value)
 	}
-	if value, ok := wu.mutation.Transports(); ok {
+	if value, ok := _u.mutation.Transports(); ok {
 		_spec.SetField(webauthn.FieldTransports, field.TypeJSON, value)
 	}
-	if value, ok := wu.mutation.AppendedTransports(); ok {
+	if value, ok := _u.mutation.AppendedTransports(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, webauthn.FieldTransports, value)
 		})
 	}
-	if value, ok := wu.mutation.BackupState(); ok {
+	if value, ok := _u.mutation.BackupState(); ok {
 		_spec.SetField(webauthn.FieldBackupState, field.TypeBool, value)
 	}
-	if value, ok := wu.mutation.UserPresent(); ok {
+	if value, ok := _u.mutation.UserPresent(); ok {
 		_spec.SetField(webauthn.FieldUserPresent, field.TypeBool, value)
 	}
-	if value, ok := wu.mutation.UserVerified(); ok {
+	if value, ok := _u.mutation.UserVerified(); ok {
 		_spec.SetField(webauthn.FieldUserVerified, field.TypeBool, value)
 	}
-	if wu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -381,10 +381,10 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = wu.schemaConfig.Webauthn
+		edge.Schema = _u.schemaConfig.Webauthn
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := wu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -395,16 +395,16 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = wu.schemaConfig.Webauthn
+		edge.Schema = _u.schemaConfig.Webauthn
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = wu.schemaConfig.Webauthn
-	ctx = internal.NewSchemaConfigContext(ctx, wu.schemaConfig)
-	_spec.AddModifiers(wu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, wu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Webauthn
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{webauthn.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -412,8 +412,8 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	wu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // WebauthnUpdateOne is the builder for updating a single Webauthn entity.
@@ -426,228 +426,228 @@ type WebauthnUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (wuo *WebauthnUpdateOne) SetUpdatedAt(t time.Time) *WebauthnUpdateOne {
-	wuo.mutation.SetUpdatedAt(t)
-	return wuo
+func (_u *WebauthnUpdateOne) SetUpdatedAt(v time.Time) *WebauthnUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (wuo *WebauthnUpdateOne) ClearUpdatedAt() *WebauthnUpdateOne {
-	wuo.mutation.ClearUpdatedAt()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearUpdatedAt() *WebauthnUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (wuo *WebauthnUpdateOne) SetUpdatedBy(s string) *WebauthnUpdateOne {
-	wuo.mutation.SetUpdatedBy(s)
-	return wuo
+func (_u *WebauthnUpdateOne) SetUpdatedBy(v string) *WebauthnUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableUpdatedBy(s *string) *WebauthnUpdateOne {
-	if s != nil {
-		wuo.SetUpdatedBy(*s)
+func (_u *WebauthnUpdateOne) SetNillableUpdatedBy(v *string) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return wuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (wuo *WebauthnUpdateOne) ClearUpdatedBy() *WebauthnUpdateOne {
-	wuo.mutation.ClearUpdatedBy()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearUpdatedBy() *WebauthnUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (wuo *WebauthnUpdateOne) SetTags(s []string) *WebauthnUpdateOne {
-	wuo.mutation.SetTags(s)
-	return wuo
+func (_u *WebauthnUpdateOne) SetTags(v []string) *WebauthnUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (wuo *WebauthnUpdateOne) AppendTags(s []string) *WebauthnUpdateOne {
-	wuo.mutation.AppendTags(s)
-	return wuo
+// AppendTags appends value to the "tags" field.
+func (_u *WebauthnUpdateOne) AppendTags(v []string) *WebauthnUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (wuo *WebauthnUpdateOne) ClearTags() *WebauthnUpdateOne {
-	wuo.mutation.ClearTags()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearTags() *WebauthnUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (wuo *WebauthnUpdateOne) SetOwnerID(s string) *WebauthnUpdateOne {
-	wuo.mutation.SetOwnerID(s)
-	return wuo
+func (_u *WebauthnUpdateOne) SetOwnerID(v string) *WebauthnUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableOwnerID(s *string) *WebauthnUpdateOne {
-	if s != nil {
-		wuo.SetOwnerID(*s)
+func (_u *WebauthnUpdateOne) SetNillableOwnerID(v *string) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return wuo
+	return _u
 }
 
 // SetCredentialID sets the "credential_id" field.
-func (wuo *WebauthnUpdateOne) SetCredentialID(b []byte) *WebauthnUpdateOne {
-	wuo.mutation.SetCredentialID(b)
-	return wuo
+func (_u *WebauthnUpdateOne) SetCredentialID(v []byte) *WebauthnUpdateOne {
+	_u.mutation.SetCredentialID(v)
+	return _u
 }
 
 // ClearCredentialID clears the value of the "credential_id" field.
-func (wuo *WebauthnUpdateOne) ClearCredentialID() *WebauthnUpdateOne {
-	wuo.mutation.ClearCredentialID()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearCredentialID() *WebauthnUpdateOne {
+	_u.mutation.ClearCredentialID()
+	return _u
 }
 
 // SetPublicKey sets the "public_key" field.
-func (wuo *WebauthnUpdateOne) SetPublicKey(b []byte) *WebauthnUpdateOne {
-	wuo.mutation.SetPublicKey(b)
-	return wuo
+func (_u *WebauthnUpdateOne) SetPublicKey(v []byte) *WebauthnUpdateOne {
+	_u.mutation.SetPublicKey(v)
+	return _u
 }
 
 // ClearPublicKey clears the value of the "public_key" field.
-func (wuo *WebauthnUpdateOne) ClearPublicKey() *WebauthnUpdateOne {
-	wuo.mutation.ClearPublicKey()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearPublicKey() *WebauthnUpdateOne {
+	_u.mutation.ClearPublicKey()
+	return _u
 }
 
 // SetAttestationType sets the "attestation_type" field.
-func (wuo *WebauthnUpdateOne) SetAttestationType(s string) *WebauthnUpdateOne {
-	wuo.mutation.SetAttestationType(s)
-	return wuo
+func (_u *WebauthnUpdateOne) SetAttestationType(v string) *WebauthnUpdateOne {
+	_u.mutation.SetAttestationType(v)
+	return _u
 }
 
 // SetNillableAttestationType sets the "attestation_type" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableAttestationType(s *string) *WebauthnUpdateOne {
-	if s != nil {
-		wuo.SetAttestationType(*s)
+func (_u *WebauthnUpdateOne) SetNillableAttestationType(v *string) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetAttestationType(*v)
 	}
-	return wuo
+	return _u
 }
 
 // ClearAttestationType clears the value of the "attestation_type" field.
-func (wuo *WebauthnUpdateOne) ClearAttestationType() *WebauthnUpdateOne {
-	wuo.mutation.ClearAttestationType()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearAttestationType() *WebauthnUpdateOne {
+	_u.mutation.ClearAttestationType()
+	return _u
 }
 
 // SetSignCount sets the "sign_count" field.
-func (wuo *WebauthnUpdateOne) SetSignCount(i int32) *WebauthnUpdateOne {
-	wuo.mutation.ResetSignCount()
-	wuo.mutation.SetSignCount(i)
-	return wuo
+func (_u *WebauthnUpdateOne) SetSignCount(v int32) *WebauthnUpdateOne {
+	_u.mutation.ResetSignCount()
+	_u.mutation.SetSignCount(v)
+	return _u
 }
 
 // SetNillableSignCount sets the "sign_count" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableSignCount(i *int32) *WebauthnUpdateOne {
-	if i != nil {
-		wuo.SetSignCount(*i)
+func (_u *WebauthnUpdateOne) SetNillableSignCount(v *int32) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetSignCount(*v)
 	}
-	return wuo
+	return _u
 }
 
-// AddSignCount adds i to the "sign_count" field.
-func (wuo *WebauthnUpdateOne) AddSignCount(i int32) *WebauthnUpdateOne {
-	wuo.mutation.AddSignCount(i)
-	return wuo
+// AddSignCount adds value to the "sign_count" field.
+func (_u *WebauthnUpdateOne) AddSignCount(v int32) *WebauthnUpdateOne {
+	_u.mutation.AddSignCount(v)
+	return _u
 }
 
 // SetTransports sets the "transports" field.
-func (wuo *WebauthnUpdateOne) SetTransports(s []string) *WebauthnUpdateOne {
-	wuo.mutation.SetTransports(s)
-	return wuo
+func (_u *WebauthnUpdateOne) SetTransports(v []string) *WebauthnUpdateOne {
+	_u.mutation.SetTransports(v)
+	return _u
 }
 
-// AppendTransports appends s to the "transports" field.
-func (wuo *WebauthnUpdateOne) AppendTransports(s []string) *WebauthnUpdateOne {
-	wuo.mutation.AppendTransports(s)
-	return wuo
+// AppendTransports appends value to the "transports" field.
+func (_u *WebauthnUpdateOne) AppendTransports(v []string) *WebauthnUpdateOne {
+	_u.mutation.AppendTransports(v)
+	return _u
 }
 
 // SetBackupState sets the "backup_state" field.
-func (wuo *WebauthnUpdateOne) SetBackupState(b bool) *WebauthnUpdateOne {
-	wuo.mutation.SetBackupState(b)
-	return wuo
+func (_u *WebauthnUpdateOne) SetBackupState(v bool) *WebauthnUpdateOne {
+	_u.mutation.SetBackupState(v)
+	return _u
 }
 
 // SetNillableBackupState sets the "backup_state" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableBackupState(b *bool) *WebauthnUpdateOne {
-	if b != nil {
-		wuo.SetBackupState(*b)
+func (_u *WebauthnUpdateOne) SetNillableBackupState(v *bool) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetBackupState(*v)
 	}
-	return wuo
+	return _u
 }
 
 // SetUserPresent sets the "user_present" field.
-func (wuo *WebauthnUpdateOne) SetUserPresent(b bool) *WebauthnUpdateOne {
-	wuo.mutation.SetUserPresent(b)
-	return wuo
+func (_u *WebauthnUpdateOne) SetUserPresent(v bool) *WebauthnUpdateOne {
+	_u.mutation.SetUserPresent(v)
+	return _u
 }
 
 // SetNillableUserPresent sets the "user_present" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableUserPresent(b *bool) *WebauthnUpdateOne {
-	if b != nil {
-		wuo.SetUserPresent(*b)
+func (_u *WebauthnUpdateOne) SetNillableUserPresent(v *bool) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetUserPresent(*v)
 	}
-	return wuo
+	return _u
 }
 
 // SetUserVerified sets the "user_verified" field.
-func (wuo *WebauthnUpdateOne) SetUserVerified(b bool) *WebauthnUpdateOne {
-	wuo.mutation.SetUserVerified(b)
-	return wuo
+func (_u *WebauthnUpdateOne) SetUserVerified(v bool) *WebauthnUpdateOne {
+	_u.mutation.SetUserVerified(v)
+	return _u
 }
 
 // SetNillableUserVerified sets the "user_verified" field if the given value is not nil.
-func (wuo *WebauthnUpdateOne) SetNillableUserVerified(b *bool) *WebauthnUpdateOne {
-	if b != nil {
-		wuo.SetUserVerified(*b)
+func (_u *WebauthnUpdateOne) SetNillableUserVerified(v *bool) *WebauthnUpdateOne {
+	if v != nil {
+		_u.SetUserVerified(*v)
 	}
-	return wuo
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (wuo *WebauthnUpdateOne) SetOwner(u *User) *WebauthnUpdateOne {
-	return wuo.SetOwnerID(u.ID)
+func (_u *WebauthnUpdateOne) SetOwner(v *User) *WebauthnUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the WebauthnMutation object of the builder.
-func (wuo *WebauthnUpdateOne) Mutation() *WebauthnMutation {
-	return wuo.mutation
+func (_u *WebauthnUpdateOne) Mutation() *WebauthnMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (wuo *WebauthnUpdateOne) ClearOwner() *WebauthnUpdateOne {
-	wuo.mutation.ClearOwner()
-	return wuo
+func (_u *WebauthnUpdateOne) ClearOwner() *WebauthnUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Where appends a list predicates to the WebauthnUpdate builder.
-func (wuo *WebauthnUpdateOne) Where(ps ...predicate.Webauthn) *WebauthnUpdateOne {
-	wuo.mutation.Where(ps...)
-	return wuo
+func (_u *WebauthnUpdateOne) Where(ps ...predicate.Webauthn) *WebauthnUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (wuo *WebauthnUpdateOne) Select(field string, fields ...string) *WebauthnUpdateOne {
-	wuo.fields = append([]string{field}, fields...)
-	return wuo
+func (_u *WebauthnUpdateOne) Select(field string, fields ...string) *WebauthnUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Webauthn entity.
-func (wuo *WebauthnUpdateOne) Save(ctx context.Context) (*Webauthn, error) {
-	if err := wuo.defaults(); err != nil {
+func (_u *WebauthnUpdateOne) Save(ctx context.Context) (*Webauthn, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, wuo.sqlSave, wuo.mutation, wuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (wuo *WebauthnUpdateOne) SaveX(ctx context.Context) *Webauthn {
-	node, err := wuo.Save(ctx)
+func (_u *WebauthnUpdateOne) SaveX(ctx context.Context) *Webauthn {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -655,55 +655,55 @@ func (wuo *WebauthnUpdateOne) SaveX(ctx context.Context) *Webauthn {
 }
 
 // Exec executes the query on the entity.
-func (wuo *WebauthnUpdateOne) Exec(ctx context.Context) error {
-	_, err := wuo.Save(ctx)
+func (_u *WebauthnUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (wuo *WebauthnUpdateOne) ExecX(ctx context.Context) {
-	if err := wuo.Exec(ctx); err != nil {
+func (_u *WebauthnUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (wuo *WebauthnUpdateOne) defaults() error {
-	if _, ok := wuo.mutation.UpdatedAt(); !ok && !wuo.mutation.UpdatedAtCleared() {
+func (_u *WebauthnUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if webauthn.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized webauthn.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := webauthn.UpdateDefaultUpdatedAt()
-		wuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (wuo *WebauthnUpdateOne) check() error {
-	if wuo.mutation.OwnerCleared() && len(wuo.mutation.OwnerIDs()) > 0 {
+func (_u *WebauthnUpdateOne) check() error {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "Webauthn.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (wuo *WebauthnUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebauthnUpdateOne {
-	wuo.modifiers = append(wuo.modifiers, modifiers...)
-	return wuo
+func (_u *WebauthnUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebauthnUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err error) {
-	if err := wuo.check(); err != nil {
+func (_u *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(webauthn.Table, webauthn.Columns, sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString))
-	id, ok := wuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Webauthn.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := wuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, webauthn.FieldID)
 		for _, f := range fields {
@@ -715,84 +715,84 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 			}
 		}
 	}
-	if ps := wuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if wuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(webauthn.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := wuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(webauthn.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if wuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedAt, field.TypeTime)
 	}
-	if wuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(webauthn.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := wuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(webauthn.FieldUpdatedBy, field.TypeString, value)
 	}
-	if wuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(webauthn.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := wuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(webauthn.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := wuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, webauthn.FieldTags, value)
 		})
 	}
-	if wuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(webauthn.FieldTags, field.TypeJSON)
 	}
-	if value, ok := wuo.mutation.CredentialID(); ok {
+	if value, ok := _u.mutation.CredentialID(); ok {
 		_spec.SetField(webauthn.FieldCredentialID, field.TypeBytes, value)
 	}
-	if wuo.mutation.CredentialIDCleared() {
+	if _u.mutation.CredentialIDCleared() {
 		_spec.ClearField(webauthn.FieldCredentialID, field.TypeBytes)
 	}
-	if value, ok := wuo.mutation.PublicKey(); ok {
+	if value, ok := _u.mutation.PublicKey(); ok {
 		_spec.SetField(webauthn.FieldPublicKey, field.TypeBytes, value)
 	}
-	if wuo.mutation.PublicKeyCleared() {
+	if _u.mutation.PublicKeyCleared() {
 		_spec.ClearField(webauthn.FieldPublicKey, field.TypeBytes)
 	}
-	if value, ok := wuo.mutation.AttestationType(); ok {
+	if value, ok := _u.mutation.AttestationType(); ok {
 		_spec.SetField(webauthn.FieldAttestationType, field.TypeString, value)
 	}
-	if wuo.mutation.AttestationTypeCleared() {
+	if _u.mutation.AttestationTypeCleared() {
 		_spec.ClearField(webauthn.FieldAttestationType, field.TypeString)
 	}
-	if value, ok := wuo.mutation.SignCount(); ok {
+	if value, ok := _u.mutation.SignCount(); ok {
 		_spec.SetField(webauthn.FieldSignCount, field.TypeInt32, value)
 	}
-	if value, ok := wuo.mutation.AddedSignCount(); ok {
+	if value, ok := _u.mutation.AddedSignCount(); ok {
 		_spec.AddField(webauthn.FieldSignCount, field.TypeInt32, value)
 	}
-	if value, ok := wuo.mutation.Transports(); ok {
+	if value, ok := _u.mutation.Transports(); ok {
 		_spec.SetField(webauthn.FieldTransports, field.TypeJSON, value)
 	}
-	if value, ok := wuo.mutation.AppendedTransports(); ok {
+	if value, ok := _u.mutation.AppendedTransports(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, webauthn.FieldTransports, value)
 		})
 	}
-	if value, ok := wuo.mutation.BackupState(); ok {
+	if value, ok := _u.mutation.BackupState(); ok {
 		_spec.SetField(webauthn.FieldBackupState, field.TypeBool, value)
 	}
-	if value, ok := wuo.mutation.UserPresent(); ok {
+	if value, ok := _u.mutation.UserPresent(); ok {
 		_spec.SetField(webauthn.FieldUserPresent, field.TypeBool, value)
 	}
-	if value, ok := wuo.mutation.UserVerified(); ok {
+	if value, ok := _u.mutation.UserVerified(); ok {
 		_spec.SetField(webauthn.FieldUserVerified, field.TypeBool, value)
 	}
-	if wuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -803,10 +803,10 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = wuo.schemaConfig.Webauthn
+		edge.Schema = _u.schemaConfig.Webauthn
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := wuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -817,19 +817,19 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = wuo.schemaConfig.Webauthn
+		edge.Schema = _u.schemaConfig.Webauthn
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = wuo.schemaConfig.Webauthn
-	ctx = internal.NewSchemaConfigContext(ctx, wuo.schemaConfig)
-	_spec.AddModifiers(wuo.modifiers...)
-	_node = &Webauthn{config: wuo.config}
+	_spec.Node.Schema = _u.schemaConfig.Webauthn
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Webauthn{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, wuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{webauthn.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -837,6 +837,6 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 		}
 		return nil, err
 	}
-	wuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -137,7 +137,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
-			accessmap.EdgeAuthCheck(Group{}.Name()),
+			accessmap.EdgeViewCheck(Group{}.Name()),
 		)
 
 	editEdge := edge.To("editors", Group.Type).
@@ -146,7 +146,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
-			accessmap.EdgeAuthCheck(Group{}.Name()),
+			accessmap.EdgeViewCheck(Group{}.Name()),
 		)
 
 	viewEdge := edge.To("viewers", Group.Type).
@@ -155,7 +155,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 			entgql.RelayConnection(),
 			entgql.QueryField(),
 			entgql.MultiOrder(),
-			accessmap.EdgeAuthCheck(Group{}.Name()),
+			accessmap.EdgeViewCheck(Group{}.Name()),
 		)
 
 	edges := []ent.Edge{blockEdge, editEdge}

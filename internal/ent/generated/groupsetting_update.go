@@ -28,198 +28,198 @@ type GroupSettingUpdate struct {
 }
 
 // Where appends a list predicates to the GroupSettingUpdate builder.
-func (gsu *GroupSettingUpdate) Where(ps ...predicate.GroupSetting) *GroupSettingUpdate {
-	gsu.mutation.Where(ps...)
-	return gsu
+func (_u *GroupSettingUpdate) Where(ps ...predicate.GroupSetting) *GroupSettingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gsu *GroupSettingUpdate) SetUpdatedAt(t time.Time) *GroupSettingUpdate {
-	gsu.mutation.SetUpdatedAt(t)
-	return gsu
+func (_u *GroupSettingUpdate) SetUpdatedAt(v time.Time) *GroupSettingUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (gsu *GroupSettingUpdate) ClearUpdatedAt() *GroupSettingUpdate {
-	gsu.mutation.ClearUpdatedAt()
-	return gsu
+func (_u *GroupSettingUpdate) ClearUpdatedAt() *GroupSettingUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gsu *GroupSettingUpdate) SetUpdatedBy(s string) *GroupSettingUpdate {
-	gsu.mutation.SetUpdatedBy(s)
-	return gsu
+func (_u *GroupSettingUpdate) SetUpdatedBy(v string) *GroupSettingUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableUpdatedBy(s *string) *GroupSettingUpdate {
-	if s != nil {
-		gsu.SetUpdatedBy(*s)
+func (_u *GroupSettingUpdate) SetNillableUpdatedBy(v *string) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return gsu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (gsu *GroupSettingUpdate) ClearUpdatedBy() *GroupSettingUpdate {
-	gsu.mutation.ClearUpdatedBy()
-	return gsu
+func (_u *GroupSettingUpdate) ClearUpdatedBy() *GroupSettingUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (gsu *GroupSettingUpdate) SetDeletedAt(t time.Time) *GroupSettingUpdate {
-	gsu.mutation.SetDeletedAt(t)
-	return gsu
+func (_u *GroupSettingUpdate) SetDeletedAt(v time.Time) *GroupSettingUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableDeletedAt(t *time.Time) *GroupSettingUpdate {
-	if t != nil {
-		gsu.SetDeletedAt(*t)
+func (_u *GroupSettingUpdate) SetNillableDeletedAt(v *time.Time) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return gsu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (gsu *GroupSettingUpdate) ClearDeletedAt() *GroupSettingUpdate {
-	gsu.mutation.ClearDeletedAt()
-	return gsu
+func (_u *GroupSettingUpdate) ClearDeletedAt() *GroupSettingUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (gsu *GroupSettingUpdate) SetDeletedBy(s string) *GroupSettingUpdate {
-	gsu.mutation.SetDeletedBy(s)
-	return gsu
+func (_u *GroupSettingUpdate) SetDeletedBy(v string) *GroupSettingUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableDeletedBy(s *string) *GroupSettingUpdate {
-	if s != nil {
-		gsu.SetDeletedBy(*s)
+func (_u *GroupSettingUpdate) SetNillableDeletedBy(v *string) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return gsu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (gsu *GroupSettingUpdate) ClearDeletedBy() *GroupSettingUpdate {
-	gsu.mutation.ClearDeletedBy()
-	return gsu
+func (_u *GroupSettingUpdate) ClearDeletedBy() *GroupSettingUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetVisibility sets the "visibility" field.
-func (gsu *GroupSettingUpdate) SetVisibility(e enums.Visibility) *GroupSettingUpdate {
-	gsu.mutation.SetVisibility(e)
-	return gsu
+func (_u *GroupSettingUpdate) SetVisibility(v enums.Visibility) *GroupSettingUpdate {
+	_u.mutation.SetVisibility(v)
+	return _u
 }
 
 // SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableVisibility(e *enums.Visibility) *GroupSettingUpdate {
-	if e != nil {
-		gsu.SetVisibility(*e)
+func (_u *GroupSettingUpdate) SetNillableVisibility(v *enums.Visibility) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetVisibility(*v)
 	}
-	return gsu
+	return _u
 }
 
 // SetJoinPolicy sets the "join_policy" field.
-func (gsu *GroupSettingUpdate) SetJoinPolicy(ep enums.JoinPolicy) *GroupSettingUpdate {
-	gsu.mutation.SetJoinPolicy(ep)
-	return gsu
+func (_u *GroupSettingUpdate) SetJoinPolicy(v enums.JoinPolicy) *GroupSettingUpdate {
+	_u.mutation.SetJoinPolicy(v)
+	return _u
 }
 
 // SetNillableJoinPolicy sets the "join_policy" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableJoinPolicy(ep *enums.JoinPolicy) *GroupSettingUpdate {
-	if ep != nil {
-		gsu.SetJoinPolicy(*ep)
+func (_u *GroupSettingUpdate) SetNillableJoinPolicy(v *enums.JoinPolicy) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetJoinPolicy(*v)
 	}
-	return gsu
+	return _u
 }
 
 // SetSyncToSlack sets the "sync_to_slack" field.
-func (gsu *GroupSettingUpdate) SetSyncToSlack(b bool) *GroupSettingUpdate {
-	gsu.mutation.SetSyncToSlack(b)
-	return gsu
+func (_u *GroupSettingUpdate) SetSyncToSlack(v bool) *GroupSettingUpdate {
+	_u.mutation.SetSyncToSlack(v)
+	return _u
 }
 
 // SetNillableSyncToSlack sets the "sync_to_slack" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableSyncToSlack(b *bool) *GroupSettingUpdate {
-	if b != nil {
-		gsu.SetSyncToSlack(*b)
+func (_u *GroupSettingUpdate) SetNillableSyncToSlack(v *bool) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetSyncToSlack(*v)
 	}
-	return gsu
+	return _u
 }
 
 // ClearSyncToSlack clears the value of the "sync_to_slack" field.
-func (gsu *GroupSettingUpdate) ClearSyncToSlack() *GroupSettingUpdate {
-	gsu.mutation.ClearSyncToSlack()
-	return gsu
+func (_u *GroupSettingUpdate) ClearSyncToSlack() *GroupSettingUpdate {
+	_u.mutation.ClearSyncToSlack()
+	return _u
 }
 
 // SetSyncToGithub sets the "sync_to_github" field.
-func (gsu *GroupSettingUpdate) SetSyncToGithub(b bool) *GroupSettingUpdate {
-	gsu.mutation.SetSyncToGithub(b)
-	return gsu
+func (_u *GroupSettingUpdate) SetSyncToGithub(v bool) *GroupSettingUpdate {
+	_u.mutation.SetSyncToGithub(v)
+	return _u
 }
 
 // SetNillableSyncToGithub sets the "sync_to_github" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableSyncToGithub(b *bool) *GroupSettingUpdate {
-	if b != nil {
-		gsu.SetSyncToGithub(*b)
+func (_u *GroupSettingUpdate) SetNillableSyncToGithub(v *bool) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetSyncToGithub(*v)
 	}
-	return gsu
+	return _u
 }
 
 // ClearSyncToGithub clears the value of the "sync_to_github" field.
-func (gsu *GroupSettingUpdate) ClearSyncToGithub() *GroupSettingUpdate {
-	gsu.mutation.ClearSyncToGithub()
-	return gsu
+func (_u *GroupSettingUpdate) ClearSyncToGithub() *GroupSettingUpdate {
+	_u.mutation.ClearSyncToGithub()
+	return _u
 }
 
 // SetGroupID sets the "group_id" field.
-func (gsu *GroupSettingUpdate) SetGroupID(s string) *GroupSettingUpdate {
-	gsu.mutation.SetGroupID(s)
-	return gsu
+func (_u *GroupSettingUpdate) SetGroupID(v string) *GroupSettingUpdate {
+	_u.mutation.SetGroupID(v)
+	return _u
 }
 
 // SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (gsu *GroupSettingUpdate) SetNillableGroupID(s *string) *GroupSettingUpdate {
-	if s != nil {
-		gsu.SetGroupID(*s)
+func (_u *GroupSettingUpdate) SetNillableGroupID(v *string) *GroupSettingUpdate {
+	if v != nil {
+		_u.SetGroupID(*v)
 	}
-	return gsu
+	return _u
 }
 
 // ClearGroupID clears the value of the "group_id" field.
-func (gsu *GroupSettingUpdate) ClearGroupID() *GroupSettingUpdate {
-	gsu.mutation.ClearGroupID()
-	return gsu
+func (_u *GroupSettingUpdate) ClearGroupID() *GroupSettingUpdate {
+	_u.mutation.ClearGroupID()
+	return _u
 }
 
 // SetGroup sets the "group" edge to the Group entity.
-func (gsu *GroupSettingUpdate) SetGroup(g *Group) *GroupSettingUpdate {
-	return gsu.SetGroupID(g.ID)
+func (_u *GroupSettingUpdate) SetGroup(v *Group) *GroupSettingUpdate {
+	return _u.SetGroupID(v.ID)
 }
 
 // Mutation returns the GroupSettingMutation object of the builder.
-func (gsu *GroupSettingUpdate) Mutation() *GroupSettingMutation {
-	return gsu.mutation
+func (_u *GroupSettingUpdate) Mutation() *GroupSettingMutation {
+	return _u.mutation
 }
 
 // ClearGroup clears the "group" edge to the Group entity.
-func (gsu *GroupSettingUpdate) ClearGroup() *GroupSettingUpdate {
-	gsu.mutation.ClearGroup()
-	return gsu
+func (_u *GroupSettingUpdate) ClearGroup() *GroupSettingUpdate {
+	_u.mutation.ClearGroup()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (gsu *GroupSettingUpdate) Save(ctx context.Context) (int, error) {
-	if err := gsu.defaults(); err != nil {
+func (_u *GroupSettingUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, gsu.sqlSave, gsu.mutation, gsu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gsu *GroupSettingUpdate) SaveX(ctx context.Context) int {
-	affected, err := gsu.Save(ctx)
+func (_u *GroupSettingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -227,38 +227,38 @@ func (gsu *GroupSettingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (gsu *GroupSettingUpdate) Exec(ctx context.Context) error {
-	_, err := gsu.Save(ctx)
+func (_u *GroupSettingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gsu *GroupSettingUpdate) ExecX(ctx context.Context) {
-	if err := gsu.Exec(ctx); err != nil {
+func (_u *GroupSettingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gsu *GroupSettingUpdate) defaults() error {
-	if _, ok := gsu.mutation.UpdatedAt(); !ok && !gsu.mutation.UpdatedAtCleared() {
+func (_u *GroupSettingUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if groupsetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupsetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupsetting.UpdateDefaultUpdatedAt()
-		gsu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gsu *GroupSettingUpdate) check() error {
-	if v, ok := gsu.mutation.Visibility(); ok {
+func (_u *GroupSettingUpdate) check() error {
+	if v, ok := _u.mutation.Visibility(); ok {
 		if err := groupsetting.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "GroupSetting.visibility": %w`, err)}
 		}
 	}
-	if v, ok := gsu.mutation.JoinPolicy(); ok {
+	if v, ok := _u.mutation.JoinPolicy(); ok {
 		if err := groupsetting.JoinPolicyValidator(v); err != nil {
 			return &ValidationError{Name: "join_policy", err: fmt.Errorf(`generated: validator failed for field "GroupSetting.join_policy": %w`, err)}
 		}
@@ -267,72 +267,72 @@ func (gsu *GroupSettingUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (gsu *GroupSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupSettingUpdate {
-	gsu.modifiers = append(gsu.modifiers, modifiers...)
-	return gsu
+func (_u *GroupSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupSettingUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := gsu.check(); err != nil {
-		return n, err
+func (_u *GroupSettingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(groupsetting.Table, groupsetting.Columns, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
-	if ps := gsu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if gsu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupsetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := gsu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if gsu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupsetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if gsu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(groupsetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := gsu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if gsu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupsetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := gsu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if gsu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupsetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gsu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if gsu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(groupsetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := gsu.mutation.Visibility(); ok {
+	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)
 	}
-	if value, ok := gsu.mutation.JoinPolicy(); ok {
+	if value, ok := _u.mutation.JoinPolicy(); ok {
 		_spec.SetField(groupsetting.FieldJoinPolicy, field.TypeEnum, value)
 	}
-	if value, ok := gsu.mutation.SyncToSlack(); ok {
+	if value, ok := _u.mutation.SyncToSlack(); ok {
 		_spec.SetField(groupsetting.FieldSyncToSlack, field.TypeBool, value)
 	}
-	if gsu.mutation.SyncToSlackCleared() {
+	if _u.mutation.SyncToSlackCleared() {
 		_spec.ClearField(groupsetting.FieldSyncToSlack, field.TypeBool)
 	}
-	if value, ok := gsu.mutation.SyncToGithub(); ok {
+	if value, ok := _u.mutation.SyncToGithub(); ok {
 		_spec.SetField(groupsetting.FieldSyncToGithub, field.TypeBool, value)
 	}
-	if gsu.mutation.SyncToGithubCleared() {
+	if _u.mutation.SyncToGithubCleared() {
 		_spec.ClearField(groupsetting.FieldSyncToGithub, field.TypeBool)
 	}
-	if gsu.mutation.GroupCleared() {
+	if _u.mutation.GroupCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -343,10 +343,10 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gsu.schemaConfig.GroupSetting
+		edge.Schema = _u.schemaConfig.GroupSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := gsu.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -357,16 +357,16 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gsu.schemaConfig.GroupSetting
+		edge.Schema = _u.schemaConfig.GroupSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = gsu.schemaConfig.GroupSetting
-	ctx = internal.NewSchemaConfigContext(ctx, gsu.schemaConfig)
-	_spec.AddModifiers(gsu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, gsu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.GroupSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupsetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -374,8 +374,8 @@ func (gsu *GroupSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	gsu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // GroupSettingUpdateOne is the builder for updating a single GroupSetting entity.
@@ -388,205 +388,205 @@ type GroupSettingUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gsuo *GroupSettingUpdateOne) SetUpdatedAt(t time.Time) *GroupSettingUpdateOne {
-	gsuo.mutation.SetUpdatedAt(t)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetUpdatedAt(v time.Time) *GroupSettingUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (gsuo *GroupSettingUpdateOne) ClearUpdatedAt() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearUpdatedAt()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearUpdatedAt() *GroupSettingUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gsuo *GroupSettingUpdateOne) SetUpdatedBy(s string) *GroupSettingUpdateOne {
-	gsuo.mutation.SetUpdatedBy(s)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetUpdatedBy(v string) *GroupSettingUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableUpdatedBy(s *string) *GroupSettingUpdateOne {
-	if s != nil {
-		gsuo.SetUpdatedBy(*s)
+func (_u *GroupSettingUpdateOne) SetNillableUpdatedBy(v *string) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (gsuo *GroupSettingUpdateOne) ClearUpdatedBy() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearUpdatedBy()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearUpdatedBy() *GroupSettingUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (gsuo *GroupSettingUpdateOne) SetDeletedAt(t time.Time) *GroupSettingUpdateOne {
-	gsuo.mutation.SetDeletedAt(t)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetDeletedAt(v time.Time) *GroupSettingUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupSettingUpdateOne {
-	if t != nil {
-		gsuo.SetDeletedAt(*t)
+func (_u *GroupSettingUpdateOne) SetNillableDeletedAt(v *time.Time) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (gsuo *GroupSettingUpdateOne) ClearDeletedAt() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearDeletedAt()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearDeletedAt() *GroupSettingUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (gsuo *GroupSettingUpdateOne) SetDeletedBy(s string) *GroupSettingUpdateOne {
-	gsuo.mutation.SetDeletedBy(s)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetDeletedBy(v string) *GroupSettingUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableDeletedBy(s *string) *GroupSettingUpdateOne {
-	if s != nil {
-		gsuo.SetDeletedBy(*s)
+func (_u *GroupSettingUpdateOne) SetNillableDeletedBy(v *string) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (gsuo *GroupSettingUpdateOne) ClearDeletedBy() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearDeletedBy()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearDeletedBy() *GroupSettingUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetVisibility sets the "visibility" field.
-func (gsuo *GroupSettingUpdateOne) SetVisibility(e enums.Visibility) *GroupSettingUpdateOne {
-	gsuo.mutation.SetVisibility(e)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetVisibility(v enums.Visibility) *GroupSettingUpdateOne {
+	_u.mutation.SetVisibility(v)
+	return _u
 }
 
 // SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableVisibility(e *enums.Visibility) *GroupSettingUpdateOne {
-	if e != nil {
-		gsuo.SetVisibility(*e)
+func (_u *GroupSettingUpdateOne) SetNillableVisibility(v *enums.Visibility) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetVisibility(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // SetJoinPolicy sets the "join_policy" field.
-func (gsuo *GroupSettingUpdateOne) SetJoinPolicy(ep enums.JoinPolicy) *GroupSettingUpdateOne {
-	gsuo.mutation.SetJoinPolicy(ep)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetJoinPolicy(v enums.JoinPolicy) *GroupSettingUpdateOne {
+	_u.mutation.SetJoinPolicy(v)
+	return _u
 }
 
 // SetNillableJoinPolicy sets the "join_policy" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableJoinPolicy(ep *enums.JoinPolicy) *GroupSettingUpdateOne {
-	if ep != nil {
-		gsuo.SetJoinPolicy(*ep)
+func (_u *GroupSettingUpdateOne) SetNillableJoinPolicy(v *enums.JoinPolicy) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetJoinPolicy(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // SetSyncToSlack sets the "sync_to_slack" field.
-func (gsuo *GroupSettingUpdateOne) SetSyncToSlack(b bool) *GroupSettingUpdateOne {
-	gsuo.mutation.SetSyncToSlack(b)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetSyncToSlack(v bool) *GroupSettingUpdateOne {
+	_u.mutation.SetSyncToSlack(v)
+	return _u
 }
 
 // SetNillableSyncToSlack sets the "sync_to_slack" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableSyncToSlack(b *bool) *GroupSettingUpdateOne {
-	if b != nil {
-		gsuo.SetSyncToSlack(*b)
+func (_u *GroupSettingUpdateOne) SetNillableSyncToSlack(v *bool) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetSyncToSlack(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // ClearSyncToSlack clears the value of the "sync_to_slack" field.
-func (gsuo *GroupSettingUpdateOne) ClearSyncToSlack() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearSyncToSlack()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearSyncToSlack() *GroupSettingUpdateOne {
+	_u.mutation.ClearSyncToSlack()
+	return _u
 }
 
 // SetSyncToGithub sets the "sync_to_github" field.
-func (gsuo *GroupSettingUpdateOne) SetSyncToGithub(b bool) *GroupSettingUpdateOne {
-	gsuo.mutation.SetSyncToGithub(b)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetSyncToGithub(v bool) *GroupSettingUpdateOne {
+	_u.mutation.SetSyncToGithub(v)
+	return _u
 }
 
 // SetNillableSyncToGithub sets the "sync_to_github" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableSyncToGithub(b *bool) *GroupSettingUpdateOne {
-	if b != nil {
-		gsuo.SetSyncToGithub(*b)
+func (_u *GroupSettingUpdateOne) SetNillableSyncToGithub(v *bool) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetSyncToGithub(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // ClearSyncToGithub clears the value of the "sync_to_github" field.
-func (gsuo *GroupSettingUpdateOne) ClearSyncToGithub() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearSyncToGithub()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearSyncToGithub() *GroupSettingUpdateOne {
+	_u.mutation.ClearSyncToGithub()
+	return _u
 }
 
 // SetGroupID sets the "group_id" field.
-func (gsuo *GroupSettingUpdateOne) SetGroupID(s string) *GroupSettingUpdateOne {
-	gsuo.mutation.SetGroupID(s)
-	return gsuo
+func (_u *GroupSettingUpdateOne) SetGroupID(v string) *GroupSettingUpdateOne {
+	_u.mutation.SetGroupID(v)
+	return _u
 }
 
 // SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (gsuo *GroupSettingUpdateOne) SetNillableGroupID(s *string) *GroupSettingUpdateOne {
-	if s != nil {
-		gsuo.SetGroupID(*s)
+func (_u *GroupSettingUpdateOne) SetNillableGroupID(v *string) *GroupSettingUpdateOne {
+	if v != nil {
+		_u.SetGroupID(*v)
 	}
-	return gsuo
+	return _u
 }
 
 // ClearGroupID clears the value of the "group_id" field.
-func (gsuo *GroupSettingUpdateOne) ClearGroupID() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearGroupID()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearGroupID() *GroupSettingUpdateOne {
+	_u.mutation.ClearGroupID()
+	return _u
 }
 
 // SetGroup sets the "group" edge to the Group entity.
-func (gsuo *GroupSettingUpdateOne) SetGroup(g *Group) *GroupSettingUpdateOne {
-	return gsuo.SetGroupID(g.ID)
+func (_u *GroupSettingUpdateOne) SetGroup(v *Group) *GroupSettingUpdateOne {
+	return _u.SetGroupID(v.ID)
 }
 
 // Mutation returns the GroupSettingMutation object of the builder.
-func (gsuo *GroupSettingUpdateOne) Mutation() *GroupSettingMutation {
-	return gsuo.mutation
+func (_u *GroupSettingUpdateOne) Mutation() *GroupSettingMutation {
+	return _u.mutation
 }
 
 // ClearGroup clears the "group" edge to the Group entity.
-func (gsuo *GroupSettingUpdateOne) ClearGroup() *GroupSettingUpdateOne {
-	gsuo.mutation.ClearGroup()
-	return gsuo
+func (_u *GroupSettingUpdateOne) ClearGroup() *GroupSettingUpdateOne {
+	_u.mutation.ClearGroup()
+	return _u
 }
 
 // Where appends a list predicates to the GroupSettingUpdate builder.
-func (gsuo *GroupSettingUpdateOne) Where(ps ...predicate.GroupSetting) *GroupSettingUpdateOne {
-	gsuo.mutation.Where(ps...)
-	return gsuo
+func (_u *GroupSettingUpdateOne) Where(ps ...predicate.GroupSetting) *GroupSettingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (gsuo *GroupSettingUpdateOne) Select(field string, fields ...string) *GroupSettingUpdateOne {
-	gsuo.fields = append([]string{field}, fields...)
-	return gsuo
+func (_u *GroupSettingUpdateOne) Select(field string, fields ...string) *GroupSettingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated GroupSetting entity.
-func (gsuo *GroupSettingUpdateOne) Save(ctx context.Context) (*GroupSetting, error) {
-	if err := gsuo.defaults(); err != nil {
+func (_u *GroupSettingUpdateOne) Save(ctx context.Context) (*GroupSetting, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, gsuo.sqlSave, gsuo.mutation, gsuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gsuo *GroupSettingUpdateOne) SaveX(ctx context.Context) *GroupSetting {
-	node, err := gsuo.Save(ctx)
+func (_u *GroupSettingUpdateOne) SaveX(ctx context.Context) *GroupSetting {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -594,38 +594,38 @@ func (gsuo *GroupSettingUpdateOne) SaveX(ctx context.Context) *GroupSetting {
 }
 
 // Exec executes the query on the entity.
-func (gsuo *GroupSettingUpdateOne) Exec(ctx context.Context) error {
-	_, err := gsuo.Save(ctx)
+func (_u *GroupSettingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gsuo *GroupSettingUpdateOne) ExecX(ctx context.Context) {
-	if err := gsuo.Exec(ctx); err != nil {
+func (_u *GroupSettingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gsuo *GroupSettingUpdateOne) defaults() error {
-	if _, ok := gsuo.mutation.UpdatedAt(); !ok && !gsuo.mutation.UpdatedAtCleared() {
+func (_u *GroupSettingUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if groupsetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupsetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupsetting.UpdateDefaultUpdatedAt()
-		gsuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gsuo *GroupSettingUpdateOne) check() error {
-	if v, ok := gsuo.mutation.Visibility(); ok {
+func (_u *GroupSettingUpdateOne) check() error {
+	if v, ok := _u.mutation.Visibility(); ok {
 		if err := groupsetting.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "GroupSetting.visibility": %w`, err)}
 		}
 	}
-	if v, ok := gsuo.mutation.JoinPolicy(); ok {
+	if v, ok := _u.mutation.JoinPolicy(); ok {
 		if err := groupsetting.JoinPolicyValidator(v); err != nil {
 			return &ValidationError{Name: "join_policy", err: fmt.Errorf(`generated: validator failed for field "GroupSetting.join_policy": %w`, err)}
 		}
@@ -634,22 +634,22 @@ func (gsuo *GroupSettingUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (gsuo *GroupSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupSettingUpdateOne {
-	gsuo.modifiers = append(gsuo.modifiers, modifiers...)
-	return gsuo
+func (_u *GroupSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupSettingUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSetting, err error) {
-	if err := gsuo.check(); err != nil {
+func (_u *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSetting, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(groupsetting.Table, groupsetting.Columns, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
-	id, ok := gsuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "GroupSetting.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := gsuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, groupsetting.FieldID)
 		for _, f := range fields {
@@ -661,62 +661,62 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 			}
 		}
 	}
-	if ps := gsuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if gsuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupsetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := gsuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if gsuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupsetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if gsuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(groupsetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := gsuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if gsuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupsetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := gsuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if gsuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(groupsetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := gsuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if gsuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(groupsetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := gsuo.mutation.Visibility(); ok {
+	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)
 	}
-	if value, ok := gsuo.mutation.JoinPolicy(); ok {
+	if value, ok := _u.mutation.JoinPolicy(); ok {
 		_spec.SetField(groupsetting.FieldJoinPolicy, field.TypeEnum, value)
 	}
-	if value, ok := gsuo.mutation.SyncToSlack(); ok {
+	if value, ok := _u.mutation.SyncToSlack(); ok {
 		_spec.SetField(groupsetting.FieldSyncToSlack, field.TypeBool, value)
 	}
-	if gsuo.mutation.SyncToSlackCleared() {
+	if _u.mutation.SyncToSlackCleared() {
 		_spec.ClearField(groupsetting.FieldSyncToSlack, field.TypeBool)
 	}
-	if value, ok := gsuo.mutation.SyncToGithub(); ok {
+	if value, ok := _u.mutation.SyncToGithub(); ok {
 		_spec.SetField(groupsetting.FieldSyncToGithub, field.TypeBool, value)
 	}
-	if gsuo.mutation.SyncToGithubCleared() {
+	if _u.mutation.SyncToGithubCleared() {
 		_spec.ClearField(groupsetting.FieldSyncToGithub, field.TypeBool)
 	}
-	if gsuo.mutation.GroupCleared() {
+	if _u.mutation.GroupCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -727,10 +727,10 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gsuo.schemaConfig.GroupSetting
+		edge.Schema = _u.schemaConfig.GroupSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := gsuo.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -741,19 +741,19 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gsuo.schemaConfig.GroupSetting
+		edge.Schema = _u.schemaConfig.GroupSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = gsuo.schemaConfig.GroupSetting
-	ctx = internal.NewSchemaConfigContext(ctx, gsuo.schemaConfig)
-	_spec.AddModifiers(gsuo.modifiers...)
-	_node = &GroupSetting{config: gsuo.config}
+	_spec.Node.Schema = _u.schemaConfig.GroupSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &GroupSetting{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, gsuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupsetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -761,6 +761,6 @@ func (gsuo *GroupSettingUpdateOne) sqlSave(ctx context.Context) (_node *GroupSet
 		}
 		return nil, err
 	}
-	gsuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -112,7 +112,7 @@ func (*JobRunnerToken) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the JobRunnerToken fields.
-func (jrt *JobRunnerToken) assignValues(columns []string, values []any) error {
+func (_m *JobRunnerToken) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -122,49 +122,49 @@ func (jrt *JobRunnerToken) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				jrt.ID = value.String
+				_m.ID = value.String
 			}
 		case jobrunnertoken.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				jrt.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case jobrunnertoken.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				jrt.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case jobrunnertoken.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				jrt.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case jobrunnertoken.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				jrt.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case jobrunnertoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				jrt.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case jobrunnertoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				jrt.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case jobrunnertoken.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &jrt.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -172,57 +172,57 @@ func (jrt *JobRunnerToken) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				jrt.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case jobrunnertoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				jrt.Token = value.String
+				_m.Token = value.String
 			}
 		case jobrunnertoken.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				jrt.ExpiresAt = new(time.Time)
-				*jrt.ExpiresAt = value.Time
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case jobrunnertoken.FieldLastUsedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_used_at", values[i])
 			} else if value.Valid {
-				jrt.LastUsedAt = new(time.Time)
-				*jrt.LastUsedAt = value.Time
+				_m.LastUsedAt = new(time.Time)
+				*_m.LastUsedAt = value.Time
 			}
 		case jobrunnertoken.FieldIsActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_active", values[i])
 			} else if value.Valid {
-				jrt.IsActive = value.Bool
+				_m.IsActive = value.Bool
 			}
 		case jobrunnertoken.FieldRevokedReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_reason", values[i])
 			} else if value.Valid {
-				jrt.RevokedReason = new(string)
-				*jrt.RevokedReason = value.String
+				_m.RevokedReason = new(string)
+				*_m.RevokedReason = value.String
 			}
 		case jobrunnertoken.FieldRevokedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_by", values[i])
 			} else if value.Valid {
-				jrt.RevokedBy = new(string)
-				*jrt.RevokedBy = value.String
+				_m.RevokedBy = new(string)
+				*_m.RevokedBy = value.String
 			}
 		case jobrunnertoken.FieldRevokedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_at", values[i])
 			} else if value.Valid {
-				jrt.RevokedAt = new(time.Time)
-				*jrt.RevokedAt = value.Time
+				_m.RevokedAt = new(time.Time)
+				*_m.RevokedAt = value.Time
 			}
 		default:
-			jrt.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -230,94 +230,94 @@ func (jrt *JobRunnerToken) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the JobRunnerToken.
 // This includes values selected through modifiers, order, etc.
-func (jrt *JobRunnerToken) Value(name string) (ent.Value, error) {
-	return jrt.selectValues.Get(name)
+func (_m *JobRunnerToken) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the JobRunnerToken entity.
-func (jrt *JobRunnerToken) QueryOwner() *OrganizationQuery {
-	return NewJobRunnerTokenClient(jrt.config).QueryOwner(jrt)
+func (_m *JobRunnerToken) QueryOwner() *OrganizationQuery {
+	return NewJobRunnerTokenClient(_m.config).QueryOwner(_m)
 }
 
 // QueryJobRunners queries the "job_runners" edge of the JobRunnerToken entity.
-func (jrt *JobRunnerToken) QueryJobRunners() *JobRunnerQuery {
-	return NewJobRunnerTokenClient(jrt.config).QueryJobRunners(jrt)
+func (_m *JobRunnerToken) QueryJobRunners() *JobRunnerQuery {
+	return NewJobRunnerTokenClient(_m.config).QueryJobRunners(_m)
 }
 
 // Update returns a builder for updating this JobRunnerToken.
 // Note that you need to call JobRunnerToken.Unwrap() before calling this method if this JobRunnerToken
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (jrt *JobRunnerToken) Update() *JobRunnerTokenUpdateOne {
-	return NewJobRunnerTokenClient(jrt.config).UpdateOne(jrt)
+func (_m *JobRunnerToken) Update() *JobRunnerTokenUpdateOne {
+	return NewJobRunnerTokenClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the JobRunnerToken entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (jrt *JobRunnerToken) Unwrap() *JobRunnerToken {
-	_tx, ok := jrt.config.driver.(*txDriver)
+func (_m *JobRunnerToken) Unwrap() *JobRunnerToken {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: JobRunnerToken is not a transactional entity")
 	}
-	jrt.config.driver = _tx.drv
-	return jrt
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (jrt *JobRunnerToken) String() string {
+func (_m *JobRunnerToken) String() string {
 	var builder strings.Builder
 	builder.WriteString("JobRunnerToken(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", jrt.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(jrt.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(jrt.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(jrt.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(jrt.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(jrt.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(jrt.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", jrt.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(jrt.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(jrt.Token)
+	builder.WriteString(_m.Token)
 	builder.WriteString(", ")
-	if v := jrt.ExpiresAt; v != nil {
+	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := jrt.LastUsedAt; v != nil {
+	if v := _m.LastUsedAt; v != nil {
 		builder.WriteString("last_used_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("is_active=")
-	builder.WriteString(fmt.Sprintf("%v", jrt.IsActive))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsActive))
 	builder.WriteString(", ")
-	if v := jrt.RevokedReason; v != nil {
+	if v := _m.RevokedReason; v != nil {
 		builder.WriteString("revoked_reason=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := jrt.RevokedBy; v != nil {
+	if v := _m.RevokedBy; v != nil {
 		builder.WriteString("revoked_by=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := jrt.RevokedAt; v != nil {
+	if v := _m.RevokedAt; v != nil {
 		builder.WriteString("revoked_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
@@ -327,25 +327,25 @@ func (jrt *JobRunnerToken) String() string {
 
 // NamedJobRunners returns the JobRunners named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (jrt *JobRunnerToken) NamedJobRunners(name string) ([]*JobRunner, error) {
-	if jrt.Edges.namedJobRunners == nil {
+func (_m *JobRunnerToken) NamedJobRunners(name string) ([]*JobRunner, error) {
+	if _m.Edges.namedJobRunners == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := jrt.Edges.namedJobRunners[name]
+	nodes, ok := _m.Edges.namedJobRunners[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (jrt *JobRunnerToken) appendNamedJobRunners(name string, edges ...*JobRunner) {
-	if jrt.Edges.namedJobRunners == nil {
-		jrt.Edges.namedJobRunners = make(map[string][]*JobRunner)
+func (_m *JobRunnerToken) appendNamedJobRunners(name string, edges ...*JobRunner) {
+	if _m.Edges.namedJobRunners == nil {
+		_m.Edges.namedJobRunners = make(map[string][]*JobRunner)
 	}
 	if len(edges) == 0 {
-		jrt.Edges.namedJobRunners[name] = []*JobRunner{}
+		_m.Edges.namedJobRunners[name] = []*JobRunner{}
 	} else {
-		jrt.Edges.namedJobRunners[name] = append(jrt.Edges.namedJobRunners[name], edges...)
+		_m.Edges.namedJobRunners[name] = append(_m.Edges.namedJobRunners[name], edges...)
 	}
 }
 

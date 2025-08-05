@@ -39,44 +39,44 @@ type EntityTypeQuery struct {
 }
 
 // Where adds a new predicate for the EntityTypeQuery builder.
-func (etq *EntityTypeQuery) Where(ps ...predicate.EntityType) *EntityTypeQuery {
-	etq.predicates = append(etq.predicates, ps...)
-	return etq
+func (_q *EntityTypeQuery) Where(ps ...predicate.EntityType) *EntityTypeQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (etq *EntityTypeQuery) Limit(limit int) *EntityTypeQuery {
-	etq.ctx.Limit = &limit
-	return etq
+func (_q *EntityTypeQuery) Limit(limit int) *EntityTypeQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (etq *EntityTypeQuery) Offset(offset int) *EntityTypeQuery {
-	etq.ctx.Offset = &offset
-	return etq
+func (_q *EntityTypeQuery) Offset(offset int) *EntityTypeQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (etq *EntityTypeQuery) Unique(unique bool) *EntityTypeQuery {
-	etq.ctx.Unique = &unique
-	return etq
+func (_q *EntityTypeQuery) Unique(unique bool) *EntityTypeQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (etq *EntityTypeQuery) Order(o ...entitytype.OrderOption) *EntityTypeQuery {
-	etq.order = append(etq.order, o...)
-	return etq
+func (_q *EntityTypeQuery) Order(o ...entitytype.OrderOption) *EntityTypeQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (etq *EntityTypeQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: etq.config}).Query()
+func (_q *EntityTypeQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := etq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := etq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (etq *EntityTypeQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entitytype.OwnerTable, entitytype.OwnerColumn),
 		)
-		schemaConfig := etq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.EntityType
-		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEntities chains the current query on the "entities" edge.
-func (etq *EntityTypeQuery) QueryEntities() *EntityQuery {
-	query := (&EntityClient{config: etq.config}).Query()
+func (_q *EntityTypeQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := etq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := etq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func (etq *EntityTypeQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, entitytype.EntitiesTable, entitytype.EntitiesColumn),
 		)
-		schemaConfig := etq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
-		fromU = sqlgraph.SetNeighbors(etq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -121,8 +121,8 @@ func (etq *EntityTypeQuery) QueryEntities() *EntityQuery {
 
 // First returns the first EntityType entity from the query.
 // Returns a *NotFoundError when no EntityType was found.
-func (etq *EntityTypeQuery) First(ctx context.Context) (*EntityType, error) {
-	nodes, err := etq.Limit(1).All(setContextOp(ctx, etq.ctx, ent.OpQueryFirst))
+func (_q *EntityTypeQuery) First(ctx context.Context) (*EntityType, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -133,8 +133,8 @@ func (etq *EntityTypeQuery) First(ctx context.Context) (*EntityType, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (etq *EntityTypeQuery) FirstX(ctx context.Context) *EntityType {
-	node, err := etq.First(ctx)
+func (_q *EntityTypeQuery) FirstX(ctx context.Context) *EntityType {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -143,9 +143,9 @@ func (etq *EntityTypeQuery) FirstX(ctx context.Context) *EntityType {
 
 // FirstID returns the first EntityType ID from the query.
 // Returns a *NotFoundError when no EntityType ID was found.
-func (etq *EntityTypeQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *EntityTypeQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = etq.Limit(1).IDs(setContextOp(ctx, etq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,8 +156,8 @@ func (etq *EntityTypeQuery) FirstID(ctx context.Context) (id string, err error) 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (etq *EntityTypeQuery) FirstIDX(ctx context.Context) string {
-	id, err := etq.FirstID(ctx)
+func (_q *EntityTypeQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -167,8 +167,8 @@ func (etq *EntityTypeQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single EntityType entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one EntityType entity is found.
 // Returns a *NotFoundError when no EntityType entities are found.
-func (etq *EntityTypeQuery) Only(ctx context.Context) (*EntityType, error) {
-	nodes, err := etq.Limit(2).All(setContextOp(ctx, etq.ctx, ent.OpQueryOnly))
+func (_q *EntityTypeQuery) Only(ctx context.Context) (*EntityType, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,8 +183,8 @@ func (etq *EntityTypeQuery) Only(ctx context.Context) (*EntityType, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (etq *EntityTypeQuery) OnlyX(ctx context.Context) *EntityType {
-	node, err := etq.Only(ctx)
+func (_q *EntityTypeQuery) OnlyX(ctx context.Context) *EntityType {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,9 +194,9 @@ func (etq *EntityTypeQuery) OnlyX(ctx context.Context) *EntityType {
 // OnlyID is like Only, but returns the only EntityType ID in the query.
 // Returns a *NotSingularError when more than one EntityType ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (etq *EntityTypeQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *EntityTypeQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = etq.Limit(2).IDs(setContextOp(ctx, etq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -211,8 +211,8 @@ func (etq *EntityTypeQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (etq *EntityTypeQuery) OnlyIDX(ctx context.Context) string {
-	id, err := etq.OnlyID(ctx)
+func (_q *EntityTypeQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,18 +220,18 @@ func (etq *EntityTypeQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of EntityTypes.
-func (etq *EntityTypeQuery) All(ctx context.Context) ([]*EntityType, error) {
-	ctx = setContextOp(ctx, etq.ctx, ent.OpQueryAll)
-	if err := etq.prepareQuery(ctx); err != nil {
+func (_q *EntityTypeQuery) All(ctx context.Context) ([]*EntityType, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*EntityType, *EntityTypeQuery]()
-	return withInterceptors[[]*EntityType](ctx, etq, qr, etq.inters)
+	return withInterceptors[[]*EntityType](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (etq *EntityTypeQuery) AllX(ctx context.Context) []*EntityType {
-	nodes, err := etq.All(ctx)
+func (_q *EntityTypeQuery) AllX(ctx context.Context) []*EntityType {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,20 +239,20 @@ func (etq *EntityTypeQuery) AllX(ctx context.Context) []*EntityType {
 }
 
 // IDs executes the query and returns a list of EntityType IDs.
-func (etq *EntityTypeQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if etq.ctx.Unique == nil && etq.path != nil {
-		etq.Unique(true)
+func (_q *EntityTypeQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, etq.ctx, ent.OpQueryIDs)
-	if err = etq.Select(entitytype.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(entitytype.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (etq *EntityTypeQuery) IDsX(ctx context.Context) []string {
-	ids, err := etq.IDs(ctx)
+func (_q *EntityTypeQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -260,17 +260,17 @@ func (etq *EntityTypeQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (etq *EntityTypeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, etq.ctx, ent.OpQueryCount)
-	if err := etq.prepareQuery(ctx); err != nil {
+func (_q *EntityTypeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, etq, querierCount[*EntityTypeQuery](), etq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*EntityTypeQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (etq *EntityTypeQuery) CountX(ctx context.Context) int {
-	count, err := etq.Count(ctx)
+func (_q *EntityTypeQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -278,9 +278,9 @@ func (etq *EntityTypeQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (etq *EntityTypeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, etq.ctx, ent.OpQueryExist)
-	switch _, err := etq.FirstID(ctx); {
+func (_q *EntityTypeQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -291,8 +291,8 @@ func (etq *EntityTypeQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (etq *EntityTypeQuery) ExistX(ctx context.Context) bool {
-	exist, err := etq.Exist(ctx)
+func (_q *EntityTypeQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -301,45 +301,45 @@ func (etq *EntityTypeQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the EntityTypeQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (etq *EntityTypeQuery) Clone() *EntityTypeQuery {
-	if etq == nil {
+func (_q *EntityTypeQuery) Clone() *EntityTypeQuery {
+	if _q == nil {
 		return nil
 	}
 	return &EntityTypeQuery{
-		config:       etq.config,
-		ctx:          etq.ctx.Clone(),
-		order:        append([]entitytype.OrderOption{}, etq.order...),
-		inters:       append([]Interceptor{}, etq.inters...),
-		predicates:   append([]predicate.EntityType{}, etq.predicates...),
-		withOwner:    etq.withOwner.Clone(),
-		withEntities: etq.withEntities.Clone(),
+		config:       _q.config,
+		ctx:          _q.ctx.Clone(),
+		order:        append([]entitytype.OrderOption{}, _q.order...),
+		inters:       append([]Interceptor{}, _q.inters...),
+		predicates:   append([]predicate.EntityType{}, _q.predicates...),
+		withOwner:    _q.withOwner.Clone(),
+		withEntities: _q.withEntities.Clone(),
 		// clone intermediate query.
-		sql:       etq.sql.Clone(),
-		path:      etq.path,
-		modifiers: append([]func(*sql.Selector){}, etq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithOwner(opts ...func(*OrganizationQuery)) *EntityTypeQuery {
-	query := (&OrganizationClient{config: etq.config}).Query()
+func (_q *EntityTypeQuery) WithOwner(opts ...func(*OrganizationQuery)) *EntityTypeQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	etq.withOwner = query
-	return etq
+	_q.withOwner = query
+	return _q
 }
 
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithEntities(opts ...func(*EntityQuery)) *EntityTypeQuery {
-	query := (&EntityClient{config: etq.config}).Query()
+func (_q *EntityTypeQuery) WithEntities(opts ...func(*EntityQuery)) *EntityTypeQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	etq.withEntities = query
-	return etq
+	_q.withEntities = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -356,10 +356,10 @@ func (etq *EntityTypeQuery) WithEntities(opts ...func(*EntityQuery)) *EntityType
 //		GroupBy(entitytype.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (etq *EntityTypeQuery) GroupBy(field string, fields ...string) *EntityTypeGroupBy {
-	etq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &EntityTypeGroupBy{build: etq}
-	grbuild.flds = &etq.ctx.Fields
+func (_q *EntityTypeQuery) GroupBy(field string, fields ...string) *EntityTypeGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &EntityTypeGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = entitytype.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -377,112 +377,112 @@ func (etq *EntityTypeQuery) GroupBy(field string, fields ...string) *EntityTypeG
 //	client.EntityType.Query().
 //		Select(entitytype.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (etq *EntityTypeQuery) Select(fields ...string) *EntityTypeSelect {
-	etq.ctx.Fields = append(etq.ctx.Fields, fields...)
-	sbuild := &EntityTypeSelect{EntityTypeQuery: etq}
+func (_q *EntityTypeQuery) Select(fields ...string) *EntityTypeSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &EntityTypeSelect{EntityTypeQuery: _q}
 	sbuild.label = entitytype.Label
-	sbuild.flds, sbuild.scan = &etq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a EntityTypeSelect configured with the given aggregations.
-func (etq *EntityTypeQuery) Aggregate(fns ...AggregateFunc) *EntityTypeSelect {
-	return etq.Select().Aggregate(fns...)
+func (_q *EntityTypeQuery) Aggregate(fns ...AggregateFunc) *EntityTypeSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (etq *EntityTypeQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range etq.inters {
+func (_q *EntityTypeQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, etq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range etq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !entitytype.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if etq.path != nil {
-		prev, err := etq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		etq.sql = prev
+		_q.sql = prev
 	}
 	if entitytype.Policy == nil {
 		return errors.New("generated: uninitialized entitytype.Policy (forgotten import generated/runtime?)")
 	}
-	if err := entitytype.Policy.EvalQuery(ctx, etq); err != nil {
+	if err := entitytype.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (etq *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntityType, error) {
+func (_q *EntityTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*EntityType, error) {
 	var (
 		nodes       = []*EntityType{}
-		_spec       = etq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			etq.withOwner != nil,
-			etq.withEntities != nil,
+			_q.withOwner != nil,
+			_q.withEntities != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*EntityType).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &EntityType{config: etq.config}
+		node := &EntityType{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = etq.schemaConfig.EntityType
-	ctx = internal.NewSchemaConfigContext(ctx, etq.schemaConfig)
-	if len(etq.modifiers) > 0 {
-		_spec.Modifiers = etq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.EntityType
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, etq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := etq.withOwner; query != nil {
-		if err := etq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *EntityType, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := etq.withEntities; query != nil {
-		if err := etq.loadEntities(ctx, query, nodes,
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *EntityType) { n.Edges.Entities = []*Entity{} },
 			func(n *EntityType, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range etq.withNamedEntities {
-		if err := etq.loadEntities(ctx, query, nodes,
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *EntityType) { n.appendNamedEntities(name) },
 			func(n *EntityType, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range etq.loadTotal {
-		if err := etq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (etq *EntityTypeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *Organization)) error {
+func (_q *EntityTypeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*EntityType)
 	for i := range nodes {
@@ -511,7 +511,7 @@ func (etq *EntityTypeQuery) loadOwner(ctx context.Context, query *OrganizationQu
 	}
 	return nil
 }
-func (etq *EntityTypeQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *Entity)) error {
+func (_q *EntityTypeQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*EntityType, init func(*EntityType), assign func(*EntityType, *Entity)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*EntityType)
 	for i := range nodes {
@@ -543,29 +543,29 @@ func (etq *EntityTypeQuery) loadEntities(ctx context.Context, query *EntityQuery
 	return nil
 }
 
-func (etq *EntityTypeQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := etq.querySpec()
-	_spec.Node.Schema = etq.schemaConfig.EntityType
-	ctx = internal.NewSchemaConfigContext(ctx, etq.schemaConfig)
-	if len(etq.modifiers) > 0 {
-		_spec.Modifiers = etq.modifiers
+func (_q *EntityTypeQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.EntityType
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = etq.ctx.Fields
-	if len(etq.ctx.Fields) > 0 {
-		_spec.Unique = etq.ctx.Unique != nil && *etq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, etq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (etq *EntityTypeQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *EntityTypeQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(entitytype.Table, entitytype.Columns, sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString))
-	_spec.From = etq.sql
-	if unique := etq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if etq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := etq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, entitytype.FieldID)
 		for i := range fields {
@@ -573,24 +573,24 @@ func (etq *EntityTypeQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if etq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(entitytype.FieldOwnerID)
 		}
 	}
-	if ps := etq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := etq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := etq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := etq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -600,62 +600,62 @@ func (etq *EntityTypeQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (etq *EntityTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(etq.driver.Dialect())
+func (_q *EntityTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(entitytype.Table)
-	columns := etq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = entitytype.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if etq.sql != nil {
-		selector = etq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if etq.ctx.Unique != nil && *etq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(etq.schemaConfig.EntityType)
-	ctx = internal.NewSchemaConfigContext(ctx, etq.schemaConfig)
+	t1.Schema(_q.schemaConfig.EntityType)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range etq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range etq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range etq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := etq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := etq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (etq *EntityTypeQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeSelect {
-	etq.modifiers = append(etq.modifiers, modifiers...)
-	return etq.Select()
+func (_q *EntityTypeQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (etq *EntityTypeQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *EntityTypeQuery {
-	query := (&EntityClient{config: etq.config}).Query()
+func (_q *EntityTypeQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *EntityTypeQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if etq.withNamedEntities == nil {
-		etq.withNamedEntities = make(map[string]*EntityQuery)
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
-	etq.withNamedEntities[name] = query
-	return etq
+	_q.withNamedEntities[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -684,41 +684,41 @@ type EntityTypeGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (etgb *EntityTypeGroupBy) Aggregate(fns ...AggregateFunc) *EntityTypeGroupBy {
-	etgb.fns = append(etgb.fns, fns...)
-	return etgb
+func (_g *EntityTypeGroupBy) Aggregate(fns ...AggregateFunc) *EntityTypeGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (etgb *EntityTypeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, etgb.build.ctx, ent.OpQueryGroupBy)
-	if err := etgb.build.prepareQuery(ctx); err != nil {
+func (_g *EntityTypeGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EntityTypeQuery, *EntityTypeGroupBy](ctx, etgb.build, etgb, etgb.build.inters, v)
+	return scanWithInterceptors[*EntityTypeQuery, *EntityTypeGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (etgb *EntityTypeGroupBy) sqlScan(ctx context.Context, root *EntityTypeQuery, v any) error {
+func (_g *EntityTypeGroupBy) sqlScan(ctx context.Context, root *EntityTypeQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(etgb.fns))
-	for _, fn := range etgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*etgb.flds)+len(etgb.fns))
-		for _, f := range *etgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*etgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := etgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -732,27 +732,27 @@ type EntityTypeSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ets *EntityTypeSelect) Aggregate(fns ...AggregateFunc) *EntityTypeSelect {
-	ets.fns = append(ets.fns, fns...)
-	return ets
+func (_s *EntityTypeSelect) Aggregate(fns ...AggregateFunc) *EntityTypeSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ets *EntityTypeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ets.ctx, ent.OpQuerySelect)
-	if err := ets.prepareQuery(ctx); err != nil {
+func (_s *EntityTypeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EntityTypeQuery, *EntityTypeSelect](ctx, ets.EntityTypeQuery, ets, ets.inters, v)
+	return scanWithInterceptors[*EntityTypeQuery, *EntityTypeSelect](ctx, _s.EntityTypeQuery, _s, _s.inters, v)
 }
 
-func (ets *EntityTypeSelect) sqlScan(ctx context.Context, root *EntityTypeQuery, v any) error {
+func (_s *EntityTypeSelect) sqlScan(ctx context.Context, root *EntityTypeQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ets.fns))
-	for _, fn := range ets.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ets.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -760,7 +760,7 @@ func (ets *EntityTypeSelect) sqlScan(ctx context.Context, root *EntityTypeQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ets.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -768,7 +768,7 @@ func (ets *EntityTypeSelect) sqlScan(ctx context.Context, root *EntityTypeQuery,
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ets *EntityTypeSelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeSelect {
-	ets.modifiers = append(ets.modifiers, modifiers...)
-	return ets
+func (_s *EntityTypeSelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

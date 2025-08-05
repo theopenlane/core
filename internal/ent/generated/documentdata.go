@@ -126,7 +126,7 @@ func (*DocumentData) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the DocumentData fields.
-func (dd *DocumentData) assignValues(columns []string, values []any) error {
+func (_m *DocumentData) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -136,49 +136,49 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				dd.ID = value.String
+				_m.ID = value.String
 			}
 		case documentdata.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				dd.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case documentdata.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				dd.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case documentdata.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				dd.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case documentdata.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				dd.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case documentdata.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				dd.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case documentdata.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				dd.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case documentdata.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &dd.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -186,24 +186,24 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				dd.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case documentdata.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_id", values[i])
 			} else if value.Valid {
-				dd.TemplateID = value.String
+				_m.TemplateID = value.String
 			}
 		case documentdata.FieldData:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field data", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &dd.Data); err != nil {
+				if err := json.Unmarshal(*value, &_m.Data); err != nil {
 					return fmt.Errorf("unmarshal field data: %w", err)
 				}
 			}
 		default:
-			dd.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -211,131 +211,131 @@ func (dd *DocumentData) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the DocumentData.
 // This includes values selected through modifiers, order, etc.
-func (dd *DocumentData) Value(name string) (ent.Value, error) {
-	return dd.selectValues.Get(name)
+func (_m *DocumentData) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the DocumentData entity.
-func (dd *DocumentData) QueryOwner() *OrganizationQuery {
-	return NewDocumentDataClient(dd.config).QueryOwner(dd)
+func (_m *DocumentData) QueryOwner() *OrganizationQuery {
+	return NewDocumentDataClient(_m.config).QueryOwner(_m)
 }
 
 // QueryTemplate queries the "template" edge of the DocumentData entity.
-func (dd *DocumentData) QueryTemplate() *TemplateQuery {
-	return NewDocumentDataClient(dd.config).QueryTemplate(dd)
+func (_m *DocumentData) QueryTemplate() *TemplateQuery {
+	return NewDocumentDataClient(_m.config).QueryTemplate(_m)
 }
 
 // QueryEntities queries the "entities" edge of the DocumentData entity.
-func (dd *DocumentData) QueryEntities() *EntityQuery {
-	return NewDocumentDataClient(dd.config).QueryEntities(dd)
+func (_m *DocumentData) QueryEntities() *EntityQuery {
+	return NewDocumentDataClient(_m.config).QueryEntities(_m)
 }
 
 // QueryFiles queries the "files" edge of the DocumentData entity.
-func (dd *DocumentData) QueryFiles() *FileQuery {
-	return NewDocumentDataClient(dd.config).QueryFiles(dd)
+func (_m *DocumentData) QueryFiles() *FileQuery {
+	return NewDocumentDataClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this DocumentData.
 // Note that you need to call DocumentData.Unwrap() before calling this method if this DocumentData
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (dd *DocumentData) Update() *DocumentDataUpdateOne {
-	return NewDocumentDataClient(dd.config).UpdateOne(dd)
+func (_m *DocumentData) Update() *DocumentDataUpdateOne {
+	return NewDocumentDataClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the DocumentData entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (dd *DocumentData) Unwrap() *DocumentData {
-	_tx, ok := dd.config.driver.(*txDriver)
+func (_m *DocumentData) Unwrap() *DocumentData {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: DocumentData is not a transactional entity")
 	}
-	dd.config.driver = _tx.drv
-	return dd
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (dd *DocumentData) String() string {
+func (_m *DocumentData) String() string {
 	var builder strings.Builder
 	builder.WriteString("DocumentData(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", dd.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(dd.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(dd.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(dd.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(dd.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(dd.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(dd.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", dd.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(dd.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("template_id=")
-	builder.WriteString(dd.TemplateID)
+	builder.WriteString(_m.TemplateID)
 	builder.WriteString(", ")
 	builder.WriteString("data=")
-	builder.WriteString(fmt.Sprintf("%v", dd.Data))
+	builder.WriteString(fmt.Sprintf("%v", _m.Data))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (dd *DocumentData) NamedEntities(name string) ([]*Entity, error) {
-	if dd.Edges.namedEntities == nil {
+func (_m *DocumentData) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := dd.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (dd *DocumentData) appendNamedEntities(name string, edges ...*Entity) {
-	if dd.Edges.namedEntities == nil {
-		dd.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *DocumentData) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		dd.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		dd.Edges.namedEntities[name] = append(dd.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (dd *DocumentData) NamedFiles(name string) ([]*File, error) {
-	if dd.Edges.namedFiles == nil {
+func (_m *DocumentData) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := dd.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (dd *DocumentData) appendNamedFiles(name string, edges ...*File) {
-	if dd.Edges.namedFiles == nil {
-		dd.Edges.namedFiles = make(map[string][]*File)
+func (_m *DocumentData) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		dd.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		dd.Edges.namedFiles[name] = append(dd.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

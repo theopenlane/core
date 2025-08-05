@@ -151,7 +151,7 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ScheduledJob fields.
-func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
+func (_m *ScheduledJob) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -161,73 +161,73 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				sj.ID = value.String
+				_m.ID = value.String
 			}
 		case scheduledjob.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sj.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case scheduledjob.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sj.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case scheduledjob.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sj.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case scheduledjob.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sj.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case scheduledjob.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				sj.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case scheduledjob.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				sj.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case scheduledjob.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				sj.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case scheduledjob.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				sj.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case scheduledjob.FieldJobID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field job_id", values[i])
 			} else if value.Valid {
-				sj.JobID = value.String
+				_m.JobID = value.String
 			}
 		case scheduledjob.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				sj.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case scheduledjob.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field configuration", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sj.Configuration); err != nil {
+				if err := json.Unmarshal(*value, &_m.Configuration); err != nil {
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
@@ -235,17 +235,17 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
-				sj.Cron = new(models.Cron)
-				*sj.Cron = *value.S.(*models.Cron)
+				_m.Cron = new(models.Cron)
+				*_m.Cron = *value.S.(*models.Cron)
 			}
 		case scheduledjob.FieldJobRunnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
 			} else if value.Valid {
-				sj.JobRunnerID = value.String
+				_m.JobRunnerID = value.String
 			}
 		default:
-			sj.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -253,147 +253,147 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ScheduledJob.
 // This includes values selected through modifiers, order, etc.
-func (sj *ScheduledJob) Value(name string) (ent.Value, error) {
-	return sj.selectValues.Get(name)
+func (_m *ScheduledJob) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the ScheduledJob entity.
-func (sj *ScheduledJob) QueryOwner() *OrganizationQuery {
-	return NewScheduledJobClient(sj.config).QueryOwner(sj)
+func (_m *ScheduledJob) QueryOwner() *OrganizationQuery {
+	return NewScheduledJobClient(_m.config).QueryOwner(_m)
 }
 
 // QueryJobTemplate queries the "job_template" edge of the ScheduledJob entity.
-func (sj *ScheduledJob) QueryJobTemplate() *JobTemplateQuery {
-	return NewScheduledJobClient(sj.config).QueryJobTemplate(sj)
+func (_m *ScheduledJob) QueryJobTemplate() *JobTemplateQuery {
+	return NewScheduledJobClient(_m.config).QueryJobTemplate(_m)
 }
 
 // QueryControls queries the "controls" edge of the ScheduledJob entity.
-func (sj *ScheduledJob) QueryControls() *ControlQuery {
-	return NewScheduledJobClient(sj.config).QueryControls(sj)
+func (_m *ScheduledJob) QueryControls() *ControlQuery {
+	return NewScheduledJobClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the ScheduledJob entity.
-func (sj *ScheduledJob) QuerySubcontrols() *SubcontrolQuery {
-	return NewScheduledJobClient(sj.config).QuerySubcontrols(sj)
+func (_m *ScheduledJob) QuerySubcontrols() *SubcontrolQuery {
+	return NewScheduledJobClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryJobRunner queries the "job_runner" edge of the ScheduledJob entity.
-func (sj *ScheduledJob) QueryJobRunner() *JobRunnerQuery {
-	return NewScheduledJobClient(sj.config).QueryJobRunner(sj)
+func (_m *ScheduledJob) QueryJobRunner() *JobRunnerQuery {
+	return NewScheduledJobClient(_m.config).QueryJobRunner(_m)
 }
 
 // Update returns a builder for updating this ScheduledJob.
 // Note that you need to call ScheduledJob.Unwrap() before calling this method if this ScheduledJob
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sj *ScheduledJob) Update() *ScheduledJobUpdateOne {
-	return NewScheduledJobClient(sj.config).UpdateOne(sj)
+func (_m *ScheduledJob) Update() *ScheduledJobUpdateOne {
+	return NewScheduledJobClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ScheduledJob entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sj *ScheduledJob) Unwrap() *ScheduledJob {
-	_tx, ok := sj.config.driver.(*txDriver)
+func (_m *ScheduledJob) Unwrap() *ScheduledJob {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ScheduledJob is not a transactional entity")
 	}
-	sj.config.driver = _tx.drv
-	return sj
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sj *ScheduledJob) String() string {
+func (_m *ScheduledJob) String() string {
 	var builder strings.Builder
 	builder.WriteString("ScheduledJob(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sj.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(sj.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sj.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(sj.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(sj.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(sj.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(sj.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(sj.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(sj.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("job_id=")
-	builder.WriteString(sj.JobID)
+	builder.WriteString(_m.JobID)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))
+	builder.WriteString(fmt.Sprintf("%v", _m.Configuration))
 	builder.WriteString(", ")
-	if v := sj.Cron; v != nil {
+	if v := _m.Cron; v != nil {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("job_runner_id=")
-	builder.WriteString(sj.JobRunnerID)
+	builder.WriteString(_m.JobRunnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (sj *ScheduledJob) NamedControls(name string) ([]*Control, error) {
-	if sj.Edges.namedControls == nil {
+func (_m *ScheduledJob) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := sj.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (sj *ScheduledJob) appendNamedControls(name string, edges ...*Control) {
-	if sj.Edges.namedControls == nil {
-		sj.Edges.namedControls = make(map[string][]*Control)
+func (_m *ScheduledJob) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		sj.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		sj.Edges.namedControls[name] = append(sj.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (sj *ScheduledJob) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if sj.Edges.namedSubcontrols == nil {
+func (_m *ScheduledJob) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := sj.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (sj *ScheduledJob) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if sj.Edges.namedSubcontrols == nil {
-		sj.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *ScheduledJob) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		sj.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		sj.Edges.namedSubcontrols[name] = append(sj.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 

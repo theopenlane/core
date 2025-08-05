@@ -123,7 +123,7 @@ func (*Contact) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Contact fields.
-func (c *Contact) assignValues(columns []string, values []any) error {
+func (_m *Contact) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -133,49 +133,49 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				c.ID = value.String
+				_m.ID = value.String
 			}
 		case contact.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				c.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case contact.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				c.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case contact.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				c.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case contact.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				c.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case contact.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				c.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case contact.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				c.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case contact.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -183,52 +183,52 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				c.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case contact.FieldFullName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field full_name", values[i])
 			} else if value.Valid {
-				c.FullName = value.String
+				_m.FullName = value.String
 			}
 		case contact.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				c.Title = value.String
+				_m.Title = value.String
 			}
 		case contact.FieldCompany:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field company", values[i])
 			} else if value.Valid {
-				c.Company = value.String
+				_m.Company = value.String
 			}
 		case contact.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				c.Email = value.String
+				_m.Email = value.String
 			}
 		case contact.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
-				c.PhoneNumber = value.String
+				_m.PhoneNumber = value.String
 			}
 		case contact.FieldAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field address", values[i])
 			} else if value.Valid {
-				c.Address = value.String
+				_m.Address = value.String
 			}
 		case contact.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				c.Status = enums.UserStatus(value.String)
+				_m.Status = enums.UserStatus(value.String)
 			}
 		default:
-			c.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -236,141 +236,141 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Contact.
 // This includes values selected through modifiers, order, etc.
-func (c *Contact) Value(name string) (ent.Value, error) {
-	return c.selectValues.Get(name)
+func (_m *Contact) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Contact entity.
-func (c *Contact) QueryOwner() *OrganizationQuery {
-	return NewContactClient(c.config).QueryOwner(c)
+func (_m *Contact) QueryOwner() *OrganizationQuery {
+	return NewContactClient(_m.config).QueryOwner(_m)
 }
 
 // QueryEntities queries the "entities" edge of the Contact entity.
-func (c *Contact) QueryEntities() *EntityQuery {
-	return NewContactClient(c.config).QueryEntities(c)
+func (_m *Contact) QueryEntities() *EntityQuery {
+	return NewContactClient(_m.config).QueryEntities(_m)
 }
 
 // QueryFiles queries the "files" edge of the Contact entity.
-func (c *Contact) QueryFiles() *FileQuery {
-	return NewContactClient(c.config).QueryFiles(c)
+func (_m *Contact) QueryFiles() *FileQuery {
+	return NewContactClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this Contact.
 // Note that you need to call Contact.Unwrap() before calling this method if this Contact
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (c *Contact) Update() *ContactUpdateOne {
-	return NewContactClient(c.config).UpdateOne(c)
+func (_m *Contact) Update() *ContactUpdateOne {
+	return NewContactClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Contact entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (c *Contact) Unwrap() *Contact {
-	_tx, ok := c.config.driver.(*txDriver)
+func (_m *Contact) Unwrap() *Contact {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Contact is not a transactional entity")
 	}
-	c.config.driver = _tx.drv
-	return c
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (c *Contact) String() string {
+func (_m *Contact) String() string {
 	var builder strings.Builder
 	builder.WriteString("Contact(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(c.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(c.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(c.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(c.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", c.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(c.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("full_name=")
-	builder.WriteString(c.FullName)
+	builder.WriteString(_m.FullName)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(c.Title)
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("company=")
-	builder.WriteString(c.Company)
+	builder.WriteString(_m.Company)
 	builder.WriteString(", ")
 	builder.WriteString("email=")
-	builder.WriteString(c.Email)
+	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
-	builder.WriteString(c.PhoneNumber)
+	builder.WriteString(_m.PhoneNumber)
 	builder.WriteString(", ")
 	builder.WriteString("address=")
-	builder.WriteString(c.Address)
+	builder.WriteString(_m.Address)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", c.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Contact) NamedEntities(name string) ([]*Entity, error) {
-	if c.Edges.namedEntities == nil {
+func (_m *Contact) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Contact) appendNamedEntities(name string, edges ...*Entity) {
-	if c.Edges.namedEntities == nil {
-		c.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *Contact) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		c.Edges.namedEntities[name] = append(c.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Contact) NamedFiles(name string) ([]*File, error) {
-	if c.Edges.namedFiles == nil {
+func (_m *Contact) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Contact) appendNamedFiles(name string, edges ...*File) {
-	if c.Edges.namedFiles == nil {
-		c.Edges.namedFiles = make(map[string][]*File)
+func (_m *Contact) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		c.Edges.namedFiles[name] = append(c.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

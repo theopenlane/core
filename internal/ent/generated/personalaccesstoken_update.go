@@ -31,398 +31,398 @@ type PersonalAccessTokenUpdate struct {
 }
 
 // Where appends a list predicates to the PersonalAccessTokenUpdate builder.
-func (patu *PersonalAccessTokenUpdate) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenUpdate {
-	patu.mutation.Where(ps...)
-	return patu
+func (_u *PersonalAccessTokenUpdate) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (patu *PersonalAccessTokenUpdate) SetUpdatedAt(t time.Time) *PersonalAccessTokenUpdate {
-	patu.mutation.SetUpdatedAt(t)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetUpdatedAt(v time.Time) *PersonalAccessTokenUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (patu *PersonalAccessTokenUpdate) ClearUpdatedAt() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearUpdatedAt()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearUpdatedAt() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (patu *PersonalAccessTokenUpdate) SetUpdatedBy(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetUpdatedBy(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetUpdatedBy(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableUpdatedBy(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetUpdatedBy(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableUpdatedBy(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (patu *PersonalAccessTokenUpdate) ClearUpdatedBy() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearUpdatedBy()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearUpdatedBy() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (patu *PersonalAccessTokenUpdate) SetDeletedAt(t time.Time) *PersonalAccessTokenUpdate {
-	patu.mutation.SetDeletedAt(t)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetDeletedAt(v time.Time) *PersonalAccessTokenUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableDeletedAt(t *time.Time) *PersonalAccessTokenUpdate {
-	if t != nil {
-		patu.SetDeletedAt(*t)
+func (_u *PersonalAccessTokenUpdate) SetNillableDeletedAt(v *time.Time) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (patu *PersonalAccessTokenUpdate) ClearDeletedAt() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearDeletedAt()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearDeletedAt() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (patu *PersonalAccessTokenUpdate) SetDeletedBy(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetDeletedBy(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetDeletedBy(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableDeletedBy(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetDeletedBy(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableDeletedBy(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (patu *PersonalAccessTokenUpdate) ClearDeletedBy() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearDeletedBy()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearDeletedBy() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (patu *PersonalAccessTokenUpdate) SetTags(s []string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetTags(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetTags(v []string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (patu *PersonalAccessTokenUpdate) AppendTags(s []string) *PersonalAccessTokenUpdate {
-	patu.mutation.AppendTags(s)
-	return patu
+// AppendTags appends value to the "tags" field.
+func (_u *PersonalAccessTokenUpdate) AppendTags(v []string) *PersonalAccessTokenUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (patu *PersonalAccessTokenUpdate) ClearTags() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearTags()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearTags() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (patu *PersonalAccessTokenUpdate) SetOwnerID(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetOwnerID(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetOwnerID(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableOwnerID(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetOwnerID(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableOwnerID(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return patu
+	return _u
 }
 
 // SetName sets the "name" field.
-func (patu *PersonalAccessTokenUpdate) SetName(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetName(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetName(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableName(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetName(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableName(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return patu
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (patu *PersonalAccessTokenUpdate) SetExpiresAt(t time.Time) *PersonalAccessTokenUpdate {
-	patu.mutation.SetExpiresAt(t)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetExpiresAt(v time.Time) *PersonalAccessTokenUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableExpiresAt(t *time.Time) *PersonalAccessTokenUpdate {
-	if t != nil {
-		patu.SetExpiresAt(*t)
+func (_u *PersonalAccessTokenUpdate) SetNillableExpiresAt(v *time.Time) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (patu *PersonalAccessTokenUpdate) ClearExpiresAt() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearExpiresAt()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearExpiresAt() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (patu *PersonalAccessTokenUpdate) SetDescription(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetDescription(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetDescription(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableDescription(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetDescription(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableDescription(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (patu *PersonalAccessTokenUpdate) ClearDescription() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearDescription()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearDescription() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetScopes sets the "scopes" field.
-func (patu *PersonalAccessTokenUpdate) SetScopes(s []string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetScopes(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetScopes(v []string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetScopes(v)
+	return _u
 }
 
-// AppendScopes appends s to the "scopes" field.
-func (patu *PersonalAccessTokenUpdate) AppendScopes(s []string) *PersonalAccessTokenUpdate {
-	patu.mutation.AppendScopes(s)
-	return patu
+// AppendScopes appends value to the "scopes" field.
+func (_u *PersonalAccessTokenUpdate) AppendScopes(v []string) *PersonalAccessTokenUpdate {
+	_u.mutation.AppendScopes(v)
+	return _u
 }
 
 // ClearScopes clears the value of the "scopes" field.
-func (patu *PersonalAccessTokenUpdate) ClearScopes() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearScopes()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearScopes() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearScopes()
+	return _u
 }
 
 // SetSSOAuthorizations sets the "sso_authorizations" field.
-func (patu *PersonalAccessTokenUpdate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *PersonalAccessTokenUpdate {
-	patu.mutation.SetSSOAuthorizations(mam)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetSSOAuthorizations(v models.SSOAuthorizationMap) *PersonalAccessTokenUpdate {
+	_u.mutation.SetSSOAuthorizations(v)
+	return _u
 }
 
 // ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
-func (patu *PersonalAccessTokenUpdate) ClearSSOAuthorizations() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearSSOAuthorizations()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearSSOAuthorizations() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearSSOAuthorizations()
+	return _u
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (patu *PersonalAccessTokenUpdate) SetLastUsedAt(t time.Time) *PersonalAccessTokenUpdate {
-	patu.mutation.SetLastUsedAt(t)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetLastUsedAt(v time.Time) *PersonalAccessTokenUpdate {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableLastUsedAt(t *time.Time) *PersonalAccessTokenUpdate {
-	if t != nil {
-		patu.SetLastUsedAt(*t)
+func (_u *PersonalAccessTokenUpdate) SetNillableLastUsedAt(v *time.Time) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearLastUsedAt clears the value of the "last_used_at" field.
-func (patu *PersonalAccessTokenUpdate) ClearLastUsedAt() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearLastUsedAt()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearLastUsedAt() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearLastUsedAt()
+	return _u
 }
 
 // SetIsActive sets the "is_active" field.
-func (patu *PersonalAccessTokenUpdate) SetIsActive(b bool) *PersonalAccessTokenUpdate {
-	patu.mutation.SetIsActive(b)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetIsActive(v bool) *PersonalAccessTokenUpdate {
+	_u.mutation.SetIsActive(v)
+	return _u
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableIsActive(b *bool) *PersonalAccessTokenUpdate {
-	if b != nil {
-		patu.SetIsActive(*b)
+func (_u *PersonalAccessTokenUpdate) SetNillableIsActive(v *bool) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetIsActive(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearIsActive clears the value of the "is_active" field.
-func (patu *PersonalAccessTokenUpdate) ClearIsActive() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearIsActive()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearIsActive() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearIsActive()
+	return _u
 }
 
 // SetRevokedReason sets the "revoked_reason" field.
-func (patu *PersonalAccessTokenUpdate) SetRevokedReason(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetRevokedReason(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetRevokedReason(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetRevokedReason(v)
+	return _u
 }
 
 // SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableRevokedReason(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetRevokedReason(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableRevokedReason(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetRevokedReason(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearRevokedReason clears the value of the "revoked_reason" field.
-func (patu *PersonalAccessTokenUpdate) ClearRevokedReason() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearRevokedReason()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearRevokedReason() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearRevokedReason()
+	return _u
 }
 
 // SetRevokedBy sets the "revoked_by" field.
-func (patu *PersonalAccessTokenUpdate) SetRevokedBy(s string) *PersonalAccessTokenUpdate {
-	patu.mutation.SetRevokedBy(s)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetRevokedBy(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetRevokedBy(v)
+	return _u
 }
 
 // SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableRevokedBy(s *string) *PersonalAccessTokenUpdate {
-	if s != nil {
-		patu.SetRevokedBy(*s)
+func (_u *PersonalAccessTokenUpdate) SetNillableRevokedBy(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetRevokedBy(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearRevokedBy clears the value of the "revoked_by" field.
-func (patu *PersonalAccessTokenUpdate) ClearRevokedBy() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearRevokedBy()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearRevokedBy() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearRevokedBy()
+	return _u
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (patu *PersonalAccessTokenUpdate) SetRevokedAt(t time.Time) *PersonalAccessTokenUpdate {
-	patu.mutation.SetRevokedAt(t)
-	return patu
+func (_u *PersonalAccessTokenUpdate) SetRevokedAt(v time.Time) *PersonalAccessTokenUpdate {
+	_u.mutation.SetRevokedAt(v)
+	return _u
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (patu *PersonalAccessTokenUpdate) SetNillableRevokedAt(t *time.Time) *PersonalAccessTokenUpdate {
-	if t != nil {
-		patu.SetRevokedAt(*t)
+func (_u *PersonalAccessTokenUpdate) SetNillableRevokedAt(v *time.Time) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetRevokedAt(*v)
 	}
-	return patu
+	return _u
 }
 
 // ClearRevokedAt clears the value of the "revoked_at" field.
-func (patu *PersonalAccessTokenUpdate) ClearRevokedAt() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearRevokedAt()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearRevokedAt() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearRevokedAt()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (patu *PersonalAccessTokenUpdate) SetOwner(u *User) *PersonalAccessTokenUpdate {
-	return patu.SetOwnerID(u.ID)
+func (_u *PersonalAccessTokenUpdate) SetOwner(v *User) *PersonalAccessTokenUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
-func (patu *PersonalAccessTokenUpdate) AddOrganizationIDs(ids ...string) *PersonalAccessTokenUpdate {
-	patu.mutation.AddOrganizationIDs(ids...)
-	return patu
+func (_u *PersonalAccessTokenUpdate) AddOrganizationIDs(ids ...string) *PersonalAccessTokenUpdate {
+	_u.mutation.AddOrganizationIDs(ids...)
+	return _u
 }
 
 // AddOrganizations adds the "organizations" edges to the Organization entity.
-func (patu *PersonalAccessTokenUpdate) AddOrganizations(o ...*Organization) *PersonalAccessTokenUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *PersonalAccessTokenUpdate) AddOrganizations(v ...*Organization) *PersonalAccessTokenUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patu.AddOrganizationIDs(ids...)
+	return _u.AddOrganizationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (patu *PersonalAccessTokenUpdate) AddEventIDs(ids ...string) *PersonalAccessTokenUpdate {
-	patu.mutation.AddEventIDs(ids...)
-	return patu
+func (_u *PersonalAccessTokenUpdate) AddEventIDs(ids ...string) *PersonalAccessTokenUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (patu *PersonalAccessTokenUpdate) AddEvents(e ...*Event) *PersonalAccessTokenUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *PersonalAccessTokenUpdate) AddEvents(v ...*Event) *PersonalAccessTokenUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patu.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the PersonalAccessTokenMutation object of the builder.
-func (patu *PersonalAccessTokenUpdate) Mutation() *PersonalAccessTokenMutation {
-	return patu.mutation
+func (_u *PersonalAccessTokenUpdate) Mutation() *PersonalAccessTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (patu *PersonalAccessTokenUpdate) ClearOwner() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearOwner()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearOwner() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearOrganizations clears all "organizations" edges to the Organization entity.
-func (patu *PersonalAccessTokenUpdate) ClearOrganizations() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearOrganizations()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearOrganizations() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearOrganizations()
+	return _u
 }
 
 // RemoveOrganizationIDs removes the "organizations" edge to Organization entities by IDs.
-func (patu *PersonalAccessTokenUpdate) RemoveOrganizationIDs(ids ...string) *PersonalAccessTokenUpdate {
-	patu.mutation.RemoveOrganizationIDs(ids...)
-	return patu
+func (_u *PersonalAccessTokenUpdate) RemoveOrganizationIDs(ids ...string) *PersonalAccessTokenUpdate {
+	_u.mutation.RemoveOrganizationIDs(ids...)
+	return _u
 }
 
 // RemoveOrganizations removes "organizations" edges to Organization entities.
-func (patu *PersonalAccessTokenUpdate) RemoveOrganizations(o ...*Organization) *PersonalAccessTokenUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *PersonalAccessTokenUpdate) RemoveOrganizations(v ...*Organization) *PersonalAccessTokenUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patu.RemoveOrganizationIDs(ids...)
+	return _u.RemoveOrganizationIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (patu *PersonalAccessTokenUpdate) ClearEvents() *PersonalAccessTokenUpdate {
-	patu.mutation.ClearEvents()
-	return patu
+func (_u *PersonalAccessTokenUpdate) ClearEvents() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (patu *PersonalAccessTokenUpdate) RemoveEventIDs(ids ...string) *PersonalAccessTokenUpdate {
-	patu.mutation.RemoveEventIDs(ids...)
-	return patu
+func (_u *PersonalAccessTokenUpdate) RemoveEventIDs(ids ...string) *PersonalAccessTokenUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (patu *PersonalAccessTokenUpdate) RemoveEvents(e ...*Event) *PersonalAccessTokenUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *PersonalAccessTokenUpdate) RemoveEvents(v ...*Event) *PersonalAccessTokenUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patu.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (patu *PersonalAccessTokenUpdate) Save(ctx context.Context) (int, error) {
-	if err := patu.defaults(); err != nil {
+func (_u *PersonalAccessTokenUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, patu.sqlSave, patu.mutation, patu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (patu *PersonalAccessTokenUpdate) SaveX(ctx context.Context) int {
-	affected, err := patu.Save(ctx)
+func (_u *PersonalAccessTokenUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -430,165 +430,165 @@ func (patu *PersonalAccessTokenUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (patu *PersonalAccessTokenUpdate) Exec(ctx context.Context) error {
-	_, err := patu.Save(ctx)
+func (_u *PersonalAccessTokenUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (patu *PersonalAccessTokenUpdate) ExecX(ctx context.Context) {
-	if err := patu.Exec(ctx); err != nil {
+func (_u *PersonalAccessTokenUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (patu *PersonalAccessTokenUpdate) defaults() error {
-	if _, ok := patu.mutation.UpdatedAt(); !ok && !patu.mutation.UpdatedAtCleared() {
+func (_u *PersonalAccessTokenUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if personalaccesstoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized personalaccesstoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := personalaccesstoken.UpdateDefaultUpdatedAt()
-		patu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (patu *PersonalAccessTokenUpdate) check() error {
-	if v, ok := patu.mutation.Name(); ok {
+func (_u *PersonalAccessTokenUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := personalaccesstoken.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.name": %w`, err)}
 		}
 	}
-	if patu.mutation.OwnerCleared() && len(patu.mutation.OwnerIDs()) > 0 {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "PersonalAccessToken.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (patu *PersonalAccessTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PersonalAccessTokenUpdate {
-	patu.modifiers = append(patu.modifiers, modifiers...)
-	return patu
+func (_u *PersonalAccessTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PersonalAccessTokenUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := patu.check(); err != nil {
-		return n, err
+func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(personalaccesstoken.Table, personalaccesstoken.Columns, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
-	if ps := patu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if patu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := patu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if patu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if patu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := patu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if patu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := patu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if patu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := patu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if patu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := patu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(personalaccesstoken.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := patu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, personalaccesstoken.FieldTags, value)
 		})
 	}
-	if patu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(personalaccesstoken.FieldTags, field.TypeJSON)
 	}
-	if value, ok := patu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
 	}
-	if value, ok := patu.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)
 	}
-	if patu.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldExpiresAt, field.TypeTime)
 	}
-	if value, ok := patu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(personalaccesstoken.FieldDescription, field.TypeString, value)
 	}
-	if patu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDescription, field.TypeString)
 	}
-	if value, ok := patu.mutation.Scopes(); ok {
+	if value, ok := _u.mutation.Scopes(); ok {
 		_spec.SetField(personalaccesstoken.FieldScopes, field.TypeJSON, value)
 	}
-	if value, ok := patu.mutation.AppendedScopes(); ok {
+	if value, ok := _u.mutation.AppendedScopes(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, personalaccesstoken.FieldScopes, value)
 		})
 	}
-	if patu.mutation.ScopesCleared() {
+	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(personalaccesstoken.FieldScopes, field.TypeJSON)
 	}
-	if value, ok := patu.mutation.SSOAuthorizations(); ok {
+	if value, ok := _u.mutation.SSOAuthorizations(); ok {
 		_spec.SetField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON, value)
 	}
-	if patu.mutation.SSOAuthorizationsCleared() {
+	if _u.mutation.SSOAuthorizationsCleared() {
 		_spec.ClearField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
-	if value, ok := patu.mutation.LastUsedAt(); ok {
+	if value, ok := _u.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
 	}
-	if patu.mutation.LastUsedAtCleared() {
+	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if value, ok := patu.mutation.IsActive(); ok {
+	if value, ok := _u.mutation.IsActive(); ok {
 		_spec.SetField(personalaccesstoken.FieldIsActive, field.TypeBool, value)
 	}
-	if patu.mutation.IsActiveCleared() {
+	if _u.mutation.IsActiveCleared() {
 		_spec.ClearField(personalaccesstoken.FieldIsActive, field.TypeBool)
 	}
-	if value, ok := patu.mutation.RevokedReason(); ok {
+	if value, ok := _u.mutation.RevokedReason(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedReason, field.TypeString, value)
 	}
-	if patu.mutation.RevokedReasonCleared() {
+	if _u.mutation.RevokedReasonCleared() {
 		_spec.ClearField(personalaccesstoken.FieldRevokedReason, field.TypeString)
 	}
-	if value, ok := patu.mutation.RevokedBy(); ok {
+	if value, ok := _u.mutation.RevokedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedBy, field.TypeString, value)
 	}
-	if patu.mutation.RevokedByCleared() {
+	if _u.mutation.RevokedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldRevokedBy, field.TypeString)
 	}
-	if value, ok := patu.mutation.RevokedAt(); ok {
+	if value, ok := _u.mutation.RevokedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedAt, field.TypeTime, value)
 	}
-	if patu.mutation.RevokedAtCleared() {
+	if _u.mutation.RevokedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldRevokedAt, field.TypeTime)
 	}
-	if patu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -599,10 +599,10 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.PersonalAccessToken
+		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -613,13 +613,13 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.PersonalAccessToken
+		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if patu.mutation.OrganizationsCleared() {
+	if _u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -630,10 +630,10 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patu.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !patu.mutation.OrganizationsCleared() {
+	if nodes := _u.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !_u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -644,13 +644,13 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patu.mutation.OrganizationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -661,13 +661,13 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if patu.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -678,10 +678,10 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !patu.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -692,13 +692,13 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patu.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -709,16 +709,16 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patu.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = patu.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, patu.schemaConfig)
-	_spec.AddModifiers(patu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, patu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.PersonalAccessToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{personalaccesstoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -726,8 +726,8 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		return 0, err
 	}
-	patu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // PersonalAccessTokenUpdateOne is the builder for updating a single PersonalAccessToken entity.
@@ -740,405 +740,405 @@ type PersonalAccessTokenUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedAt(t time.Time) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetUpdatedAt(t)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetUpdatedAt(v time.Time) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedAt() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearUpdatedAt()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearUpdatedAt() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetUpdatedBy(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetUpdatedBy(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetUpdatedBy(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableUpdatedBy(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetUpdatedBy(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableUpdatedBy(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearUpdatedBy() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearUpdatedBy()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearUpdatedBy() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetDeletedAt(t time.Time) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetDeletedAt(t)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetDeletedAt(v time.Time) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableDeletedAt(t *time.Time) *PersonalAccessTokenUpdateOne {
-	if t != nil {
-		patuo.SetDeletedAt(*t)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableDeletedAt(v *time.Time) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearDeletedAt() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearDeletedAt()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearDeletedAt() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetDeletedBy(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetDeletedBy(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetDeletedBy(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableDeletedBy(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetDeletedBy(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableDeletedBy(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearDeletedBy() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearDeletedBy()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearDeletedBy() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetTags(s []string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetTags(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetTags(v []string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (patuo *PersonalAccessTokenUpdateOne) AppendTags(s []string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.AppendTags(s)
-	return patuo
+// AppendTags appends value to the "tags" field.
+func (_u *PersonalAccessTokenUpdateOne) AppendTags(v []string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearTags() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearTags()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearTags() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetOwnerID(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetOwnerID(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetOwnerID(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableOwnerID(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetOwnerID(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableOwnerID(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return patuo
+	return _u
 }
 
 // SetName sets the "name" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetName(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetName(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetName(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableName(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetName(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableName(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return patuo
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetExpiresAt(t time.Time) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetExpiresAt(t)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetExpiresAt(v time.Time) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableExpiresAt(t *time.Time) *PersonalAccessTokenUpdateOne {
-	if t != nil {
-		patuo.SetExpiresAt(*t)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableExpiresAt(v *time.Time) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearExpiresAt() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearExpiresAt()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearExpiresAt() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetDescription(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetDescription(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetDescription(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableDescription(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetDescription(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableDescription(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearDescription() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearDescription()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearDescription() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetScopes sets the "scopes" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetScopes(s []string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetScopes(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetScopes(v []string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetScopes(v)
+	return _u
 }
 
-// AppendScopes appends s to the "scopes" field.
-func (patuo *PersonalAccessTokenUpdateOne) AppendScopes(s []string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.AppendScopes(s)
-	return patuo
+// AppendScopes appends value to the "scopes" field.
+func (_u *PersonalAccessTokenUpdateOne) AppendScopes(v []string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.AppendScopes(v)
+	return _u
 }
 
 // ClearScopes clears the value of the "scopes" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearScopes() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearScopes()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearScopes() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearScopes()
+	return _u
 }
 
 // SetSSOAuthorizations sets the "sso_authorizations" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetSSOAuthorizations(mam)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetSSOAuthorizations(v models.SSOAuthorizationMap) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetSSOAuthorizations(v)
+	return _u
 }
 
 // ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearSSOAuthorizations() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearSSOAuthorizations()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearSSOAuthorizations() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearSSOAuthorizations()
+	return _u
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetLastUsedAt(t time.Time) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetLastUsedAt(t)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetLastUsedAt(v time.Time) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableLastUsedAt(t *time.Time) *PersonalAccessTokenUpdateOne {
-	if t != nil {
-		patuo.SetLastUsedAt(*t)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableLastUsedAt(v *time.Time) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearLastUsedAt clears the value of the "last_used_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearLastUsedAt() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearLastUsedAt()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearLastUsedAt() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearLastUsedAt()
+	return _u
 }
 
 // SetIsActive sets the "is_active" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetIsActive(b bool) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetIsActive(b)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetIsActive(v bool) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetIsActive(v)
+	return _u
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableIsActive(b *bool) *PersonalAccessTokenUpdateOne {
-	if b != nil {
-		patuo.SetIsActive(*b)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableIsActive(v *bool) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetIsActive(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearIsActive clears the value of the "is_active" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearIsActive() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearIsActive()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearIsActive() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearIsActive()
+	return _u
 }
 
 // SetRevokedReason sets the "revoked_reason" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetRevokedReason(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetRevokedReason(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetRevokedReason(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetRevokedReason(v)
+	return _u
 }
 
 // SetNillableRevokedReason sets the "revoked_reason" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableRevokedReason(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetRevokedReason(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableRevokedReason(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetRevokedReason(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearRevokedReason clears the value of the "revoked_reason" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearRevokedReason() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearRevokedReason()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearRevokedReason() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearRevokedReason()
+	return _u
 }
 
 // SetRevokedBy sets the "revoked_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetRevokedBy(s string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetRevokedBy(s)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetRevokedBy(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetRevokedBy(v)
+	return _u
 }
 
 // SetNillableRevokedBy sets the "revoked_by" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableRevokedBy(s *string) *PersonalAccessTokenUpdateOne {
-	if s != nil {
-		patuo.SetRevokedBy(*s)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableRevokedBy(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetRevokedBy(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearRevokedBy clears the value of the "revoked_by" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearRevokedBy() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearRevokedBy()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearRevokedBy() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearRevokedBy()
+	return _u
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) SetRevokedAt(t time.Time) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.SetRevokedAt(t)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) SetRevokedAt(v time.Time) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetRevokedAt(v)
+	return _u
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (patuo *PersonalAccessTokenUpdateOne) SetNillableRevokedAt(t *time.Time) *PersonalAccessTokenUpdateOne {
-	if t != nil {
-		patuo.SetRevokedAt(*t)
+func (_u *PersonalAccessTokenUpdateOne) SetNillableRevokedAt(v *time.Time) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetRevokedAt(*v)
 	}
-	return patuo
+	return _u
 }
 
 // ClearRevokedAt clears the value of the "revoked_at" field.
-func (patuo *PersonalAccessTokenUpdateOne) ClearRevokedAt() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearRevokedAt()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearRevokedAt() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearRevokedAt()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (patuo *PersonalAccessTokenUpdateOne) SetOwner(u *User) *PersonalAccessTokenUpdateOne {
-	return patuo.SetOwnerID(u.ID)
+func (_u *PersonalAccessTokenUpdateOne) SetOwner(v *User) *PersonalAccessTokenUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
-func (patuo *PersonalAccessTokenUpdateOne) AddOrganizationIDs(ids ...string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.AddOrganizationIDs(ids...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) AddOrganizationIDs(ids ...string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.AddOrganizationIDs(ids...)
+	return _u
 }
 
 // AddOrganizations adds the "organizations" edges to the Organization entity.
-func (patuo *PersonalAccessTokenUpdateOne) AddOrganizations(o ...*Organization) *PersonalAccessTokenUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *PersonalAccessTokenUpdateOne) AddOrganizations(v ...*Organization) *PersonalAccessTokenUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patuo.AddOrganizationIDs(ids...)
+	return _u.AddOrganizationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (patuo *PersonalAccessTokenUpdateOne) AddEventIDs(ids ...string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.AddEventIDs(ids...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) AddEventIDs(ids ...string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (patuo *PersonalAccessTokenUpdateOne) AddEvents(e ...*Event) *PersonalAccessTokenUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *PersonalAccessTokenUpdateOne) AddEvents(v ...*Event) *PersonalAccessTokenUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patuo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the PersonalAccessTokenMutation object of the builder.
-func (patuo *PersonalAccessTokenUpdateOne) Mutation() *PersonalAccessTokenMutation {
-	return patuo.mutation
+func (_u *PersonalAccessTokenUpdateOne) Mutation() *PersonalAccessTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (patuo *PersonalAccessTokenUpdateOne) ClearOwner() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearOwner()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearOwner() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearOrganizations clears all "organizations" edges to the Organization entity.
-func (patuo *PersonalAccessTokenUpdateOne) ClearOrganizations() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearOrganizations()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearOrganizations() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearOrganizations()
+	return _u
 }
 
 // RemoveOrganizationIDs removes the "organizations" edge to Organization entities by IDs.
-func (patuo *PersonalAccessTokenUpdateOne) RemoveOrganizationIDs(ids ...string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.RemoveOrganizationIDs(ids...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) RemoveOrganizationIDs(ids ...string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.RemoveOrganizationIDs(ids...)
+	return _u
 }
 
 // RemoveOrganizations removes "organizations" edges to Organization entities.
-func (patuo *PersonalAccessTokenUpdateOne) RemoveOrganizations(o ...*Organization) *PersonalAccessTokenUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *PersonalAccessTokenUpdateOne) RemoveOrganizations(v ...*Organization) *PersonalAccessTokenUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patuo.RemoveOrganizationIDs(ids...)
+	return _u.RemoveOrganizationIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (patuo *PersonalAccessTokenUpdateOne) ClearEvents() *PersonalAccessTokenUpdateOne {
-	patuo.mutation.ClearEvents()
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) ClearEvents() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (patuo *PersonalAccessTokenUpdateOne) RemoveEventIDs(ids ...string) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.RemoveEventIDs(ids...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) RemoveEventIDs(ids ...string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (patuo *PersonalAccessTokenUpdateOne) RemoveEvents(e ...*Event) *PersonalAccessTokenUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *PersonalAccessTokenUpdateOne) RemoveEvents(v ...*Event) *PersonalAccessTokenUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return patuo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the PersonalAccessTokenUpdate builder.
-func (patuo *PersonalAccessTokenUpdateOne) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenUpdateOne {
-	patuo.mutation.Where(ps...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) Where(ps ...predicate.PersonalAccessToken) *PersonalAccessTokenUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (patuo *PersonalAccessTokenUpdateOne) Select(field string, fields ...string) *PersonalAccessTokenUpdateOne {
-	patuo.fields = append([]string{field}, fields...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) Select(field string, fields ...string) *PersonalAccessTokenUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated PersonalAccessToken entity.
-func (patuo *PersonalAccessTokenUpdateOne) Save(ctx context.Context) (*PersonalAccessToken, error) {
-	if err := patuo.defaults(); err != nil {
+func (_u *PersonalAccessTokenUpdateOne) Save(ctx context.Context) (*PersonalAccessToken, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, patuo.sqlSave, patuo.mutation, patuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (patuo *PersonalAccessTokenUpdateOne) SaveX(ctx context.Context) *PersonalAccessToken {
-	node, err := patuo.Save(ctx)
+func (_u *PersonalAccessTokenUpdateOne) SaveX(ctx context.Context) *PersonalAccessToken {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1146,60 +1146,60 @@ func (patuo *PersonalAccessTokenUpdateOne) SaveX(ctx context.Context) *PersonalA
 }
 
 // Exec executes the query on the entity.
-func (patuo *PersonalAccessTokenUpdateOne) Exec(ctx context.Context) error {
-	_, err := patuo.Save(ctx)
+func (_u *PersonalAccessTokenUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (patuo *PersonalAccessTokenUpdateOne) ExecX(ctx context.Context) {
-	if err := patuo.Exec(ctx); err != nil {
+func (_u *PersonalAccessTokenUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (patuo *PersonalAccessTokenUpdateOne) defaults() error {
-	if _, ok := patuo.mutation.UpdatedAt(); !ok && !patuo.mutation.UpdatedAtCleared() {
+func (_u *PersonalAccessTokenUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if personalaccesstoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized personalaccesstoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := personalaccesstoken.UpdateDefaultUpdatedAt()
-		patuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (patuo *PersonalAccessTokenUpdateOne) check() error {
-	if v, ok := patuo.mutation.Name(); ok {
+func (_u *PersonalAccessTokenUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := personalaccesstoken.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.name": %w`, err)}
 		}
 	}
-	if patuo.mutation.OwnerCleared() && len(patuo.mutation.OwnerIDs()) > 0 {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "PersonalAccessToken.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (patuo *PersonalAccessTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PersonalAccessTokenUpdateOne {
-	patuo.modifiers = append(patuo.modifiers, modifiers...)
-	return patuo
+func (_u *PersonalAccessTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PersonalAccessTokenUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *PersonalAccessToken, err error) {
-	if err := patuo.check(); err != nil {
+func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *PersonalAccessToken, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(personalaccesstoken.Table, personalaccesstoken.Columns, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
-	id, ok := patuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "PersonalAccessToken.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := patuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, personalaccesstoken.FieldID)
 		for _, f := range fields {
@@ -1211,117 +1211,117 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 			}
 		}
 	}
-	if ps := patuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if patuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := patuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if patuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if patuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := patuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if patuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := patuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if patuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := patuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if patuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := patuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(personalaccesstoken.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := patuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, personalaccesstoken.FieldTags, value)
 		})
 	}
-	if patuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(personalaccesstoken.FieldTags, field.TypeJSON)
 	}
-	if value, ok := patuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
 	}
-	if value, ok := patuo.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)
 	}
-	if patuo.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldExpiresAt, field.TypeTime)
 	}
-	if value, ok := patuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(personalaccesstoken.FieldDescription, field.TypeString, value)
 	}
-	if patuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(personalaccesstoken.FieldDescription, field.TypeString)
 	}
-	if value, ok := patuo.mutation.Scopes(); ok {
+	if value, ok := _u.mutation.Scopes(); ok {
 		_spec.SetField(personalaccesstoken.FieldScopes, field.TypeJSON, value)
 	}
-	if value, ok := patuo.mutation.AppendedScopes(); ok {
+	if value, ok := _u.mutation.AppendedScopes(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, personalaccesstoken.FieldScopes, value)
 		})
 	}
-	if patuo.mutation.ScopesCleared() {
+	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(personalaccesstoken.FieldScopes, field.TypeJSON)
 	}
-	if value, ok := patuo.mutation.SSOAuthorizations(); ok {
+	if value, ok := _u.mutation.SSOAuthorizations(); ok {
 		_spec.SetField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON, value)
 	}
-	if patuo.mutation.SSOAuthorizationsCleared() {
+	if _u.mutation.SSOAuthorizationsCleared() {
 		_spec.ClearField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
-	if value, ok := patuo.mutation.LastUsedAt(); ok {
+	if value, ok := _u.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
 	}
-	if patuo.mutation.LastUsedAtCleared() {
+	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if value, ok := patuo.mutation.IsActive(); ok {
+	if value, ok := _u.mutation.IsActive(); ok {
 		_spec.SetField(personalaccesstoken.FieldIsActive, field.TypeBool, value)
 	}
-	if patuo.mutation.IsActiveCleared() {
+	if _u.mutation.IsActiveCleared() {
 		_spec.ClearField(personalaccesstoken.FieldIsActive, field.TypeBool)
 	}
-	if value, ok := patuo.mutation.RevokedReason(); ok {
+	if value, ok := _u.mutation.RevokedReason(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedReason, field.TypeString, value)
 	}
-	if patuo.mutation.RevokedReasonCleared() {
+	if _u.mutation.RevokedReasonCleared() {
 		_spec.ClearField(personalaccesstoken.FieldRevokedReason, field.TypeString)
 	}
-	if value, ok := patuo.mutation.RevokedBy(); ok {
+	if value, ok := _u.mutation.RevokedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedBy, field.TypeString, value)
 	}
-	if patuo.mutation.RevokedByCleared() {
+	if _u.mutation.RevokedByCleared() {
 		_spec.ClearField(personalaccesstoken.FieldRevokedBy, field.TypeString)
 	}
-	if value, ok := patuo.mutation.RevokedAt(); ok {
+	if value, ok := _u.mutation.RevokedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldRevokedAt, field.TypeTime, value)
 	}
-	if patuo.mutation.RevokedAtCleared() {
+	if _u.mutation.RevokedAtCleared() {
 		_spec.ClearField(personalaccesstoken.FieldRevokedAt, field.TypeTime)
 	}
-	if patuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1332,10 +1332,10 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.PersonalAccessToken
+		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1346,13 +1346,13 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.PersonalAccessToken
+		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if patuo.mutation.OrganizationsCleared() {
+	if _u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1363,10 +1363,10 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patuo.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !patuo.mutation.OrganizationsCleared() {
+	if nodes := _u.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !_u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1377,13 +1377,13 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patuo.mutation.OrganizationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1394,13 +1394,13 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if patuo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1411,10 +1411,10 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !patuo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1425,13 +1425,13 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := patuo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1442,19 +1442,19 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = patuo.schemaConfig.PersonalAccessTokenEvents
+		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = patuo.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, patuo.schemaConfig)
-	_spec.AddModifiers(patuo.modifiers...)
-	_node = &PersonalAccessToken{config: patuo.config}
+	_spec.Node.Schema = _u.schemaConfig.PersonalAccessToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &PersonalAccessToken{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, patuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{personalaccesstoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1462,6 +1462,6 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		return nil, err
 	}
-	patuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

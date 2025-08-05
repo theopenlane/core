@@ -24,255 +24,255 @@ type SubprocessorCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (sc *SubprocessorCreate) SetCreatedAt(t time.Time) *SubprocessorCreate {
-	sc.mutation.SetCreatedAt(t)
-	return sc
+func (_c *SubprocessorCreate) SetCreatedAt(v time.Time) *SubprocessorCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableCreatedAt(t *time.Time) *SubprocessorCreate {
-	if t != nil {
-		sc.SetCreatedAt(*t)
+func (_c *SubprocessorCreate) SetNillableCreatedAt(v *time.Time) *SubprocessorCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sc *SubprocessorCreate) SetUpdatedAt(t time.Time) *SubprocessorCreate {
-	sc.mutation.SetUpdatedAt(t)
-	return sc
+func (_c *SubprocessorCreate) SetUpdatedAt(v time.Time) *SubprocessorCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableUpdatedAt(t *time.Time) *SubprocessorCreate {
-	if t != nil {
-		sc.SetUpdatedAt(*t)
+func (_c *SubprocessorCreate) SetNillableUpdatedAt(v *time.Time) *SubprocessorCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (sc *SubprocessorCreate) SetCreatedBy(s string) *SubprocessorCreate {
-	sc.mutation.SetCreatedBy(s)
-	return sc
+func (_c *SubprocessorCreate) SetCreatedBy(v string) *SubprocessorCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableCreatedBy(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetCreatedBy(*s)
+func (_c *SubprocessorCreate) SetNillableCreatedBy(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sc *SubprocessorCreate) SetUpdatedBy(s string) *SubprocessorCreate {
-	sc.mutation.SetUpdatedBy(s)
-	return sc
+func (_c *SubprocessorCreate) SetUpdatedBy(v string) *SubprocessorCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableUpdatedBy(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetUpdatedBy(*s)
+func (_c *SubprocessorCreate) SetNillableUpdatedBy(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sc *SubprocessorCreate) SetDeletedAt(t time.Time) *SubprocessorCreate {
-	sc.mutation.SetDeletedAt(t)
-	return sc
+func (_c *SubprocessorCreate) SetDeletedAt(v time.Time) *SubprocessorCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableDeletedAt(t *time.Time) *SubprocessorCreate {
-	if t != nil {
-		sc.SetDeletedAt(*t)
+func (_c *SubprocessorCreate) SetNillableDeletedAt(v *time.Time) *SubprocessorCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sc *SubprocessorCreate) SetDeletedBy(s string) *SubprocessorCreate {
-	sc.mutation.SetDeletedBy(s)
-	return sc
+func (_c *SubprocessorCreate) SetDeletedBy(v string) *SubprocessorCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableDeletedBy(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetDeletedBy(*s)
+func (_c *SubprocessorCreate) SetNillableDeletedBy(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (sc *SubprocessorCreate) SetTags(s []string) *SubprocessorCreate {
-	sc.mutation.SetTags(s)
-	return sc
+func (_c *SubprocessorCreate) SetTags(v []string) *SubprocessorCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (sc *SubprocessorCreate) SetOwnerID(s string) *SubprocessorCreate {
-	sc.mutation.SetOwnerID(s)
-	return sc
+func (_c *SubprocessorCreate) SetOwnerID(v string) *SubprocessorCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableOwnerID(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetOwnerID(*s)
+func (_c *SubprocessorCreate) SetNillableOwnerID(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetSystemOwned sets the "system_owned" field.
-func (sc *SubprocessorCreate) SetSystemOwned(b bool) *SubprocessorCreate {
-	sc.mutation.SetSystemOwned(b)
-	return sc
+func (_c *SubprocessorCreate) SetSystemOwned(v bool) *SubprocessorCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
 }
 
 // SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableSystemOwned(b *bool) *SubprocessorCreate {
-	if b != nil {
-		sc.SetSystemOwned(*b)
+func (_c *SubprocessorCreate) SetNillableSystemOwned(v *bool) *SubprocessorCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (sc *SubprocessorCreate) SetName(s string) *SubprocessorCreate {
-	sc.mutation.SetName(s)
-	return sc
+func (_c *SubprocessorCreate) SetName(v string) *SubprocessorCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (sc *SubprocessorCreate) SetDescription(s string) *SubprocessorCreate {
-	sc.mutation.SetDescription(s)
-	return sc
+func (_c *SubprocessorCreate) SetDescription(v string) *SubprocessorCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableDescription(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetDescription(*s)
+func (_c *SubprocessorCreate) SetNillableDescription(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (sc *SubprocessorCreate) SetLogoRemoteURL(s string) *SubprocessorCreate {
-	sc.mutation.SetLogoRemoteURL(s)
-	return sc
+func (_c *SubprocessorCreate) SetLogoRemoteURL(v string) *SubprocessorCreate {
+	_c.mutation.SetLogoRemoteURL(v)
+	return _c
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableLogoRemoteURL(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetLogoRemoteURL(*s)
+func (_c *SubprocessorCreate) SetNillableLogoRemoteURL(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetLogoRemoteURL(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (sc *SubprocessorCreate) SetLogoLocalFileID(s string) *SubprocessorCreate {
-	sc.mutation.SetLogoLocalFileID(s)
-	return sc
+func (_c *SubprocessorCreate) SetLogoLocalFileID(v string) *SubprocessorCreate {
+	_c.mutation.SetLogoLocalFileID(v)
+	return _c
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableLogoLocalFileID(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetLogoLocalFileID(*s)
+func (_c *SubprocessorCreate) SetNillableLogoLocalFileID(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetLogoLocalFileID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *SubprocessorCreate) SetID(s string) *SubprocessorCreate {
-	sc.mutation.SetID(s)
-	return sc
+func (_c *SubprocessorCreate) SetID(v string) *SubprocessorCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableID(s *string) *SubprocessorCreate {
-	if s != nil {
-		sc.SetID(*s)
+func (_c *SubprocessorCreate) SetNillableID(v *string) *SubprocessorCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (sc *SubprocessorCreate) SetOwner(o *Organization) *SubprocessorCreate {
-	return sc.SetOwnerID(o.ID)
+func (_c *SubprocessorCreate) SetOwner(v *Organization) *SubprocessorCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (sc *SubprocessorCreate) AddFileIDs(ids ...string) *SubprocessorCreate {
-	sc.mutation.AddFileIDs(ids...)
-	return sc
+func (_c *SubprocessorCreate) AddFileIDs(ids ...string) *SubprocessorCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (sc *SubprocessorCreate) AddFiles(f ...*File) *SubprocessorCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *SubprocessorCreate) AddFiles(v ...*File) *SubprocessorCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (sc *SubprocessorCreate) SetLogoFileID(id string) *SubprocessorCreate {
-	sc.mutation.SetLogoFileID(id)
-	return sc
+func (_c *SubprocessorCreate) SetLogoFileID(id string) *SubprocessorCreate {
+	_c.mutation.SetLogoFileID(id)
+	return _c
 }
 
 // SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (sc *SubprocessorCreate) SetNillableLogoFileID(id *string) *SubprocessorCreate {
+func (_c *SubprocessorCreate) SetNillableLogoFileID(id *string) *SubprocessorCreate {
 	if id != nil {
-		sc = sc.SetLogoFileID(*id)
+		_c = _c.SetLogoFileID(*id)
 	}
-	return sc
+	return _c
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (sc *SubprocessorCreate) SetLogoFile(f *File) *SubprocessorCreate {
-	return sc.SetLogoFileID(f.ID)
+func (_c *SubprocessorCreate) SetLogoFile(v *File) *SubprocessorCreate {
+	return _c.SetLogoFileID(v.ID)
 }
 
 // AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
-func (sc *SubprocessorCreate) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorCreate {
-	sc.mutation.AddTrustCenterSubprocessorIDs(ids...)
-	return sc
+func (_c *SubprocessorCreate) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorCreate {
+	_c.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return _c
 }
 
 // AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (sc *SubprocessorCreate) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *SubprocessorCreate) AddTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *SubprocessorCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddTrustCenterSubprocessorIDs(ids...)
+	return _c.AddTrustCenterSubprocessorIDs(ids...)
 }
 
 // Mutation returns the SubprocessorMutation object of the builder.
-func (sc *SubprocessorCreate) Mutation() *SubprocessorMutation {
-	return sc.mutation
+func (_c *SubprocessorCreate) Mutation() *SubprocessorMutation {
+	return _c.mutation
 }
 
 // Save creates the Subprocessor in the database.
-func (sc *SubprocessorCreate) Save(ctx context.Context) (*Subprocessor, error) {
-	if err := sc.defaults(); err != nil {
+func (_c *SubprocessorCreate) Save(ctx context.Context) (*Subprocessor, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *SubprocessorCreate) SaveX(ctx context.Context) *Subprocessor {
-	v, err := sc.Save(ctx)
+func (_c *SubprocessorCreate) SaveX(ctx context.Context) *Subprocessor {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -280,63 +280,63 @@ func (sc *SubprocessorCreate) SaveX(ctx context.Context) *Subprocessor {
 }
 
 // Exec executes the query.
-func (sc *SubprocessorCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *SubprocessorCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *SubprocessorCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *SubprocessorCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *SubprocessorCreate) defaults() error {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
+func (_c *SubprocessorCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if subprocessor.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessor.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessor.DefaultCreatedAt()
-		sc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if subprocessor.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessor.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessor.DefaultUpdatedAt()
-		sc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := subprocessor.DefaultTags
-		sc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := sc.mutation.SystemOwned(); !ok {
+	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subprocessor.DefaultSystemOwned
-		sc.mutation.SetSystemOwned(v)
+		_c.mutation.SetSystemOwned(v)
 	}
-	if _, ok := sc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if subprocessor.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subprocessor.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := subprocessor.DefaultID()
-		sc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *SubprocessorCreate) check() error {
-	if _, ok := sc.mutation.Name(); !ok {
+func (_c *SubprocessorCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Subprocessor.name"`)}
 	}
-	if v, ok := sc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := subprocessor.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.name": %w`, err)}
 		}
 	}
-	if v, ok := sc.mutation.LogoRemoteURL(); ok {
+	if v, ok := _c.mutation.LogoRemoteURL(); ok {
 		if err := subprocessor.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.logo_remote_url": %w`, err)}
 		}
@@ -344,12 +344,12 @@ func (sc *SubprocessorCreate) check() error {
 	return nil
 }
 
-func (sc *SubprocessorCreate) sqlSave(ctx context.Context) (*Subprocessor, error) {
-	if err := sc.check(); err != nil {
+func (_c *SubprocessorCreate) sqlSave(ctx context.Context) (*Subprocessor, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -362,66 +362,66 @@ func (sc *SubprocessorCreate) sqlSave(ctx context.Context) (*Subprocessor, error
 			return nil, fmt.Errorf("unexpected Subprocessor.ID type: %T", _spec.ID.Value)
 		}
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec) {
+func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Subprocessor{config: sc.config}
+		_node = &Subprocessor{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subprocessor.Table, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
 	)
-	_spec.Schema = sc.schemaConfig.Subprocessor
-	if id, ok := sc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Subprocessor
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(subprocessor.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := sc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(subprocessor.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := sc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessor.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(subprocessor.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(subprocessor.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := sc.mutation.SystemOwned(); ok {
+	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(subprocessor.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
 	}
-	if value, ok := sc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := sc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(subprocessor.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := sc.mutation.LogoRemoteURL(); ok {
+	if value, ok := _c.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(subprocessor.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
 	}
-	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -432,14 +432,14 @@ func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Subprocessor
+		edge.Schema = _c.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -450,13 +450,13 @@ func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.SubprocessorFiles
+		edge.Schema = _c.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.LogoFileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -467,14 +467,14 @@ func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Subprocessor
+		edge.Schema = _c.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.LogoLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -485,7 +485,7 @@ func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -502,16 +502,16 @@ type SubprocessorCreateBulk struct {
 }
 
 // Save creates the Subprocessor entities in the database.
-func (scb *SubprocessorCreateBulk) Save(ctx context.Context) ([]*Subprocessor, error) {
-	if scb.err != nil {
-		return nil, scb.err
+func (_c *SubprocessorCreateBulk) Save(ctx context.Context) ([]*Subprocessor, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Subprocessor, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Subprocessor, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SubprocessorMutation)
@@ -525,11 +525,11 @@ func (scb *SubprocessorCreateBulk) Save(ctx context.Context) ([]*Subprocessor, e
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -549,7 +549,7 @@ func (scb *SubprocessorCreateBulk) Save(ctx context.Context) ([]*Subprocessor, e
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -557,8 +557,8 @@ func (scb *SubprocessorCreateBulk) Save(ctx context.Context) ([]*Subprocessor, e
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *SubprocessorCreateBulk) SaveX(ctx context.Context) []*Subprocessor {
-	v, err := scb.Save(ctx)
+func (_c *SubprocessorCreateBulk) SaveX(ctx context.Context) []*Subprocessor {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -566,14 +566,14 @@ func (scb *SubprocessorCreateBulk) SaveX(ctx context.Context) []*Subprocessor {
 }
 
 // Exec executes the query.
-func (scb *SubprocessorCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *SubprocessorCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *SubprocessorCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *SubprocessorCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

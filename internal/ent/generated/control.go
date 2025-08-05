@@ -387,7 +387,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Control fields.
-func (c *Control) assignValues(columns []string, values []any) error {
+func (_m *Control) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -397,55 +397,55 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				c.ID = value.String
+				_m.ID = value.String
 			}
 		case control.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				c.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case control.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				c.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case control.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				c.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case control.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				c.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case control.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				c.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case control.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				c.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case control.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				c.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case control.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -453,68 +453,68 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				c.Description = value.String
+				_m.Description = value.String
 			}
 		case control.FieldReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
 			} else if value.Valid {
-				c.ReferenceID = value.String
+				_m.ReferenceID = value.String
 			}
 		case control.FieldAuditorReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
 			} else if value.Valid {
-				c.AuditorReferenceID = value.String
+				_m.AuditorReferenceID = value.String
 			}
 		case control.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				c.Status = enums.ControlStatus(value.String)
+				_m.Status = enums.ControlStatus(value.String)
 			}
 		case control.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				c.Source = enums.ControlSource(value.String)
+				_m.Source = enums.ControlSource(value.String)
 			}
 		case control.FieldReferenceFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
 			} else if value.Valid {
-				c.ReferenceFramework = new(string)
-				*c.ReferenceFramework = value.String
+				_m.ReferenceFramework = new(string)
+				*_m.ReferenceFramework = value.String
 			}
 		case control.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_type", values[i])
 			} else if value.Valid {
-				c.ControlType = enums.ControlType(value.String)
+				_m.ControlType = enums.ControlType(value.String)
 			}
 		case control.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				c.Category = value.String
+				_m.Category = value.String
 			}
 		case control.FieldCategoryID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				c.CategoryID = value.String
+				_m.CategoryID = value.String
 			}
 		case control.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				c.Subcategory = value.String
+				_m.Subcategory = value.String
 			}
 		case control.FieldMappedCategories:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field mapped_categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.MappedCategories); err != nil {
+				if err := json.Unmarshal(*value, &_m.MappedCategories); err != nil {
 					return fmt.Errorf("unmarshal field mapped_categories: %w", err)
 				}
 			}
@@ -522,7 +522,7 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_objectives", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.AssessmentObjectives); err != nil {
+				if err := json.Unmarshal(*value, &_m.AssessmentObjectives); err != nil {
 					return fmt.Errorf("unmarshal field assessment_objectives: %w", err)
 				}
 			}
@@ -530,7 +530,7 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_methods", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.AssessmentMethods); err != nil {
+				if err := json.Unmarshal(*value, &_m.AssessmentMethods); err != nil {
 					return fmt.Errorf("unmarshal field assessment_methods: %w", err)
 				}
 			}
@@ -538,7 +538,7 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_questions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.ControlQuestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlQuestions); err != nil {
 					return fmt.Errorf("unmarshal field control_questions: %w", err)
 				}
 			}
@@ -546,7 +546,7 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_guidance", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.ImplementationGuidance); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImplementationGuidance); err != nil {
 					return fmt.Errorf("unmarshal field implementation_guidance: %w", err)
 				}
 			}
@@ -554,7 +554,7 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.ExampleEvidence); err != nil {
+				if err := json.Unmarshal(*value, &_m.ExampleEvidence); err != nil {
 					return fmt.Errorf("unmarshal field example_evidence: %w", err)
 				}
 			}
@@ -562,7 +562,7 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field references", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.References); err != nil {
+				if err := json.Unmarshal(*value, &_m.References); err != nil {
 					return fmt.Errorf("unmarshal field references: %w", err)
 				}
 			}
@@ -570,35 +570,35 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
 			} else if value.Valid {
-				c.ControlOwnerID = new(string)
-				*c.ControlOwnerID = value.String
+				_m.ControlOwnerID = new(string)
+				*_m.ControlOwnerID = value.String
 			}
 		case control.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				c.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case control.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				c.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case control.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
 			} else if value.Valid {
-				c.RefCode = value.String
+				_m.RefCode = value.String
 			}
 		case control.FieldStandardID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
 			} else if value.Valid {
-				c.StandardID = value.String
+				_m.StandardID = value.String
 			}
 		default:
-			c.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -606,669 +606,669 @@ func (c *Control) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Control.
 // This includes values selected through modifiers, order, etc.
-func (c *Control) Value(name string) (ent.Value, error) {
-	return c.selectValues.Get(name)
+func (_m *Control) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryEvidence queries the "evidence" edge of the Control entity.
-func (c *Control) QueryEvidence() *EvidenceQuery {
-	return NewControlClient(c.config).QueryEvidence(c)
+func (_m *Control) QueryEvidence() *EvidenceQuery {
+	return NewControlClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the Control entity.
-func (c *Control) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewControlClient(c.config).QueryControlObjectives(c)
+func (_m *Control) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewControlClient(_m.config).QueryControlObjectives(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Control entity.
-func (c *Control) QueryTasks() *TaskQuery {
-	return NewControlClient(c.config).QueryTasks(c)
+func (_m *Control) QueryTasks() *TaskQuery {
+	return NewControlClient(_m.config).QueryTasks(_m)
 }
 
 // QueryNarratives queries the "narratives" edge of the Control entity.
-func (c *Control) QueryNarratives() *NarrativeQuery {
-	return NewControlClient(c.config).QueryNarratives(c)
+func (_m *Control) QueryNarratives() *NarrativeQuery {
+	return NewControlClient(_m.config).QueryNarratives(_m)
 }
 
 // QueryRisks queries the "risks" edge of the Control entity.
-func (c *Control) QueryRisks() *RiskQuery {
-	return NewControlClient(c.config).QueryRisks(c)
+func (_m *Control) QueryRisks() *RiskQuery {
+	return NewControlClient(_m.config).QueryRisks(_m)
 }
 
 // QueryActionPlans queries the "action_plans" edge of the Control entity.
-func (c *Control) QueryActionPlans() *ActionPlanQuery {
-	return NewControlClient(c.config).QueryActionPlans(c)
+func (_m *Control) QueryActionPlans() *ActionPlanQuery {
+	return NewControlClient(_m.config).QueryActionPlans(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the Control entity.
-func (c *Control) QueryProcedures() *ProcedureQuery {
-	return NewControlClient(c.config).QueryProcedures(c)
+func (_m *Control) QueryProcedures() *ProcedureQuery {
+	return NewControlClient(_m.config).QueryProcedures(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Control entity.
-func (c *Control) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewControlClient(c.config).QueryInternalPolicies(c)
+func (_m *Control) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewControlClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryControlOwner queries the "control_owner" edge of the Control entity.
-func (c *Control) QueryControlOwner() *GroupQuery {
-	return NewControlClient(c.config).QueryControlOwner(c)
+func (_m *Control) QueryControlOwner() *GroupQuery {
+	return NewControlClient(_m.config).QueryControlOwner(_m)
 }
 
 // QueryDelegate queries the "delegate" edge of the Control entity.
-func (c *Control) QueryDelegate() *GroupQuery {
-	return NewControlClient(c.config).QueryDelegate(c)
+func (_m *Control) QueryDelegate() *GroupQuery {
+	return NewControlClient(_m.config).QueryDelegate(_m)
 }
 
 // QueryOwner queries the "owner" edge of the Control entity.
-func (c *Control) QueryOwner() *OrganizationQuery {
-	return NewControlClient(c.config).QueryOwner(c)
+func (_m *Control) QueryOwner() *OrganizationQuery {
+	return NewControlClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Control entity.
-func (c *Control) QueryBlockedGroups() *GroupQuery {
-	return NewControlClient(c.config).QueryBlockedGroups(c)
+func (_m *Control) QueryBlockedGroups() *GroupQuery {
+	return NewControlClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Control entity.
-func (c *Control) QueryEditors() *GroupQuery {
-	return NewControlClient(c.config).QueryEditors(c)
+func (_m *Control) QueryEditors() *GroupQuery {
+	return NewControlClient(_m.config).QueryEditors(_m)
 }
 
 // QueryStandard queries the "standard" edge of the Control entity.
-func (c *Control) QueryStandard() *StandardQuery {
-	return NewControlClient(c.config).QueryStandard(c)
+func (_m *Control) QueryStandard() *StandardQuery {
+	return NewControlClient(_m.config).QueryStandard(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Control entity.
-func (c *Control) QueryPrograms() *ProgramQuery {
-	return NewControlClient(c.config).QueryPrograms(c)
+func (_m *Control) QueryPrograms() *ProgramQuery {
+	return NewControlClient(_m.config).QueryPrograms(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Control entity.
-func (c *Control) QueryAssets() *AssetQuery {
-	return NewControlClient(c.config).QueryAssets(c)
+func (_m *Control) QueryAssets() *AssetQuery {
+	return NewControlClient(_m.config).QueryAssets(_m)
 }
 
 // QueryScans queries the "scans" edge of the Control entity.
-func (c *Control) QueryScans() *ScanQuery {
-	return NewControlClient(c.config).QueryScans(c)
+func (_m *Control) QueryScans() *ScanQuery {
+	return NewControlClient(_m.config).QueryScans(_m)
 }
 
 // QueryControlImplementations queries the "control_implementations" edge of the Control entity.
-func (c *Control) QueryControlImplementations() *ControlImplementationQuery {
-	return NewControlClient(c.config).QueryControlImplementations(c)
+func (_m *Control) QueryControlImplementations() *ControlImplementationQuery {
+	return NewControlClient(_m.config).QueryControlImplementations(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Control entity.
-func (c *Control) QuerySubcontrols() *SubcontrolQuery {
-	return NewControlClient(c.config).QuerySubcontrols(c)
+func (_m *Control) QuerySubcontrols() *SubcontrolQuery {
+	return NewControlClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Control entity.
-func (c *Control) QueryScheduledJobs() *ScheduledJobQuery {
-	return NewControlClient(c.config).QueryScheduledJobs(c)
+func (_m *Control) QueryScheduledJobs() *ScheduledJobQuery {
+	return NewControlClient(_m.config).QueryScheduledJobs(_m)
 }
 
 // QueryMappedToControls queries the "mapped_to_controls" edge of the Control entity.
-func (c *Control) QueryMappedToControls() *MappedControlQuery {
-	return NewControlClient(c.config).QueryMappedToControls(c)
+func (_m *Control) QueryMappedToControls() *MappedControlQuery {
+	return NewControlClient(_m.config).QueryMappedToControls(_m)
 }
 
 // QueryMappedFromControls queries the "mapped_from_controls" edge of the Control entity.
-func (c *Control) QueryMappedFromControls() *MappedControlQuery {
-	return NewControlClient(c.config).QueryMappedFromControls(c)
+func (_m *Control) QueryMappedFromControls() *MappedControlQuery {
+	return NewControlClient(_m.config).QueryMappedFromControls(_m)
 }
 
 // Update returns a builder for updating this Control.
 // Note that you need to call Control.Unwrap() before calling this method if this Control
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (c *Control) Update() *ControlUpdateOne {
-	return NewControlClient(c.config).UpdateOne(c)
+func (_m *Control) Update() *ControlUpdateOne {
+	return NewControlClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Control entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (c *Control) Unwrap() *Control {
-	_tx, ok := c.config.driver.(*txDriver)
+func (_m *Control) Unwrap() *Control {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Control is not a transactional entity")
 	}
-	c.config.driver = _tx.drv
-	return c
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (c *Control) String() string {
+func (_m *Control) String() string {
 	var builder strings.Builder
 	builder.WriteString("Control(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(c.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(c.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(c.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(c.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(c.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", c.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(c.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("reference_id=")
-	builder.WriteString(c.ReferenceID)
+	builder.WriteString(_m.ReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_reference_id=")
-	builder.WriteString(c.AuditorReferenceID)
+	builder.WriteString(_m.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", c.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", c.Source))
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteString(", ")
-	if v := c.ReferenceFramework; v != nil {
+	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
-	builder.WriteString(fmt.Sprintf("%v", c.ControlType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlType))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(c.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("category_id=")
-	builder.WriteString(c.CategoryID)
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("subcategory=")
-	builder.WriteString(c.Subcategory)
+	builder.WriteString(_m.Subcategory)
 	builder.WriteString(", ")
 	builder.WriteString("mapped_categories=")
-	builder.WriteString(fmt.Sprintf("%v", c.MappedCategories))
+	builder.WriteString(fmt.Sprintf("%v", _m.MappedCategories))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_objectives=")
-	builder.WriteString(fmt.Sprintf("%v", c.AssessmentObjectives))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssessmentObjectives))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_methods=")
-	builder.WriteString(fmt.Sprintf("%v", c.AssessmentMethods))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssessmentMethods))
 	builder.WriteString(", ")
 	builder.WriteString("control_questions=")
-	builder.WriteString(fmt.Sprintf("%v", c.ControlQuestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlQuestions))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_guidance=")
-	builder.WriteString(fmt.Sprintf("%v", c.ImplementationGuidance))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImplementationGuidance))
 	builder.WriteString(", ")
 	builder.WriteString("example_evidence=")
-	builder.WriteString(fmt.Sprintf("%v", c.ExampleEvidence))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExampleEvidence))
 	builder.WriteString(", ")
 	builder.WriteString("references=")
-	builder.WriteString(fmt.Sprintf("%v", c.References))
+	builder.WriteString(fmt.Sprintf("%v", _m.References))
 	builder.WriteString(", ")
-	if v := c.ControlOwnerID; v != nil {
+	if v := _m.ControlOwnerID; v != nil {
 		builder.WriteString("control_owner_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(c.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(c.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
-	builder.WriteString(c.RefCode)
+	builder.WriteString(_m.RefCode)
 	builder.WriteString(", ")
 	builder.WriteString("standard_id=")
-	builder.WriteString(c.StandardID)
+	builder.WriteString(_m.StandardID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEvidence returns the Evidence named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedEvidence(name string) ([]*Evidence, error) {
-	if c.Edges.namedEvidence == nil {
+func (_m *Control) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedEvidence[name]
+	nodes, ok := _m.Edges.namedEvidence[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedEvidence(name string, edges ...*Evidence) {
-	if c.Edges.namedEvidence == nil {
-		c.Edges.namedEvidence = make(map[string][]*Evidence)
+func (_m *Control) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedEvidence[name] = []*Evidence{}
+		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
-		c.Edges.namedEvidence[name] = append(c.Edges.namedEvidence[name], edges...)
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
 	}
 }
 
 // NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if c.Edges.namedControlObjectives == nil {
+func (_m *Control) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedControlObjectives[name]
+	nodes, ok := _m.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if c.Edges.namedControlObjectives == nil {
-		c.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+func (_m *Control) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedControlObjectives[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		c.Edges.namedControlObjectives[name] = append(c.Edges.namedControlObjectives[name], edges...)
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedTasks(name string) ([]*Task, error) {
-	if c.Edges.namedTasks == nil {
+func (_m *Control) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedTasks(name string, edges ...*Task) {
-	if c.Edges.namedTasks == nil {
-		c.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Control) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		c.Edges.namedTasks[name] = append(c.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedNarratives(name string) ([]*Narrative, error) {
-	if c.Edges.namedNarratives == nil {
+func (_m *Control) NamedNarratives(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedNarratives[name]
+	nodes, ok := _m.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedNarratives(name string, edges ...*Narrative) {
-	if c.Edges.namedNarratives == nil {
-		c.Edges.namedNarratives = make(map[string][]*Narrative)
+func (_m *Control) appendNamedNarratives(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarratives == nil {
+		_m.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedNarratives[name] = []*Narrative{}
+		_m.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		c.Edges.namedNarratives[name] = append(c.Edges.namedNarratives[name], edges...)
+		_m.Edges.namedNarratives[name] = append(_m.Edges.namedNarratives[name], edges...)
 	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedRisks(name string) ([]*Risk, error) {
-	if c.Edges.namedRisks == nil {
+func (_m *Control) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedRisks(name string, edges ...*Risk) {
-	if c.Edges.namedRisks == nil {
-		c.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *Control) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		c.Edges.namedRisks[name] = append(c.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if c.Edges.namedActionPlans == nil {
+func (_m *Control) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedActionPlans[name]
+	nodes, ok := _m.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if c.Edges.namedActionPlans == nil {
-		c.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+func (_m *Control) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedActionPlans[name] = []*ActionPlan{}
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		c.Edges.namedActionPlans[name] = append(c.Edges.namedActionPlans[name], edges...)
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedProcedures(name string) ([]*Procedure, error) {
-	if c.Edges.namedProcedures == nil {
+func (_m *Control) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedProcedures(name string, edges ...*Procedure) {
-	if c.Edges.namedProcedures == nil {
-		c.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *Control) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		c.Edges.namedProcedures[name] = append(c.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if c.Edges.namedInternalPolicies == nil {
+func (_m *Control) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if c.Edges.namedInternalPolicies == nil {
-		c.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Control) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		c.Edges.namedInternalPolicies[name] = append(c.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedBlockedGroups(name string) ([]*Group, error) {
-	if c.Edges.namedBlockedGroups == nil {
+func (_m *Control) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if c.Edges.namedBlockedGroups == nil {
-		c.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Control) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		c.Edges.namedBlockedGroups[name] = append(c.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedEditors(name string) ([]*Group, error) {
-	if c.Edges.namedEditors == nil {
+func (_m *Control) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedEditors(name string, edges ...*Group) {
-	if c.Edges.namedEditors == nil {
-		c.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Control) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		c.Edges.namedEditors[name] = append(c.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedPrograms(name string) ([]*Program, error) {
-	if c.Edges.namedPrograms == nil {
+func (_m *Control) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedPrograms(name string, edges ...*Program) {
-	if c.Edges.namedPrograms == nil {
-		c.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *Control) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		c.Edges.namedPrograms[name] = append(c.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 
 // NamedAssets returns the Assets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedAssets(name string) ([]*Asset, error) {
-	if c.Edges.namedAssets == nil {
+func (_m *Control) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedAssets[name]
+	nodes, ok := _m.Edges.namedAssets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedAssets(name string, edges ...*Asset) {
-	if c.Edges.namedAssets == nil {
-		c.Edges.namedAssets = make(map[string][]*Asset)
+func (_m *Control) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedAssets[name] = []*Asset{}
+		_m.Edges.namedAssets[name] = []*Asset{}
 	} else {
-		c.Edges.namedAssets[name] = append(c.Edges.namedAssets[name], edges...)
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
 	}
 }
 
 // NamedScans returns the Scans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedScans(name string) ([]*Scan, error) {
-	if c.Edges.namedScans == nil {
+func (_m *Control) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedScans[name]
+	nodes, ok := _m.Edges.namedScans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedScans(name string, edges ...*Scan) {
-	if c.Edges.namedScans == nil {
-		c.Edges.namedScans = make(map[string][]*Scan)
+func (_m *Control) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedScans[name] = []*Scan{}
+		_m.Edges.namedScans[name] = []*Scan{}
 	} else {
-		c.Edges.namedScans[name] = append(c.Edges.namedScans[name], edges...)
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 
 // NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
-	if c.Edges.namedControlImplementations == nil {
+func (_m *Control) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedControlImplementations[name]
+	nodes, ok := _m.Edges.namedControlImplementations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
-	if c.Edges.namedControlImplementations == nil {
-		c.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+func (_m *Control) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
 	} else {
-		c.Edges.namedControlImplementations[name] = append(c.Edges.namedControlImplementations[name], edges...)
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if c.Edges.namedSubcontrols == nil {
+func (_m *Control) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if c.Edges.namedSubcontrols == nil {
-		c.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *Control) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		c.Edges.namedSubcontrols[name] = append(c.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
-	if c.Edges.namedScheduledJobs == nil {
+func (_m *Control) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
+	if _m.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedScheduledJobs[name]
+	nodes, ok := _m.Edges.namedScheduledJobs[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
-	if c.Edges.namedScheduledJobs == nil {
-		c.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
+func (_m *Control) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
+	if _m.Edges.namedScheduledJobs == nil {
+		_m.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
+		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
-		c.Edges.namedScheduledJobs[name] = append(c.Edges.namedScheduledJobs[name], edges...)
+		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 
 // NamedMappedToControls returns the MappedToControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedMappedToControls(name string) ([]*MappedControl, error) {
-	if c.Edges.namedMappedToControls == nil {
+func (_m *Control) NamedMappedToControls(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedToControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedMappedToControls[name]
+	nodes, ok := _m.Edges.namedMappedToControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedMappedToControls(name string, edges ...*MappedControl) {
-	if c.Edges.namedMappedToControls == nil {
-		c.Edges.namedMappedToControls = make(map[string][]*MappedControl)
+func (_m *Control) appendNamedMappedToControls(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedToControls == nil {
+		_m.Edges.namedMappedToControls = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedMappedToControls[name] = []*MappedControl{}
+		_m.Edges.namedMappedToControls[name] = []*MappedControl{}
 	} else {
-		c.Edges.namedMappedToControls[name] = append(c.Edges.namedMappedToControls[name], edges...)
+		_m.Edges.namedMappedToControls[name] = append(_m.Edges.namedMappedToControls[name], edges...)
 	}
 }
 
 // NamedMappedFromControls returns the MappedFromControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedMappedFromControls(name string) ([]*MappedControl, error) {
-	if c.Edges.namedMappedFromControls == nil {
+func (_m *Control) NamedMappedFromControls(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedFromControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedMappedFromControls[name]
+	nodes, ok := _m.Edges.namedMappedFromControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Control) appendNamedMappedFromControls(name string, edges ...*MappedControl) {
-	if c.Edges.namedMappedFromControls == nil {
-		c.Edges.namedMappedFromControls = make(map[string][]*MappedControl)
+func (_m *Control) appendNamedMappedFromControls(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedFromControls == nil {
+		_m.Edges.namedMappedFromControls = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedMappedFromControls[name] = []*MappedControl{}
+		_m.Edges.namedMappedFromControls[name] = []*MappedControl{}
 	} else {
-		c.Edges.namedMappedFromControls[name] = append(c.Edges.namedMappedFromControls[name], edges...)
+		_m.Edges.namedMappedFromControls[name] = append(_m.Edges.namedMappedFromControls[name], edges...)
 	}
 }
 

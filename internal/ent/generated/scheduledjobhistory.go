@@ -81,7 +81,7 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ScheduledJobHistory fields.
-func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) error {
+func (_m *ScheduledJobHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -91,91 +91,91 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				sjh.ID = value.String
+				_m.ID = value.String
 			}
 		case scheduledjobhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				sjh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case scheduledjobhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				sjh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case scheduledjobhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				sjh.Operation = *value
+				_m.Operation = *value
 			}
 		case scheduledjobhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sjh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case scheduledjobhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sjh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case scheduledjobhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sjh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case scheduledjobhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sjh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case scheduledjobhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				sjh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case scheduledjobhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				sjh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case scheduledjobhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				sjh.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case scheduledjobhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				sjh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case scheduledjobhistory.FieldJobID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field job_id", values[i])
 			} else if value.Valid {
-				sjh.JobID = value.String
+				_m.JobID = value.String
 			}
 		case scheduledjobhistory.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				sjh.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case scheduledjobhistory.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field configuration", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sjh.Configuration); err != nil {
+				if err := json.Unmarshal(*value, &_m.Configuration); err != nil {
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
@@ -183,17 +183,17 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
-				sjh.Cron = new(models.Cron)
-				*sjh.Cron = *value.S.(*models.Cron)
+				_m.Cron = new(models.Cron)
+				*_m.Cron = *value.S.(*models.Cron)
 			}
 		case scheduledjobhistory.FieldJobRunnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
 			} else if value.Valid {
-				sjh.JobRunnerID = value.String
+				_m.JobRunnerID = value.String
 			}
 		default:
-			sjh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -201,82 +201,82 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ScheduledJobHistory.
 // This includes values selected through modifiers, order, etc.
-func (sjh *ScheduledJobHistory) Value(name string) (ent.Value, error) {
-	return sjh.selectValues.Get(name)
+func (_m *ScheduledJobHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ScheduledJobHistory.
 // Note that you need to call ScheduledJobHistory.Unwrap() before calling this method if this ScheduledJobHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sjh *ScheduledJobHistory) Update() *ScheduledJobHistoryUpdateOne {
-	return NewScheduledJobHistoryClient(sjh.config).UpdateOne(sjh)
+func (_m *ScheduledJobHistory) Update() *ScheduledJobHistoryUpdateOne {
+	return NewScheduledJobHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ScheduledJobHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sjh *ScheduledJobHistory) Unwrap() *ScheduledJobHistory {
-	_tx, ok := sjh.config.driver.(*txDriver)
+func (_m *ScheduledJobHistory) Unwrap() *ScheduledJobHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ScheduledJobHistory is not a transactional entity")
 	}
-	sjh.config.driver = _tx.drv
-	return sjh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sjh *ScheduledJobHistory) String() string {
+func (_m *ScheduledJobHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ScheduledJobHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sjh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(sjh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(sjh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(sjh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sjh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(sjh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(sjh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(sjh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(sjh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(sjh.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(sjh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("job_id=")
-	builder.WriteString(sjh.JobID)
+	builder.WriteString(_m.JobID)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.Configuration))
+	builder.WriteString(fmt.Sprintf("%v", _m.Configuration))
 	builder.WriteString(", ")
-	if v := sjh.Cron; v != nil {
+	if v := _m.Cron; v != nil {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("job_runner_id=")
-	builder.WriteString(sjh.JobRunnerID)
+	builder.WriteString(_m.JobRunnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -229,3340 +229,3340 @@ var (
 	ErrIdenticalHistory = errors.New("cannot take diff of identical history")
 )
 
-func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
+func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(aph.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(actionplanhistory.FieldCreatedAt, aph.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(actionplanhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(aph.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(actionplanhistory.FieldUpdatedAt, aph.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(actionplanhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(aph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(actionplanhistory.FieldCreatedBy, aph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(actionplanhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(aph.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDeletedAt, aph.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(aph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDeletedBy, aph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(aph.Tags, new.Tags) {
-		changes = append(changes, NewChange(actionplanhistory.FieldTags, aph.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(actionplanhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(aph.Revision, new.Revision) {
-		changes = append(changes, NewChange(actionplanhistory.FieldRevision, aph.Revision, new.Revision))
+	if !reflect.DeepEqual(_m.Revision, new.Revision) {
+		changes = append(changes, NewChange(actionplanhistory.FieldRevision, _m.Revision, new.Revision))
 	}
-	if !reflect.DeepEqual(aph.Name, new.Name) {
-		changes = append(changes, NewChange(actionplanhistory.FieldName, aph.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(actionplanhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(aph.Status, new.Status) {
-		changes = append(changes, NewChange(actionplanhistory.FieldStatus, aph.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(actionplanhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(aph.ActionPlanType, new.ActionPlanType) {
-		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanType, aph.ActionPlanType, new.ActionPlanType))
+	if !reflect.DeepEqual(_m.ActionPlanType, new.ActionPlanType) {
+		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanType, _m.ActionPlanType, new.ActionPlanType))
 	}
-	if !reflect.DeepEqual(aph.Details, new.Details) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDetails, aph.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDetails, _m.Details, new.Details))
 	}
-	if !reflect.DeepEqual(aph.ApprovalRequired, new.ApprovalRequired) {
-		changes = append(changes, NewChange(actionplanhistory.FieldApprovalRequired, aph.ApprovalRequired, new.ApprovalRequired))
+	if !reflect.DeepEqual(_m.ApprovalRequired, new.ApprovalRequired) {
+		changes = append(changes, NewChange(actionplanhistory.FieldApprovalRequired, _m.ApprovalRequired, new.ApprovalRequired))
 	}
-	if !reflect.DeepEqual(aph.ReviewDue, new.ReviewDue) {
-		changes = append(changes, NewChange(actionplanhistory.FieldReviewDue, aph.ReviewDue, new.ReviewDue))
+	if !reflect.DeepEqual(_m.ReviewDue, new.ReviewDue) {
+		changes = append(changes, NewChange(actionplanhistory.FieldReviewDue, _m.ReviewDue, new.ReviewDue))
 	}
-	if !reflect.DeepEqual(aph.ReviewFrequency, new.ReviewFrequency) {
-		changes = append(changes, NewChange(actionplanhistory.FieldReviewFrequency, aph.ReviewFrequency, new.ReviewFrequency))
+	if !reflect.DeepEqual(_m.ReviewFrequency, new.ReviewFrequency) {
+		changes = append(changes, NewChange(actionplanhistory.FieldReviewFrequency, _m.ReviewFrequency, new.ReviewFrequency))
 	}
-	if !reflect.DeepEqual(aph.ApproverID, new.ApproverID) {
-		changes = append(changes, NewChange(actionplanhistory.FieldApproverID, aph.ApproverID, new.ApproverID))
+	if !reflect.DeepEqual(_m.ApproverID, new.ApproverID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldApproverID, _m.ApproverID, new.ApproverID))
 	}
-	if !reflect.DeepEqual(aph.DelegateID, new.DelegateID) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDelegateID, aph.DelegateID, new.DelegateID))
+	if !reflect.DeepEqual(_m.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDelegateID, _m.DelegateID, new.DelegateID))
 	}
-	if !reflect.DeepEqual(aph.Summary, new.Summary) {
-		changes = append(changes, NewChange(actionplanhistory.FieldSummary, aph.Summary, new.Summary))
+	if !reflect.DeepEqual(_m.Summary, new.Summary) {
+		changes = append(changes, NewChange(actionplanhistory.FieldSummary, _m.Summary, new.Summary))
 	}
-	if !reflect.DeepEqual(aph.TagSuggestions, new.TagSuggestions) {
-		changes = append(changes, NewChange(actionplanhistory.FieldTagSuggestions, aph.TagSuggestions, new.TagSuggestions))
+	if !reflect.DeepEqual(_m.TagSuggestions, new.TagSuggestions) {
+		changes = append(changes, NewChange(actionplanhistory.FieldTagSuggestions, _m.TagSuggestions, new.TagSuggestions))
 	}
-	if !reflect.DeepEqual(aph.DismissedTagSuggestions, new.DismissedTagSuggestions) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDismissedTagSuggestions, aph.DismissedTagSuggestions, new.DismissedTagSuggestions))
+	if !reflect.DeepEqual(_m.DismissedTagSuggestions, new.DismissedTagSuggestions) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDismissedTagSuggestions, _m.DismissedTagSuggestions, new.DismissedTagSuggestions))
 	}
-	if !reflect.DeepEqual(aph.ControlSuggestions, new.ControlSuggestions) {
-		changes = append(changes, NewChange(actionplanhistory.FieldControlSuggestions, aph.ControlSuggestions, new.ControlSuggestions))
+	if !reflect.DeepEqual(_m.ControlSuggestions, new.ControlSuggestions) {
+		changes = append(changes, NewChange(actionplanhistory.FieldControlSuggestions, _m.ControlSuggestions, new.ControlSuggestions))
 	}
-	if !reflect.DeepEqual(aph.DismissedControlSuggestions, new.DismissedControlSuggestions) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDismissedControlSuggestions, aph.DismissedControlSuggestions, new.DismissedControlSuggestions))
+	if !reflect.DeepEqual(_m.DismissedControlSuggestions, new.DismissedControlSuggestions) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDismissedControlSuggestions, _m.DismissedControlSuggestions, new.DismissedControlSuggestions))
 	}
-	if !reflect.DeepEqual(aph.ImprovementSuggestions, new.ImprovementSuggestions) {
-		changes = append(changes, NewChange(actionplanhistory.FieldImprovementSuggestions, aph.ImprovementSuggestions, new.ImprovementSuggestions))
+	if !reflect.DeepEqual(_m.ImprovementSuggestions, new.ImprovementSuggestions) {
+		changes = append(changes, NewChange(actionplanhistory.FieldImprovementSuggestions, _m.ImprovementSuggestions, new.ImprovementSuggestions))
 	}
-	if !reflect.DeepEqual(aph.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDismissedImprovementSuggestions, aph.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
+	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
-	if !reflect.DeepEqual(aph.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, aph.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(actionplanhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(aph.DueDate, new.DueDate) {
-		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, aph.DueDate, new.DueDate))
+	if !reflect.DeepEqual(_m.DueDate, new.DueDate) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, _m.DueDate, new.DueDate))
 	}
-	if !reflect.DeepEqual(aph.Priority, new.Priority) {
-		changes = append(changes, NewChange(actionplanhistory.FieldPriority, aph.Priority, new.Priority))
+	if !reflect.DeepEqual(_m.Priority, new.Priority) {
+		changes = append(changes, NewChange(actionplanhistory.FieldPriority, _m.Priority, new.Priority))
 	}
-	if !reflect.DeepEqual(aph.Source, new.Source) {
-		changes = append(changes, NewChange(actionplanhistory.FieldSource, aph.Source, new.Source))
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(actionplanhistory.FieldSource, _m.Source, new.Source))
 	}
 	return changes
 }
 
-func (aph *ActionPlanHistory) Diff(history *ActionPlanHistory) (*HistoryDiff[ActionPlanHistory], error) {
-	if aph.Ref != history.Ref {
+func (_m *ActionPlanHistory) Diff(history *ActionPlanHistory) (*HistoryDiff[ActionPlanHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	aphUnix, historyUnix := aph.HistoryTime.Unix(), history.HistoryTime.Unix()
-	aphOlder := aphUnix < historyUnix || (aphUnix == historyUnix && aph.ID < history.ID)
-	historyOlder := aphUnix > historyUnix || (aphUnix == historyUnix && aph.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if aphOlder {
+	if _mOlder {
 		return &HistoryDiff[ActionPlanHistory]{
-			Old:     aph,
+			Old:     _m,
 			New:     history,
-			Changes: aph.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ActionPlanHistory]{
 			Old:     history,
-			New:     aph,
-			Changes: history.changes(aph),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ah *AssetHistory) changes(new *AssetHistory) []Change {
+func (_m *AssetHistory) changes(new *AssetHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ah.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(assethistory.FieldCreatedAt, ah.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(assethistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ah.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(assethistory.FieldUpdatedAt, ah.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(assethistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ah.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(assethistory.FieldCreatedBy, ah.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(assethistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ah.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(assethistory.FieldDeletedAt, ah.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(assethistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ah.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(assethistory.FieldDeletedBy, ah.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(assethistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ah.Tags, new.Tags) {
-		changes = append(changes, NewChange(assethistory.FieldTags, ah.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(assethistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ah.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(assethistory.FieldOwnerID, ah.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(assethistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ah.AssetType, new.AssetType) {
-		changes = append(changes, NewChange(assethistory.FieldAssetType, ah.AssetType, new.AssetType))
+	if !reflect.DeepEqual(_m.AssetType, new.AssetType) {
+		changes = append(changes, NewChange(assethistory.FieldAssetType, _m.AssetType, new.AssetType))
 	}
-	if !reflect.DeepEqual(ah.Name, new.Name) {
-		changes = append(changes, NewChange(assethistory.FieldName, ah.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(assethistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(ah.Description, new.Description) {
-		changes = append(changes, NewChange(assethistory.FieldDescription, ah.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(assethistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(ah.Identifier, new.Identifier) {
-		changes = append(changes, NewChange(assethistory.FieldIdentifier, ah.Identifier, new.Identifier))
+	if !reflect.DeepEqual(_m.Identifier, new.Identifier) {
+		changes = append(changes, NewChange(assethistory.FieldIdentifier, _m.Identifier, new.Identifier))
 	}
-	if !reflect.DeepEqual(ah.Website, new.Website) {
-		changes = append(changes, NewChange(assethistory.FieldWebsite, ah.Website, new.Website))
+	if !reflect.DeepEqual(_m.Website, new.Website) {
+		changes = append(changes, NewChange(assethistory.FieldWebsite, _m.Website, new.Website))
 	}
-	if !reflect.DeepEqual(ah.Cpe, new.Cpe) {
-		changes = append(changes, NewChange(assethistory.FieldCpe, ah.Cpe, new.Cpe))
+	if !reflect.DeepEqual(_m.Cpe, new.Cpe) {
+		changes = append(changes, NewChange(assethistory.FieldCpe, _m.Cpe, new.Cpe))
 	}
-	if !reflect.DeepEqual(ah.Categories, new.Categories) {
-		changes = append(changes, NewChange(assethistory.FieldCategories, ah.Categories, new.Categories))
+	if !reflect.DeepEqual(_m.Categories, new.Categories) {
+		changes = append(changes, NewChange(assethistory.FieldCategories, _m.Categories, new.Categories))
 	}
 	return changes
 }
 
-func (ah *AssetHistory) Diff(history *AssetHistory) (*HistoryDiff[AssetHistory], error) {
-	if ah.Ref != history.Ref {
+func (_m *AssetHistory) Diff(history *AssetHistory) (*HistoryDiff[AssetHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ahUnix, historyUnix := ah.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ahOlder := ahUnix < historyUnix || (ahUnix == historyUnix && ah.ID < history.ID)
-	historyOlder := ahUnix > historyUnix || (ahUnix == historyUnix && ah.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ahOlder {
+	if _mOlder {
 		return &HistoryDiff[AssetHistory]{
-			Old:     ah,
+			Old:     _m,
 			New:     history,
-			Changes: ah.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[AssetHistory]{
 			Old:     history,
-			New:     ah,
-			Changes: history.changes(ah),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ch *ContactHistory) changes(new *ContactHistory) []Change {
+func (_m *ContactHistory) changes(new *ContactHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(contacthistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(contacthistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(contacthistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(contacthistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(contacthistory.FieldCreatedBy, ch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(contacthistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ch.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(contacthistory.FieldDeletedAt, ch.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(contacthistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(contacthistory.FieldDeletedBy, ch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(contacthistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ch.Tags, new.Tags) {
-		changes = append(changes, NewChange(contacthistory.FieldTags, ch.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(contacthistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ch.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(contacthistory.FieldOwnerID, ch.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(contacthistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ch.FullName, new.FullName) {
-		changes = append(changes, NewChange(contacthistory.FieldFullName, ch.FullName, new.FullName))
+	if !reflect.DeepEqual(_m.FullName, new.FullName) {
+		changes = append(changes, NewChange(contacthistory.FieldFullName, _m.FullName, new.FullName))
 	}
-	if !reflect.DeepEqual(ch.Title, new.Title) {
-		changes = append(changes, NewChange(contacthistory.FieldTitle, ch.Title, new.Title))
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(contacthistory.FieldTitle, _m.Title, new.Title))
 	}
-	if !reflect.DeepEqual(ch.Company, new.Company) {
-		changes = append(changes, NewChange(contacthistory.FieldCompany, ch.Company, new.Company))
+	if !reflect.DeepEqual(_m.Company, new.Company) {
+		changes = append(changes, NewChange(contacthistory.FieldCompany, _m.Company, new.Company))
 	}
-	if !reflect.DeepEqual(ch.Email, new.Email) {
-		changes = append(changes, NewChange(contacthistory.FieldEmail, ch.Email, new.Email))
+	if !reflect.DeepEqual(_m.Email, new.Email) {
+		changes = append(changes, NewChange(contacthistory.FieldEmail, _m.Email, new.Email))
 	}
-	if !reflect.DeepEqual(ch.PhoneNumber, new.PhoneNumber) {
-		changes = append(changes, NewChange(contacthistory.FieldPhoneNumber, ch.PhoneNumber, new.PhoneNumber))
+	if !reflect.DeepEqual(_m.PhoneNumber, new.PhoneNumber) {
+		changes = append(changes, NewChange(contacthistory.FieldPhoneNumber, _m.PhoneNumber, new.PhoneNumber))
 	}
-	if !reflect.DeepEqual(ch.Address, new.Address) {
-		changes = append(changes, NewChange(contacthistory.FieldAddress, ch.Address, new.Address))
+	if !reflect.DeepEqual(_m.Address, new.Address) {
+		changes = append(changes, NewChange(contacthistory.FieldAddress, _m.Address, new.Address))
 	}
-	if !reflect.DeepEqual(ch.Status, new.Status) {
-		changes = append(changes, NewChange(contacthistory.FieldStatus, ch.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(contacthistory.FieldStatus, _m.Status, new.Status))
 	}
 	return changes
 }
 
-func (ch *ContactHistory) Diff(history *ContactHistory) (*HistoryDiff[ContactHistory], error) {
-	if ch.Ref != history.Ref {
+func (_m *ContactHistory) Diff(history *ContactHistory) (*HistoryDiff[ContactHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	chOlder := chUnix < historyUnix || (chUnix == historyUnix && ch.ID < history.ID)
-	historyOlder := chUnix > historyUnix || (chUnix == historyUnix && ch.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if chOlder {
+	if _mOlder {
 		return &HistoryDiff[ContactHistory]{
-			Old:     ch,
+			Old:     _m,
 			New:     history,
-			Changes: ch.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ContactHistory]{
 			Old:     history,
-			New:     ch,
-			Changes: history.changes(ch),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ch *ControlHistory) changes(new *ControlHistory) []Change {
+func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(controlhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(controlhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(controlhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(controlhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(controlhistory.FieldCreatedBy, ch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(controlhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ch.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(controlhistory.FieldDeletedAt, ch.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(controlhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(controlhistory.FieldDeletedBy, ch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(controlhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ch.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(controlhistory.FieldDisplayID, ch.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(controlhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(ch.Tags, new.Tags) {
-		changes = append(changes, NewChange(controlhistory.FieldTags, ch.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(controlhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ch.Description, new.Description) {
-		changes = append(changes, NewChange(controlhistory.FieldDescription, ch.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(controlhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(ch.ReferenceID, new.ReferenceID) {
-		changes = append(changes, NewChange(controlhistory.FieldReferenceID, ch.ReferenceID, new.ReferenceID))
+	if !reflect.DeepEqual(_m.ReferenceID, new.ReferenceID) {
+		changes = append(changes, NewChange(controlhistory.FieldReferenceID, _m.ReferenceID, new.ReferenceID))
 	}
-	if !reflect.DeepEqual(ch.AuditorReferenceID, new.AuditorReferenceID) {
-		changes = append(changes, NewChange(controlhistory.FieldAuditorReferenceID, ch.AuditorReferenceID, new.AuditorReferenceID))
+	if !reflect.DeepEqual(_m.AuditorReferenceID, new.AuditorReferenceID) {
+		changes = append(changes, NewChange(controlhistory.FieldAuditorReferenceID, _m.AuditorReferenceID, new.AuditorReferenceID))
 	}
-	if !reflect.DeepEqual(ch.Status, new.Status) {
-		changes = append(changes, NewChange(controlhistory.FieldStatus, ch.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(controlhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(ch.Source, new.Source) {
-		changes = append(changes, NewChange(controlhistory.FieldSource, ch.Source, new.Source))
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(controlhistory.FieldSource, _m.Source, new.Source))
 	}
-	if !reflect.DeepEqual(ch.ReferenceFramework, new.ReferenceFramework) {
-		changes = append(changes, NewChange(controlhistory.FieldReferenceFramework, ch.ReferenceFramework, new.ReferenceFramework))
+	if !reflect.DeepEqual(_m.ReferenceFramework, new.ReferenceFramework) {
+		changes = append(changes, NewChange(controlhistory.FieldReferenceFramework, _m.ReferenceFramework, new.ReferenceFramework))
 	}
-	if !reflect.DeepEqual(ch.ControlType, new.ControlType) {
-		changes = append(changes, NewChange(controlhistory.FieldControlType, ch.ControlType, new.ControlType))
+	if !reflect.DeepEqual(_m.ControlType, new.ControlType) {
+		changes = append(changes, NewChange(controlhistory.FieldControlType, _m.ControlType, new.ControlType))
 	}
-	if !reflect.DeepEqual(ch.Category, new.Category) {
-		changes = append(changes, NewChange(controlhistory.FieldCategory, ch.Category, new.Category))
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(controlhistory.FieldCategory, _m.Category, new.Category))
 	}
-	if !reflect.DeepEqual(ch.CategoryID, new.CategoryID) {
-		changes = append(changes, NewChange(controlhistory.FieldCategoryID, ch.CategoryID, new.CategoryID))
+	if !reflect.DeepEqual(_m.CategoryID, new.CategoryID) {
+		changes = append(changes, NewChange(controlhistory.FieldCategoryID, _m.CategoryID, new.CategoryID))
 	}
-	if !reflect.DeepEqual(ch.Subcategory, new.Subcategory) {
-		changes = append(changes, NewChange(controlhistory.FieldSubcategory, ch.Subcategory, new.Subcategory))
+	if !reflect.DeepEqual(_m.Subcategory, new.Subcategory) {
+		changes = append(changes, NewChange(controlhistory.FieldSubcategory, _m.Subcategory, new.Subcategory))
 	}
-	if !reflect.DeepEqual(ch.MappedCategories, new.MappedCategories) {
-		changes = append(changes, NewChange(controlhistory.FieldMappedCategories, ch.MappedCategories, new.MappedCategories))
+	if !reflect.DeepEqual(_m.MappedCategories, new.MappedCategories) {
+		changes = append(changes, NewChange(controlhistory.FieldMappedCategories, _m.MappedCategories, new.MappedCategories))
 	}
-	if !reflect.DeepEqual(ch.AssessmentObjectives, new.AssessmentObjectives) {
-		changes = append(changes, NewChange(controlhistory.FieldAssessmentObjectives, ch.AssessmentObjectives, new.AssessmentObjectives))
+	if !reflect.DeepEqual(_m.AssessmentObjectives, new.AssessmentObjectives) {
+		changes = append(changes, NewChange(controlhistory.FieldAssessmentObjectives, _m.AssessmentObjectives, new.AssessmentObjectives))
 	}
-	if !reflect.DeepEqual(ch.AssessmentMethods, new.AssessmentMethods) {
-		changes = append(changes, NewChange(controlhistory.FieldAssessmentMethods, ch.AssessmentMethods, new.AssessmentMethods))
+	if !reflect.DeepEqual(_m.AssessmentMethods, new.AssessmentMethods) {
+		changes = append(changes, NewChange(controlhistory.FieldAssessmentMethods, _m.AssessmentMethods, new.AssessmentMethods))
 	}
-	if !reflect.DeepEqual(ch.ControlQuestions, new.ControlQuestions) {
-		changes = append(changes, NewChange(controlhistory.FieldControlQuestions, ch.ControlQuestions, new.ControlQuestions))
+	if !reflect.DeepEqual(_m.ControlQuestions, new.ControlQuestions) {
+		changes = append(changes, NewChange(controlhistory.FieldControlQuestions, _m.ControlQuestions, new.ControlQuestions))
 	}
-	if !reflect.DeepEqual(ch.ImplementationGuidance, new.ImplementationGuidance) {
-		changes = append(changes, NewChange(controlhistory.FieldImplementationGuidance, ch.ImplementationGuidance, new.ImplementationGuidance))
+	if !reflect.DeepEqual(_m.ImplementationGuidance, new.ImplementationGuidance) {
+		changes = append(changes, NewChange(controlhistory.FieldImplementationGuidance, _m.ImplementationGuidance, new.ImplementationGuidance))
 	}
-	if !reflect.DeepEqual(ch.ExampleEvidence, new.ExampleEvidence) {
-		changes = append(changes, NewChange(controlhistory.FieldExampleEvidence, ch.ExampleEvidence, new.ExampleEvidence))
+	if !reflect.DeepEqual(_m.ExampleEvidence, new.ExampleEvidence) {
+		changes = append(changes, NewChange(controlhistory.FieldExampleEvidence, _m.ExampleEvidence, new.ExampleEvidence))
 	}
-	if !reflect.DeepEqual(ch.References, new.References) {
-		changes = append(changes, NewChange(controlhistory.FieldReferences, ch.References, new.References))
+	if !reflect.DeepEqual(_m.References, new.References) {
+		changes = append(changes, NewChange(controlhistory.FieldReferences, _m.References, new.References))
 	}
-	if !reflect.DeepEqual(ch.ControlOwnerID, new.ControlOwnerID) {
-		changes = append(changes, NewChange(controlhistory.FieldControlOwnerID, ch.ControlOwnerID, new.ControlOwnerID))
+	if !reflect.DeepEqual(_m.ControlOwnerID, new.ControlOwnerID) {
+		changes = append(changes, NewChange(controlhistory.FieldControlOwnerID, _m.ControlOwnerID, new.ControlOwnerID))
 	}
-	if !reflect.DeepEqual(ch.DelegateID, new.DelegateID) {
-		changes = append(changes, NewChange(controlhistory.FieldDelegateID, ch.DelegateID, new.DelegateID))
+	if !reflect.DeepEqual(_m.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(controlhistory.FieldDelegateID, _m.DelegateID, new.DelegateID))
 	}
-	if !reflect.DeepEqual(ch.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(controlhistory.FieldOwnerID, ch.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ch.RefCode, new.RefCode) {
-		changes = append(changes, NewChange(controlhistory.FieldRefCode, ch.RefCode, new.RefCode))
+	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
+		changes = append(changes, NewChange(controlhistory.FieldRefCode, _m.RefCode, new.RefCode))
 	}
-	if !reflect.DeepEqual(ch.StandardID, new.StandardID) {
-		changes = append(changes, NewChange(controlhistory.FieldStandardID, ch.StandardID, new.StandardID))
+	if !reflect.DeepEqual(_m.StandardID, new.StandardID) {
+		changes = append(changes, NewChange(controlhistory.FieldStandardID, _m.StandardID, new.StandardID))
 	}
 	return changes
 }
 
-func (ch *ControlHistory) Diff(history *ControlHistory) (*HistoryDiff[ControlHistory], error) {
-	if ch.Ref != history.Ref {
+func (_m *ControlHistory) Diff(history *ControlHistory) (*HistoryDiff[ControlHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	chOlder := chUnix < historyUnix || (chUnix == historyUnix && ch.ID < history.ID)
-	historyOlder := chUnix > historyUnix || (chUnix == historyUnix && ch.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if chOlder {
+	if _mOlder {
 		return &HistoryDiff[ControlHistory]{
-			Old:     ch,
+			Old:     _m,
 			New:     history,
-			Changes: ch.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ControlHistory]{
 			Old:     history,
-			New:     ch,
-			Changes: history.changes(ch),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (cih *ControlImplementationHistory) changes(new *ControlImplementationHistory) []Change {
+func (_m *ControlImplementationHistory) changes(new *ControlImplementationHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(cih.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldCreatedAt, cih.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(cih.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldUpdatedAt, cih.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(cih.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldCreatedBy, cih.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(cih.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldDeletedAt, cih.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(cih.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldDeletedBy, cih.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(cih.Tags, new.Tags) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldTags, cih.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(cih.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldOwnerID, cih.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(cih.Status, new.Status) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldStatus, cih.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(cih.ImplementationDate, new.ImplementationDate) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldImplementationDate, cih.ImplementationDate, new.ImplementationDate))
+	if !reflect.DeepEqual(_m.ImplementationDate, new.ImplementationDate) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldImplementationDate, _m.ImplementationDate, new.ImplementationDate))
 	}
-	if !reflect.DeepEqual(cih.Verified, new.Verified) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldVerified, cih.Verified, new.Verified))
+	if !reflect.DeepEqual(_m.Verified, new.Verified) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldVerified, _m.Verified, new.Verified))
 	}
-	if !reflect.DeepEqual(cih.VerificationDate, new.VerificationDate) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldVerificationDate, cih.VerificationDate, new.VerificationDate))
+	if !reflect.DeepEqual(_m.VerificationDate, new.VerificationDate) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldVerificationDate, _m.VerificationDate, new.VerificationDate))
 	}
-	if !reflect.DeepEqual(cih.Details, new.Details) {
-		changes = append(changes, NewChange(controlimplementationhistory.FieldDetails, cih.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDetails, _m.Details, new.Details))
 	}
 	return changes
 }
 
-func (cih *ControlImplementationHistory) Diff(history *ControlImplementationHistory) (*HistoryDiff[ControlImplementationHistory], error) {
-	if cih.Ref != history.Ref {
+func (_m *ControlImplementationHistory) Diff(history *ControlImplementationHistory) (*HistoryDiff[ControlImplementationHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	cihUnix, historyUnix := cih.HistoryTime.Unix(), history.HistoryTime.Unix()
-	cihOlder := cihUnix < historyUnix || (cihUnix == historyUnix && cih.ID < history.ID)
-	historyOlder := cihUnix > historyUnix || (cihUnix == historyUnix && cih.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if cihOlder {
+	if _mOlder {
 		return &HistoryDiff[ControlImplementationHistory]{
-			Old:     cih,
+			Old:     _m,
 			New:     history,
-			Changes: cih.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ControlImplementationHistory]{
 			Old:     history,
-			New:     cih,
-			Changes: history.changes(cih),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Change {
+func (_m *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(coh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldCreatedAt, coh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(coh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldUpdatedAt, coh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(coh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldCreatedBy, coh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(coh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedAt, coh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(coh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedBy, coh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(coh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDisplayID, coh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(coh.Tags, new.Tags) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldTags, coh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(coh.Revision, new.Revision) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldRevision, coh.Revision, new.Revision))
+	if !reflect.DeepEqual(_m.Revision, new.Revision) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldRevision, _m.Revision, new.Revision))
 	}
-	if !reflect.DeepEqual(coh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldOwnerID, coh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(coh.Name, new.Name) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldName, coh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(coh.DesiredOutcome, new.DesiredOutcome) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldDesiredOutcome, coh.DesiredOutcome, new.DesiredOutcome))
+	if !reflect.DeepEqual(_m.DesiredOutcome, new.DesiredOutcome) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDesiredOutcome, _m.DesiredOutcome, new.DesiredOutcome))
 	}
-	if !reflect.DeepEqual(coh.Status, new.Status) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldStatus, coh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(coh.Source, new.Source) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldSource, coh.Source, new.Source))
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldSource, _m.Source, new.Source))
 	}
-	if !reflect.DeepEqual(coh.ControlObjectiveType, new.ControlObjectiveType) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldControlObjectiveType, coh.ControlObjectiveType, new.ControlObjectiveType))
+	if !reflect.DeepEqual(_m.ControlObjectiveType, new.ControlObjectiveType) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldControlObjectiveType, _m.ControlObjectiveType, new.ControlObjectiveType))
 	}
-	if !reflect.DeepEqual(coh.Category, new.Category) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldCategory, coh.Category, new.Category))
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldCategory, _m.Category, new.Category))
 	}
-	if !reflect.DeepEqual(coh.Subcategory, new.Subcategory) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldSubcategory, coh.Subcategory, new.Subcategory))
+	if !reflect.DeepEqual(_m.Subcategory, new.Subcategory) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldSubcategory, _m.Subcategory, new.Subcategory))
 	}
 	return changes
 }
 
-func (coh *ControlObjectiveHistory) Diff(history *ControlObjectiveHistory) (*HistoryDiff[ControlObjectiveHistory], error) {
-	if coh.Ref != history.Ref {
+func (_m *ControlObjectiveHistory) Diff(history *ControlObjectiveHistory) (*HistoryDiff[ControlObjectiveHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	cohUnix, historyUnix := coh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	cohOlder := cohUnix < historyUnix || (cohUnix == historyUnix && coh.ID < history.ID)
-	historyOlder := cohUnix > historyUnix || (cohUnix == historyUnix && coh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if cohOlder {
+	if _mOlder {
 		return &HistoryDiff[ControlObjectiveHistory]{
-			Old:     coh,
+			Old:     _m,
 			New:     history,
-			Changes: coh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ControlObjectiveHistory]{
 			Old:     history,
-			New:     coh,
-			Changes: history.changes(coh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (cdh *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
+func (_m *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(cdh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(customdomainhistory.FieldCreatedAt, cdh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(customdomainhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(cdh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(customdomainhistory.FieldUpdatedAt, cdh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(customdomainhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(cdh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(customdomainhistory.FieldCreatedBy, cdh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(customdomainhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(cdh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(customdomainhistory.FieldDeletedAt, cdh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(customdomainhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(cdh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(customdomainhistory.FieldDeletedBy, cdh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(customdomainhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(cdh.Tags, new.Tags) {
-		changes = append(changes, NewChange(customdomainhistory.FieldTags, cdh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(customdomainhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(cdh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(customdomainhistory.FieldOwnerID, cdh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(cdh.CnameRecord, new.CnameRecord) {
-		changes = append(changes, NewChange(customdomainhistory.FieldCnameRecord, cdh.CnameRecord, new.CnameRecord))
+	if !reflect.DeepEqual(_m.CnameRecord, new.CnameRecord) {
+		changes = append(changes, NewChange(customdomainhistory.FieldCnameRecord, _m.CnameRecord, new.CnameRecord))
 	}
-	if !reflect.DeepEqual(cdh.MappableDomainID, new.MappableDomainID) {
-		changes = append(changes, NewChange(customdomainhistory.FieldMappableDomainID, cdh.MappableDomainID, new.MappableDomainID))
+	if !reflect.DeepEqual(_m.MappableDomainID, new.MappableDomainID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldMappableDomainID, _m.MappableDomainID, new.MappableDomainID))
 	}
-	if !reflect.DeepEqual(cdh.DNSVerificationID, new.DNSVerificationID) {
-		changes = append(changes, NewChange(customdomainhistory.FieldDNSVerificationID, cdh.DNSVerificationID, new.DNSVerificationID))
+	if !reflect.DeepEqual(_m.DNSVerificationID, new.DNSVerificationID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldDNSVerificationID, _m.DNSVerificationID, new.DNSVerificationID))
 	}
 	return changes
 }
 
-func (cdh *CustomDomainHistory) Diff(history *CustomDomainHistory) (*HistoryDiff[CustomDomainHistory], error) {
-	if cdh.Ref != history.Ref {
+func (_m *CustomDomainHistory) Diff(history *CustomDomainHistory) (*HistoryDiff[CustomDomainHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	cdhUnix, historyUnix := cdh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	cdhOlder := cdhUnix < historyUnix || (cdhUnix == historyUnix && cdh.ID < history.ID)
-	historyOlder := cdhUnix > historyUnix || (cdhUnix == historyUnix && cdh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if cdhOlder {
+	if _mOlder {
 		return &HistoryDiff[CustomDomainHistory]{
-			Old:     cdh,
+			Old:     _m,
 			New:     history,
-			Changes: cdh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[CustomDomainHistory]{
 			Old:     history,
-			New:     cdh,
-			Changes: history.changes(cdh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (dvh *DNSVerificationHistory) changes(new *DNSVerificationHistory) []Change {
+func (_m *DNSVerificationHistory) changes(new *DNSVerificationHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(dvh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldCreatedAt, dvh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(dvh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldUpdatedAt, dvh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(dvh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldCreatedBy, dvh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(dvh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldDeletedAt, dvh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(dvh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldDeletedBy, dvh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(dvh.Tags, new.Tags) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldTags, dvh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(dvh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldOwnerID, dvh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(dvh.CloudflareHostnameID, new.CloudflareHostnameID) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldCloudflareHostnameID, dvh.CloudflareHostnameID, new.CloudflareHostnameID))
+	if !reflect.DeepEqual(_m.CloudflareHostnameID, new.CloudflareHostnameID) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldCloudflareHostnameID, _m.CloudflareHostnameID, new.CloudflareHostnameID))
 	}
-	if !reflect.DeepEqual(dvh.DNSTxtRecord, new.DNSTxtRecord) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSTxtRecord, dvh.DNSTxtRecord, new.DNSTxtRecord))
+	if !reflect.DeepEqual(_m.DNSTxtRecord, new.DNSTxtRecord) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSTxtRecord, _m.DNSTxtRecord, new.DNSTxtRecord))
 	}
-	if !reflect.DeepEqual(dvh.DNSTxtValue, new.DNSTxtValue) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSTxtValue, dvh.DNSTxtValue, new.DNSTxtValue))
+	if !reflect.DeepEqual(_m.DNSTxtValue, new.DNSTxtValue) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSTxtValue, _m.DNSTxtValue, new.DNSTxtValue))
 	}
-	if !reflect.DeepEqual(dvh.DNSVerificationStatus, new.DNSVerificationStatus) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatus, dvh.DNSVerificationStatus, new.DNSVerificationStatus))
+	if !reflect.DeepEqual(_m.DNSVerificationStatus, new.DNSVerificationStatus) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatus, _m.DNSVerificationStatus, new.DNSVerificationStatus))
 	}
-	if !reflect.DeepEqual(dvh.DNSVerificationStatusReason, new.DNSVerificationStatusReason) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatusReason, dvh.DNSVerificationStatusReason, new.DNSVerificationStatusReason))
+	if !reflect.DeepEqual(_m.DNSVerificationStatusReason, new.DNSVerificationStatusReason) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatusReason, _m.DNSVerificationStatusReason, new.DNSVerificationStatusReason))
 	}
-	if !reflect.DeepEqual(dvh.AcmeChallengePath, new.AcmeChallengePath) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengePath, dvh.AcmeChallengePath, new.AcmeChallengePath))
+	if !reflect.DeepEqual(_m.AcmeChallengePath, new.AcmeChallengePath) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengePath, _m.AcmeChallengePath, new.AcmeChallengePath))
 	}
-	if !reflect.DeepEqual(dvh.ExpectedAcmeChallengeValue, new.ExpectedAcmeChallengeValue) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldExpectedAcmeChallengeValue, dvh.ExpectedAcmeChallengeValue, new.ExpectedAcmeChallengeValue))
+	if !reflect.DeepEqual(_m.ExpectedAcmeChallengeValue, new.ExpectedAcmeChallengeValue) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldExpectedAcmeChallengeValue, _m.ExpectedAcmeChallengeValue, new.ExpectedAcmeChallengeValue))
 	}
-	if !reflect.DeepEqual(dvh.AcmeChallengeStatus, new.AcmeChallengeStatus) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengeStatus, dvh.AcmeChallengeStatus, new.AcmeChallengeStatus))
+	if !reflect.DeepEqual(_m.AcmeChallengeStatus, new.AcmeChallengeStatus) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengeStatus, _m.AcmeChallengeStatus, new.AcmeChallengeStatus))
 	}
-	if !reflect.DeepEqual(dvh.AcmeChallengeStatusReason, new.AcmeChallengeStatusReason) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengeStatusReason, dvh.AcmeChallengeStatusReason, new.AcmeChallengeStatusReason))
+	if !reflect.DeepEqual(_m.AcmeChallengeStatusReason, new.AcmeChallengeStatusReason) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengeStatusReason, _m.AcmeChallengeStatusReason, new.AcmeChallengeStatusReason))
 	}
 	return changes
 }
 
-func (dvh *DNSVerificationHistory) Diff(history *DNSVerificationHistory) (*HistoryDiff[DNSVerificationHistory], error) {
-	if dvh.Ref != history.Ref {
+func (_m *DNSVerificationHistory) Diff(history *DNSVerificationHistory) (*HistoryDiff[DNSVerificationHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	dvhUnix, historyUnix := dvh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	dvhOlder := dvhUnix < historyUnix || (dvhUnix == historyUnix && dvh.ID < history.ID)
-	historyOlder := dvhUnix > historyUnix || (dvhUnix == historyUnix && dvh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if dvhOlder {
+	if _mOlder {
 		return &HistoryDiff[DNSVerificationHistory]{
-			Old:     dvh,
+			Old:     _m,
 			New:     history,
-			Changes: dvh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[DNSVerificationHistory]{
 			Old:     history,
-			New:     dvh,
-			Changes: history.changes(dvh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ddh *DocumentDataHistory) changes(new *DocumentDataHistory) []Change {
+func (_m *DocumentDataHistory) changes(new *DocumentDataHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ddh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(documentdatahistory.FieldCreatedAt, ddh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(documentdatahistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ddh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(documentdatahistory.FieldUpdatedAt, ddh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(documentdatahistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ddh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(documentdatahistory.FieldCreatedBy, ddh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(documentdatahistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ddh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(documentdatahistory.FieldDeletedAt, ddh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(documentdatahistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ddh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(documentdatahistory.FieldDeletedBy, ddh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(documentdatahistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ddh.Tags, new.Tags) {
-		changes = append(changes, NewChange(documentdatahistory.FieldTags, ddh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(documentdatahistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ddh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(documentdatahistory.FieldOwnerID, ddh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(documentdatahistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ddh.TemplateID, new.TemplateID) {
-		changes = append(changes, NewChange(documentdatahistory.FieldTemplateID, ddh.TemplateID, new.TemplateID))
+	if !reflect.DeepEqual(_m.TemplateID, new.TemplateID) {
+		changes = append(changes, NewChange(documentdatahistory.FieldTemplateID, _m.TemplateID, new.TemplateID))
 	}
-	if !reflect.DeepEqual(ddh.Data, new.Data) {
-		changes = append(changes, NewChange(documentdatahistory.FieldData, ddh.Data, new.Data))
+	if !reflect.DeepEqual(_m.Data, new.Data) {
+		changes = append(changes, NewChange(documentdatahistory.FieldData, _m.Data, new.Data))
 	}
 	return changes
 }
 
-func (ddh *DocumentDataHistory) Diff(history *DocumentDataHistory) (*HistoryDiff[DocumentDataHistory], error) {
-	if ddh.Ref != history.Ref {
+func (_m *DocumentDataHistory) Diff(history *DocumentDataHistory) (*HistoryDiff[DocumentDataHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ddhUnix, historyUnix := ddh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ddhOlder := ddhUnix < historyUnix || (ddhUnix == historyUnix && ddh.ID < history.ID)
-	historyOlder := ddhUnix > historyUnix || (ddhUnix == historyUnix && ddh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ddhOlder {
+	if _mOlder {
 		return &HistoryDiff[DocumentDataHistory]{
-			Old:     ddh,
+			Old:     _m,
 			New:     history,
-			Changes: ddh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[DocumentDataHistory]{
 			Old:     history,
-			New:     ddh,
-			Changes: history.changes(ddh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (eh *EntityHistory) changes(new *EntityHistory) []Change {
+func (_m *EntityHistory) changes(new *EntityHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(eh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(entityhistory.FieldCreatedAt, eh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(entityhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(entityhistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(entityhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(entityhistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(entityhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(eh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(entityhistory.FieldDeletedAt, eh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(entityhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(eh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(entityhistory.FieldDeletedBy, eh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(entityhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(eh.Tags, new.Tags) {
-		changes = append(changes, NewChange(entityhistory.FieldTags, eh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(entityhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(eh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(entityhistory.FieldOwnerID, eh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(entityhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(eh.Name, new.Name) {
-		changes = append(changes, NewChange(entityhistory.FieldName, eh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(entityhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(eh.DisplayName, new.DisplayName) {
-		changes = append(changes, NewChange(entityhistory.FieldDisplayName, eh.DisplayName, new.DisplayName))
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(entityhistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
 	}
-	if !reflect.DeepEqual(eh.Description, new.Description) {
-		changes = append(changes, NewChange(entityhistory.FieldDescription, eh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(entityhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(eh.Domains, new.Domains) {
-		changes = append(changes, NewChange(entityhistory.FieldDomains, eh.Domains, new.Domains))
+	if !reflect.DeepEqual(_m.Domains, new.Domains) {
+		changes = append(changes, NewChange(entityhistory.FieldDomains, _m.Domains, new.Domains))
 	}
-	if !reflect.DeepEqual(eh.EntityTypeID, new.EntityTypeID) {
-		changes = append(changes, NewChange(entityhistory.FieldEntityTypeID, eh.EntityTypeID, new.EntityTypeID))
+	if !reflect.DeepEqual(_m.EntityTypeID, new.EntityTypeID) {
+		changes = append(changes, NewChange(entityhistory.FieldEntityTypeID, _m.EntityTypeID, new.EntityTypeID))
 	}
-	if !reflect.DeepEqual(eh.Status, new.Status) {
-		changes = append(changes, NewChange(entityhistory.FieldStatus, eh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(entityhistory.FieldStatus, _m.Status, new.Status))
 	}
 	return changes
 }
 
-func (eh *EntityHistory) Diff(history *EntityHistory) (*HistoryDiff[EntityHistory], error) {
-	if eh.Ref != history.Ref {
+func (_m *EntityHistory) Diff(history *EntityHistory) (*HistoryDiff[EntityHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ehOlder := ehUnix < historyUnix || (ehUnix == historyUnix && eh.ID < history.ID)
-	historyOlder := ehUnix > historyUnix || (ehUnix == historyUnix && eh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ehOlder {
+	if _mOlder {
 		return &HistoryDiff[EntityHistory]{
-			Old:     eh,
+			Old:     _m,
 			New:     history,
-			Changes: eh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[EntityHistory]{
 			Old:     history,
-			New:     eh,
-			Changes: history.changes(eh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (eth *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
+func (_m *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(eth.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(entitytypehistory.FieldCreatedAt, eth.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(entitytypehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(eth.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(entitytypehistory.FieldUpdatedAt, eth.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(entitytypehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(eth.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(entitytypehistory.FieldCreatedBy, eth.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(entitytypehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(eth.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(entitytypehistory.FieldDeletedAt, eth.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(entitytypehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(eth.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(entitytypehistory.FieldDeletedBy, eth.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(entitytypehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(eth.Tags, new.Tags) {
-		changes = append(changes, NewChange(entitytypehistory.FieldTags, eth.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(entitytypehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(eth.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(entitytypehistory.FieldOwnerID, eth.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(entitytypehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(eth.Name, new.Name) {
-		changes = append(changes, NewChange(entitytypehistory.FieldName, eth.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(entitytypehistory.FieldName, _m.Name, new.Name))
 	}
 	return changes
 }
 
-func (eth *EntityTypeHistory) Diff(history *EntityTypeHistory) (*HistoryDiff[EntityTypeHistory], error) {
-	if eth.Ref != history.Ref {
+func (_m *EntityTypeHistory) Diff(history *EntityTypeHistory) (*HistoryDiff[EntityTypeHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ethUnix, historyUnix := eth.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ethOlder := ethUnix < historyUnix || (ethUnix == historyUnix && eth.ID < history.ID)
-	historyOlder := ethUnix > historyUnix || (ethUnix == historyUnix && eth.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ethOlder {
+	if _mOlder {
 		return &HistoryDiff[EntityTypeHistory]{
-			Old:     eth,
+			Old:     _m,
 			New:     history,
-			Changes: eth.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[EntityTypeHistory]{
 			Old:     history,
-			New:     eth,
-			Changes: history.changes(eth),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (eh *EvidenceHistory) changes(new *EvidenceHistory) []Change {
+func (_m *EvidenceHistory) changes(new *EvidenceHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(eh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(evidencehistory.FieldCreatedAt, eh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(evidencehistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(evidencehistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(evidencehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(eh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(evidencehistory.FieldDeletedAt, eh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(eh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(evidencehistory.FieldDeletedBy, eh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(evidencehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(eh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(evidencehistory.FieldDisplayID, eh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(evidencehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(eh.Tags, new.Tags) {
-		changes = append(changes, NewChange(evidencehistory.FieldTags, eh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(evidencehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(eh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(evidencehistory.FieldOwnerID, eh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(evidencehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(eh.Name, new.Name) {
-		changes = append(changes, NewChange(evidencehistory.FieldName, eh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(evidencehistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(eh.Description, new.Description) {
-		changes = append(changes, NewChange(evidencehistory.FieldDescription, eh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(evidencehistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(eh.CollectionProcedure, new.CollectionProcedure) {
-		changes = append(changes, NewChange(evidencehistory.FieldCollectionProcedure, eh.CollectionProcedure, new.CollectionProcedure))
+	if !reflect.DeepEqual(_m.CollectionProcedure, new.CollectionProcedure) {
+		changes = append(changes, NewChange(evidencehistory.FieldCollectionProcedure, _m.CollectionProcedure, new.CollectionProcedure))
 	}
-	if !reflect.DeepEqual(eh.CreationDate, new.CreationDate) {
-		changes = append(changes, NewChange(evidencehistory.FieldCreationDate, eh.CreationDate, new.CreationDate))
+	if !reflect.DeepEqual(_m.CreationDate, new.CreationDate) {
+		changes = append(changes, NewChange(evidencehistory.FieldCreationDate, _m.CreationDate, new.CreationDate))
 	}
-	if !reflect.DeepEqual(eh.RenewalDate, new.RenewalDate) {
-		changes = append(changes, NewChange(evidencehistory.FieldRenewalDate, eh.RenewalDate, new.RenewalDate))
+	if !reflect.DeepEqual(_m.RenewalDate, new.RenewalDate) {
+		changes = append(changes, NewChange(evidencehistory.FieldRenewalDate, _m.RenewalDate, new.RenewalDate))
 	}
-	if !reflect.DeepEqual(eh.Source, new.Source) {
-		changes = append(changes, NewChange(evidencehistory.FieldSource, eh.Source, new.Source))
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(evidencehistory.FieldSource, _m.Source, new.Source))
 	}
-	if !reflect.DeepEqual(eh.IsAutomated, new.IsAutomated) {
-		changes = append(changes, NewChange(evidencehistory.FieldIsAutomated, eh.IsAutomated, new.IsAutomated))
+	if !reflect.DeepEqual(_m.IsAutomated, new.IsAutomated) {
+		changes = append(changes, NewChange(evidencehistory.FieldIsAutomated, _m.IsAutomated, new.IsAutomated))
 	}
-	if !reflect.DeepEqual(eh.URL, new.URL) {
-		changes = append(changes, NewChange(evidencehistory.FieldURL, eh.URL, new.URL))
+	if !reflect.DeepEqual(_m.URL, new.URL) {
+		changes = append(changes, NewChange(evidencehistory.FieldURL, _m.URL, new.URL))
 	}
-	if !reflect.DeepEqual(eh.Status, new.Status) {
-		changes = append(changes, NewChange(evidencehistory.FieldStatus, eh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(evidencehistory.FieldStatus, _m.Status, new.Status))
 	}
 	return changes
 }
 
-func (eh *EvidenceHistory) Diff(history *EvidenceHistory) (*HistoryDiff[EvidenceHistory], error) {
-	if eh.Ref != history.Ref {
+func (_m *EvidenceHistory) Diff(history *EvidenceHistory) (*HistoryDiff[EvidenceHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ehOlder := ehUnix < historyUnix || (ehUnix == historyUnix && eh.ID < history.ID)
-	historyOlder := ehUnix > historyUnix || (ehUnix == historyUnix && eh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ehOlder {
+	if _mOlder {
 		return &HistoryDiff[EvidenceHistory]{
-			Old:     eh,
+			Old:     _m,
 			New:     history,
-			Changes: eh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[EvidenceHistory]{
 			Old:     history,
-			New:     eh,
-			Changes: history.changes(eh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (fh *FileHistory) changes(new *FileHistory) []Change {
+func (_m *FileHistory) changes(new *FileHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(fh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(filehistory.FieldCreatedAt, fh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(filehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(filehistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(filehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(fh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(filehistory.FieldCreatedBy, fh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(filehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(fh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(filehistory.FieldDeletedAt, fh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(filehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(fh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(filehistory.FieldDeletedBy, fh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(filehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(fh.Tags, new.Tags) {
-		changes = append(changes, NewChange(filehistory.FieldTags, fh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(filehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(fh.ProvidedFileName, new.ProvidedFileName) {
-		changes = append(changes, NewChange(filehistory.FieldProvidedFileName, fh.ProvidedFileName, new.ProvidedFileName))
+	if !reflect.DeepEqual(_m.ProvidedFileName, new.ProvidedFileName) {
+		changes = append(changes, NewChange(filehistory.FieldProvidedFileName, _m.ProvidedFileName, new.ProvidedFileName))
 	}
-	if !reflect.DeepEqual(fh.ProvidedFileExtension, new.ProvidedFileExtension) {
-		changes = append(changes, NewChange(filehistory.FieldProvidedFileExtension, fh.ProvidedFileExtension, new.ProvidedFileExtension))
+	if !reflect.DeepEqual(_m.ProvidedFileExtension, new.ProvidedFileExtension) {
+		changes = append(changes, NewChange(filehistory.FieldProvidedFileExtension, _m.ProvidedFileExtension, new.ProvidedFileExtension))
 	}
-	if !reflect.DeepEqual(fh.ProvidedFileSize, new.ProvidedFileSize) {
-		changes = append(changes, NewChange(filehistory.FieldProvidedFileSize, fh.ProvidedFileSize, new.ProvidedFileSize))
+	if !reflect.DeepEqual(_m.ProvidedFileSize, new.ProvidedFileSize) {
+		changes = append(changes, NewChange(filehistory.FieldProvidedFileSize, _m.ProvidedFileSize, new.ProvidedFileSize))
 	}
-	if !reflect.DeepEqual(fh.PersistedFileSize, new.PersistedFileSize) {
-		changes = append(changes, NewChange(filehistory.FieldPersistedFileSize, fh.PersistedFileSize, new.PersistedFileSize))
+	if !reflect.DeepEqual(_m.PersistedFileSize, new.PersistedFileSize) {
+		changes = append(changes, NewChange(filehistory.FieldPersistedFileSize, _m.PersistedFileSize, new.PersistedFileSize))
 	}
-	if !reflect.DeepEqual(fh.DetectedMimeType, new.DetectedMimeType) {
-		changes = append(changes, NewChange(filehistory.FieldDetectedMimeType, fh.DetectedMimeType, new.DetectedMimeType))
+	if !reflect.DeepEqual(_m.DetectedMimeType, new.DetectedMimeType) {
+		changes = append(changes, NewChange(filehistory.FieldDetectedMimeType, _m.DetectedMimeType, new.DetectedMimeType))
 	}
-	if !reflect.DeepEqual(fh.Md5Hash, new.Md5Hash) {
-		changes = append(changes, NewChange(filehistory.FieldMd5Hash, fh.Md5Hash, new.Md5Hash))
+	if !reflect.DeepEqual(_m.Md5Hash, new.Md5Hash) {
+		changes = append(changes, NewChange(filehistory.FieldMd5Hash, _m.Md5Hash, new.Md5Hash))
 	}
-	if !reflect.DeepEqual(fh.DetectedContentType, new.DetectedContentType) {
-		changes = append(changes, NewChange(filehistory.FieldDetectedContentType, fh.DetectedContentType, new.DetectedContentType))
+	if !reflect.DeepEqual(_m.DetectedContentType, new.DetectedContentType) {
+		changes = append(changes, NewChange(filehistory.FieldDetectedContentType, _m.DetectedContentType, new.DetectedContentType))
 	}
-	if !reflect.DeepEqual(fh.StoreKey, new.StoreKey) {
-		changes = append(changes, NewChange(filehistory.FieldStoreKey, fh.StoreKey, new.StoreKey))
+	if !reflect.DeepEqual(_m.StoreKey, new.StoreKey) {
+		changes = append(changes, NewChange(filehistory.FieldStoreKey, _m.StoreKey, new.StoreKey))
 	}
-	if !reflect.DeepEqual(fh.CategoryType, new.CategoryType) {
-		changes = append(changes, NewChange(filehistory.FieldCategoryType, fh.CategoryType, new.CategoryType))
+	if !reflect.DeepEqual(_m.CategoryType, new.CategoryType) {
+		changes = append(changes, NewChange(filehistory.FieldCategoryType, _m.CategoryType, new.CategoryType))
 	}
-	if !reflect.DeepEqual(fh.URI, new.URI) {
-		changes = append(changes, NewChange(filehistory.FieldURI, fh.URI, new.URI))
+	if !reflect.DeepEqual(_m.URI, new.URI) {
+		changes = append(changes, NewChange(filehistory.FieldURI, _m.URI, new.URI))
 	}
-	if !reflect.DeepEqual(fh.StorageScheme, new.StorageScheme) {
-		changes = append(changes, NewChange(filehistory.FieldStorageScheme, fh.StorageScheme, new.StorageScheme))
+	if !reflect.DeepEqual(_m.StorageScheme, new.StorageScheme) {
+		changes = append(changes, NewChange(filehistory.FieldStorageScheme, _m.StorageScheme, new.StorageScheme))
 	}
-	if !reflect.DeepEqual(fh.StorageVolume, new.StorageVolume) {
-		changes = append(changes, NewChange(filehistory.FieldStorageVolume, fh.StorageVolume, new.StorageVolume))
+	if !reflect.DeepEqual(_m.StorageVolume, new.StorageVolume) {
+		changes = append(changes, NewChange(filehistory.FieldStorageVolume, _m.StorageVolume, new.StorageVolume))
 	}
-	if !reflect.DeepEqual(fh.StoragePath, new.StoragePath) {
-		changes = append(changes, NewChange(filehistory.FieldStoragePath, fh.StoragePath, new.StoragePath))
+	if !reflect.DeepEqual(_m.StoragePath, new.StoragePath) {
+		changes = append(changes, NewChange(filehistory.FieldStoragePath, _m.StoragePath, new.StoragePath))
 	}
-	if !reflect.DeepEqual(fh.FileContents, new.FileContents) {
-		changes = append(changes, NewChange(filehistory.FieldFileContents, fh.FileContents, new.FileContents))
+	if !reflect.DeepEqual(_m.FileContents, new.FileContents) {
+		changes = append(changes, NewChange(filehistory.FieldFileContents, _m.FileContents, new.FileContents))
 	}
 	return changes
 }
 
-func (fh *FileHistory) Diff(history *FileHistory) (*HistoryDiff[FileHistory], error) {
-	if fh.Ref != history.Ref {
+func (_m *FileHistory) Diff(history *FileHistory) (*HistoryDiff[FileHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	fhUnix, historyUnix := fh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	fhOlder := fhUnix < historyUnix || (fhUnix == historyUnix && fh.ID < history.ID)
-	historyOlder := fhUnix > historyUnix || (fhUnix == historyUnix && fh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if fhOlder {
+	if _mOlder {
 		return &HistoryDiff[FileHistory]{
-			Old:     fh,
+			Old:     _m,
 			New:     history,
-			Changes: fh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[FileHistory]{
 			Old:     history,
-			New:     fh,
-			Changes: history.changes(fh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (gh *GroupHistory) changes(new *GroupHistory) []Change {
+func (_m *GroupHistory) changes(new *GroupHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(gh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(grouphistory.FieldCreatedAt, gh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(grouphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(gh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(grouphistory.FieldUpdatedAt, gh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(grouphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(gh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(grouphistory.FieldCreatedBy, gh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(grouphistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(gh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(grouphistory.FieldDeletedAt, gh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(grouphistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(gh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(grouphistory.FieldDeletedBy, gh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(grouphistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(gh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(grouphistory.FieldDisplayID, gh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(grouphistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(gh.Tags, new.Tags) {
-		changes = append(changes, NewChange(grouphistory.FieldTags, gh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(grouphistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(gh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(grouphistory.FieldOwnerID, gh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(grouphistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(gh.Name, new.Name) {
-		changes = append(changes, NewChange(grouphistory.FieldName, gh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(grouphistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(gh.Description, new.Description) {
-		changes = append(changes, NewChange(grouphistory.FieldDescription, gh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(grouphistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(gh.IsManaged, new.IsManaged) {
-		changes = append(changes, NewChange(grouphistory.FieldIsManaged, gh.IsManaged, new.IsManaged))
+	if !reflect.DeepEqual(_m.IsManaged, new.IsManaged) {
+		changes = append(changes, NewChange(grouphistory.FieldIsManaged, _m.IsManaged, new.IsManaged))
 	}
-	if !reflect.DeepEqual(gh.GravatarLogoURL, new.GravatarLogoURL) {
-		changes = append(changes, NewChange(grouphistory.FieldGravatarLogoURL, gh.GravatarLogoURL, new.GravatarLogoURL))
+	if !reflect.DeepEqual(_m.GravatarLogoURL, new.GravatarLogoURL) {
+		changes = append(changes, NewChange(grouphistory.FieldGravatarLogoURL, _m.GravatarLogoURL, new.GravatarLogoURL))
 	}
-	if !reflect.DeepEqual(gh.LogoURL, new.LogoURL) {
-		changes = append(changes, NewChange(grouphistory.FieldLogoURL, gh.LogoURL, new.LogoURL))
+	if !reflect.DeepEqual(_m.LogoURL, new.LogoURL) {
+		changes = append(changes, NewChange(grouphistory.FieldLogoURL, _m.LogoURL, new.LogoURL))
 	}
-	if !reflect.DeepEqual(gh.DisplayName, new.DisplayName) {
-		changes = append(changes, NewChange(grouphistory.FieldDisplayName, gh.DisplayName, new.DisplayName))
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(grouphistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
 	}
 	return changes
 }
 
-func (gh *GroupHistory) Diff(history *GroupHistory) (*HistoryDiff[GroupHistory], error) {
-	if gh.Ref != history.Ref {
+func (_m *GroupHistory) Diff(history *GroupHistory) (*HistoryDiff[GroupHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ghUnix, historyUnix := gh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ghOlder := ghUnix < historyUnix || (ghUnix == historyUnix && gh.ID < history.ID)
-	historyOlder := ghUnix > historyUnix || (ghUnix == historyUnix && gh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ghOlder {
+	if _mOlder {
 		return &HistoryDiff[GroupHistory]{
-			Old:     gh,
+			Old:     _m,
 			New:     history,
-			Changes: gh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[GroupHistory]{
 			Old:     history,
-			New:     gh,
-			Changes: history.changes(gh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (gmh *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change {
+func (_m *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(gmh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedAt, gmh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(gmh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldUpdatedAt, gmh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(gmh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedBy, gmh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(gmh.Role, new.Role) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldRole, gmh.Role, new.Role))
+	if !reflect.DeepEqual(_m.Role, new.Role) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldRole, _m.Role, new.Role))
 	}
-	if !reflect.DeepEqual(gmh.GroupID, new.GroupID) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldGroupID, gmh.GroupID, new.GroupID))
+	if !reflect.DeepEqual(_m.GroupID, new.GroupID) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldGroupID, _m.GroupID, new.GroupID))
 	}
-	if !reflect.DeepEqual(gmh.UserID, new.UserID) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldUserID, gmh.UserID, new.UserID))
+	if !reflect.DeepEqual(_m.UserID, new.UserID) {
+		changes = append(changes, NewChange(groupmembershiphistory.FieldUserID, _m.UserID, new.UserID))
 	}
 	return changes
 }
 
-func (gmh *GroupMembershipHistory) Diff(history *GroupMembershipHistory) (*HistoryDiff[GroupMembershipHistory], error) {
-	if gmh.Ref != history.Ref {
+func (_m *GroupMembershipHistory) Diff(history *GroupMembershipHistory) (*HistoryDiff[GroupMembershipHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	gmhUnix, historyUnix := gmh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	gmhOlder := gmhUnix < historyUnix || (gmhUnix == historyUnix && gmh.ID < history.ID)
-	historyOlder := gmhUnix > historyUnix || (gmhUnix == historyUnix && gmh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if gmhOlder {
+	if _mOlder {
 		return &HistoryDiff[GroupMembershipHistory]{
-			Old:     gmh,
+			Old:     _m,
 			New:     history,
-			Changes: gmh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[GroupMembershipHistory]{
 			Old:     history,
-			New:     gmh,
-			Changes: history.changes(gmh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (gsh *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
+func (_m *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(gsh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedAt, gsh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(gsh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldUpdatedAt, gsh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(gsh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedBy, gsh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(gsh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedAt, gsh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(gsh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedBy, gsh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(gsh.Visibility, new.Visibility) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldVisibility, gsh.Visibility, new.Visibility))
+	if !reflect.DeepEqual(_m.Visibility, new.Visibility) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldVisibility, _m.Visibility, new.Visibility))
 	}
-	if !reflect.DeepEqual(gsh.JoinPolicy, new.JoinPolicy) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldJoinPolicy, gsh.JoinPolicy, new.JoinPolicy))
+	if !reflect.DeepEqual(_m.JoinPolicy, new.JoinPolicy) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldJoinPolicy, _m.JoinPolicy, new.JoinPolicy))
 	}
-	if !reflect.DeepEqual(gsh.SyncToSlack, new.SyncToSlack) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldSyncToSlack, gsh.SyncToSlack, new.SyncToSlack))
+	if !reflect.DeepEqual(_m.SyncToSlack, new.SyncToSlack) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldSyncToSlack, _m.SyncToSlack, new.SyncToSlack))
 	}
-	if !reflect.DeepEqual(gsh.SyncToGithub, new.SyncToGithub) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldSyncToGithub, gsh.SyncToGithub, new.SyncToGithub))
+	if !reflect.DeepEqual(_m.SyncToGithub, new.SyncToGithub) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldSyncToGithub, _m.SyncToGithub, new.SyncToGithub))
 	}
-	if !reflect.DeepEqual(gsh.GroupID, new.GroupID) {
-		changes = append(changes, NewChange(groupsettinghistory.FieldGroupID, gsh.GroupID, new.GroupID))
+	if !reflect.DeepEqual(_m.GroupID, new.GroupID) {
+		changes = append(changes, NewChange(groupsettinghistory.FieldGroupID, _m.GroupID, new.GroupID))
 	}
 	return changes
 }
 
-func (gsh *GroupSettingHistory) Diff(history *GroupSettingHistory) (*HistoryDiff[GroupSettingHistory], error) {
-	if gsh.Ref != history.Ref {
+func (_m *GroupSettingHistory) Diff(history *GroupSettingHistory) (*HistoryDiff[GroupSettingHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	gshUnix, historyUnix := gsh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	gshOlder := gshUnix < historyUnix || (gshUnix == historyUnix && gsh.ID < history.ID)
-	historyOlder := gshUnix > historyUnix || (gshUnix == historyUnix && gsh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if gshOlder {
+	if _mOlder {
 		return &HistoryDiff[GroupSettingHistory]{
-			Old:     gsh,
+			Old:     _m,
 			New:     history,
-			Changes: gsh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[GroupSettingHistory]{
 			Old:     history,
-			New:     gsh,
-			Changes: history.changes(gsh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (hh *HushHistory) changes(new *HushHistory) []Change {
+func (_m *HushHistory) changes(new *HushHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(hh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(hushhistory.FieldCreatedAt, hh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(hushhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(hh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(hushhistory.FieldUpdatedAt, hh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(hushhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(hh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(hushhistory.FieldCreatedBy, hh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(hushhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(hh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(hushhistory.FieldDeletedAt, hh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(hushhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(hh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(hushhistory.FieldDeletedBy, hh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(hushhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(hh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(hushhistory.FieldOwnerID, hh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(hushhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(hh.Name, new.Name) {
-		changes = append(changes, NewChange(hushhistory.FieldName, hh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(hushhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(hh.Description, new.Description) {
-		changes = append(changes, NewChange(hushhistory.FieldDescription, hh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(hushhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(hh.Kind, new.Kind) {
-		changes = append(changes, NewChange(hushhistory.FieldKind, hh.Kind, new.Kind))
+	if !reflect.DeepEqual(_m.Kind, new.Kind) {
+		changes = append(changes, NewChange(hushhistory.FieldKind, _m.Kind, new.Kind))
 	}
-	if !reflect.DeepEqual(hh.SecretName, new.SecretName) {
-		changes = append(changes, NewChange(hushhistory.FieldSecretName, hh.SecretName, new.SecretName))
+	if !reflect.DeepEqual(_m.SecretName, new.SecretName) {
+		changes = append(changes, NewChange(hushhistory.FieldSecretName, _m.SecretName, new.SecretName))
 	}
-	if !reflect.DeepEqual(hh.SecretValue, new.SecretValue) {
-		changes = append(changes, NewChange(hushhistory.FieldSecretValue, hh.SecretValue, new.SecretValue))
+	if !reflect.DeepEqual(_m.SecretValue, new.SecretValue) {
+		changes = append(changes, NewChange(hushhistory.FieldSecretValue, _m.SecretValue, new.SecretValue))
 	}
 	return changes
 }
 
-func (hh *HushHistory) Diff(history *HushHistory) (*HistoryDiff[HushHistory], error) {
-	if hh.Ref != history.Ref {
+func (_m *HushHistory) Diff(history *HushHistory) (*HistoryDiff[HushHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	hhUnix, historyUnix := hh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	hhOlder := hhUnix < historyUnix || (hhUnix == historyUnix && hh.ID < history.ID)
-	historyOlder := hhUnix > historyUnix || (hhUnix == historyUnix && hh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if hhOlder {
+	if _mOlder {
 		return &HistoryDiff[HushHistory]{
-			Old:     hh,
+			Old:     _m,
 			New:     history,
-			Changes: hh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[HushHistory]{
 			Old:     history,
-			New:     hh,
-			Changes: history.changes(hh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ih *IntegrationHistory) changes(new *IntegrationHistory) []Change {
+func (_m *IntegrationHistory) changes(new *IntegrationHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ih.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(integrationhistory.FieldCreatedAt, ih.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(integrationhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ih.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(integrationhistory.FieldUpdatedAt, ih.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(integrationhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ih.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(integrationhistory.FieldCreatedBy, ih.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(integrationhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ih.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(integrationhistory.FieldDeletedAt, ih.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(integrationhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ih.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(integrationhistory.FieldDeletedBy, ih.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(integrationhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ih.Tags, new.Tags) {
-		changes = append(changes, NewChange(integrationhistory.FieldTags, ih.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(integrationhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ih.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(integrationhistory.FieldOwnerID, ih.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(integrationhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ih.Name, new.Name) {
-		changes = append(changes, NewChange(integrationhistory.FieldName, ih.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(integrationhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(ih.Description, new.Description) {
-		changes = append(changes, NewChange(integrationhistory.FieldDescription, ih.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(integrationhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(ih.Kind, new.Kind) {
-		changes = append(changes, NewChange(integrationhistory.FieldKind, ih.Kind, new.Kind))
+	if !reflect.DeepEqual(_m.Kind, new.Kind) {
+		changes = append(changes, NewChange(integrationhistory.FieldKind, _m.Kind, new.Kind))
 	}
 	return changes
 }
 
-func (ih *IntegrationHistory) Diff(history *IntegrationHistory) (*HistoryDiff[IntegrationHistory], error) {
-	if ih.Ref != history.Ref {
+func (_m *IntegrationHistory) Diff(history *IntegrationHistory) (*HistoryDiff[IntegrationHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ihUnix, historyUnix := ih.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ihOlder := ihUnix < historyUnix || (ihUnix == historyUnix && ih.ID < history.ID)
-	historyOlder := ihUnix > historyUnix || (ihUnix == historyUnix && ih.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ihOlder {
+	if _mOlder {
 		return &HistoryDiff[IntegrationHistory]{
-			Old:     ih,
+			Old:     _m,
 			New:     history,
-			Changes: ih.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[IntegrationHistory]{
 			Old:     history,
-			New:     ih,
-			Changes: history.changes(ih),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
+func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(iph.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldCreatedAt, iph.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(iph.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldUpdatedAt, iph.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(iph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldCreatedBy, iph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(iph.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedAt, iph.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(iph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedBy, iph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(iph.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDisplayID, iph.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(iph.Tags, new.Tags) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldTags, iph.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(iph.Revision, new.Revision) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldRevision, iph.Revision, new.Revision))
+	if !reflect.DeepEqual(_m.Revision, new.Revision) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldRevision, _m.Revision, new.Revision))
 	}
-	if !reflect.DeepEqual(iph.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldOwnerID, iph.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(iph.Name, new.Name) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldName, iph.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(iph.Status, new.Status) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldStatus, iph.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(iph.PolicyType, new.PolicyType) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldPolicyType, iph.PolicyType, new.PolicyType))
+	if !reflect.DeepEqual(_m.PolicyType, new.PolicyType) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldPolicyType, _m.PolicyType, new.PolicyType))
 	}
-	if !reflect.DeepEqual(iph.Details, new.Details) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDetails, iph.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDetails, _m.Details, new.Details))
 	}
-	if !reflect.DeepEqual(iph.ApprovalRequired, new.ApprovalRequired) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldApprovalRequired, iph.ApprovalRequired, new.ApprovalRequired))
+	if !reflect.DeepEqual(_m.ApprovalRequired, new.ApprovalRequired) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldApprovalRequired, _m.ApprovalRequired, new.ApprovalRequired))
 	}
-	if !reflect.DeepEqual(iph.ReviewDue, new.ReviewDue) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldReviewDue, iph.ReviewDue, new.ReviewDue))
+	if !reflect.DeepEqual(_m.ReviewDue, new.ReviewDue) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldReviewDue, _m.ReviewDue, new.ReviewDue))
 	}
-	if !reflect.DeepEqual(iph.ReviewFrequency, new.ReviewFrequency) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldReviewFrequency, iph.ReviewFrequency, new.ReviewFrequency))
+	if !reflect.DeepEqual(_m.ReviewFrequency, new.ReviewFrequency) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldReviewFrequency, _m.ReviewFrequency, new.ReviewFrequency))
 	}
-	if !reflect.DeepEqual(iph.ApproverID, new.ApproverID) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldApproverID, iph.ApproverID, new.ApproverID))
+	if !reflect.DeepEqual(_m.ApproverID, new.ApproverID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldApproverID, _m.ApproverID, new.ApproverID))
 	}
-	if !reflect.DeepEqual(iph.DelegateID, new.DelegateID) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDelegateID, iph.DelegateID, new.DelegateID))
+	if !reflect.DeepEqual(_m.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDelegateID, _m.DelegateID, new.DelegateID))
 	}
-	if !reflect.DeepEqual(iph.Summary, new.Summary) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldSummary, iph.Summary, new.Summary))
+	if !reflect.DeepEqual(_m.Summary, new.Summary) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldSummary, _m.Summary, new.Summary))
 	}
-	if !reflect.DeepEqual(iph.TagSuggestions, new.TagSuggestions) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldTagSuggestions, iph.TagSuggestions, new.TagSuggestions))
+	if !reflect.DeepEqual(_m.TagSuggestions, new.TagSuggestions) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldTagSuggestions, _m.TagSuggestions, new.TagSuggestions))
 	}
-	if !reflect.DeepEqual(iph.DismissedTagSuggestions, new.DismissedTagSuggestions) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedTagSuggestions, iph.DismissedTagSuggestions, new.DismissedTagSuggestions))
+	if !reflect.DeepEqual(_m.DismissedTagSuggestions, new.DismissedTagSuggestions) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedTagSuggestions, _m.DismissedTagSuggestions, new.DismissedTagSuggestions))
 	}
-	if !reflect.DeepEqual(iph.ControlSuggestions, new.ControlSuggestions) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldControlSuggestions, iph.ControlSuggestions, new.ControlSuggestions))
+	if !reflect.DeepEqual(_m.ControlSuggestions, new.ControlSuggestions) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldControlSuggestions, _m.ControlSuggestions, new.ControlSuggestions))
 	}
-	if !reflect.DeepEqual(iph.DismissedControlSuggestions, new.DismissedControlSuggestions) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedControlSuggestions, iph.DismissedControlSuggestions, new.DismissedControlSuggestions))
+	if !reflect.DeepEqual(_m.DismissedControlSuggestions, new.DismissedControlSuggestions) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedControlSuggestions, _m.DismissedControlSuggestions, new.DismissedControlSuggestions))
 	}
-	if !reflect.DeepEqual(iph.ImprovementSuggestions, new.ImprovementSuggestions) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldImprovementSuggestions, iph.ImprovementSuggestions, new.ImprovementSuggestions))
+	if !reflect.DeepEqual(_m.ImprovementSuggestions, new.ImprovementSuggestions) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldImprovementSuggestions, _m.ImprovementSuggestions, new.ImprovementSuggestions))
 	}
-	if !reflect.DeepEqual(iph.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedImprovementSuggestions, iph.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
+	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
 	return changes
 }
 
-func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*HistoryDiff[InternalPolicyHistory], error) {
-	if iph.Ref != history.Ref {
+func (_m *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*HistoryDiff[InternalPolicyHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	iphUnix, historyUnix := iph.HistoryTime.Unix(), history.HistoryTime.Unix()
-	iphOlder := iphUnix < historyUnix || (iphUnix == historyUnix && iph.ID < history.ID)
-	historyOlder := iphUnix > historyUnix || (iphUnix == historyUnix && iph.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if iphOlder {
+	if _mOlder {
 		return &HistoryDiff[InternalPolicyHistory]{
-			Old:     iph,
+			Old:     _m,
 			New:     history,
-			Changes: iph.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[InternalPolicyHistory]{
 			Old:     history,
-			New:     iph,
-			Changes: history.changes(iph),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (jth *JobTemplateHistory) changes(new *JobTemplateHistory) []Change {
+func (_m *JobTemplateHistory) changes(new *JobTemplateHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(jth.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldCreatedAt, jth.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(jth.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldUpdatedAt, jth.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(jth.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldCreatedBy, jth.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(jth.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldDeletedAt, jth.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(jth.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldDeletedBy, jth.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(jth.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldDisplayID, jth.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(jth.Tags, new.Tags) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldTags, jth.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(jth.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldOwnerID, jth.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(jth.SystemOwned, new.SystemOwned) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldSystemOwned, jth.SystemOwned, new.SystemOwned))
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
 	}
-	if !reflect.DeepEqual(jth.Title, new.Title) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldTitle, jth.Title, new.Title))
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldTitle, _m.Title, new.Title))
 	}
-	if !reflect.DeepEqual(jth.Description, new.Description) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldDescription, jth.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(jth.Platform, new.Platform) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldPlatform, jth.Platform, new.Platform))
+	if !reflect.DeepEqual(_m.Platform, new.Platform) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldPlatform, _m.Platform, new.Platform))
 	}
-	if !reflect.DeepEqual(jth.WindmillPath, new.WindmillPath) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldWindmillPath, jth.WindmillPath, new.WindmillPath))
+	if !reflect.DeepEqual(_m.WindmillPath, new.WindmillPath) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldWindmillPath, _m.WindmillPath, new.WindmillPath))
 	}
-	if !reflect.DeepEqual(jth.DownloadURL, new.DownloadURL) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldDownloadURL, jth.DownloadURL, new.DownloadURL))
+	if !reflect.DeepEqual(_m.DownloadURL, new.DownloadURL) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDownloadURL, _m.DownloadURL, new.DownloadURL))
 	}
-	if !reflect.DeepEqual(jth.Configuration, new.Configuration) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldConfiguration, jth.Configuration, new.Configuration))
+	if !reflect.DeepEqual(_m.Configuration, new.Configuration) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldConfiguration, _m.Configuration, new.Configuration))
 	}
-	if !reflect.DeepEqual(jth.Cron, new.Cron) {
-		changes = append(changes, NewChange(jobtemplatehistory.FieldCron, jth.Cron, new.Cron))
+	if !reflect.DeepEqual(_m.Cron, new.Cron) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldCron, _m.Cron, new.Cron))
 	}
 	return changes
 }
 
-func (jth *JobTemplateHistory) Diff(history *JobTemplateHistory) (*HistoryDiff[JobTemplateHistory], error) {
-	if jth.Ref != history.Ref {
+func (_m *JobTemplateHistory) Diff(history *JobTemplateHistory) (*HistoryDiff[JobTemplateHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	jthUnix, historyUnix := jth.HistoryTime.Unix(), history.HistoryTime.Unix()
-	jthOlder := jthUnix < historyUnix || (jthUnix == historyUnix && jth.ID < history.ID)
-	historyOlder := jthUnix > historyUnix || (jthUnix == historyUnix && jth.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if jthOlder {
+	if _mOlder {
 		return &HistoryDiff[JobTemplateHistory]{
-			Old:     jth,
+			Old:     _m,
 			New:     history,
-			Changes: jth.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[JobTemplateHistory]{
 			Old:     history,
-			New:     jth,
-			Changes: history.changes(jth),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (mdh *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
+func (_m *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(mdh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldCreatedAt, mdh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(mdh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldUpdatedAt, mdh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(mdh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldCreatedBy, mdh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(mdh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldDeletedAt, mdh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(mdh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldDeletedBy, mdh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(mdh.Tags, new.Tags) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldTags, mdh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(mdh.Name, new.Name) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldName, mdh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(mdh.ZoneID, new.ZoneID) {
-		changes = append(changes, NewChange(mappabledomainhistory.FieldZoneID, mdh.ZoneID, new.ZoneID))
+	if !reflect.DeepEqual(_m.ZoneID, new.ZoneID) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldZoneID, _m.ZoneID, new.ZoneID))
 	}
 	return changes
 }
 
-func (mdh *MappableDomainHistory) Diff(history *MappableDomainHistory) (*HistoryDiff[MappableDomainHistory], error) {
-	if mdh.Ref != history.Ref {
+func (_m *MappableDomainHistory) Diff(history *MappableDomainHistory) (*HistoryDiff[MappableDomainHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	mdhUnix, historyUnix := mdh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	mdhOlder := mdhUnix < historyUnix || (mdhUnix == historyUnix && mdh.ID < history.ID)
-	historyOlder := mdhUnix > historyUnix || (mdhUnix == historyUnix && mdh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if mdhOlder {
+	if _mOlder {
 		return &HistoryDiff[MappableDomainHistory]{
-			Old:     mdh,
+			Old:     _m,
 			New:     history,
-			Changes: mdh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[MappableDomainHistory]{
 			Old:     history,
-			New:     mdh,
-			Changes: history.changes(mdh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
+func (_m *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(mch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldCreatedAt, mch.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(mch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldUpdatedAt, mch.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(mch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldCreatedBy, mch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(mch.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldDeletedAt, mch.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(mch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldDeletedBy, mch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(mch.Tags, new.Tags) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldTags, mch.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(mch.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldOwnerID, mch.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(mch.MappingType, new.MappingType) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappingType, mch.MappingType, new.MappingType))
+	if !reflect.DeepEqual(_m.MappingType, new.MappingType) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappingType, _m.MappingType, new.MappingType))
 	}
-	if !reflect.DeepEqual(mch.Relation, new.Relation) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldRelation, mch.Relation, new.Relation))
+	if !reflect.DeepEqual(_m.Relation, new.Relation) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldRelation, _m.Relation, new.Relation))
 	}
-	if !reflect.DeepEqual(mch.Confidence, new.Confidence) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldConfidence, mch.Confidence, new.Confidence))
+	if !reflect.DeepEqual(_m.Confidence, new.Confidence) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldConfidence, _m.Confidence, new.Confidence))
 	}
-	if !reflect.DeepEqual(mch.Source, new.Source) {
-		changes = append(changes, NewChange(mappedcontrolhistory.FieldSource, mch.Source, new.Source))
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldSource, _m.Source, new.Source))
 	}
 	return changes
 }
 
-func (mch *MappedControlHistory) Diff(history *MappedControlHistory) (*HistoryDiff[MappedControlHistory], error) {
-	if mch.Ref != history.Ref {
+func (_m *MappedControlHistory) Diff(history *MappedControlHistory) (*HistoryDiff[MappedControlHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	mchUnix, historyUnix := mch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	mchOlder := mchUnix < historyUnix || (mchUnix == historyUnix && mch.ID < history.ID)
-	historyOlder := mchUnix > historyUnix || (mchUnix == historyUnix && mch.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if mchOlder {
+	if _mOlder {
 		return &HistoryDiff[MappedControlHistory]{
-			Old:     mch,
+			Old:     _m,
 			New:     history,
-			Changes: mch.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[MappedControlHistory]{
 			Old:     history,
-			New:     mch,
-			Changes: history.changes(mch),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
+func (_m *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(nh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(narrativehistory.FieldCreatedAt, nh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(narrativehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(nh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(narrativehistory.FieldUpdatedAt, nh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(narrativehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(nh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(narrativehistory.FieldCreatedBy, nh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(narrativehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(nh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(narrativehistory.FieldDeletedAt, nh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(narrativehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(nh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(narrativehistory.FieldDeletedBy, nh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(narrativehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(nh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(narrativehistory.FieldDisplayID, nh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(narrativehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(nh.Tags, new.Tags) {
-		changes = append(changes, NewChange(narrativehistory.FieldTags, nh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(narrativehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(nh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(narrativehistory.FieldOwnerID, nh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(narrativehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(nh.Name, new.Name) {
-		changes = append(changes, NewChange(narrativehistory.FieldName, nh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(narrativehistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(nh.Description, new.Description) {
-		changes = append(changes, NewChange(narrativehistory.FieldDescription, nh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(narrativehistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(nh.Details, new.Details) {
-		changes = append(changes, NewChange(narrativehistory.FieldDetails, nh.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(narrativehistory.FieldDetails, _m.Details, new.Details))
 	}
 	return changes
 }
 
-func (nh *NarrativeHistory) Diff(history *NarrativeHistory) (*HistoryDiff[NarrativeHistory], error) {
-	if nh.Ref != history.Ref {
+func (_m *NarrativeHistory) Diff(history *NarrativeHistory) (*HistoryDiff[NarrativeHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	nhUnix, historyUnix := nh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	nhOlder := nhUnix < historyUnix || (nhUnix == historyUnix && nh.ID < history.ID)
-	historyOlder := nhUnix > historyUnix || (nhUnix == historyUnix && nh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if nhOlder {
+	if _mOlder {
 		return &HistoryDiff[NarrativeHistory]{
-			Old:     nh,
+			Old:     _m,
 			New:     history,
-			Changes: nh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[NarrativeHistory]{
 			Old:     history,
-			New:     nh,
-			Changes: history.changes(nh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (nh *NoteHistory) changes(new *NoteHistory) []Change {
+func (_m *NoteHistory) changes(new *NoteHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(nh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(notehistory.FieldCreatedAt, nh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(notehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(nh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(notehistory.FieldUpdatedAt, nh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(notehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(nh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(notehistory.FieldCreatedBy, nh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(notehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(nh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(notehistory.FieldDeletedAt, nh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(notehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(nh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(notehistory.FieldDeletedBy, nh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(notehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(nh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(notehistory.FieldDisplayID, nh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(notehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(nh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(notehistory.FieldOwnerID, nh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(notehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(nh.Text, new.Text) {
-		changes = append(changes, NewChange(notehistory.FieldText, nh.Text, new.Text))
+	if !reflect.DeepEqual(_m.Text, new.Text) {
+		changes = append(changes, NewChange(notehistory.FieldText, _m.Text, new.Text))
 	}
 	return changes
 }
 
-func (nh *NoteHistory) Diff(history *NoteHistory) (*HistoryDiff[NoteHistory], error) {
-	if nh.Ref != history.Ref {
+func (_m *NoteHistory) Diff(history *NoteHistory) (*HistoryDiff[NoteHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	nhUnix, historyUnix := nh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	nhOlder := nhUnix < historyUnix || (nhUnix == historyUnix && nh.ID < history.ID)
-	historyOlder := nhUnix > historyUnix || (nhUnix == historyUnix && nh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if nhOlder {
+	if _mOlder {
 		return &HistoryDiff[NoteHistory]{
-			Old:     nh,
+			Old:     _m,
 			New:     history,
-			Changes: nh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[NoteHistory]{
 			Old:     history,
-			New:     nh,
-			Changes: history.changes(nh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (omh *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
+func (_m *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(omh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedAt, omh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(omh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldUpdatedAt, omh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(omh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedBy, omh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(omh.Role, new.Role) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldRole, omh.Role, new.Role))
+	if !reflect.DeepEqual(_m.Role, new.Role) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldRole, _m.Role, new.Role))
 	}
-	if !reflect.DeepEqual(omh.OrganizationID, new.OrganizationID) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldOrganizationID, omh.OrganizationID, new.OrganizationID))
+	if !reflect.DeepEqual(_m.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldOrganizationID, _m.OrganizationID, new.OrganizationID))
 	}
-	if !reflect.DeepEqual(omh.UserID, new.UserID) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldUserID, omh.UserID, new.UserID))
+	if !reflect.DeepEqual(_m.UserID, new.UserID) {
+		changes = append(changes, NewChange(orgmembershiphistory.FieldUserID, _m.UserID, new.UserID))
 	}
 	return changes
 }
 
-func (omh *OrgMembershipHistory) Diff(history *OrgMembershipHistory) (*HistoryDiff[OrgMembershipHistory], error) {
-	if omh.Ref != history.Ref {
+func (_m *OrgMembershipHistory) Diff(history *OrgMembershipHistory) (*HistoryDiff[OrgMembershipHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	omhUnix, historyUnix := omh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	omhOlder := omhUnix < historyUnix || (omhUnix == historyUnix && omh.ID < history.ID)
-	historyOlder := omhUnix > historyUnix || (omhUnix == historyUnix && omh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if omhOlder {
+	if _mOlder {
 		return &HistoryDiff[OrgMembershipHistory]{
-			Old:     omh,
+			Old:     _m,
 			New:     history,
-			Changes: omh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[OrgMembershipHistory]{
 			Old:     history,
-			New:     omh,
-			Changes: history.changes(omh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change {
+func (_m *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(osh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedAt, osh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(osh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldUpdatedAt, osh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(osh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedBy, osh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(osh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedAt, osh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(osh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedBy, osh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(osh.Tags, new.Tags) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldTags, osh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(osh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldOwnerID, osh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(osh.StripeSubscriptionID, new.StripeSubscriptionID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionID, osh.StripeSubscriptionID, new.StripeSubscriptionID))
+	if !reflect.DeepEqual(_m.StripeSubscriptionID, new.StripeSubscriptionID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionID, _m.StripeSubscriptionID, new.StripeSubscriptionID))
 	}
-	if !reflect.DeepEqual(osh.ProductTier, new.ProductTier) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductTier, osh.ProductTier, new.ProductTier))
+	if !reflect.DeepEqual(_m.ProductTier, new.ProductTier) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductTier, _m.ProductTier, new.ProductTier))
 	}
-	if !reflect.DeepEqual(osh.ProductPrice, new.ProductPrice) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductPrice, osh.ProductPrice, new.ProductPrice))
+	if !reflect.DeepEqual(_m.ProductPrice, new.ProductPrice) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldProductPrice, _m.ProductPrice, new.ProductPrice))
 	}
-	if !reflect.DeepEqual(osh.StripeProductTierID, new.StripeProductTierID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeProductTierID, osh.StripeProductTierID, new.StripeProductTierID))
+	if !reflect.DeepEqual(_m.StripeProductTierID, new.StripeProductTierID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeProductTierID, _m.StripeProductTierID, new.StripeProductTierID))
 	}
-	if !reflect.DeepEqual(osh.StripeSubscriptionStatus, new.StripeSubscriptionStatus) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionStatus, osh.StripeSubscriptionStatus, new.StripeSubscriptionStatus))
+	if !reflect.DeepEqual(_m.StripeSubscriptionStatus, new.StripeSubscriptionStatus) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeSubscriptionStatus, _m.StripeSubscriptionStatus, new.StripeSubscriptionStatus))
 	}
-	if !reflect.DeepEqual(osh.Active, new.Active) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldActive, osh.Active, new.Active))
+	if !reflect.DeepEqual(_m.Active, new.Active) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldActive, _m.Active, new.Active))
 	}
-	if !reflect.DeepEqual(osh.StripeCustomerID, new.StripeCustomerID) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeCustomerID, osh.StripeCustomerID, new.StripeCustomerID))
+	if !reflect.DeepEqual(_m.StripeCustomerID, new.StripeCustomerID) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldStripeCustomerID, _m.StripeCustomerID, new.StripeCustomerID))
 	}
-	if !reflect.DeepEqual(osh.ExpiresAt, new.ExpiresAt) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldExpiresAt, osh.ExpiresAt, new.ExpiresAt))
+	if !reflect.DeepEqual(_m.ExpiresAt, new.ExpiresAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldExpiresAt, _m.ExpiresAt, new.ExpiresAt))
 	}
-	if !reflect.DeepEqual(osh.TrialExpiresAt, new.TrialExpiresAt) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldTrialExpiresAt, osh.TrialExpiresAt, new.TrialExpiresAt))
+	if !reflect.DeepEqual(_m.TrialExpiresAt, new.TrialExpiresAt) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldTrialExpiresAt, _m.TrialExpiresAt, new.TrialExpiresAt))
 	}
-	if !reflect.DeepEqual(osh.DaysUntilDue, new.DaysUntilDue) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDaysUntilDue, osh.DaysUntilDue, new.DaysUntilDue))
+	if !reflect.DeepEqual(_m.DaysUntilDue, new.DaysUntilDue) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldDaysUntilDue, _m.DaysUntilDue, new.DaysUntilDue))
 	}
-	if !reflect.DeepEqual(osh.PaymentMethodAdded, new.PaymentMethodAdded) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldPaymentMethodAdded, osh.PaymentMethodAdded, new.PaymentMethodAdded))
+	if !reflect.DeepEqual(_m.PaymentMethodAdded, new.PaymentMethodAdded) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldPaymentMethodAdded, _m.PaymentMethodAdded, new.PaymentMethodAdded))
 	}
-	if !reflect.DeepEqual(osh.Features, new.Features) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, osh.Features, new.Features))
+	if !reflect.DeepEqual(_m.Features, new.Features) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatures, _m.Features, new.Features))
 	}
-	if !reflect.DeepEqual(osh.FeatureLookupKeys, new.FeatureLookupKeys) {
-		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatureLookupKeys, osh.FeatureLookupKeys, new.FeatureLookupKeys))
+	if !reflect.DeepEqual(_m.FeatureLookupKeys, new.FeatureLookupKeys) {
+		changes = append(changes, NewChange(orgsubscriptionhistory.FieldFeatureLookupKeys, _m.FeatureLookupKeys, new.FeatureLookupKeys))
 	}
 	return changes
 }
 
-func (osh *OrgSubscriptionHistory) Diff(history *OrgSubscriptionHistory) (*HistoryDiff[OrgSubscriptionHistory], error) {
-	if osh.Ref != history.Ref {
+func (_m *OrgSubscriptionHistory) Diff(history *OrgSubscriptionHistory) (*HistoryDiff[OrgSubscriptionHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	oshUnix, historyUnix := osh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	oshOlder := oshUnix < historyUnix || (oshUnix == historyUnix && osh.ID < history.ID)
-	historyOlder := oshUnix > historyUnix || (oshUnix == historyUnix && osh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if oshOlder {
+	if _mOlder {
 		return &HistoryDiff[OrgSubscriptionHistory]{
-			Old:     osh,
+			Old:     _m,
 			New:     history,
-			Changes: osh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[OrgSubscriptionHistory]{
 			Old:     history,
-			New:     osh,
-			Changes: history.changes(osh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
+func (_m *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(oh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(organizationhistory.FieldCreatedAt, oh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(oh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(organizationhistory.FieldUpdatedAt, oh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(oh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(organizationhistory.FieldCreatedBy, oh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(organizationhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(oh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(organizationhistory.FieldDeletedAt, oh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(oh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(organizationhistory.FieldDeletedBy, oh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(organizationhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(oh.Tags, new.Tags) {
-		changes = append(changes, NewChange(organizationhistory.FieldTags, oh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(organizationhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(oh.Name, new.Name) {
-		changes = append(changes, NewChange(organizationhistory.FieldName, oh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(organizationhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(oh.DisplayName, new.DisplayName) {
-		changes = append(changes, NewChange(organizationhistory.FieldDisplayName, oh.DisplayName, new.DisplayName))
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(organizationhistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
 	}
-	if !reflect.DeepEqual(oh.Description, new.Description) {
-		changes = append(changes, NewChange(organizationhistory.FieldDescription, oh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(organizationhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(oh.ParentOrganizationID, new.ParentOrganizationID) {
-		changes = append(changes, NewChange(organizationhistory.FieldParentOrganizationID, oh.ParentOrganizationID, new.ParentOrganizationID))
+	if !reflect.DeepEqual(_m.ParentOrganizationID, new.ParentOrganizationID) {
+		changes = append(changes, NewChange(organizationhistory.FieldParentOrganizationID, _m.ParentOrganizationID, new.ParentOrganizationID))
 	}
-	if !reflect.DeepEqual(oh.PersonalOrg, new.PersonalOrg) {
-		changes = append(changes, NewChange(organizationhistory.FieldPersonalOrg, oh.PersonalOrg, new.PersonalOrg))
+	if !reflect.DeepEqual(_m.PersonalOrg, new.PersonalOrg) {
+		changes = append(changes, NewChange(organizationhistory.FieldPersonalOrg, _m.PersonalOrg, new.PersonalOrg))
 	}
-	if !reflect.DeepEqual(oh.AvatarRemoteURL, new.AvatarRemoteURL) {
-		changes = append(changes, NewChange(organizationhistory.FieldAvatarRemoteURL, oh.AvatarRemoteURL, new.AvatarRemoteURL))
+	if !reflect.DeepEqual(_m.AvatarRemoteURL, new.AvatarRemoteURL) {
+		changes = append(changes, NewChange(organizationhistory.FieldAvatarRemoteURL, _m.AvatarRemoteURL, new.AvatarRemoteURL))
 	}
-	if !reflect.DeepEqual(oh.AvatarLocalFileID, new.AvatarLocalFileID) {
-		changes = append(changes, NewChange(organizationhistory.FieldAvatarLocalFileID, oh.AvatarLocalFileID, new.AvatarLocalFileID))
+	if !reflect.DeepEqual(_m.AvatarLocalFileID, new.AvatarLocalFileID) {
+		changes = append(changes, NewChange(organizationhistory.FieldAvatarLocalFileID, _m.AvatarLocalFileID, new.AvatarLocalFileID))
 	}
-	if !reflect.DeepEqual(oh.AvatarUpdatedAt, new.AvatarUpdatedAt) {
-		changes = append(changes, NewChange(organizationhistory.FieldAvatarUpdatedAt, oh.AvatarUpdatedAt, new.AvatarUpdatedAt))
+	if !reflect.DeepEqual(_m.AvatarUpdatedAt, new.AvatarUpdatedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldAvatarUpdatedAt, _m.AvatarUpdatedAt, new.AvatarUpdatedAt))
 	}
-	if !reflect.DeepEqual(oh.DedicatedDb, new.DedicatedDb) {
-		changes = append(changes, NewChange(organizationhistory.FieldDedicatedDb, oh.DedicatedDb, new.DedicatedDb))
+	if !reflect.DeepEqual(_m.DedicatedDb, new.DedicatedDb) {
+		changes = append(changes, NewChange(organizationhistory.FieldDedicatedDb, _m.DedicatedDb, new.DedicatedDb))
 	}
 	return changes
 }
 
-func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[OrganizationHistory], error) {
-	if oh.Ref != history.Ref {
+func (_m *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[OrganizationHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ohUnix, historyUnix := oh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ohOlder := ohUnix < historyUnix || (ohUnix == historyUnix && oh.ID < history.ID)
-	historyOlder := ohUnix > historyUnix || (ohUnix == historyUnix && oh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ohOlder {
+	if _mOlder {
 		return &HistoryDiff[OrganizationHistory]{
-			Old:     oh,
+			Old:     _m,
 			New:     history,
-			Changes: oh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[OrganizationHistory]{
 			Old:     history,
-			New:     oh,
-			Changes: history.changes(oh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) []Change {
+func (_m *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(osh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldCreatedAt, osh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(osh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldUpdatedAt, osh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(osh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldCreatedBy, osh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(osh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedAt, osh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(osh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedBy, osh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(osh.Tags, new.Tags) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldTags, osh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(osh.Domains, new.Domains) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldDomains, osh.Domains, new.Domains))
+	if !reflect.DeepEqual(_m.Domains, new.Domains) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldDomains, _m.Domains, new.Domains))
 	}
-	if !reflect.DeepEqual(osh.BillingContact, new.BillingContact) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingContact, osh.BillingContact, new.BillingContact))
+	if !reflect.DeepEqual(_m.BillingContact, new.BillingContact) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingContact, _m.BillingContact, new.BillingContact))
 	}
-	if !reflect.DeepEqual(osh.BillingEmail, new.BillingEmail) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingEmail, osh.BillingEmail, new.BillingEmail))
+	if !reflect.DeepEqual(_m.BillingEmail, new.BillingEmail) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingEmail, _m.BillingEmail, new.BillingEmail))
 	}
-	if !reflect.DeepEqual(osh.BillingPhone, new.BillingPhone) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingPhone, osh.BillingPhone, new.BillingPhone))
+	if !reflect.DeepEqual(_m.BillingPhone, new.BillingPhone) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingPhone, _m.BillingPhone, new.BillingPhone))
 	}
-	if !reflect.DeepEqual(osh.BillingAddress, new.BillingAddress) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingAddress, osh.BillingAddress, new.BillingAddress))
+	if !reflect.DeepEqual(_m.BillingAddress, new.BillingAddress) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingAddress, _m.BillingAddress, new.BillingAddress))
 	}
-	if !reflect.DeepEqual(osh.TaxIdentifier, new.TaxIdentifier) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldTaxIdentifier, osh.TaxIdentifier, new.TaxIdentifier))
+	if !reflect.DeepEqual(_m.TaxIdentifier, new.TaxIdentifier) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldTaxIdentifier, _m.TaxIdentifier, new.TaxIdentifier))
 	}
-	if !reflect.DeepEqual(osh.GeoLocation, new.GeoLocation) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldGeoLocation, osh.GeoLocation, new.GeoLocation))
+	if !reflect.DeepEqual(_m.GeoLocation, new.GeoLocation) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldGeoLocation, _m.GeoLocation, new.GeoLocation))
 	}
-	if !reflect.DeepEqual(osh.OrganizationID, new.OrganizationID) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldOrganizationID, osh.OrganizationID, new.OrganizationID))
+	if !reflect.DeepEqual(_m.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldOrganizationID, _m.OrganizationID, new.OrganizationID))
 	}
-	if !reflect.DeepEqual(osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingNotificationsEnabled, osh.BillingNotificationsEnabled, new.BillingNotificationsEnabled))
+	if !reflect.DeepEqual(_m.BillingNotificationsEnabled, new.BillingNotificationsEnabled) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldBillingNotificationsEnabled, _m.BillingNotificationsEnabled, new.BillingNotificationsEnabled))
 	}
-	if !reflect.DeepEqual(osh.AllowedEmailDomains, new.AllowedEmailDomains) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldAllowedEmailDomains, osh.AllowedEmailDomains, new.AllowedEmailDomains))
+	if !reflect.DeepEqual(_m.AllowedEmailDomains, new.AllowedEmailDomains) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldAllowedEmailDomains, _m.AllowedEmailDomains, new.AllowedEmailDomains))
 	}
-	if !reflect.DeepEqual(osh.IdentityProvider, new.IdentityProvider) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProvider, osh.IdentityProvider, new.IdentityProvider))
+	if !reflect.DeepEqual(_m.IdentityProvider, new.IdentityProvider) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProvider, _m.IdentityProvider, new.IdentityProvider))
 	}
-	if !reflect.DeepEqual(osh.IdentityProviderClientID, new.IdentityProviderClientID) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderClientID, osh.IdentityProviderClientID, new.IdentityProviderClientID))
+	if !reflect.DeepEqual(_m.IdentityProviderClientID, new.IdentityProviderClientID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderClientID, _m.IdentityProviderClientID, new.IdentityProviderClientID))
 	}
-	if !reflect.DeepEqual(osh.IdentityProviderClientSecret, new.IdentityProviderClientSecret) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderClientSecret, osh.IdentityProviderClientSecret, new.IdentityProviderClientSecret))
+	if !reflect.DeepEqual(_m.IdentityProviderClientSecret, new.IdentityProviderClientSecret) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderClientSecret, _m.IdentityProviderClientSecret, new.IdentityProviderClientSecret))
 	}
-	if !reflect.DeepEqual(osh.IdentityProviderMetadataEndpoint, new.IdentityProviderMetadataEndpoint) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, osh.IdentityProviderMetadataEndpoint, new.IdentityProviderMetadataEndpoint))
+	if !reflect.DeepEqual(_m.IdentityProviderMetadataEndpoint, new.IdentityProviderMetadataEndpoint) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, _m.IdentityProviderMetadataEndpoint, new.IdentityProviderMetadataEndpoint))
 	}
-	if !reflect.DeepEqual(osh.IdentityProviderEntityID, new.IdentityProviderEntityID) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderEntityID, osh.IdentityProviderEntityID, new.IdentityProviderEntityID))
+	if !reflect.DeepEqual(_m.IdentityProviderEntityID, new.IdentityProviderEntityID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderEntityID, _m.IdentityProviderEntityID, new.IdentityProviderEntityID))
 	}
-	if !reflect.DeepEqual(osh.OidcDiscoveryEndpoint, new.OidcDiscoveryEndpoint) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldOidcDiscoveryEndpoint, osh.OidcDiscoveryEndpoint, new.OidcDiscoveryEndpoint))
+	if !reflect.DeepEqual(_m.OidcDiscoveryEndpoint, new.OidcDiscoveryEndpoint) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldOidcDiscoveryEndpoint, _m.OidcDiscoveryEndpoint, new.OidcDiscoveryEndpoint))
 	}
-	if !reflect.DeepEqual(osh.IdentityProviderLoginEnforced, new.IdentityProviderLoginEnforced) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderLoginEnforced, osh.IdentityProviderLoginEnforced, new.IdentityProviderLoginEnforced))
+	if !reflect.DeepEqual(_m.IdentityProviderLoginEnforced, new.IdentityProviderLoginEnforced) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldIdentityProviderLoginEnforced, _m.IdentityProviderLoginEnforced, new.IdentityProviderLoginEnforced))
 	}
-	if !reflect.DeepEqual(osh.ComplianceWebhookToken, new.ComplianceWebhookToken) {
-		changes = append(changes, NewChange(organizationsettinghistory.FieldComplianceWebhookToken, osh.ComplianceWebhookToken, new.ComplianceWebhookToken))
+	if !reflect.DeepEqual(_m.ComplianceWebhookToken, new.ComplianceWebhookToken) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldComplianceWebhookToken, _m.ComplianceWebhookToken, new.ComplianceWebhookToken))
 	}
 	return changes
 }
 
-func (osh *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory) (*HistoryDiff[OrganizationSettingHistory], error) {
-	if osh.Ref != history.Ref {
+func (_m *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory) (*HistoryDiff[OrganizationSettingHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	oshUnix, historyUnix := osh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	oshOlder := oshUnix < historyUnix || (oshUnix == historyUnix && osh.ID < history.ID)
-	historyOlder := oshUnix > historyUnix || (oshUnix == historyUnix && osh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if oshOlder {
+	if _mOlder {
 		return &HistoryDiff[OrganizationSettingHistory]{
-			Old:     osh,
+			Old:     _m,
 			New:     history,
-			Changes: osh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[OrganizationSettingHistory]{
 			Old:     history,
-			New:     osh,
-			Changes: history.changes(osh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
+func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ph.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(procedurehistory.FieldCreatedAt, ph.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(procedurehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ph.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(procedurehistory.FieldUpdatedAt, ph.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(procedurehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(procedurehistory.FieldCreatedBy, ph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(procedurehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ph.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(procedurehistory.FieldDeletedAt, ph.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(procedurehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(procedurehistory.FieldDeletedBy, ph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(procedurehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ph.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(procedurehistory.FieldDisplayID, ph.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(procedurehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(ph.Tags, new.Tags) {
-		changes = append(changes, NewChange(procedurehistory.FieldTags, ph.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(procedurehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ph.Revision, new.Revision) {
-		changes = append(changes, NewChange(procedurehistory.FieldRevision, ph.Revision, new.Revision))
+	if !reflect.DeepEqual(_m.Revision, new.Revision) {
+		changes = append(changes, NewChange(procedurehistory.FieldRevision, _m.Revision, new.Revision))
 	}
-	if !reflect.DeepEqual(ph.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(procedurehistory.FieldOwnerID, ph.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(procedurehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ph.Name, new.Name) {
-		changes = append(changes, NewChange(procedurehistory.FieldName, ph.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(procedurehistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(ph.Status, new.Status) {
-		changes = append(changes, NewChange(procedurehistory.FieldStatus, ph.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(procedurehistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(ph.ProcedureType, new.ProcedureType) {
-		changes = append(changes, NewChange(procedurehistory.FieldProcedureType, ph.ProcedureType, new.ProcedureType))
+	if !reflect.DeepEqual(_m.ProcedureType, new.ProcedureType) {
+		changes = append(changes, NewChange(procedurehistory.FieldProcedureType, _m.ProcedureType, new.ProcedureType))
 	}
-	if !reflect.DeepEqual(ph.Details, new.Details) {
-		changes = append(changes, NewChange(procedurehistory.FieldDetails, ph.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(procedurehistory.FieldDetails, _m.Details, new.Details))
 	}
-	if !reflect.DeepEqual(ph.ApprovalRequired, new.ApprovalRequired) {
-		changes = append(changes, NewChange(procedurehistory.FieldApprovalRequired, ph.ApprovalRequired, new.ApprovalRequired))
+	if !reflect.DeepEqual(_m.ApprovalRequired, new.ApprovalRequired) {
+		changes = append(changes, NewChange(procedurehistory.FieldApprovalRequired, _m.ApprovalRequired, new.ApprovalRequired))
 	}
-	if !reflect.DeepEqual(ph.ReviewDue, new.ReviewDue) {
-		changes = append(changes, NewChange(procedurehistory.FieldReviewDue, ph.ReviewDue, new.ReviewDue))
+	if !reflect.DeepEqual(_m.ReviewDue, new.ReviewDue) {
+		changes = append(changes, NewChange(procedurehistory.FieldReviewDue, _m.ReviewDue, new.ReviewDue))
 	}
-	if !reflect.DeepEqual(ph.ReviewFrequency, new.ReviewFrequency) {
-		changes = append(changes, NewChange(procedurehistory.FieldReviewFrequency, ph.ReviewFrequency, new.ReviewFrequency))
+	if !reflect.DeepEqual(_m.ReviewFrequency, new.ReviewFrequency) {
+		changes = append(changes, NewChange(procedurehistory.FieldReviewFrequency, _m.ReviewFrequency, new.ReviewFrequency))
 	}
-	if !reflect.DeepEqual(ph.ApproverID, new.ApproverID) {
-		changes = append(changes, NewChange(procedurehistory.FieldApproverID, ph.ApproverID, new.ApproverID))
+	if !reflect.DeepEqual(_m.ApproverID, new.ApproverID) {
+		changes = append(changes, NewChange(procedurehistory.FieldApproverID, _m.ApproverID, new.ApproverID))
 	}
-	if !reflect.DeepEqual(ph.DelegateID, new.DelegateID) {
-		changes = append(changes, NewChange(procedurehistory.FieldDelegateID, ph.DelegateID, new.DelegateID))
+	if !reflect.DeepEqual(_m.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(procedurehistory.FieldDelegateID, _m.DelegateID, new.DelegateID))
 	}
-	if !reflect.DeepEqual(ph.Summary, new.Summary) {
-		changes = append(changes, NewChange(procedurehistory.FieldSummary, ph.Summary, new.Summary))
+	if !reflect.DeepEqual(_m.Summary, new.Summary) {
+		changes = append(changes, NewChange(procedurehistory.FieldSummary, _m.Summary, new.Summary))
 	}
-	if !reflect.DeepEqual(ph.TagSuggestions, new.TagSuggestions) {
-		changes = append(changes, NewChange(procedurehistory.FieldTagSuggestions, ph.TagSuggestions, new.TagSuggestions))
+	if !reflect.DeepEqual(_m.TagSuggestions, new.TagSuggestions) {
+		changes = append(changes, NewChange(procedurehistory.FieldTagSuggestions, _m.TagSuggestions, new.TagSuggestions))
 	}
-	if !reflect.DeepEqual(ph.DismissedTagSuggestions, new.DismissedTagSuggestions) {
-		changes = append(changes, NewChange(procedurehistory.FieldDismissedTagSuggestions, ph.DismissedTagSuggestions, new.DismissedTagSuggestions))
+	if !reflect.DeepEqual(_m.DismissedTagSuggestions, new.DismissedTagSuggestions) {
+		changes = append(changes, NewChange(procedurehistory.FieldDismissedTagSuggestions, _m.DismissedTagSuggestions, new.DismissedTagSuggestions))
 	}
-	if !reflect.DeepEqual(ph.ControlSuggestions, new.ControlSuggestions) {
-		changes = append(changes, NewChange(procedurehistory.FieldControlSuggestions, ph.ControlSuggestions, new.ControlSuggestions))
+	if !reflect.DeepEqual(_m.ControlSuggestions, new.ControlSuggestions) {
+		changes = append(changes, NewChange(procedurehistory.FieldControlSuggestions, _m.ControlSuggestions, new.ControlSuggestions))
 	}
-	if !reflect.DeepEqual(ph.DismissedControlSuggestions, new.DismissedControlSuggestions) {
-		changes = append(changes, NewChange(procedurehistory.FieldDismissedControlSuggestions, ph.DismissedControlSuggestions, new.DismissedControlSuggestions))
+	if !reflect.DeepEqual(_m.DismissedControlSuggestions, new.DismissedControlSuggestions) {
+		changes = append(changes, NewChange(procedurehistory.FieldDismissedControlSuggestions, _m.DismissedControlSuggestions, new.DismissedControlSuggestions))
 	}
-	if !reflect.DeepEqual(ph.ImprovementSuggestions, new.ImprovementSuggestions) {
-		changes = append(changes, NewChange(procedurehistory.FieldImprovementSuggestions, ph.ImprovementSuggestions, new.ImprovementSuggestions))
+	if !reflect.DeepEqual(_m.ImprovementSuggestions, new.ImprovementSuggestions) {
+		changes = append(changes, NewChange(procedurehistory.FieldImprovementSuggestions, _m.ImprovementSuggestions, new.ImprovementSuggestions))
 	}
-	if !reflect.DeepEqual(ph.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
-		changes = append(changes, NewChange(procedurehistory.FieldDismissedImprovementSuggestions, ph.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
+	if !reflect.DeepEqual(_m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions) {
+		changes = append(changes, NewChange(procedurehistory.FieldDismissedImprovementSuggestions, _m.DismissedImprovementSuggestions, new.DismissedImprovementSuggestions))
 	}
 	return changes
 }
 
-func (ph *ProcedureHistory) Diff(history *ProcedureHistory) (*HistoryDiff[ProcedureHistory], error) {
-	if ph.Ref != history.Ref {
+func (_m *ProcedureHistory) Diff(history *ProcedureHistory) (*HistoryDiff[ProcedureHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	phUnix, historyUnix := ph.HistoryTime.Unix(), history.HistoryTime.Unix()
-	phOlder := phUnix < historyUnix || (phUnix == historyUnix && ph.ID < history.ID)
-	historyOlder := phUnix > historyUnix || (phUnix == historyUnix && ph.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if phOlder {
+	if _mOlder {
 		return &HistoryDiff[ProcedureHistory]{
-			Old:     ph,
+			Old:     _m,
 			New:     history,
-			Changes: ph.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ProcedureHistory]{
 			Old:     history,
-			New:     ph,
-			Changes: history.changes(ph),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
+func (_m *ProgramHistory) changes(new *ProgramHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ph.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(programhistory.FieldCreatedAt, ph.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(programhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ph.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(programhistory.FieldUpdatedAt, ph.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(programhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ph.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(programhistory.FieldCreatedBy, ph.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(programhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ph.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(programhistory.FieldDeletedAt, ph.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(programhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ph.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(programhistory.FieldDeletedBy, ph.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(programhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ph.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(programhistory.FieldDisplayID, ph.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(programhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(ph.Tags, new.Tags) {
-		changes = append(changes, NewChange(programhistory.FieldTags, ph.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(programhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ph.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(programhistory.FieldOwnerID, ph.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(programhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(ph.Name, new.Name) {
-		changes = append(changes, NewChange(programhistory.FieldName, ph.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(programhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(ph.Description, new.Description) {
-		changes = append(changes, NewChange(programhistory.FieldDescription, ph.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(programhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(ph.Status, new.Status) {
-		changes = append(changes, NewChange(programhistory.FieldStatus, ph.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(programhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(ph.ProgramType, new.ProgramType) {
-		changes = append(changes, NewChange(programhistory.FieldProgramType, ph.ProgramType, new.ProgramType))
+	if !reflect.DeepEqual(_m.ProgramType, new.ProgramType) {
+		changes = append(changes, NewChange(programhistory.FieldProgramType, _m.ProgramType, new.ProgramType))
 	}
-	if !reflect.DeepEqual(ph.FrameworkName, new.FrameworkName) {
-		changes = append(changes, NewChange(programhistory.FieldFrameworkName, ph.FrameworkName, new.FrameworkName))
+	if !reflect.DeepEqual(_m.FrameworkName, new.FrameworkName) {
+		changes = append(changes, NewChange(programhistory.FieldFrameworkName, _m.FrameworkName, new.FrameworkName))
 	}
-	if !reflect.DeepEqual(ph.StartDate, new.StartDate) {
-		changes = append(changes, NewChange(programhistory.FieldStartDate, ph.StartDate, new.StartDate))
+	if !reflect.DeepEqual(_m.StartDate, new.StartDate) {
+		changes = append(changes, NewChange(programhistory.FieldStartDate, _m.StartDate, new.StartDate))
 	}
-	if !reflect.DeepEqual(ph.EndDate, new.EndDate) {
-		changes = append(changes, NewChange(programhistory.FieldEndDate, ph.EndDate, new.EndDate))
+	if !reflect.DeepEqual(_m.EndDate, new.EndDate) {
+		changes = append(changes, NewChange(programhistory.FieldEndDate, _m.EndDate, new.EndDate))
 	}
-	if !reflect.DeepEqual(ph.AuditorReady, new.AuditorReady) {
-		changes = append(changes, NewChange(programhistory.FieldAuditorReady, ph.AuditorReady, new.AuditorReady))
+	if !reflect.DeepEqual(_m.AuditorReady, new.AuditorReady) {
+		changes = append(changes, NewChange(programhistory.FieldAuditorReady, _m.AuditorReady, new.AuditorReady))
 	}
-	if !reflect.DeepEqual(ph.AuditorWriteComments, new.AuditorWriteComments) {
-		changes = append(changes, NewChange(programhistory.FieldAuditorWriteComments, ph.AuditorWriteComments, new.AuditorWriteComments))
+	if !reflect.DeepEqual(_m.AuditorWriteComments, new.AuditorWriteComments) {
+		changes = append(changes, NewChange(programhistory.FieldAuditorWriteComments, _m.AuditorWriteComments, new.AuditorWriteComments))
 	}
-	if !reflect.DeepEqual(ph.AuditorReadComments, new.AuditorReadComments) {
-		changes = append(changes, NewChange(programhistory.FieldAuditorReadComments, ph.AuditorReadComments, new.AuditorReadComments))
+	if !reflect.DeepEqual(_m.AuditorReadComments, new.AuditorReadComments) {
+		changes = append(changes, NewChange(programhistory.FieldAuditorReadComments, _m.AuditorReadComments, new.AuditorReadComments))
 	}
-	if !reflect.DeepEqual(ph.AuditFirm, new.AuditFirm) {
-		changes = append(changes, NewChange(programhistory.FieldAuditFirm, ph.AuditFirm, new.AuditFirm))
+	if !reflect.DeepEqual(_m.AuditFirm, new.AuditFirm) {
+		changes = append(changes, NewChange(programhistory.FieldAuditFirm, _m.AuditFirm, new.AuditFirm))
 	}
-	if !reflect.DeepEqual(ph.Auditor, new.Auditor) {
-		changes = append(changes, NewChange(programhistory.FieldAuditor, ph.Auditor, new.Auditor))
+	if !reflect.DeepEqual(_m.Auditor, new.Auditor) {
+		changes = append(changes, NewChange(programhistory.FieldAuditor, _m.Auditor, new.Auditor))
 	}
-	if !reflect.DeepEqual(ph.AuditorEmail, new.AuditorEmail) {
-		changes = append(changes, NewChange(programhistory.FieldAuditorEmail, ph.AuditorEmail, new.AuditorEmail))
+	if !reflect.DeepEqual(_m.AuditorEmail, new.AuditorEmail) {
+		changes = append(changes, NewChange(programhistory.FieldAuditorEmail, _m.AuditorEmail, new.AuditorEmail))
 	}
 	return changes
 }
 
-func (ph *ProgramHistory) Diff(history *ProgramHistory) (*HistoryDiff[ProgramHistory], error) {
-	if ph.Ref != history.Ref {
+func (_m *ProgramHistory) Diff(history *ProgramHistory) (*HistoryDiff[ProgramHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	phUnix, historyUnix := ph.HistoryTime.Unix(), history.HistoryTime.Unix()
-	phOlder := phUnix < historyUnix || (phUnix == historyUnix && ph.ID < history.ID)
-	historyOlder := phUnix > historyUnix || (phUnix == historyUnix && ph.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if phOlder {
+	if _mOlder {
 		return &HistoryDiff[ProgramHistory]{
-			Old:     ph,
+			Old:     _m,
 			New:     history,
-			Changes: ph.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ProgramHistory]{
 			Old:     history,
-			New:     ph,
-			Changes: history.changes(ph),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Change {
+func (_m *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(pmh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedAt, pmh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(pmh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldUpdatedAt, pmh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(pmh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedBy, pmh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(pmh.Role, new.Role) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldRole, pmh.Role, new.Role))
+	if !reflect.DeepEqual(_m.Role, new.Role) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldRole, _m.Role, new.Role))
 	}
-	if !reflect.DeepEqual(pmh.ProgramID, new.ProgramID) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldProgramID, pmh.ProgramID, new.ProgramID))
+	if !reflect.DeepEqual(_m.ProgramID, new.ProgramID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldProgramID, _m.ProgramID, new.ProgramID))
 	}
-	if !reflect.DeepEqual(pmh.UserID, new.UserID) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldUserID, pmh.UserID, new.UserID))
+	if !reflect.DeepEqual(_m.UserID, new.UserID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldUserID, _m.UserID, new.UserID))
 	}
 	return changes
 }
 
-func (pmh *ProgramMembershipHistory) Diff(history *ProgramMembershipHistory) (*HistoryDiff[ProgramMembershipHistory], error) {
-	if pmh.Ref != history.Ref {
+func (_m *ProgramMembershipHistory) Diff(history *ProgramMembershipHistory) (*HistoryDiff[ProgramMembershipHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	pmhUnix, historyUnix := pmh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	pmhOlder := pmhUnix < historyUnix || (pmhUnix == historyUnix && pmh.ID < history.ID)
-	historyOlder := pmhUnix > historyUnix || (pmhUnix == historyUnix && pmh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if pmhOlder {
+	if _mOlder {
 		return &HistoryDiff[ProgramMembershipHistory]{
-			Old:     pmh,
+			Old:     _m,
 			New:     history,
-			Changes: pmh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ProgramMembershipHistory]{
 			Old:     history,
-			New:     pmh,
-			Changes: history.changes(pmh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (rh *RiskHistory) changes(new *RiskHistory) []Change {
+func (_m *RiskHistory) changes(new *RiskHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(rh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(riskhistory.FieldCreatedAt, rh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(riskhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(rh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(riskhistory.FieldUpdatedAt, rh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(riskhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(rh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(riskhistory.FieldCreatedBy, rh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(riskhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(rh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(riskhistory.FieldDeletedAt, rh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(riskhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(rh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(riskhistory.FieldDeletedBy, rh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(riskhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(rh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(riskhistory.FieldDisplayID, rh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(riskhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(rh.Tags, new.Tags) {
-		changes = append(changes, NewChange(riskhistory.FieldTags, rh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(riskhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(rh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(riskhistory.FieldOwnerID, rh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(riskhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(rh.Name, new.Name) {
-		changes = append(changes, NewChange(riskhistory.FieldName, rh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(riskhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(rh.Status, new.Status) {
-		changes = append(changes, NewChange(riskhistory.FieldStatus, rh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(riskhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(rh.RiskType, new.RiskType) {
-		changes = append(changes, NewChange(riskhistory.FieldRiskType, rh.RiskType, new.RiskType))
+	if !reflect.DeepEqual(_m.RiskType, new.RiskType) {
+		changes = append(changes, NewChange(riskhistory.FieldRiskType, _m.RiskType, new.RiskType))
 	}
-	if !reflect.DeepEqual(rh.Category, new.Category) {
-		changes = append(changes, NewChange(riskhistory.FieldCategory, rh.Category, new.Category))
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(riskhistory.FieldCategory, _m.Category, new.Category))
 	}
-	if !reflect.DeepEqual(rh.Impact, new.Impact) {
-		changes = append(changes, NewChange(riskhistory.FieldImpact, rh.Impact, new.Impact))
+	if !reflect.DeepEqual(_m.Impact, new.Impact) {
+		changes = append(changes, NewChange(riskhistory.FieldImpact, _m.Impact, new.Impact))
 	}
-	if !reflect.DeepEqual(rh.Likelihood, new.Likelihood) {
-		changes = append(changes, NewChange(riskhistory.FieldLikelihood, rh.Likelihood, new.Likelihood))
+	if !reflect.DeepEqual(_m.Likelihood, new.Likelihood) {
+		changes = append(changes, NewChange(riskhistory.FieldLikelihood, _m.Likelihood, new.Likelihood))
 	}
-	if !reflect.DeepEqual(rh.Score, new.Score) {
-		changes = append(changes, NewChange(riskhistory.FieldScore, rh.Score, new.Score))
+	if !reflect.DeepEqual(_m.Score, new.Score) {
+		changes = append(changes, NewChange(riskhistory.FieldScore, _m.Score, new.Score))
 	}
-	if !reflect.DeepEqual(rh.Mitigation, new.Mitigation) {
-		changes = append(changes, NewChange(riskhistory.FieldMitigation, rh.Mitigation, new.Mitigation))
+	if !reflect.DeepEqual(_m.Mitigation, new.Mitigation) {
+		changes = append(changes, NewChange(riskhistory.FieldMitigation, _m.Mitigation, new.Mitigation))
 	}
-	if !reflect.DeepEqual(rh.Details, new.Details) {
-		changes = append(changes, NewChange(riskhistory.FieldDetails, rh.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(riskhistory.FieldDetails, _m.Details, new.Details))
 	}
-	if !reflect.DeepEqual(rh.BusinessCosts, new.BusinessCosts) {
-		changes = append(changes, NewChange(riskhistory.FieldBusinessCosts, rh.BusinessCosts, new.BusinessCosts))
+	if !reflect.DeepEqual(_m.BusinessCosts, new.BusinessCosts) {
+		changes = append(changes, NewChange(riskhistory.FieldBusinessCosts, _m.BusinessCosts, new.BusinessCosts))
 	}
-	if !reflect.DeepEqual(rh.StakeholderID, new.StakeholderID) {
-		changes = append(changes, NewChange(riskhistory.FieldStakeholderID, rh.StakeholderID, new.StakeholderID))
+	if !reflect.DeepEqual(_m.StakeholderID, new.StakeholderID) {
+		changes = append(changes, NewChange(riskhistory.FieldStakeholderID, _m.StakeholderID, new.StakeholderID))
 	}
-	if !reflect.DeepEqual(rh.DelegateID, new.DelegateID) {
-		changes = append(changes, NewChange(riskhistory.FieldDelegateID, rh.DelegateID, new.DelegateID))
+	if !reflect.DeepEqual(_m.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(riskhistory.FieldDelegateID, _m.DelegateID, new.DelegateID))
 	}
 	return changes
 }
 
-func (rh *RiskHistory) Diff(history *RiskHistory) (*HistoryDiff[RiskHistory], error) {
-	if rh.Ref != history.Ref {
+func (_m *RiskHistory) Diff(history *RiskHistory) (*HistoryDiff[RiskHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID < history.ID)
-	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if rhOlder {
+	if _mOlder {
 		return &HistoryDiff[RiskHistory]{
-			Old:     rh,
+			Old:     _m,
 			New:     history,
-			Changes: rh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[RiskHistory]{
 			Old:     history,
-			New:     rh,
-			Changes: history.changes(rh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (sh *ScanHistory) changes(new *ScanHistory) []Change {
+func (_m *ScanHistory) changes(new *ScanHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(scanhistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(scanhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(scanhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(scanhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(scanhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(scanhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(scanhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(scanhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(scanhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(scanhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(sh.Tags, new.Tags) {
-		changes = append(changes, NewChange(scanhistory.FieldTags, sh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(scanhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(scanhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(scanhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(sh.Target, new.Target) {
-		changes = append(changes, NewChange(scanhistory.FieldTarget, sh.Target, new.Target))
+	if !reflect.DeepEqual(_m.Target, new.Target) {
+		changes = append(changes, NewChange(scanhistory.FieldTarget, _m.Target, new.Target))
 	}
-	if !reflect.DeepEqual(sh.ScanType, new.ScanType) {
-		changes = append(changes, NewChange(scanhistory.FieldScanType, sh.ScanType, new.ScanType))
+	if !reflect.DeepEqual(_m.ScanType, new.ScanType) {
+		changes = append(changes, NewChange(scanhistory.FieldScanType, _m.ScanType, new.ScanType))
 	}
-	if !reflect.DeepEqual(sh.Metadata, new.Metadata) {
-		changes = append(changes, NewChange(scanhistory.FieldMetadata, sh.Metadata, new.Metadata))
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(scanhistory.FieldMetadata, _m.Metadata, new.Metadata))
 	}
-	if !reflect.DeepEqual(sh.Status, new.Status) {
-		changes = append(changes, NewChange(scanhistory.FieldStatus, sh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(scanhistory.FieldStatus, _m.Status, new.Status))
 	}
 	return changes
 }
 
-func (sh *ScanHistory) Diff(history *ScanHistory) (*HistoryDiff[ScanHistory], error) {
-	if sh.Ref != history.Ref {
+func (_m *ScanHistory) Diff(history *ScanHistory) (*HistoryDiff[ScanHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if shOlder {
+	if _mOlder {
 		return &HistoryDiff[ScanHistory]{
-			Old:     sh,
+			Old:     _m,
 			New:     history,
-			Changes: sh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ScanHistory]{
 			Old:     history,
-			New:     sh,
-			Changes: history.changes(sh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
+func (_m *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(sjh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedAt, sjh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(sjh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldUpdatedAt, sjh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sjh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedBy, sjh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(sjh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedAt, sjh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sjh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedBy, sjh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(sjh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDisplayID, sjh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(sjh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldOwnerID, sjh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(sjh.JobID, new.JobID) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldJobID, sjh.JobID, new.JobID))
+	if !reflect.DeepEqual(_m.JobID, new.JobID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldJobID, _m.JobID, new.JobID))
 	}
-	if !reflect.DeepEqual(sjh.Active, new.Active) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldActive, sjh.Active, new.Active))
+	if !reflect.DeepEqual(_m.Active, new.Active) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldActive, _m.Active, new.Active))
 	}
-	if !reflect.DeepEqual(sjh.Configuration, new.Configuration) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, sjh.Configuration, new.Configuration))
+	if !reflect.DeepEqual(_m.Configuration, new.Configuration) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, _m.Configuration, new.Configuration))
 	}
-	if !reflect.DeepEqual(sjh.Cron, new.Cron) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCron, sjh.Cron, new.Cron))
+	if !reflect.DeepEqual(_m.Cron, new.Cron) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCron, _m.Cron, new.Cron))
 	}
-	if !reflect.DeepEqual(sjh.JobRunnerID, new.JobRunnerID) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldJobRunnerID, sjh.JobRunnerID, new.JobRunnerID))
+	if !reflect.DeepEqual(_m.JobRunnerID, new.JobRunnerID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldJobRunnerID, _m.JobRunnerID, new.JobRunnerID))
 	}
 	return changes
 }
 
-func (sjh *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff[ScheduledJobHistory], error) {
-	if sjh.Ref != history.Ref {
+func (_m *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff[ScheduledJobHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	sjhUnix, historyUnix := sjh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	sjhOlder := sjhUnix < historyUnix || (sjhUnix == historyUnix && sjh.ID < history.ID)
-	historyOlder := sjhUnix > historyUnix || (sjhUnix == historyUnix && sjh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if sjhOlder {
+	if _mOlder {
 		return &HistoryDiff[ScheduledJobHistory]{
-			Old:     sjh,
+			Old:     _m,
 			New:     history,
-			Changes: sjh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[ScheduledJobHistory]{
 			Old:     history,
-			New:     sjh,
-			Changes: history.changes(sjh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (sh *StandardHistory) changes(new *StandardHistory) []Change {
+func (_m *StandardHistory) changes(new *StandardHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(standardhistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(standardhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(standardhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(standardhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(standardhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(standardhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(standardhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(standardhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(standardhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(standardhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(sh.Tags, new.Tags) {
-		changes = append(changes, NewChange(standardhistory.FieldTags, sh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(standardhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(sh.Revision, new.Revision) {
-		changes = append(changes, NewChange(standardhistory.FieldRevision, sh.Revision, new.Revision))
+	if !reflect.DeepEqual(_m.Revision, new.Revision) {
+		changes = append(changes, NewChange(standardhistory.FieldRevision, _m.Revision, new.Revision))
 	}
-	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(standardhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(standardhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(sh.SystemOwned, new.SystemOwned) {
-		changes = append(changes, NewChange(standardhistory.FieldSystemOwned, sh.SystemOwned, new.SystemOwned))
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(standardhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
 	}
-	if !reflect.DeepEqual(sh.Name, new.Name) {
-		changes = append(changes, NewChange(standardhistory.FieldName, sh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(standardhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(sh.ShortName, new.ShortName) {
-		changes = append(changes, NewChange(standardhistory.FieldShortName, sh.ShortName, new.ShortName))
+	if !reflect.DeepEqual(_m.ShortName, new.ShortName) {
+		changes = append(changes, NewChange(standardhistory.FieldShortName, _m.ShortName, new.ShortName))
 	}
-	if !reflect.DeepEqual(sh.Framework, new.Framework) {
-		changes = append(changes, NewChange(standardhistory.FieldFramework, sh.Framework, new.Framework))
+	if !reflect.DeepEqual(_m.Framework, new.Framework) {
+		changes = append(changes, NewChange(standardhistory.FieldFramework, _m.Framework, new.Framework))
 	}
-	if !reflect.DeepEqual(sh.Description, new.Description) {
-		changes = append(changes, NewChange(standardhistory.FieldDescription, sh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(standardhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(sh.GoverningBodyLogoURL, new.GoverningBodyLogoURL) {
-		changes = append(changes, NewChange(standardhistory.FieldGoverningBodyLogoURL, sh.GoverningBodyLogoURL, new.GoverningBodyLogoURL))
+	if !reflect.DeepEqual(_m.GoverningBodyLogoURL, new.GoverningBodyLogoURL) {
+		changes = append(changes, NewChange(standardhistory.FieldGoverningBodyLogoURL, _m.GoverningBodyLogoURL, new.GoverningBodyLogoURL))
 	}
-	if !reflect.DeepEqual(sh.GoverningBody, new.GoverningBody) {
-		changes = append(changes, NewChange(standardhistory.FieldGoverningBody, sh.GoverningBody, new.GoverningBody))
+	if !reflect.DeepEqual(_m.GoverningBody, new.GoverningBody) {
+		changes = append(changes, NewChange(standardhistory.FieldGoverningBody, _m.GoverningBody, new.GoverningBody))
 	}
-	if !reflect.DeepEqual(sh.Domains, new.Domains) {
-		changes = append(changes, NewChange(standardhistory.FieldDomains, sh.Domains, new.Domains))
+	if !reflect.DeepEqual(_m.Domains, new.Domains) {
+		changes = append(changes, NewChange(standardhistory.FieldDomains, _m.Domains, new.Domains))
 	}
-	if !reflect.DeepEqual(sh.Link, new.Link) {
-		changes = append(changes, NewChange(standardhistory.FieldLink, sh.Link, new.Link))
+	if !reflect.DeepEqual(_m.Link, new.Link) {
+		changes = append(changes, NewChange(standardhistory.FieldLink, _m.Link, new.Link))
 	}
-	if !reflect.DeepEqual(sh.Status, new.Status) {
-		changes = append(changes, NewChange(standardhistory.FieldStatus, sh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(standardhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(sh.IsPublic, new.IsPublic) {
-		changes = append(changes, NewChange(standardhistory.FieldIsPublic, sh.IsPublic, new.IsPublic))
+	if !reflect.DeepEqual(_m.IsPublic, new.IsPublic) {
+		changes = append(changes, NewChange(standardhistory.FieldIsPublic, _m.IsPublic, new.IsPublic))
 	}
-	if !reflect.DeepEqual(sh.FreeToUse, new.FreeToUse) {
-		changes = append(changes, NewChange(standardhistory.FieldFreeToUse, sh.FreeToUse, new.FreeToUse))
+	if !reflect.DeepEqual(_m.FreeToUse, new.FreeToUse) {
+		changes = append(changes, NewChange(standardhistory.FieldFreeToUse, _m.FreeToUse, new.FreeToUse))
 	}
-	if !reflect.DeepEqual(sh.StandardType, new.StandardType) {
-		changes = append(changes, NewChange(standardhistory.FieldStandardType, sh.StandardType, new.StandardType))
+	if !reflect.DeepEqual(_m.StandardType, new.StandardType) {
+		changes = append(changes, NewChange(standardhistory.FieldStandardType, _m.StandardType, new.StandardType))
 	}
-	if !reflect.DeepEqual(sh.Version, new.Version) {
-		changes = append(changes, NewChange(standardhistory.FieldVersion, sh.Version, new.Version))
+	if !reflect.DeepEqual(_m.Version, new.Version) {
+		changes = append(changes, NewChange(standardhistory.FieldVersion, _m.Version, new.Version))
 	}
 	return changes
 }
 
-func (sh *StandardHistory) Diff(history *StandardHistory) (*HistoryDiff[StandardHistory], error) {
-	if sh.Ref != history.Ref {
+func (_m *StandardHistory) Diff(history *StandardHistory) (*HistoryDiff[StandardHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if shOlder {
+	if _mOlder {
 		return &HistoryDiff[StandardHistory]{
-			Old:     sh,
+			Old:     _m,
 			New:     history,
-			Changes: sh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[StandardHistory]{
 			Old:     history,
-			New:     sh,
-			Changes: history.changes(sh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
+func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(sh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDisplayID, sh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(sh.Tags, new.Tags) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldTags, sh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(sh.Description, new.Description) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, sh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(sh.ReferenceID, new.ReferenceID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceID, sh.ReferenceID, new.ReferenceID))
+	if !reflect.DeepEqual(_m.ReferenceID, new.ReferenceID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceID, _m.ReferenceID, new.ReferenceID))
 	}
-	if !reflect.DeepEqual(sh.AuditorReferenceID, new.AuditorReferenceID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldAuditorReferenceID, sh.AuditorReferenceID, new.AuditorReferenceID))
+	if !reflect.DeepEqual(_m.AuditorReferenceID, new.AuditorReferenceID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAuditorReferenceID, _m.AuditorReferenceID, new.AuditorReferenceID))
 	}
-	if !reflect.DeepEqual(sh.Status, new.Status) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldStatus, sh.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(sh.Source, new.Source) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldSource, sh.Source, new.Source))
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSource, _m.Source, new.Source))
 	}
-	if !reflect.DeepEqual(sh.ReferenceFramework, new.ReferenceFramework) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceFramework, sh.ReferenceFramework, new.ReferenceFramework))
+	if !reflect.DeepEqual(_m.ReferenceFramework, new.ReferenceFramework) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceFramework, _m.ReferenceFramework, new.ReferenceFramework))
 	}
-	if !reflect.DeepEqual(sh.ControlType, new.ControlType) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldControlType, sh.ControlType, new.ControlType))
+	if !reflect.DeepEqual(_m.ControlType, new.ControlType) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlType, _m.ControlType, new.ControlType))
 	}
-	if !reflect.DeepEqual(sh.Category, new.Category) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldCategory, sh.Category, new.Category))
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCategory, _m.Category, new.Category))
 	}
-	if !reflect.DeepEqual(sh.CategoryID, new.CategoryID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldCategoryID, sh.CategoryID, new.CategoryID))
+	if !reflect.DeepEqual(_m.CategoryID, new.CategoryID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldCategoryID, _m.CategoryID, new.CategoryID))
 	}
-	if !reflect.DeepEqual(sh.Subcategory, new.Subcategory) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldSubcategory, sh.Subcategory, new.Subcategory))
+	if !reflect.DeepEqual(_m.Subcategory, new.Subcategory) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldSubcategory, _m.Subcategory, new.Subcategory))
 	}
-	if !reflect.DeepEqual(sh.MappedCategories, new.MappedCategories) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldMappedCategories, sh.MappedCategories, new.MappedCategories))
+	if !reflect.DeepEqual(_m.MappedCategories, new.MappedCategories) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldMappedCategories, _m.MappedCategories, new.MappedCategories))
 	}
-	if !reflect.DeepEqual(sh.AssessmentObjectives, new.AssessmentObjectives) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldAssessmentObjectives, sh.AssessmentObjectives, new.AssessmentObjectives))
+	if !reflect.DeepEqual(_m.AssessmentObjectives, new.AssessmentObjectives) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAssessmentObjectives, _m.AssessmentObjectives, new.AssessmentObjectives))
 	}
-	if !reflect.DeepEqual(sh.AssessmentMethods, new.AssessmentMethods) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldAssessmentMethods, sh.AssessmentMethods, new.AssessmentMethods))
+	if !reflect.DeepEqual(_m.AssessmentMethods, new.AssessmentMethods) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldAssessmentMethods, _m.AssessmentMethods, new.AssessmentMethods))
 	}
-	if !reflect.DeepEqual(sh.ControlQuestions, new.ControlQuestions) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldControlQuestions, sh.ControlQuestions, new.ControlQuestions))
+	if !reflect.DeepEqual(_m.ControlQuestions, new.ControlQuestions) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlQuestions, _m.ControlQuestions, new.ControlQuestions))
 	}
-	if !reflect.DeepEqual(sh.ImplementationGuidance, new.ImplementationGuidance) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationGuidance, sh.ImplementationGuidance, new.ImplementationGuidance))
+	if !reflect.DeepEqual(_m.ImplementationGuidance, new.ImplementationGuidance) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationGuidance, _m.ImplementationGuidance, new.ImplementationGuidance))
 	}
-	if !reflect.DeepEqual(sh.ExampleEvidence, new.ExampleEvidence) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldExampleEvidence, sh.ExampleEvidence, new.ExampleEvidence))
+	if !reflect.DeepEqual(_m.ExampleEvidence, new.ExampleEvidence) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldExampleEvidence, _m.ExampleEvidence, new.ExampleEvidence))
 	}
-	if !reflect.DeepEqual(sh.References, new.References) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldReferences, sh.References, new.References))
+	if !reflect.DeepEqual(_m.References, new.References) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferences, _m.References, new.References))
 	}
-	if !reflect.DeepEqual(sh.ControlOwnerID, new.ControlOwnerID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldControlOwnerID, sh.ControlOwnerID, new.ControlOwnerID))
+	if !reflect.DeepEqual(_m.ControlOwnerID, new.ControlOwnerID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlOwnerID, _m.ControlOwnerID, new.ControlOwnerID))
 	}
-	if !reflect.DeepEqual(sh.DelegateID, new.DelegateID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldDelegateID, sh.DelegateID, new.DelegateID))
+	if !reflect.DeepEqual(_m.DelegateID, new.DelegateID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDelegateID, _m.DelegateID, new.DelegateID))
 	}
-	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(sh.RefCode, new.RefCode) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, sh.RefCode, new.RefCode))
+	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldRefCode, _m.RefCode, new.RefCode))
 	}
-	if !reflect.DeepEqual(sh.ControlID, new.ControlID) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldControlID, sh.ControlID, new.ControlID))
+	if !reflect.DeepEqual(_m.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldControlID, _m.ControlID, new.ControlID))
 	}
 	return changes
 }
 
-func (sh *SubcontrolHistory) Diff(history *SubcontrolHistory) (*HistoryDiff[SubcontrolHistory], error) {
-	if sh.Ref != history.Ref {
+func (_m *SubcontrolHistory) Diff(history *SubcontrolHistory) (*HistoryDiff[SubcontrolHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if shOlder {
+	if _mOlder {
 		return &HistoryDiff[SubcontrolHistory]{
-			Old:     sh,
+			Old:     _m,
 			New:     history,
-			Changes: sh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[SubcontrolHistory]{
 			Old:     history,
-			New:     sh,
-			Changes: history.changes(sh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (sh *SubprocessorHistory) changes(new *SubprocessorHistory) []Change {
+func (_m *SubprocessorHistory) changes(new *SubprocessorHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(sh.Tags, new.Tags) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldTags, sh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(sh.SystemOwned, new.SystemOwned) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldSystemOwned, sh.SystemOwned, new.SystemOwned))
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
 	}
-	if !reflect.DeepEqual(sh.Name, new.Name) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldName, sh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(sh.Description, new.Description) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldDescription, sh.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(sh.LogoRemoteURL, new.LogoRemoteURL) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldLogoRemoteURL, sh.LogoRemoteURL, new.LogoRemoteURL))
+	if !reflect.DeepEqual(_m.LogoRemoteURL, new.LogoRemoteURL) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldLogoRemoteURL, _m.LogoRemoteURL, new.LogoRemoteURL))
 	}
-	if !reflect.DeepEqual(sh.LogoLocalFileID, new.LogoLocalFileID) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldLogoLocalFileID, sh.LogoLocalFileID, new.LogoLocalFileID))
+	if !reflect.DeepEqual(_m.LogoLocalFileID, new.LogoLocalFileID) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldLogoLocalFileID, _m.LogoLocalFileID, new.LogoLocalFileID))
 	}
 	return changes
 }
 
-func (sh *SubprocessorHistory) Diff(history *SubprocessorHistory) (*HistoryDiff[SubprocessorHistory], error) {
-	if sh.Ref != history.Ref {
+func (_m *SubprocessorHistory) Diff(history *SubprocessorHistory) (*HistoryDiff[SubprocessorHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if shOlder {
+	if _mOlder {
 		return &HistoryDiff[SubprocessorHistory]{
-			Old:     sh,
+			Old:     _m,
 			New:     history,
-			Changes: sh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[SubprocessorHistory]{
 			Old:     history,
-			New:     sh,
-			Changes: history.changes(sh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (th *TaskHistory) changes(new *TaskHistory) []Change {
+func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(th.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(taskhistory.FieldCreatedAt, th.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(taskhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(th.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(taskhistory.FieldUpdatedAt, th.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(taskhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(th.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(taskhistory.FieldCreatedBy, th.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(taskhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(th.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(taskhistory.FieldDeletedAt, th.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(taskhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(th.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(taskhistory.FieldDeletedBy, th.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(taskhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(th.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(taskhistory.FieldDisplayID, th.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(taskhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(th.Tags, new.Tags) {
-		changes = append(changes, NewChange(taskhistory.FieldTags, th.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(taskhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(th.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(taskhistory.FieldOwnerID, th.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(taskhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(th.Title, new.Title) {
-		changes = append(changes, NewChange(taskhistory.FieldTitle, th.Title, new.Title))
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(taskhistory.FieldTitle, _m.Title, new.Title))
 	}
-	if !reflect.DeepEqual(th.Details, new.Details) {
-		changes = append(changes, NewChange(taskhistory.FieldDetails, th.Details, new.Details))
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(taskhistory.FieldDetails, _m.Details, new.Details))
 	}
-	if !reflect.DeepEqual(th.Status, new.Status) {
-		changes = append(changes, NewChange(taskhistory.FieldStatus, th.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(taskhistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(th.Category, new.Category) {
-		changes = append(changes, NewChange(taskhistory.FieldCategory, th.Category, new.Category))
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(taskhistory.FieldCategory, _m.Category, new.Category))
 	}
-	if !reflect.DeepEqual(th.Due, new.Due) {
-		changes = append(changes, NewChange(taskhistory.FieldDue, th.Due, new.Due))
+	if !reflect.DeepEqual(_m.Due, new.Due) {
+		changes = append(changes, NewChange(taskhistory.FieldDue, _m.Due, new.Due))
 	}
-	if !reflect.DeepEqual(th.Completed, new.Completed) {
-		changes = append(changes, NewChange(taskhistory.FieldCompleted, th.Completed, new.Completed))
+	if !reflect.DeepEqual(_m.Completed, new.Completed) {
+		changes = append(changes, NewChange(taskhistory.FieldCompleted, _m.Completed, new.Completed))
 	}
-	if !reflect.DeepEqual(th.AssigneeID, new.AssigneeID) {
-		changes = append(changes, NewChange(taskhistory.FieldAssigneeID, th.AssigneeID, new.AssigneeID))
+	if !reflect.DeepEqual(_m.AssigneeID, new.AssigneeID) {
+		changes = append(changes, NewChange(taskhistory.FieldAssigneeID, _m.AssigneeID, new.AssigneeID))
 	}
-	if !reflect.DeepEqual(th.AssignerID, new.AssignerID) {
-		changes = append(changes, NewChange(taskhistory.FieldAssignerID, th.AssignerID, new.AssignerID))
+	if !reflect.DeepEqual(_m.AssignerID, new.AssignerID) {
+		changes = append(changes, NewChange(taskhistory.FieldAssignerID, _m.AssignerID, new.AssignerID))
 	}
 	return changes
 }
 
-func (th *TaskHistory) Diff(history *TaskHistory) (*HistoryDiff[TaskHistory], error) {
-	if th.Ref != history.Ref {
+func (_m *TaskHistory) Diff(history *TaskHistory) (*HistoryDiff[TaskHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	thUnix, historyUnix := th.HistoryTime.Unix(), history.HistoryTime.Unix()
-	thOlder := thUnix < historyUnix || (thUnix == historyUnix && th.ID < history.ID)
-	historyOlder := thUnix > historyUnix || (thUnix == historyUnix && th.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if thOlder {
+	if _mOlder {
 		return &HistoryDiff[TaskHistory]{
-			Old:     th,
+			Old:     _m,
 			New:     history,
-			Changes: th.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TaskHistory]{
 			Old:     history,
-			New:     th,
-			Changes: history.changes(th),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
+func (_m *TemplateHistory) changes(new *TemplateHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(th.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(templatehistory.FieldCreatedAt, th.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(templatehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(th.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(templatehistory.FieldUpdatedAt, th.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(templatehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(th.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(templatehistory.FieldCreatedBy, th.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(templatehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(th.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(templatehistory.FieldDeletedAt, th.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(templatehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(th.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(templatehistory.FieldDeletedBy, th.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(templatehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(th.Tags, new.Tags) {
-		changes = append(changes, NewChange(templatehistory.FieldTags, th.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(templatehistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(th.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(templatehistory.FieldOwnerID, th.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(templatehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(th.Name, new.Name) {
-		changes = append(changes, NewChange(templatehistory.FieldName, th.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(templatehistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(th.TemplateType, new.TemplateType) {
-		changes = append(changes, NewChange(templatehistory.FieldTemplateType, th.TemplateType, new.TemplateType))
+	if !reflect.DeepEqual(_m.TemplateType, new.TemplateType) {
+		changes = append(changes, NewChange(templatehistory.FieldTemplateType, _m.TemplateType, new.TemplateType))
 	}
-	if !reflect.DeepEqual(th.Description, new.Description) {
-		changes = append(changes, NewChange(templatehistory.FieldDescription, th.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(templatehistory.FieldDescription, _m.Description, new.Description))
 	}
-	if !reflect.DeepEqual(th.Jsonconfig, new.Jsonconfig) {
-		changes = append(changes, NewChange(templatehistory.FieldJsonconfig, th.Jsonconfig, new.Jsonconfig))
+	if !reflect.DeepEqual(_m.Jsonconfig, new.Jsonconfig) {
+		changes = append(changes, NewChange(templatehistory.FieldJsonconfig, _m.Jsonconfig, new.Jsonconfig))
 	}
-	if !reflect.DeepEqual(th.Uischema, new.Uischema) {
-		changes = append(changes, NewChange(templatehistory.FieldUischema, th.Uischema, new.Uischema))
+	if !reflect.DeepEqual(_m.Uischema, new.Uischema) {
+		changes = append(changes, NewChange(templatehistory.FieldUischema, _m.Uischema, new.Uischema))
 	}
 	return changes
 }
 
-func (th *TemplateHistory) Diff(history *TemplateHistory) (*HistoryDiff[TemplateHistory], error) {
-	if th.Ref != history.Ref {
+func (_m *TemplateHistory) Diff(history *TemplateHistory) (*HistoryDiff[TemplateHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	thUnix, historyUnix := th.HistoryTime.Unix(), history.HistoryTime.Unix()
-	thOlder := thUnix < historyUnix || (thUnix == historyUnix && th.ID < history.ID)
-	historyOlder := thUnix > historyUnix || (thUnix == historyUnix && th.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if thOlder {
+	if _mOlder {
 		return &HistoryDiff[TemplateHistory]{
-			Old:     th,
+			Old:     _m,
 			New:     history,
-			Changes: th.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TemplateHistory]{
 			Old:     history,
-			New:     th,
-			Changes: history.changes(th),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (tch *TrustCenterHistory) changes(new *TrustCenterHistory) []Change {
+func (_m *TrustCenterHistory) changes(new *TrustCenterHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(tch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldCreatedAt, tch.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(tch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldUpdatedAt, tch.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(tch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldCreatedBy, tch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(tch.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldDeletedAt, tch.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(tch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldDeletedBy, tch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(tch.Tags, new.Tags) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldTags, tch.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(tch.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldOwnerID, tch.OwnerID, new.OwnerID))
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
-	if !reflect.DeepEqual(tch.Slug, new.Slug) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldSlug, tch.Slug, new.Slug))
+	if !reflect.DeepEqual(_m.Slug, new.Slug) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldSlug, _m.Slug, new.Slug))
 	}
-	if !reflect.DeepEqual(tch.CustomDomainID, new.CustomDomainID) {
-		changes = append(changes, NewChange(trustcenterhistory.FieldCustomDomainID, tch.CustomDomainID, new.CustomDomainID))
+	if !reflect.DeepEqual(_m.CustomDomainID, new.CustomDomainID) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldCustomDomainID, _m.CustomDomainID, new.CustomDomainID))
 	}
 	return changes
 }
 
-func (tch *TrustCenterHistory) Diff(history *TrustCenterHistory) (*HistoryDiff[TrustCenterHistory], error) {
-	if tch.Ref != history.Ref {
+func (_m *TrustCenterHistory) Diff(history *TrustCenterHistory) (*HistoryDiff[TrustCenterHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	tchUnix, historyUnix := tch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	tchOlder := tchUnix < historyUnix || (tchUnix == historyUnix && tch.ID < history.ID)
-	historyOlder := tchUnix > historyUnix || (tchUnix == historyUnix && tch.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if tchOlder {
+	if _mOlder {
 		return &HistoryDiff[TrustCenterHistory]{
-			Old:     tch,
+			Old:     _m,
 			New:     history,
-			Changes: tch.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TrustCenterHistory]{
 			Old:     history,
-			New:     tch,
-			Changes: history.changes(tch),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (tcch *TrustCenterComplianceHistory) changes(new *TrustCenterComplianceHistory) []Change {
+func (_m *TrustCenterComplianceHistory) changes(new *TrustCenterComplianceHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(tcch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(trustcentercompliancehistory.FieldCreatedAt, tcch.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(tcch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(trustcentercompliancehistory.FieldUpdatedAt, tcch.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(tcch.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(trustcentercompliancehistory.FieldCreatedBy, tcch.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(tcch.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(trustcentercompliancehistory.FieldDeletedAt, tcch.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(tcch.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(trustcentercompliancehistory.FieldDeletedBy, tcch.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(tcch.Tags, new.Tags) {
-		changes = append(changes, NewChange(trustcentercompliancehistory.FieldTags, tcch.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldTags, _m.Tags, new.Tags))
 	}
 	return changes
 }
 
-func (tcch *TrustCenterComplianceHistory) Diff(history *TrustCenterComplianceHistory) (*HistoryDiff[TrustCenterComplianceHistory], error) {
-	if tcch.Ref != history.Ref {
+func (_m *TrustCenterComplianceHistory) Diff(history *TrustCenterComplianceHistory) (*HistoryDiff[TrustCenterComplianceHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	tcchUnix, historyUnix := tcch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	tcchOlder := tcchUnix < historyUnix || (tcchUnix == historyUnix && tcch.ID < history.ID)
-	historyOlder := tcchUnix > historyUnix || (tcchUnix == historyUnix && tcch.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if tcchOlder {
+	if _mOlder {
 		return &HistoryDiff[TrustCenterComplianceHistory]{
-			Old:     tcch,
+			Old:     _m,
 			New:     history,
-			Changes: tcch.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TrustCenterComplianceHistory]{
 			Old:     history,
-			New:     tcch,
-			Changes: history.changes(tcch),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (tcsh *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) []Change {
+func (_m *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(tcsh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldCreatedAt, tcsh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(tcsh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldUpdatedAt, tcsh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(tcsh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldCreatedBy, tcsh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(tcsh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldDeletedAt, tcsh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(tcsh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldDeletedBy, tcsh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(tcsh.TrustCenterID, new.TrustCenterID) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldTrustCenterID, tcsh.TrustCenterID, new.TrustCenterID))
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
 	}
-	if !reflect.DeepEqual(tcsh.Title, new.Title) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldTitle, tcsh.Title, new.Title))
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldTitle, _m.Title, new.Title))
 	}
-	if !reflect.DeepEqual(tcsh.Overview, new.Overview) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldOverview, tcsh.Overview, new.Overview))
+	if !reflect.DeepEqual(_m.Overview, new.Overview) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldOverview, _m.Overview, new.Overview))
 	}
-	if !reflect.DeepEqual(tcsh.LogoRemoteURL, new.LogoRemoteURL) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoRemoteURL, tcsh.LogoRemoteURL, new.LogoRemoteURL))
+	if !reflect.DeepEqual(_m.LogoRemoteURL, new.LogoRemoteURL) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoRemoteURL, _m.LogoRemoteURL, new.LogoRemoteURL))
 	}
-	if !reflect.DeepEqual(tcsh.LogoLocalFileID, new.LogoLocalFileID) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoLocalFileID, tcsh.LogoLocalFileID, new.LogoLocalFileID))
+	if !reflect.DeepEqual(_m.LogoLocalFileID, new.LogoLocalFileID) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoLocalFileID, _m.LogoLocalFileID, new.LogoLocalFileID))
 	}
-	if !reflect.DeepEqual(tcsh.FaviconRemoteURL, new.FaviconRemoteURL) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconRemoteURL, tcsh.FaviconRemoteURL, new.FaviconRemoteURL))
+	if !reflect.DeepEqual(_m.FaviconRemoteURL, new.FaviconRemoteURL) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconRemoteURL, _m.FaviconRemoteURL, new.FaviconRemoteURL))
 	}
-	if !reflect.DeepEqual(tcsh.FaviconLocalFileID, new.FaviconLocalFileID) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconLocalFileID, tcsh.FaviconLocalFileID, new.FaviconLocalFileID))
+	if !reflect.DeepEqual(_m.FaviconLocalFileID, new.FaviconLocalFileID) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconLocalFileID, _m.FaviconLocalFileID, new.FaviconLocalFileID))
 	}
-	if !reflect.DeepEqual(tcsh.ThemeMode, new.ThemeMode) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldThemeMode, tcsh.ThemeMode, new.ThemeMode))
+	if !reflect.DeepEqual(_m.ThemeMode, new.ThemeMode) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldThemeMode, _m.ThemeMode, new.ThemeMode))
 	}
-	if !reflect.DeepEqual(tcsh.PrimaryColor, new.PrimaryColor) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldPrimaryColor, tcsh.PrimaryColor, new.PrimaryColor))
+	if !reflect.DeepEqual(_m.PrimaryColor, new.PrimaryColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldPrimaryColor, _m.PrimaryColor, new.PrimaryColor))
 	}
-	if !reflect.DeepEqual(tcsh.Font, new.Font) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldFont, tcsh.Font, new.Font))
+	if !reflect.DeepEqual(_m.Font, new.Font) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFont, _m.Font, new.Font))
 	}
-	if !reflect.DeepEqual(tcsh.ForegroundColor, new.ForegroundColor) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldForegroundColor, tcsh.ForegroundColor, new.ForegroundColor))
+	if !reflect.DeepEqual(_m.ForegroundColor, new.ForegroundColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldForegroundColor, _m.ForegroundColor, new.ForegroundColor))
 	}
-	if !reflect.DeepEqual(tcsh.BackgroundColor, new.BackgroundColor) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldBackgroundColor, tcsh.BackgroundColor, new.BackgroundColor))
+	if !reflect.DeepEqual(_m.BackgroundColor, new.BackgroundColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldBackgroundColor, _m.BackgroundColor, new.BackgroundColor))
 	}
-	if !reflect.DeepEqual(tcsh.AccentColor, new.AccentColor) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldAccentColor, tcsh.AccentColor, new.AccentColor))
+	if !reflect.DeepEqual(_m.AccentColor, new.AccentColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldAccentColor, _m.AccentColor, new.AccentColor))
 	}
 	return changes
 }
 
-func (tcsh *TrustCenterSettingHistory) Diff(history *TrustCenterSettingHistory) (*HistoryDiff[TrustCenterSettingHistory], error) {
-	if tcsh.Ref != history.Ref {
+func (_m *TrustCenterSettingHistory) Diff(history *TrustCenterSettingHistory) (*HistoryDiff[TrustCenterSettingHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	tcshUnix, historyUnix := tcsh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	tcshOlder := tcshUnix < historyUnix || (tcshUnix == historyUnix && tcsh.ID < history.ID)
-	historyOlder := tcshUnix > historyUnix || (tcshUnix == historyUnix && tcsh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if tcshOlder {
+	if _mOlder {
 		return &HistoryDiff[TrustCenterSettingHistory]{
-			Old:     tcsh,
+			Old:     _m,
 			New:     history,
-			Changes: tcsh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TrustCenterSettingHistory]{
 			Old:     history,
-			New:     tcsh,
-			Changes: history.changes(tcsh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (tcsh *TrustCenterSubprocessorHistory) changes(new *TrustCenterSubprocessorHistory) []Change {
+func (_m *TrustCenterSubprocessorHistory) changes(new *TrustCenterSubprocessorHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(tcsh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCreatedAt, tcsh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(tcsh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldUpdatedAt, tcsh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(tcsh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCreatedBy, tcsh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(tcsh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedAt, tcsh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(tcsh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedBy, tcsh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(tcsh.SubprocessorID, new.SubprocessorID) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldSubprocessorID, tcsh.SubprocessorID, new.SubprocessorID))
+	if !reflect.DeepEqual(_m.SubprocessorID, new.SubprocessorID) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldSubprocessorID, _m.SubprocessorID, new.SubprocessorID))
 	}
-	if !reflect.DeepEqual(tcsh.TrustCenterID, new.TrustCenterID) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldTrustCenterID, tcsh.TrustCenterID, new.TrustCenterID))
+	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
 	}
-	if !reflect.DeepEqual(tcsh.Countries, new.Countries) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCountries, tcsh.Countries, new.Countries))
+	if !reflect.DeepEqual(_m.Countries, new.Countries) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCountries, _m.Countries, new.Countries))
 	}
-	if !reflect.DeepEqual(tcsh.Category, new.Category) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCategory, tcsh.Category, new.Category))
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCategory, _m.Category, new.Category))
 	}
 	return changes
 }
 
-func (tcsh *TrustCenterSubprocessorHistory) Diff(history *TrustCenterSubprocessorHistory) (*HistoryDiff[TrustCenterSubprocessorHistory], error) {
-	if tcsh.Ref != history.Ref {
+func (_m *TrustCenterSubprocessorHistory) Diff(history *TrustCenterSubprocessorHistory) (*HistoryDiff[TrustCenterSubprocessorHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	tcshUnix, historyUnix := tcsh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	tcshOlder := tcshUnix < historyUnix || (tcshUnix == historyUnix && tcsh.ID < history.ID)
-	historyOlder := tcshUnix > historyUnix || (tcshUnix == historyUnix && tcsh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if tcshOlder {
+	if _mOlder {
 		return &HistoryDiff[TrustCenterSubprocessorHistory]{
-			Old:     tcsh,
+			Old:     _m,
 			New:     history,
-			Changes: tcsh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TrustCenterSubprocessorHistory]{
 			Old:     history,
-			New:     tcsh,
-			Changes: history.changes(tcsh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (uh *UserHistory) changes(new *UserHistory) []Change {
+func (_m *UserHistory) changes(new *UserHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(uh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(userhistory.FieldCreatedAt, uh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(userhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(uh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(userhistory.FieldUpdatedAt, uh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(userhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(uh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(userhistory.FieldCreatedBy, uh.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(userhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(uh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(userhistory.FieldDeletedAt, uh.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(userhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(uh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(userhistory.FieldDeletedBy, uh.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(userhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(uh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(userhistory.FieldDisplayID, uh.DisplayID, new.DisplayID))
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(userhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
 	}
-	if !reflect.DeepEqual(uh.Tags, new.Tags) {
-		changes = append(changes, NewChange(userhistory.FieldTags, uh.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(userhistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(uh.Email, new.Email) {
-		changes = append(changes, NewChange(userhistory.FieldEmail, uh.Email, new.Email))
+	if !reflect.DeepEqual(_m.Email, new.Email) {
+		changes = append(changes, NewChange(userhistory.FieldEmail, _m.Email, new.Email))
 	}
-	if !reflect.DeepEqual(uh.FirstName, new.FirstName) {
-		changes = append(changes, NewChange(userhistory.FieldFirstName, uh.FirstName, new.FirstName))
+	if !reflect.DeepEqual(_m.FirstName, new.FirstName) {
+		changes = append(changes, NewChange(userhistory.FieldFirstName, _m.FirstName, new.FirstName))
 	}
-	if !reflect.DeepEqual(uh.LastName, new.LastName) {
-		changes = append(changes, NewChange(userhistory.FieldLastName, uh.LastName, new.LastName))
+	if !reflect.DeepEqual(_m.LastName, new.LastName) {
+		changes = append(changes, NewChange(userhistory.FieldLastName, _m.LastName, new.LastName))
 	}
-	if !reflect.DeepEqual(uh.DisplayName, new.DisplayName) {
-		changes = append(changes, NewChange(userhistory.FieldDisplayName, uh.DisplayName, new.DisplayName))
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(userhistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
 	}
-	if !reflect.DeepEqual(uh.AvatarRemoteURL, new.AvatarRemoteURL) {
-		changes = append(changes, NewChange(userhistory.FieldAvatarRemoteURL, uh.AvatarRemoteURL, new.AvatarRemoteURL))
+	if !reflect.DeepEqual(_m.AvatarRemoteURL, new.AvatarRemoteURL) {
+		changes = append(changes, NewChange(userhistory.FieldAvatarRemoteURL, _m.AvatarRemoteURL, new.AvatarRemoteURL))
 	}
-	if !reflect.DeepEqual(uh.AvatarLocalFileID, new.AvatarLocalFileID) {
-		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFileID, uh.AvatarLocalFileID, new.AvatarLocalFileID))
+	if !reflect.DeepEqual(_m.AvatarLocalFileID, new.AvatarLocalFileID) {
+		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFileID, _m.AvatarLocalFileID, new.AvatarLocalFileID))
 	}
-	if !reflect.DeepEqual(uh.AvatarUpdatedAt, new.AvatarUpdatedAt) {
-		changes = append(changes, NewChange(userhistory.FieldAvatarUpdatedAt, uh.AvatarUpdatedAt, new.AvatarUpdatedAt))
+	if !reflect.DeepEqual(_m.AvatarUpdatedAt, new.AvatarUpdatedAt) {
+		changes = append(changes, NewChange(userhistory.FieldAvatarUpdatedAt, _m.AvatarUpdatedAt, new.AvatarUpdatedAt))
 	}
-	if !reflect.DeepEqual(uh.LastSeen, new.LastSeen) {
-		changes = append(changes, NewChange(userhistory.FieldLastSeen, uh.LastSeen, new.LastSeen))
+	if !reflect.DeepEqual(_m.LastSeen, new.LastSeen) {
+		changes = append(changes, NewChange(userhistory.FieldLastSeen, _m.LastSeen, new.LastSeen))
 	}
-	if !reflect.DeepEqual(uh.LastLoginProvider, new.LastLoginProvider) {
-		changes = append(changes, NewChange(userhistory.FieldLastLoginProvider, uh.LastLoginProvider, new.LastLoginProvider))
+	if !reflect.DeepEqual(_m.LastLoginProvider, new.LastLoginProvider) {
+		changes = append(changes, NewChange(userhistory.FieldLastLoginProvider, _m.LastLoginProvider, new.LastLoginProvider))
 	}
-	if !reflect.DeepEqual(uh.Password, new.Password) {
-		changes = append(changes, NewChange(userhistory.FieldPassword, uh.Password, new.Password))
+	if !reflect.DeepEqual(_m.Password, new.Password) {
+		changes = append(changes, NewChange(userhistory.FieldPassword, _m.Password, new.Password))
 	}
-	if !reflect.DeepEqual(uh.Sub, new.Sub) {
-		changes = append(changes, NewChange(userhistory.FieldSub, uh.Sub, new.Sub))
+	if !reflect.DeepEqual(_m.Sub, new.Sub) {
+		changes = append(changes, NewChange(userhistory.FieldSub, _m.Sub, new.Sub))
 	}
-	if !reflect.DeepEqual(uh.AuthProvider, new.AuthProvider) {
-		changes = append(changes, NewChange(userhistory.FieldAuthProvider, uh.AuthProvider, new.AuthProvider))
+	if !reflect.DeepEqual(_m.AuthProvider, new.AuthProvider) {
+		changes = append(changes, NewChange(userhistory.FieldAuthProvider, _m.AuthProvider, new.AuthProvider))
 	}
-	if !reflect.DeepEqual(uh.Role, new.Role) {
-		changes = append(changes, NewChange(userhistory.FieldRole, uh.Role, new.Role))
+	if !reflect.DeepEqual(_m.Role, new.Role) {
+		changes = append(changes, NewChange(userhistory.FieldRole, _m.Role, new.Role))
 	}
 	return changes
 }
 
-func (uh *UserHistory) Diff(history *UserHistory) (*HistoryDiff[UserHistory], error) {
-	if uh.Ref != history.Ref {
+func (_m *UserHistory) Diff(history *UserHistory) (*HistoryDiff[UserHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	uhUnix, historyUnix := uh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	uhOlder := uhUnix < historyUnix || (uhUnix == historyUnix && uh.ID < history.ID)
-	historyOlder := uhUnix > historyUnix || (uhUnix == historyUnix && uh.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if uhOlder {
+	if _mOlder {
 		return &HistoryDiff[UserHistory]{
-			Old:     uh,
+			Old:     _m,
 			New:     history,
-			Changes: uh.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[UserHistory]{
 			Old:     history,
-			New:     uh,
-			Changes: history.changes(uh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
 }
 
-func (ush *UserSettingHistory) changes(new *UserSettingHistory) []Change {
+func (_m *UserSettingHistory) changes(new *UserSettingHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ush.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(usersettinghistory.FieldCreatedAt, ush.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(usersettinghistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ush.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(usersettinghistory.FieldUpdatedAt, ush.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(usersettinghistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ush.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(usersettinghistory.FieldCreatedBy, ush.CreatedBy, new.CreatedBy))
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(usersettinghistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(ush.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(usersettinghistory.FieldDeletedAt, ush.DeletedAt, new.DeletedAt))
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(usersettinghistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
 	}
-	if !reflect.DeepEqual(ush.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(usersettinghistory.FieldDeletedBy, ush.DeletedBy, new.DeletedBy))
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(usersettinghistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(ush.Tags, new.Tags) {
-		changes = append(changes, NewChange(usersettinghistory.FieldTags, ush.Tags, new.Tags))
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(usersettinghistory.FieldTags, _m.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(ush.UserID, new.UserID) {
-		changes = append(changes, NewChange(usersettinghistory.FieldUserID, ush.UserID, new.UserID))
+	if !reflect.DeepEqual(_m.UserID, new.UserID) {
+		changes = append(changes, NewChange(usersettinghistory.FieldUserID, _m.UserID, new.UserID))
 	}
-	if !reflect.DeepEqual(ush.Locked, new.Locked) {
-		changes = append(changes, NewChange(usersettinghistory.FieldLocked, ush.Locked, new.Locked))
+	if !reflect.DeepEqual(_m.Locked, new.Locked) {
+		changes = append(changes, NewChange(usersettinghistory.FieldLocked, _m.Locked, new.Locked))
 	}
-	if !reflect.DeepEqual(ush.SilencedAt, new.SilencedAt) {
-		changes = append(changes, NewChange(usersettinghistory.FieldSilencedAt, ush.SilencedAt, new.SilencedAt))
+	if !reflect.DeepEqual(_m.SilencedAt, new.SilencedAt) {
+		changes = append(changes, NewChange(usersettinghistory.FieldSilencedAt, _m.SilencedAt, new.SilencedAt))
 	}
-	if !reflect.DeepEqual(ush.SuspendedAt, new.SuspendedAt) {
-		changes = append(changes, NewChange(usersettinghistory.FieldSuspendedAt, ush.SuspendedAt, new.SuspendedAt))
+	if !reflect.DeepEqual(_m.SuspendedAt, new.SuspendedAt) {
+		changes = append(changes, NewChange(usersettinghistory.FieldSuspendedAt, _m.SuspendedAt, new.SuspendedAt))
 	}
-	if !reflect.DeepEqual(ush.Status, new.Status) {
-		changes = append(changes, NewChange(usersettinghistory.FieldStatus, ush.Status, new.Status))
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(usersettinghistory.FieldStatus, _m.Status, new.Status))
 	}
-	if !reflect.DeepEqual(ush.EmailConfirmed, new.EmailConfirmed) {
-		changes = append(changes, NewChange(usersettinghistory.FieldEmailConfirmed, ush.EmailConfirmed, new.EmailConfirmed))
+	if !reflect.DeepEqual(_m.EmailConfirmed, new.EmailConfirmed) {
+		changes = append(changes, NewChange(usersettinghistory.FieldEmailConfirmed, _m.EmailConfirmed, new.EmailConfirmed))
 	}
-	if !reflect.DeepEqual(ush.IsWebauthnAllowed, new.IsWebauthnAllowed) {
-		changes = append(changes, NewChange(usersettinghistory.FieldIsWebauthnAllowed, ush.IsWebauthnAllowed, new.IsWebauthnAllowed))
+	if !reflect.DeepEqual(_m.IsWebauthnAllowed, new.IsWebauthnAllowed) {
+		changes = append(changes, NewChange(usersettinghistory.FieldIsWebauthnAllowed, _m.IsWebauthnAllowed, new.IsWebauthnAllowed))
 	}
-	if !reflect.DeepEqual(ush.IsTfaEnabled, new.IsTfaEnabled) {
-		changes = append(changes, NewChange(usersettinghistory.FieldIsTfaEnabled, ush.IsTfaEnabled, new.IsTfaEnabled))
+	if !reflect.DeepEqual(_m.IsTfaEnabled, new.IsTfaEnabled) {
+		changes = append(changes, NewChange(usersettinghistory.FieldIsTfaEnabled, _m.IsTfaEnabled, new.IsTfaEnabled))
 	}
-	if !reflect.DeepEqual(ush.PhoneNumber, new.PhoneNumber) {
-		changes = append(changes, NewChange(usersettinghistory.FieldPhoneNumber, ush.PhoneNumber, new.PhoneNumber))
+	if !reflect.DeepEqual(_m.PhoneNumber, new.PhoneNumber) {
+		changes = append(changes, NewChange(usersettinghistory.FieldPhoneNumber, _m.PhoneNumber, new.PhoneNumber))
 	}
 	return changes
 }
 
-func (ush *UserSettingHistory) Diff(history *UserSettingHistory) (*HistoryDiff[UserSettingHistory], error) {
-	if ush.Ref != history.Ref {
+func (_m *UserSettingHistory) Diff(history *UserSettingHistory) (*HistoryDiff[UserSettingHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, ErrMismatchedRef
 	}
 
-	ushUnix, historyUnix := ush.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ushOlder := ushUnix < historyUnix || (ushUnix == historyUnix && ush.ID < history.ID)
-	historyOlder := ushUnix > historyUnix || (ushUnix == historyUnix && ush.ID > history.ID)
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
 
-	if ushOlder {
+	if _mOlder {
 		return &HistoryDiff[UserSettingHistory]{
-			Old:     ush,
+			Old:     _m,
 			New:     history,
-			Changes: ush.changes(history),
+			Changes: _m.changes(history),
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[UserSettingHistory]{
 			Old:     history,
-			New:     ush,
-			Changes: history.changes(ush),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory

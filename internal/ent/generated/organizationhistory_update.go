@@ -27,231 +27,231 @@ type OrganizationHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the OrganizationHistoryUpdate builder.
-func (ohu *OrganizationHistoryUpdate) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdate {
-	ohu.mutation.Where(ps...)
-	return ohu
+func (_u *OrganizationHistoryUpdate) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ohu *OrganizationHistoryUpdate) SetUpdatedAt(t time.Time) *OrganizationHistoryUpdate {
-	ohu.mutation.SetUpdatedAt(t)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetUpdatedAt(v time.Time) *OrganizationHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ohu *OrganizationHistoryUpdate) ClearUpdatedAt() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearUpdatedAt()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearUpdatedAt() *OrganizationHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ohu *OrganizationHistoryUpdate) SetUpdatedBy(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetUpdatedBy(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetUpdatedBy(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableUpdatedBy(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetUpdatedBy(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableUpdatedBy(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ohu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ohu *OrganizationHistoryUpdate) ClearUpdatedBy() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearUpdatedBy()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearUpdatedBy() *OrganizationHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ohu *OrganizationHistoryUpdate) SetDeletedAt(t time.Time) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDeletedAt(t)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetDeletedAt(v time.Time) *OrganizationHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDeletedAt(t *time.Time) *OrganizationHistoryUpdate {
-	if t != nil {
-		ohu.SetDeletedAt(*t)
+func (_u *OrganizationHistoryUpdate) SetNillableDeletedAt(v *time.Time) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ohu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ohu *OrganizationHistoryUpdate) ClearDeletedAt() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearDeletedAt()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearDeletedAt() *OrganizationHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ohu *OrganizationHistoryUpdate) SetDeletedBy(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDeletedBy(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetDeletedBy(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDeletedBy(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetDeletedBy(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableDeletedBy(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ohu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ohu *OrganizationHistoryUpdate) ClearDeletedBy() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearDeletedBy()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearDeletedBy() *OrganizationHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ohu *OrganizationHistoryUpdate) SetTags(s []string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetTags(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetTags(v []string) *OrganizationHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ohu *OrganizationHistoryUpdate) AppendTags(s []string) *OrganizationHistoryUpdate {
-	ohu.mutation.AppendTags(s)
-	return ohu
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationHistoryUpdate) AppendTags(v []string) *OrganizationHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ohu *OrganizationHistoryUpdate) ClearTags() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearTags()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearTags() *OrganizationHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ohu *OrganizationHistoryUpdate) SetName(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetName(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetName(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableName(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetName(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableName(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ohu
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ohu *OrganizationHistoryUpdate) SetDisplayName(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDisplayName(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetDisplayName(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDisplayName(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetDisplayName(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableDisplayName(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return ohu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ohu *OrganizationHistoryUpdate) SetDescription(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDescription(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetDescription(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDescription(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetDescription(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableDescription(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ohu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ohu *OrganizationHistoryUpdate) ClearDescription() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearDescription()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearDescription() *OrganizationHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (ohu *OrganizationHistoryUpdate) SetAvatarRemoteURL(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetAvatarRemoteURL(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetAvatarRemoteURL(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableAvatarRemoteURL(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetAvatarRemoteURL(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableAvatarRemoteURL(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
 	}
-	return ohu
+	return _u
 }
 
 // ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
-func (ohu *OrganizationHistoryUpdate) ClearAvatarRemoteURL() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearAvatarRemoteURL()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearAvatarRemoteURL() *OrganizationHistoryUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (ohu *OrganizationHistoryUpdate) SetAvatarLocalFileID(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetAvatarLocalFileID(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetAvatarLocalFileID(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableAvatarLocalFileID(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetAvatarLocalFileID(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableAvatarLocalFileID(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
 	}
-	return ohu
+	return _u
 }
 
 // ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (ohu *OrganizationHistoryUpdate) ClearAvatarLocalFileID() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearAvatarLocalFileID()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearAvatarLocalFileID() *OrganizationHistoryUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (ohu *OrganizationHistoryUpdate) SetAvatarUpdatedAt(t time.Time) *OrganizationHistoryUpdate {
-	ohu.mutation.SetAvatarUpdatedAt(t)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetAvatarUpdatedAt(v time.Time) *OrganizationHistoryUpdate {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
 }
 
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
-func (ohu *OrganizationHistoryUpdate) ClearAvatarUpdatedAt() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearAvatarUpdatedAt()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearAvatarUpdatedAt() *OrganizationHistoryUpdate {
+	_u.mutation.ClearAvatarUpdatedAt()
+	return _u
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
-func (ohu *OrganizationHistoryUpdate) SetDedicatedDb(b bool) *OrganizationHistoryUpdate {
-	ohu.mutation.SetDedicatedDb(b)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetDedicatedDb(v bool) *OrganizationHistoryUpdate {
+	_u.mutation.SetDedicatedDb(v)
+	return _u
 }
 
 // SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableDedicatedDb(b *bool) *OrganizationHistoryUpdate {
-	if b != nil {
-		ohu.SetDedicatedDb(*b)
+func (_u *OrganizationHistoryUpdate) SetNillableDedicatedDb(v *bool) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetDedicatedDb(*v)
 	}
-	return ohu
+	return _u
 }
 
 // Mutation returns the OrganizationHistoryMutation object of the builder.
-func (ohu *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
-	return ohu.mutation
+func (_u *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ohu *OrganizationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ohu.defaults(); err != nil {
+func (_u *OrganizationHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ohu.sqlSave, ohu.mutation, ohu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ohu *OrganizationHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ohu.Save(ctx)
+func (_u *OrganizationHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -259,139 +259,139 @@ func (ohu *OrganizationHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ohu *OrganizationHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ohu.Save(ctx)
+func (_u *OrganizationHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ohu *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ohu.Exec(ctx); err != nil {
+func (_u *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ohu *OrganizationHistoryUpdate) defaults() error {
-	if _, ok := ohu.mutation.UpdatedAt(); !ok && !ohu.mutation.UpdatedAtCleared() {
+func (_u *OrganizationHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organizationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.UpdateDefaultUpdatedAt()
-		ohu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ohu.mutation.AvatarUpdatedAt(); !ok && !ohu.mutation.AvatarUpdatedAtCleared() {
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
 		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
-		ohu.mutation.SetAvatarUpdatedAt(v)
+		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ohu *OrganizationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationHistoryUpdate {
-	ohu.modifiers = append(ohu.modifiers, modifiers...)
-	return ohu
+func (_u *OrganizationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeString))
-	if ps := ohu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ohu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeString)
 	}
-	if ohu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ohu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ohu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ohu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ohu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ohu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ohu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ohu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ohu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ohu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ohu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ohu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationhistory.FieldTags, value)
 		})
 	}
-	if ohu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ohu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ohu.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organizationhistory.FieldDisplayName, field.TypeString, value)
 	}
-	if value, ok := ohu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(organizationhistory.FieldDescription, field.TypeString, value)
 	}
-	if ohu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(organizationhistory.FieldDescription, field.TypeString)
 	}
-	if ohu.mutation.ParentOrganizationIDCleared() {
+	if _u.mutation.ParentOrganizationIDCleared() {
 		_spec.ClearField(organizationhistory.FieldParentOrganizationID, field.TypeString)
 	}
-	if ohu.mutation.PersonalOrgCleared() {
+	if _u.mutation.PersonalOrgCleared() {
 		_spec.ClearField(organizationhistory.FieldPersonalOrg, field.TypeBool)
 	}
-	if value, ok := ohu.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarRemoteURL, field.TypeString, value)
 	}
-	if ohu.mutation.AvatarRemoteURLCleared() {
+	if _u.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
-	if value, ok := ohu.mutation.AvatarLocalFileID(); ok {
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarLocalFileID, field.TypeString, value)
 	}
-	if ohu.mutation.AvatarLocalFileIDCleared() {
+	if _u.mutation.AvatarLocalFileIDCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarLocalFileID, field.TypeString)
 	}
-	if value, ok := ohu.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
-	if ohu.mutation.AvatarUpdatedAtCleared() {
+	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
-	if value, ok := ohu.mutation.DedicatedDb(); ok {
+	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
 	}
-	_spec.Node.Schema = ohu.schemaConfig.OrganizationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ohu.schemaConfig)
-	_spec.AddModifiers(ohu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ohu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -399,8 +399,8 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	ohu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrganizationHistoryUpdateOne is the builder for updating a single OrganizationHistory entity.
@@ -413,238 +413,238 @@ type OrganizationHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedAt(t time.Time) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetUpdatedAt(t)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetUpdatedAt(v time.Time) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedAt() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearUpdatedAt()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearUpdatedAt() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedBy(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetUpdatedBy(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetUpdatedBy(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetUpdatedBy(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearUpdatedBy() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearUpdatedBy()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearUpdatedBy() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDeletedAt(t time.Time) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDeletedAt(t)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetDeletedAt(v time.Time) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *OrganizationHistoryUpdateOne {
-	if t != nil {
-		ohuo.SetDeletedAt(*t)
+func (_u *OrganizationHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearDeletedAt() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearDeletedAt()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearDeletedAt() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDeletedBy(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDeletedBy(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetDeletedBy(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDeletedBy(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetDeletedBy(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableDeletedBy(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearDeletedBy() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearDeletedBy()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearDeletedBy() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetTags(s []string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetTags(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetTags(v []string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ohuo *OrganizationHistoryUpdateOne) AppendTags(s []string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.AppendTags(s)
-	return ohuo
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationHistoryUpdateOne) AppendTags(v []string) *OrganizationHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearTags() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearTags()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearTags() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetName(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetName(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetName(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableName(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetName(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableName(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDisplayName(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDisplayName(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetDisplayName(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDisplayName(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetDisplayName(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableDisplayName(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDescription(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDescription(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetDescription(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDescription(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetDescription(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableDescription(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearDescription() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearDescription()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearDescription() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetAvatarRemoteURL(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetAvatarRemoteURL(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetAvatarRemoteURL(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableAvatarRemoteURL(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetAvatarRemoteURL(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableAvatarRemoteURL(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarRemoteURL() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearAvatarRemoteURL()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearAvatarRemoteURL() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetAvatarLocalFileID(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetAvatarLocalFileID(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetAvatarLocalFileID(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableAvatarLocalFileID(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetAvatarLocalFileID(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableAvatarLocalFileID(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarLocalFileID() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearAvatarLocalFileID()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearAvatarLocalFileID() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetAvatarUpdatedAt(t time.Time) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetAvatarUpdatedAt(t)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetAvatarUpdatedAt(v time.Time) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
 }
 
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarUpdatedAt() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearAvatarUpdatedAt()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearAvatarUpdatedAt() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearAvatarUpdatedAt()
+	return _u
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetDedicatedDb(b bool) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetDedicatedDb(b)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetDedicatedDb(v bool) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetDedicatedDb(v)
+	return _u
 }
 
 // SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableDedicatedDb(b *bool) *OrganizationHistoryUpdateOne {
-	if b != nil {
-		ohuo.SetDedicatedDb(*b)
+func (_u *OrganizationHistoryUpdateOne) SetNillableDedicatedDb(v *bool) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDedicatedDb(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // Mutation returns the OrganizationHistoryMutation object of the builder.
-func (ohuo *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
-	return ohuo.mutation
+func (_u *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the OrganizationHistoryUpdate builder.
-func (ohuo *OrganizationHistoryUpdateOne) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.Where(ps...)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ohuo *OrganizationHistoryUpdateOne) Select(field string, fields ...string) *OrganizationHistoryUpdateOne {
-	ohuo.fields = append([]string{field}, fields...)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) Select(field string, fields ...string) *OrganizationHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrganizationHistory entity.
-func (ohuo *OrganizationHistoryUpdateOne) Save(ctx context.Context) (*OrganizationHistory, error) {
-	if err := ohuo.defaults(); err != nil {
+func (_u *OrganizationHistoryUpdateOne) Save(ctx context.Context) (*OrganizationHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ohuo.sqlSave, ohuo.mutation, ohuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ohuo *OrganizationHistoryUpdateOne) SaveX(ctx context.Context) *OrganizationHistory {
-	node, err := ohuo.Save(ctx)
+func (_u *OrganizationHistoryUpdateOne) SaveX(ctx context.Context) *OrganizationHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -652,51 +652,51 @@ func (ohuo *OrganizationHistoryUpdateOne) SaveX(ctx context.Context) *Organizati
 }
 
 // Exec executes the query on the entity.
-func (ohuo *OrganizationHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ohuo.Save(ctx)
+func (_u *OrganizationHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ohuo *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ohuo.Exec(ctx); err != nil {
+func (_u *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ohuo *OrganizationHistoryUpdateOne) defaults() error {
-	if _, ok := ohuo.mutation.UpdatedAt(); !ok && !ohuo.mutation.UpdatedAtCleared() {
+func (_u *OrganizationHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organizationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.UpdateDefaultUpdatedAt()
-		ohuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ohuo.mutation.AvatarUpdatedAt(); !ok && !ohuo.mutation.AvatarUpdatedAtCleared() {
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
 		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
-		ohuo.mutation.SetAvatarUpdatedAt(v)
+		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ohuo *OrganizationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationHistoryUpdateOne {
-	ohuo.modifiers = append(ohuo.modifiers, modifiers...)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationHistory, err error) {
+func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeString))
-	id, ok := ohuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrganizationHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ohuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organizationhistory.FieldID)
 		for _, f := range fields {
@@ -708,103 +708,103 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 			}
 		}
 	}
-	if ps := ohuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ohuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeString)
 	}
-	if ohuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ohuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ohuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ohuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ohuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ohuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ohuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ohuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ohuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ohuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ohuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organizationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ohuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationhistory.FieldTags, value)
 		})
 	}
-	if ohuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ohuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ohuo.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organizationhistory.FieldDisplayName, field.TypeString, value)
 	}
-	if value, ok := ohuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(organizationhistory.FieldDescription, field.TypeString, value)
 	}
-	if ohuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(organizationhistory.FieldDescription, field.TypeString)
 	}
-	if ohuo.mutation.ParentOrganizationIDCleared() {
+	if _u.mutation.ParentOrganizationIDCleared() {
 		_spec.ClearField(organizationhistory.FieldParentOrganizationID, field.TypeString)
 	}
-	if ohuo.mutation.PersonalOrgCleared() {
+	if _u.mutation.PersonalOrgCleared() {
 		_spec.ClearField(organizationhistory.FieldPersonalOrg, field.TypeBool)
 	}
-	if value, ok := ohuo.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarRemoteURL, field.TypeString, value)
 	}
-	if ohuo.mutation.AvatarRemoteURLCleared() {
+	if _u.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
-	if value, ok := ohuo.mutation.AvatarLocalFileID(); ok {
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarLocalFileID, field.TypeString, value)
 	}
-	if ohuo.mutation.AvatarLocalFileIDCleared() {
+	if _u.mutation.AvatarLocalFileIDCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarLocalFileID, field.TypeString)
 	}
-	if value, ok := ohuo.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
-	if ohuo.mutation.AvatarUpdatedAtCleared() {
+	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
-	if value, ok := ohuo.mutation.DedicatedDb(); ok {
+	if value, ok := _u.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
 	}
-	_spec.Node.Schema = ohuo.schemaConfig.OrganizationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ohuo.schemaConfig)
-	_spec.AddModifiers(ohuo.modifiers...)
-	_node = &OrganizationHistory{config: ohuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrganizationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrganizationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ohuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -812,6 +812,6 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 		}
 		return nil, err
 	}
-	ohuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

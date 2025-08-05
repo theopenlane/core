@@ -28,263 +28,263 @@ type AssetHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the AssetHistoryUpdate builder.
-func (ahu *AssetHistoryUpdate) Where(ps ...predicate.AssetHistory) *AssetHistoryUpdate {
-	ahu.mutation.Where(ps...)
-	return ahu
+func (_u *AssetHistoryUpdate) Where(ps ...predicate.AssetHistory) *AssetHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ahu *AssetHistoryUpdate) SetUpdatedAt(t time.Time) *AssetHistoryUpdate {
-	ahu.mutation.SetUpdatedAt(t)
-	return ahu
+func (_u *AssetHistoryUpdate) SetUpdatedAt(v time.Time) *AssetHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ahu *AssetHistoryUpdate) ClearUpdatedAt() *AssetHistoryUpdate {
-	ahu.mutation.ClearUpdatedAt()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearUpdatedAt() *AssetHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ahu *AssetHistoryUpdate) SetUpdatedBy(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetUpdatedBy(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetUpdatedBy(v string) *AssetHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableUpdatedBy(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetUpdatedBy(*s)
+func (_u *AssetHistoryUpdate) SetNillableUpdatedBy(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ahu *AssetHistoryUpdate) ClearUpdatedBy() *AssetHistoryUpdate {
-	ahu.mutation.ClearUpdatedBy()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearUpdatedBy() *AssetHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ahu *AssetHistoryUpdate) SetDeletedAt(t time.Time) *AssetHistoryUpdate {
-	ahu.mutation.SetDeletedAt(t)
-	return ahu
+func (_u *AssetHistoryUpdate) SetDeletedAt(v time.Time) *AssetHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableDeletedAt(t *time.Time) *AssetHistoryUpdate {
-	if t != nil {
-		ahu.SetDeletedAt(*t)
+func (_u *AssetHistoryUpdate) SetNillableDeletedAt(v *time.Time) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ahu *AssetHistoryUpdate) ClearDeletedAt() *AssetHistoryUpdate {
-	ahu.mutation.ClearDeletedAt()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearDeletedAt() *AssetHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ahu *AssetHistoryUpdate) SetDeletedBy(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetDeletedBy(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetDeletedBy(v string) *AssetHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableDeletedBy(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetDeletedBy(*s)
+func (_u *AssetHistoryUpdate) SetNillableDeletedBy(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ahu *AssetHistoryUpdate) ClearDeletedBy() *AssetHistoryUpdate {
-	ahu.mutation.ClearDeletedBy()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearDeletedBy() *AssetHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ahu *AssetHistoryUpdate) SetTags(s []string) *AssetHistoryUpdate {
-	ahu.mutation.SetTags(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetTags(v []string) *AssetHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ahu *AssetHistoryUpdate) AppendTags(s []string) *AssetHistoryUpdate {
-	ahu.mutation.AppendTags(s)
-	return ahu
+// AppendTags appends value to the "tags" field.
+func (_u *AssetHistoryUpdate) AppendTags(v []string) *AssetHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ahu *AssetHistoryUpdate) ClearTags() *AssetHistoryUpdate {
-	ahu.mutation.ClearTags()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearTags() *AssetHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ahu *AssetHistoryUpdate) SetOwnerID(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetOwnerID(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetOwnerID(v string) *AssetHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableOwnerID(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetOwnerID(*s)
+func (_u *AssetHistoryUpdate) SetNillableOwnerID(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ahu *AssetHistoryUpdate) ClearOwnerID() *AssetHistoryUpdate {
-	ahu.mutation.ClearOwnerID()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearOwnerID() *AssetHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetAssetType sets the "asset_type" field.
-func (ahu *AssetHistoryUpdate) SetAssetType(et enums.AssetType) *AssetHistoryUpdate {
-	ahu.mutation.SetAssetType(et)
-	return ahu
+func (_u *AssetHistoryUpdate) SetAssetType(v enums.AssetType) *AssetHistoryUpdate {
+	_u.mutation.SetAssetType(v)
+	return _u
 }
 
 // SetNillableAssetType sets the "asset_type" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableAssetType(et *enums.AssetType) *AssetHistoryUpdate {
-	if et != nil {
-		ahu.SetAssetType(*et)
+func (_u *AssetHistoryUpdate) SetNillableAssetType(v *enums.AssetType) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetAssetType(*v)
 	}
-	return ahu
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ahu *AssetHistoryUpdate) SetName(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetName(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableName(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetName(*s)
+func (_u *AssetHistoryUpdate) SetNillableName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ahu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ahu *AssetHistoryUpdate) SetDescription(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetDescription(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetDescription(v string) *AssetHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableDescription(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetDescription(*s)
+func (_u *AssetHistoryUpdate) SetNillableDescription(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ahu *AssetHistoryUpdate) ClearDescription() *AssetHistoryUpdate {
-	ahu.mutation.ClearDescription()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearDescription() *AssetHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetIdentifier sets the "identifier" field.
-func (ahu *AssetHistoryUpdate) SetIdentifier(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetIdentifier(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetIdentifier(v string) *AssetHistoryUpdate {
+	_u.mutation.SetIdentifier(v)
+	return _u
 }
 
 // SetNillableIdentifier sets the "identifier" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableIdentifier(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetIdentifier(*s)
+func (_u *AssetHistoryUpdate) SetNillableIdentifier(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetIdentifier(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearIdentifier clears the value of the "identifier" field.
-func (ahu *AssetHistoryUpdate) ClearIdentifier() *AssetHistoryUpdate {
-	ahu.mutation.ClearIdentifier()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearIdentifier() *AssetHistoryUpdate {
+	_u.mutation.ClearIdentifier()
+	return _u
 }
 
 // SetWebsite sets the "website" field.
-func (ahu *AssetHistoryUpdate) SetWebsite(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetWebsite(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetWebsite(v string) *AssetHistoryUpdate {
+	_u.mutation.SetWebsite(v)
+	return _u
 }
 
 // SetNillableWebsite sets the "website" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableWebsite(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetWebsite(*s)
+func (_u *AssetHistoryUpdate) SetNillableWebsite(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetWebsite(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearWebsite clears the value of the "website" field.
-func (ahu *AssetHistoryUpdate) ClearWebsite() *AssetHistoryUpdate {
-	ahu.mutation.ClearWebsite()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearWebsite() *AssetHistoryUpdate {
+	_u.mutation.ClearWebsite()
+	return _u
 }
 
 // SetCpe sets the "cpe" field.
-func (ahu *AssetHistoryUpdate) SetCpe(s string) *AssetHistoryUpdate {
-	ahu.mutation.SetCpe(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetCpe(v string) *AssetHistoryUpdate {
+	_u.mutation.SetCpe(v)
+	return _u
 }
 
 // SetNillableCpe sets the "cpe" field if the given value is not nil.
-func (ahu *AssetHistoryUpdate) SetNillableCpe(s *string) *AssetHistoryUpdate {
-	if s != nil {
-		ahu.SetCpe(*s)
+func (_u *AssetHistoryUpdate) SetNillableCpe(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetCpe(*v)
 	}
-	return ahu
+	return _u
 }
 
 // ClearCpe clears the value of the "cpe" field.
-func (ahu *AssetHistoryUpdate) ClearCpe() *AssetHistoryUpdate {
-	ahu.mutation.ClearCpe()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearCpe() *AssetHistoryUpdate {
+	_u.mutation.ClearCpe()
+	return _u
 }
 
 // SetCategories sets the "categories" field.
-func (ahu *AssetHistoryUpdate) SetCategories(s []string) *AssetHistoryUpdate {
-	ahu.mutation.SetCategories(s)
-	return ahu
+func (_u *AssetHistoryUpdate) SetCategories(v []string) *AssetHistoryUpdate {
+	_u.mutation.SetCategories(v)
+	return _u
 }
 
-// AppendCategories appends s to the "categories" field.
-func (ahu *AssetHistoryUpdate) AppendCategories(s []string) *AssetHistoryUpdate {
-	ahu.mutation.AppendCategories(s)
-	return ahu
+// AppendCategories appends value to the "categories" field.
+func (_u *AssetHistoryUpdate) AppendCategories(v []string) *AssetHistoryUpdate {
+	_u.mutation.AppendCategories(v)
+	return _u
 }
 
 // ClearCategories clears the value of the "categories" field.
-func (ahu *AssetHistoryUpdate) ClearCategories() *AssetHistoryUpdate {
-	ahu.mutation.ClearCategories()
-	return ahu
+func (_u *AssetHistoryUpdate) ClearCategories() *AssetHistoryUpdate {
+	_u.mutation.ClearCategories()
+	return _u
 }
 
 // Mutation returns the AssetHistoryMutation object of the builder.
-func (ahu *AssetHistoryUpdate) Mutation() *AssetHistoryMutation {
-	return ahu.mutation
+func (_u *AssetHistoryUpdate) Mutation() *AssetHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ahu *AssetHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ahu.defaults(); err != nil {
+func (_u *AssetHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ahu.sqlSave, ahu.mutation, ahu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ahu *AssetHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ahu.Save(ctx)
+func (_u *AssetHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -292,33 +292,33 @@ func (ahu *AssetHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ahu *AssetHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ahu.Save(ctx)
+func (_u *AssetHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ahu *AssetHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ahu.Exec(ctx); err != nil {
+func (_u *AssetHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ahu *AssetHistoryUpdate) defaults() error {
-	if _, ok := ahu.mutation.UpdatedAt(); !ok && !ahu.mutation.UpdatedAtCleared() {
+func (_u *AssetHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if assethistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized assethistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := assethistory.UpdateDefaultUpdatedAt()
-		ahu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ahu *AssetHistoryUpdate) check() error {
-	if v, ok := ahu.mutation.AssetType(); ok {
+func (_u *AssetHistoryUpdate) check() error {
+	if v, ok := _u.mutation.AssetType(); ok {
 		if err := assethistory.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "AssetHistory.asset_type": %w`, err)}
 		}
@@ -327,118 +327,118 @@ func (ahu *AssetHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ahu *AssetHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetHistoryUpdate {
-	ahu.modifiers = append(ahu.modifiers, modifiers...)
-	return ahu
+func (_u *AssetHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ahu *AssetHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ahu.check(); err != nil {
-		return n, err
+func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(assethistory.Table, assethistory.Columns, sqlgraph.NewFieldSpec(assethistory.FieldID, field.TypeString))
-	if ps := ahu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ahu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(assethistory.FieldRef, field.TypeString)
 	}
-	if ahu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(assethistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ahu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(assethistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ahu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(assethistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ahu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(assethistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ahu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(assethistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ahu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(assethistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ahu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(assethistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ahu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(assethistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ahu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(assethistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ahu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assethistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ahu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(assethistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ahu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, assethistory.FieldTags, value)
 		})
 	}
-	if ahu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assethistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ahu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ahu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ahu.mutation.AssetType(); ok {
+	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(assethistory.FieldAssetType, field.TypeEnum, value)
 	}
-	if value, ok := ahu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assethistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ahu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(assethistory.FieldDescription, field.TypeString, value)
 	}
-	if ahu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(assethistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := ahu.mutation.Identifier(); ok {
+	if value, ok := _u.mutation.Identifier(); ok {
 		_spec.SetField(assethistory.FieldIdentifier, field.TypeString, value)
 	}
-	if ahu.mutation.IdentifierCleared() {
+	if _u.mutation.IdentifierCleared() {
 		_spec.ClearField(assethistory.FieldIdentifier, field.TypeString)
 	}
-	if value, ok := ahu.mutation.Website(); ok {
+	if value, ok := _u.mutation.Website(); ok {
 		_spec.SetField(assethistory.FieldWebsite, field.TypeString, value)
 	}
-	if ahu.mutation.WebsiteCleared() {
+	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(assethistory.FieldWebsite, field.TypeString)
 	}
-	if value, ok := ahu.mutation.Cpe(); ok {
+	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(assethistory.FieldCpe, field.TypeString, value)
 	}
-	if ahu.mutation.CpeCleared() {
+	if _u.mutation.CpeCleared() {
 		_spec.ClearField(assethistory.FieldCpe, field.TypeString)
 	}
-	if value, ok := ahu.mutation.Categories(); ok {
+	if value, ok := _u.mutation.Categories(); ok {
 		_spec.SetField(assethistory.FieldCategories, field.TypeJSON, value)
 	}
-	if value, ok := ahu.mutation.AppendedCategories(); ok {
+	if value, ok := _u.mutation.AppendedCategories(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, assethistory.FieldCategories, value)
 		})
 	}
-	if ahu.mutation.CategoriesCleared() {
+	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(assethistory.FieldCategories, field.TypeJSON)
 	}
-	_spec.Node.Schema = ahu.schemaConfig.AssetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ahu.schemaConfig)
-	_spec.AddModifiers(ahu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ahu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.AssetHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{assethistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -446,8 +446,8 @@ func (ahu *AssetHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ahu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // AssetHistoryUpdateOne is the builder for updating a single AssetHistory entity.
@@ -460,270 +460,270 @@ type AssetHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ahuo *AssetHistoryUpdateOne) SetUpdatedAt(t time.Time) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetUpdatedAt(t)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetUpdatedAt(v time.Time) *AssetHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ahuo *AssetHistoryUpdateOne) ClearUpdatedAt() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearUpdatedAt()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearUpdatedAt() *AssetHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ahuo *AssetHistoryUpdateOne) SetUpdatedBy(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetUpdatedBy(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetUpdatedBy(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableUpdatedBy(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetUpdatedBy(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableUpdatedBy(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ahuo *AssetHistoryUpdateOne) ClearUpdatedBy() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearUpdatedBy()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearUpdatedBy() *AssetHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ahuo *AssetHistoryUpdateOne) SetDeletedAt(t time.Time) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetDeletedAt(t)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetDeletedAt(v time.Time) *AssetHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *AssetHistoryUpdateOne {
-	if t != nil {
-		ahuo.SetDeletedAt(*t)
+func (_u *AssetHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ahuo *AssetHistoryUpdateOne) ClearDeletedAt() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearDeletedAt()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearDeletedAt() *AssetHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ahuo *AssetHistoryUpdateOne) SetDeletedBy(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetDeletedBy(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetDeletedBy(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableDeletedBy(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetDeletedBy(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableDeletedBy(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ahuo *AssetHistoryUpdateOne) ClearDeletedBy() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearDeletedBy()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearDeletedBy() *AssetHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ahuo *AssetHistoryUpdateOne) SetTags(s []string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetTags(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetTags(v []string) *AssetHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ahuo *AssetHistoryUpdateOne) AppendTags(s []string) *AssetHistoryUpdateOne {
-	ahuo.mutation.AppendTags(s)
-	return ahuo
+// AppendTags appends value to the "tags" field.
+func (_u *AssetHistoryUpdateOne) AppendTags(v []string) *AssetHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ahuo *AssetHistoryUpdateOne) ClearTags() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearTags()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearTags() *AssetHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ahuo *AssetHistoryUpdateOne) SetOwnerID(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetOwnerID(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetOwnerID(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableOwnerID(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetOwnerID(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableOwnerID(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (ahuo *AssetHistoryUpdateOne) ClearOwnerID() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearOwnerID()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearOwnerID() *AssetHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetAssetType sets the "asset_type" field.
-func (ahuo *AssetHistoryUpdateOne) SetAssetType(et enums.AssetType) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetAssetType(et)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetAssetType(v enums.AssetType) *AssetHistoryUpdateOne {
+	_u.mutation.SetAssetType(v)
+	return _u
 }
 
 // SetNillableAssetType sets the "asset_type" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableAssetType(et *enums.AssetType) *AssetHistoryUpdateOne {
-	if et != nil {
-		ahuo.SetAssetType(*et)
+func (_u *AssetHistoryUpdateOne) SetNillableAssetType(v *enums.AssetType) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssetType(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ahuo *AssetHistoryUpdateOne) SetName(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetName(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableName(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetName(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ahuo *AssetHistoryUpdateOne) SetDescription(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetDescription(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetDescription(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableDescription(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetDescription(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableDescription(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ahuo *AssetHistoryUpdateOne) ClearDescription() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearDescription()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearDescription() *AssetHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetIdentifier sets the "identifier" field.
-func (ahuo *AssetHistoryUpdateOne) SetIdentifier(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetIdentifier(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetIdentifier(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetIdentifier(v)
+	return _u
 }
 
 // SetNillableIdentifier sets the "identifier" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableIdentifier(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetIdentifier(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableIdentifier(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentifier(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearIdentifier clears the value of the "identifier" field.
-func (ahuo *AssetHistoryUpdateOne) ClearIdentifier() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearIdentifier()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearIdentifier() *AssetHistoryUpdateOne {
+	_u.mutation.ClearIdentifier()
+	return _u
 }
 
 // SetWebsite sets the "website" field.
-func (ahuo *AssetHistoryUpdateOne) SetWebsite(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetWebsite(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetWebsite(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetWebsite(v)
+	return _u
 }
 
 // SetNillableWebsite sets the "website" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableWebsite(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetWebsite(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableWebsite(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetWebsite(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearWebsite clears the value of the "website" field.
-func (ahuo *AssetHistoryUpdateOne) ClearWebsite() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearWebsite()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearWebsite() *AssetHistoryUpdateOne {
+	_u.mutation.ClearWebsite()
+	return _u
 }
 
 // SetCpe sets the "cpe" field.
-func (ahuo *AssetHistoryUpdateOne) SetCpe(s string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetCpe(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetCpe(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetCpe(v)
+	return _u
 }
 
 // SetNillableCpe sets the "cpe" field if the given value is not nil.
-func (ahuo *AssetHistoryUpdateOne) SetNillableCpe(s *string) *AssetHistoryUpdateOne {
-	if s != nil {
-		ahuo.SetCpe(*s)
+func (_u *AssetHistoryUpdateOne) SetNillableCpe(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetCpe(*v)
 	}
-	return ahuo
+	return _u
 }
 
 // ClearCpe clears the value of the "cpe" field.
-func (ahuo *AssetHistoryUpdateOne) ClearCpe() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearCpe()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearCpe() *AssetHistoryUpdateOne {
+	_u.mutation.ClearCpe()
+	return _u
 }
 
 // SetCategories sets the "categories" field.
-func (ahuo *AssetHistoryUpdateOne) SetCategories(s []string) *AssetHistoryUpdateOne {
-	ahuo.mutation.SetCategories(s)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) SetCategories(v []string) *AssetHistoryUpdateOne {
+	_u.mutation.SetCategories(v)
+	return _u
 }
 
-// AppendCategories appends s to the "categories" field.
-func (ahuo *AssetHistoryUpdateOne) AppendCategories(s []string) *AssetHistoryUpdateOne {
-	ahuo.mutation.AppendCategories(s)
-	return ahuo
+// AppendCategories appends value to the "categories" field.
+func (_u *AssetHistoryUpdateOne) AppendCategories(v []string) *AssetHistoryUpdateOne {
+	_u.mutation.AppendCategories(v)
+	return _u
 }
 
 // ClearCategories clears the value of the "categories" field.
-func (ahuo *AssetHistoryUpdateOne) ClearCategories() *AssetHistoryUpdateOne {
-	ahuo.mutation.ClearCategories()
-	return ahuo
+func (_u *AssetHistoryUpdateOne) ClearCategories() *AssetHistoryUpdateOne {
+	_u.mutation.ClearCategories()
+	return _u
 }
 
 // Mutation returns the AssetHistoryMutation object of the builder.
-func (ahuo *AssetHistoryUpdateOne) Mutation() *AssetHistoryMutation {
-	return ahuo.mutation
+func (_u *AssetHistoryUpdateOne) Mutation() *AssetHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the AssetHistoryUpdate builder.
-func (ahuo *AssetHistoryUpdateOne) Where(ps ...predicate.AssetHistory) *AssetHistoryUpdateOne {
-	ahuo.mutation.Where(ps...)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) Where(ps ...predicate.AssetHistory) *AssetHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ahuo *AssetHistoryUpdateOne) Select(field string, fields ...string) *AssetHistoryUpdateOne {
-	ahuo.fields = append([]string{field}, fields...)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) Select(field string, fields ...string) *AssetHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated AssetHistory entity.
-func (ahuo *AssetHistoryUpdateOne) Save(ctx context.Context) (*AssetHistory, error) {
-	if err := ahuo.defaults(); err != nil {
+func (_u *AssetHistoryUpdateOne) Save(ctx context.Context) (*AssetHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ahuo.sqlSave, ahuo.mutation, ahuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ahuo *AssetHistoryUpdateOne) SaveX(ctx context.Context) *AssetHistory {
-	node, err := ahuo.Save(ctx)
+func (_u *AssetHistoryUpdateOne) SaveX(ctx context.Context) *AssetHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -731,33 +731,33 @@ func (ahuo *AssetHistoryUpdateOne) SaveX(ctx context.Context) *AssetHistory {
 }
 
 // Exec executes the query on the entity.
-func (ahuo *AssetHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ahuo.Save(ctx)
+func (_u *AssetHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ahuo *AssetHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ahuo.Exec(ctx); err != nil {
+func (_u *AssetHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ahuo *AssetHistoryUpdateOne) defaults() error {
-	if _, ok := ahuo.mutation.UpdatedAt(); !ok && !ahuo.mutation.UpdatedAtCleared() {
+func (_u *AssetHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if assethistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized assethistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := assethistory.UpdateDefaultUpdatedAt()
-		ahuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ahuo *AssetHistoryUpdateOne) check() error {
-	if v, ok := ahuo.mutation.AssetType(); ok {
+func (_u *AssetHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.AssetType(); ok {
 		if err := assethistory.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "AssetHistory.asset_type": %w`, err)}
 		}
@@ -766,22 +766,22 @@ func (ahuo *AssetHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ahuo *AssetHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetHistoryUpdateOne {
-	ahuo.modifiers = append(ahuo.modifiers, modifiers...)
-	return ahuo
+func (_u *AssetHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ahuo *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHistory, err error) {
-	if err := ahuo.check(); err != nil {
+func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(assethistory.Table, assethistory.Columns, sqlgraph.NewFieldSpec(assethistory.FieldID, field.TypeString))
-	id, ok := ahuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "AssetHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ahuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, assethistory.FieldID)
 		for _, f := range fields {
@@ -793,111 +793,111 @@ func (ahuo *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHis
 			}
 		}
 	}
-	if ps := ahuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ahuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(assethistory.FieldRef, field.TypeString)
 	}
-	if ahuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(assethistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ahuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(assethistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ahuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(assethistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ahuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(assethistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(assethistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ahuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(assethistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(assethistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ahuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(assethistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ahuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(assethistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ahuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assethistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(assethistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ahuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, assethistory.FieldTags, value)
 		})
 	}
-	if ahuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assethistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ahuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
 	}
-	if ahuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.AssetType(); ok {
+	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(assethistory.FieldAssetType, field.TypeEnum, value)
 	}
-	if value, ok := ahuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assethistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ahuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(assethistory.FieldDescription, field.TypeString, value)
 	}
-	if ahuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(assethistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.Identifier(); ok {
+	if value, ok := _u.mutation.Identifier(); ok {
 		_spec.SetField(assethistory.FieldIdentifier, field.TypeString, value)
 	}
-	if ahuo.mutation.IdentifierCleared() {
+	if _u.mutation.IdentifierCleared() {
 		_spec.ClearField(assethistory.FieldIdentifier, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.Website(); ok {
+	if value, ok := _u.mutation.Website(); ok {
 		_spec.SetField(assethistory.FieldWebsite, field.TypeString, value)
 	}
-	if ahuo.mutation.WebsiteCleared() {
+	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(assethistory.FieldWebsite, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.Cpe(); ok {
+	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(assethistory.FieldCpe, field.TypeString, value)
 	}
-	if ahuo.mutation.CpeCleared() {
+	if _u.mutation.CpeCleared() {
 		_spec.ClearField(assethistory.FieldCpe, field.TypeString)
 	}
-	if value, ok := ahuo.mutation.Categories(); ok {
+	if value, ok := _u.mutation.Categories(); ok {
 		_spec.SetField(assethistory.FieldCategories, field.TypeJSON, value)
 	}
-	if value, ok := ahuo.mutation.AppendedCategories(); ok {
+	if value, ok := _u.mutation.AppendedCategories(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, assethistory.FieldCategories, value)
 		})
 	}
-	if ahuo.mutation.CategoriesCleared() {
+	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(assethistory.FieldCategories, field.TypeJSON)
 	}
-	_spec.Node.Schema = ahuo.schemaConfig.AssetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ahuo.schemaConfig)
-	_spec.AddModifiers(ahuo.modifiers...)
-	_node = &AssetHistory{config: ahuo.config}
+	_spec.Node.Schema = _u.schemaConfig.AssetHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &AssetHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ahuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{assethistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -905,6 +905,6 @@ func (ahuo *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHis
 		}
 		return nil, err
 	}
-	ahuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -22,58 +22,58 @@ type ProcedureHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ProcedureHistoryDelete builder.
-func (phd *ProcedureHistoryDelete) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryDelete {
-	phd.mutation.Where(ps...)
-	return phd
+func (_d *ProcedureHistoryDelete) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (phd *ProcedureHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, phd.sqlExec, phd.mutation, phd.hooks)
+func (_d *ProcedureHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phd *ProcedureHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := phd.Exec(ctx)
+func (_d *ProcedureHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (phd *ProcedureHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ProcedureHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(procedurehistory.Table, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = phd.schemaConfig.ProcedureHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phd.schemaConfig)
-	if ps := phd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ProcedureHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, phd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	phd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ProcedureHistoryDeleteOne is the builder for deleting a single ProcedureHistory entity.
 type ProcedureHistoryDeleteOne struct {
-	phd *ProcedureHistoryDelete
+	_d *ProcedureHistoryDelete
 }
 
 // Where appends a list predicates to the ProcedureHistoryDelete builder.
-func (phdo *ProcedureHistoryDeleteOne) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryDeleteOne {
-	phdo.phd.mutation.Where(ps...)
-	return phdo
+func (_d *ProcedureHistoryDeleteOne) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (phdo *ProcedureHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := phdo.phd.Exec(ctx)
+func (_d *ProcedureHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (phdo *ProcedureHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phdo *ProcedureHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := phdo.Exec(ctx); err != nil {
+func (_d *ProcedureHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

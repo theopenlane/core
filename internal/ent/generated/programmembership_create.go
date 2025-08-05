@@ -25,146 +25,146 @@ type ProgramMembershipCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (pmc *ProgramMembershipCreate) SetCreatedAt(t time.Time) *ProgramMembershipCreate {
-	pmc.mutation.SetCreatedAt(t)
-	return pmc
+func (_c *ProgramMembershipCreate) SetCreatedAt(v time.Time) *ProgramMembershipCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableCreatedAt(t *time.Time) *ProgramMembershipCreate {
-	if t != nil {
-		pmc.SetCreatedAt(*t)
+func (_c *ProgramMembershipCreate) SetNillableCreatedAt(v *time.Time) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return pmc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pmc *ProgramMembershipCreate) SetUpdatedAt(t time.Time) *ProgramMembershipCreate {
-	pmc.mutation.SetUpdatedAt(t)
-	return pmc
+func (_c *ProgramMembershipCreate) SetUpdatedAt(v time.Time) *ProgramMembershipCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableUpdatedAt(t *time.Time) *ProgramMembershipCreate {
-	if t != nil {
-		pmc.SetUpdatedAt(*t)
+func (_c *ProgramMembershipCreate) SetNillableUpdatedAt(v *time.Time) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return pmc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (pmc *ProgramMembershipCreate) SetCreatedBy(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetCreatedBy(s)
-	return pmc
+func (_c *ProgramMembershipCreate) SetCreatedBy(v string) *ProgramMembershipCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableCreatedBy(s *string) *ProgramMembershipCreate {
-	if s != nil {
-		pmc.SetCreatedBy(*s)
+func (_c *ProgramMembershipCreate) SetNillableCreatedBy(v *string) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return pmc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pmc *ProgramMembershipCreate) SetUpdatedBy(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetUpdatedBy(s)
-	return pmc
+func (_c *ProgramMembershipCreate) SetUpdatedBy(v string) *ProgramMembershipCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableUpdatedBy(s *string) *ProgramMembershipCreate {
-	if s != nil {
-		pmc.SetUpdatedBy(*s)
+func (_c *ProgramMembershipCreate) SetNillableUpdatedBy(v *string) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return pmc
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (pmc *ProgramMembershipCreate) SetRole(e enums.Role) *ProgramMembershipCreate {
-	pmc.mutation.SetRole(e)
-	return pmc
+func (_c *ProgramMembershipCreate) SetRole(v enums.Role) *ProgramMembershipCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableRole(e *enums.Role) *ProgramMembershipCreate {
-	if e != nil {
-		pmc.SetRole(*e)
+func (_c *ProgramMembershipCreate) SetNillableRole(v *enums.Role) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetRole(*v)
 	}
-	return pmc
+	return _c
 }
 
 // SetProgramID sets the "program_id" field.
-func (pmc *ProgramMembershipCreate) SetProgramID(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetProgramID(s)
-	return pmc
+func (_c *ProgramMembershipCreate) SetProgramID(v string) *ProgramMembershipCreate {
+	_c.mutation.SetProgramID(v)
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (pmc *ProgramMembershipCreate) SetUserID(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetUserID(s)
-	return pmc
+func (_c *ProgramMembershipCreate) SetUserID(v string) *ProgramMembershipCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (pmc *ProgramMembershipCreate) SetID(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetID(s)
-	return pmc
+func (_c *ProgramMembershipCreate) SetID(v string) *ProgramMembershipCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableID(s *string) *ProgramMembershipCreate {
-	if s != nil {
-		pmc.SetID(*s)
+func (_c *ProgramMembershipCreate) SetNillableID(v *string) *ProgramMembershipCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return pmc
+	return _c
 }
 
 // SetProgram sets the "program" edge to the Program entity.
-func (pmc *ProgramMembershipCreate) SetProgram(p *Program) *ProgramMembershipCreate {
-	return pmc.SetProgramID(p.ID)
+func (_c *ProgramMembershipCreate) SetProgram(v *Program) *ProgramMembershipCreate {
+	return _c.SetProgramID(v.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (pmc *ProgramMembershipCreate) SetUser(u *User) *ProgramMembershipCreate {
-	return pmc.SetUserID(u.ID)
+func (_c *ProgramMembershipCreate) SetUser(v *User) *ProgramMembershipCreate {
+	return _c.SetUserID(v.ID)
 }
 
 // SetOrgMembershipID sets the "org_membership" edge to the OrgMembership entity by ID.
-func (pmc *ProgramMembershipCreate) SetOrgMembershipID(id string) *ProgramMembershipCreate {
-	pmc.mutation.SetOrgMembershipID(id)
-	return pmc
+func (_c *ProgramMembershipCreate) SetOrgMembershipID(id string) *ProgramMembershipCreate {
+	_c.mutation.SetOrgMembershipID(id)
+	return _c
 }
 
 // SetNillableOrgMembershipID sets the "org_membership" edge to the OrgMembership entity by ID if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableOrgMembershipID(id *string) *ProgramMembershipCreate {
+func (_c *ProgramMembershipCreate) SetNillableOrgMembershipID(id *string) *ProgramMembershipCreate {
 	if id != nil {
-		pmc = pmc.SetOrgMembershipID(*id)
+		_c = _c.SetOrgMembershipID(*id)
 	}
-	return pmc
+	return _c
 }
 
 // SetOrgMembership sets the "org_membership" edge to the OrgMembership entity.
-func (pmc *ProgramMembershipCreate) SetOrgMembership(o *OrgMembership) *ProgramMembershipCreate {
-	return pmc.SetOrgMembershipID(o.ID)
+func (_c *ProgramMembershipCreate) SetOrgMembership(v *OrgMembership) *ProgramMembershipCreate {
+	return _c.SetOrgMembershipID(v.ID)
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
-func (pmc *ProgramMembershipCreate) Mutation() *ProgramMembershipMutation {
-	return pmc.mutation
+func (_c *ProgramMembershipCreate) Mutation() *ProgramMembershipMutation {
+	return _c.mutation
 }
 
 // Save creates the ProgramMembership in the database.
-func (pmc *ProgramMembershipCreate) Save(ctx context.Context) (*ProgramMembership, error) {
-	if err := pmc.defaults(); err != nil {
+func (_c *ProgramMembershipCreate) Save(ctx context.Context) (*ProgramMembership, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, pmc.sqlSave, pmc.mutation, pmc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (pmc *ProgramMembershipCreate) SaveX(ctx context.Context) *ProgramMembership {
-	v, err := pmc.Save(ctx)
+func (_c *ProgramMembershipCreate) SaveX(ctx context.Context) *ProgramMembership {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -172,79 +172,79 @@ func (pmc *ProgramMembershipCreate) SaveX(ctx context.Context) *ProgramMembershi
 }
 
 // Exec executes the query.
-func (pmc *ProgramMembershipCreate) Exec(ctx context.Context) error {
-	_, err := pmc.Save(ctx)
+func (_c *ProgramMembershipCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmc *ProgramMembershipCreate) ExecX(ctx context.Context) {
-	if err := pmc.Exec(ctx); err != nil {
+func (_c *ProgramMembershipCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pmc *ProgramMembershipCreate) defaults() error {
-	if _, ok := pmc.mutation.CreatedAt(); !ok {
+func (_c *ProgramMembershipCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if programmembership.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembership.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembership.DefaultCreatedAt()
-		pmc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := pmc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if programmembership.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembership.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembership.DefaultUpdatedAt()
-		pmc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pmc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		v := programmembership.DefaultRole
-		pmc.mutation.SetRole(v)
+		_c.mutation.SetRole(v)
 	}
-	if _, ok := pmc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if programmembership.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized programmembership.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := programmembership.DefaultID()
-		pmc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pmc *ProgramMembershipCreate) check() error {
-	if _, ok := pmc.mutation.Role(); !ok {
+func (_c *ProgramMembershipCreate) check() error {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "ProgramMembership.role"`)}
 	}
-	if v, ok := pmc.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := programmembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "ProgramMembership.role": %w`, err)}
 		}
 	}
-	if _, ok := pmc.mutation.ProgramID(); !ok {
+	if _, ok := _c.mutation.ProgramID(); !ok {
 		return &ValidationError{Name: "program_id", err: errors.New(`generated: missing required field "ProgramMembership.program_id"`)}
 	}
-	if _, ok := pmc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`generated: missing required field "ProgramMembership.user_id"`)}
 	}
-	if len(pmc.mutation.ProgramIDs()) == 0 {
+	if len(_c.mutation.ProgramIDs()) == 0 {
 		return &ValidationError{Name: "program", err: errors.New(`generated: missing required edge "ProgramMembership.program"`)}
 	}
-	if len(pmc.mutation.UserIDs()) == 0 {
+	if len(_c.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`generated: missing required edge "ProgramMembership.user"`)}
 	}
 	return nil
 }
 
-func (pmc *ProgramMembershipCreate) sqlSave(ctx context.Context) (*ProgramMembership, error) {
-	if err := pmc.check(); err != nil {
+func (_c *ProgramMembershipCreate) sqlSave(ctx context.Context) (*ProgramMembership, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := pmc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, pmc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -257,42 +257,42 @@ func (pmc *ProgramMembershipCreate) sqlSave(ctx context.Context) (*ProgramMember
 			return nil, fmt.Errorf("unexpected ProgramMembership.ID type: %T", _spec.ID.Value)
 		}
 	}
-	pmc.mutation.id = &_node.ID
-	pmc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.CreateSpec) {
+func (_c *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ProgramMembership{config: pmc.config}
+		_node = &ProgramMembership{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(programmembership.Table, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
 	)
-	_spec.Schema = pmc.schemaConfig.ProgramMembership
-	if id, ok := pmc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ProgramMembership
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := pmc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(programmembership.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := pmc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(programmembership.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pmc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(programmembership.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := pmc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pmc.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if nodes := pmc.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -303,14 +303,14 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pmc.schemaConfig.ProgramMembership
+		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ProgramID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pmc.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -321,14 +321,14 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pmc.schemaConfig.ProgramMembership
+		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.UserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pmc.mutation.OrgMembershipIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgMembershipIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -339,7 +339,7 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pmc.schemaConfig.ProgramMembership
+		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -357,16 +357,16 @@ type ProgramMembershipCreateBulk struct {
 }
 
 // Save creates the ProgramMembership entities in the database.
-func (pmcb *ProgramMembershipCreateBulk) Save(ctx context.Context) ([]*ProgramMembership, error) {
-	if pmcb.err != nil {
-		return nil, pmcb.err
+func (_c *ProgramMembershipCreateBulk) Save(ctx context.Context) ([]*ProgramMembership, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(pmcb.builders))
-	nodes := make([]*ProgramMembership, len(pmcb.builders))
-	mutators := make([]Mutator, len(pmcb.builders))
-	for i := range pmcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ProgramMembership, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := pmcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProgramMembershipMutation)
@@ -380,11 +380,11 @@ func (pmcb *ProgramMembershipCreateBulk) Save(ctx context.Context) ([]*ProgramMe
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, pmcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, pmcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -404,7 +404,7 @@ func (pmcb *ProgramMembershipCreateBulk) Save(ctx context.Context) ([]*ProgramMe
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, pmcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -412,8 +412,8 @@ func (pmcb *ProgramMembershipCreateBulk) Save(ctx context.Context) ([]*ProgramMe
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pmcb *ProgramMembershipCreateBulk) SaveX(ctx context.Context) []*ProgramMembership {
-	v, err := pmcb.Save(ctx)
+func (_c *ProgramMembershipCreateBulk) SaveX(ctx context.Context) []*ProgramMembership {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -421,14 +421,14 @@ func (pmcb *ProgramMembershipCreateBulk) SaveX(ctx context.Context) []*ProgramMe
 }
 
 // Exec executes the query.
-func (pmcb *ProgramMembershipCreateBulk) Exec(ctx context.Context) error {
-	_, err := pmcb.Save(ctx)
+func (_c *ProgramMembershipCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmcb *ProgramMembershipCreateBulk) ExecX(ctx context.Context) {
-	if err := pmcb.Exec(ctx); err != nil {
+func (_c *ProgramMembershipCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

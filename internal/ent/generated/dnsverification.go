@@ -115,7 +115,7 @@ func (*DNSVerification) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the DNSVerification fields.
-func (dv *DNSVerification) assignValues(columns []string, values []any) error {
+func (_m *DNSVerification) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -125,49 +125,49 @@ func (dv *DNSVerification) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				dv.ID = value.String
+				_m.ID = value.String
 			}
 		case dnsverification.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				dv.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case dnsverification.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				dv.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case dnsverification.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				dv.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case dnsverification.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				dv.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case dnsverification.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				dv.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case dnsverification.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				dv.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case dnsverification.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &dv.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -175,64 +175,64 @@ func (dv *DNSVerification) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				dv.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case dnsverification.FieldCloudflareHostnameID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cloudflare_hostname_id", values[i])
 			} else if value.Valid {
-				dv.CloudflareHostnameID = value.String
+				_m.CloudflareHostnameID = value.String
 			}
 		case dnsverification.FieldDNSTxtRecord:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_txt_record", values[i])
 			} else if value.Valid {
-				dv.DNSTxtRecord = value.String
+				_m.DNSTxtRecord = value.String
 			}
 		case dnsverification.FieldDNSTxtValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_txt_value", values[i])
 			} else if value.Valid {
-				dv.DNSTxtValue = value.String
+				_m.DNSTxtValue = value.String
 			}
 		case dnsverification.FieldDNSVerificationStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_status", values[i])
 			} else if value.Valid {
-				dv.DNSVerificationStatus = enums.DNSVerificationStatus(value.String)
+				_m.DNSVerificationStatus = enums.DNSVerificationStatus(value.String)
 			}
 		case dnsverification.FieldDNSVerificationStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_status_reason", values[i])
 			} else if value.Valid {
-				dv.DNSVerificationStatusReason = value.String
+				_m.DNSVerificationStatusReason = value.String
 			}
 		case dnsverification.FieldAcmeChallengePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_path", values[i])
 			} else if value.Valid {
-				dv.AcmeChallengePath = value.String
+				_m.AcmeChallengePath = value.String
 			}
 		case dnsverification.FieldExpectedAcmeChallengeValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field expected_acme_challenge_value", values[i])
 			} else if value.Valid {
-				dv.ExpectedAcmeChallengeValue = value.String
+				_m.ExpectedAcmeChallengeValue = value.String
 			}
 		case dnsverification.FieldAcmeChallengeStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_status", values[i])
 			} else if value.Valid {
-				dv.AcmeChallengeStatus = enums.SSLVerificationStatus(value.String)
+				_m.AcmeChallengeStatus = enums.SSLVerificationStatus(value.String)
 			}
 		case dnsverification.FieldAcmeChallengeStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_status_reason", values[i])
 			} else if value.Valid {
-				dv.AcmeChallengeStatusReason = value.String
+				_m.AcmeChallengeStatusReason = value.String
 			}
 		default:
-			dv.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -240,118 +240,118 @@ func (dv *DNSVerification) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the DNSVerification.
 // This includes values selected through modifiers, order, etc.
-func (dv *DNSVerification) Value(name string) (ent.Value, error) {
-	return dv.selectValues.Get(name)
+func (_m *DNSVerification) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the DNSVerification entity.
-func (dv *DNSVerification) QueryOwner() *OrganizationQuery {
-	return NewDNSVerificationClient(dv.config).QueryOwner(dv)
+func (_m *DNSVerification) QueryOwner() *OrganizationQuery {
+	return NewDNSVerificationClient(_m.config).QueryOwner(_m)
 }
 
 // QueryCustomDomains queries the "custom_domains" edge of the DNSVerification entity.
-func (dv *DNSVerification) QueryCustomDomains() *CustomDomainQuery {
-	return NewDNSVerificationClient(dv.config).QueryCustomDomains(dv)
+func (_m *DNSVerification) QueryCustomDomains() *CustomDomainQuery {
+	return NewDNSVerificationClient(_m.config).QueryCustomDomains(_m)
 }
 
 // Update returns a builder for updating this DNSVerification.
 // Note that you need to call DNSVerification.Unwrap() before calling this method if this DNSVerification
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (dv *DNSVerification) Update() *DNSVerificationUpdateOne {
-	return NewDNSVerificationClient(dv.config).UpdateOne(dv)
+func (_m *DNSVerification) Update() *DNSVerificationUpdateOne {
+	return NewDNSVerificationClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the DNSVerification entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (dv *DNSVerification) Unwrap() *DNSVerification {
-	_tx, ok := dv.config.driver.(*txDriver)
+func (_m *DNSVerification) Unwrap() *DNSVerification {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: DNSVerification is not a transactional entity")
 	}
-	dv.config.driver = _tx.drv
-	return dv
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (dv *DNSVerification) String() string {
+func (_m *DNSVerification) String() string {
 	var builder strings.Builder
 	builder.WriteString("DNSVerification(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", dv.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(dv.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(dv.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(dv.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(dv.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(dv.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(dv.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", dv.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(dv.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("cloudflare_hostname_id=")
-	builder.WriteString(dv.CloudflareHostnameID)
+	builder.WriteString(_m.CloudflareHostnameID)
 	builder.WriteString(", ")
 	builder.WriteString("dns_txt_record=")
-	builder.WriteString(dv.DNSTxtRecord)
+	builder.WriteString(_m.DNSTxtRecord)
 	builder.WriteString(", ")
 	builder.WriteString("dns_txt_value=")
-	builder.WriteString(dv.DNSTxtValue)
+	builder.WriteString(_m.DNSTxtValue)
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_status=")
-	builder.WriteString(fmt.Sprintf("%v", dv.DNSVerificationStatus))
+	builder.WriteString(fmt.Sprintf("%v", _m.DNSVerificationStatus))
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_status_reason=")
-	builder.WriteString(dv.DNSVerificationStatusReason)
+	builder.WriteString(_m.DNSVerificationStatusReason)
 	builder.WriteString(", ")
 	builder.WriteString("acme_challenge_path=")
-	builder.WriteString(dv.AcmeChallengePath)
+	builder.WriteString(_m.AcmeChallengePath)
 	builder.WriteString(", ")
 	builder.WriteString("expected_acme_challenge_value=")
-	builder.WriteString(dv.ExpectedAcmeChallengeValue)
+	builder.WriteString(_m.ExpectedAcmeChallengeValue)
 	builder.WriteString(", ")
 	builder.WriteString("acme_challenge_status=")
-	builder.WriteString(fmt.Sprintf("%v", dv.AcmeChallengeStatus))
+	builder.WriteString(fmt.Sprintf("%v", _m.AcmeChallengeStatus))
 	builder.WriteString(", ")
 	builder.WriteString("acme_challenge_status_reason=")
-	builder.WriteString(dv.AcmeChallengeStatusReason)
+	builder.WriteString(_m.AcmeChallengeStatusReason)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedCustomDomains returns the CustomDomains named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (dv *DNSVerification) NamedCustomDomains(name string) ([]*CustomDomain, error) {
-	if dv.Edges.namedCustomDomains == nil {
+func (_m *DNSVerification) NamedCustomDomains(name string) ([]*CustomDomain, error) {
+	if _m.Edges.namedCustomDomains == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := dv.Edges.namedCustomDomains[name]
+	nodes, ok := _m.Edges.namedCustomDomains[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (dv *DNSVerification) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
-	if dv.Edges.namedCustomDomains == nil {
-		dv.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
+func (_m *DNSVerification) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
+	if _m.Edges.namedCustomDomains == nil {
+		_m.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
 	}
 	if len(edges) == 0 {
-		dv.Edges.namedCustomDomains[name] = []*CustomDomain{}
+		_m.Edges.namedCustomDomains[name] = []*CustomDomain{}
 	} else {
-		dv.Edges.namedCustomDomains[name] = append(dv.Edges.namedCustomDomains[name], edges...)
+		_m.Edges.namedCustomDomains[name] = append(_m.Edges.namedCustomDomains[name], edges...)
 	}
 }
 

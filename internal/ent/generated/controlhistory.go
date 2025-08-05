@@ -112,7 +112,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ControlHistory fields.
-func (ch *ControlHistory) assignValues(columns []string, values []any) error {
+func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -122,73 +122,73 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ch.ID = value.String
+				_m.ID = value.String
 			}
 		case controlhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ch.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case controlhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ch.Ref = value.String
+				_m.Ref = value.String
 			}
 		case controlhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ch.Operation = *value
+				_m.Operation = *value
 			}
 		case controlhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ch.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case controlhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ch.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case controlhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ch.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case controlhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ch.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case controlhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ch.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case controlhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ch.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case controlhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				ch.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case controlhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -196,68 +196,68 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				ch.Description = value.String
+				_m.Description = value.String
 			}
 		case controlhistory.FieldReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
 			} else if value.Valid {
-				ch.ReferenceID = value.String
+				_m.ReferenceID = value.String
 			}
 		case controlhistory.FieldAuditorReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
 			} else if value.Valid {
-				ch.AuditorReferenceID = value.String
+				_m.AuditorReferenceID = value.String
 			}
 		case controlhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ch.Status = enums.ControlStatus(value.String)
+				_m.Status = enums.ControlStatus(value.String)
 			}
 		case controlhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				ch.Source = enums.ControlSource(value.String)
+				_m.Source = enums.ControlSource(value.String)
 			}
 		case controlhistory.FieldReferenceFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
 			} else if value.Valid {
-				ch.ReferenceFramework = new(string)
-				*ch.ReferenceFramework = value.String
+				_m.ReferenceFramework = new(string)
+				*_m.ReferenceFramework = value.String
 			}
 		case controlhistory.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_type", values[i])
 			} else if value.Valid {
-				ch.ControlType = enums.ControlType(value.String)
+				_m.ControlType = enums.ControlType(value.String)
 			}
 		case controlhistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				ch.Category = value.String
+				_m.Category = value.String
 			}
 		case controlhistory.FieldCategoryID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				ch.CategoryID = value.String
+				_m.CategoryID = value.String
 			}
 		case controlhistory.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				ch.Subcategory = value.String
+				_m.Subcategory = value.String
 			}
 		case controlhistory.FieldMappedCategories:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field mapped_categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.MappedCategories); err != nil {
+				if err := json.Unmarshal(*value, &_m.MappedCategories); err != nil {
 					return fmt.Errorf("unmarshal field mapped_categories: %w", err)
 				}
 			}
@@ -265,7 +265,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_objectives", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.AssessmentObjectives); err != nil {
+				if err := json.Unmarshal(*value, &_m.AssessmentObjectives); err != nil {
 					return fmt.Errorf("unmarshal field assessment_objectives: %w", err)
 				}
 			}
@@ -273,7 +273,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_methods", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.AssessmentMethods); err != nil {
+				if err := json.Unmarshal(*value, &_m.AssessmentMethods); err != nil {
 					return fmt.Errorf("unmarshal field assessment_methods: %w", err)
 				}
 			}
@@ -281,7 +281,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_questions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.ControlQuestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlQuestions); err != nil {
 					return fmt.Errorf("unmarshal field control_questions: %w", err)
 				}
 			}
@@ -289,7 +289,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_guidance", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.ImplementationGuidance); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImplementationGuidance); err != nil {
 					return fmt.Errorf("unmarshal field implementation_guidance: %w", err)
 				}
 			}
@@ -297,7 +297,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.ExampleEvidence); err != nil {
+				if err := json.Unmarshal(*value, &_m.ExampleEvidence); err != nil {
 					return fmt.Errorf("unmarshal field example_evidence: %w", err)
 				}
 			}
@@ -305,7 +305,7 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field references", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.References); err != nil {
+				if err := json.Unmarshal(*value, &_m.References); err != nil {
 					return fmt.Errorf("unmarshal field references: %w", err)
 				}
 			}
@@ -313,35 +313,35 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
 			} else if value.Valid {
-				ch.ControlOwnerID = new(string)
-				*ch.ControlOwnerID = value.String
+				_m.ControlOwnerID = new(string)
+				*_m.ControlOwnerID = value.String
 			}
 		case controlhistory.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				ch.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case controlhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ch.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case controlhistory.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
 			} else if value.Valid {
-				ch.RefCode = value.String
+				_m.RefCode = value.String
 			}
 		case controlhistory.FieldStandardID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
 			} else if value.Valid {
-				ch.StandardID = value.String
+				_m.StandardID = value.String
 			}
 		default:
-			ch.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -349,135 +349,135 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ControlHistory.
 // This includes values selected through modifiers, order, etc.
-func (ch *ControlHistory) Value(name string) (ent.Value, error) {
-	return ch.selectValues.Get(name)
+func (_m *ControlHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ControlHistory.
 // Note that you need to call ControlHistory.Unwrap() before calling this method if this ControlHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ch *ControlHistory) Update() *ControlHistoryUpdateOne {
-	return NewControlHistoryClient(ch.config).UpdateOne(ch)
+func (_m *ControlHistory) Update() *ControlHistoryUpdateOne {
+	return NewControlHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ControlHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ch *ControlHistory) Unwrap() *ControlHistory {
-	_tx, ok := ch.config.driver.(*txDriver)
+func (_m *ControlHistory) Unwrap() *ControlHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ControlHistory is not a transactional entity")
 	}
-	ch.config.driver = _tx.drv
-	return ch
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ch *ControlHistory) String() string {
+func (_m *ControlHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ControlHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ch.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ch.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ch.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ch.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ch.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ch.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ch.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(ch.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(ch.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("reference_id=")
-	builder.WriteString(ch.ReferenceID)
+	builder.WriteString(_m.ReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_reference_id=")
-	builder.WriteString(ch.AuditorReferenceID)
+	builder.WriteString(_m.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Source))
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteString(", ")
-	if v := ch.ReferenceFramework; v != nil {
+	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
-	builder.WriteString(fmt.Sprintf("%v", ch.ControlType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlType))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(ch.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("category_id=")
-	builder.WriteString(ch.CategoryID)
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("subcategory=")
-	builder.WriteString(ch.Subcategory)
+	builder.WriteString(_m.Subcategory)
 	builder.WriteString(", ")
 	builder.WriteString("mapped_categories=")
-	builder.WriteString(fmt.Sprintf("%v", ch.MappedCategories))
+	builder.WriteString(fmt.Sprintf("%v", _m.MappedCategories))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_objectives=")
-	builder.WriteString(fmt.Sprintf("%v", ch.AssessmentObjectives))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssessmentObjectives))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_methods=")
-	builder.WriteString(fmt.Sprintf("%v", ch.AssessmentMethods))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssessmentMethods))
 	builder.WriteString(", ")
 	builder.WriteString("control_questions=")
-	builder.WriteString(fmt.Sprintf("%v", ch.ControlQuestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlQuestions))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_guidance=")
-	builder.WriteString(fmt.Sprintf("%v", ch.ImplementationGuidance))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImplementationGuidance))
 	builder.WriteString(", ")
 	builder.WriteString("example_evidence=")
-	builder.WriteString(fmt.Sprintf("%v", ch.ExampleEvidence))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExampleEvidence))
 	builder.WriteString(", ")
 	builder.WriteString("references=")
-	builder.WriteString(fmt.Sprintf("%v", ch.References))
+	builder.WriteString(fmt.Sprintf("%v", _m.References))
 	builder.WriteString(", ")
-	if v := ch.ControlOwnerID; v != nil {
+	if v := _m.ControlOwnerID; v != nil {
 		builder.WriteString("control_owner_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(ch.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ch.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
-	builder.WriteString(ch.RefCode)
+	builder.WriteString(_m.RefCode)
 	builder.WriteString(", ")
 	builder.WriteString("standard_id=")
-	builder.WriteString(ch.StandardID)
+	builder.WriteString(_m.StandardID)
 	builder.WriteByte(')')
 	return builder.String()
 }

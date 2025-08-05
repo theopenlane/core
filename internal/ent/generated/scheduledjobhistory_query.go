@@ -33,40 +33,40 @@ type ScheduledJobHistoryQuery struct {
 }
 
 // Where adds a new predicate for the ScheduledJobHistoryQuery builder.
-func (sjhq *ScheduledJobHistoryQuery) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryQuery {
-	sjhq.predicates = append(sjhq.predicates, ps...)
-	return sjhq
+func (_q *ScheduledJobHistoryQuery) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sjhq *ScheduledJobHistoryQuery) Limit(limit int) *ScheduledJobHistoryQuery {
-	sjhq.ctx.Limit = &limit
-	return sjhq
+func (_q *ScheduledJobHistoryQuery) Limit(limit int) *ScheduledJobHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sjhq *ScheduledJobHistoryQuery) Offset(offset int) *ScheduledJobHistoryQuery {
-	sjhq.ctx.Offset = &offset
-	return sjhq
+func (_q *ScheduledJobHistoryQuery) Offset(offset int) *ScheduledJobHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sjhq *ScheduledJobHistoryQuery) Unique(unique bool) *ScheduledJobHistoryQuery {
-	sjhq.ctx.Unique = &unique
-	return sjhq
+func (_q *ScheduledJobHistoryQuery) Unique(unique bool) *ScheduledJobHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sjhq *ScheduledJobHistoryQuery) Order(o ...scheduledjobhistory.OrderOption) *ScheduledJobHistoryQuery {
-	sjhq.order = append(sjhq.order, o...)
-	return sjhq
+func (_q *ScheduledJobHistoryQuery) Order(o ...scheduledjobhistory.OrderOption) *ScheduledJobHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ScheduledJobHistory entity from the query.
 // Returns a *NotFoundError when no ScheduledJobHistory was found.
-func (sjhq *ScheduledJobHistoryQuery) First(ctx context.Context) (*ScheduledJobHistory, error) {
-	nodes, err := sjhq.Limit(1).All(setContextOp(ctx, sjhq.ctx, ent.OpQueryFirst))
+func (_q *ScheduledJobHistoryQuery) First(ctx context.Context) (*ScheduledJobHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (sjhq *ScheduledJobHistoryQuery) First(ctx context.Context) (*ScheduledJobH
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) FirstX(ctx context.Context) *ScheduledJobHistory {
-	node, err := sjhq.First(ctx)
+func (_q *ScheduledJobHistoryQuery) FirstX(ctx context.Context) *ScheduledJobHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (sjhq *ScheduledJobHistoryQuery) FirstX(ctx context.Context) *ScheduledJobH
 
 // FirstID returns the first ScheduledJobHistory ID from the query.
 // Returns a *NotFoundError when no ScheduledJobHistory ID was found.
-func (sjhq *ScheduledJobHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ScheduledJobHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sjhq.Limit(1).IDs(setContextOp(ctx, sjhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (sjhq *ScheduledJobHistoryQuery) FirstID(ctx context.Context) (id string, e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := sjhq.FirstID(ctx)
+func (_q *ScheduledJobHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (sjhq *ScheduledJobHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ScheduledJobHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ScheduledJobHistory entity is found.
 // Returns a *NotFoundError when no ScheduledJobHistory entities are found.
-func (sjhq *ScheduledJobHistoryQuery) Only(ctx context.Context) (*ScheduledJobHistory, error) {
-	nodes, err := sjhq.Limit(2).All(setContextOp(ctx, sjhq.ctx, ent.OpQueryOnly))
+func (_q *ScheduledJobHistoryQuery) Only(ctx context.Context) (*ScheduledJobHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (sjhq *ScheduledJobHistoryQuery) Only(ctx context.Context) (*ScheduledJobHi
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) OnlyX(ctx context.Context) *ScheduledJobHistory {
-	node, err := sjhq.Only(ctx)
+func (_q *ScheduledJobHistoryQuery) OnlyX(ctx context.Context) *ScheduledJobHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (sjhq *ScheduledJobHistoryQuery) OnlyX(ctx context.Context) *ScheduledJobHi
 // OnlyID is like Only, but returns the only ScheduledJobHistory ID in the query.
 // Returns a *NotSingularError when more than one ScheduledJobHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sjhq *ScheduledJobHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ScheduledJobHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sjhq.Limit(2).IDs(setContextOp(ctx, sjhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (sjhq *ScheduledJobHistoryQuery) OnlyID(ctx context.Context) (id string, er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := sjhq.OnlyID(ctx)
+func (_q *ScheduledJobHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (sjhq *ScheduledJobHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ScheduledJobHistories.
-func (sjhq *ScheduledJobHistoryQuery) All(ctx context.Context) ([]*ScheduledJobHistory, error) {
-	ctx = setContextOp(ctx, sjhq.ctx, ent.OpQueryAll)
-	if err := sjhq.prepareQuery(ctx); err != nil {
+func (_q *ScheduledJobHistoryQuery) All(ctx context.Context) ([]*ScheduledJobHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ScheduledJobHistory, *ScheduledJobHistoryQuery]()
-	return withInterceptors[[]*ScheduledJobHistory](ctx, sjhq, qr, sjhq.inters)
+	return withInterceptors[[]*ScheduledJobHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) AllX(ctx context.Context) []*ScheduledJobHistory {
-	nodes, err := sjhq.All(ctx)
+func (_q *ScheduledJobHistoryQuery) AllX(ctx context.Context) []*ScheduledJobHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (sjhq *ScheduledJobHistoryQuery) AllX(ctx context.Context) []*ScheduledJobH
 }
 
 // IDs executes the query and returns a list of ScheduledJobHistory IDs.
-func (sjhq *ScheduledJobHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if sjhq.ctx.Unique == nil && sjhq.path != nil {
-		sjhq.Unique(true)
+func (_q *ScheduledJobHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sjhq.ctx, ent.OpQueryIDs)
-	if err = sjhq.Select(scheduledjobhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(scheduledjobhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := sjhq.IDs(ctx)
+func (_q *ScheduledJobHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (sjhq *ScheduledJobHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (sjhq *ScheduledJobHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sjhq.ctx, ent.OpQueryCount)
-	if err := sjhq.prepareQuery(ctx); err != nil {
+func (_q *ScheduledJobHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sjhq, querierCount[*ScheduledJobHistoryQuery](), sjhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ScheduledJobHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) CountX(ctx context.Context) int {
-	count, err := sjhq.Count(ctx)
+func (_q *ScheduledJobHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (sjhq *ScheduledJobHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sjhq *ScheduledJobHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sjhq.ctx, ent.OpQueryExist)
-	switch _, err := sjhq.FirstID(ctx); {
+func (_q *ScheduledJobHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (sjhq *ScheduledJobHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sjhq *ScheduledJobHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := sjhq.Exist(ctx)
+func (_q *ScheduledJobHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (sjhq *ScheduledJobHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ScheduledJobHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sjhq *ScheduledJobHistoryQuery) Clone() *ScheduledJobHistoryQuery {
-	if sjhq == nil {
+func (_q *ScheduledJobHistoryQuery) Clone() *ScheduledJobHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ScheduledJobHistoryQuery{
-		config:     sjhq.config,
-		ctx:        sjhq.ctx.Clone(),
-		order:      append([]scheduledjobhistory.OrderOption{}, sjhq.order...),
-		inters:     append([]Interceptor{}, sjhq.inters...),
-		predicates: append([]predicate.ScheduledJobHistory{}, sjhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]scheduledjobhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ScheduledJobHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       sjhq.sql.Clone(),
-		path:      sjhq.path,
-		modifiers: append([]func(*sql.Selector){}, sjhq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (sjhq *ScheduledJobHistoryQuery) Clone() *ScheduledJobHistoryQuery {
 //		GroupBy(scheduledjobhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (sjhq *ScheduledJobHistoryQuery) GroupBy(field string, fields ...string) *ScheduledJobHistoryGroupBy {
-	sjhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ScheduledJobHistoryGroupBy{build: sjhq}
-	grbuild.flds = &sjhq.ctx.Fields
+func (_q *ScheduledJobHistoryQuery) GroupBy(field string, fields ...string) *ScheduledJobHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ScheduledJobHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = scheduledjobhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (sjhq *ScheduledJobHistoryQuery) GroupBy(field string, fields ...string) *S
 //	client.ScheduledJobHistory.Query().
 //		Select(scheduledjobhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (sjhq *ScheduledJobHistoryQuery) Select(fields ...string) *ScheduledJobHistorySelect {
-	sjhq.ctx.Fields = append(sjhq.ctx.Fields, fields...)
-	sbuild := &ScheduledJobHistorySelect{ScheduledJobHistoryQuery: sjhq}
+func (_q *ScheduledJobHistoryQuery) Select(fields ...string) *ScheduledJobHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ScheduledJobHistorySelect{ScheduledJobHistoryQuery: _q}
 	sbuild.label = scheduledjobhistory.Label
-	sbuild.flds, sbuild.scan = &sjhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ScheduledJobHistorySelect configured with the given aggregations.
-func (sjhq *ScheduledJobHistoryQuery) Aggregate(fns ...AggregateFunc) *ScheduledJobHistorySelect {
-	return sjhq.Select().Aggregate(fns...)
+func (_q *ScheduledJobHistoryQuery) Aggregate(fns ...AggregateFunc) *ScheduledJobHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sjhq *ScheduledJobHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sjhq.inters {
+func (_q *ScheduledJobHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sjhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sjhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !scheduledjobhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if sjhq.path != nil {
-		prev, err := sjhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sjhq.sql = prev
+		_q.sql = prev
 	}
 	if scheduledjobhistory.Policy == nil {
 		return errors.New("generated: uninitialized scheduledjobhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := scheduledjobhistory.Policy.EvalQuery(ctx, sjhq); err != nil {
+	if err := scheduledjobhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sjhq *ScheduledJobHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScheduledJobHistory, error) {
+func (_q *ScheduledJobHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScheduledJobHistory, error) {
 	var (
 		nodes = []*ScheduledJobHistory{}
-		_spec = sjhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ScheduledJobHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ScheduledJobHistory{config: sjhq.config}
+		node := &ScheduledJobHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = sjhq.schemaConfig.ScheduledJobHistory
-	ctx = internal.NewSchemaConfigContext(ctx, sjhq.schemaConfig)
-	if len(sjhq.modifiers) > 0 {
-		_spec.Modifiers = sjhq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ScheduledJobHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sjhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range sjhq.loadTotal {
-		if err := sjhq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sjhq *ScheduledJobHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sjhq.querySpec()
-	_spec.Node.Schema = sjhq.schemaConfig.ScheduledJobHistory
-	ctx = internal.NewSchemaConfigContext(ctx, sjhq.schemaConfig)
-	if len(sjhq.modifiers) > 0 {
-		_spec.Modifiers = sjhq.modifiers
+func (_q *ScheduledJobHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ScheduledJobHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sjhq.ctx.Fields
-	if len(sjhq.ctx.Fields) > 0 {
-		_spec.Unique = sjhq.ctx.Unique != nil && *sjhq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sjhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sjhq *ScheduledJobHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ScheduledJobHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(scheduledjobhistory.Table, scheduledjobhistory.Columns, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
-	_spec.From = sjhq.sql
-	if unique := sjhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sjhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sjhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scheduledjobhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (sjhq *ScheduledJobHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := sjhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sjhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sjhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sjhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (sjhq *ScheduledJobHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sjhq *ScheduledJobHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sjhq.driver.Dialect())
+func (_q *ScheduledJobHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(scheduledjobhistory.Table)
-	columns := sjhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = scheduledjobhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sjhq.sql != nil {
-		selector = sjhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sjhq.ctx.Unique != nil && *sjhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(sjhq.schemaConfig.ScheduledJobHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, sjhq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ScheduledJobHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range sjhq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sjhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sjhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sjhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sjhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sjhq *ScheduledJobHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobHistorySelect {
-	sjhq.modifiers = append(sjhq.modifiers, modifiers...)
-	return sjhq.Select()
+func (_q *ScheduledJobHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type ScheduledJobHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sjhgb *ScheduledJobHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ScheduledJobHistoryGroupBy {
-	sjhgb.fns = append(sjhgb.fns, fns...)
-	return sjhgb
+func (_g *ScheduledJobHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ScheduledJobHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sjhgb *ScheduledJobHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sjhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sjhgb.build.prepareQuery(ctx); err != nil {
+func (_g *ScheduledJobHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScheduledJobHistoryQuery, *ScheduledJobHistoryGroupBy](ctx, sjhgb.build, sjhgb, sjhgb.build.inters, v)
+	return scanWithInterceptors[*ScheduledJobHistoryQuery, *ScheduledJobHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sjhgb *ScheduledJobHistoryGroupBy) sqlScan(ctx context.Context, root *ScheduledJobHistoryQuery, v any) error {
+func (_g *ScheduledJobHistoryGroupBy) sqlScan(ctx context.Context, root *ScheduledJobHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sjhgb.fns))
-	for _, fn := range sjhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sjhgb.flds)+len(sjhgb.fns))
-		for _, f := range *sjhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sjhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sjhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type ScheduledJobHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (sjhs *ScheduledJobHistorySelect) Aggregate(fns ...AggregateFunc) *ScheduledJobHistorySelect {
-	sjhs.fns = append(sjhs.fns, fns...)
-	return sjhs
+func (_s *ScheduledJobHistorySelect) Aggregate(fns ...AggregateFunc) *ScheduledJobHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sjhs *ScheduledJobHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sjhs.ctx, ent.OpQuerySelect)
-	if err := sjhs.prepareQuery(ctx); err != nil {
+func (_s *ScheduledJobHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScheduledJobHistoryQuery, *ScheduledJobHistorySelect](ctx, sjhs.ScheduledJobHistoryQuery, sjhs, sjhs.inters, v)
+	return scanWithInterceptors[*ScheduledJobHistoryQuery, *ScheduledJobHistorySelect](ctx, _s.ScheduledJobHistoryQuery, _s, _s.inters, v)
 }
 
-func (sjhs *ScheduledJobHistorySelect) sqlScan(ctx context.Context, root *ScheduledJobHistoryQuery, v any) error {
+func (_s *ScheduledJobHistorySelect) sqlScan(ctx context.Context, root *ScheduledJobHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(sjhs.fns))
-	for _, fn := range sjhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*sjhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (sjhs *ScheduledJobHistorySelect) sqlScan(ctx context.Context, root *Schedu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sjhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (sjhs *ScheduledJobHistorySelect) sqlScan(ctx context.Context, root *Schedu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sjhs *ScheduledJobHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobHistorySelect {
-	sjhs.modifiers = append(sjhs.modifiers, modifiers...)
-	return sjhs
+func (_s *ScheduledJobHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

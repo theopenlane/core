@@ -22,58 +22,58 @@ type SubprocessorHistoryDelete struct {
 }
 
 // Where appends a list predicates to the SubprocessorHistoryDelete builder.
-func (shd *SubprocessorHistoryDelete) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryDelete {
-	shd.mutation.Where(ps...)
-	return shd
+func (_d *SubprocessorHistoryDelete) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (shd *SubprocessorHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, shd.sqlExec, shd.mutation, shd.hooks)
+func (_d *SubprocessorHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shd *SubprocessorHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := shd.Exec(ctx)
+func (_d *SubprocessorHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (shd *SubprocessorHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SubprocessorHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(subprocessorhistory.Table, sqlgraph.NewFieldSpec(subprocessorhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = shd.schemaConfig.SubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shd.schemaConfig)
-	if ps := shd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.SubprocessorHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, shd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	shd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SubprocessorHistoryDeleteOne is the builder for deleting a single SubprocessorHistory entity.
 type SubprocessorHistoryDeleteOne struct {
-	shd *SubprocessorHistoryDelete
+	_d *SubprocessorHistoryDelete
 }
 
 // Where appends a list predicates to the SubprocessorHistoryDelete builder.
-func (shdo *SubprocessorHistoryDeleteOne) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryDeleteOne {
-	shdo.shd.mutation.Where(ps...)
-	return shdo
+func (_d *SubprocessorHistoryDeleteOne) Where(ps ...predicate.SubprocessorHistory) *SubprocessorHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (shdo *SubprocessorHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := shdo.shd.Exec(ctx)
+func (_d *SubprocessorHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (shdo *SubprocessorHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shdo *SubprocessorHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := shdo.Exec(ctx); err != nil {
+func (_d *SubprocessorHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

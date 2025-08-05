@@ -29,265 +29,265 @@ type TaskHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the TaskHistoryUpdate builder.
-func (thu *TaskHistoryUpdate) Where(ps ...predicate.TaskHistory) *TaskHistoryUpdate {
-	thu.mutation.Where(ps...)
-	return thu
+func (_u *TaskHistoryUpdate) Where(ps ...predicate.TaskHistory) *TaskHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (thu *TaskHistoryUpdate) SetUpdatedAt(t time.Time) *TaskHistoryUpdate {
-	thu.mutation.SetUpdatedAt(t)
-	return thu
+func (_u *TaskHistoryUpdate) SetUpdatedAt(v time.Time) *TaskHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (thu *TaskHistoryUpdate) ClearUpdatedAt() *TaskHistoryUpdate {
-	thu.mutation.ClearUpdatedAt()
-	return thu
+func (_u *TaskHistoryUpdate) ClearUpdatedAt() *TaskHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (thu *TaskHistoryUpdate) SetUpdatedBy(s string) *TaskHistoryUpdate {
-	thu.mutation.SetUpdatedBy(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetUpdatedBy(v string) *TaskHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableUpdatedBy(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetUpdatedBy(*s)
+func (_u *TaskHistoryUpdate) SetNillableUpdatedBy(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (thu *TaskHistoryUpdate) ClearUpdatedBy() *TaskHistoryUpdate {
-	thu.mutation.ClearUpdatedBy()
-	return thu
+func (_u *TaskHistoryUpdate) ClearUpdatedBy() *TaskHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (thu *TaskHistoryUpdate) SetDeletedAt(t time.Time) *TaskHistoryUpdate {
-	thu.mutation.SetDeletedAt(t)
-	return thu
+func (_u *TaskHistoryUpdate) SetDeletedAt(v time.Time) *TaskHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableDeletedAt(t *time.Time) *TaskHistoryUpdate {
-	if t != nil {
-		thu.SetDeletedAt(*t)
+func (_u *TaskHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (thu *TaskHistoryUpdate) ClearDeletedAt() *TaskHistoryUpdate {
-	thu.mutation.ClearDeletedAt()
-	return thu
+func (_u *TaskHistoryUpdate) ClearDeletedAt() *TaskHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (thu *TaskHistoryUpdate) SetDeletedBy(s string) *TaskHistoryUpdate {
-	thu.mutation.SetDeletedBy(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetDeletedBy(v string) *TaskHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableDeletedBy(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetDeletedBy(*s)
+func (_u *TaskHistoryUpdate) SetNillableDeletedBy(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (thu *TaskHistoryUpdate) ClearDeletedBy() *TaskHistoryUpdate {
-	thu.mutation.ClearDeletedBy()
-	return thu
+func (_u *TaskHistoryUpdate) ClearDeletedBy() *TaskHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (thu *TaskHistoryUpdate) SetTags(s []string) *TaskHistoryUpdate {
-	thu.mutation.SetTags(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetTags(v []string) *TaskHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (thu *TaskHistoryUpdate) AppendTags(s []string) *TaskHistoryUpdate {
-	thu.mutation.AppendTags(s)
-	return thu
+// AppendTags appends value to the "tags" field.
+func (_u *TaskHistoryUpdate) AppendTags(v []string) *TaskHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (thu *TaskHistoryUpdate) ClearTags() *TaskHistoryUpdate {
-	thu.mutation.ClearTags()
-	return thu
+func (_u *TaskHistoryUpdate) ClearTags() *TaskHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (thu *TaskHistoryUpdate) SetTitle(s string) *TaskHistoryUpdate {
-	thu.mutation.SetTitle(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetTitle(v string) *TaskHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableTitle(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetTitle(*s)
+func (_u *TaskHistoryUpdate) SetNillableTitle(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return thu
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (thu *TaskHistoryUpdate) SetDetails(s string) *TaskHistoryUpdate {
-	thu.mutation.SetDetails(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetDetails(v string) *TaskHistoryUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableDetails(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetDetails(*s)
+func (_u *TaskHistoryUpdate) SetNillableDetails(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (thu *TaskHistoryUpdate) ClearDetails() *TaskHistoryUpdate {
-	thu.mutation.ClearDetails()
-	return thu
+func (_u *TaskHistoryUpdate) ClearDetails() *TaskHistoryUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (thu *TaskHistoryUpdate) SetStatus(es enums.TaskStatus) *TaskHistoryUpdate {
-	thu.mutation.SetStatus(es)
-	return thu
+func (_u *TaskHistoryUpdate) SetStatus(v enums.TaskStatus) *TaskHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableStatus(es *enums.TaskStatus) *TaskHistoryUpdate {
-	if es != nil {
-		thu.SetStatus(*es)
+func (_u *TaskHistoryUpdate) SetNillableStatus(v *enums.TaskStatus) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return thu
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (thu *TaskHistoryUpdate) SetCategory(s string) *TaskHistoryUpdate {
-	thu.mutation.SetCategory(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetCategory(v string) *TaskHistoryUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableCategory(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetCategory(*s)
+func (_u *TaskHistoryUpdate) SetNillableCategory(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (thu *TaskHistoryUpdate) ClearCategory() *TaskHistoryUpdate {
-	thu.mutation.ClearCategory()
-	return thu
+func (_u *TaskHistoryUpdate) ClearCategory() *TaskHistoryUpdate {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetDue sets the "due" field.
-func (thu *TaskHistoryUpdate) SetDue(mt models.DateTime) *TaskHistoryUpdate {
-	thu.mutation.SetDue(mt)
-	return thu
+func (_u *TaskHistoryUpdate) SetDue(v models.DateTime) *TaskHistoryUpdate {
+	_u.mutation.SetDue(v)
+	return _u
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableDue(mt *models.DateTime) *TaskHistoryUpdate {
-	if mt != nil {
-		thu.SetDue(*mt)
+func (_u *TaskHistoryUpdate) SetNillableDue(v *models.DateTime) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetDue(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDue clears the value of the "due" field.
-func (thu *TaskHistoryUpdate) ClearDue() *TaskHistoryUpdate {
-	thu.mutation.ClearDue()
-	return thu
+func (_u *TaskHistoryUpdate) ClearDue() *TaskHistoryUpdate {
+	_u.mutation.ClearDue()
+	return _u
 }
 
 // SetCompleted sets the "completed" field.
-func (thu *TaskHistoryUpdate) SetCompleted(mt models.DateTime) *TaskHistoryUpdate {
-	thu.mutation.SetCompleted(mt)
-	return thu
+func (_u *TaskHistoryUpdate) SetCompleted(v models.DateTime) *TaskHistoryUpdate {
+	_u.mutation.SetCompleted(v)
+	return _u
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableCompleted(mt *models.DateTime) *TaskHistoryUpdate {
-	if mt != nil {
-		thu.SetCompleted(*mt)
+func (_u *TaskHistoryUpdate) SetNillableCompleted(v *models.DateTime) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetCompleted(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearCompleted clears the value of the "completed" field.
-func (thu *TaskHistoryUpdate) ClearCompleted() *TaskHistoryUpdate {
-	thu.mutation.ClearCompleted()
-	return thu
+func (_u *TaskHistoryUpdate) ClearCompleted() *TaskHistoryUpdate {
+	_u.mutation.ClearCompleted()
+	return _u
 }
 
 // SetAssigneeID sets the "assignee_id" field.
-func (thu *TaskHistoryUpdate) SetAssigneeID(s string) *TaskHistoryUpdate {
-	thu.mutation.SetAssigneeID(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetAssigneeID(v string) *TaskHistoryUpdate {
+	_u.mutation.SetAssigneeID(v)
+	return _u
 }
 
 // SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableAssigneeID(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetAssigneeID(*s)
+func (_u *TaskHistoryUpdate) SetNillableAssigneeID(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetAssigneeID(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearAssigneeID clears the value of the "assignee_id" field.
-func (thu *TaskHistoryUpdate) ClearAssigneeID() *TaskHistoryUpdate {
-	thu.mutation.ClearAssigneeID()
-	return thu
+func (_u *TaskHistoryUpdate) ClearAssigneeID() *TaskHistoryUpdate {
+	_u.mutation.ClearAssigneeID()
+	return _u
 }
 
 // SetAssignerID sets the "assigner_id" field.
-func (thu *TaskHistoryUpdate) SetAssignerID(s string) *TaskHistoryUpdate {
-	thu.mutation.SetAssignerID(s)
-	return thu
+func (_u *TaskHistoryUpdate) SetAssignerID(v string) *TaskHistoryUpdate {
+	_u.mutation.SetAssignerID(v)
+	return _u
 }
 
 // SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableAssignerID(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetAssignerID(*s)
+func (_u *TaskHistoryUpdate) SetNillableAssignerID(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetAssignerID(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearAssignerID clears the value of the "assigner_id" field.
-func (thu *TaskHistoryUpdate) ClearAssignerID() *TaskHistoryUpdate {
-	thu.mutation.ClearAssignerID()
-	return thu
+func (_u *TaskHistoryUpdate) ClearAssignerID() *TaskHistoryUpdate {
+	_u.mutation.ClearAssignerID()
+	return _u
 }
 
 // Mutation returns the TaskHistoryMutation object of the builder.
-func (thu *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
-	return thu.mutation
+func (_u *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (thu *TaskHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := thu.defaults(); err != nil {
+func (_u *TaskHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, thu.sqlSave, thu.mutation, thu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thu *TaskHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := thu.Save(ctx)
+func (_u *TaskHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -295,33 +295,33 @@ func (thu *TaskHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (thu *TaskHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := thu.Save(ctx)
+func (_u *TaskHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thu *TaskHistoryUpdate) ExecX(ctx context.Context) {
-	if err := thu.Exec(ctx); err != nil {
+func (_u *TaskHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (thu *TaskHistoryUpdate) defaults() error {
-	if _, ok := thu.mutation.UpdatedAt(); !ok && !thu.mutation.UpdatedAtCleared() {
+func (_u *TaskHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if taskhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := taskhistory.UpdateDefaultUpdatedAt()
-		thu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (thu *TaskHistoryUpdate) check() error {
-	if v, ok := thu.mutation.Status(); ok {
+func (_u *TaskHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
 		}
@@ -330,116 +330,116 @@ func (thu *TaskHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (thu *TaskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TaskHistoryUpdate {
-	thu.modifiers = append(thu.modifiers, modifiers...)
-	return thu
+func (_u *TaskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TaskHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := thu.check(); err != nil {
-		return n, err
+func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(taskhistory.Table, taskhistory.Columns, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
-	if ps := thu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if thu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(taskhistory.FieldRef, field.TypeString)
 	}
-	if thu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := thu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if thu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if thu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := thu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if thu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := thu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if thu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := thu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if thu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := thu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := thu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, taskhistory.FieldTags, value)
 		})
 	}
-	if thu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(taskhistory.FieldTags, field.TypeJSON)
 	}
-	if thu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(taskhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := thu.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := thu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
 	}
-	if thu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(taskhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := thu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := thu.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
 	}
-	if thu.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(taskhistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := thu.mutation.Due(); ok {
+	if value, ok := _u.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 	}
-	if thu.mutation.DueCleared() {
+	if _u.mutation.DueCleared() {
 		_spec.ClearField(taskhistory.FieldDue, field.TypeTime)
 	}
-	if value, ok := thu.mutation.Completed(); ok {
+	if value, ok := _u.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
 	}
-	if thu.mutation.CompletedCleared() {
+	if _u.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
 	}
-	if value, ok := thu.mutation.AssigneeID(); ok {
+	if value, ok := _u.mutation.AssigneeID(); ok {
 		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
 	}
-	if thu.mutation.AssigneeIDCleared() {
+	if _u.mutation.AssigneeIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
 	}
-	if value, ok := thu.mutation.AssignerID(); ok {
+	if value, ok := _u.mutation.AssignerID(); ok {
 		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
 	}
-	if thu.mutation.AssignerIDCleared() {
+	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
 	}
-	_spec.Node.Schema = thu.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
-	_spec.AddModifiers(thu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, thu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TaskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{taskhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -447,8 +447,8 @@ func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	thu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TaskHistoryUpdateOne is the builder for updating a single TaskHistory entity.
@@ -461,272 +461,272 @@ type TaskHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (thuo *TaskHistoryUpdateOne) SetUpdatedAt(t time.Time) *TaskHistoryUpdateOne {
-	thuo.mutation.SetUpdatedAt(t)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetUpdatedAt(v time.Time) *TaskHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (thuo *TaskHistoryUpdateOne) ClearUpdatedAt() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearUpdatedAt()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearUpdatedAt() *TaskHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (thuo *TaskHistoryUpdateOne) SetUpdatedBy(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetUpdatedBy(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetUpdatedBy(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableUpdatedBy(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetUpdatedBy(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (thuo *TaskHistoryUpdateOne) ClearUpdatedBy() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearUpdatedBy()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearUpdatedBy() *TaskHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (thuo *TaskHistoryUpdateOne) SetDeletedAt(t time.Time) *TaskHistoryUpdateOne {
-	thuo.mutation.SetDeletedAt(t)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetDeletedAt(v time.Time) *TaskHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *TaskHistoryUpdateOne {
-	if t != nil {
-		thuo.SetDeletedAt(*t)
+func (_u *TaskHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (thuo *TaskHistoryUpdateOne) ClearDeletedAt() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearDeletedAt()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearDeletedAt() *TaskHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (thuo *TaskHistoryUpdateOne) SetDeletedBy(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetDeletedBy(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetDeletedBy(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableDeletedBy(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetDeletedBy(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableDeletedBy(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (thuo *TaskHistoryUpdateOne) ClearDeletedBy() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearDeletedBy()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearDeletedBy() *TaskHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (thuo *TaskHistoryUpdateOne) SetTags(s []string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetTags(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetTags(v []string) *TaskHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (thuo *TaskHistoryUpdateOne) AppendTags(s []string) *TaskHistoryUpdateOne {
-	thuo.mutation.AppendTags(s)
-	return thuo
+// AppendTags appends value to the "tags" field.
+func (_u *TaskHistoryUpdateOne) AppendTags(v []string) *TaskHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (thuo *TaskHistoryUpdateOne) ClearTags() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearTags()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearTags() *TaskHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (thuo *TaskHistoryUpdateOne) SetTitle(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetTitle(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetTitle(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableTitle(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetTitle(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableTitle(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return thuo
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (thuo *TaskHistoryUpdateOne) SetDetails(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetDetails(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetDetails(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableDetails(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetDetails(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableDetails(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (thuo *TaskHistoryUpdateOne) ClearDetails() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearDetails()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearDetails() *TaskHistoryUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (thuo *TaskHistoryUpdateOne) SetStatus(es enums.TaskStatus) *TaskHistoryUpdateOne {
-	thuo.mutation.SetStatus(es)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetStatus(v enums.TaskStatus) *TaskHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableStatus(es *enums.TaskStatus) *TaskHistoryUpdateOne {
-	if es != nil {
-		thuo.SetStatus(*es)
+func (_u *TaskHistoryUpdateOne) SetNillableStatus(v *enums.TaskStatus) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return thuo
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (thuo *TaskHistoryUpdateOne) SetCategory(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetCategory(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetCategory(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableCategory(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetCategory(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableCategory(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (thuo *TaskHistoryUpdateOne) ClearCategory() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearCategory()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearCategory() *TaskHistoryUpdateOne {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetDue sets the "due" field.
-func (thuo *TaskHistoryUpdateOne) SetDue(mt models.DateTime) *TaskHistoryUpdateOne {
-	thuo.mutation.SetDue(mt)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetDue(v models.DateTime) *TaskHistoryUpdateOne {
+	_u.mutation.SetDue(v)
+	return _u
 }
 
 // SetNillableDue sets the "due" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableDue(mt *models.DateTime) *TaskHistoryUpdateOne {
-	if mt != nil {
-		thuo.SetDue(*mt)
+func (_u *TaskHistoryUpdateOne) SetNillableDue(v *models.DateTime) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDue(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDue clears the value of the "due" field.
-func (thuo *TaskHistoryUpdateOne) ClearDue() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearDue()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearDue() *TaskHistoryUpdateOne {
+	_u.mutation.ClearDue()
+	return _u
 }
 
 // SetCompleted sets the "completed" field.
-func (thuo *TaskHistoryUpdateOne) SetCompleted(mt models.DateTime) *TaskHistoryUpdateOne {
-	thuo.mutation.SetCompleted(mt)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetCompleted(v models.DateTime) *TaskHistoryUpdateOne {
+	_u.mutation.SetCompleted(v)
+	return _u
 }
 
 // SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableCompleted(mt *models.DateTime) *TaskHistoryUpdateOne {
-	if mt != nil {
-		thuo.SetCompleted(*mt)
+func (_u *TaskHistoryUpdateOne) SetNillableCompleted(v *models.DateTime) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetCompleted(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearCompleted clears the value of the "completed" field.
-func (thuo *TaskHistoryUpdateOne) ClearCompleted() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearCompleted()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearCompleted() *TaskHistoryUpdateOne {
+	_u.mutation.ClearCompleted()
+	return _u
 }
 
 // SetAssigneeID sets the "assignee_id" field.
-func (thuo *TaskHistoryUpdateOne) SetAssigneeID(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetAssigneeID(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetAssigneeID(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetAssigneeID(v)
+	return _u
 }
 
 // SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableAssigneeID(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetAssigneeID(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableAssigneeID(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssigneeID(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearAssigneeID clears the value of the "assignee_id" field.
-func (thuo *TaskHistoryUpdateOne) ClearAssigneeID() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearAssigneeID()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearAssigneeID() *TaskHistoryUpdateOne {
+	_u.mutation.ClearAssigneeID()
+	return _u
 }
 
 // SetAssignerID sets the "assigner_id" field.
-func (thuo *TaskHistoryUpdateOne) SetAssignerID(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetAssignerID(s)
-	return thuo
+func (_u *TaskHistoryUpdateOne) SetAssignerID(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetAssignerID(v)
+	return _u
 }
 
 // SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableAssignerID(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetAssignerID(*s)
+func (_u *TaskHistoryUpdateOne) SetNillableAssignerID(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignerID(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearAssignerID clears the value of the "assigner_id" field.
-func (thuo *TaskHistoryUpdateOne) ClearAssignerID() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearAssignerID()
-	return thuo
+func (_u *TaskHistoryUpdateOne) ClearAssignerID() *TaskHistoryUpdateOne {
+	_u.mutation.ClearAssignerID()
+	return _u
 }
 
 // Mutation returns the TaskHistoryMutation object of the builder.
-func (thuo *TaskHistoryUpdateOne) Mutation() *TaskHistoryMutation {
-	return thuo.mutation
+func (_u *TaskHistoryUpdateOne) Mutation() *TaskHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TaskHistoryUpdate builder.
-func (thuo *TaskHistoryUpdateOne) Where(ps ...predicate.TaskHistory) *TaskHistoryUpdateOne {
-	thuo.mutation.Where(ps...)
-	return thuo
+func (_u *TaskHistoryUpdateOne) Where(ps ...predicate.TaskHistory) *TaskHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (thuo *TaskHistoryUpdateOne) Select(field string, fields ...string) *TaskHistoryUpdateOne {
-	thuo.fields = append([]string{field}, fields...)
-	return thuo
+func (_u *TaskHistoryUpdateOne) Select(field string, fields ...string) *TaskHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TaskHistory entity.
-func (thuo *TaskHistoryUpdateOne) Save(ctx context.Context) (*TaskHistory, error) {
-	if err := thuo.defaults(); err != nil {
+func (_u *TaskHistoryUpdateOne) Save(ctx context.Context) (*TaskHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, thuo.sqlSave, thuo.mutation, thuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thuo *TaskHistoryUpdateOne) SaveX(ctx context.Context) *TaskHistory {
-	node, err := thuo.Save(ctx)
+func (_u *TaskHistoryUpdateOne) SaveX(ctx context.Context) *TaskHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -734,33 +734,33 @@ func (thuo *TaskHistoryUpdateOne) SaveX(ctx context.Context) *TaskHistory {
 }
 
 // Exec executes the query on the entity.
-func (thuo *TaskHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := thuo.Save(ctx)
+func (_u *TaskHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thuo *TaskHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := thuo.Exec(ctx); err != nil {
+func (_u *TaskHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (thuo *TaskHistoryUpdateOne) defaults() error {
-	if _, ok := thuo.mutation.UpdatedAt(); !ok && !thuo.mutation.UpdatedAtCleared() {
+func (_u *TaskHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if taskhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized taskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := taskhistory.UpdateDefaultUpdatedAt()
-		thuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (thuo *TaskHistoryUpdateOne) check() error {
-	if v, ok := thuo.mutation.Status(); ok {
+func (_u *TaskHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := taskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
 		}
@@ -769,22 +769,22 @@ func (thuo *TaskHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (thuo *TaskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TaskHistoryUpdateOne {
-	thuo.modifiers = append(thuo.modifiers, modifiers...)
-	return thuo
+func (_u *TaskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TaskHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory, err error) {
-	if err := thuo.check(); err != nil {
+func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(taskhistory.Table, taskhistory.Columns, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
-	id, ok := thuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TaskHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := thuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, taskhistory.FieldID)
 		for _, f := range fields {
@@ -796,109 +796,109 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 			}
 		}
 	}
-	if ps := thuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if thuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(taskhistory.FieldRef, field.TypeString)
 	}
-	if thuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if thuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if thuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := thuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if thuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := thuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if thuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if thuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := thuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, taskhistory.FieldTags, value)
 		})
 	}
-	if thuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(taskhistory.FieldTags, field.TypeJSON)
 	}
-	if thuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(taskhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := thuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
 	}
-	if thuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(taskhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := thuo.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
 	}
-	if thuo.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(taskhistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Due(); ok {
+	if value, ok := _u.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 	}
-	if thuo.mutation.DueCleared() {
+	if _u.mutation.DueCleared() {
 		_spec.ClearField(taskhistory.FieldDue, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.Completed(); ok {
+	if value, ok := _u.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
 	}
-	if thuo.mutation.CompletedCleared() {
+	if _u.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.AssigneeID(); ok {
+	if value, ok := _u.mutation.AssigneeID(); ok {
 		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
 	}
-	if thuo.mutation.AssigneeIDCleared() {
+	if _u.mutation.AssigneeIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
 	}
-	if value, ok := thuo.mutation.AssignerID(); ok {
+	if value, ok := _u.mutation.AssignerID(); ok {
 		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
 	}
-	if thuo.mutation.AssignerIDCleared() {
+	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
 	}
-	_spec.Node.Schema = thuo.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)
-	_spec.AddModifiers(thuo.modifiers...)
-	_node = &TaskHistory{config: thuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TaskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TaskHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, thuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{taskhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -906,6 +906,6 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 		}
 		return nil, err
 	}
-	thuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

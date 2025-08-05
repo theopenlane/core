@@ -28,409 +28,409 @@ type StandardHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the StandardHistoryUpdate builder.
-func (shu *StandardHistoryUpdate) Where(ps ...predicate.StandardHistory) *StandardHistoryUpdate {
-	shu.mutation.Where(ps...)
-	return shu
+func (_u *StandardHistoryUpdate) Where(ps ...predicate.StandardHistory) *StandardHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shu *StandardHistoryUpdate) SetUpdatedAt(t time.Time) *StandardHistoryUpdate {
-	shu.mutation.SetUpdatedAt(t)
-	return shu
+func (_u *StandardHistoryUpdate) SetUpdatedAt(v time.Time) *StandardHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (shu *StandardHistoryUpdate) ClearUpdatedAt() *StandardHistoryUpdate {
-	shu.mutation.ClearUpdatedAt()
-	return shu
+func (_u *StandardHistoryUpdate) ClearUpdatedAt() *StandardHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shu *StandardHistoryUpdate) SetUpdatedBy(s string) *StandardHistoryUpdate {
-	shu.mutation.SetUpdatedBy(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetUpdatedBy(v string) *StandardHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableUpdatedBy(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetUpdatedBy(*s)
+func (_u *StandardHistoryUpdate) SetNillableUpdatedBy(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (shu *StandardHistoryUpdate) ClearUpdatedBy() *StandardHistoryUpdate {
-	shu.mutation.ClearUpdatedBy()
-	return shu
+func (_u *StandardHistoryUpdate) ClearUpdatedBy() *StandardHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shu *StandardHistoryUpdate) SetDeletedAt(t time.Time) *StandardHistoryUpdate {
-	shu.mutation.SetDeletedAt(t)
-	return shu
+func (_u *StandardHistoryUpdate) SetDeletedAt(v time.Time) *StandardHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableDeletedAt(t *time.Time) *StandardHistoryUpdate {
-	if t != nil {
-		shu.SetDeletedAt(*t)
+func (_u *StandardHistoryUpdate) SetNillableDeletedAt(v *time.Time) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (shu *StandardHistoryUpdate) ClearDeletedAt() *StandardHistoryUpdate {
-	shu.mutation.ClearDeletedAt()
-	return shu
+func (_u *StandardHistoryUpdate) ClearDeletedAt() *StandardHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shu *StandardHistoryUpdate) SetDeletedBy(s string) *StandardHistoryUpdate {
-	shu.mutation.SetDeletedBy(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetDeletedBy(v string) *StandardHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableDeletedBy(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetDeletedBy(*s)
+func (_u *StandardHistoryUpdate) SetNillableDeletedBy(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (shu *StandardHistoryUpdate) ClearDeletedBy() *StandardHistoryUpdate {
-	shu.mutation.ClearDeletedBy()
-	return shu
+func (_u *StandardHistoryUpdate) ClearDeletedBy() *StandardHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (shu *StandardHistoryUpdate) SetTags(s []string) *StandardHistoryUpdate {
-	shu.mutation.SetTags(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetTags(v []string) *StandardHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (shu *StandardHistoryUpdate) AppendTags(s []string) *StandardHistoryUpdate {
-	shu.mutation.AppendTags(s)
-	return shu
+// AppendTags appends value to the "tags" field.
+func (_u *StandardHistoryUpdate) AppendTags(v []string) *StandardHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (shu *StandardHistoryUpdate) ClearTags() *StandardHistoryUpdate {
-	shu.mutation.ClearTags()
-	return shu
+func (_u *StandardHistoryUpdate) ClearTags() *StandardHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (shu *StandardHistoryUpdate) SetRevision(s string) *StandardHistoryUpdate {
-	shu.mutation.SetRevision(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetRevision(v string) *StandardHistoryUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableRevision(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetRevision(*s)
+func (_u *StandardHistoryUpdate) SetNillableRevision(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (shu *StandardHistoryUpdate) ClearRevision() *StandardHistoryUpdate {
-	shu.mutation.ClearRevision()
-	return shu
+func (_u *StandardHistoryUpdate) ClearRevision() *StandardHistoryUpdate {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shu *StandardHistoryUpdate) SetOwnerID(s string) *StandardHistoryUpdate {
-	shu.mutation.SetOwnerID(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetOwnerID(v string) *StandardHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableOwnerID(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetOwnerID(*s)
+func (_u *StandardHistoryUpdate) SetNillableOwnerID(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (shu *StandardHistoryUpdate) ClearOwnerID() *StandardHistoryUpdate {
-	shu.mutation.ClearOwnerID()
-	return shu
+func (_u *StandardHistoryUpdate) ClearOwnerID() *StandardHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (shu *StandardHistoryUpdate) SetName(s string) *StandardHistoryUpdate {
-	shu.mutation.SetName(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetName(v string) *StandardHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableName(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetName(*s)
+func (_u *StandardHistoryUpdate) SetNillableName(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return shu
+	return _u
 }
 
 // SetShortName sets the "short_name" field.
-func (shu *StandardHistoryUpdate) SetShortName(s string) *StandardHistoryUpdate {
-	shu.mutation.SetShortName(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetShortName(v string) *StandardHistoryUpdate {
+	_u.mutation.SetShortName(v)
+	return _u
 }
 
 // SetNillableShortName sets the "short_name" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableShortName(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetShortName(*s)
+func (_u *StandardHistoryUpdate) SetNillableShortName(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetShortName(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearShortName clears the value of the "short_name" field.
-func (shu *StandardHistoryUpdate) ClearShortName() *StandardHistoryUpdate {
-	shu.mutation.ClearShortName()
-	return shu
+func (_u *StandardHistoryUpdate) ClearShortName() *StandardHistoryUpdate {
+	_u.mutation.ClearShortName()
+	return _u
 }
 
 // SetFramework sets the "framework" field.
-func (shu *StandardHistoryUpdate) SetFramework(s string) *StandardHistoryUpdate {
-	shu.mutation.SetFramework(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetFramework(v string) *StandardHistoryUpdate {
+	_u.mutation.SetFramework(v)
+	return _u
 }
 
 // SetNillableFramework sets the "framework" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableFramework(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetFramework(*s)
+func (_u *StandardHistoryUpdate) SetNillableFramework(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetFramework(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearFramework clears the value of the "framework" field.
-func (shu *StandardHistoryUpdate) ClearFramework() *StandardHistoryUpdate {
-	shu.mutation.ClearFramework()
-	return shu
+func (_u *StandardHistoryUpdate) ClearFramework() *StandardHistoryUpdate {
+	_u.mutation.ClearFramework()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (shu *StandardHistoryUpdate) SetDescription(s string) *StandardHistoryUpdate {
-	shu.mutation.SetDescription(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetDescription(v string) *StandardHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableDescription(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetDescription(*s)
+func (_u *StandardHistoryUpdate) SetNillableDescription(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (shu *StandardHistoryUpdate) ClearDescription() *StandardHistoryUpdate {
-	shu.mutation.ClearDescription()
-	return shu
+func (_u *StandardHistoryUpdate) ClearDescription() *StandardHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
-func (shu *StandardHistoryUpdate) SetGoverningBodyLogoURL(s string) *StandardHistoryUpdate {
-	shu.mutation.SetGoverningBodyLogoURL(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetGoverningBodyLogoURL(v string) *StandardHistoryUpdate {
+	_u.mutation.SetGoverningBodyLogoURL(v)
+	return _u
 }
 
 // SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableGoverningBodyLogoURL(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetGoverningBodyLogoURL(*s)
+func (_u *StandardHistoryUpdate) SetNillableGoverningBodyLogoURL(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetGoverningBodyLogoURL(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearGoverningBodyLogoURL clears the value of the "governing_body_logo_url" field.
-func (shu *StandardHistoryUpdate) ClearGoverningBodyLogoURL() *StandardHistoryUpdate {
-	shu.mutation.ClearGoverningBodyLogoURL()
-	return shu
+func (_u *StandardHistoryUpdate) ClearGoverningBodyLogoURL() *StandardHistoryUpdate {
+	_u.mutation.ClearGoverningBodyLogoURL()
+	return _u
 }
 
 // SetGoverningBody sets the "governing_body" field.
-func (shu *StandardHistoryUpdate) SetGoverningBody(s string) *StandardHistoryUpdate {
-	shu.mutation.SetGoverningBody(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetGoverningBody(v string) *StandardHistoryUpdate {
+	_u.mutation.SetGoverningBody(v)
+	return _u
 }
 
 // SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableGoverningBody(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetGoverningBody(*s)
+func (_u *StandardHistoryUpdate) SetNillableGoverningBody(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetGoverningBody(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearGoverningBody clears the value of the "governing_body" field.
-func (shu *StandardHistoryUpdate) ClearGoverningBody() *StandardHistoryUpdate {
-	shu.mutation.ClearGoverningBody()
-	return shu
+func (_u *StandardHistoryUpdate) ClearGoverningBody() *StandardHistoryUpdate {
+	_u.mutation.ClearGoverningBody()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (shu *StandardHistoryUpdate) SetDomains(s []string) *StandardHistoryUpdate {
-	shu.mutation.SetDomains(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetDomains(v []string) *StandardHistoryUpdate {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (shu *StandardHistoryUpdate) AppendDomains(s []string) *StandardHistoryUpdate {
-	shu.mutation.AppendDomains(s)
-	return shu
+// AppendDomains appends value to the "domains" field.
+func (_u *StandardHistoryUpdate) AppendDomains(v []string) *StandardHistoryUpdate {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (shu *StandardHistoryUpdate) ClearDomains() *StandardHistoryUpdate {
-	shu.mutation.ClearDomains()
-	return shu
+func (_u *StandardHistoryUpdate) ClearDomains() *StandardHistoryUpdate {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetLink sets the "link" field.
-func (shu *StandardHistoryUpdate) SetLink(s string) *StandardHistoryUpdate {
-	shu.mutation.SetLink(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetLink(v string) *StandardHistoryUpdate {
+	_u.mutation.SetLink(v)
+	return _u
 }
 
 // SetNillableLink sets the "link" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableLink(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetLink(*s)
+func (_u *StandardHistoryUpdate) SetNillableLink(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetLink(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearLink clears the value of the "link" field.
-func (shu *StandardHistoryUpdate) ClearLink() *StandardHistoryUpdate {
-	shu.mutation.ClearLink()
-	return shu
+func (_u *StandardHistoryUpdate) ClearLink() *StandardHistoryUpdate {
+	_u.mutation.ClearLink()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (shu *StandardHistoryUpdate) SetStatus(es enums.StandardStatus) *StandardHistoryUpdate {
-	shu.mutation.SetStatus(es)
-	return shu
+func (_u *StandardHistoryUpdate) SetStatus(v enums.StandardStatus) *StandardHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableStatus(es *enums.StandardStatus) *StandardHistoryUpdate {
-	if es != nil {
-		shu.SetStatus(*es)
+func (_u *StandardHistoryUpdate) SetNillableStatus(v *enums.StandardStatus) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (shu *StandardHistoryUpdate) ClearStatus() *StandardHistoryUpdate {
-	shu.mutation.ClearStatus()
-	return shu
+func (_u *StandardHistoryUpdate) ClearStatus() *StandardHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetIsPublic sets the "is_public" field.
-func (shu *StandardHistoryUpdate) SetIsPublic(b bool) *StandardHistoryUpdate {
-	shu.mutation.SetIsPublic(b)
-	return shu
+func (_u *StandardHistoryUpdate) SetIsPublic(v bool) *StandardHistoryUpdate {
+	_u.mutation.SetIsPublic(v)
+	return _u
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableIsPublic(b *bool) *StandardHistoryUpdate {
-	if b != nil {
-		shu.SetIsPublic(*b)
+func (_u *StandardHistoryUpdate) SetNillableIsPublic(v *bool) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetIsPublic(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearIsPublic clears the value of the "is_public" field.
-func (shu *StandardHistoryUpdate) ClearIsPublic() *StandardHistoryUpdate {
-	shu.mutation.ClearIsPublic()
-	return shu
+func (_u *StandardHistoryUpdate) ClearIsPublic() *StandardHistoryUpdate {
+	_u.mutation.ClearIsPublic()
+	return _u
 }
 
 // SetFreeToUse sets the "free_to_use" field.
-func (shu *StandardHistoryUpdate) SetFreeToUse(b bool) *StandardHistoryUpdate {
-	shu.mutation.SetFreeToUse(b)
-	return shu
+func (_u *StandardHistoryUpdate) SetFreeToUse(v bool) *StandardHistoryUpdate {
+	_u.mutation.SetFreeToUse(v)
+	return _u
 }
 
 // SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableFreeToUse(b *bool) *StandardHistoryUpdate {
-	if b != nil {
-		shu.SetFreeToUse(*b)
+func (_u *StandardHistoryUpdate) SetNillableFreeToUse(v *bool) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetFreeToUse(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearFreeToUse clears the value of the "free_to_use" field.
-func (shu *StandardHistoryUpdate) ClearFreeToUse() *StandardHistoryUpdate {
-	shu.mutation.ClearFreeToUse()
-	return shu
+func (_u *StandardHistoryUpdate) ClearFreeToUse() *StandardHistoryUpdate {
+	_u.mutation.ClearFreeToUse()
+	return _u
 }
 
 // SetStandardType sets the "standard_type" field.
-func (shu *StandardHistoryUpdate) SetStandardType(s string) *StandardHistoryUpdate {
-	shu.mutation.SetStandardType(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetStandardType(v string) *StandardHistoryUpdate {
+	_u.mutation.SetStandardType(v)
+	return _u
 }
 
 // SetNillableStandardType sets the "standard_type" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableStandardType(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetStandardType(*s)
+func (_u *StandardHistoryUpdate) SetNillableStandardType(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetStandardType(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearStandardType clears the value of the "standard_type" field.
-func (shu *StandardHistoryUpdate) ClearStandardType() *StandardHistoryUpdate {
-	shu.mutation.ClearStandardType()
-	return shu
+func (_u *StandardHistoryUpdate) ClearStandardType() *StandardHistoryUpdate {
+	_u.mutation.ClearStandardType()
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (shu *StandardHistoryUpdate) SetVersion(s string) *StandardHistoryUpdate {
-	shu.mutation.SetVersion(s)
-	return shu
+func (_u *StandardHistoryUpdate) SetVersion(v string) *StandardHistoryUpdate {
+	_u.mutation.SetVersion(v)
+	return _u
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (shu *StandardHistoryUpdate) SetNillableVersion(s *string) *StandardHistoryUpdate {
-	if s != nil {
-		shu.SetVersion(*s)
+func (_u *StandardHistoryUpdate) SetNillableVersion(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetVersion(*v)
 	}
-	return shu
+	return _u
 }
 
 // ClearVersion clears the value of the "version" field.
-func (shu *StandardHistoryUpdate) ClearVersion() *StandardHistoryUpdate {
-	shu.mutation.ClearVersion()
-	return shu
+func (_u *StandardHistoryUpdate) ClearVersion() *StandardHistoryUpdate {
+	_u.mutation.ClearVersion()
+	return _u
 }
 
 // Mutation returns the StandardHistoryMutation object of the builder.
-func (shu *StandardHistoryUpdate) Mutation() *StandardHistoryMutation {
-	return shu.mutation
+func (_u *StandardHistoryUpdate) Mutation() *StandardHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (shu *StandardHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := shu.defaults(); err != nil {
+func (_u *StandardHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shu *StandardHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := shu.Save(ctx)
+func (_u *StandardHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -438,33 +438,33 @@ func (shu *StandardHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (shu *StandardHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := shu.Save(ctx)
+func (_u *StandardHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shu *StandardHistoryUpdate) ExecX(ctx context.Context) {
-	if err := shu.Exec(ctx); err != nil {
+func (_u *StandardHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *StandardHistoryUpdate) defaults() error {
-	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+func (_u *StandardHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if standardhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standardhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := standardhistory.UpdateDefaultUpdatedAt()
-		shu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shu *StandardHistoryUpdate) check() error {
-	if v, ok := shu.mutation.Status(); ok {
+func (_u *StandardHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := standardhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "StandardHistory.status": %w`, err)}
 		}
@@ -473,166 +473,166 @@ func (shu *StandardHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (shu *StandardHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardHistoryUpdate {
-	shu.modifiers = append(shu.modifiers, modifiers...)
-	return shu
+func (_u *StandardHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := shu.check(); err != nil {
-		return n, err
+func (_u *StandardHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(standardhistory.Table, standardhistory.Columns, sqlgraph.NewFieldSpec(standardhistory.FieldID, field.TypeString))
-	if ps := shu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if shu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(standardhistory.FieldRef, field.TypeString)
 	}
-	if shu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(standardhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if shu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(standardhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if shu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(standardhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if shu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := shu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := shu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standardhistory.FieldTags, value)
 		})
 	}
-	if shu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(standardhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := shu.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(standardhistory.FieldRevision, field.TypeString, value)
 	}
-	if shu.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(standardhistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := shu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(standardhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if shu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(standardhistory.FieldOwnerID, field.TypeString)
 	}
-	if shu.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := shu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := shu.mutation.ShortName(); ok {
+	if value, ok := _u.mutation.ShortName(); ok {
 		_spec.SetField(standardhistory.FieldShortName, field.TypeString, value)
 	}
-	if shu.mutation.ShortNameCleared() {
+	if _u.mutation.ShortNameCleared() {
 		_spec.ClearField(standardhistory.FieldShortName, field.TypeString)
 	}
-	if value, ok := shu.mutation.Framework(); ok {
+	if value, ok := _u.mutation.Framework(); ok {
 		_spec.SetField(standardhistory.FieldFramework, field.TypeString, value)
 	}
-	if shu.mutation.FrameworkCleared() {
+	if _u.mutation.FrameworkCleared() {
 		_spec.ClearField(standardhistory.FieldFramework, field.TypeString)
 	}
-	if value, ok := shu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(standardhistory.FieldDescription, field.TypeString, value)
 	}
-	if shu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(standardhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := shu.mutation.GoverningBodyLogoURL(); ok {
+	if value, ok := _u.mutation.GoverningBodyLogoURL(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBodyLogoURL, field.TypeString, value)
 	}
-	if shu.mutation.GoverningBodyLogoURLCleared() {
+	if _u.mutation.GoverningBodyLogoURLCleared() {
 		_spec.ClearField(standardhistory.FieldGoverningBodyLogoURL, field.TypeString)
 	}
-	if value, ok := shu.mutation.GoverningBody(); ok {
+	if value, ok := _u.mutation.GoverningBody(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBody, field.TypeString, value)
 	}
-	if shu.mutation.GoverningBodyCleared() {
+	if _u.mutation.GoverningBodyCleared() {
 		_spec.ClearField(standardhistory.FieldGoverningBody, field.TypeString)
 	}
-	if value, ok := shu.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(standardhistory.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := shu.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standardhistory.FieldDomains, value)
 		})
 	}
-	if shu.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(standardhistory.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := shu.mutation.Link(); ok {
+	if value, ok := _u.mutation.Link(); ok {
 		_spec.SetField(standardhistory.FieldLink, field.TypeString, value)
 	}
-	if shu.mutation.LinkCleared() {
+	if _u.mutation.LinkCleared() {
 		_spec.ClearField(standardhistory.FieldLink, field.TypeString)
 	}
-	if value, ok := shu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(standardhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if shu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(standardhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := shu.mutation.IsPublic(); ok {
+	if value, ok := _u.mutation.IsPublic(); ok {
 		_spec.SetField(standardhistory.FieldIsPublic, field.TypeBool, value)
 	}
-	if shu.mutation.IsPublicCleared() {
+	if _u.mutation.IsPublicCleared() {
 		_spec.ClearField(standardhistory.FieldIsPublic, field.TypeBool)
 	}
-	if value, ok := shu.mutation.FreeToUse(); ok {
+	if value, ok := _u.mutation.FreeToUse(); ok {
 		_spec.SetField(standardhistory.FieldFreeToUse, field.TypeBool, value)
 	}
-	if shu.mutation.FreeToUseCleared() {
+	if _u.mutation.FreeToUseCleared() {
 		_spec.ClearField(standardhistory.FieldFreeToUse, field.TypeBool)
 	}
-	if value, ok := shu.mutation.StandardType(); ok {
+	if value, ok := _u.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)
 	}
-	if shu.mutation.StandardTypeCleared() {
+	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standardhistory.FieldStandardType, field.TypeString)
 	}
-	if value, ok := shu.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
 	}
-	if shu.mutation.VersionCleared() {
+	if _u.mutation.VersionCleared() {
 		_spec.ClearField(standardhistory.FieldVersion, field.TypeString)
 	}
-	_spec.Node.Schema = shu.schemaConfig.StandardHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
-	_spec.AddModifiers(shu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, shu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.StandardHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{standardhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -640,8 +640,8 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		return 0, err
 	}
-	shu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StandardHistoryUpdateOne is the builder for updating a single StandardHistory entity.
@@ -654,416 +654,416 @@ type StandardHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shuo *StandardHistoryUpdateOne) SetUpdatedAt(t time.Time) *StandardHistoryUpdateOne {
-	shuo.mutation.SetUpdatedAt(t)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetUpdatedAt(v time.Time) *StandardHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (shuo *StandardHistoryUpdateOne) ClearUpdatedAt() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedAt()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearUpdatedAt() *StandardHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shuo *StandardHistoryUpdateOne) SetUpdatedBy(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetUpdatedBy(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetUpdatedBy(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableUpdatedBy(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetUpdatedBy(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableUpdatedBy(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (shuo *StandardHistoryUpdateOne) ClearUpdatedBy() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearUpdatedBy()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearUpdatedBy() *StandardHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (shuo *StandardHistoryUpdateOne) SetDeletedAt(t time.Time) *StandardHistoryUpdateOne {
-	shuo.mutation.SetDeletedAt(t)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetDeletedAt(v time.Time) *StandardHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *StandardHistoryUpdateOne {
-	if t != nil {
-		shuo.SetDeletedAt(*t)
+func (_u *StandardHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (shuo *StandardHistoryUpdateOne) ClearDeletedAt() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearDeletedAt()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearDeletedAt() *StandardHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (shuo *StandardHistoryUpdateOne) SetDeletedBy(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetDeletedBy(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetDeletedBy(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableDeletedBy(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDeletedBy(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableDeletedBy(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (shuo *StandardHistoryUpdateOne) ClearDeletedBy() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearDeletedBy()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearDeletedBy() *StandardHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (shuo *StandardHistoryUpdateOne) SetTags(s []string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetTags(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetTags(v []string) *StandardHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (shuo *StandardHistoryUpdateOne) AppendTags(s []string) *StandardHistoryUpdateOne {
-	shuo.mutation.AppendTags(s)
-	return shuo
+// AppendTags appends value to the "tags" field.
+func (_u *StandardHistoryUpdateOne) AppendTags(v []string) *StandardHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (shuo *StandardHistoryUpdateOne) ClearTags() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearTags()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearTags() *StandardHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (shuo *StandardHistoryUpdateOne) SetRevision(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetRevision(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetRevision(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableRevision(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetRevision(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableRevision(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (shuo *StandardHistoryUpdateOne) ClearRevision() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearRevision()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearRevision() *StandardHistoryUpdateOne {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (shuo *StandardHistoryUpdateOne) SetOwnerID(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetOwnerID(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetOwnerID(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableOwnerID(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetOwnerID(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableOwnerID(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (shuo *StandardHistoryUpdateOne) ClearOwnerID() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearOwnerID()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearOwnerID() *StandardHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (shuo *StandardHistoryUpdateOne) SetName(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetName(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetName(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableName(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetName(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableName(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return shuo
+	return _u
 }
 
 // SetShortName sets the "short_name" field.
-func (shuo *StandardHistoryUpdateOne) SetShortName(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetShortName(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetShortName(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetShortName(v)
+	return _u
 }
 
 // SetNillableShortName sets the "short_name" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableShortName(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetShortName(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableShortName(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetShortName(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearShortName clears the value of the "short_name" field.
-func (shuo *StandardHistoryUpdateOne) ClearShortName() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearShortName()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearShortName() *StandardHistoryUpdateOne {
+	_u.mutation.ClearShortName()
+	return _u
 }
 
 // SetFramework sets the "framework" field.
-func (shuo *StandardHistoryUpdateOne) SetFramework(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetFramework(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetFramework(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetFramework(v)
+	return _u
 }
 
 // SetNillableFramework sets the "framework" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableFramework(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetFramework(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableFramework(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetFramework(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearFramework clears the value of the "framework" field.
-func (shuo *StandardHistoryUpdateOne) ClearFramework() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearFramework()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearFramework() *StandardHistoryUpdateOne {
+	_u.mutation.ClearFramework()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (shuo *StandardHistoryUpdateOne) SetDescription(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetDescription(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetDescription(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableDescription(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetDescription(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableDescription(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (shuo *StandardHistoryUpdateOne) ClearDescription() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearDescription()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearDescription() *StandardHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
-func (shuo *StandardHistoryUpdateOne) SetGoverningBodyLogoURL(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetGoverningBodyLogoURL(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetGoverningBodyLogoURL(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetGoverningBodyLogoURL(v)
+	return _u
 }
 
 // SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableGoverningBodyLogoURL(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetGoverningBodyLogoURL(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableGoverningBodyLogoURL(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetGoverningBodyLogoURL(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearGoverningBodyLogoURL clears the value of the "governing_body_logo_url" field.
-func (shuo *StandardHistoryUpdateOne) ClearGoverningBodyLogoURL() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearGoverningBodyLogoURL()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearGoverningBodyLogoURL() *StandardHistoryUpdateOne {
+	_u.mutation.ClearGoverningBodyLogoURL()
+	return _u
 }
 
 // SetGoverningBody sets the "governing_body" field.
-func (shuo *StandardHistoryUpdateOne) SetGoverningBody(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetGoverningBody(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetGoverningBody(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetGoverningBody(v)
+	return _u
 }
 
 // SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableGoverningBody(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetGoverningBody(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableGoverningBody(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetGoverningBody(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearGoverningBody clears the value of the "governing_body" field.
-func (shuo *StandardHistoryUpdateOne) ClearGoverningBody() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearGoverningBody()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearGoverningBody() *StandardHistoryUpdateOne {
+	_u.mutation.ClearGoverningBody()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (shuo *StandardHistoryUpdateOne) SetDomains(s []string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetDomains(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetDomains(v []string) *StandardHistoryUpdateOne {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (shuo *StandardHistoryUpdateOne) AppendDomains(s []string) *StandardHistoryUpdateOne {
-	shuo.mutation.AppendDomains(s)
-	return shuo
+// AppendDomains appends value to the "domains" field.
+func (_u *StandardHistoryUpdateOne) AppendDomains(v []string) *StandardHistoryUpdateOne {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (shuo *StandardHistoryUpdateOne) ClearDomains() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearDomains()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearDomains() *StandardHistoryUpdateOne {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetLink sets the "link" field.
-func (shuo *StandardHistoryUpdateOne) SetLink(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetLink(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetLink(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetLink(v)
+	return _u
 }
 
 // SetNillableLink sets the "link" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableLink(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetLink(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableLink(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetLink(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearLink clears the value of the "link" field.
-func (shuo *StandardHistoryUpdateOne) ClearLink() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearLink()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearLink() *StandardHistoryUpdateOne {
+	_u.mutation.ClearLink()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (shuo *StandardHistoryUpdateOne) SetStatus(es enums.StandardStatus) *StandardHistoryUpdateOne {
-	shuo.mutation.SetStatus(es)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetStatus(v enums.StandardStatus) *StandardHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableStatus(es *enums.StandardStatus) *StandardHistoryUpdateOne {
-	if es != nil {
-		shuo.SetStatus(*es)
+func (_u *StandardHistoryUpdateOne) SetNillableStatus(v *enums.StandardStatus) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (shuo *StandardHistoryUpdateOne) ClearStatus() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearStatus()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearStatus() *StandardHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetIsPublic sets the "is_public" field.
-func (shuo *StandardHistoryUpdateOne) SetIsPublic(b bool) *StandardHistoryUpdateOne {
-	shuo.mutation.SetIsPublic(b)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetIsPublic(v bool) *StandardHistoryUpdateOne {
+	_u.mutation.SetIsPublic(v)
+	return _u
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableIsPublic(b *bool) *StandardHistoryUpdateOne {
-	if b != nil {
-		shuo.SetIsPublic(*b)
+func (_u *StandardHistoryUpdateOne) SetNillableIsPublic(v *bool) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsPublic(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearIsPublic clears the value of the "is_public" field.
-func (shuo *StandardHistoryUpdateOne) ClearIsPublic() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearIsPublic()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearIsPublic() *StandardHistoryUpdateOne {
+	_u.mutation.ClearIsPublic()
+	return _u
 }
 
 // SetFreeToUse sets the "free_to_use" field.
-func (shuo *StandardHistoryUpdateOne) SetFreeToUse(b bool) *StandardHistoryUpdateOne {
-	shuo.mutation.SetFreeToUse(b)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetFreeToUse(v bool) *StandardHistoryUpdateOne {
+	_u.mutation.SetFreeToUse(v)
+	return _u
 }
 
 // SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableFreeToUse(b *bool) *StandardHistoryUpdateOne {
-	if b != nil {
-		shuo.SetFreeToUse(*b)
+func (_u *StandardHistoryUpdateOne) SetNillableFreeToUse(v *bool) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetFreeToUse(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearFreeToUse clears the value of the "free_to_use" field.
-func (shuo *StandardHistoryUpdateOne) ClearFreeToUse() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearFreeToUse()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearFreeToUse() *StandardHistoryUpdateOne {
+	_u.mutation.ClearFreeToUse()
+	return _u
 }
 
 // SetStandardType sets the "standard_type" field.
-func (shuo *StandardHistoryUpdateOne) SetStandardType(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetStandardType(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetStandardType(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetStandardType(v)
+	return _u
 }
 
 // SetNillableStandardType sets the "standard_type" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableStandardType(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetStandardType(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableStandardType(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetStandardType(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearStandardType clears the value of the "standard_type" field.
-func (shuo *StandardHistoryUpdateOne) ClearStandardType() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearStandardType()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearStandardType() *StandardHistoryUpdateOne {
+	_u.mutation.ClearStandardType()
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (shuo *StandardHistoryUpdateOne) SetVersion(s string) *StandardHistoryUpdateOne {
-	shuo.mutation.SetVersion(s)
-	return shuo
+func (_u *StandardHistoryUpdateOne) SetVersion(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetVersion(v)
+	return _u
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (shuo *StandardHistoryUpdateOne) SetNillableVersion(s *string) *StandardHistoryUpdateOne {
-	if s != nil {
-		shuo.SetVersion(*s)
+func (_u *StandardHistoryUpdateOne) SetNillableVersion(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetVersion(*v)
 	}
-	return shuo
+	return _u
 }
 
 // ClearVersion clears the value of the "version" field.
-func (shuo *StandardHistoryUpdateOne) ClearVersion() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearVersion()
-	return shuo
+func (_u *StandardHistoryUpdateOne) ClearVersion() *StandardHistoryUpdateOne {
+	_u.mutation.ClearVersion()
+	return _u
 }
 
 // Mutation returns the StandardHistoryMutation object of the builder.
-func (shuo *StandardHistoryUpdateOne) Mutation() *StandardHistoryMutation {
-	return shuo.mutation
+func (_u *StandardHistoryUpdateOne) Mutation() *StandardHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the StandardHistoryUpdate builder.
-func (shuo *StandardHistoryUpdateOne) Where(ps ...predicate.StandardHistory) *StandardHistoryUpdateOne {
-	shuo.mutation.Where(ps...)
-	return shuo
+func (_u *StandardHistoryUpdateOne) Where(ps ...predicate.StandardHistory) *StandardHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (shuo *StandardHistoryUpdateOne) Select(field string, fields ...string) *StandardHistoryUpdateOne {
-	shuo.fields = append([]string{field}, fields...)
-	return shuo
+func (_u *StandardHistoryUpdateOne) Select(field string, fields ...string) *StandardHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated StandardHistory entity.
-func (shuo *StandardHistoryUpdateOne) Save(ctx context.Context) (*StandardHistory, error) {
-	if err := shuo.defaults(); err != nil {
+func (_u *StandardHistoryUpdateOne) Save(ctx context.Context) (*StandardHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shuo *StandardHistoryUpdateOne) SaveX(ctx context.Context) *StandardHistory {
-	node, err := shuo.Save(ctx)
+func (_u *StandardHistoryUpdateOne) SaveX(ctx context.Context) *StandardHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1071,33 +1071,33 @@ func (shuo *StandardHistoryUpdateOne) SaveX(ctx context.Context) *StandardHistor
 }
 
 // Exec executes the query on the entity.
-func (shuo *StandardHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := shuo.Save(ctx)
+func (_u *StandardHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shuo *StandardHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := shuo.Exec(ctx); err != nil {
+func (_u *StandardHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *StandardHistoryUpdateOne) defaults() error {
-	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+func (_u *StandardHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if standardhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standardhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := standardhistory.UpdateDefaultUpdatedAt()
-		shuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shuo *StandardHistoryUpdateOne) check() error {
-	if v, ok := shuo.mutation.Status(); ok {
+func (_u *StandardHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := standardhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "StandardHistory.status": %w`, err)}
 		}
@@ -1106,22 +1106,22 @@ func (shuo *StandardHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (shuo *StandardHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardHistoryUpdateOne {
-	shuo.modifiers = append(shuo.modifiers, modifiers...)
-	return shuo
+func (_u *StandardHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StandardHistory, err error) {
-	if err := shuo.check(); err != nil {
+func (_u *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StandardHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(standardhistory.Table, standardhistory.Columns, sqlgraph.NewFieldSpec(standardhistory.FieldID, field.TypeString))
-	id, ok := shuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "StandardHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := shuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, standardhistory.FieldID)
 		for _, f := range fields {
@@ -1133,159 +1133,159 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 			}
 		}
 	}
-	if ps := shuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if shuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(standardhistory.FieldRef, field.TypeString)
 	}
-	if shuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if shuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(standardhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(standardhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if shuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(standardhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(standardhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(standardhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if shuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(standardhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(standardhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := shuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standardhistory.FieldTags, value)
 		})
 	}
-	if shuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(standardhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := shuo.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(standardhistory.FieldRevision, field.TypeString, value)
 	}
-	if shuo.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(standardhistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := shuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(standardhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if shuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(standardhistory.FieldOwnerID, field.TypeString)
 	}
-	if shuo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(standardhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := shuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(standardhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := shuo.mutation.ShortName(); ok {
+	if value, ok := _u.mutation.ShortName(); ok {
 		_spec.SetField(standardhistory.FieldShortName, field.TypeString, value)
 	}
-	if shuo.mutation.ShortNameCleared() {
+	if _u.mutation.ShortNameCleared() {
 		_spec.ClearField(standardhistory.FieldShortName, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Framework(); ok {
+	if value, ok := _u.mutation.Framework(); ok {
 		_spec.SetField(standardhistory.FieldFramework, field.TypeString, value)
 	}
-	if shuo.mutation.FrameworkCleared() {
+	if _u.mutation.FrameworkCleared() {
 		_spec.ClearField(standardhistory.FieldFramework, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(standardhistory.FieldDescription, field.TypeString, value)
 	}
-	if shuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(standardhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := shuo.mutation.GoverningBodyLogoURL(); ok {
+	if value, ok := _u.mutation.GoverningBodyLogoURL(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBodyLogoURL, field.TypeString, value)
 	}
-	if shuo.mutation.GoverningBodyLogoURLCleared() {
+	if _u.mutation.GoverningBodyLogoURLCleared() {
 		_spec.ClearField(standardhistory.FieldGoverningBodyLogoURL, field.TypeString)
 	}
-	if value, ok := shuo.mutation.GoverningBody(); ok {
+	if value, ok := _u.mutation.GoverningBody(); ok {
 		_spec.SetField(standardhistory.FieldGoverningBody, field.TypeString, value)
 	}
-	if shuo.mutation.GoverningBodyCleared() {
+	if _u.mutation.GoverningBodyCleared() {
 		_spec.ClearField(standardhistory.FieldGoverningBody, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(standardhistory.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := shuo.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standardhistory.FieldDomains, value)
 		})
 	}
-	if shuo.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(standardhistory.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := shuo.mutation.Link(); ok {
+	if value, ok := _u.mutation.Link(); ok {
 		_spec.SetField(standardhistory.FieldLink, field.TypeString, value)
 	}
-	if shuo.mutation.LinkCleared() {
+	if _u.mutation.LinkCleared() {
 		_spec.ClearField(standardhistory.FieldLink, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(standardhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if shuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(standardhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := shuo.mutation.IsPublic(); ok {
+	if value, ok := _u.mutation.IsPublic(); ok {
 		_spec.SetField(standardhistory.FieldIsPublic, field.TypeBool, value)
 	}
-	if shuo.mutation.IsPublicCleared() {
+	if _u.mutation.IsPublicCleared() {
 		_spec.ClearField(standardhistory.FieldIsPublic, field.TypeBool)
 	}
-	if value, ok := shuo.mutation.FreeToUse(); ok {
+	if value, ok := _u.mutation.FreeToUse(); ok {
 		_spec.SetField(standardhistory.FieldFreeToUse, field.TypeBool, value)
 	}
-	if shuo.mutation.FreeToUseCleared() {
+	if _u.mutation.FreeToUseCleared() {
 		_spec.ClearField(standardhistory.FieldFreeToUse, field.TypeBool)
 	}
-	if value, ok := shuo.mutation.StandardType(); ok {
+	if value, ok := _u.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)
 	}
-	if shuo.mutation.StandardTypeCleared() {
+	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standardhistory.FieldStandardType, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
 	}
-	if shuo.mutation.VersionCleared() {
+	if _u.mutation.VersionCleared() {
 		_spec.ClearField(standardhistory.FieldVersion, field.TypeString)
 	}
-	_spec.Node.Schema = shuo.schemaConfig.StandardHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)
-	_spec.AddModifiers(shuo.modifiers...)
-	_node = &StandardHistory{config: shuo.config}
+	_spec.Node.Schema = _u.schemaConfig.StandardHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &StandardHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, shuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{standardhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1293,6 +1293,6 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 		}
 		return nil, err
 	}
-	shuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

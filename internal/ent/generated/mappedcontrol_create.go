@@ -26,290 +26,290 @@ type MappedControlCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (mcc *MappedControlCreate) SetCreatedAt(t time.Time) *MappedControlCreate {
-	mcc.mutation.SetCreatedAt(t)
-	return mcc
+func (_c *MappedControlCreate) SetCreatedAt(v time.Time) *MappedControlCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableCreatedAt(t *time.Time) *MappedControlCreate {
-	if t != nil {
-		mcc.SetCreatedAt(*t)
+func (_c *MappedControlCreate) SetNillableCreatedAt(v *time.Time) *MappedControlCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mcc *MappedControlCreate) SetUpdatedAt(t time.Time) *MappedControlCreate {
-	mcc.mutation.SetUpdatedAt(t)
-	return mcc
+func (_c *MappedControlCreate) SetUpdatedAt(v time.Time) *MappedControlCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableUpdatedAt(t *time.Time) *MappedControlCreate {
-	if t != nil {
-		mcc.SetUpdatedAt(*t)
+func (_c *MappedControlCreate) SetNillableUpdatedAt(v *time.Time) *MappedControlCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (mcc *MappedControlCreate) SetCreatedBy(s string) *MappedControlCreate {
-	mcc.mutation.SetCreatedBy(s)
-	return mcc
+func (_c *MappedControlCreate) SetCreatedBy(v string) *MappedControlCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableCreatedBy(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetCreatedBy(*s)
+func (_c *MappedControlCreate) SetNillableCreatedBy(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mcc *MappedControlCreate) SetUpdatedBy(s string) *MappedControlCreate {
-	mcc.mutation.SetUpdatedBy(s)
-	return mcc
+func (_c *MappedControlCreate) SetUpdatedBy(v string) *MappedControlCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableUpdatedBy(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetUpdatedBy(*s)
+func (_c *MappedControlCreate) SetNillableUpdatedBy(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (mcc *MappedControlCreate) SetDeletedAt(t time.Time) *MappedControlCreate {
-	mcc.mutation.SetDeletedAt(t)
-	return mcc
+func (_c *MappedControlCreate) SetDeletedAt(v time.Time) *MappedControlCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableDeletedAt(t *time.Time) *MappedControlCreate {
-	if t != nil {
-		mcc.SetDeletedAt(*t)
+func (_c *MappedControlCreate) SetNillableDeletedAt(v *time.Time) *MappedControlCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (mcc *MappedControlCreate) SetDeletedBy(s string) *MappedControlCreate {
-	mcc.mutation.SetDeletedBy(s)
-	return mcc
+func (_c *MappedControlCreate) SetDeletedBy(v string) *MappedControlCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableDeletedBy(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetDeletedBy(*s)
+func (_c *MappedControlCreate) SetNillableDeletedBy(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (mcc *MappedControlCreate) SetTags(s []string) *MappedControlCreate {
-	mcc.mutation.SetTags(s)
-	return mcc
+func (_c *MappedControlCreate) SetTags(v []string) *MappedControlCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (mcc *MappedControlCreate) SetOwnerID(s string) *MappedControlCreate {
-	mcc.mutation.SetOwnerID(s)
-	return mcc
+func (_c *MappedControlCreate) SetOwnerID(v string) *MappedControlCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableOwnerID(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetOwnerID(*s)
+func (_c *MappedControlCreate) SetNillableOwnerID(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetMappingType sets the "mapping_type" field.
-func (mcc *MappedControlCreate) SetMappingType(et enums.MappingType) *MappedControlCreate {
-	mcc.mutation.SetMappingType(et)
-	return mcc
+func (_c *MappedControlCreate) SetMappingType(v enums.MappingType) *MappedControlCreate {
+	_c.mutation.SetMappingType(v)
+	return _c
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableMappingType(et *enums.MappingType) *MappedControlCreate {
-	if et != nil {
-		mcc.SetMappingType(*et)
+func (_c *MappedControlCreate) SetNillableMappingType(v *enums.MappingType) *MappedControlCreate {
+	if v != nil {
+		_c.SetMappingType(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetRelation sets the "relation" field.
-func (mcc *MappedControlCreate) SetRelation(s string) *MappedControlCreate {
-	mcc.mutation.SetRelation(s)
-	return mcc
+func (_c *MappedControlCreate) SetRelation(v string) *MappedControlCreate {
+	_c.mutation.SetRelation(v)
+	return _c
 }
 
 // SetNillableRelation sets the "relation" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableRelation(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetRelation(*s)
+func (_c *MappedControlCreate) SetNillableRelation(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetRelation(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetConfidence sets the "confidence" field.
-func (mcc *MappedControlCreate) SetConfidence(i int) *MappedControlCreate {
-	mcc.mutation.SetConfidence(i)
-	return mcc
+func (_c *MappedControlCreate) SetConfidence(v int) *MappedControlCreate {
+	_c.mutation.SetConfidence(v)
+	return _c
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableConfidence(i *int) *MappedControlCreate {
-	if i != nil {
-		mcc.SetConfidence(*i)
+func (_c *MappedControlCreate) SetNillableConfidence(v *int) *MappedControlCreate {
+	if v != nil {
+		_c.SetConfidence(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetSource sets the "source" field.
-func (mcc *MappedControlCreate) SetSource(es enums.MappingSource) *MappedControlCreate {
-	mcc.mutation.SetSource(es)
-	return mcc
+func (_c *MappedControlCreate) SetSource(v enums.MappingSource) *MappedControlCreate {
+	_c.mutation.SetSource(v)
+	return _c
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableSource(es *enums.MappingSource) *MappedControlCreate {
-	if es != nil {
-		mcc.SetSource(*es)
+func (_c *MappedControlCreate) SetNillableSource(v *enums.MappingSource) *MappedControlCreate {
+	if v != nil {
+		_c.SetSource(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (mcc *MappedControlCreate) SetID(s string) *MappedControlCreate {
-	mcc.mutation.SetID(s)
-	return mcc
+func (_c *MappedControlCreate) SetID(v string) *MappedControlCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableID(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetID(*s)
+func (_c *MappedControlCreate) SetNillableID(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return mcc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (mcc *MappedControlCreate) SetOwner(o *Organization) *MappedControlCreate {
-	return mcc.SetOwnerID(o.ID)
+func (_c *MappedControlCreate) SetOwner(v *Organization) *MappedControlCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (mcc *MappedControlCreate) AddBlockedGroupIDs(ids ...string) *MappedControlCreate {
-	mcc.mutation.AddBlockedGroupIDs(ids...)
-	return mcc
+func (_c *MappedControlCreate) AddBlockedGroupIDs(ids ...string) *MappedControlCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (mcc *MappedControlCreate) AddBlockedGroups(g ...*Group) *MappedControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *MappedControlCreate) AddBlockedGroups(v ...*Group) *MappedControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (mcc *MappedControlCreate) AddEditorIDs(ids ...string) *MappedControlCreate {
-	mcc.mutation.AddEditorIDs(ids...)
-	return mcc
+func (_c *MappedControlCreate) AddEditorIDs(ids ...string) *MappedControlCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (mcc *MappedControlCreate) AddEditors(g ...*Group) *MappedControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *MappedControlCreate) AddEditors(v ...*Group) *MappedControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddFromControlIDs adds the "from_controls" edge to the Control entity by IDs.
-func (mcc *MappedControlCreate) AddFromControlIDs(ids ...string) *MappedControlCreate {
-	mcc.mutation.AddFromControlIDs(ids...)
-	return mcc
+func (_c *MappedControlCreate) AddFromControlIDs(ids ...string) *MappedControlCreate {
+	_c.mutation.AddFromControlIDs(ids...)
+	return _c
 }
 
 // AddFromControls adds the "from_controls" edges to the Control entity.
-func (mcc *MappedControlCreate) AddFromControls(c ...*Control) *MappedControlCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *MappedControlCreate) AddFromControls(v ...*Control) *MappedControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcc.AddFromControlIDs(ids...)
+	return _c.AddFromControlIDs(ids...)
 }
 
 // AddToControlIDs adds the "to_controls" edge to the Control entity by IDs.
-func (mcc *MappedControlCreate) AddToControlIDs(ids ...string) *MappedControlCreate {
-	mcc.mutation.AddToControlIDs(ids...)
-	return mcc
+func (_c *MappedControlCreate) AddToControlIDs(ids ...string) *MappedControlCreate {
+	_c.mutation.AddToControlIDs(ids...)
+	return _c
 }
 
 // AddToControls adds the "to_controls" edges to the Control entity.
-func (mcc *MappedControlCreate) AddToControls(c ...*Control) *MappedControlCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *MappedControlCreate) AddToControls(v ...*Control) *MappedControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcc.AddToControlIDs(ids...)
+	return _c.AddToControlIDs(ids...)
 }
 
 // AddFromSubcontrolIDs adds the "from_subcontrols" edge to the Subcontrol entity by IDs.
-func (mcc *MappedControlCreate) AddFromSubcontrolIDs(ids ...string) *MappedControlCreate {
-	mcc.mutation.AddFromSubcontrolIDs(ids...)
-	return mcc
+func (_c *MappedControlCreate) AddFromSubcontrolIDs(ids ...string) *MappedControlCreate {
+	_c.mutation.AddFromSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddFromSubcontrols adds the "from_subcontrols" edges to the Subcontrol entity.
-func (mcc *MappedControlCreate) AddFromSubcontrols(s ...*Subcontrol) *MappedControlCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *MappedControlCreate) AddFromSubcontrols(v ...*Subcontrol) *MappedControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcc.AddFromSubcontrolIDs(ids...)
+	return _c.AddFromSubcontrolIDs(ids...)
 }
 
 // AddToSubcontrolIDs adds the "to_subcontrols" edge to the Subcontrol entity by IDs.
-func (mcc *MappedControlCreate) AddToSubcontrolIDs(ids ...string) *MappedControlCreate {
-	mcc.mutation.AddToSubcontrolIDs(ids...)
-	return mcc
+func (_c *MappedControlCreate) AddToSubcontrolIDs(ids ...string) *MappedControlCreate {
+	_c.mutation.AddToSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddToSubcontrols adds the "to_subcontrols" edges to the Subcontrol entity.
-func (mcc *MappedControlCreate) AddToSubcontrols(s ...*Subcontrol) *MappedControlCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *MappedControlCreate) AddToSubcontrols(v ...*Subcontrol) *MappedControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return mcc.AddToSubcontrolIDs(ids...)
+	return _c.AddToSubcontrolIDs(ids...)
 }
 
 // Mutation returns the MappedControlMutation object of the builder.
-func (mcc *MappedControlCreate) Mutation() *MappedControlMutation {
-	return mcc.mutation
+func (_c *MappedControlCreate) Mutation() *MappedControlMutation {
+	return _c.mutation
 }
 
 // Save creates the MappedControl in the database.
-func (mcc *MappedControlCreate) Save(ctx context.Context) (*MappedControl, error) {
-	if err := mcc.defaults(); err != nil {
+func (_c *MappedControlCreate) Save(ctx context.Context) (*MappedControl, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, mcc.sqlSave, mcc.mutation, mcc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mcc *MappedControlCreate) SaveX(ctx context.Context) *MappedControl {
-	v, err := mcc.Save(ctx)
+func (_c *MappedControlCreate) SaveX(ctx context.Context) *MappedControl {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -317,77 +317,77 @@ func (mcc *MappedControlCreate) SaveX(ctx context.Context) *MappedControl {
 }
 
 // Exec executes the query.
-func (mcc *MappedControlCreate) Exec(ctx context.Context) error {
-	_, err := mcc.Save(ctx)
+func (_c *MappedControlCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mcc *MappedControlCreate) ExecX(ctx context.Context) {
-	if err := mcc.Exec(ctx); err != nil {
+func (_c *MappedControlCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mcc *MappedControlCreate) defaults() error {
-	if _, ok := mcc.mutation.CreatedAt(); !ok {
+func (_c *MappedControlCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if mappedcontrol.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrol.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrol.DefaultCreatedAt()
-		mcc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := mcc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if mappedcontrol.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrol.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrol.DefaultUpdatedAt()
-		mcc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mcc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := mappedcontrol.DefaultTags
-		mcc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := mcc.mutation.MappingType(); !ok {
+	if _, ok := _c.mutation.MappingType(); !ok {
 		v := mappedcontrol.DefaultMappingType
-		mcc.mutation.SetMappingType(v)
+		_c.mutation.SetMappingType(v)
 	}
-	if _, ok := mcc.mutation.Source(); !ok {
+	if _, ok := _c.mutation.Source(); !ok {
 		v := mappedcontrol.DefaultSource
-		mcc.mutation.SetSource(v)
+		_c.mutation.SetSource(v)
 	}
-	if _, ok := mcc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if mappedcontrol.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrol.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrol.DefaultID()
-		mcc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mcc *MappedControlCreate) check() error {
-	if v, ok := mcc.mutation.OwnerID(); ok {
+func (_c *MappedControlCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := mcc.mutation.MappingType(); !ok {
+	if _, ok := _c.mutation.MappingType(); !ok {
 		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControl.mapping_type"`)}
 	}
-	if v, ok := mcc.mutation.MappingType(); ok {
+	if v, ok := _c.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}
 		}
 	}
-	if v, ok := mcc.mutation.Confidence(); ok {
+	if v, ok := _c.mutation.Confidence(); ok {
 		if err := mappedcontrol.ConfidenceValidator(v); err != nil {
 			return &ValidationError{Name: "confidence", err: fmt.Errorf(`generated: validator failed for field "MappedControl.confidence": %w`, err)}
 		}
 	}
-	if v, ok := mcc.mutation.Source(); ok {
+	if v, ok := _c.mutation.Source(); ok {
 		if err := mappedcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControl.source": %w`, err)}
 		}
@@ -395,12 +395,12 @@ func (mcc *MappedControlCreate) check() error {
 	return nil
 }
 
-func (mcc *MappedControlCreate) sqlSave(ctx context.Context) (*MappedControl, error) {
-	if err := mcc.check(); err != nil {
+func (_c *MappedControlCreate) sqlSave(ctx context.Context) (*MappedControl, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := mcc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mcc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -413,66 +413,66 @@ func (mcc *MappedControlCreate) sqlSave(ctx context.Context) (*MappedControl, er
 			return nil, fmt.Errorf("unexpected MappedControl.ID type: %T", _spec.ID.Value)
 		}
 	}
-	mcc.mutation.id = &_node.ID
-	mcc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpec) {
+func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpec) {
 	var (
-		_node = &MappedControl{config: mcc.config}
+		_node = &MappedControl{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappedcontrol.Table, sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString))
 	)
-	_spec.Schema = mcc.schemaConfig.MappedControl
-	if id, ok := mcc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.MappedControl
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := mcc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := mcc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mcc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := mcc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mcc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := mcc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(mappedcontrol.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := mcc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrol.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := mcc.mutation.MappingType(); ok {
+	if value, ok := _c.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrol.FieldMappingType, field.TypeEnum, value)
 		_node.MappingType = value
 	}
-	if value, ok := mcc.mutation.Relation(); ok {
+	if value, ok := _c.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrol.FieldRelation, field.TypeString, value)
 		_node.Relation = value
 	}
-	if value, ok := mcc.mutation.Confidence(); ok {
+	if value, ok := _c.mutation.Confidence(); ok {
 		_spec.SetField(mappedcontrol.FieldConfidence, field.TypeInt, value)
 		_node.Confidence = &value
 	}
-	if value, ok := mcc.mutation.Source(); ok {
+	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(mappedcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if nodes := mcc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -483,14 +483,14 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControl
+		edge.Schema = _c.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -501,13 +501,13 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControlBlockedGroups
+		edge.Schema = _c.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -518,13 +518,13 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControlEditors
+		edge.Schema = _c.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.FromControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FromControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -535,13 +535,13 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControlFromControls
+		edge.Schema = _c.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.ToControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ToControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -552,13 +552,13 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControlToControls
+		edge.Schema = _c.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -569,13 +569,13 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControlFromSubcontrols
+		edge.Schema = _c.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -586,7 +586,7 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.MappedControlToSubcontrols
+		edge.Schema = _c.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -603,16 +603,16 @@ type MappedControlCreateBulk struct {
 }
 
 // Save creates the MappedControl entities in the database.
-func (mccb *MappedControlCreateBulk) Save(ctx context.Context) ([]*MappedControl, error) {
-	if mccb.err != nil {
-		return nil, mccb.err
+func (_c *MappedControlCreateBulk) Save(ctx context.Context) ([]*MappedControl, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(mccb.builders))
-	nodes := make([]*MappedControl, len(mccb.builders))
-	mutators := make([]Mutator, len(mccb.builders))
-	for i := range mccb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*MappedControl, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := mccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MappedControlMutation)
@@ -626,11 +626,11 @@ func (mccb *MappedControlCreateBulk) Save(ctx context.Context) ([]*MappedControl
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -650,7 +650,7 @@ func (mccb *MappedControlCreateBulk) Save(ctx context.Context) ([]*MappedControl
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -658,8 +658,8 @@ func (mccb *MappedControlCreateBulk) Save(ctx context.Context) ([]*MappedControl
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mccb *MappedControlCreateBulk) SaveX(ctx context.Context) []*MappedControl {
-	v, err := mccb.Save(ctx)
+func (_c *MappedControlCreateBulk) SaveX(ctx context.Context) []*MappedControl {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -667,14 +667,14 @@ func (mccb *MappedControlCreateBulk) SaveX(ctx context.Context) []*MappedControl
 }
 
 // Exec executes the query.
-func (mccb *MappedControlCreateBulk) Exec(ctx context.Context) error {
-	_, err := mccb.Save(ctx)
+func (_c *MappedControlCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mccb *MappedControlCreateBulk) ExecX(ctx context.Context) {
-	if err := mccb.Exec(ctx); err != nil {
+func (_c *MappedControlCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

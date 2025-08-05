@@ -22,58 +22,58 @@ type ProcedureDelete struct {
 }
 
 // Where appends a list predicates to the ProcedureDelete builder.
-func (pd *ProcedureDelete) Where(ps ...predicate.Procedure) *ProcedureDelete {
-	pd.mutation.Where(ps...)
-	return pd
+func (_d *ProcedureDelete) Where(ps ...predicate.Procedure) *ProcedureDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (pd *ProcedureDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, pd.sqlExec, pd.mutation, pd.hooks)
+func (_d *ProcedureDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pd *ProcedureDelete) ExecX(ctx context.Context) int {
-	n, err := pd.Exec(ctx)
+func (_d *ProcedureDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (pd *ProcedureDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ProcedureDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(procedure.Table, sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString))
-	_spec.Node.Schema = pd.schemaConfig.Procedure
-	ctx = internal.NewSchemaConfigContext(ctx, pd.schemaConfig)
-	if ps := pd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Procedure
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, pd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	pd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ProcedureDeleteOne is the builder for deleting a single Procedure entity.
 type ProcedureDeleteOne struct {
-	pd *ProcedureDelete
+	_d *ProcedureDelete
 }
 
 // Where appends a list predicates to the ProcedureDelete builder.
-func (pdo *ProcedureDeleteOne) Where(ps ...predicate.Procedure) *ProcedureDeleteOne {
-	pdo.pd.mutation.Where(ps...)
-	return pdo
+func (_d *ProcedureDeleteOne) Where(ps ...predicate.Procedure) *ProcedureDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (pdo *ProcedureDeleteOne) Exec(ctx context.Context) error {
-	n, err := pdo.pd.Exec(ctx)
+func (_d *ProcedureDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (pdo *ProcedureDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pdo *ProcedureDeleteOne) ExecX(ctx context.Context) {
-	if err := pdo.Exec(ctx); err != nil {
+func (_d *ProcedureDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -319,7 +319,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Program fields.
-func (pr *Program) assignValues(columns []string, values []any) error {
+func (_m *Program) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -329,55 +329,55 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				pr.ID = value.String
+				_m.ID = value.String
 			}
 		case program.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				pr.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case program.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				pr.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case program.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				pr.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case program.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				pr.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case program.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				pr.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case program.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				pr.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case program.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				pr.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case program.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -385,88 +385,88 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				pr.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case program.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				pr.Name = value.String
+				_m.Name = value.String
 			}
 		case program.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				pr.Description = value.String
+				_m.Description = value.String
 			}
 		case program.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				pr.Status = enums.ProgramStatus(value.String)
+				_m.Status = enums.ProgramStatus(value.String)
 			}
 		case program.FieldProgramType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_type", values[i])
 			} else if value.Valid {
-				pr.ProgramType = enums.ProgramType(value.String)
+				_m.ProgramType = enums.ProgramType(value.String)
 			}
 		case program.FieldFrameworkName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field framework_name", values[i])
 			} else if value.Valid {
-				pr.FrameworkName = value.String
+				_m.FrameworkName = value.String
 			}
 		case program.FieldStartDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field start_date", values[i])
 			} else if value.Valid {
-				pr.StartDate = value.Time
+				_m.StartDate = value.Time
 			}
 		case program.FieldEndDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field end_date", values[i])
 			} else if value.Valid {
-				pr.EndDate = value.Time
+				_m.EndDate = value.Time
 			}
 		case program.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_ready", values[i])
 			} else if value.Valid {
-				pr.AuditorReady = value.Bool
+				_m.AuditorReady = value.Bool
 			}
 		case program.FieldAuditorWriteComments:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_write_comments", values[i])
 			} else if value.Valid {
-				pr.AuditorWriteComments = value.Bool
+				_m.AuditorWriteComments = value.Bool
 			}
 		case program.FieldAuditorReadComments:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_read_comments", values[i])
 			} else if value.Valid {
-				pr.AuditorReadComments = value.Bool
+				_m.AuditorReadComments = value.Bool
 			}
 		case program.FieldAuditFirm:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field audit_firm", values[i])
 			} else if value.Valid {
-				pr.AuditFirm = value.String
+				_m.AuditFirm = value.String
 			}
 		case program.FieldAuditor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor", values[i])
 			} else if value.Valid {
-				pr.Auditor = value.String
+				_m.Auditor = value.String
 			}
 		case program.FieldAuditorEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_email", values[i])
 			} else if value.Valid {
-				pr.AuditorEmail = value.String
+				_m.AuditorEmail = value.String
 			}
 		default:
-			pr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -474,597 +474,597 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Program.
 // This includes values selected through modifiers, order, etc.
-func (pr *Program) Value(name string) (ent.Value, error) {
-	return pr.selectValues.Get(name)
+func (_m *Program) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Program entity.
-func (pr *Program) QueryOwner() *OrganizationQuery {
-	return NewProgramClient(pr.config).QueryOwner(pr)
+func (_m *Program) QueryOwner() *OrganizationQuery {
+	return NewProgramClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Program entity.
-func (pr *Program) QueryBlockedGroups() *GroupQuery {
-	return NewProgramClient(pr.config).QueryBlockedGroups(pr)
+func (_m *Program) QueryBlockedGroups() *GroupQuery {
+	return NewProgramClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Program entity.
-func (pr *Program) QueryEditors() *GroupQuery {
-	return NewProgramClient(pr.config).QueryEditors(pr)
+func (_m *Program) QueryEditors() *GroupQuery {
+	return NewProgramClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the Program entity.
-func (pr *Program) QueryViewers() *GroupQuery {
-	return NewProgramClient(pr.config).QueryViewers(pr)
+func (_m *Program) QueryViewers() *GroupQuery {
+	return NewProgramClient(_m.config).QueryViewers(_m)
 }
 
 // QueryControls queries the "controls" edge of the Program entity.
-func (pr *Program) QueryControls() *ControlQuery {
-	return NewProgramClient(pr.config).QueryControls(pr)
+func (_m *Program) QueryControls() *ControlQuery {
+	return NewProgramClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the Program entity.
-func (pr *Program) QuerySubcontrols() *SubcontrolQuery {
-	return NewProgramClient(pr.config).QuerySubcontrols(pr)
+func (_m *Program) QuerySubcontrols() *SubcontrolQuery {
+	return NewProgramClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the Program entity.
-func (pr *Program) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewProgramClient(pr.config).QueryControlObjectives(pr)
+func (_m *Program) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewProgramClient(_m.config).QueryControlObjectives(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Program entity.
-func (pr *Program) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewProgramClient(pr.config).QueryInternalPolicies(pr)
+func (_m *Program) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewProgramClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the Program entity.
-func (pr *Program) QueryProcedures() *ProcedureQuery {
-	return NewProgramClient(pr.config).QueryProcedures(pr)
+func (_m *Program) QueryProcedures() *ProcedureQuery {
+	return NewProgramClient(_m.config).QueryProcedures(_m)
 }
 
 // QueryRisks queries the "risks" edge of the Program entity.
-func (pr *Program) QueryRisks() *RiskQuery {
-	return NewProgramClient(pr.config).QueryRisks(pr)
+func (_m *Program) QueryRisks() *RiskQuery {
+	return NewProgramClient(_m.config).QueryRisks(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Program entity.
-func (pr *Program) QueryTasks() *TaskQuery {
-	return NewProgramClient(pr.config).QueryTasks(pr)
+func (_m *Program) QueryTasks() *TaskQuery {
+	return NewProgramClient(_m.config).QueryTasks(_m)
 }
 
 // QueryNotes queries the "notes" edge of the Program entity.
-func (pr *Program) QueryNotes() *NoteQuery {
-	return NewProgramClient(pr.config).QueryNotes(pr)
+func (_m *Program) QueryNotes() *NoteQuery {
+	return NewProgramClient(_m.config).QueryNotes(_m)
 }
 
 // QueryFiles queries the "files" edge of the Program entity.
-func (pr *Program) QueryFiles() *FileQuery {
-	return NewProgramClient(pr.config).QueryFiles(pr)
+func (_m *Program) QueryFiles() *FileQuery {
+	return NewProgramClient(_m.config).QueryFiles(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the Program entity.
-func (pr *Program) QueryEvidence() *EvidenceQuery {
-	return NewProgramClient(pr.config).QueryEvidence(pr)
+func (_m *Program) QueryEvidence() *EvidenceQuery {
+	return NewProgramClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryNarratives queries the "narratives" edge of the Program entity.
-func (pr *Program) QueryNarratives() *NarrativeQuery {
-	return NewProgramClient(pr.config).QueryNarratives(pr)
+func (_m *Program) QueryNarratives() *NarrativeQuery {
+	return NewProgramClient(_m.config).QueryNarratives(_m)
 }
 
 // QueryActionPlans queries the "action_plans" edge of the Program entity.
-func (pr *Program) QueryActionPlans() *ActionPlanQuery {
-	return NewProgramClient(pr.config).QueryActionPlans(pr)
+func (_m *Program) QueryActionPlans() *ActionPlanQuery {
+	return NewProgramClient(_m.config).QueryActionPlans(_m)
 }
 
 // QueryUsers queries the "users" edge of the Program entity.
-func (pr *Program) QueryUsers() *UserQuery {
-	return NewProgramClient(pr.config).QueryUsers(pr)
+func (_m *Program) QueryUsers() *UserQuery {
+	return NewProgramClient(_m.config).QueryUsers(_m)
 }
 
 // QueryMembers queries the "members" edge of the Program entity.
-func (pr *Program) QueryMembers() *ProgramMembershipQuery {
-	return NewProgramClient(pr.config).QueryMembers(pr)
+func (_m *Program) QueryMembers() *ProgramMembershipQuery {
+	return NewProgramClient(_m.config).QueryMembers(_m)
 }
 
 // Update returns a builder for updating this Program.
 // Note that you need to call Program.Unwrap() before calling this method if this Program
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (pr *Program) Update() *ProgramUpdateOne {
-	return NewProgramClient(pr.config).UpdateOne(pr)
+func (_m *Program) Update() *ProgramUpdateOne {
+	return NewProgramClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Program entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (pr *Program) Unwrap() *Program {
-	_tx, ok := pr.config.driver.(*txDriver)
+func (_m *Program) Unwrap() *Program {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Program is not a transactional entity")
 	}
-	pr.config.driver = _tx.drv
-	return pr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (pr *Program) String() string {
+func (_m *Program) String() string {
 	var builder strings.Builder
 	builder.WriteString("Program(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(pr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(pr.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(pr.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(pr.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(pr.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(pr.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(pr.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(pr.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("program_type=")
-	builder.WriteString(fmt.Sprintf("%v", pr.ProgramType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ProgramType))
 	builder.WriteString(", ")
 	builder.WriteString("framework_name=")
-	builder.WriteString(pr.FrameworkName)
+	builder.WriteString(_m.FrameworkName)
 	builder.WriteString(", ")
 	builder.WriteString("start_date=")
-	builder.WriteString(pr.StartDate.Format(time.ANSIC))
+	builder.WriteString(_m.StartDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
-	builder.WriteString(pr.EndDate.Format(time.ANSIC))
+	builder.WriteString(_m.EndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
-	builder.WriteString(fmt.Sprintf("%v", pr.AuditorReady))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReady))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_write_comments=")
-	builder.WriteString(fmt.Sprintf("%v", pr.AuditorWriteComments))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuditorWriteComments))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_read_comments=")
-	builder.WriteString(fmt.Sprintf("%v", pr.AuditorReadComments))
+	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReadComments))
 	builder.WriteString(", ")
 	builder.WriteString("audit_firm=")
-	builder.WriteString(pr.AuditFirm)
+	builder.WriteString(_m.AuditFirm)
 	builder.WriteString(", ")
 	builder.WriteString("auditor=")
-	builder.WriteString(pr.Auditor)
+	builder.WriteString(_m.Auditor)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_email=")
-	builder.WriteString(pr.AuditorEmail)
+	builder.WriteString(_m.AuditorEmail)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedBlockedGroups(name string) ([]*Group, error) {
-	if pr.Edges.namedBlockedGroups == nil {
+func (_m *Program) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if pr.Edges.namedBlockedGroups == nil {
-		pr.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Program) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		pr.Edges.namedBlockedGroups[name] = append(pr.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedEditors(name string) ([]*Group, error) {
-	if pr.Edges.namedEditors == nil {
+func (_m *Program) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedEditors(name string, edges ...*Group) {
-	if pr.Edges.namedEditors == nil {
-		pr.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Program) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		pr.Edges.namedEditors[name] = append(pr.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedViewers(name string) ([]*Group, error) {
-	if pr.Edges.namedViewers == nil {
+func (_m *Program) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedViewers(name string, edges ...*Group) {
-	if pr.Edges.namedViewers == nil {
-		pr.Edges.namedViewers = make(map[string][]*Group)
+func (_m *Program) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		pr.Edges.namedViewers[name] = append(pr.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedControls(name string) ([]*Control, error) {
-	if pr.Edges.namedControls == nil {
+func (_m *Program) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedControls(name string, edges ...*Control) {
-	if pr.Edges.namedControls == nil {
-		pr.Edges.namedControls = make(map[string][]*Control)
+func (_m *Program) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		pr.Edges.namedControls[name] = append(pr.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if pr.Edges.namedSubcontrols == nil {
+func (_m *Program) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if pr.Edges.namedSubcontrols == nil {
-		pr.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *Program) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		pr.Edges.namedSubcontrols[name] = append(pr.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if pr.Edges.namedControlObjectives == nil {
+func (_m *Program) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedControlObjectives[name]
+	nodes, ok := _m.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if pr.Edges.namedControlObjectives == nil {
-		pr.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+func (_m *Program) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedControlObjectives[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		pr.Edges.namedControlObjectives[name] = append(pr.Edges.namedControlObjectives[name], edges...)
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if pr.Edges.namedInternalPolicies == nil {
+func (_m *Program) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if pr.Edges.namedInternalPolicies == nil {
-		pr.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Program) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		pr.Edges.namedInternalPolicies[name] = append(pr.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedProcedures(name string) ([]*Procedure, error) {
-	if pr.Edges.namedProcedures == nil {
+func (_m *Program) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedProcedures(name string, edges ...*Procedure) {
-	if pr.Edges.namedProcedures == nil {
-		pr.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *Program) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		pr.Edges.namedProcedures[name] = append(pr.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedRisks(name string) ([]*Risk, error) {
-	if pr.Edges.namedRisks == nil {
+func (_m *Program) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedRisks(name string, edges ...*Risk) {
-	if pr.Edges.namedRisks == nil {
-		pr.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *Program) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		pr.Edges.namedRisks[name] = append(pr.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedTasks(name string) ([]*Task, error) {
-	if pr.Edges.namedTasks == nil {
+func (_m *Program) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedTasks(name string, edges ...*Task) {
-	if pr.Edges.namedTasks == nil {
-		pr.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Program) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		pr.Edges.namedTasks[name] = append(pr.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedNotes returns the Notes named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedNotes(name string) ([]*Note, error) {
-	if pr.Edges.namedNotes == nil {
+func (_m *Program) NamedNotes(name string) ([]*Note, error) {
+	if _m.Edges.namedNotes == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedNotes[name]
+	nodes, ok := _m.Edges.namedNotes[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedNotes(name string, edges ...*Note) {
-	if pr.Edges.namedNotes == nil {
-		pr.Edges.namedNotes = make(map[string][]*Note)
+func (_m *Program) appendNamedNotes(name string, edges ...*Note) {
+	if _m.Edges.namedNotes == nil {
+		_m.Edges.namedNotes = make(map[string][]*Note)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedNotes[name] = []*Note{}
+		_m.Edges.namedNotes[name] = []*Note{}
 	} else {
-		pr.Edges.namedNotes[name] = append(pr.Edges.namedNotes[name], edges...)
+		_m.Edges.namedNotes[name] = append(_m.Edges.namedNotes[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedFiles(name string) ([]*File, error) {
-	if pr.Edges.namedFiles == nil {
+func (_m *Program) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedFiles(name string, edges ...*File) {
-	if pr.Edges.namedFiles == nil {
-		pr.Edges.namedFiles = make(map[string][]*File)
+func (_m *Program) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		pr.Edges.namedFiles[name] = append(pr.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedEvidence returns the Evidence named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedEvidence(name string) ([]*Evidence, error) {
-	if pr.Edges.namedEvidence == nil {
+func (_m *Program) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedEvidence[name]
+	nodes, ok := _m.Edges.namedEvidence[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedEvidence(name string, edges ...*Evidence) {
-	if pr.Edges.namedEvidence == nil {
-		pr.Edges.namedEvidence = make(map[string][]*Evidence)
+func (_m *Program) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedEvidence[name] = []*Evidence{}
+		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
-		pr.Edges.namedEvidence[name] = append(pr.Edges.namedEvidence[name], edges...)
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
 	}
 }
 
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedNarratives(name string) ([]*Narrative, error) {
-	if pr.Edges.namedNarratives == nil {
+func (_m *Program) NamedNarratives(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedNarratives[name]
+	nodes, ok := _m.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedNarratives(name string, edges ...*Narrative) {
-	if pr.Edges.namedNarratives == nil {
-		pr.Edges.namedNarratives = make(map[string][]*Narrative)
+func (_m *Program) appendNamedNarratives(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarratives == nil {
+		_m.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedNarratives[name] = []*Narrative{}
+		_m.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		pr.Edges.namedNarratives[name] = append(pr.Edges.namedNarratives[name], edges...)
+		_m.Edges.namedNarratives[name] = append(_m.Edges.namedNarratives[name], edges...)
 	}
 }
 
 // NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if pr.Edges.namedActionPlans == nil {
+func (_m *Program) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedActionPlans[name]
+	nodes, ok := _m.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if pr.Edges.namedActionPlans == nil {
-		pr.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+func (_m *Program) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedActionPlans[name] = []*ActionPlan{}
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		pr.Edges.namedActionPlans[name] = append(pr.Edges.namedActionPlans[name], edges...)
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 
 // NamedUsers returns the Users named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedUsers(name string) ([]*User, error) {
-	if pr.Edges.namedUsers == nil {
+func (_m *Program) NamedUsers(name string) ([]*User, error) {
+	if _m.Edges.namedUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedUsers[name]
+	nodes, ok := _m.Edges.namedUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedUsers(name string, edges ...*User) {
-	if pr.Edges.namedUsers == nil {
-		pr.Edges.namedUsers = make(map[string][]*User)
+func (_m *Program) appendNamedUsers(name string, edges ...*User) {
+	if _m.Edges.namedUsers == nil {
+		_m.Edges.namedUsers = make(map[string][]*User)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedUsers[name] = []*User{}
+		_m.Edges.namedUsers[name] = []*User{}
 	} else {
-		pr.Edges.namedUsers[name] = append(pr.Edges.namedUsers[name], edges...)
+		_m.Edges.namedUsers[name] = append(_m.Edges.namedUsers[name], edges...)
 	}
 }
 
 // NamedMembers returns the Members named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pr *Program) NamedMembers(name string) ([]*ProgramMembership, error) {
-	if pr.Edges.namedMembers == nil {
+func (_m *Program) NamedMembers(name string) ([]*ProgramMembership, error) {
+	if _m.Edges.namedMembers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pr.Edges.namedMembers[name]
+	nodes, ok := _m.Edges.namedMembers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pr *Program) appendNamedMembers(name string, edges ...*ProgramMembership) {
-	if pr.Edges.namedMembers == nil {
-		pr.Edges.namedMembers = make(map[string][]*ProgramMembership)
+func (_m *Program) appendNamedMembers(name string, edges ...*ProgramMembership) {
+	if _m.Edges.namedMembers == nil {
+		_m.Edges.namedMembers = make(map[string][]*ProgramMembership)
 	}
 	if len(edges) == 0 {
-		pr.Edges.namedMembers[name] = []*ProgramMembership{}
+		_m.Edges.namedMembers[name] = []*ProgramMembership{}
 	} else {
-		pr.Edges.namedMembers[name] = append(pr.Edges.namedMembers[name], edges...)
+		_m.Edges.namedMembers[name] = append(_m.Edges.namedMembers[name], edges...)
 	}
 }
 

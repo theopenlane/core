@@ -22,58 +22,58 @@ type SubscriberDelete struct {
 }
 
 // Where appends a list predicates to the SubscriberDelete builder.
-func (sd *SubscriberDelete) Where(ps ...predicate.Subscriber) *SubscriberDelete {
-	sd.mutation.Where(ps...)
-	return sd
+func (_d *SubscriberDelete) Where(ps ...predicate.Subscriber) *SubscriberDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (sd *SubscriberDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, sd.sqlExec, sd.mutation, sd.hooks)
+func (_d *SubscriberDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sd *SubscriberDelete) ExecX(ctx context.Context) int {
-	n, err := sd.Exec(ctx)
+func (_d *SubscriberDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (sd *SubscriberDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SubscriberDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(subscriber.Table, sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString))
-	_spec.Node.Schema = sd.schemaConfig.Subscriber
-	ctx = internal.NewSchemaConfigContext(ctx, sd.schemaConfig)
-	if ps := sd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Subscriber
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, sd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	sd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SubscriberDeleteOne is the builder for deleting a single Subscriber entity.
 type SubscriberDeleteOne struct {
-	sd *SubscriberDelete
+	_d *SubscriberDelete
 }
 
 // Where appends a list predicates to the SubscriberDelete builder.
-func (sdo *SubscriberDeleteOne) Where(ps ...predicate.Subscriber) *SubscriberDeleteOne {
-	sdo.sd.mutation.Where(ps...)
-	return sdo
+func (_d *SubscriberDeleteOne) Where(ps ...predicate.Subscriber) *SubscriberDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (sdo *SubscriberDeleteOne) Exec(ctx context.Context) error {
-	n, err := sdo.sd.Exec(ctx)
+func (_d *SubscriberDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (sdo *SubscriberDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sdo *SubscriberDeleteOne) ExecX(ctx context.Context) {
-	if err := sdo.Exec(ctx); err != nil {
+func (_d *SubscriberDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

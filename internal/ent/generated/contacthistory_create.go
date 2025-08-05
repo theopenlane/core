@@ -23,263 +23,263 @@ type ContactHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (chc *ContactHistoryCreate) SetHistoryTime(t time.Time) *ContactHistoryCreate {
-	chc.mutation.SetHistoryTime(t)
-	return chc
+func (_c *ContactHistoryCreate) SetHistoryTime(v time.Time) *ContactHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableHistoryTime(t *time.Time) *ContactHistoryCreate {
-	if t != nil {
-		chc.SetHistoryTime(*t)
+func (_c *ContactHistoryCreate) SetNillableHistoryTime(v *time.Time) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (chc *ContactHistoryCreate) SetRef(s string) *ContactHistoryCreate {
-	chc.mutation.SetRef(s)
-	return chc
+func (_c *ContactHistoryCreate) SetRef(v string) *ContactHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableRef(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetRef(*s)
+func (_c *ContactHistoryCreate) SetNillableRef(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (chc *ContactHistoryCreate) SetOperation(ht history.OpType) *ContactHistoryCreate {
-	chc.mutation.SetOperation(ht)
-	return chc
+func (_c *ContactHistoryCreate) SetOperation(v history.OpType) *ContactHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (chc *ContactHistoryCreate) SetCreatedAt(t time.Time) *ContactHistoryCreate {
-	chc.mutation.SetCreatedAt(t)
-	return chc
+func (_c *ContactHistoryCreate) SetCreatedAt(v time.Time) *ContactHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableCreatedAt(t *time.Time) *ContactHistoryCreate {
-	if t != nil {
-		chc.SetCreatedAt(*t)
+func (_c *ContactHistoryCreate) SetNillableCreatedAt(v *time.Time) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (chc *ContactHistoryCreate) SetUpdatedAt(t time.Time) *ContactHistoryCreate {
-	chc.mutation.SetUpdatedAt(t)
-	return chc
+func (_c *ContactHistoryCreate) SetUpdatedAt(v time.Time) *ContactHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ContactHistoryCreate {
-	if t != nil {
-		chc.SetUpdatedAt(*t)
+func (_c *ContactHistoryCreate) SetNillableUpdatedAt(v *time.Time) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (chc *ContactHistoryCreate) SetCreatedBy(s string) *ContactHistoryCreate {
-	chc.mutation.SetCreatedBy(s)
-	return chc
+func (_c *ContactHistoryCreate) SetCreatedBy(v string) *ContactHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableCreatedBy(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetCreatedBy(*s)
+func (_c *ContactHistoryCreate) SetNillableCreatedBy(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (chc *ContactHistoryCreate) SetUpdatedBy(s string) *ContactHistoryCreate {
-	chc.mutation.SetUpdatedBy(s)
-	return chc
+func (_c *ContactHistoryCreate) SetUpdatedBy(v string) *ContactHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableUpdatedBy(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetUpdatedBy(*s)
+func (_c *ContactHistoryCreate) SetNillableUpdatedBy(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (chc *ContactHistoryCreate) SetDeletedAt(t time.Time) *ContactHistoryCreate {
-	chc.mutation.SetDeletedAt(t)
-	return chc
+func (_c *ContactHistoryCreate) SetDeletedAt(v time.Time) *ContactHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableDeletedAt(t *time.Time) *ContactHistoryCreate {
-	if t != nil {
-		chc.SetDeletedAt(*t)
+func (_c *ContactHistoryCreate) SetNillableDeletedAt(v *time.Time) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (chc *ContactHistoryCreate) SetDeletedBy(s string) *ContactHistoryCreate {
-	chc.mutation.SetDeletedBy(s)
-	return chc
+func (_c *ContactHistoryCreate) SetDeletedBy(v string) *ContactHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableDeletedBy(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetDeletedBy(*s)
+func (_c *ContactHistoryCreate) SetNillableDeletedBy(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (chc *ContactHistoryCreate) SetTags(s []string) *ContactHistoryCreate {
-	chc.mutation.SetTags(s)
-	return chc
+func (_c *ContactHistoryCreate) SetTags(v []string) *ContactHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (chc *ContactHistoryCreate) SetOwnerID(s string) *ContactHistoryCreate {
-	chc.mutation.SetOwnerID(s)
-	return chc
+func (_c *ContactHistoryCreate) SetOwnerID(v string) *ContactHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableOwnerID(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetOwnerID(*s)
+func (_c *ContactHistoryCreate) SetNillableOwnerID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetFullName sets the "full_name" field.
-func (chc *ContactHistoryCreate) SetFullName(s string) *ContactHistoryCreate {
-	chc.mutation.SetFullName(s)
-	return chc
+func (_c *ContactHistoryCreate) SetFullName(v string) *ContactHistoryCreate {
+	_c.mutation.SetFullName(v)
+	return _c
 }
 
 // SetTitle sets the "title" field.
-func (chc *ContactHistoryCreate) SetTitle(s string) *ContactHistoryCreate {
-	chc.mutation.SetTitle(s)
-	return chc
+func (_c *ContactHistoryCreate) SetTitle(v string) *ContactHistoryCreate {
+	_c.mutation.SetTitle(v)
+	return _c
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableTitle(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetTitle(*s)
+func (_c *ContactHistoryCreate) SetNillableTitle(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetTitle(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetCompany sets the "company" field.
-func (chc *ContactHistoryCreate) SetCompany(s string) *ContactHistoryCreate {
-	chc.mutation.SetCompany(s)
-	return chc
+func (_c *ContactHistoryCreate) SetCompany(v string) *ContactHistoryCreate {
+	_c.mutation.SetCompany(v)
+	return _c
 }
 
 // SetNillableCompany sets the "company" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableCompany(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetCompany(*s)
+func (_c *ContactHistoryCreate) SetNillableCompany(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetCompany(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetEmail sets the "email" field.
-func (chc *ContactHistoryCreate) SetEmail(s string) *ContactHistoryCreate {
-	chc.mutation.SetEmail(s)
-	return chc
+func (_c *ContactHistoryCreate) SetEmail(v string) *ContactHistoryCreate {
+	_c.mutation.SetEmail(v)
+	return _c
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableEmail(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetEmail(*s)
+func (_c *ContactHistoryCreate) SetNillableEmail(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetEmail(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (chc *ContactHistoryCreate) SetPhoneNumber(s string) *ContactHistoryCreate {
-	chc.mutation.SetPhoneNumber(s)
-	return chc
+func (_c *ContactHistoryCreate) SetPhoneNumber(v string) *ContactHistoryCreate {
+	_c.mutation.SetPhoneNumber(v)
+	return _c
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillablePhoneNumber(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetPhoneNumber(*s)
+func (_c *ContactHistoryCreate) SetNillablePhoneNumber(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetPhoneNumber(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetAddress sets the "address" field.
-func (chc *ContactHistoryCreate) SetAddress(s string) *ContactHistoryCreate {
-	chc.mutation.SetAddress(s)
-	return chc
+func (_c *ContactHistoryCreate) SetAddress(v string) *ContactHistoryCreate {
+	_c.mutation.SetAddress(v)
+	return _c
 }
 
 // SetNillableAddress sets the "address" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableAddress(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetAddress(*s)
+func (_c *ContactHistoryCreate) SetNillableAddress(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetAddress(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (chc *ContactHistoryCreate) SetStatus(es enums.UserStatus) *ContactHistoryCreate {
-	chc.mutation.SetStatus(es)
-	return chc
+func (_c *ContactHistoryCreate) SetStatus(v enums.UserStatus) *ContactHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableStatus(es *enums.UserStatus) *ContactHistoryCreate {
-	if es != nil {
-		chc.SetStatus(*es)
+func (_c *ContactHistoryCreate) SetNillableStatus(v *enums.UserStatus) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (chc *ContactHistoryCreate) SetID(s string) *ContactHistoryCreate {
-	chc.mutation.SetID(s)
-	return chc
+func (_c *ContactHistoryCreate) SetID(v string) *ContactHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (chc *ContactHistoryCreate) SetNillableID(s *string) *ContactHistoryCreate {
-	if s != nil {
-		chc.SetID(*s)
+func (_c *ContactHistoryCreate) SetNillableID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return chc
+	return _c
 }
 
 // Mutation returns the ContactHistoryMutation object of the builder.
-func (chc *ContactHistoryCreate) Mutation() *ContactHistoryMutation {
-	return chc.mutation
+func (_c *ContactHistoryCreate) Mutation() *ContactHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the ContactHistory in the database.
-func (chc *ContactHistoryCreate) Save(ctx context.Context) (*ContactHistory, error) {
-	if err := chc.defaults(); err != nil {
+func (_c *ContactHistoryCreate) Save(ctx context.Context) (*ContactHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (chc *ContactHistoryCreate) SaveX(ctx context.Context) *ContactHistory {
-	v, err := chc.Save(ctx)
+func (_c *ContactHistoryCreate) SaveX(ctx context.Context) *ContactHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -287,79 +287,79 @@ func (chc *ContactHistoryCreate) SaveX(ctx context.Context) *ContactHistory {
 }
 
 // Exec executes the query.
-func (chc *ContactHistoryCreate) Exec(ctx context.Context) error {
-	_, err := chc.Save(ctx)
+func (_c *ContactHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chc *ContactHistoryCreate) ExecX(ctx context.Context) {
-	if err := chc.Exec(ctx); err != nil {
+func (_c *ContactHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (chc *ContactHistoryCreate) defaults() error {
-	if _, ok := chc.mutation.HistoryTime(); !ok {
+func (_c *ContactHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if contacthistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized contacthistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := contacthistory.DefaultHistoryTime()
-		chc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := chc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if contacthistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized contacthistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := contacthistory.DefaultCreatedAt()
-		chc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := chc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if contacthistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized contacthistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := contacthistory.DefaultUpdatedAt()
-		chc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := chc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := contacthistory.DefaultTags
-		chc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := chc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := contacthistory.DefaultStatus
-		chc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := chc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if contacthistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized contacthistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := contacthistory.DefaultID()
-		chc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (chc *ContactHistoryCreate) check() error {
-	if _, ok := chc.mutation.HistoryTime(); !ok {
+func (_c *ContactHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "ContactHistory.history_time"`)}
 	}
-	if _, ok := chc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "ContactHistory.operation"`)}
 	}
-	if v, ok := chc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := contacthistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ContactHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := chc.mutation.FullName(); !ok {
+	if _, ok := _c.mutation.FullName(); !ok {
 		return &ValidationError{Name: "full_name", err: errors.New(`generated: missing required field "ContactHistory.full_name"`)}
 	}
-	if _, ok := chc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "ContactHistory.status"`)}
 	}
-	if v, ok := chc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := contacthistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ContactHistory.status": %w`, err)}
 		}
@@ -367,12 +367,12 @@ func (chc *ContactHistoryCreate) check() error {
 	return nil
 }
 
-func (chc *ContactHistoryCreate) sqlSave(ctx context.Context) (*ContactHistory, error) {
-	if err := chc.check(); err != nil {
+func (_c *ContactHistoryCreate) sqlSave(ctx context.Context) (*ContactHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := chc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, chc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -385,90 +385,90 @@ func (chc *ContactHistoryCreate) sqlSave(ctx context.Context) (*ContactHistory, 
 			return nil, fmt.Errorf("unexpected ContactHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	chc.mutation.id = &_node.ID
-	chc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateSpec) {
+func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ContactHistory{config: chc.config}
+		_node = &ContactHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(contacthistory.Table, sqlgraph.NewFieldSpec(contacthistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = chc.schemaConfig.ContactHistory
-	if id, ok := chc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ContactHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := chc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(contacthistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := chc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(contacthistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := chc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(contacthistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := chc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(contacthistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := chc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(contacthistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := chc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(contacthistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := chc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(contacthistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := chc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(contacthistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := chc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(contacthistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := chc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(contacthistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := chc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(contacthistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := chc.mutation.FullName(); ok {
+	if value, ok := _c.mutation.FullName(); ok {
 		_spec.SetField(contacthistory.FieldFullName, field.TypeString, value)
 		_node.FullName = value
 	}
-	if value, ok := chc.mutation.Title(); ok {
+	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(contacthistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
-	if value, ok := chc.mutation.Company(); ok {
+	if value, ok := _c.mutation.Company(); ok {
 		_spec.SetField(contacthistory.FieldCompany, field.TypeString, value)
 		_node.Company = value
 	}
-	if value, ok := chc.mutation.Email(); ok {
+	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(contacthistory.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := chc.mutation.PhoneNumber(); ok {
+	if value, ok := _c.mutation.PhoneNumber(); ok {
 		_spec.SetField(contacthistory.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
 	}
-	if value, ok := chc.mutation.Address(); ok {
+	if value, ok := _c.mutation.Address(); ok {
 		_spec.SetField(contacthistory.FieldAddress, field.TypeString, value)
 		_node.Address = value
 	}
-	if value, ok := chc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
@@ -483,16 +483,16 @@ type ContactHistoryCreateBulk struct {
 }
 
 // Save creates the ContactHistory entities in the database.
-func (chcb *ContactHistoryCreateBulk) Save(ctx context.Context) ([]*ContactHistory, error) {
-	if chcb.err != nil {
-		return nil, chcb.err
+func (_c *ContactHistoryCreateBulk) Save(ctx context.Context) ([]*ContactHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(chcb.builders))
-	nodes := make([]*ContactHistory, len(chcb.builders))
-	mutators := make([]Mutator, len(chcb.builders))
-	for i := range chcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ContactHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := chcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ContactHistoryMutation)
@@ -506,11 +506,11 @@ func (chcb *ContactHistoryCreateBulk) Save(ctx context.Context) ([]*ContactHisto
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, chcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, chcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -530,7 +530,7 @@ func (chcb *ContactHistoryCreateBulk) Save(ctx context.Context) ([]*ContactHisto
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, chcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -538,8 +538,8 @@ func (chcb *ContactHistoryCreateBulk) Save(ctx context.Context) ([]*ContactHisto
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (chcb *ContactHistoryCreateBulk) SaveX(ctx context.Context) []*ContactHistory {
-	v, err := chcb.Save(ctx)
+func (_c *ContactHistoryCreateBulk) SaveX(ctx context.Context) []*ContactHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -547,14 +547,14 @@ func (chcb *ContactHistoryCreateBulk) SaveX(ctx context.Context) []*ContactHisto
 }
 
 // Exec executes the query.
-func (chcb *ContactHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := chcb.Save(ctx)
+func (_c *ContactHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chcb *ContactHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := chcb.Exec(ctx); err != nil {
+func (_c *ContactHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -95,7 +95,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the RiskHistory fields.
-func (rh *RiskHistory) assignValues(columns []string, values []any) error {
+func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -105,73 +105,73 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				rh.ID = value.String
+				_m.ID = value.String
 			}
 		case riskhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				rh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case riskhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				rh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case riskhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				rh.Operation = *value
+				_m.Operation = *value
 			}
 		case riskhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				rh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case riskhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				rh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case riskhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				rh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case riskhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				rh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case riskhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				rh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case riskhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				rh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case riskhistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				rh.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case riskhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &rh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -179,82 +179,82 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				rh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case riskhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				rh.Name = value.String
+				_m.Name = value.String
 			}
 		case riskhistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				rh.Status = enums.RiskStatus(value.String)
+				_m.Status = enums.RiskStatus(value.String)
 			}
 		case riskhistory.FieldRiskType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_type", values[i])
 			} else if value.Valid {
-				rh.RiskType = value.String
+				_m.RiskType = value.String
 			}
 		case riskhistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				rh.Category = value.String
+				_m.Category = value.String
 			}
 		case riskhistory.FieldImpact:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field impact", values[i])
 			} else if value.Valid {
-				rh.Impact = enums.RiskImpact(value.String)
+				_m.Impact = enums.RiskImpact(value.String)
 			}
 		case riskhistory.FieldLikelihood:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field likelihood", values[i])
 			} else if value.Valid {
-				rh.Likelihood = enums.RiskLikelihood(value.String)
+				_m.Likelihood = enums.RiskLikelihood(value.String)
 			}
 		case riskhistory.FieldScore:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field score", values[i])
 			} else if value.Valid {
-				rh.Score = int(value.Int64)
+				_m.Score = int(value.Int64)
 			}
 		case riskhistory.FieldMitigation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mitigation", values[i])
 			} else if value.Valid {
-				rh.Mitigation = value.String
+				_m.Mitigation = value.String
 			}
 		case riskhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				rh.Details = value.String
+				_m.Details = value.String
 			}
 		case riskhistory.FieldBusinessCosts:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
 			} else if value.Valid {
-				rh.BusinessCosts = value.String
+				_m.BusinessCosts = value.String
 			}
 		case riskhistory.FieldStakeholderID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stakeholder_id", values[i])
 			} else if value.Valid {
-				rh.StakeholderID = value.String
+				_m.StakeholderID = value.String
 			}
 		case riskhistory.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				rh.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		default:
-			rh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -262,104 +262,104 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the RiskHistory.
 // This includes values selected through modifiers, order, etc.
-func (rh *RiskHistory) Value(name string) (ent.Value, error) {
-	return rh.selectValues.Get(name)
+func (_m *RiskHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this RiskHistory.
 // Note that you need to call RiskHistory.Unwrap() before calling this method if this RiskHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (rh *RiskHistory) Update() *RiskHistoryUpdateOne {
-	return NewRiskHistoryClient(rh.config).UpdateOne(rh)
+func (_m *RiskHistory) Update() *RiskHistoryUpdateOne {
+	return NewRiskHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the RiskHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (rh *RiskHistory) Unwrap() *RiskHistory {
-	_tx, ok := rh.config.driver.(*txDriver)
+func (_m *RiskHistory) Unwrap() *RiskHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: RiskHistory is not a transactional entity")
 	}
-	rh.config.driver = _tx.drv
-	return rh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (rh *RiskHistory) String() string {
+func (_m *RiskHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("RiskHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", rh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(rh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(rh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(rh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(rh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(rh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(rh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(rh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(rh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(rh.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(rh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(rh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("risk_type=")
-	builder.WriteString(rh.RiskType)
+	builder.WriteString(_m.RiskType)
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(rh.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Impact))
+	builder.WriteString(fmt.Sprintf("%v", _m.Impact))
 	builder.WriteString(", ")
 	builder.WriteString("likelihood=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Likelihood))
+	builder.WriteString(fmt.Sprintf("%v", _m.Likelihood))
 	builder.WriteString(", ")
 	builder.WriteString("score=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Score))
+	builder.WriteString(fmt.Sprintf("%v", _m.Score))
 	builder.WriteString(", ")
 	builder.WriteString("mitigation=")
-	builder.WriteString(rh.Mitigation)
+	builder.WriteString(_m.Mitigation)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(rh.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("business_costs=")
-	builder.WriteString(rh.BusinessCosts)
+	builder.WriteString(_m.BusinessCosts)
 	builder.WriteString(", ")
 	builder.WriteString("stakeholder_id=")
-	builder.WriteString(rh.StakeholderID)
+	builder.WriteString(_m.StakeholderID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(rh.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteByte(')')
 	return builder.String()
 }
