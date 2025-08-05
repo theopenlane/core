@@ -63,7 +63,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithSummarizer(),
 		serveropts.WithWindmill(),
 		serveropts.WithKeyDirOption(),
-		serveropts.WithSecretManagerKeysOption(),
+		//		serveropts.WithSecretManagerKeysOption(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))

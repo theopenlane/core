@@ -8,7 +8,6 @@ import (
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/anthropic"
 	"github.com/tmc/langchaingo/llms/cloudflare"
-	"github.com/tmc/langchaingo/llms/googleai"
 	"github.com/tmc/langchaingo/llms/huggingface"
 	"github.com/tmc/langchaingo/llms/mistral"
 	"github.com/tmc/langchaingo/llms/ollama"
@@ -52,8 +51,6 @@ func getClient(cfg entconfig.Config) (llms.Model, error) {
 		return newCloudflareClient(cfg)
 	case entconfig.LLMProviderMistral:
 		return newMistralClient(cfg)
-	case entconfig.LLMProviderGemini:
-		return newGeminiClient(cfg)
 	case entconfig.LLMProviderHuggingface:
 		return newHuggingfaceClient(cfg)
 	case entconfig.LLMProviderOllama:
@@ -131,33 +128,6 @@ func newMistralClient(cfg entconfig.Config) (llms.Model, error) {
 	}
 
 	return mistral.New(opts...)
-}
-
-func newGeminiClient(cfg entconfig.Config) (llms.Model, error) {
-	opts := []googleai.Option{}
-	gCfg := cfg.Summarizer.LLM.Gemini
-
-	if gCfg.APIKey != "" {
-		opts = append(opts, googleai.WithAPIKey(gCfg.APIKey))
-	}
-
-	if gCfg.Model != "" {
-		opts = append(opts, googleai.WithDefaultModel(gCfg.Model))
-	}
-
-	if gCfg.MaxTokens != 0 {
-		opts = append(opts, googleai.WithDefaultMaxTokens(gCfg.MaxTokens))
-	}
-
-	if gCfg.CredentialsJSON != "" {
-		opts = append(opts, googleai.WithCredentialsJSON([]byte(gCfg.CredentialsJSON)))
-	}
-
-	if gCfg.CredentialsPath != "" {
-		opts = append(opts, googleai.WithCredentialsFile(gCfg.CredentialsPath))
-	}
-
-	return googleai.New(context.Background(), opts...)
 }
 
 func newHuggingfaceClient(cfg entconfig.Config) (llms.Model, error) {

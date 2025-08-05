@@ -1,7 +1,6 @@
 package serveropts
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -12,8 +11,6 @@ import (
 	"os"
 	"slices"
 	"strings"
-
-	"google.golang.org/api/option"
 
 	"github.com/redis/go-redis/v9"
 
@@ -470,33 +467,33 @@ func WithObjectStorage() ServerOption {
 				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
 					log.Panic().Msg("default bucket not found")
 				}
-			case storage.ProviderGCS:
-				gcsOpts := []storage.GCSOption{
-					storage.WithGCSBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-				}
-
-				if s.Config.Settings.ObjectStorage.CredentialsJSON != "" {
-					gcsOpts = append(gcsOpts, storage.WithGCSClientOptions(option.WithCredentialsJSON([]byte(s.Config.Settings.ObjectStorage.CredentialsJSON))))
-				}
-
-				// reuse region field to hold project ID for now
-				if s.Config.Settings.ObjectStorage.Region != "" {
-					gcsOpts = append(gcsOpts, storage.WithGCSProjectID(s.Config.Settings.ObjectStorage.Region))
-				}
-
-				store, err = storage.NewGCSFromConfig(context.Background(), storage.NewGCSOptions(gcsOpts...))
-				if err != nil {
-					log.Panic().Err(err).Msg("error creating GCS store")
-				}
-
-				bucks, err := store.ListBuckets()
-				if err != nil {
-					log.Panic().Err(err).Msg("error listing buckets")
-				}
-
-				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
-					log.Panic().Msg("default bucket not found")
-				}
+				//			case storage.ProviderGCS:
+				//				gcsOpts := []storage.GCSOption{
+				//					storage.WithGCSBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+				//				}
+				//
+				//				if s.Config.Settings.ObjectStorage.CredentialsJSON != "" {
+				//					gcsOpts = append(gcsOpts, storage.WithGCSClientOptions(option.WithCredentialsJSON([]byte(s.Config.Settings.ObjectStorage.CredentialsJSON))))
+				//				}
+				//
+				//				// reuse region field to hold project ID for now
+				//				if s.Config.Settings.ObjectStorage.Region != "" {
+				//					gcsOpts = append(gcsOpts, storage.WithGCSProjectID(s.Config.Settings.ObjectStorage.Region))
+				//				}
+				//
+				//				store, err = storage.NewGCSFromConfig(context.Background(), storage.NewGCSOptions(gcsOpts...))
+				//				if err != nil {
+				//					log.Panic().Err(err).Msg("error creating GCS store")
+				//				}
+				//
+				//				bucks, err := store.ListBuckets()
+				//				if err != nil {
+				//					log.Panic().Err(err).Msg("error listing buckets")
+				//				}
+				//
+				//				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
+				//					log.Panic().Msg("default bucket not found")
+				//				}
 			default:
 				s.Config.Settings.ObjectStorage.Provider = storage.ProviderDisk
 
@@ -597,15 +594,6 @@ func WithKeyDirOption() ServerOption {
 		if s.Config.Settings.Keywatcher.Enabled && s.Config.Settings.Keywatcher.KeyDir != "" {
 			WithKeyDir(s.Config.Settings.Keywatcher.KeyDir).apply(s)
 			WithKeyDirWatcher(s.Config.Settings.Keywatcher.KeyDir).apply(s)
-		}
-	})
-}
-
-// WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
-func WithSecretManagerKeysOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Keywatcher.SecretManagerSecret != "" && s.Config.Settings.Keywatcher.ExternalSecretsIntegration {
-			WithSecretManagerKeys(s.Config.Settings.Server.SecretManagerSecret).apply(s)
 		}
 	})
 }
