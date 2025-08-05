@@ -4,9 +4,6 @@ builds:
   - env:
       - CGO_ENABLED=1
     binary: openlane
-    flags:
-      - -trimpath
-      - -tags=netgo
     goos:
       - linux
     main: ./cmd/cli
