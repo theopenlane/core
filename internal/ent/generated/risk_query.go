@@ -76,44 +76,44 @@ type RiskQuery struct {
 }
 
 // Where adds a new predicate for the RiskQuery builder.
-func (rq *RiskQuery) Where(ps ...predicate.Risk) *RiskQuery {
-	rq.predicates = append(rq.predicates, ps...)
-	return rq
+func (_q *RiskQuery) Where(ps ...predicate.Risk) *RiskQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (rq *RiskQuery) Limit(limit int) *RiskQuery {
-	rq.ctx.Limit = &limit
-	return rq
+func (_q *RiskQuery) Limit(limit int) *RiskQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (rq *RiskQuery) Offset(offset int) *RiskQuery {
-	rq.ctx.Offset = &offset
-	return rq
+func (_q *RiskQuery) Offset(offset int) *RiskQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (rq *RiskQuery) Unique(unique bool) *RiskQuery {
-	rq.ctx.Unique = &unique
-	return rq
+func (_q *RiskQuery) Unique(unique bool) *RiskQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (rq *RiskQuery) Order(o ...risk.OrderOption) *RiskQuery {
-	rq.order = append(rq.order, o...)
-	return rq
+func (_q *RiskQuery) Order(o ...risk.OrderOption) *RiskQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (rq *RiskQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -122,23 +122,23 @@ func (rq *RiskQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, risk.OwnerTable, risk.OwnerColumn),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Risk
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (rq *RiskQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -147,23 +147,23 @@ func (rq *RiskQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, risk.BlockedGroupsTable, risk.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.RiskBlockedGroups
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEditors chains the current query on the "editors" edge.
-func (rq *RiskQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -172,23 +172,23 @@ func (rq *RiskQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, risk.EditorsTable, risk.EditorsPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.RiskEditors
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryViewers chains the current query on the "viewers" edge.
-func (rq *RiskQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -197,23 +197,23 @@ func (rq *RiskQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, risk.ViewersTable, risk.ViewersPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.RiskViewers
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControls chains the current query on the "controls" edge.
-func (rq *RiskQuery) QueryControls() *ControlQuery {
-	query := (&ControlClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -222,23 +222,23 @@ func (rq *RiskQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, risk.ControlsTable, risk.ControlsPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlRisks
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubcontrols chains the current query on the "subcontrols" edge.
-func (rq *RiskQuery) QuerySubcontrols() *SubcontrolQuery {
-	query := (&SubcontrolClient{config: rq.config}).Query()
+func (_q *RiskQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -247,23 +247,23 @@ func (rq *RiskQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, risk.SubcontrolsTable, risk.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolRisks
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryProcedures chains the current query on the "procedures" edge.
-func (rq *RiskQuery) QueryProcedures() *ProcedureQuery {
-	query := (&ProcedureClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -272,23 +272,23 @@ func (rq *RiskQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProceduresTable, risk.ProceduresPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.ProcedureRisks
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
-func (rq *RiskQuery) QueryInternalPolicies() *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -297,23 +297,23 @@ func (rq *RiskQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, risk.InternalPoliciesTable, risk.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyRisks
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryPrograms chains the current query on the "programs" edge.
-func (rq *RiskQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -322,23 +322,23 @@ func (rq *RiskQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProgramsTable, risk.ProgramsPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramRisks
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryActionPlans chains the current query on the "action_plans" edge.
-func (rq *RiskQuery) QueryActionPlans() *ActionPlanQuery {
-	query := (&ActionPlanClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryActionPlans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -347,23 +347,23 @@ func (rq *RiskQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, risk.ActionPlansTable, risk.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.RiskActionPlans
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTasks chains the current query on the "tasks" edge.
-func (rq *RiskQuery) QueryTasks() *TaskQuery {
-	query := (&TaskClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -372,23 +372,23 @@ func (rq *RiskQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, risk.TasksTable, risk.TasksPrimaryKey...),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.RiskTasks
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryAssets chains the current query on the "assets" edge.
-func (rq *RiskQuery) QueryAssets() *AssetQuery {
-	query := (&AssetClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -397,23 +397,23 @@ func (rq *RiskQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, risk.AssetsTable, risk.AssetsColumn),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Asset
 		step.Edge.Schema = schemaConfig.Asset
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEntities chains the current query on the "entities" edge.
-func (rq *RiskQuery) QueryEntities() *EntityQuery {
-	query := (&EntityClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -422,23 +422,23 @@ func (rq *RiskQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, risk.EntitiesTable, risk.EntitiesColumn),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Entity
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryScans chains the current query on the "scans" edge.
-func (rq *RiskQuery) QueryScans() *ScanQuery {
-	query := (&ScanClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -447,23 +447,23 @@ func (rq *RiskQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, risk.ScansTable, risk.ScansColumn),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.Scan
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryStakeholder chains the current query on the "stakeholder" edge.
-func (rq *RiskQuery) QueryStakeholder() *GroupQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryStakeholder() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -472,23 +472,23 @@ func (rq *RiskQuery) QueryStakeholder() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderTable, risk.StakeholderColumn),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Risk
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryDelegate chains the current query on the "delegate" edge.
-func (rq *RiskQuery) QueryDelegate() *GroupQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) QueryDelegate() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := rq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := rq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -497,10 +497,10 @@ func (rq *RiskQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateTable, risk.DelegateColumn),
 		)
-		schemaConfig := rq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Risk
-		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -508,8 +508,8 @@ func (rq *RiskQuery) QueryDelegate() *GroupQuery {
 
 // First returns the first Risk entity from the query.
 // Returns a *NotFoundError when no Risk was found.
-func (rq *RiskQuery) First(ctx context.Context) (*Risk, error) {
-	nodes, err := rq.Limit(1).All(setContextOp(ctx, rq.ctx, ent.OpQueryFirst))
+func (_q *RiskQuery) First(ctx context.Context) (*Risk, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -520,8 +520,8 @@ func (rq *RiskQuery) First(ctx context.Context) (*Risk, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (rq *RiskQuery) FirstX(ctx context.Context) *Risk {
-	node, err := rq.First(ctx)
+func (_q *RiskQuery) FirstX(ctx context.Context) *Risk {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -530,9 +530,9 @@ func (rq *RiskQuery) FirstX(ctx context.Context) *Risk {
 
 // FirstID returns the first Risk ID from the query.
 // Returns a *NotFoundError when no Risk ID was found.
-func (rq *RiskQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *RiskQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = rq.Limit(1).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -543,8 +543,8 @@ func (rq *RiskQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rq *RiskQuery) FirstIDX(ctx context.Context) string {
-	id, err := rq.FirstID(ctx)
+func (_q *RiskQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -554,8 +554,8 @@ func (rq *RiskQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Risk entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Risk entity is found.
 // Returns a *NotFoundError when no Risk entities are found.
-func (rq *RiskQuery) Only(ctx context.Context) (*Risk, error) {
-	nodes, err := rq.Limit(2).All(setContextOp(ctx, rq.ctx, ent.OpQueryOnly))
+func (_q *RiskQuery) Only(ctx context.Context) (*Risk, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -570,8 +570,8 @@ func (rq *RiskQuery) Only(ctx context.Context) (*Risk, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (rq *RiskQuery) OnlyX(ctx context.Context) *Risk {
-	node, err := rq.Only(ctx)
+func (_q *RiskQuery) OnlyX(ctx context.Context) *Risk {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -581,9 +581,9 @@ func (rq *RiskQuery) OnlyX(ctx context.Context) *Risk {
 // OnlyID is like Only, but returns the only Risk ID in the query.
 // Returns a *NotSingularError when more than one Risk ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rq *RiskQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *RiskQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = rq.Limit(2).IDs(setContextOp(ctx, rq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -598,8 +598,8 @@ func (rq *RiskQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rq *RiskQuery) OnlyIDX(ctx context.Context) string {
-	id, err := rq.OnlyID(ctx)
+func (_q *RiskQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -607,18 +607,18 @@ func (rq *RiskQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Risks.
-func (rq *RiskQuery) All(ctx context.Context) ([]*Risk, error) {
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryAll)
-	if err := rq.prepareQuery(ctx); err != nil {
+func (_q *RiskQuery) All(ctx context.Context) ([]*Risk, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Risk, *RiskQuery]()
-	return withInterceptors[[]*Risk](ctx, rq, qr, rq.inters)
+	return withInterceptors[[]*Risk](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (rq *RiskQuery) AllX(ctx context.Context) []*Risk {
-	nodes, err := rq.All(ctx)
+func (_q *RiskQuery) AllX(ctx context.Context) []*Risk {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -626,20 +626,20 @@ func (rq *RiskQuery) AllX(ctx context.Context) []*Risk {
 }
 
 // IDs executes the query and returns a list of Risk IDs.
-func (rq *RiskQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if rq.ctx.Unique == nil && rq.path != nil {
-		rq.Unique(true)
+func (_q *RiskQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryIDs)
-	if err = rq.Select(risk.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(risk.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rq *RiskQuery) IDsX(ctx context.Context) []string {
-	ids, err := rq.IDs(ctx)
+func (_q *RiskQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -647,17 +647,17 @@ func (rq *RiskQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (rq *RiskQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryCount)
-	if err := rq.prepareQuery(ctx); err != nil {
+func (_q *RiskQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, rq, querierCount[*RiskQuery](), rq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*RiskQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (rq *RiskQuery) CountX(ctx context.Context) int {
-	count, err := rq.Count(ctx)
+func (_q *RiskQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -665,9 +665,9 @@ func (rq *RiskQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (rq *RiskQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryExist)
-	switch _, err := rq.FirstID(ctx); {
+func (_q *RiskQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -678,8 +678,8 @@ func (rq *RiskQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (rq *RiskQuery) ExistX(ctx context.Context) bool {
-	exist, err := rq.Exist(ctx)
+func (_q *RiskQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -688,213 +688,213 @@ func (rq *RiskQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the RiskQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (rq *RiskQuery) Clone() *RiskQuery {
-	if rq == nil {
+func (_q *RiskQuery) Clone() *RiskQuery {
+	if _q == nil {
 		return nil
 	}
 	return &RiskQuery{
-		config:               rq.config,
-		ctx:                  rq.ctx.Clone(),
-		order:                append([]risk.OrderOption{}, rq.order...),
-		inters:               append([]Interceptor{}, rq.inters...),
-		predicates:           append([]predicate.Risk{}, rq.predicates...),
-		withOwner:            rq.withOwner.Clone(),
-		withBlockedGroups:    rq.withBlockedGroups.Clone(),
-		withEditors:          rq.withEditors.Clone(),
-		withViewers:          rq.withViewers.Clone(),
-		withControls:         rq.withControls.Clone(),
-		withSubcontrols:      rq.withSubcontrols.Clone(),
-		withProcedures:       rq.withProcedures.Clone(),
-		withInternalPolicies: rq.withInternalPolicies.Clone(),
-		withPrograms:         rq.withPrograms.Clone(),
-		withActionPlans:      rq.withActionPlans.Clone(),
-		withTasks:            rq.withTasks.Clone(),
-		withAssets:           rq.withAssets.Clone(),
-		withEntities:         rq.withEntities.Clone(),
-		withScans:            rq.withScans.Clone(),
-		withStakeholder:      rq.withStakeholder.Clone(),
-		withDelegate:         rq.withDelegate.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]risk.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.Risk{}, _q.predicates...),
+		withOwner:            _q.withOwner.Clone(),
+		withBlockedGroups:    _q.withBlockedGroups.Clone(),
+		withEditors:          _q.withEditors.Clone(),
+		withViewers:          _q.withViewers.Clone(),
+		withControls:         _q.withControls.Clone(),
+		withSubcontrols:      _q.withSubcontrols.Clone(),
+		withProcedures:       _q.withProcedures.Clone(),
+		withInternalPolicies: _q.withInternalPolicies.Clone(),
+		withPrograms:         _q.withPrograms.Clone(),
+		withActionPlans:      _q.withActionPlans.Clone(),
+		withTasks:            _q.withTasks.Clone(),
+		withAssets:           _q.withAssets.Clone(),
+		withEntities:         _q.withEntities.Clone(),
+		withScans:            _q.withScans.Clone(),
+		withStakeholder:      _q.withStakeholder.Clone(),
+		withDelegate:         _q.withDelegate.Clone(),
 		// clone intermediate query.
-		sql:       rq.sql.Clone(),
-		path:      rq.path,
-		modifiers: append([]func(*sql.Selector){}, rq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithOwner(opts ...func(*OrganizationQuery)) *RiskQuery {
-	query := (&OrganizationClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithOwner(opts ...func(*OrganizationQuery)) *RiskQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withOwner = query
-	return rq
+	_q.withOwner = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
 // the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withBlockedGroups = query
-	return rq
+	_q.withBlockedGroups = query
+	return _q
 }
 
 // WithEditors tells the query-builder to eager-load the nodes that are connected to
 // the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithEditors(opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithEditors(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withEditors = query
-	return rq
+	_q.withEditors = query
+	return _q
 }
 
 // WithViewers tells the query-builder to eager-load the nodes that are connected to
 // the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithViewers(opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithViewers(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withViewers = query
-	return rq
+	_q.withViewers = query
+	return _q
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithControls(opts ...func(*ControlQuery)) *RiskQuery {
-	query := (&ControlClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithControls(opts ...func(*ControlQuery)) *RiskQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withControls = query
-	return rq
+	_q.withControls = query
+	return _q
 }
 
 // WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *RiskQuery {
-	query := (&SubcontrolClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *RiskQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withSubcontrols = query
-	return rq
+	_q.withSubcontrols = query
+	return _q
 }
 
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithProcedures(opts ...func(*ProcedureQuery)) *RiskQuery {
-	query := (&ProcedureClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithProcedures(opts ...func(*ProcedureQuery)) *RiskQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withProcedures = query
-	return rq
+	_q.withProcedures = query
+	return _q
 }
 
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *RiskQuery {
-	query := (&InternalPolicyClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *RiskQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withInternalPolicies = query
-	return rq
+	_q.withInternalPolicies = query
+	return _q
 }
 
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithPrograms(opts ...func(*ProgramQuery)) *RiskQuery {
-	query := (&ProgramClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithPrograms(opts ...func(*ProgramQuery)) *RiskQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withPrograms = query
-	return rq
+	_q.withPrograms = query
+	return _q
 }
 
 // WithActionPlans tells the query-builder to eager-load the nodes that are connected to
 // the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *RiskQuery {
-	query := (&ActionPlanClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *RiskQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withActionPlans = query
-	return rq
+	_q.withActionPlans = query
+	return _q
 }
 
 // WithTasks tells the query-builder to eager-load the nodes that are connected to
 // the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithTasks(opts ...func(*TaskQuery)) *RiskQuery {
-	query := (&TaskClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithTasks(opts ...func(*TaskQuery)) *RiskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withTasks = query
-	return rq
+	_q.withTasks = query
+	return _q
 }
 
 // WithAssets tells the query-builder to eager-load the nodes that are connected to
 // the "assets" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithAssets(opts ...func(*AssetQuery)) *RiskQuery {
-	query := (&AssetClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithAssets(opts ...func(*AssetQuery)) *RiskQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withAssets = query
-	return rq
+	_q.withAssets = query
+	return _q
 }
 
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithEntities(opts ...func(*EntityQuery)) *RiskQuery {
-	query := (&EntityClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithEntities(opts ...func(*EntityQuery)) *RiskQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withEntities = query
-	return rq
+	_q.withEntities = query
+	return _q
 }
 
 // WithScans tells the query-builder to eager-load the nodes that are connected to
 // the "scans" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithScans(opts ...func(*ScanQuery)) *RiskQuery {
-	query := (&ScanClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithScans(opts ...func(*ScanQuery)) *RiskQuery {
+	query := (&ScanClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withScans = query
-	return rq
+	_q.withScans = query
+	return _q
 }
 
 // WithStakeholder tells the query-builder to eager-load the nodes that are connected to
 // the "stakeholder" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithStakeholder(opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithStakeholder(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withStakeholder = query
-	return rq
+	_q.withStakeholder = query
+	return _q
 }
 
 // WithDelegate tells the query-builder to eager-load the nodes that are connected to
 // the "delegate" edge. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithDelegate(opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithDelegate(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	rq.withDelegate = query
-	return rq
+	_q.withDelegate = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -911,10 +911,10 @@ func (rq *RiskQuery) WithDelegate(opts ...func(*GroupQuery)) *RiskQuery {
 //		GroupBy(risk.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (rq *RiskQuery) GroupBy(field string, fields ...string) *RiskGroupBy {
-	rq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &RiskGroupBy{build: rq}
-	grbuild.flds = &rq.ctx.Fields
+func (_q *RiskQuery) GroupBy(field string, fields ...string) *RiskGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &RiskGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = risk.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -932,73 +932,73 @@ func (rq *RiskQuery) GroupBy(field string, fields ...string) *RiskGroupBy {
 //	client.Risk.Query().
 //		Select(risk.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (rq *RiskQuery) Select(fields ...string) *RiskSelect {
-	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
-	sbuild := &RiskSelect{RiskQuery: rq}
+func (_q *RiskQuery) Select(fields ...string) *RiskSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &RiskSelect{RiskQuery: _q}
 	sbuild.label = risk.Label
-	sbuild.flds, sbuild.scan = &rq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a RiskSelect configured with the given aggregations.
-func (rq *RiskQuery) Aggregate(fns ...AggregateFunc) *RiskSelect {
-	return rq.Select().Aggregate(fns...)
+func (_q *RiskQuery) Aggregate(fns ...AggregateFunc) *RiskSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (rq *RiskQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range rq.inters {
+func (_q *RiskQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, rq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range rq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !risk.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if rq.path != nil {
-		prev, err := rq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		rq.sql = prev
+		_q.sql = prev
 	}
 	if risk.Policy == nil {
 		return errors.New("generated: uninitialized risk.Policy (forgotten import generated/runtime?)")
 	}
-	if err := risk.Policy.EvalQuery(ctx, rq); err != nil {
+	if err := risk.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, error) {
+func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, error) {
 	var (
 		nodes       = []*Risk{}
-		withFKs     = rq.withFKs
-		_spec       = rq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [16]bool{
-			rq.withOwner != nil,
-			rq.withBlockedGroups != nil,
-			rq.withEditors != nil,
-			rq.withViewers != nil,
-			rq.withControls != nil,
-			rq.withSubcontrols != nil,
-			rq.withProcedures != nil,
-			rq.withInternalPolicies != nil,
-			rq.withPrograms != nil,
-			rq.withActionPlans != nil,
-			rq.withTasks != nil,
-			rq.withAssets != nil,
-			rq.withEntities != nil,
-			rq.withScans != nil,
-			rq.withStakeholder != nil,
-			rq.withDelegate != nil,
+			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withViewers != nil,
+			_q.withControls != nil,
+			_q.withSubcontrols != nil,
+			_q.withProcedures != nil,
+			_q.withInternalPolicies != nil,
+			_q.withPrograms != nil,
+			_q.withActionPlans != nil,
+			_q.withTasks != nil,
+			_q.withAssets != nil,
+			_q.withEntities != nil,
+			_q.withScans != nil,
+			_q.withStakeholder != nil,
+			_q.withDelegate != nil,
 		}
 	)
 	if withFKs {
@@ -1008,234 +1008,234 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		return (*Risk).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Risk{config: rq.config}
+		node := &Risk{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = rq.schemaConfig.Risk
-	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
-	if len(rq.modifiers) > 0 {
-		_spec.Modifiers = rq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Risk
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, rq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := rq.withOwner; query != nil {
-		if err := rq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Risk, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withBlockedGroups; query != nil {
-		if err := rq.loadBlockedGroups(ctx, query, nodes,
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Risk) { n.Edges.BlockedGroups = []*Group{} },
 			func(n *Risk, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withEditors; query != nil {
-		if err := rq.loadEditors(ctx, query, nodes,
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Editors = []*Group{} },
 			func(n *Risk, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withViewers; query != nil {
-		if err := rq.loadViewers(ctx, query, nodes,
+	if query := _q.withViewers; query != nil {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Viewers = []*Group{} },
 			func(n *Risk, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withControls; query != nil {
-		if err := rq.loadControls(ctx, query, nodes,
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Controls = []*Control{} },
 			func(n *Risk, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withSubcontrols; query != nil {
-		if err := rq.loadSubcontrols(ctx, query, nodes,
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *Risk, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withProcedures; query != nil {
-		if err := rq.loadProcedures(ctx, query, nodes,
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Procedures = []*Procedure{} },
 			func(n *Risk, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withInternalPolicies; query != nil {
-		if err := rq.loadInternalPolicies(ctx, query, nodes,
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Risk) { n.Edges.InternalPolicies = []*InternalPolicy{} },
 			func(n *Risk, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withPrograms; query != nil {
-		if err := rq.loadPrograms(ctx, query, nodes,
+	if query := _q.withPrograms; query != nil {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Programs = []*Program{} },
 			func(n *Risk, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withActionPlans; query != nil {
-		if err := rq.loadActionPlans(ctx, query, nodes,
+	if query := _q.withActionPlans; query != nil {
+		if err := _q.loadActionPlans(ctx, query, nodes,
 			func(n *Risk) { n.Edges.ActionPlans = []*ActionPlan{} },
 			func(n *Risk, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withTasks; query != nil {
-		if err := rq.loadTasks(ctx, query, nodes,
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Tasks = []*Task{} },
 			func(n *Risk, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withAssets; query != nil {
-		if err := rq.loadAssets(ctx, query, nodes,
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Assets = []*Asset{} },
 			func(n *Risk, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withEntities; query != nil {
-		if err := rq.loadEntities(ctx, query, nodes,
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Entities = []*Entity{} },
 			func(n *Risk, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withScans; query != nil {
-		if err := rq.loadScans(ctx, query, nodes,
+	if query := _q.withScans; query != nil {
+		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Scans = []*Scan{} },
 			func(n *Risk, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withStakeholder; query != nil {
-		if err := rq.loadStakeholder(ctx, query, nodes, nil,
+	if query := _q.withStakeholder; query != nil {
+		if err := _q.loadStakeholder(ctx, query, nodes, nil,
 			func(n *Risk, e *Group) { n.Edges.Stakeholder = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := rq.withDelegate; query != nil {
-		if err := rq.loadDelegate(ctx, query, nodes, nil,
+	if query := _q.withDelegate; query != nil {
+		if err := _q.loadDelegate(ctx, query, nodes, nil,
 			func(n *Risk, e *Group) { n.Edges.Delegate = e }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedBlockedGroups {
-		if err := rq.loadBlockedGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedBlockedGroups(name) },
 			func(n *Risk, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedEditors {
-		if err := rq.loadEditors(ctx, query, nodes,
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedEditors(name) },
 			func(n *Risk, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedViewers {
-		if err := rq.loadViewers(ctx, query, nodes,
+	for name, query := range _q.withNamedViewers {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedViewers(name) },
 			func(n *Risk, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedControls {
-		if err := rq.loadControls(ctx, query, nodes,
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedControls(name) },
 			func(n *Risk, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedSubcontrols {
-		if err := rq.loadSubcontrols(ctx, query, nodes,
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedSubcontrols(name) },
 			func(n *Risk, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedProcedures {
-		if err := rq.loadProcedures(ctx, query, nodes,
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedProcedures(name) },
 			func(n *Risk, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedInternalPolicies {
-		if err := rq.loadInternalPolicies(ctx, query, nodes,
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedInternalPolicies(name) },
 			func(n *Risk, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedPrograms {
-		if err := rq.loadPrograms(ctx, query, nodes,
+	for name, query := range _q.withNamedPrograms {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedPrograms(name) },
 			func(n *Risk, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedActionPlans {
-		if err := rq.loadActionPlans(ctx, query, nodes,
+	for name, query := range _q.withNamedActionPlans {
+		if err := _q.loadActionPlans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedActionPlans(name) },
 			func(n *Risk, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedTasks {
-		if err := rq.loadTasks(ctx, query, nodes,
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedTasks(name) },
 			func(n *Risk, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedAssets {
-		if err := rq.loadAssets(ctx, query, nodes,
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedAssets(name) },
 			func(n *Risk, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedEntities {
-		if err := rq.loadEntities(ctx, query, nodes,
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedEntities(name) },
 			func(n *Risk, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range rq.withNamedScans {
-		if err := rq.loadScans(ctx, query, nodes,
+	for name, query := range _q.withNamedScans {
+		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedScans(name) },
 			func(n *Risk, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range rq.loadTotal {
-		if err := rq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (rq *RiskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Organization)) error {
+func (_q *RiskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
 	for i := range nodes {
@@ -1264,7 +1264,7 @@ func (rq *RiskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 	}
 	return nil
 }
-func (rq *RiskQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+func (_q *RiskQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1277,7 +1277,7 @@ func (rq *RiskQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.BlockedGroupsTable)
-		joinT.Schema(rq.schemaConfig.RiskBlockedGroups)
+		joinT.Schema(_q.schemaConfig.RiskBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(risk.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(risk.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1326,7 +1326,7 @@ func (rq *RiskQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, n
 	}
 	return nil
 }
-func (rq *RiskQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+func (_q *RiskQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1339,7 +1339,7 @@ func (rq *RiskQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.EditorsTable)
-		joinT.Schema(rq.schemaConfig.RiskEditors)
+		joinT.Schema(_q.schemaConfig.RiskEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(risk.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(risk.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1388,7 +1388,7 @@ func (rq *RiskQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes [
 	}
 	return nil
 }
-func (rq *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+func (_q *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1401,7 +1401,7 @@ func (rq *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.ViewersTable)
-		joinT.Schema(rq.schemaConfig.RiskViewers)
+		joinT.Schema(_q.schemaConfig.RiskViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(risk.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(risk.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1450,7 +1450,7 @@ func (rq *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 	}
 	return nil
 }
-func (rq *RiskQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Control)) error {
+func (_q *RiskQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1463,7 +1463,7 @@ func (rq *RiskQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.ControlsTable)
-		joinT.Schema(rq.schemaConfig.ControlRisks)
+		joinT.Schema(_q.schemaConfig.ControlRisks)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(risk.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(risk.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1512,7 +1512,7 @@ func (rq *RiskQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	return nil
 }
-func (rq *RiskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Subcontrol)) error {
+func (_q *RiskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Subcontrol)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1525,7 +1525,7 @@ func (rq *RiskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.SubcontrolsTable)
-		joinT.Schema(rq.schemaConfig.SubcontrolRisks)
+		joinT.Schema(_q.schemaConfig.SubcontrolRisks)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(risk.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(risk.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1574,7 +1574,7 @@ func (rq *RiskQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	return nil
 }
-func (rq *RiskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Procedure)) error {
+func (_q *RiskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Procedure)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1587,7 +1587,7 @@ func (rq *RiskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.ProceduresTable)
-		joinT.Schema(rq.schemaConfig.ProcedureRisks)
+		joinT.Schema(_q.schemaConfig.ProcedureRisks)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(risk.ProceduresPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(risk.ProceduresPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1636,7 +1636,7 @@ func (rq *RiskQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, 
 	}
 	return nil
 }
-func (rq *RiskQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *InternalPolicy)) error {
+func (_q *RiskQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1649,7 +1649,7 @@ func (rq *RiskQuery) loadInternalPolicies(ctx context.Context, query *InternalPo
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.InternalPoliciesTable)
-		joinT.Schema(rq.schemaConfig.InternalPolicyRisks)
+		joinT.Schema(_q.schemaConfig.InternalPolicyRisks)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(risk.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(risk.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1698,7 +1698,7 @@ func (rq *RiskQuery) loadInternalPolicies(ctx context.Context, query *InternalPo
 	}
 	return nil
 }
-func (rq *RiskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Program)) error {
+func (_q *RiskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1711,7 +1711,7 @@ func (rq *RiskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.ProgramsTable)
-		joinT.Schema(rq.schemaConfig.ProgramRisks)
+		joinT.Schema(_q.schemaConfig.ProgramRisks)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(risk.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(risk.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1760,7 +1760,7 @@ func (rq *RiskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	return nil
 }
-func (rq *RiskQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *ActionPlan)) error {
+func (_q *RiskQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *ActionPlan)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1773,7 +1773,7 @@ func (rq *RiskQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.ActionPlansTable)
-		joinT.Schema(rq.schemaConfig.RiskActionPlans)
+		joinT.Schema(_q.schemaConfig.RiskActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(risk.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(risk.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1822,7 +1822,7 @@ func (rq *RiskQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery
 	}
 	return nil
 }
-func (rq *RiskQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Task)) error {
+func (_q *RiskQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Task)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Risk)
 	nids := make(map[string]map[*Risk]struct{})
@@ -1835,7 +1835,7 @@ func (rq *RiskQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*R
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(risk.TasksTable)
-		joinT.Schema(rq.schemaConfig.RiskTasks)
+		joinT.Schema(_q.schemaConfig.RiskTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(risk.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(risk.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1884,7 +1884,7 @@ func (rq *RiskQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*R
 	}
 	return nil
 }
-func (rq *RiskQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Asset)) error {
+func (_q *RiskQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Asset)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Risk)
 	for i := range nodes {
@@ -1915,7 +1915,7 @@ func (rq *RiskQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []
 	}
 	return nil
 }
-func (rq *RiskQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Entity)) error {
+func (_q *RiskQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Entity)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Risk)
 	for i := range nodes {
@@ -1946,7 +1946,7 @@ func (rq *RiskQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes
 	}
 	return nil
 }
-func (rq *RiskQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Scan)) error {
+func (_q *RiskQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Scan)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Risk)
 	for i := range nodes {
@@ -1977,7 +1977,7 @@ func (rq *RiskQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*R
 	}
 	return nil
 }
-func (rq *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+func (_q *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
 	for i := range nodes {
@@ -2006,7 +2006,7 @@ func (rq *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nod
 	}
 	return nil
 }
-func (rq *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+func (_q *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
 	for i := range nodes {
@@ -2036,29 +2036,29 @@ func (rq *RiskQuery) loadDelegate(ctx context.Context, query *GroupQuery, nodes 
 	return nil
 }
 
-func (rq *RiskQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := rq.querySpec()
-	_spec.Node.Schema = rq.schemaConfig.Risk
-	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
-	if len(rq.modifiers) > 0 {
-		_spec.Modifiers = rq.modifiers
+func (_q *RiskQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Risk
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = rq.ctx.Fields
-	if len(rq.ctx.Fields) > 0 {
-		_spec.Unique = rq.ctx.Unique != nil && *rq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, rq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (rq *RiskQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(risk.Table, risk.Columns, sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString))
-	_spec.From = rq.sql
-	if unique := rq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if rq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := rq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, risk.FieldID)
 		for i := range fields {
@@ -2066,30 +2066,30 @@ func (rq *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if rq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(risk.FieldOwnerID)
 		}
-		if rq.withStakeholder != nil {
+		if _q.withStakeholder != nil {
 			_spec.Node.AddColumnOnce(risk.FieldStakeholderID)
 		}
-		if rq.withDelegate != nil {
+		if _q.withDelegate != nil {
 			_spec.Node.AddColumnOnce(risk.FieldDelegateID)
 		}
 	}
-	if ps := rq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := rq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := rq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := rq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -2099,230 +2099,230 @@ func (rq *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (rq *RiskQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(rq.driver.Dialect())
+func (_q *RiskQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(risk.Table)
-	columns := rq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = risk.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if rq.sql != nil {
-		selector = rq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if rq.ctx.Unique != nil && *rq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(rq.schemaConfig.Risk)
-	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Risk)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range rq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range rq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range rq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := rq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := rq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rq *RiskQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskSelect {
-	rq.modifiers = append(rq.modifiers, modifiers...)
-	return rq.Select()
+func (_q *RiskQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedBlockedGroups == nil {
-		rq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
 	}
-	rq.withNamedBlockedGroups[name] = query
-	return rq
+	_q.withNamedBlockedGroups[name] = query
+	return _q
 }
 
 // WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedEditors == nil {
-		rq.withNamedEditors = make(map[string]*GroupQuery)
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
-	rq.withNamedEditors[name] = query
-	return rq
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *RiskQuery {
-	query := (&GroupClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedViewers == nil {
-		rq.withNamedViewers = make(map[string]*GroupQuery)
+	if _q.withNamedViewers == nil {
+		_q.withNamedViewers = make(map[string]*GroupQuery)
 	}
-	rq.withNamedViewers[name] = query
-	return rq
+	_q.withNamedViewers[name] = query
+	return _q
 }
 
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *RiskQuery {
-	query := (&ControlClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *RiskQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedControls == nil {
-		rq.withNamedControls = make(map[string]*ControlQuery)
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
-	rq.withNamedControls[name] = query
-	return rq
+	_q.withNamedControls[name] = query
+	return _q
 }
 
 // WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *RiskQuery {
-	query := (&SubcontrolClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *RiskQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedSubcontrols == nil {
-		rq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	rq.withNamedSubcontrols[name] = query
-	return rq
+	_q.withNamedSubcontrols[name] = query
+	return _q
 }
 
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *RiskQuery {
-	query := (&ProcedureClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *RiskQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedProcedures == nil {
-		rq.withNamedProcedures = make(map[string]*ProcedureQuery)
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
 	}
-	rq.withNamedProcedures[name] = query
-	return rq
+	_q.withNamedProcedures[name] = query
+	return _q
 }
 
 // WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *RiskQuery {
-	query := (&InternalPolicyClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *RiskQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedInternalPolicies == nil {
-		rq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	rq.withNamedInternalPolicies[name] = query
-	return rq
+	_q.withNamedInternalPolicies[name] = query
+	return _q
 }
 
 // WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *RiskQuery {
-	query := (&ProgramClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *RiskQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedPrograms == nil {
-		rq.withNamedPrograms = make(map[string]*ProgramQuery)
+	if _q.withNamedPrograms == nil {
+		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	rq.withNamedPrograms[name] = query
-	return rq
+	_q.withNamedPrograms[name] = query
+	return _q
 }
 
 // WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *RiskQuery {
-	query := (&ActionPlanClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *RiskQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedActionPlans == nil {
-		rq.withNamedActionPlans = make(map[string]*ActionPlanQuery)
+	if _q.withNamedActionPlans == nil {
+		_q.withNamedActionPlans = make(map[string]*ActionPlanQuery)
 	}
-	rq.withNamedActionPlans[name] = query
-	return rq
+	_q.withNamedActionPlans[name] = query
+	return _q
 }
 
 // WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *RiskQuery {
-	query := (&TaskClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *RiskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedTasks == nil {
-		rq.withNamedTasks = make(map[string]*TaskQuery)
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
-	rq.withNamedTasks[name] = query
-	return rq
+	_q.withNamedTasks[name] = query
+	return _q
 }
 
 // WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *RiskQuery {
-	query := (&AssetClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *RiskQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedAssets == nil {
-		rq.withNamedAssets = make(map[string]*AssetQuery)
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
 	}
-	rq.withNamedAssets[name] = query
-	return rq
+	_q.withNamedAssets[name] = query
+	return _q
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *RiskQuery {
-	query := (&EntityClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *RiskQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedEntities == nil {
-		rq.withNamedEntities = make(map[string]*EntityQuery)
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
-	rq.withNamedEntities[name] = query
-	return rq
+	_q.withNamedEntities[name] = query
+	return _q
 }
 
 // WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *RiskQuery {
-	query := (&ScanClient{config: rq.config}).Query()
+func (_q *RiskQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *RiskQuery {
+	query := (&ScanClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if rq.withNamedScans == nil {
-		rq.withNamedScans = make(map[string]*ScanQuery)
+	if _q.withNamedScans == nil {
+		_q.withNamedScans = make(map[string]*ScanQuery)
 	}
-	rq.withNamedScans[name] = query
-	return rq
+	_q.withNamedScans[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -2351,41 +2351,41 @@ type RiskGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (rgb *RiskGroupBy) Aggregate(fns ...AggregateFunc) *RiskGroupBy {
-	rgb.fns = append(rgb.fns, fns...)
-	return rgb
+func (_g *RiskGroupBy) Aggregate(fns ...AggregateFunc) *RiskGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rgb *RiskGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rgb.build.ctx, ent.OpQueryGroupBy)
-	if err := rgb.build.prepareQuery(ctx); err != nil {
+func (_g *RiskGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*RiskQuery, *RiskGroupBy](ctx, rgb.build, rgb, rgb.build.inters, v)
+	return scanWithInterceptors[*RiskQuery, *RiskGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (rgb *RiskGroupBy) sqlScan(ctx context.Context, root *RiskQuery, v any) error {
+func (_g *RiskGroupBy) sqlScan(ctx context.Context, root *RiskQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(rgb.fns))
-	for _, fn := range rgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*rgb.flds)+len(rgb.fns))
-		for _, f := range *rgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*rgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2399,27 +2399,27 @@ type RiskSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (rs *RiskSelect) Aggregate(fns ...AggregateFunc) *RiskSelect {
-	rs.fns = append(rs.fns, fns...)
-	return rs
+func (_s *RiskSelect) Aggregate(fns ...AggregateFunc) *RiskSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rs *RiskSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rs.ctx, ent.OpQuerySelect)
-	if err := rs.prepareQuery(ctx); err != nil {
+func (_s *RiskSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*RiskQuery, *RiskSelect](ctx, rs.RiskQuery, rs, rs.inters, v)
+	return scanWithInterceptors[*RiskQuery, *RiskSelect](ctx, _s.RiskQuery, _s, _s.inters, v)
 }
 
-func (rs *RiskSelect) sqlScan(ctx context.Context, root *RiskQuery, v any) error {
+func (_s *RiskSelect) sqlScan(ctx context.Context, root *RiskQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(rs.fns))
-	for _, fn := range rs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*rs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -2427,7 +2427,7 @@ func (rs *RiskSelect) sqlScan(ctx context.Context, root *RiskQuery, v any) error
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2435,7 +2435,7 @@ func (rs *RiskSelect) sqlScan(ctx context.Context, root *RiskQuery, v any) error
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rs *RiskSelect) Modify(modifiers ...func(s *sql.Selector)) *RiskSelect {
-	rs.modifiers = append(rs.modifiers, modifiers...)
-	return rs
+func (_s *RiskSelect) Modify(modifiers ...func(s *sql.Selector)) *RiskSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

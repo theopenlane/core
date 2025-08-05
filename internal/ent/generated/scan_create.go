@@ -26,259 +26,259 @@ type ScanCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (sc *ScanCreate) SetCreatedAt(t time.Time) *ScanCreate {
-	sc.mutation.SetCreatedAt(t)
-	return sc
+func (_c *ScanCreate) SetCreatedAt(v time.Time) *ScanCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableCreatedAt(t *time.Time) *ScanCreate {
-	if t != nil {
-		sc.SetCreatedAt(*t)
+func (_c *ScanCreate) SetNillableCreatedAt(v *time.Time) *ScanCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sc *ScanCreate) SetUpdatedAt(t time.Time) *ScanCreate {
-	sc.mutation.SetUpdatedAt(t)
-	return sc
+func (_c *ScanCreate) SetUpdatedAt(v time.Time) *ScanCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableUpdatedAt(t *time.Time) *ScanCreate {
-	if t != nil {
-		sc.SetUpdatedAt(*t)
+func (_c *ScanCreate) SetNillableUpdatedAt(v *time.Time) *ScanCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (sc *ScanCreate) SetCreatedBy(s string) *ScanCreate {
-	sc.mutation.SetCreatedBy(s)
-	return sc
+func (_c *ScanCreate) SetCreatedBy(v string) *ScanCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableCreatedBy(s *string) *ScanCreate {
-	if s != nil {
-		sc.SetCreatedBy(*s)
+func (_c *ScanCreate) SetNillableCreatedBy(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sc *ScanCreate) SetUpdatedBy(s string) *ScanCreate {
-	sc.mutation.SetUpdatedBy(s)
-	return sc
+func (_c *ScanCreate) SetUpdatedBy(v string) *ScanCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableUpdatedBy(s *string) *ScanCreate {
-	if s != nil {
-		sc.SetUpdatedBy(*s)
+func (_c *ScanCreate) SetNillableUpdatedBy(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sc *ScanCreate) SetDeletedAt(t time.Time) *ScanCreate {
-	sc.mutation.SetDeletedAt(t)
-	return sc
+func (_c *ScanCreate) SetDeletedAt(v time.Time) *ScanCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableDeletedAt(t *time.Time) *ScanCreate {
-	if t != nil {
-		sc.SetDeletedAt(*t)
+func (_c *ScanCreate) SetNillableDeletedAt(v *time.Time) *ScanCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sc *ScanCreate) SetDeletedBy(s string) *ScanCreate {
-	sc.mutation.SetDeletedBy(s)
-	return sc
+func (_c *ScanCreate) SetDeletedBy(v string) *ScanCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableDeletedBy(s *string) *ScanCreate {
-	if s != nil {
-		sc.SetDeletedBy(*s)
+func (_c *ScanCreate) SetNillableDeletedBy(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (sc *ScanCreate) SetTags(s []string) *ScanCreate {
-	sc.mutation.SetTags(s)
-	return sc
+func (_c *ScanCreate) SetTags(v []string) *ScanCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (sc *ScanCreate) SetOwnerID(s string) *ScanCreate {
-	sc.mutation.SetOwnerID(s)
-	return sc
+func (_c *ScanCreate) SetOwnerID(v string) *ScanCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableOwnerID(s *string) *ScanCreate {
-	if s != nil {
-		sc.SetOwnerID(*s)
+func (_c *ScanCreate) SetNillableOwnerID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetTarget sets the "target" field.
-func (sc *ScanCreate) SetTarget(s string) *ScanCreate {
-	sc.mutation.SetTarget(s)
-	return sc
+func (_c *ScanCreate) SetTarget(v string) *ScanCreate {
+	_c.mutation.SetTarget(v)
+	return _c
 }
 
 // SetScanType sets the "scan_type" field.
-func (sc *ScanCreate) SetScanType(et enums.ScanType) *ScanCreate {
-	sc.mutation.SetScanType(et)
-	return sc
+func (_c *ScanCreate) SetScanType(v enums.ScanType) *ScanCreate {
+	_c.mutation.SetScanType(v)
+	return _c
 }
 
 // SetNillableScanType sets the "scan_type" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableScanType(et *enums.ScanType) *ScanCreate {
-	if et != nil {
-		sc.SetScanType(*et)
+func (_c *ScanCreate) SetNillableScanType(v *enums.ScanType) *ScanCreate {
+	if v != nil {
+		_c.SetScanType(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetMetadata sets the "metadata" field.
-func (sc *ScanCreate) SetMetadata(m map[string]interface{}) *ScanCreate {
-	sc.mutation.SetMetadata(m)
-	return sc
+func (_c *ScanCreate) SetMetadata(v map[string]interface{}) *ScanCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (sc *ScanCreate) SetStatus(es enums.ScanStatus) *ScanCreate {
-	sc.mutation.SetStatus(es)
-	return sc
+func (_c *ScanCreate) SetStatus(v enums.ScanStatus) *ScanCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableStatus(es *enums.ScanStatus) *ScanCreate {
-	if es != nil {
-		sc.SetStatus(*es)
+func (_c *ScanCreate) SetNillableStatus(v *enums.ScanStatus) *ScanCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *ScanCreate) SetID(s string) *ScanCreate {
-	sc.mutation.SetID(s)
-	return sc
+func (_c *ScanCreate) SetID(v string) *ScanCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sc *ScanCreate) SetNillableID(s *string) *ScanCreate {
-	if s != nil {
-		sc.SetID(*s)
+func (_c *ScanCreate) SetNillableID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (sc *ScanCreate) SetOwner(o *Organization) *ScanCreate {
-	return sc.SetOwnerID(o.ID)
+func (_c *ScanCreate) SetOwner(v *Organization) *ScanCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (sc *ScanCreate) AddBlockedGroupIDs(ids ...string) *ScanCreate {
-	sc.mutation.AddBlockedGroupIDs(ids...)
-	return sc
+func (_c *ScanCreate) AddBlockedGroupIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (sc *ScanCreate) AddBlockedGroups(g ...*Group) *ScanCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ScanCreate) AddBlockedGroups(v ...*Group) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (sc *ScanCreate) AddEditorIDs(ids ...string) *ScanCreate {
-	sc.mutation.AddEditorIDs(ids...)
-	return sc
+func (_c *ScanCreate) AddEditorIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (sc *ScanCreate) AddEditors(g ...*Group) *ScanCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ScanCreate) AddEditors(v ...*Group) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (sc *ScanCreate) AddViewerIDs(ids ...string) *ScanCreate {
-	sc.mutation.AddViewerIDs(ids...)
-	return sc
+func (_c *ScanCreate) AddViewerIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (sc *ScanCreate) AddViewers(g ...*Group) *ScanCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ScanCreate) AddViewers(v ...*Group) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddViewerIDs(ids...)
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (sc *ScanCreate) AddAssetIDs(ids ...string) *ScanCreate {
-	sc.mutation.AddAssetIDs(ids...)
-	return sc
+func (_c *ScanCreate) AddAssetIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (sc *ScanCreate) AddAssets(a ...*Asset) *ScanCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *ScanCreate) AddAssets(v ...*Asset) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddAssetIDs(ids...)
+	return _c.AddAssetIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (sc *ScanCreate) AddEntityIDs(ids ...string) *ScanCreate {
-	sc.mutation.AddEntityIDs(ids...)
-	return sc
+func (_c *ScanCreate) AddEntityIDs(ids ...string) *ScanCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (sc *ScanCreate) AddEntities(e ...*Entity) *ScanCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *ScanCreate) AddEntities(v ...*Entity) *ScanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddEntityIDs(ids...)
+	return _c.AddEntityIDs(ids...)
 }
 
 // Mutation returns the ScanMutation object of the builder.
-func (sc *ScanCreate) Mutation() *ScanMutation {
-	return sc.mutation
+func (_c *ScanCreate) Mutation() *ScanMutation {
+	return _c.mutation
 }
 
 // Save creates the Scan in the database.
-func (sc *ScanCreate) Save(ctx context.Context) (*Scan, error) {
-	if err := sc.defaults(); err != nil {
+func (_c *ScanCreate) Save(ctx context.Context) (*Scan, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *ScanCreate) SaveX(ctx context.Context) *Scan {
-	v, err := sc.Save(ctx)
+func (_c *ScanCreate) SaveX(ctx context.Context) *Scan {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -286,83 +286,83 @@ func (sc *ScanCreate) SaveX(ctx context.Context) *Scan {
 }
 
 // Exec executes the query.
-func (sc *ScanCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *ScanCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *ScanCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *ScanCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *ScanCreate) defaults() error {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
+func (_c *ScanCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if scan.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scan.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := scan.DefaultCreatedAt()
-		sc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if scan.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scan.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scan.DefaultUpdatedAt()
-		sc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := scan.DefaultTags
-		sc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := sc.mutation.ScanType(); !ok {
+	if _, ok := _c.mutation.ScanType(); !ok {
 		v := scan.DefaultScanType
-		sc.mutation.SetScanType(v)
+		_c.mutation.SetScanType(v)
 	}
-	if _, ok := sc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := scan.DefaultStatus
-		sc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := sc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if scan.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scan.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := scan.DefaultID()
-		sc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *ScanCreate) check() error {
-	if v, ok := sc.mutation.OwnerID(); ok {
+func (_c *ScanCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := scan.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Scan.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Target(); !ok {
+	if _, ok := _c.mutation.Target(); !ok {
 		return &ValidationError{Name: "target", err: errors.New(`generated: missing required field "Scan.target"`)}
 	}
-	if v, ok := sc.mutation.Target(); ok {
+	if v, ok := _c.mutation.Target(); ok {
 		if err := scan.TargetValidator(v); err != nil {
 			return &ValidationError{Name: "target", err: fmt.Errorf(`generated: validator failed for field "Scan.target": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.ScanType(); !ok {
+	if _, ok := _c.mutation.ScanType(); !ok {
 		return &ValidationError{Name: "scan_type", err: errors.New(`generated: missing required field "Scan.scan_type"`)}
 	}
-	if v, ok := sc.mutation.ScanType(); ok {
+	if v, ok := _c.mutation.ScanType(); ok {
 		if err := scan.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_type": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Scan.status"`)}
 	}
-	if v, ok := sc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := scan.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Scan.status": %w`, err)}
 		}
@@ -370,12 +370,12 @@ func (sc *ScanCreate) check() error {
 	return nil
 }
 
-func (sc *ScanCreate) sqlSave(ctx context.Context) (*Scan, error) {
-	if err := sc.check(); err != nil {
+func (_c *ScanCreate) sqlSave(ctx context.Context) (*Scan, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -388,66 +388,66 @@ func (sc *ScanCreate) sqlSave(ctx context.Context) (*Scan, error) {
 			return nil, fmt.Errorf("unexpected Scan.ID type: %T", _spec.ID.Value)
 		}
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
+func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Scan{config: sc.config}
+		_node = &Scan{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(scan.Table, sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString))
 	)
-	_spec.Schema = sc.schemaConfig.Scan
-	if id, ok := sc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Scan
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(scan.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := sc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(scan.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(scan.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(scan.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := sc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(scan.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(scan.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(scan.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := sc.mutation.Target(); ok {
+	if value, ok := _c.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 		_node.Target = value
 	}
-	if value, ok := sc.mutation.ScanType(); ok {
+	if value, ok := _c.mutation.ScanType(); ok {
 		_spec.SetField(scan.FieldScanType, field.TypeEnum, value)
 		_node.ScanType = value
 	}
-	if value, ok := sc.mutation.Metadata(); ok {
+	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(scan.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
-	if value, ok := sc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -458,14 +458,14 @@ func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Scan
+		edge.Schema = _c.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -476,13 +476,13 @@ func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.ScanBlockedGroups
+		edge.Schema = _c.schemaConfig.ScanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -493,13 +493,13 @@ func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.ScanEditors
+		edge.Schema = _c.schemaConfig.ScanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -510,13 +510,13 @@ func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.ScanViewers
+		edge.Schema = _c.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -527,13 +527,13 @@ func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.ScanAssets
+		edge.Schema = _c.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -544,7 +544,7 @@ func (sc *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Entity
+		edge.Schema = _c.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -561,16 +561,16 @@ type ScanCreateBulk struct {
 }
 
 // Save creates the Scan entities in the database.
-func (scb *ScanCreateBulk) Save(ctx context.Context) ([]*Scan, error) {
-	if scb.err != nil {
-		return nil, scb.err
+func (_c *ScanCreateBulk) Save(ctx context.Context) ([]*Scan, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Scan, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Scan, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ScanMutation)
@@ -584,11 +584,11 @@ func (scb *ScanCreateBulk) Save(ctx context.Context) ([]*Scan, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -608,7 +608,7 @@ func (scb *ScanCreateBulk) Save(ctx context.Context) ([]*Scan, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -616,8 +616,8 @@ func (scb *ScanCreateBulk) Save(ctx context.Context) ([]*Scan, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *ScanCreateBulk) SaveX(ctx context.Context) []*Scan {
-	v, err := scb.Save(ctx)
+func (_c *ScanCreateBulk) SaveX(ctx context.Context) []*Scan {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -625,14 +625,14 @@ func (scb *ScanCreateBulk) SaveX(ctx context.Context) []*Scan {
 }
 
 // Exec executes the query.
-func (scb *ScanCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *ScanCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *ScanCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *ScanCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

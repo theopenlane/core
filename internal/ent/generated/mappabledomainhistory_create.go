@@ -22,171 +22,171 @@ type MappableDomainHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (mdhc *MappableDomainHistoryCreate) SetHistoryTime(t time.Time) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetHistoryTime(t)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetHistoryTime(v time.Time) *MappableDomainHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableHistoryTime(t *time.Time) *MappableDomainHistoryCreate {
-	if t != nil {
-		mdhc.SetHistoryTime(*t)
+func (_c *MappableDomainHistoryCreate) SetNillableHistoryTime(v *time.Time) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (mdhc *MappableDomainHistoryCreate) SetRef(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetRef(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetRef(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableRef(s *string) *MappableDomainHistoryCreate {
-	if s != nil {
-		mdhc.SetRef(*s)
+func (_c *MappableDomainHistoryCreate) SetNillableRef(v *string) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (mdhc *MappableDomainHistoryCreate) SetOperation(ht history.OpType) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetOperation(ht)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetOperation(v history.OpType) *MappableDomainHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (mdhc *MappableDomainHistoryCreate) SetCreatedAt(t time.Time) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetCreatedAt(t)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetCreatedAt(v time.Time) *MappableDomainHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableCreatedAt(t *time.Time) *MappableDomainHistoryCreate {
-	if t != nil {
-		mdhc.SetCreatedAt(*t)
+func (_c *MappableDomainHistoryCreate) SetNillableCreatedAt(v *time.Time) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mdhc *MappableDomainHistoryCreate) SetUpdatedAt(t time.Time) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetUpdatedAt(t)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetUpdatedAt(v time.Time) *MappableDomainHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableUpdatedAt(t *time.Time) *MappableDomainHistoryCreate {
-	if t != nil {
-		mdhc.SetUpdatedAt(*t)
+func (_c *MappableDomainHistoryCreate) SetNillableUpdatedAt(v *time.Time) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (mdhc *MappableDomainHistoryCreate) SetCreatedBy(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetCreatedBy(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetCreatedBy(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableCreatedBy(s *string) *MappableDomainHistoryCreate {
-	if s != nil {
-		mdhc.SetCreatedBy(*s)
+func (_c *MappableDomainHistoryCreate) SetNillableCreatedBy(v *string) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mdhc *MappableDomainHistoryCreate) SetUpdatedBy(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetUpdatedBy(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetUpdatedBy(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableUpdatedBy(s *string) *MappableDomainHistoryCreate {
-	if s != nil {
-		mdhc.SetUpdatedBy(*s)
+func (_c *MappableDomainHistoryCreate) SetNillableUpdatedBy(v *string) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (mdhc *MappableDomainHistoryCreate) SetDeletedAt(t time.Time) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetDeletedAt(t)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetDeletedAt(v time.Time) *MappableDomainHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableDeletedAt(t *time.Time) *MappableDomainHistoryCreate {
-	if t != nil {
-		mdhc.SetDeletedAt(*t)
+func (_c *MappableDomainHistoryCreate) SetNillableDeletedAt(v *time.Time) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (mdhc *MappableDomainHistoryCreate) SetDeletedBy(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetDeletedBy(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetDeletedBy(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableDeletedBy(s *string) *MappableDomainHistoryCreate {
-	if s != nil {
-		mdhc.SetDeletedBy(*s)
+func (_c *MappableDomainHistoryCreate) SetNillableDeletedBy(v *string) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (mdhc *MappableDomainHistoryCreate) SetTags(s []string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetTags(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetTags(v []string) *MappableDomainHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (mdhc *MappableDomainHistoryCreate) SetName(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetName(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetName(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetZoneID sets the "zone_id" field.
-func (mdhc *MappableDomainHistoryCreate) SetZoneID(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetZoneID(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetZoneID(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetZoneID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (mdhc *MappableDomainHistoryCreate) SetID(s string) *MappableDomainHistoryCreate {
-	mdhc.mutation.SetID(s)
-	return mdhc
+func (_c *MappableDomainHistoryCreate) SetID(v string) *MappableDomainHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (mdhc *MappableDomainHistoryCreate) SetNillableID(s *string) *MappableDomainHistoryCreate {
-	if s != nil {
-		mdhc.SetID(*s)
+func (_c *MappableDomainHistoryCreate) SetNillableID(v *string) *MappableDomainHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return mdhc
+	return _c
 }
 
 // Mutation returns the MappableDomainHistoryMutation object of the builder.
-func (mdhc *MappableDomainHistoryCreate) Mutation() *MappableDomainHistoryMutation {
-	return mdhc.mutation
+func (_c *MappableDomainHistoryCreate) Mutation() *MappableDomainHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the MappableDomainHistory in the database.
-func (mdhc *MappableDomainHistoryCreate) Save(ctx context.Context) (*MappableDomainHistory, error) {
-	if err := mdhc.defaults(); err != nil {
+func (_c *MappableDomainHistoryCreate) Save(ctx context.Context) (*MappableDomainHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, mdhc.sqlSave, mdhc.mutation, mdhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mdhc *MappableDomainHistoryCreate) SaveX(ctx context.Context) *MappableDomainHistory {
-	v, err := mdhc.Save(ctx)
+func (_c *MappableDomainHistoryCreate) SaveX(ctx context.Context) *MappableDomainHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,83 +194,83 @@ func (mdhc *MappableDomainHistoryCreate) SaveX(ctx context.Context) *MappableDom
 }
 
 // Exec executes the query.
-func (mdhc *MappableDomainHistoryCreate) Exec(ctx context.Context) error {
-	_, err := mdhc.Save(ctx)
+func (_c *MappableDomainHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdhc *MappableDomainHistoryCreate) ExecX(ctx context.Context) {
-	if err := mdhc.Exec(ctx); err != nil {
+func (_c *MappableDomainHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mdhc *MappableDomainHistoryCreate) defaults() error {
-	if _, ok := mdhc.mutation.HistoryTime(); !ok {
+func (_c *MappableDomainHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if mappabledomainhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := mappabledomainhistory.DefaultHistoryTime()
-		mdhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := mdhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if mappabledomainhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappabledomainhistory.DefaultCreatedAt()
-		mdhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := mdhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if mappabledomainhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappabledomainhistory.DefaultUpdatedAt()
-		mdhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mdhc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := mappabledomainhistory.DefaultTags
-		mdhc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := mdhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if mappabledomainhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := mappabledomainhistory.DefaultID()
-		mdhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mdhc *MappableDomainHistoryCreate) check() error {
-	if _, ok := mdhc.mutation.HistoryTime(); !ok {
+func (_c *MappableDomainHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "MappableDomainHistory.history_time"`)}
 	}
-	if _, ok := mdhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "MappableDomainHistory.operation"`)}
 	}
-	if v, ok := mdhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := mappabledomainhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "MappableDomainHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := mdhc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "MappableDomainHistory.name"`)}
 	}
-	if _, ok := mdhc.mutation.ZoneID(); !ok {
+	if _, ok := _c.mutation.ZoneID(); !ok {
 		return &ValidationError{Name: "zone_id", err: errors.New(`generated: missing required field "MappableDomainHistory.zone_id"`)}
 	}
 	return nil
 }
 
-func (mdhc *MappableDomainHistoryCreate) sqlSave(ctx context.Context) (*MappableDomainHistory, error) {
-	if err := mdhc.check(); err != nil {
+func (_c *MappableDomainHistoryCreate) sqlSave(ctx context.Context) (*MappableDomainHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := mdhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mdhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -283,66 +283,66 @@ func (mdhc *MappableDomainHistoryCreate) sqlSave(ctx context.Context) (*Mappable
 			return nil, fmt.Errorf("unexpected MappableDomainHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	mdhc.mutation.id = &_node.ID
-	mdhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (mdhc *MappableDomainHistoryCreate) createSpec() (*MappableDomainHistory, *sqlgraph.CreateSpec) {
+func (_c *MappableDomainHistoryCreate) createSpec() (*MappableDomainHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &MappableDomainHistory{config: mdhc.config}
+		_node = &MappableDomainHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappabledomainhistory.Table, sqlgraph.NewFieldSpec(mappabledomainhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = mdhc.schemaConfig.MappableDomainHistory
-	if id, ok := mdhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.MappableDomainHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := mdhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(mappabledomainhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := mdhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(mappabledomainhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := mdhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(mappabledomainhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := mdhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(mappabledomainhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := mdhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(mappabledomainhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mdhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(mappabledomainhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := mdhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappabledomainhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mdhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(mappabledomainhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := mdhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(mappabledomainhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := mdhc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(mappabledomainhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := mdhc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(mappabledomainhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := mdhc.mutation.ZoneID(); ok {
+	if value, ok := _c.mutation.ZoneID(); ok {
 		_spec.SetField(mappabledomainhistory.FieldZoneID, field.TypeString, value)
 		_node.ZoneID = value
 	}
@@ -357,16 +357,16 @@ type MappableDomainHistoryCreateBulk struct {
 }
 
 // Save creates the MappableDomainHistory entities in the database.
-func (mdhcb *MappableDomainHistoryCreateBulk) Save(ctx context.Context) ([]*MappableDomainHistory, error) {
-	if mdhcb.err != nil {
-		return nil, mdhcb.err
+func (_c *MappableDomainHistoryCreateBulk) Save(ctx context.Context) ([]*MappableDomainHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(mdhcb.builders))
-	nodes := make([]*MappableDomainHistory, len(mdhcb.builders))
-	mutators := make([]Mutator, len(mdhcb.builders))
-	for i := range mdhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*MappableDomainHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := mdhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MappableDomainHistoryMutation)
@@ -380,11 +380,11 @@ func (mdhcb *MappableDomainHistoryCreateBulk) Save(ctx context.Context) ([]*Mapp
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mdhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mdhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -404,7 +404,7 @@ func (mdhcb *MappableDomainHistoryCreateBulk) Save(ctx context.Context) ([]*Mapp
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mdhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -412,8 +412,8 @@ func (mdhcb *MappableDomainHistoryCreateBulk) Save(ctx context.Context) ([]*Mapp
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mdhcb *MappableDomainHistoryCreateBulk) SaveX(ctx context.Context) []*MappableDomainHistory {
-	v, err := mdhcb.Save(ctx)
+func (_c *MappableDomainHistoryCreateBulk) SaveX(ctx context.Context) []*MappableDomainHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -421,14 +421,14 @@ func (mdhcb *MappableDomainHistoryCreateBulk) SaveX(ctx context.Context) []*Mapp
 }
 
 // Exec executes the query.
-func (mdhcb *MappableDomainHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := mdhcb.Save(ctx)
+func (_c *MappableDomainHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdhcb *MappableDomainHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := mdhcb.Exec(ctx); err != nil {
+func (_c *MappableDomainHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

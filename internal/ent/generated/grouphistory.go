@@ -82,7 +82,7 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the GroupHistory fields.
-func (gh *GroupHistory) assignValues(columns []string, values []any) error {
+func (_m *GroupHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -92,73 +92,73 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				gh.ID = value.String
+				_m.ID = value.String
 			}
 		case grouphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				gh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case grouphistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				gh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case grouphistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				gh.Operation = *value
+				_m.Operation = *value
 			}
 		case grouphistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				gh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case grouphistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				gh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case grouphistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				gh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case grouphistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				gh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case grouphistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case grouphistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case grouphistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				gh.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case grouphistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &gh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -166,46 +166,46 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				gh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case grouphistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				gh.Name = value.String
+				_m.Name = value.String
 			}
 		case grouphistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				gh.Description = value.String
+				_m.Description = value.String
 			}
 		case grouphistory.FieldIsManaged:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_managed", values[i])
 			} else if value.Valid {
-				gh.IsManaged = value.Bool
+				_m.IsManaged = value.Bool
 			}
 		case grouphistory.FieldGravatarLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gravatar_logo_url", values[i])
 			} else if value.Valid {
-				gh.GravatarLogoURL = value.String
+				_m.GravatarLogoURL = value.String
 			}
 		case grouphistory.FieldLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_url", values[i])
 			} else if value.Valid {
-				gh.LogoURL = value.String
+				_m.LogoURL = value.String
 			}
 		case grouphistory.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				gh.DisplayName = value.String
+				_m.DisplayName = value.String
 			}
 		default:
-			gh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -213,86 +213,86 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the GroupHistory.
 // This includes values selected through modifiers, order, etc.
-func (gh *GroupHistory) Value(name string) (ent.Value, error) {
-	return gh.selectValues.Get(name)
+func (_m *GroupHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this GroupHistory.
 // Note that you need to call GroupHistory.Unwrap() before calling this method if this GroupHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gh *GroupHistory) Update() *GroupHistoryUpdateOne {
-	return NewGroupHistoryClient(gh.config).UpdateOne(gh)
+func (_m *GroupHistory) Update() *GroupHistoryUpdateOne {
+	return NewGroupHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the GroupHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gh *GroupHistory) Unwrap() *GroupHistory {
-	_tx, ok := gh.config.driver.(*txDriver)
+func (_m *GroupHistory) Unwrap() *GroupHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: GroupHistory is not a transactional entity")
 	}
-	gh.config.driver = _tx.drv
-	return gh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gh *GroupHistory) String() string {
+func (_m *GroupHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("GroupHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(gh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(gh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", gh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(gh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(gh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(gh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(gh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(gh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(gh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(gh.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", gh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(gh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(gh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(gh.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("is_managed=")
-	builder.WriteString(fmt.Sprintf("%v", gh.IsManaged))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsManaged))
 	builder.WriteString(", ")
 	builder.WriteString("gravatar_logo_url=")
-	builder.WriteString(gh.GravatarLogoURL)
+	builder.WriteString(_m.GravatarLogoURL)
 	builder.WriteString(", ")
 	builder.WriteString("logo_url=")
-	builder.WriteString(gh.LogoURL)
+	builder.WriteString(_m.LogoURL)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(gh.DisplayName)
+	builder.WriteString(_m.DisplayName)
 	builder.WriteByte(')')
 	return builder.String()
 }

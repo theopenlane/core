@@ -22,58 +22,58 @@ type TFASettingDelete struct {
 }
 
 // Where appends a list predicates to the TFASettingDelete builder.
-func (tsd *TFASettingDelete) Where(ps ...predicate.TFASetting) *TFASettingDelete {
-	tsd.mutation.Where(ps...)
-	return tsd
+func (_d *TFASettingDelete) Where(ps ...predicate.TFASetting) *TFASettingDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tsd *TFASettingDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tsd.sqlExec, tsd.mutation, tsd.hooks)
+func (_d *TFASettingDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tsd *TFASettingDelete) ExecX(ctx context.Context) int {
-	n, err := tsd.Exec(ctx)
+func (_d *TFASettingDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tsd *TFASettingDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TFASettingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(tfasetting.Table, sqlgraph.NewFieldSpec(tfasetting.FieldID, field.TypeString))
-	_spec.Node.Schema = tsd.schemaConfig.TFASetting
-	ctx = internal.NewSchemaConfigContext(ctx, tsd.schemaConfig)
-	if ps := tsd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TFASetting
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tsd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tsd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TFASettingDeleteOne is the builder for deleting a single TFASetting entity.
 type TFASettingDeleteOne struct {
-	tsd *TFASettingDelete
+	_d *TFASettingDelete
 }
 
 // Where appends a list predicates to the TFASettingDelete builder.
-func (tsdo *TFASettingDeleteOne) Where(ps ...predicate.TFASetting) *TFASettingDeleteOne {
-	tsdo.tsd.mutation.Where(ps...)
-	return tsdo
+func (_d *TFASettingDeleteOne) Where(ps ...predicate.TFASetting) *TFASettingDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tsdo *TFASettingDeleteOne) Exec(ctx context.Context) error {
-	n, err := tsdo.tsd.Exec(ctx)
+func (_d *TFASettingDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (tsdo *TFASettingDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tsdo *TFASettingDeleteOne) ExecX(ctx context.Context) {
-	if err := tsdo.Exec(ctx); err != nil {
+func (_d *TFASettingDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -31,260 +31,260 @@ type TrustCenterUpdate struct {
 }
 
 // Where appends a list predicates to the TrustCenterUpdate builder.
-func (tcu *TrustCenterUpdate) Where(ps ...predicate.TrustCenter) *TrustCenterUpdate {
-	tcu.mutation.Where(ps...)
-	return tcu
+func (_u *TrustCenterUpdate) Where(ps ...predicate.TrustCenter) *TrustCenterUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcu *TrustCenterUpdate) SetUpdatedAt(t time.Time) *TrustCenterUpdate {
-	tcu.mutation.SetUpdatedAt(t)
-	return tcu
+func (_u *TrustCenterUpdate) SetUpdatedAt(v time.Time) *TrustCenterUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tcu *TrustCenterUpdate) ClearUpdatedAt() *TrustCenterUpdate {
-	tcu.mutation.ClearUpdatedAt()
-	return tcu
+func (_u *TrustCenterUpdate) ClearUpdatedAt() *TrustCenterUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcu *TrustCenterUpdate) SetUpdatedBy(s string) *TrustCenterUpdate {
-	tcu.mutation.SetUpdatedBy(s)
-	return tcu
+func (_u *TrustCenterUpdate) SetUpdatedBy(v string) *TrustCenterUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableUpdatedBy(s *string) *TrustCenterUpdate {
-	if s != nil {
-		tcu.SetUpdatedBy(*s)
+func (_u *TrustCenterUpdate) SetNillableUpdatedBy(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tcu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tcu *TrustCenterUpdate) ClearUpdatedBy() *TrustCenterUpdate {
-	tcu.mutation.ClearUpdatedBy()
-	return tcu
+func (_u *TrustCenterUpdate) ClearUpdatedBy() *TrustCenterUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcu *TrustCenterUpdate) SetDeletedAt(t time.Time) *TrustCenterUpdate {
-	tcu.mutation.SetDeletedAt(t)
-	return tcu
+func (_u *TrustCenterUpdate) SetDeletedAt(v time.Time) *TrustCenterUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableDeletedAt(t *time.Time) *TrustCenterUpdate {
-	if t != nil {
-		tcu.SetDeletedAt(*t)
+func (_u *TrustCenterUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tcu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tcu *TrustCenterUpdate) ClearDeletedAt() *TrustCenterUpdate {
-	tcu.mutation.ClearDeletedAt()
-	return tcu
+func (_u *TrustCenterUpdate) ClearDeletedAt() *TrustCenterUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcu *TrustCenterUpdate) SetDeletedBy(s string) *TrustCenterUpdate {
-	tcu.mutation.SetDeletedBy(s)
-	return tcu
+func (_u *TrustCenterUpdate) SetDeletedBy(v string) *TrustCenterUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableDeletedBy(s *string) *TrustCenterUpdate {
-	if s != nil {
-		tcu.SetDeletedBy(*s)
+func (_u *TrustCenterUpdate) SetNillableDeletedBy(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tcu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tcu *TrustCenterUpdate) ClearDeletedBy() *TrustCenterUpdate {
-	tcu.mutation.ClearDeletedBy()
-	return tcu
+func (_u *TrustCenterUpdate) ClearDeletedBy() *TrustCenterUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (tcu *TrustCenterUpdate) SetTags(s []string) *TrustCenterUpdate {
-	tcu.mutation.SetTags(s)
-	return tcu
+func (_u *TrustCenterUpdate) SetTags(v []string) *TrustCenterUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (tcu *TrustCenterUpdate) AppendTags(s []string) *TrustCenterUpdate {
-	tcu.mutation.AppendTags(s)
-	return tcu
+// AppendTags appends value to the "tags" field.
+func (_u *TrustCenterUpdate) AppendTags(v []string) *TrustCenterUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (tcu *TrustCenterUpdate) ClearTags() *TrustCenterUpdate {
-	tcu.mutation.ClearTags()
-	return tcu
+func (_u *TrustCenterUpdate) ClearTags() *TrustCenterUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tcu *TrustCenterUpdate) SetOwnerID(s string) *TrustCenterUpdate {
-	tcu.mutation.SetOwnerID(s)
-	return tcu
+func (_u *TrustCenterUpdate) SetOwnerID(v string) *TrustCenterUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableOwnerID(s *string) *TrustCenterUpdate {
-	if s != nil {
-		tcu.SetOwnerID(*s)
+func (_u *TrustCenterUpdate) SetNillableOwnerID(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return tcu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (tcu *TrustCenterUpdate) ClearOwnerID() *TrustCenterUpdate {
-	tcu.mutation.ClearOwnerID()
-	return tcu
+func (_u *TrustCenterUpdate) ClearOwnerID() *TrustCenterUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetSlug sets the "slug" field.
-func (tcu *TrustCenterUpdate) SetSlug(s string) *TrustCenterUpdate {
-	tcu.mutation.SetSlug(s)
-	return tcu
+func (_u *TrustCenterUpdate) SetSlug(v string) *TrustCenterUpdate {
+	_u.mutation.SetSlug(v)
+	return _u
 }
 
 // SetNillableSlug sets the "slug" field if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableSlug(s *string) *TrustCenterUpdate {
-	if s != nil {
-		tcu.SetSlug(*s)
+func (_u *TrustCenterUpdate) SetNillableSlug(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetSlug(*v)
 	}
-	return tcu
+	return _u
 }
 
 // ClearSlug clears the value of the "slug" field.
-func (tcu *TrustCenterUpdate) ClearSlug() *TrustCenterUpdate {
-	tcu.mutation.ClearSlug()
-	return tcu
+func (_u *TrustCenterUpdate) ClearSlug() *TrustCenterUpdate {
+	_u.mutation.ClearSlug()
+	return _u
 }
 
 // SetCustomDomainID sets the "custom_domain_id" field.
-func (tcu *TrustCenterUpdate) SetCustomDomainID(s string) *TrustCenterUpdate {
-	tcu.mutation.SetCustomDomainID(s)
-	return tcu
+func (_u *TrustCenterUpdate) SetCustomDomainID(v string) *TrustCenterUpdate {
+	_u.mutation.SetCustomDomainID(v)
+	return _u
 }
 
 // SetNillableCustomDomainID sets the "custom_domain_id" field if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableCustomDomainID(s *string) *TrustCenterUpdate {
-	if s != nil {
-		tcu.SetCustomDomainID(*s)
+func (_u *TrustCenterUpdate) SetNillableCustomDomainID(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetCustomDomainID(*v)
 	}
-	return tcu
+	return _u
 }
 
 // ClearCustomDomainID clears the value of the "custom_domain_id" field.
-func (tcu *TrustCenterUpdate) ClearCustomDomainID() *TrustCenterUpdate {
-	tcu.mutation.ClearCustomDomainID()
-	return tcu
+func (_u *TrustCenterUpdate) ClearCustomDomainID() *TrustCenterUpdate {
+	_u.mutation.ClearCustomDomainID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (tcu *TrustCenterUpdate) SetOwner(o *Organization) *TrustCenterUpdate {
-	return tcu.SetOwnerID(o.ID)
+func (_u *TrustCenterUpdate) SetOwner(v *Organization) *TrustCenterUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetCustomDomain sets the "custom_domain" edge to the CustomDomain entity.
-func (tcu *TrustCenterUpdate) SetCustomDomain(c *CustomDomain) *TrustCenterUpdate {
-	return tcu.SetCustomDomainID(c.ID)
+func (_u *TrustCenterUpdate) SetCustomDomain(v *CustomDomain) *TrustCenterUpdate {
+	return _u.SetCustomDomainID(v.ID)
 }
 
 // SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
-func (tcu *TrustCenterUpdate) SetSettingID(id string) *TrustCenterUpdate {
-	tcu.mutation.SetSettingID(id)
-	return tcu
+func (_u *TrustCenterUpdate) SetSettingID(id string) *TrustCenterUpdate {
+	_u.mutation.SetSettingID(id)
+	return _u
 }
 
 // SetNillableSettingID sets the "setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
-func (tcu *TrustCenterUpdate) SetNillableSettingID(id *string) *TrustCenterUpdate {
+func (_u *TrustCenterUpdate) SetNillableSettingID(id *string) *TrustCenterUpdate {
 	if id != nil {
-		tcu = tcu.SetSettingID(*id)
+		_u = _u.SetSettingID(*id)
 	}
-	return tcu
+	return _u
 }
 
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
-func (tcu *TrustCenterUpdate) SetSetting(t *TrustCenterSetting) *TrustCenterUpdate {
-	return tcu.SetSettingID(t.ID)
+func (_u *TrustCenterUpdate) SetSetting(v *TrustCenterSetting) *TrustCenterUpdate {
+	return _u.SetSettingID(v.ID)
 }
 
 // AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
-func (tcu *TrustCenterUpdate) AddTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdate {
-	tcu.mutation.AddTrustCenterSubprocessorIDs(ids...)
-	return tcu
+func (_u *TrustCenterUpdate) AddTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (tcu *TrustCenterUpdate) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *TrustCenterUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TrustCenterUpdate) AddTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcu.AddTrustCenterSubprocessorIDs(ids...)
+	return _u.AddTrustCenterSubprocessorIDs(ids...)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
-func (tcu *TrustCenterUpdate) Mutation() *TrustCenterMutation {
-	return tcu.mutation
+func (_u *TrustCenterUpdate) Mutation() *TrustCenterMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (tcu *TrustCenterUpdate) ClearOwner() *TrustCenterUpdate {
-	tcu.mutation.ClearOwner()
-	return tcu
+func (_u *TrustCenterUpdate) ClearOwner() *TrustCenterUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearCustomDomain clears the "custom_domain" edge to the CustomDomain entity.
-func (tcu *TrustCenterUpdate) ClearCustomDomain() *TrustCenterUpdate {
-	tcu.mutation.ClearCustomDomain()
-	return tcu
+func (_u *TrustCenterUpdate) ClearCustomDomain() *TrustCenterUpdate {
+	_u.mutation.ClearCustomDomain()
+	return _u
 }
 
 // ClearSetting clears the "setting" edge to the TrustCenterSetting entity.
-func (tcu *TrustCenterUpdate) ClearSetting() *TrustCenterUpdate {
-	tcu.mutation.ClearSetting()
-	return tcu
+func (_u *TrustCenterUpdate) ClearSetting() *TrustCenterUpdate {
+	_u.mutation.ClearSetting()
+	return _u
 }
 
 // ClearTrustCenterSubprocessors clears all "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (tcu *TrustCenterUpdate) ClearTrustCenterSubprocessors() *TrustCenterUpdate {
-	tcu.mutation.ClearTrustCenterSubprocessors()
-	return tcu
+func (_u *TrustCenterUpdate) ClearTrustCenterSubprocessors() *TrustCenterUpdate {
+	_u.mutation.ClearTrustCenterSubprocessors()
+	return _u
 }
 
 // RemoveTrustCenterSubprocessorIDs removes the "trust_center_subprocessors" edge to TrustCenterSubprocessor entities by IDs.
-func (tcu *TrustCenterUpdate) RemoveTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdate {
-	tcu.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
-	return tcu
+func (_u *TrustCenterUpdate) RemoveTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // RemoveTrustCenterSubprocessors removes "trust_center_subprocessors" edges to TrustCenterSubprocessor entities.
-func (tcu *TrustCenterUpdate) RemoveTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *TrustCenterUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TrustCenterUpdate) RemoveTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcu.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u.RemoveTrustCenterSubprocessorIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tcu *TrustCenterUpdate) Save(ctx context.Context) (int, error) {
-	if err := tcu.defaults(); err != nil {
+func (_u *TrustCenterUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, tcu.sqlSave, tcu.mutation, tcu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcu *TrustCenterUpdate) SaveX(ctx context.Context) int {
-	affected, err := tcu.Save(ctx)
+func (_u *TrustCenterUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -292,38 +292,38 @@ func (tcu *TrustCenterUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tcu *TrustCenterUpdate) Exec(ctx context.Context) error {
-	_, err := tcu.Save(ctx)
+func (_u *TrustCenterUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcu *TrustCenterUpdate) ExecX(ctx context.Context) {
-	if err := tcu.Exec(ctx); err != nil {
+func (_u *TrustCenterUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcu *TrustCenterUpdate) defaults() error {
-	if _, ok := tcu.mutation.UpdatedAt(); !ok && !tcu.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenter.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenter.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcenter.UpdateDefaultUpdatedAt()
-		tcu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tcu *TrustCenterUpdate) check() error {
-	if v, ok := tcu.mutation.OwnerID(); ok {
+func (_u *TrustCenterUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := trustcenter.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := tcu.mutation.Slug(); ok {
+	if v, ok := _u.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
@@ -332,71 +332,71 @@ func (tcu *TrustCenterUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tcu *TrustCenterUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterUpdate {
-	tcu.modifiers = append(tcu.modifiers, modifiers...)
-	return tcu
+func (_u *TrustCenterUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tcu.check(); err != nil {
-		return n, err
+func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenter.Table, trustcenter.Columns, sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString))
-	if ps := tcu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tcu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenter.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tcu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcenter.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tcu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenter.FieldUpdatedAt, field.TypeTime)
 	}
-	if tcu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenter.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tcu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenter.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tcu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenter.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tcu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenter.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tcu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenter.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tcu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcenter.FieldDeletedBy, field.TypeString, value)
 	}
-	if tcu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenter.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(trustcenter.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := tcu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, trustcenter.FieldTags, value)
 		})
 	}
-	if tcu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenter.FieldTags, field.TypeJSON)
 	}
-	if value, ok := tcu.mutation.Slug(); ok {
+	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(trustcenter.FieldSlug, field.TypeString, value)
 	}
-	if tcu.mutation.SlugCleared() {
+	if _u.mutation.SlugCleared() {
 		_spec.ClearField(trustcenter.FieldSlug, field.TypeString)
 	}
-	if tcu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -407,10 +407,10 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -421,13 +421,13 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcu.mutation.CustomDomainCleared() {
+	if _u.mutation.CustomDomainCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -438,10 +438,10 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcu.mutation.CustomDomainIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.CustomDomainIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -452,13 +452,13 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcu.mutation.SettingCleared() {
+	if _u.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -469,10 +469,10 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcu.mutation.SettingIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -483,13 +483,13 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcu.mutation.TrustCenterSubprocessorsCleared() {
+	if _u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -500,10 +500,10 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcu.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !tcu.mutation.TrustCenterSubprocessorsCleared() {
+	if nodes := _u.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -514,13 +514,13 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcu.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -531,16 +531,16 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcu.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = tcu.schemaConfig.TrustCenter
-	ctx = internal.NewSchemaConfigContext(ctx, tcu.schemaConfig)
-	_spec.AddModifiers(tcu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tcu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TrustCenter
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenter.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -548,8 +548,8 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	tcu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TrustCenterUpdateOne is the builder for updating a single TrustCenter entity.
@@ -562,267 +562,267 @@ type TrustCenterUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcuo *TrustCenterUpdateOne) SetUpdatedAt(t time.Time) *TrustCenterUpdateOne {
-	tcuo.mutation.SetUpdatedAt(t)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tcuo *TrustCenterUpdateOne) ClearUpdatedAt() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearUpdatedAt()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearUpdatedAt() *TrustCenterUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcuo *TrustCenterUpdateOne) SetUpdatedBy(s string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetUpdatedBy(s)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetUpdatedBy(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableUpdatedBy(s *string) *TrustCenterUpdateOne {
-	if s != nil {
-		tcuo.SetUpdatedBy(*s)
+func (_u *TrustCenterUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tcuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tcuo *TrustCenterUpdateOne) ClearUpdatedBy() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearUpdatedBy()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearUpdatedBy() *TrustCenterUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcuo *TrustCenterUpdateOne) SetDeletedAt(t time.Time) *TrustCenterUpdateOne {
-	tcuo.mutation.SetDeletedAt(t)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetDeletedAt(v time.Time) *TrustCenterUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableDeletedAt(t *time.Time) *TrustCenterUpdateOne {
-	if t != nil {
-		tcuo.SetDeletedAt(*t)
+func (_u *TrustCenterUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tcuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tcuo *TrustCenterUpdateOne) ClearDeletedAt() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearDeletedAt()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearDeletedAt() *TrustCenterUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcuo *TrustCenterUpdateOne) SetDeletedBy(s string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetDeletedBy(s)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetDeletedBy(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableDeletedBy(s *string) *TrustCenterUpdateOne {
-	if s != nil {
-		tcuo.SetDeletedBy(*s)
+func (_u *TrustCenterUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tcuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tcuo *TrustCenterUpdateOne) ClearDeletedBy() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearDeletedBy()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearDeletedBy() *TrustCenterUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (tcuo *TrustCenterUpdateOne) SetTags(s []string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetTags(s)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetTags(v []string) *TrustCenterUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (tcuo *TrustCenterUpdateOne) AppendTags(s []string) *TrustCenterUpdateOne {
-	tcuo.mutation.AppendTags(s)
-	return tcuo
+// AppendTags appends value to the "tags" field.
+func (_u *TrustCenterUpdateOne) AppendTags(v []string) *TrustCenterUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (tcuo *TrustCenterUpdateOne) ClearTags() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearTags()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearTags() *TrustCenterUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tcuo *TrustCenterUpdateOne) SetOwnerID(s string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetOwnerID(s)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetOwnerID(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableOwnerID(s *string) *TrustCenterUpdateOne {
-	if s != nil {
-		tcuo.SetOwnerID(*s)
+func (_u *TrustCenterUpdateOne) SetNillableOwnerID(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return tcuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (tcuo *TrustCenterUpdateOne) ClearOwnerID() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearOwnerID()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearOwnerID() *TrustCenterUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetSlug sets the "slug" field.
-func (tcuo *TrustCenterUpdateOne) SetSlug(s string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetSlug(s)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetSlug(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetSlug(v)
+	return _u
 }
 
 // SetNillableSlug sets the "slug" field if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableSlug(s *string) *TrustCenterUpdateOne {
-	if s != nil {
-		tcuo.SetSlug(*s)
+func (_u *TrustCenterUpdateOne) SetNillableSlug(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetSlug(*v)
 	}
-	return tcuo
+	return _u
 }
 
 // ClearSlug clears the value of the "slug" field.
-func (tcuo *TrustCenterUpdateOne) ClearSlug() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearSlug()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearSlug() *TrustCenterUpdateOne {
+	_u.mutation.ClearSlug()
+	return _u
 }
 
 // SetCustomDomainID sets the "custom_domain_id" field.
-func (tcuo *TrustCenterUpdateOne) SetCustomDomainID(s string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetCustomDomainID(s)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetCustomDomainID(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetCustomDomainID(v)
+	return _u
 }
 
 // SetNillableCustomDomainID sets the "custom_domain_id" field if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableCustomDomainID(s *string) *TrustCenterUpdateOne {
-	if s != nil {
-		tcuo.SetCustomDomainID(*s)
+func (_u *TrustCenterUpdateOne) SetNillableCustomDomainID(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetCustomDomainID(*v)
 	}
-	return tcuo
+	return _u
 }
 
 // ClearCustomDomainID clears the value of the "custom_domain_id" field.
-func (tcuo *TrustCenterUpdateOne) ClearCustomDomainID() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearCustomDomainID()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearCustomDomainID() *TrustCenterUpdateOne {
+	_u.mutation.ClearCustomDomainID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (tcuo *TrustCenterUpdateOne) SetOwner(o *Organization) *TrustCenterUpdateOne {
-	return tcuo.SetOwnerID(o.ID)
+func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetCustomDomain sets the "custom_domain" edge to the CustomDomain entity.
-func (tcuo *TrustCenterUpdateOne) SetCustomDomain(c *CustomDomain) *TrustCenterUpdateOne {
-	return tcuo.SetCustomDomainID(c.ID)
+func (_u *TrustCenterUpdateOne) SetCustomDomain(v *CustomDomain) *TrustCenterUpdateOne {
+	return _u.SetCustomDomainID(v.ID)
 }
 
 // SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
-func (tcuo *TrustCenterUpdateOne) SetSettingID(id string) *TrustCenterUpdateOne {
-	tcuo.mutation.SetSettingID(id)
-	return tcuo
+func (_u *TrustCenterUpdateOne) SetSettingID(id string) *TrustCenterUpdateOne {
+	_u.mutation.SetSettingID(id)
+	return _u
 }
 
 // SetNillableSettingID sets the "setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
-func (tcuo *TrustCenterUpdateOne) SetNillableSettingID(id *string) *TrustCenterUpdateOne {
+func (_u *TrustCenterUpdateOne) SetNillableSettingID(id *string) *TrustCenterUpdateOne {
 	if id != nil {
-		tcuo = tcuo.SetSettingID(*id)
+		_u = _u.SetSettingID(*id)
 	}
-	return tcuo
+	return _u
 }
 
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
-func (tcuo *TrustCenterUpdateOne) SetSetting(t *TrustCenterSetting) *TrustCenterUpdateOne {
-	return tcuo.SetSettingID(t.ID)
+func (_u *TrustCenterUpdateOne) SetSetting(v *TrustCenterSetting) *TrustCenterUpdateOne {
+	return _u.SetSettingID(v.ID)
 }
 
 // AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
-func (tcuo *TrustCenterUpdateOne) AddTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdateOne {
-	tcuo.mutation.AddTrustCenterSubprocessorIDs(ids...)
-	return tcuo
+func (_u *TrustCenterUpdateOne) AddTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (tcuo *TrustCenterUpdateOne) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *TrustCenterUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TrustCenterUpdateOne) AddTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcuo.AddTrustCenterSubprocessorIDs(ids...)
+	return _u.AddTrustCenterSubprocessorIDs(ids...)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
-func (tcuo *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
-	return tcuo.mutation
+func (_u *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (tcuo *TrustCenterUpdateOne) ClearOwner() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearOwner()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearOwner() *TrustCenterUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearCustomDomain clears the "custom_domain" edge to the CustomDomain entity.
-func (tcuo *TrustCenterUpdateOne) ClearCustomDomain() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearCustomDomain()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearCustomDomain() *TrustCenterUpdateOne {
+	_u.mutation.ClearCustomDomain()
+	return _u
 }
 
 // ClearSetting clears the "setting" edge to the TrustCenterSetting entity.
-func (tcuo *TrustCenterUpdateOne) ClearSetting() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearSetting()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearSetting() *TrustCenterUpdateOne {
+	_u.mutation.ClearSetting()
+	return _u
 }
 
 // ClearTrustCenterSubprocessors clears all "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (tcuo *TrustCenterUpdateOne) ClearTrustCenterSubprocessors() *TrustCenterUpdateOne {
-	tcuo.mutation.ClearTrustCenterSubprocessors()
-	return tcuo
+func (_u *TrustCenterUpdateOne) ClearTrustCenterSubprocessors() *TrustCenterUpdateOne {
+	_u.mutation.ClearTrustCenterSubprocessors()
+	return _u
 }
 
 // RemoveTrustCenterSubprocessorIDs removes the "trust_center_subprocessors" edge to TrustCenterSubprocessor entities by IDs.
-func (tcuo *TrustCenterUpdateOne) RemoveTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdateOne {
-	tcuo.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
-	return tcuo
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterSubprocessorIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // RemoveTrustCenterSubprocessors removes "trust_center_subprocessors" edges to TrustCenterSubprocessor entities.
-func (tcuo *TrustCenterUpdateOne) RemoveTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *TrustCenterUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcuo.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u.RemoveTrustCenterSubprocessorIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustCenterUpdate builder.
-func (tcuo *TrustCenterUpdateOne) Where(ps ...predicate.TrustCenter) *TrustCenterUpdateOne {
-	tcuo.mutation.Where(ps...)
-	return tcuo
+func (_u *TrustCenterUpdateOne) Where(ps ...predicate.TrustCenter) *TrustCenterUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tcuo *TrustCenterUpdateOne) Select(field string, fields ...string) *TrustCenterUpdateOne {
-	tcuo.fields = append([]string{field}, fields...)
-	return tcuo
+func (_u *TrustCenterUpdateOne) Select(field string, fields ...string) *TrustCenterUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TrustCenter entity.
-func (tcuo *TrustCenterUpdateOne) Save(ctx context.Context) (*TrustCenter, error) {
-	if err := tcuo.defaults(); err != nil {
+func (_u *TrustCenterUpdateOne) Save(ctx context.Context) (*TrustCenter, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tcuo.sqlSave, tcuo.mutation, tcuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcuo *TrustCenterUpdateOne) SaveX(ctx context.Context) *TrustCenter {
-	node, err := tcuo.Save(ctx)
+func (_u *TrustCenterUpdateOne) SaveX(ctx context.Context) *TrustCenter {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -830,38 +830,38 @@ func (tcuo *TrustCenterUpdateOne) SaveX(ctx context.Context) *TrustCenter {
 }
 
 // Exec executes the query on the entity.
-func (tcuo *TrustCenterUpdateOne) Exec(ctx context.Context) error {
-	_, err := tcuo.Save(ctx)
+func (_u *TrustCenterUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcuo *TrustCenterUpdateOne) ExecX(ctx context.Context) {
-	if err := tcuo.Exec(ctx); err != nil {
+func (_u *TrustCenterUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcuo *TrustCenterUpdateOne) defaults() error {
-	if _, ok := tcuo.mutation.UpdatedAt(); !ok && !tcuo.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenter.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenter.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcenter.UpdateDefaultUpdatedAt()
-		tcuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tcuo *TrustCenterUpdateOne) check() error {
-	if v, ok := tcuo.mutation.OwnerID(); ok {
+func (_u *TrustCenterUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := trustcenter.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := tcuo.mutation.Slug(); ok {
+	if v, ok := _u.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
@@ -870,22 +870,22 @@ func (tcuo *TrustCenterUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tcuo *TrustCenterUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterUpdateOne {
-	tcuo.modifiers = append(tcuo.modifiers, modifiers...)
-	return tcuo
+func (_u *TrustCenterUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter, err error) {
-	if err := tcuo.check(); err != nil {
+func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenter.Table, trustcenter.Columns, sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString))
-	id, ok := tcuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TrustCenter.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tcuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcenter.FieldID)
 		for _, f := range fields {
@@ -897,61 +897,61 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 			}
 		}
 	}
-	if ps := tcuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tcuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenter.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tcuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcenter.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tcuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenter.FieldUpdatedAt, field.TypeTime)
 	}
-	if tcuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenter.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tcuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcenter.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tcuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenter.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tcuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcenter.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tcuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenter.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tcuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcenter.FieldDeletedBy, field.TypeString, value)
 	}
-	if tcuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenter.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(trustcenter.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := tcuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, trustcenter.FieldTags, value)
 		})
 	}
-	if tcuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenter.FieldTags, field.TypeJSON)
 	}
-	if value, ok := tcuo.mutation.Slug(); ok {
+	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(trustcenter.FieldSlug, field.TypeString, value)
 	}
-	if tcuo.mutation.SlugCleared() {
+	if _u.mutation.SlugCleared() {
 		_spec.ClearField(trustcenter.FieldSlug, field.TypeString)
 	}
-	if tcuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -962,10 +962,10 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -976,13 +976,13 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcuo.mutation.CustomDomainCleared() {
+	if _u.mutation.CustomDomainCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -993,10 +993,10 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcuo.mutation.CustomDomainIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.CustomDomainIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1007,13 +1007,13 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenter
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcuo.mutation.SettingCleared() {
+	if _u.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -1024,10 +1024,10 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcuo.mutation.SettingIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -1038,13 +1038,13 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcuo.mutation.TrustCenterSubprocessorsCleared() {
+	if _u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1055,10 +1055,10 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcuo.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !tcuo.mutation.TrustCenterSubprocessorsCleared() {
+	if nodes := _u.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1069,13 +1069,13 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcuo.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1086,19 +1086,19 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcuo.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = tcuo.schemaConfig.TrustCenter
-	ctx = internal.NewSchemaConfigContext(ctx, tcuo.schemaConfig)
-	_spec.AddModifiers(tcuo.modifiers...)
-	_node = &TrustCenter{config: tcuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TrustCenter
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TrustCenter{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tcuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenter.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1106,6 +1106,6 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 		}
 		return nil, err
 	}
-	tcuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

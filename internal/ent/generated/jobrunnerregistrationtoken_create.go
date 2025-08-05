@@ -23,205 +23,205 @@ type JobRunnerRegistrationTokenCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetCreatedAt(t time.Time) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetCreatedAt(t)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetCreatedAt(v time.Time) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableCreatedAt(t *time.Time) *JobRunnerRegistrationTokenCreate {
-	if t != nil {
-		jrrtc.SetCreatedAt(*t)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableCreatedAt(v *time.Time) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetUpdatedAt(t time.Time) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetUpdatedAt(t)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetUpdatedAt(v time.Time) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableUpdatedAt(t *time.Time) *JobRunnerRegistrationTokenCreate {
-	if t != nil {
-		jrrtc.SetUpdatedAt(*t)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableUpdatedAt(v *time.Time) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetCreatedBy(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetCreatedBy(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetCreatedBy(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableCreatedBy(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetCreatedBy(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableCreatedBy(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetUpdatedBy(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetUpdatedBy(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetUpdatedBy(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableUpdatedBy(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetUpdatedBy(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableUpdatedBy(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetDeletedAt(t time.Time) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetDeletedAt(t)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetDeletedAt(v time.Time) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableDeletedAt(t *time.Time) *JobRunnerRegistrationTokenCreate {
-	if t != nil {
-		jrrtc.SetDeletedAt(*t)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableDeletedAt(v *time.Time) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetDeletedBy(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetDeletedBy(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetDeletedBy(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableDeletedBy(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetDeletedBy(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableDeletedBy(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetTags(s []string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetTags(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetTags(v []string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetOwnerID(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetOwnerID(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetOwnerID(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableOwnerID(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetOwnerID(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableOwnerID(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetToken sets the "token" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetToken(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetToken(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetToken(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetToken(v)
+	return _c
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableToken(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetToken(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableToken(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetToken(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetExpiresAt(t time.Time) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetExpiresAt(t)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetExpiresAt(v time.Time) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableExpiresAt(t *time.Time) *JobRunnerRegistrationTokenCreate {
-	if t != nil {
-		jrrtc.SetExpiresAt(*t)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableExpiresAt(v *time.Time) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetLastUsedAt(t time.Time) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetLastUsedAt(t)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetLastUsedAt(v time.Time) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetLastUsedAt(v)
+	return _c
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableLastUsedAt(t *time.Time) *JobRunnerRegistrationTokenCreate {
-	if t != nil {
-		jrrtc.SetLastUsedAt(*t)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableLastUsedAt(v *time.Time) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetLastUsedAt(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetJobRunnerID(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetJobRunnerID(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetJobRunnerID(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetJobRunnerID(v)
+	return _c
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableJobRunnerID(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetJobRunnerID(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableJobRunnerID(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetJobRunnerID(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetID(s string) *JobRunnerRegistrationTokenCreate {
-	jrrtc.mutation.SetID(s)
-	return jrrtc
+func (_c *JobRunnerRegistrationTokenCreate) SetID(v string) *JobRunnerRegistrationTokenCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetNillableID(s *string) *JobRunnerRegistrationTokenCreate {
-	if s != nil {
-		jrrtc.SetID(*s)
+func (_c *JobRunnerRegistrationTokenCreate) SetNillableID(v *string) *JobRunnerRegistrationTokenCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return jrrtc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetOwner(o *Organization) *JobRunnerRegistrationTokenCreate {
-	return jrrtc.SetOwnerID(o.ID)
+func (_c *JobRunnerRegistrationTokenCreate) SetOwner(v *Organization) *JobRunnerRegistrationTokenCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SetJobRunner(j *JobRunner) *JobRunnerRegistrationTokenCreate {
-	return jrrtc.SetJobRunnerID(j.ID)
+func (_c *JobRunnerRegistrationTokenCreate) SetJobRunner(v *JobRunner) *JobRunnerRegistrationTokenCreate {
+	return _c.SetJobRunnerID(v.ID)
 }
 
 // Mutation returns the JobRunnerRegistrationTokenMutation object of the builder.
-func (jrrtc *JobRunnerRegistrationTokenCreate) Mutation() *JobRunnerRegistrationTokenMutation {
-	return jrrtc.mutation
+func (_c *JobRunnerRegistrationTokenCreate) Mutation() *JobRunnerRegistrationTokenMutation {
+	return _c.mutation
 }
 
 // Save creates the JobRunnerRegistrationToken in the database.
-func (jrrtc *JobRunnerRegistrationTokenCreate) Save(ctx context.Context) (*JobRunnerRegistrationToken, error) {
-	if err := jrrtc.defaults(); err != nil {
+func (_c *JobRunnerRegistrationTokenCreate) Save(ctx context.Context) (*JobRunnerRegistrationToken, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jrrtc.sqlSave, jrrtc.mutation, jrrtc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (jrrtc *JobRunnerRegistrationTokenCreate) SaveX(ctx context.Context) *JobRunnerRegistrationToken {
-	v, err := jrrtc.Save(ctx)
+func (_c *JobRunnerRegistrationTokenCreate) SaveX(ctx context.Context) *JobRunnerRegistrationToken {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -229,81 +229,81 @@ func (jrrtc *JobRunnerRegistrationTokenCreate) SaveX(ctx context.Context) *JobRu
 }
 
 // Exec executes the query.
-func (jrrtc *JobRunnerRegistrationTokenCreate) Exec(ctx context.Context) error {
-	_, err := jrrtc.Save(ctx)
+func (_c *JobRunnerRegistrationTokenCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrrtc *JobRunnerRegistrationTokenCreate) ExecX(ctx context.Context) {
-	if err := jrrtc.Exec(ctx); err != nil {
+func (_c *JobRunnerRegistrationTokenCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jrrtc *JobRunnerRegistrationTokenCreate) defaults() error {
-	if _, ok := jrrtc.mutation.CreatedAt(); !ok {
+func (_c *JobRunnerRegistrationTokenCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if jobrunnerregistrationtoken.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunnerregistrationtoken.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunnerregistrationtoken.DefaultCreatedAt()
-		jrrtc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := jrrtc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if jobrunnerregistrationtoken.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunnerregistrationtoken.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunnerregistrationtoken.DefaultUpdatedAt()
-		jrrtc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := jrrtc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := jobrunnerregistrationtoken.DefaultTags
-		jrrtc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := jrrtc.mutation.Token(); !ok {
+	if _, ok := _c.mutation.Token(); !ok {
 		if jobrunnerregistrationtoken.DefaultToken == nil {
 			return fmt.Errorf("generated: uninitialized jobrunnerregistrationtoken.DefaultToken (forgotten import generated/runtime?)")
 		}
 		v := jobrunnerregistrationtoken.DefaultToken()
-		jrrtc.mutation.SetToken(v)
+		_c.mutation.SetToken(v)
 	}
-	if _, ok := jrrtc.mutation.ExpiresAt(); !ok {
+	if _, ok := _c.mutation.ExpiresAt(); !ok {
 		v := jobrunnerregistrationtoken.DefaultExpiresAt
-		jrrtc.mutation.SetExpiresAt(v)
+		_c.mutation.SetExpiresAt(v)
 	}
-	if _, ok := jrrtc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if jobrunnerregistrationtoken.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized jobrunnerregistrationtoken.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := jobrunnerregistrationtoken.DefaultID()
-		jrrtc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jrrtc *JobRunnerRegistrationTokenCreate) check() error {
-	if v, ok := jrrtc.mutation.OwnerID(); ok {
+func (_c *JobRunnerRegistrationTokenCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := jobrunnerregistrationtoken.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "JobRunnerRegistrationToken.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := jrrtc.mutation.Token(); !ok {
+	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "JobRunnerRegistrationToken.token"`)}
 	}
-	if _, ok := jrrtc.mutation.ExpiresAt(); !ok {
+	if _, ok := _c.mutation.ExpiresAt(); !ok {
 		return &ValidationError{Name: "expires_at", err: errors.New(`generated: missing required field "JobRunnerRegistrationToken.expires_at"`)}
 	}
 	return nil
 }
 
-func (jrrtc *JobRunnerRegistrationTokenCreate) sqlSave(ctx context.Context) (*JobRunnerRegistrationToken, error) {
-	if err := jrrtc.check(); err != nil {
+func (_c *JobRunnerRegistrationTokenCreate) sqlSave(ctx context.Context) (*JobRunnerRegistrationToken, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := jrrtc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, jrrtc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -316,62 +316,62 @@ func (jrrtc *JobRunnerRegistrationTokenCreate) sqlSave(ctx context.Context) (*Jo
 			return nil, fmt.Errorf("unexpected JobRunnerRegistrationToken.ID type: %T", _spec.ID.Value)
 		}
 	}
-	jrrtc.mutation.id = &_node.ID
-	jrrtc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (jrrtc *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistrationToken, *sqlgraph.CreateSpec) {
+func (_c *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistrationToken, *sqlgraph.CreateSpec) {
 	var (
-		_node = &JobRunnerRegistrationToken{config: jrrtc.config}
+		_node = &JobRunnerRegistrationToken{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(jobrunnerregistrationtoken.Table, sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString))
 	)
-	_spec.Schema = jrrtc.schemaConfig.JobRunnerRegistrationToken
-	if id, ok := jrrtc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.JobRunnerRegistrationToken
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := jrrtc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := jrrtc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := jrrtc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := jrrtc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := jrrtc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := jrrtc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := jrrtc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := jrrtc.mutation.Token(); ok {
+	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldToken, field.TypeString, value)
 		_node.Token = value
 	}
-	if value, ok := jrrtc.mutation.ExpiresAt(); ok {
+	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = value
 	}
-	if value, ok := jrrtc.mutation.LastUsedAt(); ok {
+	if value, ok := _c.mutation.LastUsedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldLastUsedAt, field.TypeTime, value)
 		_node.LastUsedAt = &value
 	}
-	if nodes := jrrtc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -382,14 +382,14 @@ func (jrrtc *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistrat
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtc.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _c.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := jrrtc.mutation.JobRunnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobRunnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -400,7 +400,7 @@ func (jrrtc *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistrat
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtc.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _c.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -418,16 +418,16 @@ type JobRunnerRegistrationTokenCreateBulk struct {
 }
 
 // Save creates the JobRunnerRegistrationToken entities in the database.
-func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) Save(ctx context.Context) ([]*JobRunnerRegistrationToken, error) {
-	if jrrtcb.err != nil {
-		return nil, jrrtcb.err
+func (_c *JobRunnerRegistrationTokenCreateBulk) Save(ctx context.Context) ([]*JobRunnerRegistrationToken, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(jrrtcb.builders))
-	nodes := make([]*JobRunnerRegistrationToken, len(jrrtcb.builders))
-	mutators := make([]Mutator, len(jrrtcb.builders))
-	for i := range jrrtcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*JobRunnerRegistrationToken, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := jrrtcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*JobRunnerRegistrationTokenMutation)
@@ -441,11 +441,11 @@ func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) Save(ctx context.Context) ([
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, jrrtcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, jrrtcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -465,7 +465,7 @@ func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) Save(ctx context.Context) ([
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, jrrtcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -473,8 +473,8 @@ func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) Save(ctx context.Context) ([
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) SaveX(ctx context.Context) []*JobRunnerRegistrationToken {
-	v, err := jrrtcb.Save(ctx)
+func (_c *JobRunnerRegistrationTokenCreateBulk) SaveX(ctx context.Context) []*JobRunnerRegistrationToken {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -482,14 +482,14 @@ func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) SaveX(ctx context.Context) [
 }
 
 // Exec executes the query.
-func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) Exec(ctx context.Context) error {
-	_, err := jrrtcb.Save(ctx)
+func (_c *JobRunnerRegistrationTokenCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrrtcb *JobRunnerRegistrationTokenCreateBulk) ExecX(ctx context.Context) {
-	if err := jrrtcb.Exec(ctx); err != nil {
+func (_c *JobRunnerRegistrationTokenCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

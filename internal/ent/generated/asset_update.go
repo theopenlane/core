@@ -33,490 +33,490 @@ type AssetUpdate struct {
 }
 
 // Where appends a list predicates to the AssetUpdate builder.
-func (au *AssetUpdate) Where(ps ...predicate.Asset) *AssetUpdate {
-	au.mutation.Where(ps...)
-	return au
+func (_u *AssetUpdate) Where(ps ...predicate.Asset) *AssetUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (au *AssetUpdate) SetUpdatedAt(t time.Time) *AssetUpdate {
-	au.mutation.SetUpdatedAt(t)
-	return au
+func (_u *AssetUpdate) SetUpdatedAt(v time.Time) *AssetUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (au *AssetUpdate) ClearUpdatedAt() *AssetUpdate {
-	au.mutation.ClearUpdatedAt()
-	return au
+func (_u *AssetUpdate) ClearUpdatedAt() *AssetUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (au *AssetUpdate) SetUpdatedBy(s string) *AssetUpdate {
-	au.mutation.SetUpdatedBy(s)
-	return au
+func (_u *AssetUpdate) SetUpdatedBy(v string) *AssetUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableUpdatedBy(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetUpdatedBy(*s)
+func (_u *AssetUpdate) SetNillableUpdatedBy(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (au *AssetUpdate) ClearUpdatedBy() *AssetUpdate {
-	au.mutation.ClearUpdatedBy()
-	return au
+func (_u *AssetUpdate) ClearUpdatedBy() *AssetUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (au *AssetUpdate) SetDeletedAt(t time.Time) *AssetUpdate {
-	au.mutation.SetDeletedAt(t)
-	return au
+func (_u *AssetUpdate) SetDeletedAt(v time.Time) *AssetUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableDeletedAt(t *time.Time) *AssetUpdate {
-	if t != nil {
-		au.SetDeletedAt(*t)
+func (_u *AssetUpdate) SetNillableDeletedAt(v *time.Time) *AssetUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (au *AssetUpdate) ClearDeletedAt() *AssetUpdate {
-	au.mutation.ClearDeletedAt()
-	return au
+func (_u *AssetUpdate) ClearDeletedAt() *AssetUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (au *AssetUpdate) SetDeletedBy(s string) *AssetUpdate {
-	au.mutation.SetDeletedBy(s)
-	return au
+func (_u *AssetUpdate) SetDeletedBy(v string) *AssetUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableDeletedBy(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetDeletedBy(*s)
+func (_u *AssetUpdate) SetNillableDeletedBy(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (au *AssetUpdate) ClearDeletedBy() *AssetUpdate {
-	au.mutation.ClearDeletedBy()
-	return au
+func (_u *AssetUpdate) ClearDeletedBy() *AssetUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (au *AssetUpdate) SetTags(s []string) *AssetUpdate {
-	au.mutation.SetTags(s)
-	return au
+func (_u *AssetUpdate) SetTags(v []string) *AssetUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (au *AssetUpdate) AppendTags(s []string) *AssetUpdate {
-	au.mutation.AppendTags(s)
-	return au
+// AppendTags appends value to the "tags" field.
+func (_u *AssetUpdate) AppendTags(v []string) *AssetUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (au *AssetUpdate) ClearTags() *AssetUpdate {
-	au.mutation.ClearTags()
-	return au
+func (_u *AssetUpdate) ClearTags() *AssetUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (au *AssetUpdate) SetOwnerID(s string) *AssetUpdate {
-	au.mutation.SetOwnerID(s)
-	return au
+func (_u *AssetUpdate) SetOwnerID(v string) *AssetUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableOwnerID(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetOwnerID(*s)
+func (_u *AssetUpdate) SetNillableOwnerID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (au *AssetUpdate) ClearOwnerID() *AssetUpdate {
-	au.mutation.ClearOwnerID()
-	return au
+func (_u *AssetUpdate) ClearOwnerID() *AssetUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetAssetType sets the "asset_type" field.
-func (au *AssetUpdate) SetAssetType(et enums.AssetType) *AssetUpdate {
-	au.mutation.SetAssetType(et)
-	return au
+func (_u *AssetUpdate) SetAssetType(v enums.AssetType) *AssetUpdate {
+	_u.mutation.SetAssetType(v)
+	return _u
 }
 
 // SetNillableAssetType sets the "asset_type" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableAssetType(et *enums.AssetType) *AssetUpdate {
-	if et != nil {
-		au.SetAssetType(*et)
+func (_u *AssetUpdate) SetNillableAssetType(v *enums.AssetType) *AssetUpdate {
+	if v != nil {
+		_u.SetAssetType(*v)
 	}
-	return au
+	return _u
 }
 
 // SetName sets the "name" field.
-func (au *AssetUpdate) SetName(s string) *AssetUpdate {
-	au.mutation.SetName(s)
-	return au
+func (_u *AssetUpdate) SetName(v string) *AssetUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableName(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetName(*s)
+func (_u *AssetUpdate) SetNillableName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return au
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (au *AssetUpdate) SetDescription(s string) *AssetUpdate {
-	au.mutation.SetDescription(s)
-	return au
+func (_u *AssetUpdate) SetDescription(v string) *AssetUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableDescription(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetDescription(*s)
+func (_u *AssetUpdate) SetNillableDescription(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (au *AssetUpdate) ClearDescription() *AssetUpdate {
-	au.mutation.ClearDescription()
-	return au
+func (_u *AssetUpdate) ClearDescription() *AssetUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetIdentifier sets the "identifier" field.
-func (au *AssetUpdate) SetIdentifier(s string) *AssetUpdate {
-	au.mutation.SetIdentifier(s)
-	return au
+func (_u *AssetUpdate) SetIdentifier(v string) *AssetUpdate {
+	_u.mutation.SetIdentifier(v)
+	return _u
 }
 
 // SetNillableIdentifier sets the "identifier" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableIdentifier(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetIdentifier(*s)
+func (_u *AssetUpdate) SetNillableIdentifier(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetIdentifier(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearIdentifier clears the value of the "identifier" field.
-func (au *AssetUpdate) ClearIdentifier() *AssetUpdate {
-	au.mutation.ClearIdentifier()
-	return au
+func (_u *AssetUpdate) ClearIdentifier() *AssetUpdate {
+	_u.mutation.ClearIdentifier()
+	return _u
 }
 
 // SetWebsite sets the "website" field.
-func (au *AssetUpdate) SetWebsite(s string) *AssetUpdate {
-	au.mutation.SetWebsite(s)
-	return au
+func (_u *AssetUpdate) SetWebsite(v string) *AssetUpdate {
+	_u.mutation.SetWebsite(v)
+	return _u
 }
 
 // SetNillableWebsite sets the "website" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableWebsite(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetWebsite(*s)
+func (_u *AssetUpdate) SetNillableWebsite(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetWebsite(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearWebsite clears the value of the "website" field.
-func (au *AssetUpdate) ClearWebsite() *AssetUpdate {
-	au.mutation.ClearWebsite()
-	return au
+func (_u *AssetUpdate) ClearWebsite() *AssetUpdate {
+	_u.mutation.ClearWebsite()
+	return _u
 }
 
 // SetCpe sets the "cpe" field.
-func (au *AssetUpdate) SetCpe(s string) *AssetUpdate {
-	au.mutation.SetCpe(s)
-	return au
+func (_u *AssetUpdate) SetCpe(v string) *AssetUpdate {
+	_u.mutation.SetCpe(v)
+	return _u
 }
 
 // SetNillableCpe sets the "cpe" field if the given value is not nil.
-func (au *AssetUpdate) SetNillableCpe(s *string) *AssetUpdate {
-	if s != nil {
-		au.SetCpe(*s)
+func (_u *AssetUpdate) SetNillableCpe(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetCpe(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearCpe clears the value of the "cpe" field.
-func (au *AssetUpdate) ClearCpe() *AssetUpdate {
-	au.mutation.ClearCpe()
-	return au
+func (_u *AssetUpdate) ClearCpe() *AssetUpdate {
+	_u.mutation.ClearCpe()
+	return _u
 }
 
 // SetCategories sets the "categories" field.
-func (au *AssetUpdate) SetCategories(s []string) *AssetUpdate {
-	au.mutation.SetCategories(s)
-	return au
+func (_u *AssetUpdate) SetCategories(v []string) *AssetUpdate {
+	_u.mutation.SetCategories(v)
+	return _u
 }
 
-// AppendCategories appends s to the "categories" field.
-func (au *AssetUpdate) AppendCategories(s []string) *AssetUpdate {
-	au.mutation.AppendCategories(s)
-	return au
+// AppendCategories appends value to the "categories" field.
+func (_u *AssetUpdate) AppendCategories(v []string) *AssetUpdate {
+	_u.mutation.AppendCategories(v)
+	return _u
 }
 
 // ClearCategories clears the value of the "categories" field.
-func (au *AssetUpdate) ClearCategories() *AssetUpdate {
-	au.mutation.ClearCategories()
-	return au
+func (_u *AssetUpdate) ClearCategories() *AssetUpdate {
+	_u.mutation.ClearCategories()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (au *AssetUpdate) SetOwner(o *Organization) *AssetUpdate {
-	return au.SetOwnerID(o.ID)
+func (_u *AssetUpdate) SetOwner(v *Organization) *AssetUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (au *AssetUpdate) AddBlockedGroupIDs(ids ...string) *AssetUpdate {
-	au.mutation.AddBlockedGroupIDs(ids...)
-	return au
+func (_u *AssetUpdate) AddBlockedGroupIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (au *AssetUpdate) AddBlockedGroups(g ...*Group) *AssetUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdate) AddBlockedGroups(v ...*Group) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (au *AssetUpdate) AddEditorIDs(ids ...string) *AssetUpdate {
-	au.mutation.AddEditorIDs(ids...)
-	return au
+func (_u *AssetUpdate) AddEditorIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (au *AssetUpdate) AddEditors(g ...*Group) *AssetUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdate) AddEditors(v ...*Group) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (au *AssetUpdate) AddViewerIDs(ids ...string) *AssetUpdate {
-	au.mutation.AddViewerIDs(ids...)
-	return au
+func (_u *AssetUpdate) AddViewerIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (au *AssetUpdate) AddViewers(g ...*Group) *AssetUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdate) AddViewers(v ...*Group) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (au *AssetUpdate) AddScanIDs(ids ...string) *AssetUpdate {
-	au.mutation.AddScanIDs(ids...)
-	return au
+func (_u *AssetUpdate) AddScanIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (au *AssetUpdate) AddScans(s ...*Scan) *AssetUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *AssetUpdate) AddScans(v ...*Scan) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (au *AssetUpdate) AddEntityIDs(ids ...string) *AssetUpdate {
-	au.mutation.AddEntityIDs(ids...)
-	return au
+func (_u *AssetUpdate) AddEntityIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (au *AssetUpdate) AddEntities(e ...*Entity) *AssetUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *AssetUpdate) AddEntities(v ...*Entity) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (au *AssetUpdate) AddControlIDs(ids ...string) *AssetUpdate {
-	au.mutation.AddControlIDs(ids...)
-	return au
+func (_u *AssetUpdate) AddControlIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (au *AssetUpdate) AddControls(c ...*Control) *AssetUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *AssetUpdate) AddControls(v ...*Control) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // Mutation returns the AssetMutation object of the builder.
-func (au *AssetUpdate) Mutation() *AssetMutation {
-	return au.mutation
+func (_u *AssetUpdate) Mutation() *AssetMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (au *AssetUpdate) ClearOwner() *AssetUpdate {
-	au.mutation.ClearOwner()
-	return au
+func (_u *AssetUpdate) ClearOwner() *AssetUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (au *AssetUpdate) ClearBlockedGroups() *AssetUpdate {
-	au.mutation.ClearBlockedGroups()
-	return au
+func (_u *AssetUpdate) ClearBlockedGroups() *AssetUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (au *AssetUpdate) RemoveBlockedGroupIDs(ids ...string) *AssetUpdate {
-	au.mutation.RemoveBlockedGroupIDs(ids...)
-	return au
+func (_u *AssetUpdate) RemoveBlockedGroupIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (au *AssetUpdate) RemoveBlockedGroups(g ...*Group) *AssetUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdate) RemoveBlockedGroups(v ...*Group) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (au *AssetUpdate) ClearEditors() *AssetUpdate {
-	au.mutation.ClearEditors()
-	return au
+func (_u *AssetUpdate) ClearEditors() *AssetUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (au *AssetUpdate) RemoveEditorIDs(ids ...string) *AssetUpdate {
-	au.mutation.RemoveEditorIDs(ids...)
-	return au
+func (_u *AssetUpdate) RemoveEditorIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (au *AssetUpdate) RemoveEditors(g ...*Group) *AssetUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdate) RemoveEditors(v ...*Group) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (au *AssetUpdate) ClearViewers() *AssetUpdate {
-	au.mutation.ClearViewers()
-	return au
+func (_u *AssetUpdate) ClearViewers() *AssetUpdate {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (au *AssetUpdate) RemoveViewerIDs(ids ...string) *AssetUpdate {
-	au.mutation.RemoveViewerIDs(ids...)
-	return au
+func (_u *AssetUpdate) RemoveViewerIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (au *AssetUpdate) RemoveViewers(g ...*Group) *AssetUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdate) RemoveViewers(v ...*Group) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (au *AssetUpdate) ClearScans() *AssetUpdate {
-	au.mutation.ClearScans()
-	return au
+func (_u *AssetUpdate) ClearScans() *AssetUpdate {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (au *AssetUpdate) RemoveScanIDs(ids ...string) *AssetUpdate {
-	au.mutation.RemoveScanIDs(ids...)
-	return au
+func (_u *AssetUpdate) RemoveScanIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (au *AssetUpdate) RemoveScans(s ...*Scan) *AssetUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *AssetUpdate) RemoveScans(v ...*Scan) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (au *AssetUpdate) ClearEntities() *AssetUpdate {
-	au.mutation.ClearEntities()
-	return au
+func (_u *AssetUpdate) ClearEntities() *AssetUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (au *AssetUpdate) RemoveEntityIDs(ids ...string) *AssetUpdate {
-	au.mutation.RemoveEntityIDs(ids...)
-	return au
+func (_u *AssetUpdate) RemoveEntityIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (au *AssetUpdate) RemoveEntities(e ...*Entity) *AssetUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *AssetUpdate) RemoveEntities(v ...*Entity) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (au *AssetUpdate) ClearControls() *AssetUpdate {
-	au.mutation.ClearControls()
-	return au
+func (_u *AssetUpdate) ClearControls() *AssetUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (au *AssetUpdate) RemoveControlIDs(ids ...string) *AssetUpdate {
-	au.mutation.RemoveControlIDs(ids...)
-	return au
+func (_u *AssetUpdate) RemoveControlIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (au *AssetUpdate) RemoveControls(c ...*Control) *AssetUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *AssetUpdate) RemoveControls(v ...*Control) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (au *AssetUpdate) Save(ctx context.Context) (int, error) {
-	if err := au.defaults(); err != nil {
+func (_u *AssetUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (au *AssetUpdate) SaveX(ctx context.Context) int {
-	affected, err := au.Save(ctx)
+func (_u *AssetUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -524,43 +524,43 @@ func (au *AssetUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (au *AssetUpdate) Exec(ctx context.Context) error {
-	_, err := au.Save(ctx)
+func (_u *AssetUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (au *AssetUpdate) ExecX(ctx context.Context) {
-	if err := au.Exec(ctx); err != nil {
+func (_u *AssetUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (au *AssetUpdate) defaults() error {
-	if _, ok := au.mutation.UpdatedAt(); !ok && !au.mutation.UpdatedAtCleared() {
+func (_u *AssetUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if asset.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized asset.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := asset.UpdateDefaultUpdatedAt()
-		au.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (au *AssetUpdate) check() error {
-	if v, ok := au.mutation.OwnerID(); ok {
+func (_u *AssetUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := asset.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := au.mutation.AssetType(); ok {
+	if v, ok := _u.mutation.AssetType(); ok {
 		if err := asset.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "Asset.asset_type": %w`, err)}
 		}
 	}
-	if v, ok := au.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := asset.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
 		}
@@ -569,106 +569,106 @@ func (au *AssetUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (au *AssetUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetUpdate {
-	au.modifiers = append(au.modifiers, modifiers...)
-	return au
+func (_u *AssetUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := au.check(); err != nil {
-		return n, err
+func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(asset.Table, asset.Columns, sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString))
-	if ps := au.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if au.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(asset.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := au.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(asset.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if au.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(asset.FieldUpdatedAt, field.TypeTime)
 	}
-	if au.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(asset.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := au.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(asset.FieldUpdatedBy, field.TypeString, value)
 	}
-	if au.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(asset.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := au.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(asset.FieldDeletedAt, field.TypeTime, value)
 	}
-	if au.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(asset.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := au.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(asset.FieldDeletedBy, field.TypeString, value)
 	}
-	if au.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(asset.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := au.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(asset.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := au.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, asset.FieldTags, value)
 		})
 	}
-	if au.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
 	}
-	if value, ok := au.mutation.AssetType(); ok {
+	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(asset.FieldAssetType, field.TypeEnum, value)
 	}
-	if value, ok := au.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(asset.FieldName, field.TypeString, value)
 	}
-	if value, ok := au.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(asset.FieldDescription, field.TypeString, value)
 	}
-	if au.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(asset.FieldDescription, field.TypeString)
 	}
-	if value, ok := au.mutation.Identifier(); ok {
+	if value, ok := _u.mutation.Identifier(); ok {
 		_spec.SetField(asset.FieldIdentifier, field.TypeString, value)
 	}
-	if au.mutation.IdentifierCleared() {
+	if _u.mutation.IdentifierCleared() {
 		_spec.ClearField(asset.FieldIdentifier, field.TypeString)
 	}
-	if value, ok := au.mutation.Website(); ok {
+	if value, ok := _u.mutation.Website(); ok {
 		_spec.SetField(asset.FieldWebsite, field.TypeString, value)
 	}
-	if au.mutation.WebsiteCleared() {
+	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(asset.FieldWebsite, field.TypeString)
 	}
-	if value, ok := au.mutation.Cpe(); ok {
+	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(asset.FieldCpe, field.TypeString, value)
 	}
-	if au.mutation.CpeCleared() {
+	if _u.mutation.CpeCleared() {
 		_spec.ClearField(asset.FieldCpe, field.TypeString)
 	}
-	if value, ok := au.mutation.Categories(); ok {
+	if value, ok := _u.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 	}
-	if value, ok := au.mutation.AppendedCategories(); ok {
+	if value, ok := _u.mutation.AppendedCategories(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, asset.FieldCategories, value)
 		})
 	}
-	if au.mutation.CategoriesCleared() {
+	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(asset.FieldCategories, field.TypeJSON)
 	}
-	if au.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -679,10 +679,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -693,13 +693,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -710,10 +710,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !au.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -724,13 +724,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -741,13 +741,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -758,10 +758,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !au.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -772,13 +772,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -789,13 +789,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -806,10 +806,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedViewersIDs(); len(nodes) > 0 && !au.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -820,13 +820,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -837,13 +837,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -854,10 +854,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedScansIDs(); len(nodes) > 0 && !au.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -868,13 +868,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -885,13 +885,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -902,10 +902,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !au.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -916,13 +916,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -933,13 +933,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -950,10 +950,10 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.ControlAssets
+		edge.Schema = _u.schemaConfig.ControlAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedControlsIDs(); len(nodes) > 0 && !au.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -964,13 +964,13 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.ControlAssets
+		edge.Schema = _u.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -981,16 +981,16 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = au.schemaConfig.ControlAssets
+		edge.Schema = _u.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = au.schemaConfig.Asset
-	ctx = internal.NewSchemaConfigContext(ctx, au.schemaConfig)
-	_spec.AddModifiers(au.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Asset
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{asset.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -998,8 +998,8 @@ func (au *AssetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	au.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // AssetUpdateOne is the builder for updating a single Asset entity.
@@ -1012,497 +1012,497 @@ type AssetUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (auo *AssetUpdateOne) SetUpdatedAt(t time.Time) *AssetUpdateOne {
-	auo.mutation.SetUpdatedAt(t)
-	return auo
+func (_u *AssetUpdateOne) SetUpdatedAt(v time.Time) *AssetUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (auo *AssetUpdateOne) ClearUpdatedAt() *AssetUpdateOne {
-	auo.mutation.ClearUpdatedAt()
-	return auo
+func (_u *AssetUpdateOne) ClearUpdatedAt() *AssetUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (auo *AssetUpdateOne) SetUpdatedBy(s string) *AssetUpdateOne {
-	auo.mutation.SetUpdatedBy(s)
-	return auo
+func (_u *AssetUpdateOne) SetUpdatedBy(v string) *AssetUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableUpdatedBy(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetUpdatedBy(*s)
+func (_u *AssetUpdateOne) SetNillableUpdatedBy(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (auo *AssetUpdateOne) ClearUpdatedBy() *AssetUpdateOne {
-	auo.mutation.ClearUpdatedBy()
-	return auo
+func (_u *AssetUpdateOne) ClearUpdatedBy() *AssetUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (auo *AssetUpdateOne) SetDeletedAt(t time.Time) *AssetUpdateOne {
-	auo.mutation.SetDeletedAt(t)
-	return auo
+func (_u *AssetUpdateOne) SetDeletedAt(v time.Time) *AssetUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableDeletedAt(t *time.Time) *AssetUpdateOne {
-	if t != nil {
-		auo.SetDeletedAt(*t)
+func (_u *AssetUpdateOne) SetNillableDeletedAt(v *time.Time) *AssetUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (auo *AssetUpdateOne) ClearDeletedAt() *AssetUpdateOne {
-	auo.mutation.ClearDeletedAt()
-	return auo
+func (_u *AssetUpdateOne) ClearDeletedAt() *AssetUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (auo *AssetUpdateOne) SetDeletedBy(s string) *AssetUpdateOne {
-	auo.mutation.SetDeletedBy(s)
-	return auo
+func (_u *AssetUpdateOne) SetDeletedBy(v string) *AssetUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableDeletedBy(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetDeletedBy(*s)
+func (_u *AssetUpdateOne) SetNillableDeletedBy(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (auo *AssetUpdateOne) ClearDeletedBy() *AssetUpdateOne {
-	auo.mutation.ClearDeletedBy()
-	return auo
+func (_u *AssetUpdateOne) ClearDeletedBy() *AssetUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (auo *AssetUpdateOne) SetTags(s []string) *AssetUpdateOne {
-	auo.mutation.SetTags(s)
-	return auo
+func (_u *AssetUpdateOne) SetTags(v []string) *AssetUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (auo *AssetUpdateOne) AppendTags(s []string) *AssetUpdateOne {
-	auo.mutation.AppendTags(s)
-	return auo
+// AppendTags appends value to the "tags" field.
+func (_u *AssetUpdateOne) AppendTags(v []string) *AssetUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (auo *AssetUpdateOne) ClearTags() *AssetUpdateOne {
-	auo.mutation.ClearTags()
-	return auo
+func (_u *AssetUpdateOne) ClearTags() *AssetUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (auo *AssetUpdateOne) SetOwnerID(s string) *AssetUpdateOne {
-	auo.mutation.SetOwnerID(s)
-	return auo
+func (_u *AssetUpdateOne) SetOwnerID(v string) *AssetUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableOwnerID(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetOwnerID(*s)
+func (_u *AssetUpdateOne) SetNillableOwnerID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (auo *AssetUpdateOne) ClearOwnerID() *AssetUpdateOne {
-	auo.mutation.ClearOwnerID()
-	return auo
+func (_u *AssetUpdateOne) ClearOwnerID() *AssetUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetAssetType sets the "asset_type" field.
-func (auo *AssetUpdateOne) SetAssetType(et enums.AssetType) *AssetUpdateOne {
-	auo.mutation.SetAssetType(et)
-	return auo
+func (_u *AssetUpdateOne) SetAssetType(v enums.AssetType) *AssetUpdateOne {
+	_u.mutation.SetAssetType(v)
+	return _u
 }
 
 // SetNillableAssetType sets the "asset_type" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableAssetType(et *enums.AssetType) *AssetUpdateOne {
-	if et != nil {
-		auo.SetAssetType(*et)
+func (_u *AssetUpdateOne) SetNillableAssetType(v *enums.AssetType) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAssetType(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetName sets the "name" field.
-func (auo *AssetUpdateOne) SetName(s string) *AssetUpdateOne {
-	auo.mutation.SetName(s)
-	return auo
+func (_u *AssetUpdateOne) SetName(v string) *AssetUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableName(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetName(*s)
+func (_u *AssetUpdateOne) SetNillableName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (auo *AssetUpdateOne) SetDescription(s string) *AssetUpdateOne {
-	auo.mutation.SetDescription(s)
-	return auo
+func (_u *AssetUpdateOne) SetDescription(v string) *AssetUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableDescription(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetDescription(*s)
+func (_u *AssetUpdateOne) SetNillableDescription(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (auo *AssetUpdateOne) ClearDescription() *AssetUpdateOne {
-	auo.mutation.ClearDescription()
-	return auo
+func (_u *AssetUpdateOne) ClearDescription() *AssetUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetIdentifier sets the "identifier" field.
-func (auo *AssetUpdateOne) SetIdentifier(s string) *AssetUpdateOne {
-	auo.mutation.SetIdentifier(s)
-	return auo
+func (_u *AssetUpdateOne) SetIdentifier(v string) *AssetUpdateOne {
+	_u.mutation.SetIdentifier(v)
+	return _u
 }
 
 // SetNillableIdentifier sets the "identifier" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableIdentifier(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetIdentifier(*s)
+func (_u *AssetUpdateOne) SetNillableIdentifier(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetIdentifier(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearIdentifier clears the value of the "identifier" field.
-func (auo *AssetUpdateOne) ClearIdentifier() *AssetUpdateOne {
-	auo.mutation.ClearIdentifier()
-	return auo
+func (_u *AssetUpdateOne) ClearIdentifier() *AssetUpdateOne {
+	_u.mutation.ClearIdentifier()
+	return _u
 }
 
 // SetWebsite sets the "website" field.
-func (auo *AssetUpdateOne) SetWebsite(s string) *AssetUpdateOne {
-	auo.mutation.SetWebsite(s)
-	return auo
+func (_u *AssetUpdateOne) SetWebsite(v string) *AssetUpdateOne {
+	_u.mutation.SetWebsite(v)
+	return _u
 }
 
 // SetNillableWebsite sets the "website" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableWebsite(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetWebsite(*s)
+func (_u *AssetUpdateOne) SetNillableWebsite(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetWebsite(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearWebsite clears the value of the "website" field.
-func (auo *AssetUpdateOne) ClearWebsite() *AssetUpdateOne {
-	auo.mutation.ClearWebsite()
-	return auo
+func (_u *AssetUpdateOne) ClearWebsite() *AssetUpdateOne {
+	_u.mutation.ClearWebsite()
+	return _u
 }
 
 // SetCpe sets the "cpe" field.
-func (auo *AssetUpdateOne) SetCpe(s string) *AssetUpdateOne {
-	auo.mutation.SetCpe(s)
-	return auo
+func (_u *AssetUpdateOne) SetCpe(v string) *AssetUpdateOne {
+	_u.mutation.SetCpe(v)
+	return _u
 }
 
 // SetNillableCpe sets the "cpe" field if the given value is not nil.
-func (auo *AssetUpdateOne) SetNillableCpe(s *string) *AssetUpdateOne {
-	if s != nil {
-		auo.SetCpe(*s)
+func (_u *AssetUpdateOne) SetNillableCpe(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetCpe(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearCpe clears the value of the "cpe" field.
-func (auo *AssetUpdateOne) ClearCpe() *AssetUpdateOne {
-	auo.mutation.ClearCpe()
-	return auo
+func (_u *AssetUpdateOne) ClearCpe() *AssetUpdateOne {
+	_u.mutation.ClearCpe()
+	return _u
 }
 
 // SetCategories sets the "categories" field.
-func (auo *AssetUpdateOne) SetCategories(s []string) *AssetUpdateOne {
-	auo.mutation.SetCategories(s)
-	return auo
+func (_u *AssetUpdateOne) SetCategories(v []string) *AssetUpdateOne {
+	_u.mutation.SetCategories(v)
+	return _u
 }
 
-// AppendCategories appends s to the "categories" field.
-func (auo *AssetUpdateOne) AppendCategories(s []string) *AssetUpdateOne {
-	auo.mutation.AppendCategories(s)
-	return auo
+// AppendCategories appends value to the "categories" field.
+func (_u *AssetUpdateOne) AppendCategories(v []string) *AssetUpdateOne {
+	_u.mutation.AppendCategories(v)
+	return _u
 }
 
 // ClearCategories clears the value of the "categories" field.
-func (auo *AssetUpdateOne) ClearCategories() *AssetUpdateOne {
-	auo.mutation.ClearCategories()
-	return auo
+func (_u *AssetUpdateOne) ClearCategories() *AssetUpdateOne {
+	_u.mutation.ClearCategories()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (auo *AssetUpdateOne) SetOwner(o *Organization) *AssetUpdateOne {
-	return auo.SetOwnerID(o.ID)
+func (_u *AssetUpdateOne) SetOwner(v *Organization) *AssetUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (auo *AssetUpdateOne) AddBlockedGroupIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.AddBlockedGroupIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) AddBlockedGroupIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (auo *AssetUpdateOne) AddBlockedGroups(g ...*Group) *AssetUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdateOne) AddBlockedGroups(v ...*Group) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (auo *AssetUpdateOne) AddEditorIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.AddEditorIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) AddEditorIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (auo *AssetUpdateOne) AddEditors(g ...*Group) *AssetUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdateOne) AddEditors(v ...*Group) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (auo *AssetUpdateOne) AddViewerIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.AddViewerIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) AddViewerIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (auo *AssetUpdateOne) AddViewers(g ...*Group) *AssetUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdateOne) AddViewers(v ...*Group) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (auo *AssetUpdateOne) AddScanIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.AddScanIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) AddScanIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (auo *AssetUpdateOne) AddScans(s ...*Scan) *AssetUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *AssetUpdateOne) AddScans(v ...*Scan) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (auo *AssetUpdateOne) AddEntityIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.AddEntityIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) AddEntityIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (auo *AssetUpdateOne) AddEntities(e ...*Entity) *AssetUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *AssetUpdateOne) AddEntities(v ...*Entity) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (auo *AssetUpdateOne) AddControlIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.AddControlIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) AddControlIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (auo *AssetUpdateOne) AddControls(c ...*Control) *AssetUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *AssetUpdateOne) AddControls(v ...*Control) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // Mutation returns the AssetMutation object of the builder.
-func (auo *AssetUpdateOne) Mutation() *AssetMutation {
-	return auo.mutation
+func (_u *AssetUpdateOne) Mutation() *AssetMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (auo *AssetUpdateOne) ClearOwner() *AssetUpdateOne {
-	auo.mutation.ClearOwner()
-	return auo
+func (_u *AssetUpdateOne) ClearOwner() *AssetUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (auo *AssetUpdateOne) ClearBlockedGroups() *AssetUpdateOne {
-	auo.mutation.ClearBlockedGroups()
-	return auo
+func (_u *AssetUpdateOne) ClearBlockedGroups() *AssetUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (auo *AssetUpdateOne) RemoveBlockedGroupIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.RemoveBlockedGroupIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) RemoveBlockedGroupIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (auo *AssetUpdateOne) RemoveBlockedGroups(g ...*Group) *AssetUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdateOne) RemoveBlockedGroups(v ...*Group) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (auo *AssetUpdateOne) ClearEditors() *AssetUpdateOne {
-	auo.mutation.ClearEditors()
-	return auo
+func (_u *AssetUpdateOne) ClearEditors() *AssetUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (auo *AssetUpdateOne) RemoveEditorIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.RemoveEditorIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) RemoveEditorIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (auo *AssetUpdateOne) RemoveEditors(g ...*Group) *AssetUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdateOne) RemoveEditors(v ...*Group) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (auo *AssetUpdateOne) ClearViewers() *AssetUpdateOne {
-	auo.mutation.ClearViewers()
-	return auo
+func (_u *AssetUpdateOne) ClearViewers() *AssetUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (auo *AssetUpdateOne) RemoveViewerIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.RemoveViewerIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) RemoveViewerIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (auo *AssetUpdateOne) RemoveViewers(g ...*Group) *AssetUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *AssetUpdateOne) RemoveViewers(v ...*Group) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (auo *AssetUpdateOne) ClearScans() *AssetUpdateOne {
-	auo.mutation.ClearScans()
-	return auo
+func (_u *AssetUpdateOne) ClearScans() *AssetUpdateOne {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (auo *AssetUpdateOne) RemoveScanIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.RemoveScanIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) RemoveScanIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (auo *AssetUpdateOne) RemoveScans(s ...*Scan) *AssetUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *AssetUpdateOne) RemoveScans(v ...*Scan) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (auo *AssetUpdateOne) ClearEntities() *AssetUpdateOne {
-	auo.mutation.ClearEntities()
-	return auo
+func (_u *AssetUpdateOne) ClearEntities() *AssetUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (auo *AssetUpdateOne) RemoveEntityIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.RemoveEntityIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) RemoveEntityIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (auo *AssetUpdateOne) RemoveEntities(e ...*Entity) *AssetUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *AssetUpdateOne) RemoveEntities(v ...*Entity) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (auo *AssetUpdateOne) ClearControls() *AssetUpdateOne {
-	auo.mutation.ClearControls()
-	return auo
+func (_u *AssetUpdateOne) ClearControls() *AssetUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (auo *AssetUpdateOne) RemoveControlIDs(ids ...string) *AssetUpdateOne {
-	auo.mutation.RemoveControlIDs(ids...)
-	return auo
+func (_u *AssetUpdateOne) RemoveControlIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (auo *AssetUpdateOne) RemoveControls(c ...*Control) *AssetUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *AssetUpdateOne) RemoveControls(v ...*Control) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // Where appends a list predicates to the AssetUpdate builder.
-func (auo *AssetUpdateOne) Where(ps ...predicate.Asset) *AssetUpdateOne {
-	auo.mutation.Where(ps...)
-	return auo
+func (_u *AssetUpdateOne) Where(ps ...predicate.Asset) *AssetUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (auo *AssetUpdateOne) Select(field string, fields ...string) *AssetUpdateOne {
-	auo.fields = append([]string{field}, fields...)
-	return auo
+func (_u *AssetUpdateOne) Select(field string, fields ...string) *AssetUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Asset entity.
-func (auo *AssetUpdateOne) Save(ctx context.Context) (*Asset, error) {
-	if err := auo.defaults(); err != nil {
+func (_u *AssetUpdateOne) Save(ctx context.Context) (*Asset, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (auo *AssetUpdateOne) SaveX(ctx context.Context) *Asset {
-	node, err := auo.Save(ctx)
+func (_u *AssetUpdateOne) SaveX(ctx context.Context) *Asset {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1510,43 +1510,43 @@ func (auo *AssetUpdateOne) SaveX(ctx context.Context) *Asset {
 }
 
 // Exec executes the query on the entity.
-func (auo *AssetUpdateOne) Exec(ctx context.Context) error {
-	_, err := auo.Save(ctx)
+func (_u *AssetUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (auo *AssetUpdateOne) ExecX(ctx context.Context) {
-	if err := auo.Exec(ctx); err != nil {
+func (_u *AssetUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (auo *AssetUpdateOne) defaults() error {
-	if _, ok := auo.mutation.UpdatedAt(); !ok && !auo.mutation.UpdatedAtCleared() {
+func (_u *AssetUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if asset.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized asset.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := asset.UpdateDefaultUpdatedAt()
-		auo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (auo *AssetUpdateOne) check() error {
-	if v, ok := auo.mutation.OwnerID(); ok {
+func (_u *AssetUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := asset.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := auo.mutation.AssetType(); ok {
+	if v, ok := _u.mutation.AssetType(); ok {
 		if err := asset.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "Asset.asset_type": %w`, err)}
 		}
 	}
-	if v, ok := auo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := asset.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
 		}
@@ -1555,22 +1555,22 @@ func (auo *AssetUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (auo *AssetUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetUpdateOne {
-	auo.modifiers = append(auo.modifiers, modifiers...)
-	return auo
+func (_u *AssetUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssetUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error) {
-	if err := auo.check(); err != nil {
+func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(asset.Table, asset.Columns, sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString))
-	id, ok := auo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Asset.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := auo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, asset.FieldID)
 		for _, f := range fields {
@@ -1582,96 +1582,96 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 			}
 		}
 	}
-	if ps := auo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if auo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(asset.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := auo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(asset.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if auo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(asset.FieldUpdatedAt, field.TypeTime)
 	}
-	if auo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(asset.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := auo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(asset.FieldUpdatedBy, field.TypeString, value)
 	}
-	if auo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(asset.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := auo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(asset.FieldDeletedAt, field.TypeTime, value)
 	}
-	if auo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(asset.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := auo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(asset.FieldDeletedBy, field.TypeString, value)
 	}
-	if auo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(asset.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := auo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(asset.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := auo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, asset.FieldTags, value)
 		})
 	}
-	if auo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
 	}
-	if value, ok := auo.mutation.AssetType(); ok {
+	if value, ok := _u.mutation.AssetType(); ok {
 		_spec.SetField(asset.FieldAssetType, field.TypeEnum, value)
 	}
-	if value, ok := auo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(asset.FieldName, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(asset.FieldDescription, field.TypeString, value)
 	}
-	if auo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(asset.FieldDescription, field.TypeString)
 	}
-	if value, ok := auo.mutation.Identifier(); ok {
+	if value, ok := _u.mutation.Identifier(); ok {
 		_spec.SetField(asset.FieldIdentifier, field.TypeString, value)
 	}
-	if auo.mutation.IdentifierCleared() {
+	if _u.mutation.IdentifierCleared() {
 		_spec.ClearField(asset.FieldIdentifier, field.TypeString)
 	}
-	if value, ok := auo.mutation.Website(); ok {
+	if value, ok := _u.mutation.Website(); ok {
 		_spec.SetField(asset.FieldWebsite, field.TypeString, value)
 	}
-	if auo.mutation.WebsiteCleared() {
+	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(asset.FieldWebsite, field.TypeString)
 	}
-	if value, ok := auo.mutation.Cpe(); ok {
+	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(asset.FieldCpe, field.TypeString, value)
 	}
-	if auo.mutation.CpeCleared() {
+	if _u.mutation.CpeCleared() {
 		_spec.ClearField(asset.FieldCpe, field.TypeString)
 	}
-	if value, ok := auo.mutation.Categories(); ok {
+	if value, ok := _u.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 	}
-	if value, ok := auo.mutation.AppendedCategories(); ok {
+	if value, ok := _u.mutation.AppendedCategories(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, asset.FieldCategories, value)
 		})
 	}
-	if auo.mutation.CategoriesCleared() {
+	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(asset.FieldCategories, field.TypeJSON)
 	}
-	if auo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1682,10 +1682,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1696,13 +1696,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1713,10 +1713,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !auo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1727,13 +1727,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1744,13 +1744,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1761,10 +1761,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !auo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1775,13 +1775,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1792,13 +1792,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1809,10 +1809,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !auo.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1823,13 +1823,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1840,13 +1840,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.Group
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1857,10 +1857,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedScansIDs(); len(nodes) > 0 && !auo.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1871,13 +1871,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1888,13 +1888,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1905,10 +1905,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !auo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1919,13 +1919,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1936,13 +1936,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1953,10 +1953,10 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.ControlAssets
+		edge.Schema = _u.schemaConfig.ControlAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !auo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1967,13 +1967,13 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.ControlAssets
+		edge.Schema = _u.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1984,19 +1984,19 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = auo.schemaConfig.ControlAssets
+		edge.Schema = _u.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = auo.schemaConfig.Asset
-	ctx = internal.NewSchemaConfigContext(ctx, auo.schemaConfig)
-	_spec.AddModifiers(auo.modifiers...)
-	_node = &Asset{config: auo.config}
+	_spec.Node.Schema = _u.schemaConfig.Asset
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Asset{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, auo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{asset.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -2004,6 +2004,6 @@ func (auo *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error
 		}
 		return nil, err
 	}
-	auo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

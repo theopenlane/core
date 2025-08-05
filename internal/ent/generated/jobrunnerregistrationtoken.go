@@ -105,7 +105,7 @@ func (*JobRunnerRegistrationToken) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the JobRunnerRegistrationToken fields.
-func (jrrt *JobRunnerRegistrationToken) assignValues(columns []string, values []any) error {
+func (_m *JobRunnerRegistrationToken) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -115,49 +115,49 @@ func (jrrt *JobRunnerRegistrationToken) assignValues(columns []string, values []
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				jrrt.ID = value.String
+				_m.ID = value.String
 			}
 		case jobrunnerregistrationtoken.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				jrrt.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case jobrunnerregistrationtoken.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				jrrt.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case jobrunnerregistrationtoken.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				jrrt.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case jobrunnerregistrationtoken.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				jrrt.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case jobrunnerregistrationtoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				jrrt.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case jobrunnerregistrationtoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				jrrt.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case jobrunnerregistrationtoken.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &jrrt.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -165,35 +165,35 @@ func (jrrt *JobRunnerRegistrationToken) assignValues(columns []string, values []
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				jrrt.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case jobrunnerregistrationtoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				jrrt.Token = value.String
+				_m.Token = value.String
 			}
 		case jobrunnerregistrationtoken.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				jrrt.ExpiresAt = value.Time
+				_m.ExpiresAt = value.Time
 			}
 		case jobrunnerregistrationtoken.FieldLastUsedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_used_at", values[i])
 			} else if value.Valid {
-				jrrt.LastUsedAt = new(time.Time)
-				*jrrt.LastUsedAt = value.Time
+				_m.LastUsedAt = new(time.Time)
+				*_m.LastUsedAt = value.Time
 			}
 		case jobrunnerregistrationtoken.FieldJobRunnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
 			} else if value.Valid {
-				jrrt.JobRunnerID = value.String
+				_m.JobRunnerID = value.String
 			}
 		default:
-			jrrt.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -201,80 +201,80 @@ func (jrrt *JobRunnerRegistrationToken) assignValues(columns []string, values []
 
 // Value returns the ent.Value that was dynamically selected and assigned to the JobRunnerRegistrationToken.
 // This includes values selected through modifiers, order, etc.
-func (jrrt *JobRunnerRegistrationToken) Value(name string) (ent.Value, error) {
-	return jrrt.selectValues.Get(name)
+func (_m *JobRunnerRegistrationToken) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the JobRunnerRegistrationToken entity.
-func (jrrt *JobRunnerRegistrationToken) QueryOwner() *OrganizationQuery {
-	return NewJobRunnerRegistrationTokenClient(jrrt.config).QueryOwner(jrrt)
+func (_m *JobRunnerRegistrationToken) QueryOwner() *OrganizationQuery {
+	return NewJobRunnerRegistrationTokenClient(_m.config).QueryOwner(_m)
 }
 
 // QueryJobRunner queries the "job_runner" edge of the JobRunnerRegistrationToken entity.
-func (jrrt *JobRunnerRegistrationToken) QueryJobRunner() *JobRunnerQuery {
-	return NewJobRunnerRegistrationTokenClient(jrrt.config).QueryJobRunner(jrrt)
+func (_m *JobRunnerRegistrationToken) QueryJobRunner() *JobRunnerQuery {
+	return NewJobRunnerRegistrationTokenClient(_m.config).QueryJobRunner(_m)
 }
 
 // Update returns a builder for updating this JobRunnerRegistrationToken.
 // Note that you need to call JobRunnerRegistrationToken.Unwrap() before calling this method if this JobRunnerRegistrationToken
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (jrrt *JobRunnerRegistrationToken) Update() *JobRunnerRegistrationTokenUpdateOne {
-	return NewJobRunnerRegistrationTokenClient(jrrt.config).UpdateOne(jrrt)
+func (_m *JobRunnerRegistrationToken) Update() *JobRunnerRegistrationTokenUpdateOne {
+	return NewJobRunnerRegistrationTokenClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the JobRunnerRegistrationToken entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (jrrt *JobRunnerRegistrationToken) Unwrap() *JobRunnerRegistrationToken {
-	_tx, ok := jrrt.config.driver.(*txDriver)
+func (_m *JobRunnerRegistrationToken) Unwrap() *JobRunnerRegistrationToken {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: JobRunnerRegistrationToken is not a transactional entity")
 	}
-	jrrt.config.driver = _tx.drv
-	return jrrt
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (jrrt *JobRunnerRegistrationToken) String() string {
+func (_m *JobRunnerRegistrationToken) String() string {
 	var builder strings.Builder
 	builder.WriteString("JobRunnerRegistrationToken(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", jrrt.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(jrrt.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(jrrt.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(jrrt.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(jrrt.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(jrrt.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(jrrt.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", jrrt.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(jrrt.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(jrrt.Token)
+	builder.WriteString(_m.Token)
 	builder.WriteString(", ")
 	builder.WriteString("expires_at=")
-	builder.WriteString(jrrt.ExpiresAt.Format(time.ANSIC))
+	builder.WriteString(_m.ExpiresAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := jrrt.LastUsedAt; v != nil {
+	if v := _m.LastUsedAt; v != nil {
 		builder.WriteString("last_used_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("job_runner_id=")
-	builder.WriteString(jrrt.JobRunnerID)
+	builder.WriteString(_m.JobRunnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

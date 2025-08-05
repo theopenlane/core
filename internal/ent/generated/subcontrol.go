@@ -321,7 +321,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Subcontrol fields.
-func (s *Subcontrol) assignValues(columns []string, values []any) error {
+func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -331,55 +331,55 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				s.ID = value.String
+				_m.ID = value.String
 			}
 		case subcontrol.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case subcontrol.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case subcontrol.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case subcontrol.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case subcontrol.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				s.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case subcontrol.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case subcontrol.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				s.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case subcontrol.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -387,68 +387,68 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				s.Description = value.String
+				_m.Description = value.String
 			}
 		case subcontrol.FieldReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_id", values[i])
 			} else if value.Valid {
-				s.ReferenceID = value.String
+				_m.ReferenceID = value.String
 			}
 		case subcontrol.FieldAuditorReferenceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
 			} else if value.Valid {
-				s.AuditorReferenceID = value.String
+				_m.AuditorReferenceID = value.String
 			}
 		case subcontrol.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				s.Status = enums.ControlStatus(value.String)
+				_m.Status = enums.ControlStatus(value.String)
 			}
 		case subcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				s.Source = enums.ControlSource(value.String)
+				_m.Source = enums.ControlSource(value.String)
 			}
 		case subcontrol.FieldReferenceFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
 			} else if value.Valid {
-				s.ReferenceFramework = new(string)
-				*s.ReferenceFramework = value.String
+				_m.ReferenceFramework = new(string)
+				*_m.ReferenceFramework = value.String
 			}
 		case subcontrol.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_type", values[i])
 			} else if value.Valid {
-				s.ControlType = enums.ControlType(value.String)
+				_m.ControlType = enums.ControlType(value.String)
 			}
 		case subcontrol.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				s.Category = value.String
+				_m.Category = value.String
 			}
 		case subcontrol.FieldCategoryID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				s.CategoryID = value.String
+				_m.CategoryID = value.String
 			}
 		case subcontrol.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				s.Subcategory = value.String
+				_m.Subcategory = value.String
 			}
 		case subcontrol.FieldMappedCategories:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field mapped_categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.MappedCategories); err != nil {
+				if err := json.Unmarshal(*value, &_m.MappedCategories); err != nil {
 					return fmt.Errorf("unmarshal field mapped_categories: %w", err)
 				}
 			}
@@ -456,7 +456,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_objectives", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.AssessmentObjectives); err != nil {
+				if err := json.Unmarshal(*value, &_m.AssessmentObjectives); err != nil {
 					return fmt.Errorf("unmarshal field assessment_objectives: %w", err)
 				}
 			}
@@ -464,7 +464,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field assessment_methods", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.AssessmentMethods); err != nil {
+				if err := json.Unmarshal(*value, &_m.AssessmentMethods); err != nil {
 					return fmt.Errorf("unmarshal field assessment_methods: %w", err)
 				}
 			}
@@ -472,7 +472,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_questions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.ControlQuestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlQuestions); err != nil {
 					return fmt.Errorf("unmarshal field control_questions: %w", err)
 				}
 			}
@@ -480,7 +480,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_guidance", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.ImplementationGuidance); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImplementationGuidance); err != nil {
 					return fmt.Errorf("unmarshal field implementation_guidance: %w", err)
 				}
 			}
@@ -488,7 +488,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field example_evidence", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.ExampleEvidence); err != nil {
+				if err := json.Unmarshal(*value, &_m.ExampleEvidence); err != nil {
 					return fmt.Errorf("unmarshal field example_evidence: %w", err)
 				}
 			}
@@ -496,7 +496,7 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field references", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.References); err != nil {
+				if err := json.Unmarshal(*value, &_m.References); err != nil {
 					return fmt.Errorf("unmarshal field references: %w", err)
 				}
 			}
@@ -504,49 +504,49 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
 			} else if value.Valid {
-				s.ControlOwnerID = new(string)
-				*s.ControlOwnerID = value.String
+				_m.ControlOwnerID = new(string)
+				*_m.ControlOwnerID = value.String
 			}
 		case subcontrol.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				s.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case subcontrol.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				s.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case subcontrol.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
 			} else if value.Valid {
-				s.RefCode = value.String
+				_m.RefCode = value.String
 			}
 		case subcontrol.FieldControlID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_id", values[i])
 			} else if value.Valid {
-				s.ControlID = value.String
+				_m.ControlID = value.String
 			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
-				s.program_subcontrols = new(string)
-				*s.program_subcontrols = value.String
+				_m.program_subcontrols = new(string)
+				*_m.program_subcontrols = value.String
 			}
 		case subcontrol.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
-				s.user_subcontrols = new(string)
-				*s.user_subcontrols = value.String
+				_m.user_subcontrols = new(string)
+				*_m.user_subcontrols = value.String
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -554,495 +554,495 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Subcontrol.
 // This includes values selected through modifiers, order, etc.
-func (s *Subcontrol) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Subcontrol) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryEvidence queries the "evidence" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryEvidence() *EvidenceQuery {
-	return NewSubcontrolClient(s.config).QueryEvidence(s)
+func (_m *Subcontrol) QueryEvidence() *EvidenceQuery {
+	return NewSubcontrolClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewSubcontrolClient(s.config).QueryControlObjectives(s)
+func (_m *Subcontrol) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewSubcontrolClient(_m.config).QueryControlObjectives(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryTasks() *TaskQuery {
-	return NewSubcontrolClient(s.config).QueryTasks(s)
+func (_m *Subcontrol) QueryTasks() *TaskQuery {
+	return NewSubcontrolClient(_m.config).QueryTasks(_m)
 }
 
 // QueryNarratives queries the "narratives" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryNarratives() *NarrativeQuery {
-	return NewSubcontrolClient(s.config).QueryNarratives(s)
+func (_m *Subcontrol) QueryNarratives() *NarrativeQuery {
+	return NewSubcontrolClient(_m.config).QueryNarratives(_m)
 }
 
 // QueryRisks queries the "risks" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryRisks() *RiskQuery {
-	return NewSubcontrolClient(s.config).QueryRisks(s)
+func (_m *Subcontrol) QueryRisks() *RiskQuery {
+	return NewSubcontrolClient(_m.config).QueryRisks(_m)
 }
 
 // QueryActionPlans queries the "action_plans" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryActionPlans() *ActionPlanQuery {
-	return NewSubcontrolClient(s.config).QueryActionPlans(s)
+func (_m *Subcontrol) QueryActionPlans() *ActionPlanQuery {
+	return NewSubcontrolClient(_m.config).QueryActionPlans(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryProcedures() *ProcedureQuery {
-	return NewSubcontrolClient(s.config).QueryProcedures(s)
+func (_m *Subcontrol) QueryProcedures() *ProcedureQuery {
+	return NewSubcontrolClient(_m.config).QueryProcedures(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryInternalPolicies() *InternalPolicyQuery {
-	return NewSubcontrolClient(s.config).QueryInternalPolicies(s)
+func (_m *Subcontrol) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewSubcontrolClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // QueryControlOwner queries the "control_owner" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControlOwner() *GroupQuery {
-	return NewSubcontrolClient(s.config).QueryControlOwner(s)
+func (_m *Subcontrol) QueryControlOwner() *GroupQuery {
+	return NewSubcontrolClient(_m.config).QueryControlOwner(_m)
 }
 
 // QueryDelegate queries the "delegate" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryDelegate() *GroupQuery {
-	return NewSubcontrolClient(s.config).QueryDelegate(s)
+func (_m *Subcontrol) QueryDelegate() *GroupQuery {
+	return NewSubcontrolClient(_m.config).QueryDelegate(_m)
 }
 
 // QueryOwner queries the "owner" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryOwner() *OrganizationQuery {
-	return NewSubcontrolClient(s.config).QueryOwner(s)
+func (_m *Subcontrol) QueryOwner() *OrganizationQuery {
+	return NewSubcontrolClient(_m.config).QueryOwner(_m)
 }
 
 // QueryControl queries the "control" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControl() *ControlQuery {
-	return NewSubcontrolClient(s.config).QueryControl(s)
+func (_m *Subcontrol) QueryControl() *ControlQuery {
+	return NewSubcontrolClient(_m.config).QueryControl(_m)
 }
 
 // QueryControlImplementations queries the "control_implementations" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryControlImplementations() *ControlImplementationQuery {
-	return NewSubcontrolClient(s.config).QueryControlImplementations(s)
+func (_m *Subcontrol) QueryControlImplementations() *ControlImplementationQuery {
+	return NewSubcontrolClient(_m.config).QueryControlImplementations(_m)
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryScheduledJobs() *ScheduledJobQuery {
-	return NewSubcontrolClient(s.config).QueryScheduledJobs(s)
+func (_m *Subcontrol) QueryScheduledJobs() *ScheduledJobQuery {
+	return NewSubcontrolClient(_m.config).QueryScheduledJobs(_m)
 }
 
 // QueryMappedToSubcontrols queries the "mapped_to_subcontrols" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryMappedToSubcontrols() *MappedControlQuery {
-	return NewSubcontrolClient(s.config).QueryMappedToSubcontrols(s)
+func (_m *Subcontrol) QueryMappedToSubcontrols() *MappedControlQuery {
+	return NewSubcontrolClient(_m.config).QueryMappedToSubcontrols(_m)
 }
 
 // QueryMappedFromSubcontrols queries the "mapped_from_subcontrols" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryMappedFromSubcontrols() *MappedControlQuery {
-	return NewSubcontrolClient(s.config).QueryMappedFromSubcontrols(s)
+func (_m *Subcontrol) QueryMappedFromSubcontrols() *MappedControlQuery {
+	return NewSubcontrolClient(_m.config).QueryMappedFromSubcontrols(_m)
 }
 
 // Update returns a builder for updating this Subcontrol.
 // Note that you need to call Subcontrol.Unwrap() before calling this method if this Subcontrol
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Subcontrol) Update() *SubcontrolUpdateOne {
-	return NewSubcontrolClient(s.config).UpdateOne(s)
+func (_m *Subcontrol) Update() *SubcontrolUpdateOne {
+	return NewSubcontrolClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Subcontrol entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Subcontrol) Unwrap() *Subcontrol {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Subcontrol) Unwrap() *Subcontrol {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Subcontrol is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Subcontrol) String() string {
+func (_m *Subcontrol) String() string {
 	var builder strings.Builder
 	builder.WriteString("Subcontrol(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(s.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", s.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(s.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("reference_id=")
-	builder.WriteString(s.ReferenceID)
+	builder.WriteString(_m.ReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_reference_id=")
-	builder.WriteString(s.AuditorReferenceID)
+	builder.WriteString(_m.AuditorReferenceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", s.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", s.Source))
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteString(", ")
-	if v := s.ReferenceFramework; v != nil {
+	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
-	builder.WriteString(fmt.Sprintf("%v", s.ControlType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlType))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(s.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("category_id=")
-	builder.WriteString(s.CategoryID)
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("subcategory=")
-	builder.WriteString(s.Subcategory)
+	builder.WriteString(_m.Subcategory)
 	builder.WriteString(", ")
 	builder.WriteString("mapped_categories=")
-	builder.WriteString(fmt.Sprintf("%v", s.MappedCategories))
+	builder.WriteString(fmt.Sprintf("%v", _m.MappedCategories))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_objectives=")
-	builder.WriteString(fmt.Sprintf("%v", s.AssessmentObjectives))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssessmentObjectives))
 	builder.WriteString(", ")
 	builder.WriteString("assessment_methods=")
-	builder.WriteString(fmt.Sprintf("%v", s.AssessmentMethods))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssessmentMethods))
 	builder.WriteString(", ")
 	builder.WriteString("control_questions=")
-	builder.WriteString(fmt.Sprintf("%v", s.ControlQuestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlQuestions))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_guidance=")
-	builder.WriteString(fmt.Sprintf("%v", s.ImplementationGuidance))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImplementationGuidance))
 	builder.WriteString(", ")
 	builder.WriteString("example_evidence=")
-	builder.WriteString(fmt.Sprintf("%v", s.ExampleEvidence))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExampleEvidence))
 	builder.WriteString(", ")
 	builder.WriteString("references=")
-	builder.WriteString(fmt.Sprintf("%v", s.References))
+	builder.WriteString(fmt.Sprintf("%v", _m.References))
 	builder.WriteString(", ")
-	if v := s.ControlOwnerID; v != nil {
+	if v := _m.ControlOwnerID; v != nil {
 		builder.WriteString("control_owner_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(s.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(s.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
-	builder.WriteString(s.RefCode)
+	builder.WriteString(_m.RefCode)
 	builder.WriteString(", ")
 	builder.WriteString("control_id=")
-	builder.WriteString(s.ControlID)
+	builder.WriteString(_m.ControlID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEvidence returns the Evidence named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedEvidence(name string) ([]*Evidence, error) {
-	if s.Edges.namedEvidence == nil {
+func (_m *Subcontrol) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedEvidence[name]
+	nodes, ok := _m.Edges.namedEvidence[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedEvidence(name string, edges ...*Evidence) {
-	if s.Edges.namedEvidence == nil {
-		s.Edges.namedEvidence = make(map[string][]*Evidence)
+func (_m *Subcontrol) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedEvidence[name] = []*Evidence{}
+		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
-		s.Edges.namedEvidence[name] = append(s.Edges.namedEvidence[name], edges...)
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
 	}
 }
 
 // NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if s.Edges.namedControlObjectives == nil {
+func (_m *Subcontrol) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedControlObjectives[name]
+	nodes, ok := _m.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if s.Edges.namedControlObjectives == nil {
-		s.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+func (_m *Subcontrol) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedControlObjectives[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		s.Edges.namedControlObjectives[name] = append(s.Edges.namedControlObjectives[name], edges...)
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedTasks(name string) ([]*Task, error) {
-	if s.Edges.namedTasks == nil {
+func (_m *Subcontrol) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedTasks(name string, edges ...*Task) {
-	if s.Edges.namedTasks == nil {
-		s.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Subcontrol) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		s.Edges.namedTasks[name] = append(s.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedNarratives(name string) ([]*Narrative, error) {
-	if s.Edges.namedNarratives == nil {
+func (_m *Subcontrol) NamedNarratives(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedNarratives[name]
+	nodes, ok := _m.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedNarratives(name string, edges ...*Narrative) {
-	if s.Edges.namedNarratives == nil {
-		s.Edges.namedNarratives = make(map[string][]*Narrative)
+func (_m *Subcontrol) appendNamedNarratives(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarratives == nil {
+		_m.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedNarratives[name] = []*Narrative{}
+		_m.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		s.Edges.namedNarratives[name] = append(s.Edges.namedNarratives[name], edges...)
+		_m.Edges.namedNarratives[name] = append(_m.Edges.namedNarratives[name], edges...)
 	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedRisks(name string) ([]*Risk, error) {
-	if s.Edges.namedRisks == nil {
+func (_m *Subcontrol) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedRisks(name string, edges ...*Risk) {
-	if s.Edges.namedRisks == nil {
-		s.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *Subcontrol) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		s.Edges.namedRisks[name] = append(s.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedActionPlans returns the ActionPlans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedActionPlans(name string) ([]*ActionPlan, error) {
-	if s.Edges.namedActionPlans == nil {
+func (_m *Subcontrol) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedActionPlans[name]
+	nodes, ok := _m.Edges.namedActionPlans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedActionPlans(name string, edges ...*ActionPlan) {
-	if s.Edges.namedActionPlans == nil {
-		s.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+func (_m *Subcontrol) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedActionPlans[name] = []*ActionPlan{}
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
-		s.Edges.namedActionPlans[name] = append(s.Edges.namedActionPlans[name], edges...)
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedProcedures(name string) ([]*Procedure, error) {
-	if s.Edges.namedProcedures == nil {
+func (_m *Subcontrol) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedProcedures(name string, edges ...*Procedure) {
-	if s.Edges.namedProcedures == nil {
-		s.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *Subcontrol) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		s.Edges.namedProcedures[name] = append(s.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
 // NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
-	if s.Edges.namedInternalPolicies == nil {
+func (_m *Subcontrol) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedInternalPolicies[name]
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
-	if s.Edges.namedInternalPolicies == nil {
-		s.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+func (_m *Subcontrol) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
-		s.Edges.namedInternalPolicies[name] = append(s.Edges.namedInternalPolicies[name], edges...)
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
 // NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
-	if s.Edges.namedControlImplementations == nil {
+func (_m *Subcontrol) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedControlImplementations[name]
+	nodes, ok := _m.Edges.namedControlImplementations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
-	if s.Edges.namedControlImplementations == nil {
-		s.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+func (_m *Subcontrol) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
 	} else {
-		s.Edges.namedControlImplementations[name] = append(s.Edges.namedControlImplementations[name], edges...)
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
-	if s.Edges.namedScheduledJobs == nil {
+func (_m *Subcontrol) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
+	if _m.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedScheduledJobs[name]
+	nodes, ok := _m.Edges.namedScheduledJobs[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
-	if s.Edges.namedScheduledJobs == nil {
-		s.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
+func (_m *Subcontrol) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
+	if _m.Edges.namedScheduledJobs == nil {
+		_m.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
+		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
-		s.Edges.namedScheduledJobs[name] = append(s.Edges.namedScheduledJobs[name], edges...)
+		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 
 // NamedMappedToSubcontrols returns the MappedToSubcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedMappedToSubcontrols(name string) ([]*MappedControl, error) {
-	if s.Edges.namedMappedToSubcontrols == nil {
+func (_m *Subcontrol) NamedMappedToSubcontrols(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedToSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedMappedToSubcontrols[name]
+	nodes, ok := _m.Edges.namedMappedToSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedMappedToSubcontrols(name string, edges ...*MappedControl) {
-	if s.Edges.namedMappedToSubcontrols == nil {
-		s.Edges.namedMappedToSubcontrols = make(map[string][]*MappedControl)
+func (_m *Subcontrol) appendNamedMappedToSubcontrols(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedToSubcontrols == nil {
+		_m.Edges.namedMappedToSubcontrols = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedMappedToSubcontrols[name] = []*MappedControl{}
+		_m.Edges.namedMappedToSubcontrols[name] = []*MappedControl{}
 	} else {
-		s.Edges.namedMappedToSubcontrols[name] = append(s.Edges.namedMappedToSubcontrols[name], edges...)
+		_m.Edges.namedMappedToSubcontrols[name] = append(_m.Edges.namedMappedToSubcontrols[name], edges...)
 	}
 }
 
 // NamedMappedFromSubcontrols returns the MappedFromSubcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedMappedFromSubcontrols(name string) ([]*MappedControl, error) {
-	if s.Edges.namedMappedFromSubcontrols == nil {
+func (_m *Subcontrol) NamedMappedFromSubcontrols(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedFromSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedMappedFromSubcontrols[name]
+	nodes, ok := _m.Edges.namedMappedFromSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedMappedFromSubcontrols(name string, edges ...*MappedControl) {
-	if s.Edges.namedMappedFromSubcontrols == nil {
-		s.Edges.namedMappedFromSubcontrols = make(map[string][]*MappedControl)
+func (_m *Subcontrol) appendNamedMappedFromSubcontrols(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedFromSubcontrols == nil {
+		_m.Edges.namedMappedFromSubcontrols = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedMappedFromSubcontrols[name] = []*MappedControl{}
+		_m.Edges.namedMappedFromSubcontrols[name] = []*MappedControl{}
 	} else {
-		s.Edges.namedMappedFromSubcontrols[name] = append(s.Edges.namedMappedFromSubcontrols[name], edges...)
+		_m.Edges.namedMappedFromSubcontrols[name] = append(_m.Edges.namedMappedFromSubcontrols[name], edges...)
 	}
 }
 

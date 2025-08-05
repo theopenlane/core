@@ -33,434 +33,434 @@ type ControlObjectiveCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (coc *ControlObjectiveCreate) SetCreatedAt(t time.Time) *ControlObjectiveCreate {
-	coc.mutation.SetCreatedAt(t)
-	return coc
+func (_c *ControlObjectiveCreate) SetCreatedAt(v time.Time) *ControlObjectiveCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableCreatedAt(t *time.Time) *ControlObjectiveCreate {
-	if t != nil {
-		coc.SetCreatedAt(*t)
+func (_c *ControlObjectiveCreate) SetNillableCreatedAt(v *time.Time) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (coc *ControlObjectiveCreate) SetUpdatedAt(t time.Time) *ControlObjectiveCreate {
-	coc.mutation.SetUpdatedAt(t)
-	return coc
+func (_c *ControlObjectiveCreate) SetUpdatedAt(v time.Time) *ControlObjectiveCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableUpdatedAt(t *time.Time) *ControlObjectiveCreate {
-	if t != nil {
-		coc.SetUpdatedAt(*t)
+func (_c *ControlObjectiveCreate) SetNillableUpdatedAt(v *time.Time) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (coc *ControlObjectiveCreate) SetCreatedBy(s string) *ControlObjectiveCreate {
-	coc.mutation.SetCreatedBy(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetCreatedBy(v string) *ControlObjectiveCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableCreatedBy(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetCreatedBy(*s)
+func (_c *ControlObjectiveCreate) SetNillableCreatedBy(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (coc *ControlObjectiveCreate) SetUpdatedBy(s string) *ControlObjectiveCreate {
-	coc.mutation.SetUpdatedBy(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetUpdatedBy(v string) *ControlObjectiveCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableUpdatedBy(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetUpdatedBy(*s)
+func (_c *ControlObjectiveCreate) SetNillableUpdatedBy(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (coc *ControlObjectiveCreate) SetDeletedAt(t time.Time) *ControlObjectiveCreate {
-	coc.mutation.SetDeletedAt(t)
-	return coc
+func (_c *ControlObjectiveCreate) SetDeletedAt(v time.Time) *ControlObjectiveCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableDeletedAt(t *time.Time) *ControlObjectiveCreate {
-	if t != nil {
-		coc.SetDeletedAt(*t)
+func (_c *ControlObjectiveCreate) SetNillableDeletedAt(v *time.Time) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (coc *ControlObjectiveCreate) SetDeletedBy(s string) *ControlObjectiveCreate {
-	coc.mutation.SetDeletedBy(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetDeletedBy(v string) *ControlObjectiveCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableDeletedBy(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetDeletedBy(*s)
+func (_c *ControlObjectiveCreate) SetNillableDeletedBy(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (coc *ControlObjectiveCreate) SetDisplayID(s string) *ControlObjectiveCreate {
-	coc.mutation.SetDisplayID(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetDisplayID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (coc *ControlObjectiveCreate) SetTags(s []string) *ControlObjectiveCreate {
-	coc.mutation.SetTags(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetTags(v []string) *ControlObjectiveCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetRevision sets the "revision" field.
-func (coc *ControlObjectiveCreate) SetRevision(s string) *ControlObjectiveCreate {
-	coc.mutation.SetRevision(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetRevision(v string) *ControlObjectiveCreate {
+	_c.mutation.SetRevision(v)
+	return _c
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableRevision(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetRevision(*s)
+func (_c *ControlObjectiveCreate) SetNillableRevision(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetRevision(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (coc *ControlObjectiveCreate) SetOwnerID(s string) *ControlObjectiveCreate {
-	coc.mutation.SetOwnerID(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetOwnerID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableOwnerID(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetOwnerID(*s)
+func (_c *ControlObjectiveCreate) SetNillableOwnerID(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (coc *ControlObjectiveCreate) SetName(s string) *ControlObjectiveCreate {
-	coc.mutation.SetName(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetName(v string) *ControlObjectiveCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDesiredOutcome sets the "desired_outcome" field.
-func (coc *ControlObjectiveCreate) SetDesiredOutcome(s string) *ControlObjectiveCreate {
-	coc.mutation.SetDesiredOutcome(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetDesiredOutcome(v string) *ControlObjectiveCreate {
+	_c.mutation.SetDesiredOutcome(v)
+	return _c
 }
 
 // SetNillableDesiredOutcome sets the "desired_outcome" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableDesiredOutcome(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetDesiredOutcome(*s)
+func (_c *ControlObjectiveCreate) SetNillableDesiredOutcome(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetDesiredOutcome(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (coc *ControlObjectiveCreate) SetStatus(es enums.ObjectiveStatus) *ControlObjectiveCreate {
-	coc.mutation.SetStatus(es)
-	return coc
+func (_c *ControlObjectiveCreate) SetStatus(v enums.ObjectiveStatus) *ControlObjectiveCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableStatus(es *enums.ObjectiveStatus) *ControlObjectiveCreate {
-	if es != nil {
-		coc.SetStatus(*es)
+func (_c *ControlObjectiveCreate) SetNillableStatus(v *enums.ObjectiveStatus) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetSource sets the "source" field.
-func (coc *ControlObjectiveCreate) SetSource(es enums.ControlSource) *ControlObjectiveCreate {
-	coc.mutation.SetSource(es)
-	return coc
+func (_c *ControlObjectiveCreate) SetSource(v enums.ControlSource) *ControlObjectiveCreate {
+	_c.mutation.SetSource(v)
+	return _c
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableSource(es *enums.ControlSource) *ControlObjectiveCreate {
-	if es != nil {
-		coc.SetSource(*es)
+func (_c *ControlObjectiveCreate) SetNillableSource(v *enums.ControlSource) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetSource(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetControlObjectiveType sets the "control_objective_type" field.
-func (coc *ControlObjectiveCreate) SetControlObjectiveType(s string) *ControlObjectiveCreate {
-	coc.mutation.SetControlObjectiveType(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetControlObjectiveType(v string) *ControlObjectiveCreate {
+	_c.mutation.SetControlObjectiveType(v)
+	return _c
 }
 
 // SetNillableControlObjectiveType sets the "control_objective_type" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableControlObjectiveType(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetControlObjectiveType(*s)
+func (_c *ControlObjectiveCreate) SetNillableControlObjectiveType(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetControlObjectiveType(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetCategory sets the "category" field.
-func (coc *ControlObjectiveCreate) SetCategory(s string) *ControlObjectiveCreate {
-	coc.mutation.SetCategory(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetCategory(v string) *ControlObjectiveCreate {
+	_c.mutation.SetCategory(v)
+	return _c
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableCategory(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetCategory(*s)
+func (_c *ControlObjectiveCreate) SetNillableCategory(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetCategory(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetSubcategory sets the "subcategory" field.
-func (coc *ControlObjectiveCreate) SetSubcategory(s string) *ControlObjectiveCreate {
-	coc.mutation.SetSubcategory(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetSubcategory(v string) *ControlObjectiveCreate {
+	_c.mutation.SetSubcategory(v)
+	return _c
 }
 
 // SetNillableSubcategory sets the "subcategory" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableSubcategory(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetSubcategory(*s)
+func (_c *ControlObjectiveCreate) SetNillableSubcategory(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetSubcategory(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (coc *ControlObjectiveCreate) SetID(s string) *ControlObjectiveCreate {
-	coc.mutation.SetID(s)
-	return coc
+func (_c *ControlObjectiveCreate) SetID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableID(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetID(*s)
+func (_c *ControlObjectiveCreate) SetNillableID(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (coc *ControlObjectiveCreate) SetOwner(o *Organization) *ControlObjectiveCreate {
-	return coc.SetOwnerID(o.ID)
+func (_c *ControlObjectiveCreate) SetOwner(v *Organization) *ControlObjectiveCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (coc *ControlObjectiveCreate) AddBlockedGroupIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddBlockedGroupIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddBlockedGroupIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (coc *ControlObjectiveCreate) AddBlockedGroups(g ...*Group) *ControlObjectiveCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlObjectiveCreate) AddBlockedGroups(v ...*Group) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddBlockedGroupIDs(ids...)
+	return _c.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (coc *ControlObjectiveCreate) AddEditorIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddEditorIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddEditorIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (coc *ControlObjectiveCreate) AddEditors(g ...*Group) *ControlObjectiveCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlObjectiveCreate) AddEditors(v ...*Group) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddEditorIDs(ids...)
+	return _c.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (coc *ControlObjectiveCreate) AddViewerIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddViewerIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddViewerIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddViewerIDs(ids...)
+	return _c
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (coc *ControlObjectiveCreate) AddViewers(g ...*Group) *ControlObjectiveCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *ControlObjectiveCreate) AddViewers(v ...*Group) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddViewerIDs(ids...)
+	return _c.AddViewerIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (coc *ControlObjectiveCreate) AddProgramIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddProgramIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddProgramIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (coc *ControlObjectiveCreate) AddPrograms(p ...*Program) *ControlObjectiveCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *ControlObjectiveCreate) AddPrograms(v ...*Program) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (coc *ControlObjectiveCreate) AddEvidenceIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddEvidenceIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddEvidenceIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (coc *ControlObjectiveCreate) AddEvidence(e ...*Evidence) *ControlObjectiveCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *ControlObjectiveCreate) AddEvidence(v ...*Evidence) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddEvidenceIDs(ids...)
+	return _c.AddEvidenceIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (coc *ControlObjectiveCreate) AddControlIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddControlIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddControlIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (coc *ControlObjectiveCreate) AddControls(c ...*Control) *ControlObjectiveCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ControlObjectiveCreate) AddControls(v ...*Control) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (coc *ControlObjectiveCreate) AddSubcontrolIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddSubcontrolIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddSubcontrolIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (coc *ControlObjectiveCreate) AddSubcontrols(s ...*Subcontrol) *ControlObjectiveCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ControlObjectiveCreate) AddSubcontrols(v ...*Subcontrol) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (coc *ControlObjectiveCreate) AddInternalPolicyIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddInternalPolicyIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddInternalPolicyIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (coc *ControlObjectiveCreate) AddInternalPolicies(i ...*InternalPolicy) *ControlObjectiveCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *ControlObjectiveCreate) AddInternalPolicies(v ...*InternalPolicy) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddInternalPolicyIDs(ids...)
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (coc *ControlObjectiveCreate) AddProcedureIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddProcedureIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddProcedureIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (coc *ControlObjectiveCreate) AddProcedures(p ...*Procedure) *ControlObjectiveCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *ControlObjectiveCreate) AddProcedures(v ...*Procedure) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (coc *ControlObjectiveCreate) AddRiskIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddRiskIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddRiskIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (coc *ControlObjectiveCreate) AddRisks(r ...*Risk) *ControlObjectiveCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *ControlObjectiveCreate) AddRisks(v ...*Risk) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddRiskIDs(ids...)
+	return _c.AddRiskIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (coc *ControlObjectiveCreate) AddNarrativeIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddNarrativeIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddNarrativeIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddNarrativeIDs(ids...)
+	return _c
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (coc *ControlObjectiveCreate) AddNarratives(n ...*Narrative) *ControlObjectiveCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *ControlObjectiveCreate) AddNarratives(v ...*Narrative) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddNarrativeIDs(ids...)
+	return _c.AddNarrativeIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (coc *ControlObjectiveCreate) AddTaskIDs(ids ...string) *ControlObjectiveCreate {
-	coc.mutation.AddTaskIDs(ids...)
-	return coc
+func (_c *ControlObjectiveCreate) AddTaskIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (coc *ControlObjectiveCreate) AddTasks(t ...*Task) *ControlObjectiveCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *ControlObjectiveCreate) AddTasks(v ...*Task) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return coc.AddTaskIDs(ids...)
+	return _c.AddTaskIDs(ids...)
 }
 
 // Mutation returns the ControlObjectiveMutation object of the builder.
-func (coc *ControlObjectiveCreate) Mutation() *ControlObjectiveMutation {
-	return coc.mutation
+func (_c *ControlObjectiveCreate) Mutation() *ControlObjectiveMutation {
+	return _c.mutation
 }
 
 // Save creates the ControlObjective in the database.
-func (coc *ControlObjectiveCreate) Save(ctx context.Context) (*ControlObjective, error) {
-	if err := coc.defaults(); err != nil {
+func (_c *ControlObjectiveCreate) Save(ctx context.Context) (*ControlObjective, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, coc.sqlSave, coc.mutation, coc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (coc *ControlObjectiveCreate) SaveX(ctx context.Context) *ControlObjective {
-	v, err := coc.Save(ctx)
+func (_c *ControlObjectiveCreate) SaveX(ctx context.Context) *ControlObjective {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -468,94 +468,94 @@ func (coc *ControlObjectiveCreate) SaveX(ctx context.Context) *ControlObjective 
 }
 
 // Exec executes the query.
-func (coc *ControlObjectiveCreate) Exec(ctx context.Context) error {
-	_, err := coc.Save(ctx)
+func (_c *ControlObjectiveCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (coc *ControlObjectiveCreate) ExecX(ctx context.Context) {
-	if err := coc.Exec(ctx); err != nil {
+func (_c *ControlObjectiveCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (coc *ControlObjectiveCreate) defaults() error {
-	if _, ok := coc.mutation.CreatedAt(); !ok {
+func (_c *ControlObjectiveCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if controlobjective.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlobjective.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlobjective.DefaultCreatedAt()
-		coc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := coc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if controlobjective.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized controlobjective.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := controlobjective.DefaultUpdatedAt()
-		coc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := coc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := controlobjective.DefaultTags
-		coc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := coc.mutation.Revision(); !ok {
+	if _, ok := _c.mutation.Revision(); !ok {
 		v := controlobjective.DefaultRevision
-		coc.mutation.SetRevision(v)
+		_c.mutation.SetRevision(v)
 	}
-	if _, ok := coc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := controlobjective.DefaultStatus
-		coc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := coc.mutation.Source(); !ok {
+	if _, ok := _c.mutation.Source(); !ok {
 		v := controlobjective.DefaultSource
-		coc.mutation.SetSource(v)
+		_c.mutation.SetSource(v)
 	}
-	if _, ok := coc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if controlobjective.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized controlobjective.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := controlobjective.DefaultID()
-		coc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (coc *ControlObjectiveCreate) check() error {
-	if _, ok := coc.mutation.DisplayID(); !ok {
+func (_c *ControlObjectiveCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ControlObjective.display_id"`)}
 	}
-	if v, ok := coc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := controlobjective.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.display_id": %w`, err)}
 		}
 	}
-	if v, ok := coc.mutation.Revision(); ok {
+	if v, ok := _c.mutation.Revision(); ok {
 		if err := controlobjective.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.revision": %w`, err)}
 		}
 	}
-	if v, ok := coc.mutation.OwnerID(); ok {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := controlobjective.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := coc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlObjective.name"`)}
 	}
-	if v, ok := coc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := controlobjective.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
 		}
 	}
-	if v, ok := coc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := controlobjective.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.status": %w`, err)}
 		}
 	}
-	if v, ok := coc.mutation.Source(); ok {
+	if v, ok := _c.mutation.Source(); ok {
 		if err := controlobjective.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.source": %w`, err)}
 		}
@@ -563,12 +563,12 @@ func (coc *ControlObjectiveCreate) check() error {
 	return nil
 }
 
-func (coc *ControlObjectiveCreate) sqlSave(ctx context.Context) (*ControlObjective, error) {
-	if err := coc.check(); err != nil {
+func (_c *ControlObjectiveCreate) sqlSave(ctx context.Context) (*ControlObjective, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := coc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, coc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -581,86 +581,86 @@ func (coc *ControlObjectiveCreate) sqlSave(ctx context.Context) (*ControlObjecti
 			return nil, fmt.Errorf("unexpected ControlObjective.ID type: %T", _spec.ID.Value)
 		}
 	}
-	coc.mutation.id = &_node.ID
-	coc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.CreateSpec) {
+func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ControlObjective{config: coc.config}
+		_node = &ControlObjective{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlobjective.Table, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
 	)
-	_spec.Schema = coc.schemaConfig.ControlObjective
-	if id, ok := coc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ControlObjective
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := coc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(controlobjective.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := coc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(controlobjective.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := coc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(controlobjective.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := coc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(controlobjective.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := coc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(controlobjective.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := coc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(controlobjective.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := coc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(controlobjective.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := coc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(controlobjective.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := coc.mutation.Revision(); ok {
+	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
-	if value, ok := coc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(controlobjective.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := coc.mutation.DesiredOutcome(); ok {
+	if value, ok := _c.mutation.DesiredOutcome(); ok {
 		_spec.SetField(controlobjective.FieldDesiredOutcome, field.TypeString, value)
 		_node.DesiredOutcome = value
 	}
-	if value, ok := coc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
-	if value, ok := coc.mutation.Source(); ok {
+	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(controlobjective.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if value, ok := coc.mutation.ControlObjectiveType(); ok {
+	if value, ok := _c.mutation.ControlObjectiveType(); ok {
 		_spec.SetField(controlobjective.FieldControlObjectiveType, field.TypeString, value)
 		_node.ControlObjectiveType = value
 	}
-	if value, ok := coc.mutation.Category(); ok {
+	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(controlobjective.FieldCategory, field.TypeString, value)
 		_node.Category = value
 	}
-	if value, ok := coc.mutation.Subcategory(); ok {
+	if value, ok := _c.mutation.Subcategory(); ok {
 		_spec.SetField(controlobjective.FieldSubcategory, field.TypeString, value)
 		_node.Subcategory = value
 	}
-	if nodes := coc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -671,14 +671,14 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ControlObjective
+		edge.Schema = _c.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -689,13 +689,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ControlObjectiveBlockedGroups
+		edge.Schema = _c.schemaConfig.ControlObjectiveBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -706,13 +706,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ControlObjectiveEditors
+		edge.Schema = _c.schemaConfig.ControlObjectiveEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -723,13 +723,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ControlObjectiveViewers
+		edge.Schema = _c.schemaConfig.ControlObjectiveViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -740,13 +740,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ProgramControlObjectives
+		edge.Schema = _c.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -757,13 +757,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.EvidenceControlObjectives
+		edge.Schema = _c.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -774,13 +774,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ControlControlObjectives
+		edge.Schema = _c.schemaConfig.ControlControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -791,13 +791,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.SubcontrolControlObjectives
+		edge.Schema = _c.schemaConfig.SubcontrolControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -808,13 +808,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.InternalPolicyControlObjectives
+		edge.Schema = _c.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -825,13 +825,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.Procedure
+		edge.Schema = _c.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -842,13 +842,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.Risk
+		edge.Schema = _c.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -859,13 +859,13 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.Narrative
+		edge.Schema = _c.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := coc.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -876,7 +876,7 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = coc.schemaConfig.ControlObjectiveTasks
+		edge.Schema = _c.schemaConfig.ControlObjectiveTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -893,16 +893,16 @@ type ControlObjectiveCreateBulk struct {
 }
 
 // Save creates the ControlObjective entities in the database.
-func (cocb *ControlObjectiveCreateBulk) Save(ctx context.Context) ([]*ControlObjective, error) {
-	if cocb.err != nil {
-		return nil, cocb.err
+func (_c *ControlObjectiveCreateBulk) Save(ctx context.Context) ([]*ControlObjective, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(cocb.builders))
-	nodes := make([]*ControlObjective, len(cocb.builders))
-	mutators := make([]Mutator, len(cocb.builders))
-	for i := range cocb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ControlObjective, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cocb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ControlObjectiveMutation)
@@ -916,11 +916,11 @@ func (cocb *ControlObjectiveCreateBulk) Save(ctx context.Context) ([]*ControlObj
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cocb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cocb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -940,7 +940,7 @@ func (cocb *ControlObjectiveCreateBulk) Save(ctx context.Context) ([]*ControlObj
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cocb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -948,8 +948,8 @@ func (cocb *ControlObjectiveCreateBulk) Save(ctx context.Context) ([]*ControlObj
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cocb *ControlObjectiveCreateBulk) SaveX(ctx context.Context) []*ControlObjective {
-	v, err := cocb.Save(ctx)
+func (_c *ControlObjectiveCreateBulk) SaveX(ctx context.Context) []*ControlObjective {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -957,14 +957,14 @@ func (cocb *ControlObjectiveCreateBulk) SaveX(ctx context.Context) []*ControlObj
 }
 
 // Exec executes the query.
-func (cocb *ControlObjectiveCreateBulk) Exec(ctx context.Context) error {
-	_, err := cocb.Save(ctx)
+func (_c *ControlObjectiveCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cocb *ControlObjectiveCreateBulk) ExecX(ctx context.Context) {
-	if err := cocb.Exec(ctx); err != nil {
+func (_c *ControlObjectiveCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -33,40 +33,40 @@ type TaskHistoryQuery struct {
 }
 
 // Where adds a new predicate for the TaskHistoryQuery builder.
-func (thq *TaskHistoryQuery) Where(ps ...predicate.TaskHistory) *TaskHistoryQuery {
-	thq.predicates = append(thq.predicates, ps...)
-	return thq
+func (_q *TaskHistoryQuery) Where(ps ...predicate.TaskHistory) *TaskHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (thq *TaskHistoryQuery) Limit(limit int) *TaskHistoryQuery {
-	thq.ctx.Limit = &limit
-	return thq
+func (_q *TaskHistoryQuery) Limit(limit int) *TaskHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (thq *TaskHistoryQuery) Offset(offset int) *TaskHistoryQuery {
-	thq.ctx.Offset = &offset
-	return thq
+func (_q *TaskHistoryQuery) Offset(offset int) *TaskHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (thq *TaskHistoryQuery) Unique(unique bool) *TaskHistoryQuery {
-	thq.ctx.Unique = &unique
-	return thq
+func (_q *TaskHistoryQuery) Unique(unique bool) *TaskHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (thq *TaskHistoryQuery) Order(o ...taskhistory.OrderOption) *TaskHistoryQuery {
-	thq.order = append(thq.order, o...)
-	return thq
+func (_q *TaskHistoryQuery) Order(o ...taskhistory.OrderOption) *TaskHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TaskHistory entity from the query.
 // Returns a *NotFoundError when no TaskHistory was found.
-func (thq *TaskHistoryQuery) First(ctx context.Context) (*TaskHistory, error) {
-	nodes, err := thq.Limit(1).All(setContextOp(ctx, thq.ctx, ent.OpQueryFirst))
+func (_q *TaskHistoryQuery) First(ctx context.Context) (*TaskHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (thq *TaskHistoryQuery) First(ctx context.Context) (*TaskHistory, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (thq *TaskHistoryQuery) FirstX(ctx context.Context) *TaskHistory {
-	node, err := thq.First(ctx)
+func (_q *TaskHistoryQuery) FirstX(ctx context.Context) *TaskHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (thq *TaskHistoryQuery) FirstX(ctx context.Context) *TaskHistory {
 
 // FirstID returns the first TaskHistory ID from the query.
 // Returns a *NotFoundError when no TaskHistory ID was found.
-func (thq *TaskHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *TaskHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = thq.Limit(1).IDs(setContextOp(ctx, thq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (thq *TaskHistoryQuery) FirstID(ctx context.Context) (id string, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (thq *TaskHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := thq.FirstID(ctx)
+func (_q *TaskHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (thq *TaskHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single TaskHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TaskHistory entity is found.
 // Returns a *NotFoundError when no TaskHistory entities are found.
-func (thq *TaskHistoryQuery) Only(ctx context.Context) (*TaskHistory, error) {
-	nodes, err := thq.Limit(2).All(setContextOp(ctx, thq.ctx, ent.OpQueryOnly))
+func (_q *TaskHistoryQuery) Only(ctx context.Context) (*TaskHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (thq *TaskHistoryQuery) Only(ctx context.Context) (*TaskHistory, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (thq *TaskHistoryQuery) OnlyX(ctx context.Context) *TaskHistory {
-	node, err := thq.Only(ctx)
+func (_q *TaskHistoryQuery) OnlyX(ctx context.Context) *TaskHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (thq *TaskHistoryQuery) OnlyX(ctx context.Context) *TaskHistory {
 // OnlyID is like Only, but returns the only TaskHistory ID in the query.
 // Returns a *NotSingularError when more than one TaskHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (thq *TaskHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TaskHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = thq.Limit(2).IDs(setContextOp(ctx, thq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (thq *TaskHistoryQuery) OnlyID(ctx context.Context) (id string, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (thq *TaskHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := thq.OnlyID(ctx)
+func (_q *TaskHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (thq *TaskHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of TaskHistories.
-func (thq *TaskHistoryQuery) All(ctx context.Context) ([]*TaskHistory, error) {
-	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryAll)
-	if err := thq.prepareQuery(ctx); err != nil {
+func (_q *TaskHistoryQuery) All(ctx context.Context) ([]*TaskHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TaskHistory, *TaskHistoryQuery]()
-	return withInterceptors[[]*TaskHistory](ctx, thq, qr, thq.inters)
+	return withInterceptors[[]*TaskHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (thq *TaskHistoryQuery) AllX(ctx context.Context) []*TaskHistory {
-	nodes, err := thq.All(ctx)
+func (_q *TaskHistoryQuery) AllX(ctx context.Context) []*TaskHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (thq *TaskHistoryQuery) AllX(ctx context.Context) []*TaskHistory {
 }
 
 // IDs executes the query and returns a list of TaskHistory IDs.
-func (thq *TaskHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if thq.ctx.Unique == nil && thq.path != nil {
-		thq.Unique(true)
+func (_q *TaskHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
-	if err = thq.Select(taskhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(taskhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (thq *TaskHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := thq.IDs(ctx)
+func (_q *TaskHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (thq *TaskHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (thq *TaskHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryCount)
-	if err := thq.prepareQuery(ctx); err != nil {
+func (_q *TaskHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, thq, querierCount[*TaskHistoryQuery](), thq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TaskHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (thq *TaskHistoryQuery) CountX(ctx context.Context) int {
-	count, err := thq.Count(ctx)
+func (_q *TaskHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (thq *TaskHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (thq *TaskHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryExist)
-	switch _, err := thq.FirstID(ctx); {
+func (_q *TaskHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (thq *TaskHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (thq *TaskHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := thq.Exist(ctx)
+func (_q *TaskHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (thq *TaskHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TaskHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (thq *TaskHistoryQuery) Clone() *TaskHistoryQuery {
-	if thq == nil {
+func (_q *TaskHistoryQuery) Clone() *TaskHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TaskHistoryQuery{
-		config:     thq.config,
-		ctx:        thq.ctx.Clone(),
-		order:      append([]taskhistory.OrderOption{}, thq.order...),
-		inters:     append([]Interceptor{}, thq.inters...),
-		predicates: append([]predicate.TaskHistory{}, thq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]taskhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TaskHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       thq.sql.Clone(),
-		path:      thq.path,
-		modifiers: append([]func(*sql.Selector){}, thq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (thq *TaskHistoryQuery) Clone() *TaskHistoryQuery {
 //		GroupBy(taskhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (thq *TaskHistoryQuery) GroupBy(field string, fields ...string) *TaskHistoryGroupBy {
-	thq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TaskHistoryGroupBy{build: thq}
-	grbuild.flds = &thq.ctx.Fields
+func (_q *TaskHistoryQuery) GroupBy(field string, fields ...string) *TaskHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TaskHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = taskhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (thq *TaskHistoryQuery) GroupBy(field string, fields ...string) *TaskHistor
 //	client.TaskHistory.Query().
 //		Select(taskhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (thq *TaskHistoryQuery) Select(fields ...string) *TaskHistorySelect {
-	thq.ctx.Fields = append(thq.ctx.Fields, fields...)
-	sbuild := &TaskHistorySelect{TaskHistoryQuery: thq}
+func (_q *TaskHistoryQuery) Select(fields ...string) *TaskHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TaskHistorySelect{TaskHistoryQuery: _q}
 	sbuild.label = taskhistory.Label
-	sbuild.flds, sbuild.scan = &thq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TaskHistorySelect configured with the given aggregations.
-func (thq *TaskHistoryQuery) Aggregate(fns ...AggregateFunc) *TaskHistorySelect {
-	return thq.Select().Aggregate(fns...)
+func (_q *TaskHistoryQuery) Aggregate(fns ...AggregateFunc) *TaskHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (thq *TaskHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range thq.inters {
+func (_q *TaskHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, thq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range thq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !taskhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if thq.path != nil {
-		prev, err := thq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		thq.sql = prev
+		_q.sql = prev
 	}
 	if taskhistory.Policy == nil {
 		return errors.New("generated: uninitialized taskhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := taskhistory.Policy.EvalQuery(ctx, thq); err != nil {
+	if err := taskhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (thq *TaskHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TaskHistory, error) {
+func (_q *TaskHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TaskHistory, error) {
 	var (
 		nodes = []*TaskHistory{}
-		_spec = thq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TaskHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TaskHistory{config: thq.config}
+		node := &TaskHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = thq.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thq.schemaConfig)
-	if len(thq.modifiers) > 0 {
-		_spec.Modifiers = thq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.TaskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, thq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range thq.loadTotal {
-		if err := thq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (thq *TaskHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := thq.querySpec()
-	_spec.Node.Schema = thq.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thq.schemaConfig)
-	if len(thq.modifiers) > 0 {
-		_spec.Modifiers = thq.modifiers
+func (_q *TaskHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TaskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = thq.ctx.Fields
-	if len(thq.ctx.Fields) > 0 {
-		_spec.Unique = thq.ctx.Unique != nil && *thq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, thq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (thq *TaskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TaskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(taskhistory.Table, taskhistory.Columns, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
-	_spec.From = thq.sql
-	if unique := thq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if thq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := thq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, taskhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (thq *TaskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := thq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := thq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := thq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := thq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (thq *TaskHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (thq *TaskHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(thq.driver.Dialect())
+func (_q *TaskHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(taskhistory.Table)
-	columns := thq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = taskhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if thq.sql != nil {
-		selector = thq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if thq.ctx.Unique != nil && *thq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(thq.schemaConfig.TaskHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, thq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TaskHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range thq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range thq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range thq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := thq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := thq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (thq *TaskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskHistorySelect {
-	thq.modifiers = append(thq.modifiers, modifiers...)
-	return thq.Select()
+func (_q *TaskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type TaskHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (thgb *TaskHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TaskHistoryGroupBy {
-	thgb.fns = append(thgb.fns, fns...)
-	return thgb
+func (_g *TaskHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TaskHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (thgb *TaskHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, thgb.build.ctx, ent.OpQueryGroupBy)
-	if err := thgb.build.prepareQuery(ctx); err != nil {
+func (_g *TaskHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TaskHistoryQuery, *TaskHistoryGroupBy](ctx, thgb.build, thgb, thgb.build.inters, v)
+	return scanWithInterceptors[*TaskHistoryQuery, *TaskHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (thgb *TaskHistoryGroupBy) sqlScan(ctx context.Context, root *TaskHistoryQuery, v any) error {
+func (_g *TaskHistoryGroupBy) sqlScan(ctx context.Context, root *TaskHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(thgb.fns))
-	for _, fn := range thgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*thgb.flds)+len(thgb.fns))
-		for _, f := range *thgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*thgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := thgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type TaskHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ths *TaskHistorySelect) Aggregate(fns ...AggregateFunc) *TaskHistorySelect {
-	ths.fns = append(ths.fns, fns...)
-	return ths
+func (_s *TaskHistorySelect) Aggregate(fns ...AggregateFunc) *TaskHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ths *TaskHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ths.ctx, ent.OpQuerySelect)
-	if err := ths.prepareQuery(ctx); err != nil {
+func (_s *TaskHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TaskHistoryQuery, *TaskHistorySelect](ctx, ths.TaskHistoryQuery, ths, ths.inters, v)
+	return scanWithInterceptors[*TaskHistoryQuery, *TaskHistorySelect](ctx, _s.TaskHistoryQuery, _s, _s.inters, v)
 }
 
-func (ths *TaskHistorySelect) sqlScan(ctx context.Context, root *TaskHistoryQuery, v any) error {
+func (_s *TaskHistorySelect) sqlScan(ctx context.Context, root *TaskHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ths.fns))
-	for _, fn := range ths.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ths.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (ths *TaskHistorySelect) sqlScan(ctx context.Context, root *TaskHistoryQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ths.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (ths *TaskHistorySelect) sqlScan(ctx context.Context, root *TaskHistoryQuer
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ths *TaskHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TaskHistorySelect {
-	ths.modifiers = append(ths.modifiers, modifiers...)
-	return ths
+func (_s *TaskHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TaskHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

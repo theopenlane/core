@@ -174,7 +174,7 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Asset fields.
-func (a *Asset) assignValues(columns []string, values []any) error {
+func (_m *Asset) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -184,49 +184,49 @@ func (a *Asset) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				a.ID = value.String
+				_m.ID = value.String
 			}
 		case asset.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				a.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case asset.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				a.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case asset.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				a.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case asset.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				a.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case asset.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				a.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case asset.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				a.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case asset.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &a.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -234,49 +234,49 @@ func (a *Asset) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				a.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case asset.FieldAssetType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field asset_type", values[i])
 			} else if value.Valid {
-				a.AssetType = enums.AssetType(value.String)
+				_m.AssetType = enums.AssetType(value.String)
 			}
 		case asset.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				a.Name = value.String
+				_m.Name = value.String
 			}
 		case asset.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				a.Description = value.String
+				_m.Description = value.String
 			}
 		case asset.FieldIdentifier:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identifier", values[i])
 			} else if value.Valid {
-				a.Identifier = value.String
+				_m.Identifier = value.String
 			}
 		case asset.FieldWebsite:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field website", values[i])
 			} else if value.Valid {
-				a.Website = value.String
+				_m.Website = value.String
 			}
 		case asset.FieldCpe:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cpe", values[i])
 			} else if value.Valid {
-				a.Cpe = value.String
+				_m.Cpe = value.String
 			}
 		case asset.FieldCategories:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &a.Categories); err != nil {
+				if err := json.Unmarshal(*value, &_m.Categories); err != nil {
 					return fmt.Errorf("unmarshal field categories: %w", err)
 				}
 			}
@@ -284,11 +284,11 @@ func (a *Asset) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_assets", values[i])
 			} else if value.Valid {
-				a.risk_assets = new(string)
-				*a.risk_assets = value.String
+				_m.risk_assets = new(string)
+				*_m.risk_assets = value.String
 			}
 		default:
-			a.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -296,257 +296,257 @@ func (a *Asset) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Asset.
 // This includes values selected through modifiers, order, etc.
-func (a *Asset) Value(name string) (ent.Value, error) {
-	return a.selectValues.Get(name)
+func (_m *Asset) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Asset entity.
-func (a *Asset) QueryOwner() *OrganizationQuery {
-	return NewAssetClient(a.config).QueryOwner(a)
+func (_m *Asset) QueryOwner() *OrganizationQuery {
+	return NewAssetClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Asset entity.
-func (a *Asset) QueryBlockedGroups() *GroupQuery {
-	return NewAssetClient(a.config).QueryBlockedGroups(a)
+func (_m *Asset) QueryBlockedGroups() *GroupQuery {
+	return NewAssetClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Asset entity.
-func (a *Asset) QueryEditors() *GroupQuery {
-	return NewAssetClient(a.config).QueryEditors(a)
+func (_m *Asset) QueryEditors() *GroupQuery {
+	return NewAssetClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the Asset entity.
-func (a *Asset) QueryViewers() *GroupQuery {
-	return NewAssetClient(a.config).QueryViewers(a)
+func (_m *Asset) QueryViewers() *GroupQuery {
+	return NewAssetClient(_m.config).QueryViewers(_m)
 }
 
 // QueryScans queries the "scans" edge of the Asset entity.
-func (a *Asset) QueryScans() *ScanQuery {
-	return NewAssetClient(a.config).QueryScans(a)
+func (_m *Asset) QueryScans() *ScanQuery {
+	return NewAssetClient(_m.config).QueryScans(_m)
 }
 
 // QueryEntities queries the "entities" edge of the Asset entity.
-func (a *Asset) QueryEntities() *EntityQuery {
-	return NewAssetClient(a.config).QueryEntities(a)
+func (_m *Asset) QueryEntities() *EntityQuery {
+	return NewAssetClient(_m.config).QueryEntities(_m)
 }
 
 // QueryControls queries the "controls" edge of the Asset entity.
-func (a *Asset) QueryControls() *ControlQuery {
-	return NewAssetClient(a.config).QueryControls(a)
+func (_m *Asset) QueryControls() *ControlQuery {
+	return NewAssetClient(_m.config).QueryControls(_m)
 }
 
 // Update returns a builder for updating this Asset.
 // Note that you need to call Asset.Unwrap() before calling this method if this Asset
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (a *Asset) Update() *AssetUpdateOne {
-	return NewAssetClient(a.config).UpdateOne(a)
+func (_m *Asset) Update() *AssetUpdateOne {
+	return NewAssetClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Asset entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (a *Asset) Unwrap() *Asset {
-	_tx, ok := a.config.driver.(*txDriver)
+func (_m *Asset) Unwrap() *Asset {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Asset is not a transactional entity")
 	}
-	a.config.driver = _tx.drv
-	return a
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (a *Asset) String() string {
+func (_m *Asset) String() string {
 	var builder strings.Builder
 	builder.WriteString("Asset(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(a.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(a.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(a.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(a.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(a.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", a.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(a.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("asset_type=")
-	builder.WriteString(fmt.Sprintf("%v", a.AssetType))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssetType))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(a.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(a.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("identifier=")
-	builder.WriteString(a.Identifier)
+	builder.WriteString(_m.Identifier)
 	builder.WriteString(", ")
 	builder.WriteString("website=")
-	builder.WriteString(a.Website)
+	builder.WriteString(_m.Website)
 	builder.WriteString(", ")
 	builder.WriteString("cpe=")
-	builder.WriteString(a.Cpe)
+	builder.WriteString(_m.Cpe)
 	builder.WriteString(", ")
 	builder.WriteString("categories=")
-	builder.WriteString(fmt.Sprintf("%v", a.Categories))
+	builder.WriteString(fmt.Sprintf("%v", _m.Categories))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Asset) NamedBlockedGroups(name string) ([]*Group, error) {
-	if a.Edges.namedBlockedGroups == nil {
+func (_m *Asset) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Asset) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if a.Edges.namedBlockedGroups == nil {
-		a.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Asset) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		a.Edges.namedBlockedGroups[name] = append(a.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Asset) NamedEditors(name string) ([]*Group, error) {
-	if a.Edges.namedEditors == nil {
+func (_m *Asset) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Asset) appendNamedEditors(name string, edges ...*Group) {
-	if a.Edges.namedEditors == nil {
-		a.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Asset) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		a.Edges.namedEditors[name] = append(a.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Asset) NamedViewers(name string) ([]*Group, error) {
-	if a.Edges.namedViewers == nil {
+func (_m *Asset) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Asset) appendNamedViewers(name string, edges ...*Group) {
-	if a.Edges.namedViewers == nil {
-		a.Edges.namedViewers = make(map[string][]*Group)
+func (_m *Asset) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		a.Edges.namedViewers[name] = append(a.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedScans returns the Scans named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Asset) NamedScans(name string) ([]*Scan, error) {
-	if a.Edges.namedScans == nil {
+func (_m *Asset) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedScans[name]
+	nodes, ok := _m.Edges.namedScans[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Asset) appendNamedScans(name string, edges ...*Scan) {
-	if a.Edges.namedScans == nil {
-		a.Edges.namedScans = make(map[string][]*Scan)
+func (_m *Asset) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedScans[name] = []*Scan{}
+		_m.Edges.namedScans[name] = []*Scan{}
 	} else {
-		a.Edges.namedScans[name] = append(a.Edges.namedScans[name], edges...)
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Asset) NamedEntities(name string) ([]*Entity, error) {
-	if a.Edges.namedEntities == nil {
+func (_m *Asset) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Asset) appendNamedEntities(name string, edges ...*Entity) {
-	if a.Edges.namedEntities == nil {
-		a.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *Asset) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		a.Edges.namedEntities[name] = append(a.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Asset) NamedControls(name string) ([]*Control, error) {
-	if a.Edges.namedControls == nil {
+func (_m *Asset) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Asset) appendNamedControls(name string, edges ...*Control) {
-	if a.Edges.namedControls == nil {
-		a.Edges.namedControls = make(map[string][]*Control)
+func (_m *Asset) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		a.Edges.namedControls[name] = append(a.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 

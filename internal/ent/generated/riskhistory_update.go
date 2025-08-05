@@ -28,358 +28,358 @@ type RiskHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the RiskHistoryUpdate builder.
-func (rhu *RiskHistoryUpdate) Where(ps ...predicate.RiskHistory) *RiskHistoryUpdate {
-	rhu.mutation.Where(ps...)
-	return rhu
+func (_u *RiskHistoryUpdate) Where(ps ...predicate.RiskHistory) *RiskHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (rhu *RiskHistoryUpdate) SetUpdatedAt(t time.Time) *RiskHistoryUpdate {
-	rhu.mutation.SetUpdatedAt(t)
-	return rhu
+func (_u *RiskHistoryUpdate) SetUpdatedAt(v time.Time) *RiskHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (rhu *RiskHistoryUpdate) ClearUpdatedAt() *RiskHistoryUpdate {
-	rhu.mutation.ClearUpdatedAt()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearUpdatedAt() *RiskHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (rhu *RiskHistoryUpdate) SetUpdatedBy(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetUpdatedBy(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetUpdatedBy(v string) *RiskHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableUpdatedBy(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetUpdatedBy(*s)
+func (_u *RiskHistoryUpdate) SetNillableUpdatedBy(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (rhu *RiskHistoryUpdate) ClearUpdatedBy() *RiskHistoryUpdate {
-	rhu.mutation.ClearUpdatedBy()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearUpdatedBy() *RiskHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (rhu *RiskHistoryUpdate) SetDeletedAt(t time.Time) *RiskHistoryUpdate {
-	rhu.mutation.SetDeletedAt(t)
-	return rhu
+func (_u *RiskHistoryUpdate) SetDeletedAt(v time.Time) *RiskHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDeletedAt(t *time.Time) *RiskHistoryUpdate {
-	if t != nil {
-		rhu.SetDeletedAt(*t)
+func (_u *RiskHistoryUpdate) SetNillableDeletedAt(v *time.Time) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (rhu *RiskHistoryUpdate) ClearDeletedAt() *RiskHistoryUpdate {
-	rhu.mutation.ClearDeletedAt()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearDeletedAt() *RiskHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (rhu *RiskHistoryUpdate) SetDeletedBy(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetDeletedBy(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetDeletedBy(v string) *RiskHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDeletedBy(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetDeletedBy(*s)
+func (_u *RiskHistoryUpdate) SetNillableDeletedBy(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (rhu *RiskHistoryUpdate) ClearDeletedBy() *RiskHistoryUpdate {
-	rhu.mutation.ClearDeletedBy()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearDeletedBy() *RiskHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (rhu *RiskHistoryUpdate) SetTags(s []string) *RiskHistoryUpdate {
-	rhu.mutation.SetTags(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetTags(v []string) *RiskHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (rhu *RiskHistoryUpdate) AppendTags(s []string) *RiskHistoryUpdate {
-	rhu.mutation.AppendTags(s)
-	return rhu
+// AppendTags appends value to the "tags" field.
+func (_u *RiskHistoryUpdate) AppendTags(v []string) *RiskHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (rhu *RiskHistoryUpdate) ClearTags() *RiskHistoryUpdate {
-	rhu.mutation.ClearTags()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearTags() *RiskHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (rhu *RiskHistoryUpdate) SetName(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetName(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetName(v string) *RiskHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableName(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetName(*s)
+func (_u *RiskHistoryUpdate) SetNillableName(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return rhu
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (rhu *RiskHistoryUpdate) SetStatus(es enums.RiskStatus) *RiskHistoryUpdate {
-	rhu.mutation.SetStatus(es)
-	return rhu
+func (_u *RiskHistoryUpdate) SetStatus(v enums.RiskStatus) *RiskHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableStatus(es *enums.RiskStatus) *RiskHistoryUpdate {
-	if es != nil {
-		rhu.SetStatus(*es)
+func (_u *RiskHistoryUpdate) SetNillableStatus(v *enums.RiskStatus) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (rhu *RiskHistoryUpdate) ClearStatus() *RiskHistoryUpdate {
-	rhu.mutation.ClearStatus()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearStatus() *RiskHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetRiskType sets the "risk_type" field.
-func (rhu *RiskHistoryUpdate) SetRiskType(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetRiskType(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetRiskType(v string) *RiskHistoryUpdate {
+	_u.mutation.SetRiskType(v)
+	return _u
 }
 
 // SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableRiskType(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetRiskType(*s)
+func (_u *RiskHistoryUpdate) SetNillableRiskType(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetRiskType(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearRiskType clears the value of the "risk_type" field.
-func (rhu *RiskHistoryUpdate) ClearRiskType() *RiskHistoryUpdate {
-	rhu.mutation.ClearRiskType()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearRiskType() *RiskHistoryUpdate {
+	_u.mutation.ClearRiskType()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (rhu *RiskHistoryUpdate) SetCategory(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetCategory(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetCategory(v string) *RiskHistoryUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableCategory(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetCategory(*s)
+func (_u *RiskHistoryUpdate) SetNillableCategory(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (rhu *RiskHistoryUpdate) ClearCategory() *RiskHistoryUpdate {
-	rhu.mutation.ClearCategory()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearCategory() *RiskHistoryUpdate {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetImpact sets the "impact" field.
-func (rhu *RiskHistoryUpdate) SetImpact(ei enums.RiskImpact) *RiskHistoryUpdate {
-	rhu.mutation.SetImpact(ei)
-	return rhu
+func (_u *RiskHistoryUpdate) SetImpact(v enums.RiskImpact) *RiskHistoryUpdate {
+	_u.mutation.SetImpact(v)
+	return _u
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableImpact(ei *enums.RiskImpact) *RiskHistoryUpdate {
-	if ei != nil {
-		rhu.SetImpact(*ei)
+func (_u *RiskHistoryUpdate) SetNillableImpact(v *enums.RiskImpact) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetImpact(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearImpact clears the value of the "impact" field.
-func (rhu *RiskHistoryUpdate) ClearImpact() *RiskHistoryUpdate {
-	rhu.mutation.ClearImpact()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearImpact() *RiskHistoryUpdate {
+	_u.mutation.ClearImpact()
+	return _u
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (rhu *RiskHistoryUpdate) SetLikelihood(el enums.RiskLikelihood) *RiskHistoryUpdate {
-	rhu.mutation.SetLikelihood(el)
-	return rhu
+func (_u *RiskHistoryUpdate) SetLikelihood(v enums.RiskLikelihood) *RiskHistoryUpdate {
+	_u.mutation.SetLikelihood(v)
+	return _u
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskHistoryUpdate {
-	if el != nil {
-		rhu.SetLikelihood(*el)
+func (_u *RiskHistoryUpdate) SetNillableLikelihood(v *enums.RiskLikelihood) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetLikelihood(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearLikelihood clears the value of the "likelihood" field.
-func (rhu *RiskHistoryUpdate) ClearLikelihood() *RiskHistoryUpdate {
-	rhu.mutation.ClearLikelihood()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearLikelihood() *RiskHistoryUpdate {
+	_u.mutation.ClearLikelihood()
+	return _u
 }
 
 // SetScore sets the "score" field.
-func (rhu *RiskHistoryUpdate) SetScore(i int) *RiskHistoryUpdate {
-	rhu.mutation.ResetScore()
-	rhu.mutation.SetScore(i)
-	return rhu
+func (_u *RiskHistoryUpdate) SetScore(v int) *RiskHistoryUpdate {
+	_u.mutation.ResetScore()
+	_u.mutation.SetScore(v)
+	return _u
 }
 
 // SetNillableScore sets the "score" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableScore(i *int) *RiskHistoryUpdate {
-	if i != nil {
-		rhu.SetScore(*i)
+func (_u *RiskHistoryUpdate) SetNillableScore(v *int) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetScore(*v)
 	}
-	return rhu
+	return _u
 }
 
-// AddScore adds i to the "score" field.
-func (rhu *RiskHistoryUpdate) AddScore(i int) *RiskHistoryUpdate {
-	rhu.mutation.AddScore(i)
-	return rhu
+// AddScore adds value to the "score" field.
+func (_u *RiskHistoryUpdate) AddScore(v int) *RiskHistoryUpdate {
+	_u.mutation.AddScore(v)
+	return _u
 }
 
 // ClearScore clears the value of the "score" field.
-func (rhu *RiskHistoryUpdate) ClearScore() *RiskHistoryUpdate {
-	rhu.mutation.ClearScore()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearScore() *RiskHistoryUpdate {
+	_u.mutation.ClearScore()
+	return _u
 }
 
 // SetMitigation sets the "mitigation" field.
-func (rhu *RiskHistoryUpdate) SetMitigation(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetMitigation(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetMitigation(v string) *RiskHistoryUpdate {
+	_u.mutation.SetMitigation(v)
+	return _u
 }
 
 // SetNillableMitigation sets the "mitigation" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableMitigation(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetMitigation(*s)
+func (_u *RiskHistoryUpdate) SetNillableMitigation(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetMitigation(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearMitigation clears the value of the "mitigation" field.
-func (rhu *RiskHistoryUpdate) ClearMitigation() *RiskHistoryUpdate {
-	rhu.mutation.ClearMitigation()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearMitigation() *RiskHistoryUpdate {
+	_u.mutation.ClearMitigation()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (rhu *RiskHistoryUpdate) SetDetails(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetDetails(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetDetails(v string) *RiskHistoryUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDetails(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetDetails(*s)
+func (_u *RiskHistoryUpdate) SetNillableDetails(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (rhu *RiskHistoryUpdate) ClearDetails() *RiskHistoryUpdate {
-	rhu.mutation.ClearDetails()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearDetails() *RiskHistoryUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetBusinessCosts sets the "business_costs" field.
-func (rhu *RiskHistoryUpdate) SetBusinessCosts(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetBusinessCosts(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetBusinessCosts(v string) *RiskHistoryUpdate {
+	_u.mutation.SetBusinessCosts(v)
+	return _u
 }
 
 // SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableBusinessCosts(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetBusinessCosts(*s)
+func (_u *RiskHistoryUpdate) SetNillableBusinessCosts(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetBusinessCosts(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearBusinessCosts clears the value of the "business_costs" field.
-func (rhu *RiskHistoryUpdate) ClearBusinessCosts() *RiskHistoryUpdate {
-	rhu.mutation.ClearBusinessCosts()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearBusinessCosts() *RiskHistoryUpdate {
+	_u.mutation.ClearBusinessCosts()
+	return _u
 }
 
 // SetStakeholderID sets the "stakeholder_id" field.
-func (rhu *RiskHistoryUpdate) SetStakeholderID(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetStakeholderID(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetStakeholderID(v string) *RiskHistoryUpdate {
+	_u.mutation.SetStakeholderID(v)
+	return _u
 }
 
 // SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableStakeholderID(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetStakeholderID(*s)
+func (_u *RiskHistoryUpdate) SetNillableStakeholderID(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetStakeholderID(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearStakeholderID clears the value of the "stakeholder_id" field.
-func (rhu *RiskHistoryUpdate) ClearStakeholderID() *RiskHistoryUpdate {
-	rhu.mutation.ClearStakeholderID()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearStakeholderID() *RiskHistoryUpdate {
+	_u.mutation.ClearStakeholderID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (rhu *RiskHistoryUpdate) SetDelegateID(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetDelegateID(s)
-	return rhu
+func (_u *RiskHistoryUpdate) SetDelegateID(v string) *RiskHistoryUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableDelegateID(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetDelegateID(*s)
+func (_u *RiskHistoryUpdate) SetNillableDelegateID(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return rhu
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (rhu *RiskHistoryUpdate) ClearDelegateID() *RiskHistoryUpdate {
-	rhu.mutation.ClearDelegateID()
-	return rhu
+func (_u *RiskHistoryUpdate) ClearDelegateID() *RiskHistoryUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // Mutation returns the RiskHistoryMutation object of the builder.
-func (rhu *RiskHistoryUpdate) Mutation() *RiskHistoryMutation {
-	return rhu.mutation
+func (_u *RiskHistoryUpdate) Mutation() *RiskHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (rhu *RiskHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := rhu.defaults(); err != nil {
+func (_u *RiskHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, rhu.sqlSave, rhu.mutation, rhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rhu *RiskHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := rhu.Save(ctx)
+func (_u *RiskHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -387,43 +387,43 @@ func (rhu *RiskHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (rhu *RiskHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := rhu.Save(ctx)
+func (_u *RiskHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhu *RiskHistoryUpdate) ExecX(ctx context.Context) {
-	if err := rhu.Exec(ctx); err != nil {
+func (_u *RiskHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (rhu *RiskHistoryUpdate) defaults() error {
-	if _, ok := rhu.mutation.UpdatedAt(); !ok && !rhu.mutation.UpdatedAtCleared() {
+func (_u *RiskHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if riskhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized riskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := riskhistory.UpdateDefaultUpdatedAt()
-		rhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (rhu *RiskHistoryUpdate) check() error {
-	if v, ok := rhu.mutation.Status(); ok {
+func (_u *RiskHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := riskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := rhu.mutation.Impact(); ok {
+	if v, ok := _u.mutation.Impact(); ok {
 		if err := riskhistory.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
 		}
 	}
-	if v, ok := rhu.mutation.Likelihood(); ok {
+	if v, ok := _u.mutation.Likelihood(); ok {
 		if err := riskhistory.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
 		}
@@ -432,146 +432,146 @@ func (rhu *RiskHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (rhu *RiskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskHistoryUpdate {
-	rhu.modifiers = append(rhu.modifiers, modifiers...)
-	return rhu
+func (_u *RiskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := rhu.check(); err != nil {
-		return n, err
+func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(riskhistory.Table, riskhistory.Columns, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
-	if ps := rhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if rhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(riskhistory.FieldRef, field.TypeString)
 	}
-	if rhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := rhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(riskhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if rhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if rhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(riskhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := rhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(riskhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if rhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := rhu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if rhu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := rhu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(riskhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if rhu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(riskhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := rhu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, riskhistory.FieldTags, value)
 		})
 	}
-	if rhu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(riskhistory.FieldTags, field.TypeJSON)
 	}
-	if rhu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := rhu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(riskhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if rhu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(riskhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := rhu.mutation.RiskType(); ok {
+	if value, ok := _u.mutation.RiskType(); ok {
 		_spec.SetField(riskhistory.FieldRiskType, field.TypeString, value)
 	}
-	if rhu.mutation.RiskTypeCleared() {
+	if _u.mutation.RiskTypeCleared() {
 		_spec.ClearField(riskhistory.FieldRiskType, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(riskhistory.FieldCategory, field.TypeString, value)
 	}
-	if rhu.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(riskhistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Impact(); ok {
+	if value, ok := _u.mutation.Impact(); ok {
 		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
 	}
-	if rhu.mutation.ImpactCleared() {
+	if _u.mutation.ImpactCleared() {
 		_spec.ClearField(riskhistory.FieldImpact, field.TypeEnum)
 	}
-	if value, ok := rhu.mutation.Likelihood(); ok {
+	if value, ok := _u.mutation.Likelihood(); ok {
 		_spec.SetField(riskhistory.FieldLikelihood, field.TypeEnum, value)
 	}
-	if rhu.mutation.LikelihoodCleared() {
+	if _u.mutation.LikelihoodCleared() {
 		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeEnum)
 	}
-	if value, ok := rhu.mutation.Score(); ok {
+	if value, ok := _u.mutation.Score(); ok {
 		_spec.SetField(riskhistory.FieldScore, field.TypeInt, value)
 	}
-	if value, ok := rhu.mutation.AddedScore(); ok {
+	if value, ok := _u.mutation.AddedScore(); ok {
 		_spec.AddField(riskhistory.FieldScore, field.TypeInt, value)
 	}
-	if rhu.mutation.ScoreCleared() {
+	if _u.mutation.ScoreCleared() {
 		_spec.ClearField(riskhistory.FieldScore, field.TypeInt)
 	}
-	if value, ok := rhu.mutation.Mitigation(); ok {
+	if value, ok := _u.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
 	}
-	if rhu.mutation.MitigationCleared() {
+	if _u.mutation.MitigationCleared() {
 		_spec.ClearField(riskhistory.FieldMitigation, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(riskhistory.FieldDetails, field.TypeString, value)
 	}
-	if rhu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(riskhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := rhu.mutation.BusinessCosts(); ok {
+	if value, ok := _u.mutation.BusinessCosts(); ok {
 		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
 	}
-	if rhu.mutation.BusinessCostsCleared() {
+	if _u.mutation.BusinessCostsCleared() {
 		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
 	}
-	if value, ok := rhu.mutation.StakeholderID(); ok {
+	if value, ok := _u.mutation.StakeholderID(); ok {
 		_spec.SetField(riskhistory.FieldStakeholderID, field.TypeString, value)
 	}
-	if rhu.mutation.StakeholderIDCleared() {
+	if _u.mutation.StakeholderIDCleared() {
 		_spec.ClearField(riskhistory.FieldStakeholderID, field.TypeString)
 	}
-	if value, ok := rhu.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(riskhistory.FieldDelegateID, field.TypeString, value)
 	}
-	if rhu.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(riskhistory.FieldDelegateID, field.TypeString)
 	}
-	_spec.Node.Schema = rhu.schemaConfig.RiskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, rhu.schemaConfig)
-	_spec.AddModifiers(rhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, rhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.RiskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{riskhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -579,8 +579,8 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	rhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // RiskHistoryUpdateOne is the builder for updating a single RiskHistory entity.
@@ -593,365 +593,365 @@ type RiskHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (rhuo *RiskHistoryUpdateOne) SetUpdatedAt(t time.Time) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetUpdatedAt(t)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetUpdatedAt(v time.Time) *RiskHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (rhuo *RiskHistoryUpdateOne) ClearUpdatedAt() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearUpdatedAt()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearUpdatedAt() *RiskHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (rhuo *RiskHistoryUpdateOne) SetUpdatedBy(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetUpdatedBy(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetUpdatedBy(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableUpdatedBy(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetUpdatedBy(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableUpdatedBy(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (rhuo *RiskHistoryUpdateOne) ClearUpdatedBy() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearUpdatedBy()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearUpdatedBy() *RiskHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (rhuo *RiskHistoryUpdateOne) SetDeletedAt(t time.Time) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDeletedAt(t)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetDeletedAt(v time.Time) *RiskHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *RiskHistoryUpdateOne {
-	if t != nil {
-		rhuo.SetDeletedAt(*t)
+func (_u *RiskHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDeletedAt() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDeletedAt()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearDeletedAt() *RiskHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (rhuo *RiskHistoryUpdateOne) SetDeletedBy(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDeletedBy(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetDeletedBy(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDeletedBy(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetDeletedBy(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableDeletedBy(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDeletedBy() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDeletedBy()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearDeletedBy() *RiskHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (rhuo *RiskHistoryUpdateOne) SetTags(s []string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetTags(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetTags(v []string) *RiskHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (rhuo *RiskHistoryUpdateOne) AppendTags(s []string) *RiskHistoryUpdateOne {
-	rhuo.mutation.AppendTags(s)
-	return rhuo
+// AppendTags appends value to the "tags" field.
+func (_u *RiskHistoryUpdateOne) AppendTags(v []string) *RiskHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (rhuo *RiskHistoryUpdateOne) ClearTags() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearTags()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearTags() *RiskHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (rhuo *RiskHistoryUpdateOne) SetName(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetName(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetName(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableName(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetName(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableName(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (rhuo *RiskHistoryUpdateOne) SetStatus(es enums.RiskStatus) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetStatus(es)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetStatus(v enums.RiskStatus) *RiskHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableStatus(es *enums.RiskStatus) *RiskHistoryUpdateOne {
-	if es != nil {
-		rhuo.SetStatus(*es)
+func (_u *RiskHistoryUpdateOne) SetNillableStatus(v *enums.RiskStatus) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (rhuo *RiskHistoryUpdateOne) ClearStatus() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearStatus()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearStatus() *RiskHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetRiskType sets the "risk_type" field.
-func (rhuo *RiskHistoryUpdateOne) SetRiskType(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetRiskType(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetRiskType(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetRiskType(v)
+	return _u
 }
 
 // SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableRiskType(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetRiskType(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableRiskType(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskType(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearRiskType clears the value of the "risk_type" field.
-func (rhuo *RiskHistoryUpdateOne) ClearRiskType() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearRiskType()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearRiskType() *RiskHistoryUpdateOne {
+	_u.mutation.ClearRiskType()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (rhuo *RiskHistoryUpdateOne) SetCategory(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetCategory(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetCategory(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableCategory(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetCategory(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableCategory(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (rhuo *RiskHistoryUpdateOne) ClearCategory() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearCategory()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearCategory() *RiskHistoryUpdateOne {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetImpact sets the "impact" field.
-func (rhuo *RiskHistoryUpdateOne) SetImpact(ei enums.RiskImpact) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetImpact(ei)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetImpact(v enums.RiskImpact) *RiskHistoryUpdateOne {
+	_u.mutation.SetImpact(v)
+	return _u
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableImpact(ei *enums.RiskImpact) *RiskHistoryUpdateOne {
-	if ei != nil {
-		rhuo.SetImpact(*ei)
+func (_u *RiskHistoryUpdateOne) SetNillableImpact(v *enums.RiskImpact) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetImpact(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearImpact clears the value of the "impact" field.
-func (rhuo *RiskHistoryUpdateOne) ClearImpact() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearImpact()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearImpact() *RiskHistoryUpdateOne {
+	_u.mutation.ClearImpact()
+	return _u
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (rhuo *RiskHistoryUpdateOne) SetLikelihood(el enums.RiskLikelihood) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetLikelihood(el)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetLikelihood(v enums.RiskLikelihood) *RiskHistoryUpdateOne {
+	_u.mutation.SetLikelihood(v)
+	return _u
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskHistoryUpdateOne {
-	if el != nil {
-		rhuo.SetLikelihood(*el)
+func (_u *RiskHistoryUpdateOne) SetNillableLikelihood(v *enums.RiskLikelihood) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetLikelihood(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearLikelihood clears the value of the "likelihood" field.
-func (rhuo *RiskHistoryUpdateOne) ClearLikelihood() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearLikelihood()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearLikelihood() *RiskHistoryUpdateOne {
+	_u.mutation.ClearLikelihood()
+	return _u
 }
 
 // SetScore sets the "score" field.
-func (rhuo *RiskHistoryUpdateOne) SetScore(i int) *RiskHistoryUpdateOne {
-	rhuo.mutation.ResetScore()
-	rhuo.mutation.SetScore(i)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetScore(v int) *RiskHistoryUpdateOne {
+	_u.mutation.ResetScore()
+	_u.mutation.SetScore(v)
+	return _u
 }
 
 // SetNillableScore sets the "score" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableScore(i *int) *RiskHistoryUpdateOne {
-	if i != nil {
-		rhuo.SetScore(*i)
+func (_u *RiskHistoryUpdateOne) SetNillableScore(v *int) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetScore(*v)
 	}
-	return rhuo
+	return _u
 }
 
-// AddScore adds i to the "score" field.
-func (rhuo *RiskHistoryUpdateOne) AddScore(i int) *RiskHistoryUpdateOne {
-	rhuo.mutation.AddScore(i)
-	return rhuo
+// AddScore adds value to the "score" field.
+func (_u *RiskHistoryUpdateOne) AddScore(v int) *RiskHistoryUpdateOne {
+	_u.mutation.AddScore(v)
+	return _u
 }
 
 // ClearScore clears the value of the "score" field.
-func (rhuo *RiskHistoryUpdateOne) ClearScore() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearScore()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearScore() *RiskHistoryUpdateOne {
+	_u.mutation.ClearScore()
+	return _u
 }
 
 // SetMitigation sets the "mitigation" field.
-func (rhuo *RiskHistoryUpdateOne) SetMitigation(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetMitigation(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetMitigation(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetMitigation(v)
+	return _u
 }
 
 // SetNillableMitigation sets the "mitigation" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableMitigation(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetMitigation(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableMitigation(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetMitigation(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearMitigation clears the value of the "mitigation" field.
-func (rhuo *RiskHistoryUpdateOne) ClearMitigation() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearMitigation()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearMitigation() *RiskHistoryUpdateOne {
+	_u.mutation.ClearMitigation()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (rhuo *RiskHistoryUpdateOne) SetDetails(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDetails(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetDetails(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDetails(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetDetails(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableDetails(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDetails() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDetails()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearDetails() *RiskHistoryUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetBusinessCosts sets the "business_costs" field.
-func (rhuo *RiskHistoryUpdateOne) SetBusinessCosts(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetBusinessCosts(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetBusinessCosts(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetBusinessCosts(v)
+	return _u
 }
 
 // SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableBusinessCosts(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetBusinessCosts(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableBusinessCosts(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetBusinessCosts(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearBusinessCosts clears the value of the "business_costs" field.
-func (rhuo *RiskHistoryUpdateOne) ClearBusinessCosts() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearBusinessCosts()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearBusinessCosts() *RiskHistoryUpdateOne {
+	_u.mutation.ClearBusinessCosts()
+	return _u
 }
 
 // SetStakeholderID sets the "stakeholder_id" field.
-func (rhuo *RiskHistoryUpdateOne) SetStakeholderID(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetStakeholderID(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetStakeholderID(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetStakeholderID(v)
+	return _u
 }
 
 // SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableStakeholderID(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetStakeholderID(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableStakeholderID(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetStakeholderID(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearStakeholderID clears the value of the "stakeholder_id" field.
-func (rhuo *RiskHistoryUpdateOne) ClearStakeholderID() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearStakeholderID()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearStakeholderID() *RiskHistoryUpdateOne {
+	_u.mutation.ClearStakeholderID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (rhuo *RiskHistoryUpdateOne) SetDelegateID(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetDelegateID(s)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) SetDelegateID(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableDelegateID(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetDelegateID(*s)
+func (_u *RiskHistoryUpdateOne) SetNillableDelegateID(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return rhuo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (rhuo *RiskHistoryUpdateOne) ClearDelegateID() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearDelegateID()
-	return rhuo
+func (_u *RiskHistoryUpdateOne) ClearDelegateID() *RiskHistoryUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // Mutation returns the RiskHistoryMutation object of the builder.
-func (rhuo *RiskHistoryUpdateOne) Mutation() *RiskHistoryMutation {
-	return rhuo.mutation
+func (_u *RiskHistoryUpdateOne) Mutation() *RiskHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the RiskHistoryUpdate builder.
-func (rhuo *RiskHistoryUpdateOne) Where(ps ...predicate.RiskHistory) *RiskHistoryUpdateOne {
-	rhuo.mutation.Where(ps...)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) Where(ps ...predicate.RiskHistory) *RiskHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (rhuo *RiskHistoryUpdateOne) Select(field string, fields ...string) *RiskHistoryUpdateOne {
-	rhuo.fields = append([]string{field}, fields...)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) Select(field string, fields ...string) *RiskHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated RiskHistory entity.
-func (rhuo *RiskHistoryUpdateOne) Save(ctx context.Context) (*RiskHistory, error) {
-	if err := rhuo.defaults(); err != nil {
+func (_u *RiskHistoryUpdateOne) Save(ctx context.Context) (*RiskHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, rhuo.sqlSave, rhuo.mutation, rhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rhuo *RiskHistoryUpdateOne) SaveX(ctx context.Context) *RiskHistory {
-	node, err := rhuo.Save(ctx)
+func (_u *RiskHistoryUpdateOne) SaveX(ctx context.Context) *RiskHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -959,43 +959,43 @@ func (rhuo *RiskHistoryUpdateOne) SaveX(ctx context.Context) *RiskHistory {
 }
 
 // Exec executes the query on the entity.
-func (rhuo *RiskHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := rhuo.Save(ctx)
+func (_u *RiskHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhuo *RiskHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := rhuo.Exec(ctx); err != nil {
+func (_u *RiskHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (rhuo *RiskHistoryUpdateOne) defaults() error {
-	if _, ok := rhuo.mutation.UpdatedAt(); !ok && !rhuo.mutation.UpdatedAtCleared() {
+func (_u *RiskHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if riskhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized riskhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := riskhistory.UpdateDefaultUpdatedAt()
-		rhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (rhuo *RiskHistoryUpdateOne) check() error {
-	if v, ok := rhuo.mutation.Status(); ok {
+func (_u *RiskHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := riskhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := rhuo.mutation.Impact(); ok {
+	if v, ok := _u.mutation.Impact(); ok {
 		if err := riskhistory.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
 		}
 	}
-	if v, ok := rhuo.mutation.Likelihood(); ok {
+	if v, ok := _u.mutation.Likelihood(); ok {
 		if err := riskhistory.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
 		}
@@ -1004,22 +1004,22 @@ func (rhuo *RiskHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (rhuo *RiskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskHistoryUpdateOne {
-	rhuo.modifiers = append(rhuo.modifiers, modifiers...)
-	return rhuo
+func (_u *RiskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory, err error) {
-	if err := rhuo.check(); err != nil {
+func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(riskhistory.Table, riskhistory.Columns, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
-	id, ok := rhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "RiskHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := rhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, riskhistory.FieldID)
 		for _, f := range fields {
@@ -1031,139 +1031,139 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 			}
 		}
 	}
-	if ps := rhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if rhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(riskhistory.FieldRef, field.TypeString)
 	}
-	if rhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := rhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(riskhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if rhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if rhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(riskhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(riskhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if rhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(riskhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(riskhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if rhuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := rhuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(riskhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if rhuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(riskhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(riskhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := rhuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, riskhistory.FieldTags, value)
 		})
 	}
-	if rhuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(riskhistory.FieldTags, field.TypeJSON)
 	}
-	if rhuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := rhuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(riskhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if rhuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(riskhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := rhuo.mutation.RiskType(); ok {
+	if value, ok := _u.mutation.RiskType(); ok {
 		_spec.SetField(riskhistory.FieldRiskType, field.TypeString, value)
 	}
-	if rhuo.mutation.RiskTypeCleared() {
+	if _u.mutation.RiskTypeCleared() {
 		_spec.ClearField(riskhistory.FieldRiskType, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(riskhistory.FieldCategory, field.TypeString, value)
 	}
-	if rhuo.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(riskhistory.FieldCategory, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Impact(); ok {
+	if value, ok := _u.mutation.Impact(); ok {
 		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
 	}
-	if rhuo.mutation.ImpactCleared() {
+	if _u.mutation.ImpactCleared() {
 		_spec.ClearField(riskhistory.FieldImpact, field.TypeEnum)
 	}
-	if value, ok := rhuo.mutation.Likelihood(); ok {
+	if value, ok := _u.mutation.Likelihood(); ok {
 		_spec.SetField(riskhistory.FieldLikelihood, field.TypeEnum, value)
 	}
-	if rhuo.mutation.LikelihoodCleared() {
+	if _u.mutation.LikelihoodCleared() {
 		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeEnum)
 	}
-	if value, ok := rhuo.mutation.Score(); ok {
+	if value, ok := _u.mutation.Score(); ok {
 		_spec.SetField(riskhistory.FieldScore, field.TypeInt, value)
 	}
-	if value, ok := rhuo.mutation.AddedScore(); ok {
+	if value, ok := _u.mutation.AddedScore(); ok {
 		_spec.AddField(riskhistory.FieldScore, field.TypeInt, value)
 	}
-	if rhuo.mutation.ScoreCleared() {
+	if _u.mutation.ScoreCleared() {
 		_spec.ClearField(riskhistory.FieldScore, field.TypeInt)
 	}
-	if value, ok := rhuo.mutation.Mitigation(); ok {
+	if value, ok := _u.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
 	}
-	if rhuo.mutation.MitigationCleared() {
+	if _u.mutation.MitigationCleared() {
 		_spec.ClearField(riskhistory.FieldMitigation, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(riskhistory.FieldDetails, field.TypeString, value)
 	}
-	if rhuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(riskhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.BusinessCosts(); ok {
+	if value, ok := _u.mutation.BusinessCosts(); ok {
 		_spec.SetField(riskhistory.FieldBusinessCosts, field.TypeString, value)
 	}
-	if rhuo.mutation.BusinessCostsCleared() {
+	if _u.mutation.BusinessCostsCleared() {
 		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.StakeholderID(); ok {
+	if value, ok := _u.mutation.StakeholderID(); ok {
 		_spec.SetField(riskhistory.FieldStakeholderID, field.TypeString, value)
 	}
-	if rhuo.mutation.StakeholderIDCleared() {
+	if _u.mutation.StakeholderIDCleared() {
 		_spec.ClearField(riskhistory.FieldStakeholderID, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(riskhistory.FieldDelegateID, field.TypeString, value)
 	}
-	if rhuo.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(riskhistory.FieldDelegateID, field.TypeString)
 	}
-	_spec.Node.Schema = rhuo.schemaConfig.RiskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, rhuo.schemaConfig)
-	_spec.AddModifiers(rhuo.modifiers...)
-	_node = &RiskHistory{config: rhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.RiskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &RiskHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, rhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{riskhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1171,6 +1171,6 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 		}
 		return nil, err
 	}
-	rhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

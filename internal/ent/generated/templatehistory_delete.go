@@ -22,58 +22,58 @@ type TemplateHistoryDelete struct {
 }
 
 // Where appends a list predicates to the TemplateHistoryDelete builder.
-func (thd *TemplateHistoryDelete) Where(ps ...predicate.TemplateHistory) *TemplateHistoryDelete {
-	thd.mutation.Where(ps...)
-	return thd
+func (_d *TemplateHistoryDelete) Where(ps ...predicate.TemplateHistory) *TemplateHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (thd *TemplateHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, thd.sqlExec, thd.mutation, thd.hooks)
+func (_d *TemplateHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thd *TemplateHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := thd.Exec(ctx)
+func (_d *TemplateHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (thd *TemplateHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TemplateHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(templatehistory.Table, sqlgraph.NewFieldSpec(templatehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = thd.schemaConfig.TemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thd.schemaConfig)
-	if ps := thd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, thd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	thd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TemplateHistoryDeleteOne is the builder for deleting a single TemplateHistory entity.
 type TemplateHistoryDeleteOne struct {
-	thd *TemplateHistoryDelete
+	_d *TemplateHistoryDelete
 }
 
 // Where appends a list predicates to the TemplateHistoryDelete builder.
-func (thdo *TemplateHistoryDeleteOne) Where(ps ...predicate.TemplateHistory) *TemplateHistoryDeleteOne {
-	thdo.thd.mutation.Where(ps...)
-	return thdo
+func (_d *TemplateHistoryDeleteOne) Where(ps ...predicate.TemplateHistory) *TemplateHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (thdo *TemplateHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := thdo.thd.Exec(ctx)
+func (_d *TemplateHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (thdo *TemplateHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thdo *TemplateHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := thdo.Exec(ctx); err != nil {
+func (_d *TemplateHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

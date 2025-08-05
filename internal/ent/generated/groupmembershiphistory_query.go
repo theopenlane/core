@@ -33,40 +33,40 @@ type GroupMembershipHistoryQuery struct {
 }
 
 // Where adds a new predicate for the GroupMembershipHistoryQuery builder.
-func (gmhq *GroupMembershipHistoryQuery) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryQuery {
-	gmhq.predicates = append(gmhq.predicates, ps...)
-	return gmhq
+func (_q *GroupMembershipHistoryQuery) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (gmhq *GroupMembershipHistoryQuery) Limit(limit int) *GroupMembershipHistoryQuery {
-	gmhq.ctx.Limit = &limit
-	return gmhq
+func (_q *GroupMembershipHistoryQuery) Limit(limit int) *GroupMembershipHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (gmhq *GroupMembershipHistoryQuery) Offset(offset int) *GroupMembershipHistoryQuery {
-	gmhq.ctx.Offset = &offset
-	return gmhq
+func (_q *GroupMembershipHistoryQuery) Offset(offset int) *GroupMembershipHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (gmhq *GroupMembershipHistoryQuery) Unique(unique bool) *GroupMembershipHistoryQuery {
-	gmhq.ctx.Unique = &unique
-	return gmhq
+func (_q *GroupMembershipHistoryQuery) Unique(unique bool) *GroupMembershipHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (gmhq *GroupMembershipHistoryQuery) Order(o ...groupmembershiphistory.OrderOption) *GroupMembershipHistoryQuery {
-	gmhq.order = append(gmhq.order, o...)
-	return gmhq
+func (_q *GroupMembershipHistoryQuery) Order(o ...groupmembershiphistory.OrderOption) *GroupMembershipHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first GroupMembershipHistory entity from the query.
 // Returns a *NotFoundError when no GroupMembershipHistory was found.
-func (gmhq *GroupMembershipHistoryQuery) First(ctx context.Context) (*GroupMembershipHistory, error) {
-	nodes, err := gmhq.Limit(1).All(setContextOp(ctx, gmhq.ctx, ent.OpQueryFirst))
+func (_q *GroupMembershipHistoryQuery) First(ctx context.Context) (*GroupMembershipHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (gmhq *GroupMembershipHistoryQuery) First(ctx context.Context) (*GroupMembe
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) FirstX(ctx context.Context) *GroupMembershipHistory {
-	node, err := gmhq.First(ctx)
+func (_q *GroupMembershipHistoryQuery) FirstX(ctx context.Context) *GroupMembershipHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (gmhq *GroupMembershipHistoryQuery) FirstX(ctx context.Context) *GroupMembe
 
 // FirstID returns the first GroupMembershipHistory ID from the query.
 // Returns a *NotFoundError when no GroupMembershipHistory ID was found.
-func (gmhq *GroupMembershipHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *GroupMembershipHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = gmhq.Limit(1).IDs(setContextOp(ctx, gmhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (gmhq *GroupMembershipHistoryQuery) FirstID(ctx context.Context) (id string
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := gmhq.FirstID(ctx)
+func (_q *GroupMembershipHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (gmhq *GroupMembershipHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single GroupMembershipHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one GroupMembershipHistory entity is found.
 // Returns a *NotFoundError when no GroupMembershipHistory entities are found.
-func (gmhq *GroupMembershipHistoryQuery) Only(ctx context.Context) (*GroupMembershipHistory, error) {
-	nodes, err := gmhq.Limit(2).All(setContextOp(ctx, gmhq.ctx, ent.OpQueryOnly))
+func (_q *GroupMembershipHistoryQuery) Only(ctx context.Context) (*GroupMembershipHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (gmhq *GroupMembershipHistoryQuery) Only(ctx context.Context) (*GroupMember
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) OnlyX(ctx context.Context) *GroupMembershipHistory {
-	node, err := gmhq.Only(ctx)
+func (_q *GroupMembershipHistoryQuery) OnlyX(ctx context.Context) *GroupMembershipHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (gmhq *GroupMembershipHistoryQuery) OnlyX(ctx context.Context) *GroupMember
 // OnlyID is like Only, but returns the only GroupMembershipHistory ID in the query.
 // Returns a *NotSingularError when more than one GroupMembershipHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (gmhq *GroupMembershipHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *GroupMembershipHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = gmhq.Limit(2).IDs(setContextOp(ctx, gmhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (gmhq *GroupMembershipHistoryQuery) OnlyID(ctx context.Context) (id string,
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := gmhq.OnlyID(ctx)
+func (_q *GroupMembershipHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (gmhq *GroupMembershipHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of GroupMembershipHistories.
-func (gmhq *GroupMembershipHistoryQuery) All(ctx context.Context) ([]*GroupMembershipHistory, error) {
-	ctx = setContextOp(ctx, gmhq.ctx, ent.OpQueryAll)
-	if err := gmhq.prepareQuery(ctx); err != nil {
+func (_q *GroupMembershipHistoryQuery) All(ctx context.Context) ([]*GroupMembershipHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*GroupMembershipHistory, *GroupMembershipHistoryQuery]()
-	return withInterceptors[[]*GroupMembershipHistory](ctx, gmhq, qr, gmhq.inters)
+	return withInterceptors[[]*GroupMembershipHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) AllX(ctx context.Context) []*GroupMembershipHistory {
-	nodes, err := gmhq.All(ctx)
+func (_q *GroupMembershipHistoryQuery) AllX(ctx context.Context) []*GroupMembershipHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (gmhq *GroupMembershipHistoryQuery) AllX(ctx context.Context) []*GroupMembe
 }
 
 // IDs executes the query and returns a list of GroupMembershipHistory IDs.
-func (gmhq *GroupMembershipHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if gmhq.ctx.Unique == nil && gmhq.path != nil {
-		gmhq.Unique(true)
+func (_q *GroupMembershipHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, gmhq.ctx, ent.OpQueryIDs)
-	if err = gmhq.Select(groupmembershiphistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(groupmembershiphistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := gmhq.IDs(ctx)
+func (_q *GroupMembershipHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (gmhq *GroupMembershipHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (gmhq *GroupMembershipHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, gmhq.ctx, ent.OpQueryCount)
-	if err := gmhq.prepareQuery(ctx); err != nil {
+func (_q *GroupMembershipHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, gmhq, querierCount[*GroupMembershipHistoryQuery](), gmhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*GroupMembershipHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) CountX(ctx context.Context) int {
-	count, err := gmhq.Count(ctx)
+func (_q *GroupMembershipHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (gmhq *GroupMembershipHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (gmhq *GroupMembershipHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, gmhq.ctx, ent.OpQueryExist)
-	switch _, err := gmhq.FirstID(ctx); {
+func (_q *GroupMembershipHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (gmhq *GroupMembershipHistoryQuery) Exist(ctx context.Context) (bool, error
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (gmhq *GroupMembershipHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := gmhq.Exist(ctx)
+func (_q *GroupMembershipHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (gmhq *GroupMembershipHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the GroupMembershipHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (gmhq *GroupMembershipHistoryQuery) Clone() *GroupMembershipHistoryQuery {
-	if gmhq == nil {
+func (_q *GroupMembershipHistoryQuery) Clone() *GroupMembershipHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &GroupMembershipHistoryQuery{
-		config:     gmhq.config,
-		ctx:        gmhq.ctx.Clone(),
-		order:      append([]groupmembershiphistory.OrderOption{}, gmhq.order...),
-		inters:     append([]Interceptor{}, gmhq.inters...),
-		predicates: append([]predicate.GroupMembershipHistory{}, gmhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]groupmembershiphistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.GroupMembershipHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       gmhq.sql.Clone(),
-		path:      gmhq.path,
-		modifiers: append([]func(*sql.Selector){}, gmhq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (gmhq *GroupMembershipHistoryQuery) Clone() *GroupMembershipHistoryQuery {
 //		GroupBy(groupmembershiphistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (gmhq *GroupMembershipHistoryQuery) GroupBy(field string, fields ...string) *GroupMembershipHistoryGroupBy {
-	gmhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &GroupMembershipHistoryGroupBy{build: gmhq}
-	grbuild.flds = &gmhq.ctx.Fields
+func (_q *GroupMembershipHistoryQuery) GroupBy(field string, fields ...string) *GroupMembershipHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &GroupMembershipHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = groupmembershiphistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (gmhq *GroupMembershipHistoryQuery) GroupBy(field string, fields ...string)
 //	client.GroupMembershipHistory.Query().
 //		Select(groupmembershiphistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (gmhq *GroupMembershipHistoryQuery) Select(fields ...string) *GroupMembershipHistorySelect {
-	gmhq.ctx.Fields = append(gmhq.ctx.Fields, fields...)
-	sbuild := &GroupMembershipHistorySelect{GroupMembershipHistoryQuery: gmhq}
+func (_q *GroupMembershipHistoryQuery) Select(fields ...string) *GroupMembershipHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &GroupMembershipHistorySelect{GroupMembershipHistoryQuery: _q}
 	sbuild.label = groupmembershiphistory.Label
-	sbuild.flds, sbuild.scan = &gmhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a GroupMembershipHistorySelect configured with the given aggregations.
-func (gmhq *GroupMembershipHistoryQuery) Aggregate(fns ...AggregateFunc) *GroupMembershipHistorySelect {
-	return gmhq.Select().Aggregate(fns...)
+func (_q *GroupMembershipHistoryQuery) Aggregate(fns ...AggregateFunc) *GroupMembershipHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (gmhq *GroupMembershipHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range gmhq.inters {
+func (_q *GroupMembershipHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, gmhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range gmhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !groupmembershiphistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if gmhq.path != nil {
-		prev, err := gmhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		gmhq.sql = prev
+		_q.sql = prev
 	}
 	if groupmembershiphistory.Policy == nil {
 		return errors.New("generated: uninitialized groupmembershiphistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := groupmembershiphistory.Policy.EvalQuery(ctx, gmhq); err != nil {
+	if err := groupmembershiphistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (gmhq *GroupMembershipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GroupMembershipHistory, error) {
+func (_q *GroupMembershipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GroupMembershipHistory, error) {
 	var (
 		nodes = []*GroupMembershipHistory{}
-		_spec = gmhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*GroupMembershipHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &GroupMembershipHistory{config: gmhq.config}
+		node := &GroupMembershipHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = gmhq.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, gmhq.schemaConfig)
-	if len(gmhq.modifiers) > 0 {
-		_spec.Modifiers = gmhq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.GroupMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, gmhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range gmhq.loadTotal {
-		if err := gmhq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (gmhq *GroupMembershipHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := gmhq.querySpec()
-	_spec.Node.Schema = gmhq.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, gmhq.schemaConfig)
-	if len(gmhq.modifiers) > 0 {
-		_spec.Modifiers = gmhq.modifiers
+func (_q *GroupMembershipHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.GroupMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = gmhq.ctx.Fields
-	if len(gmhq.ctx.Fields) > 0 {
-		_spec.Unique = gmhq.ctx.Unique != nil && *gmhq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, gmhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (gmhq *GroupMembershipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *GroupMembershipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(groupmembershiphistory.Table, groupmembershiphistory.Columns, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
-	_spec.From = gmhq.sql
-	if unique := gmhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if gmhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := gmhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, groupmembershiphistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (gmhq *GroupMembershipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := gmhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := gmhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := gmhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := gmhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (gmhq *GroupMembershipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (gmhq *GroupMembershipHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(gmhq.driver.Dialect())
+func (_q *GroupMembershipHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(groupmembershiphistory.Table)
-	columns := gmhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = groupmembershiphistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if gmhq.sql != nil {
-		selector = gmhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if gmhq.ctx.Unique != nil && *gmhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(gmhq.schemaConfig.GroupMembershipHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, gmhq.schemaConfig)
+	t1.Schema(_q.schemaConfig.GroupMembershipHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range gmhq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range gmhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range gmhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := gmhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := gmhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (gmhq *GroupMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipHistorySelect {
-	gmhq.modifiers = append(gmhq.modifiers, modifiers...)
-	return gmhq.Select()
+func (_q *GroupMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type GroupMembershipHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (gmhgb *GroupMembershipHistoryGroupBy) Aggregate(fns ...AggregateFunc) *GroupMembershipHistoryGroupBy {
-	gmhgb.fns = append(gmhgb.fns, fns...)
-	return gmhgb
+func (_g *GroupMembershipHistoryGroupBy) Aggregate(fns ...AggregateFunc) *GroupMembershipHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gmhgb *GroupMembershipHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gmhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := gmhgb.build.prepareQuery(ctx); err != nil {
+func (_g *GroupMembershipHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GroupMembershipHistoryQuery, *GroupMembershipHistoryGroupBy](ctx, gmhgb.build, gmhgb, gmhgb.build.inters, v)
+	return scanWithInterceptors[*GroupMembershipHistoryQuery, *GroupMembershipHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (gmhgb *GroupMembershipHistoryGroupBy) sqlScan(ctx context.Context, root *GroupMembershipHistoryQuery, v any) error {
+func (_g *GroupMembershipHistoryGroupBy) sqlScan(ctx context.Context, root *GroupMembershipHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(gmhgb.fns))
-	for _, fn := range gmhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*gmhgb.flds)+len(gmhgb.fns))
-		for _, f := range *gmhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*gmhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gmhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type GroupMembershipHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (gmhs *GroupMembershipHistorySelect) Aggregate(fns ...AggregateFunc) *GroupMembershipHistorySelect {
-	gmhs.fns = append(gmhs.fns, fns...)
-	return gmhs
+func (_s *GroupMembershipHistorySelect) Aggregate(fns ...AggregateFunc) *GroupMembershipHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gmhs *GroupMembershipHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gmhs.ctx, ent.OpQuerySelect)
-	if err := gmhs.prepareQuery(ctx); err != nil {
+func (_s *GroupMembershipHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GroupMembershipHistoryQuery, *GroupMembershipHistorySelect](ctx, gmhs.GroupMembershipHistoryQuery, gmhs, gmhs.inters, v)
+	return scanWithInterceptors[*GroupMembershipHistoryQuery, *GroupMembershipHistorySelect](ctx, _s.GroupMembershipHistoryQuery, _s, _s.inters, v)
 }
 
-func (gmhs *GroupMembershipHistorySelect) sqlScan(ctx context.Context, root *GroupMembershipHistoryQuery, v any) error {
+func (_s *GroupMembershipHistorySelect) sqlScan(ctx context.Context, root *GroupMembershipHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(gmhs.fns))
-	for _, fn := range gmhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*gmhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (gmhs *GroupMembershipHistorySelect) sqlScan(ctx context.Context, root *Gro
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gmhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (gmhs *GroupMembershipHistorySelect) sqlScan(ctx context.Context, root *Gro
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (gmhs *GroupMembershipHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipHistorySelect {
-	gmhs.modifiers = append(gmhs.modifiers, modifiers...)
-	return gmhs
+func (_s *GroupMembershipHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

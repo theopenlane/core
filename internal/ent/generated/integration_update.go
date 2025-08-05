@@ -30,274 +30,274 @@ type IntegrationUpdate struct {
 }
 
 // Where appends a list predicates to the IntegrationUpdate builder.
-func (iu *IntegrationUpdate) Where(ps ...predicate.Integration) *IntegrationUpdate {
-	iu.mutation.Where(ps...)
-	return iu
+func (_u *IntegrationUpdate) Where(ps ...predicate.Integration) *IntegrationUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (iu *IntegrationUpdate) SetUpdatedAt(t time.Time) *IntegrationUpdate {
-	iu.mutation.SetUpdatedAt(t)
-	return iu
+func (_u *IntegrationUpdate) SetUpdatedAt(v time.Time) *IntegrationUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (iu *IntegrationUpdate) ClearUpdatedAt() *IntegrationUpdate {
-	iu.mutation.ClearUpdatedAt()
-	return iu
+func (_u *IntegrationUpdate) ClearUpdatedAt() *IntegrationUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (iu *IntegrationUpdate) SetUpdatedBy(s string) *IntegrationUpdate {
-	iu.mutation.SetUpdatedBy(s)
-	return iu
+func (_u *IntegrationUpdate) SetUpdatedBy(v string) *IntegrationUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableUpdatedBy(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetUpdatedBy(*s)
+func (_u *IntegrationUpdate) SetNillableUpdatedBy(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (iu *IntegrationUpdate) ClearUpdatedBy() *IntegrationUpdate {
-	iu.mutation.ClearUpdatedBy()
-	return iu
+func (_u *IntegrationUpdate) ClearUpdatedBy() *IntegrationUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (iu *IntegrationUpdate) SetDeletedAt(t time.Time) *IntegrationUpdate {
-	iu.mutation.SetDeletedAt(t)
-	return iu
+func (_u *IntegrationUpdate) SetDeletedAt(v time.Time) *IntegrationUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableDeletedAt(t *time.Time) *IntegrationUpdate {
-	if t != nil {
-		iu.SetDeletedAt(*t)
+func (_u *IntegrationUpdate) SetNillableDeletedAt(v *time.Time) *IntegrationUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (iu *IntegrationUpdate) ClearDeletedAt() *IntegrationUpdate {
-	iu.mutation.ClearDeletedAt()
-	return iu
+func (_u *IntegrationUpdate) ClearDeletedAt() *IntegrationUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (iu *IntegrationUpdate) SetDeletedBy(s string) *IntegrationUpdate {
-	iu.mutation.SetDeletedBy(s)
-	return iu
+func (_u *IntegrationUpdate) SetDeletedBy(v string) *IntegrationUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableDeletedBy(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetDeletedBy(*s)
+func (_u *IntegrationUpdate) SetNillableDeletedBy(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (iu *IntegrationUpdate) ClearDeletedBy() *IntegrationUpdate {
-	iu.mutation.ClearDeletedBy()
-	return iu
+func (_u *IntegrationUpdate) ClearDeletedBy() *IntegrationUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (iu *IntegrationUpdate) SetTags(s []string) *IntegrationUpdate {
-	iu.mutation.SetTags(s)
-	return iu
+func (_u *IntegrationUpdate) SetTags(v []string) *IntegrationUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (iu *IntegrationUpdate) AppendTags(s []string) *IntegrationUpdate {
-	iu.mutation.AppendTags(s)
-	return iu
+// AppendTags appends value to the "tags" field.
+func (_u *IntegrationUpdate) AppendTags(v []string) *IntegrationUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (iu *IntegrationUpdate) ClearTags() *IntegrationUpdate {
-	iu.mutation.ClearTags()
-	return iu
+func (_u *IntegrationUpdate) ClearTags() *IntegrationUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (iu *IntegrationUpdate) SetOwnerID(s string) *IntegrationUpdate {
-	iu.mutation.SetOwnerID(s)
-	return iu
+func (_u *IntegrationUpdate) SetOwnerID(v string) *IntegrationUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableOwnerID(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetOwnerID(*s)
+func (_u *IntegrationUpdate) SetNillableOwnerID(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (iu *IntegrationUpdate) ClearOwnerID() *IntegrationUpdate {
-	iu.mutation.ClearOwnerID()
-	return iu
+func (_u *IntegrationUpdate) ClearOwnerID() *IntegrationUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (iu *IntegrationUpdate) SetName(s string) *IntegrationUpdate {
-	iu.mutation.SetName(s)
-	return iu
+func (_u *IntegrationUpdate) SetName(v string) *IntegrationUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableName(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetName(*s)
+func (_u *IntegrationUpdate) SetNillableName(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return iu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (iu *IntegrationUpdate) SetDescription(s string) *IntegrationUpdate {
-	iu.mutation.SetDescription(s)
-	return iu
+func (_u *IntegrationUpdate) SetDescription(v string) *IntegrationUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableDescription(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetDescription(*s)
+func (_u *IntegrationUpdate) SetNillableDescription(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (iu *IntegrationUpdate) ClearDescription() *IntegrationUpdate {
-	iu.mutation.ClearDescription()
-	return iu
+func (_u *IntegrationUpdate) ClearDescription() *IntegrationUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetKind sets the "kind" field.
-func (iu *IntegrationUpdate) SetKind(s string) *IntegrationUpdate {
-	iu.mutation.SetKind(s)
-	return iu
+func (_u *IntegrationUpdate) SetKind(v string) *IntegrationUpdate {
+	_u.mutation.SetKind(v)
+	return _u
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (iu *IntegrationUpdate) SetNillableKind(s *string) *IntegrationUpdate {
-	if s != nil {
-		iu.SetKind(*s)
+func (_u *IntegrationUpdate) SetNillableKind(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetKind(*v)
 	}
-	return iu
+	return _u
 }
 
 // ClearKind clears the value of the "kind" field.
-func (iu *IntegrationUpdate) ClearKind() *IntegrationUpdate {
-	iu.mutation.ClearKind()
-	return iu
+func (_u *IntegrationUpdate) ClearKind() *IntegrationUpdate {
+	_u.mutation.ClearKind()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (iu *IntegrationUpdate) SetOwner(o *Organization) *IntegrationUpdate {
-	return iu.SetOwnerID(o.ID)
+func (_u *IntegrationUpdate) SetOwner(v *Organization) *IntegrationUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (iu *IntegrationUpdate) AddSecretIDs(ids ...string) *IntegrationUpdate {
-	iu.mutation.AddSecretIDs(ids...)
-	return iu
+func (_u *IntegrationUpdate) AddSecretIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddSecretIDs(ids...)
+	return _u
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (iu *IntegrationUpdate) AddSecrets(h ...*Hush) *IntegrationUpdate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *IntegrationUpdate) AddSecrets(v ...*Hush) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.AddSecretIDs(ids...)
+	return _u.AddSecretIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (iu *IntegrationUpdate) AddEventIDs(ids ...string) *IntegrationUpdate {
-	iu.mutation.AddEventIDs(ids...)
-	return iu
+func (_u *IntegrationUpdate) AddEventIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (iu *IntegrationUpdate) AddEvents(e ...*Event) *IntegrationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *IntegrationUpdate) AddEvents(v ...*Event) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the IntegrationMutation object of the builder.
-func (iu *IntegrationUpdate) Mutation() *IntegrationMutation {
-	return iu.mutation
+func (_u *IntegrationUpdate) Mutation() *IntegrationMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (iu *IntegrationUpdate) ClearOwner() *IntegrationUpdate {
-	iu.mutation.ClearOwner()
-	return iu
+func (_u *IntegrationUpdate) ClearOwner() *IntegrationUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearSecrets clears all "secrets" edges to the Hush entity.
-func (iu *IntegrationUpdate) ClearSecrets() *IntegrationUpdate {
-	iu.mutation.ClearSecrets()
-	return iu
+func (_u *IntegrationUpdate) ClearSecrets() *IntegrationUpdate {
+	_u.mutation.ClearSecrets()
+	return _u
 }
 
 // RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
-func (iu *IntegrationUpdate) RemoveSecretIDs(ids ...string) *IntegrationUpdate {
-	iu.mutation.RemoveSecretIDs(ids...)
-	return iu
+func (_u *IntegrationUpdate) RemoveSecretIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveSecretIDs(ids...)
+	return _u
 }
 
 // RemoveSecrets removes "secrets" edges to Hush entities.
-func (iu *IntegrationUpdate) RemoveSecrets(h ...*Hush) *IntegrationUpdate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *IntegrationUpdate) RemoveSecrets(v ...*Hush) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.RemoveSecretIDs(ids...)
+	return _u.RemoveSecretIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (iu *IntegrationUpdate) ClearEvents() *IntegrationUpdate {
-	iu.mutation.ClearEvents()
-	return iu
+func (_u *IntegrationUpdate) ClearEvents() *IntegrationUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (iu *IntegrationUpdate) RemoveEventIDs(ids ...string) *IntegrationUpdate {
-	iu.mutation.RemoveEventIDs(ids...)
-	return iu
+func (_u *IntegrationUpdate) RemoveEventIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (iu *IntegrationUpdate) RemoveEvents(e ...*Event) *IntegrationUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *IntegrationUpdate) RemoveEvents(v ...*Event) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iu.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (iu *IntegrationUpdate) Save(ctx context.Context) (int, error) {
-	if err := iu.defaults(); err != nil {
+func (_u *IntegrationUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, iu.sqlSave, iu.mutation, iu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (iu *IntegrationUpdate) SaveX(ctx context.Context) int {
-	affected, err := iu.Save(ctx)
+func (_u *IntegrationUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -305,38 +305,38 @@ func (iu *IntegrationUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (iu *IntegrationUpdate) Exec(ctx context.Context) error {
-	_, err := iu.Save(ctx)
+func (_u *IntegrationUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (iu *IntegrationUpdate) ExecX(ctx context.Context) {
-	if err := iu.Exec(ctx); err != nil {
+func (_u *IntegrationUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (iu *IntegrationUpdate) defaults() error {
-	if _, ok := iu.mutation.UpdatedAt(); !ok && !iu.mutation.UpdatedAtCleared() {
+func (_u *IntegrationUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if integration.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized integration.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := integration.UpdateDefaultUpdatedAt()
-		iu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (iu *IntegrationUpdate) check() error {
-	if v, ok := iu.mutation.OwnerID(); ok {
+func (_u *IntegrationUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := integration.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Integration.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := iu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := integration.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
 		}
@@ -345,80 +345,80 @@ func (iu *IntegrationUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (iu *IntegrationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationUpdate {
-	iu.modifiers = append(iu.modifiers, modifiers...)
-	return iu
+func (_u *IntegrationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := iu.check(); err != nil {
-		return n, err
+func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(integration.Table, integration.Columns, sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString))
-	if ps := iu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if iu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(integration.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(integration.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if iu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integration.FieldUpdatedAt, field.TypeTime)
 	}
-	if iu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(integration.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := iu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
 	}
-	if iu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(integration.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := iu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
 	}
-	if iu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(integration.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
 	}
-	if iu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(integration.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := iu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := iu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, integration.FieldTags, value)
 		})
 	}
-	if iu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(integration.FieldTags, field.TypeJSON)
 	}
-	if value, ok := iu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
 	}
-	if value, ok := iu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(integration.FieldDescription, field.TypeString, value)
 	}
-	if iu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(integration.FieldDescription, field.TypeString)
 	}
-	if value, ok := iu.mutation.Kind(); ok {
+	if value, ok := _u.mutation.Kind(); ok {
 		_spec.SetField(integration.FieldKind, field.TypeString, value)
 	}
-	if iu.mutation.KindCleared() {
+	if _u.mutation.KindCleared() {
 		_spec.ClearField(integration.FieldKind, field.TypeString)
 	}
-	if iu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -429,10 +429,10 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -443,13 +443,13 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iu.mutation.SecretsCleared() {
+	if _u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -460,10 +460,10 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.IntegrationSecrets
+		edge.Schema = _u.schemaConfig.IntegrationSecrets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !iu.mutation.SecretsCleared() {
+	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -474,13 +474,13 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.IntegrationSecrets
+		edge.Schema = _u.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -491,13 +491,13 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.IntegrationSecrets
+		edge.Schema = _u.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iu.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -508,10 +508,10 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.IntegrationEvents
+		edge.Schema = _u.schemaConfig.IntegrationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !iu.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -522,13 +522,13 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.IntegrationEvents
+		edge.Schema = _u.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iu.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -539,16 +539,16 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iu.schemaConfig.IntegrationEvents
+		edge.Schema = _u.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = iu.schemaConfig.Integration
-	ctx = internal.NewSchemaConfigContext(ctx, iu.schemaConfig)
-	_spec.AddModifiers(iu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Integration
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{integration.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -556,8 +556,8 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	iu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // IntegrationUpdateOne is the builder for updating a single Integration entity.
@@ -570,281 +570,281 @@ type IntegrationUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (iuo *IntegrationUpdateOne) SetUpdatedAt(t time.Time) *IntegrationUpdateOne {
-	iuo.mutation.SetUpdatedAt(t)
-	return iuo
+func (_u *IntegrationUpdateOne) SetUpdatedAt(v time.Time) *IntegrationUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (iuo *IntegrationUpdateOne) ClearUpdatedAt() *IntegrationUpdateOne {
-	iuo.mutation.ClearUpdatedAt()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearUpdatedAt() *IntegrationUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (iuo *IntegrationUpdateOne) SetUpdatedBy(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetUpdatedBy(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetUpdatedBy(v string) *IntegrationUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableUpdatedBy(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetUpdatedBy(*s)
+func (_u *IntegrationUpdateOne) SetNillableUpdatedBy(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (iuo *IntegrationUpdateOne) ClearUpdatedBy() *IntegrationUpdateOne {
-	iuo.mutation.ClearUpdatedBy()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearUpdatedBy() *IntegrationUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (iuo *IntegrationUpdateOne) SetDeletedAt(t time.Time) *IntegrationUpdateOne {
-	iuo.mutation.SetDeletedAt(t)
-	return iuo
+func (_u *IntegrationUpdateOne) SetDeletedAt(v time.Time) *IntegrationUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableDeletedAt(t *time.Time) *IntegrationUpdateOne {
-	if t != nil {
-		iuo.SetDeletedAt(*t)
+func (_u *IntegrationUpdateOne) SetNillableDeletedAt(v *time.Time) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (iuo *IntegrationUpdateOne) ClearDeletedAt() *IntegrationUpdateOne {
-	iuo.mutation.ClearDeletedAt()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearDeletedAt() *IntegrationUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (iuo *IntegrationUpdateOne) SetDeletedBy(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetDeletedBy(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetDeletedBy(v string) *IntegrationUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableDeletedBy(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetDeletedBy(*s)
+func (_u *IntegrationUpdateOne) SetNillableDeletedBy(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (iuo *IntegrationUpdateOne) ClearDeletedBy() *IntegrationUpdateOne {
-	iuo.mutation.ClearDeletedBy()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearDeletedBy() *IntegrationUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (iuo *IntegrationUpdateOne) SetTags(s []string) *IntegrationUpdateOne {
-	iuo.mutation.SetTags(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetTags(v []string) *IntegrationUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (iuo *IntegrationUpdateOne) AppendTags(s []string) *IntegrationUpdateOne {
-	iuo.mutation.AppendTags(s)
-	return iuo
+// AppendTags appends value to the "tags" field.
+func (_u *IntegrationUpdateOne) AppendTags(v []string) *IntegrationUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (iuo *IntegrationUpdateOne) ClearTags() *IntegrationUpdateOne {
-	iuo.mutation.ClearTags()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearTags() *IntegrationUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (iuo *IntegrationUpdateOne) SetOwnerID(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetOwnerID(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetOwnerID(v string) *IntegrationUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableOwnerID(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetOwnerID(*s)
+func (_u *IntegrationUpdateOne) SetNillableOwnerID(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (iuo *IntegrationUpdateOne) ClearOwnerID() *IntegrationUpdateOne {
-	iuo.mutation.ClearOwnerID()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearOwnerID() *IntegrationUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (iuo *IntegrationUpdateOne) SetName(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetName(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetName(v string) *IntegrationUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableName(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetName(*s)
+func (_u *IntegrationUpdateOne) SetNillableName(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return iuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (iuo *IntegrationUpdateOne) SetDescription(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetDescription(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetDescription(v string) *IntegrationUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableDescription(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetDescription(*s)
+func (_u *IntegrationUpdateOne) SetNillableDescription(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (iuo *IntegrationUpdateOne) ClearDescription() *IntegrationUpdateOne {
-	iuo.mutation.ClearDescription()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearDescription() *IntegrationUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetKind sets the "kind" field.
-func (iuo *IntegrationUpdateOne) SetKind(s string) *IntegrationUpdateOne {
-	iuo.mutation.SetKind(s)
-	return iuo
+func (_u *IntegrationUpdateOne) SetKind(v string) *IntegrationUpdateOne {
+	_u.mutation.SetKind(v)
+	return _u
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (iuo *IntegrationUpdateOne) SetNillableKind(s *string) *IntegrationUpdateOne {
-	if s != nil {
-		iuo.SetKind(*s)
+func (_u *IntegrationUpdateOne) SetNillableKind(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetKind(*v)
 	}
-	return iuo
+	return _u
 }
 
 // ClearKind clears the value of the "kind" field.
-func (iuo *IntegrationUpdateOne) ClearKind() *IntegrationUpdateOne {
-	iuo.mutation.ClearKind()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearKind() *IntegrationUpdateOne {
+	_u.mutation.ClearKind()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (iuo *IntegrationUpdateOne) SetOwner(o *Organization) *IntegrationUpdateOne {
-	return iuo.SetOwnerID(o.ID)
+func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (iuo *IntegrationUpdateOne) AddSecretIDs(ids ...string) *IntegrationUpdateOne {
-	iuo.mutation.AddSecretIDs(ids...)
-	return iuo
+func (_u *IntegrationUpdateOne) AddSecretIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddSecretIDs(ids...)
+	return _u
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (iuo *IntegrationUpdateOne) AddSecrets(h ...*Hush) *IntegrationUpdateOne {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *IntegrationUpdateOne) AddSecrets(v ...*Hush) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.AddSecretIDs(ids...)
+	return _u.AddSecretIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (iuo *IntegrationUpdateOne) AddEventIDs(ids ...string) *IntegrationUpdateOne {
-	iuo.mutation.AddEventIDs(ids...)
-	return iuo
+func (_u *IntegrationUpdateOne) AddEventIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (iuo *IntegrationUpdateOne) AddEvents(e ...*Event) *IntegrationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *IntegrationUpdateOne) AddEvents(v ...*Event) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the IntegrationMutation object of the builder.
-func (iuo *IntegrationUpdateOne) Mutation() *IntegrationMutation {
-	return iuo.mutation
+func (_u *IntegrationUpdateOne) Mutation() *IntegrationMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (iuo *IntegrationUpdateOne) ClearOwner() *IntegrationUpdateOne {
-	iuo.mutation.ClearOwner()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearOwner() *IntegrationUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearSecrets clears all "secrets" edges to the Hush entity.
-func (iuo *IntegrationUpdateOne) ClearSecrets() *IntegrationUpdateOne {
-	iuo.mutation.ClearSecrets()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearSecrets() *IntegrationUpdateOne {
+	_u.mutation.ClearSecrets()
+	return _u
 }
 
 // RemoveSecretIDs removes the "secrets" edge to Hush entities by IDs.
-func (iuo *IntegrationUpdateOne) RemoveSecretIDs(ids ...string) *IntegrationUpdateOne {
-	iuo.mutation.RemoveSecretIDs(ids...)
-	return iuo
+func (_u *IntegrationUpdateOne) RemoveSecretIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveSecretIDs(ids...)
+	return _u
 }
 
 // RemoveSecrets removes "secrets" edges to Hush entities.
-func (iuo *IntegrationUpdateOne) RemoveSecrets(h ...*Hush) *IntegrationUpdateOne {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_u *IntegrationUpdateOne) RemoveSecrets(v ...*Hush) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.RemoveSecretIDs(ids...)
+	return _u.RemoveSecretIDs(ids...)
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (iuo *IntegrationUpdateOne) ClearEvents() *IntegrationUpdateOne {
-	iuo.mutation.ClearEvents()
-	return iuo
+func (_u *IntegrationUpdateOne) ClearEvents() *IntegrationUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (iuo *IntegrationUpdateOne) RemoveEventIDs(ids ...string) *IntegrationUpdateOne {
-	iuo.mutation.RemoveEventIDs(ids...)
-	return iuo
+func (_u *IntegrationUpdateOne) RemoveEventIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (iuo *IntegrationUpdateOne) RemoveEvents(e ...*Event) *IntegrationUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *IntegrationUpdateOne) RemoveEvents(v ...*Event) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return iuo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the IntegrationUpdate builder.
-func (iuo *IntegrationUpdateOne) Where(ps ...predicate.Integration) *IntegrationUpdateOne {
-	iuo.mutation.Where(ps...)
-	return iuo
+func (_u *IntegrationUpdateOne) Where(ps ...predicate.Integration) *IntegrationUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (iuo *IntegrationUpdateOne) Select(field string, fields ...string) *IntegrationUpdateOne {
-	iuo.fields = append([]string{field}, fields...)
-	return iuo
+func (_u *IntegrationUpdateOne) Select(field string, fields ...string) *IntegrationUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Integration entity.
-func (iuo *IntegrationUpdateOne) Save(ctx context.Context) (*Integration, error) {
-	if err := iuo.defaults(); err != nil {
+func (_u *IntegrationUpdateOne) Save(ctx context.Context) (*Integration, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, iuo.sqlSave, iuo.mutation, iuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (iuo *IntegrationUpdateOne) SaveX(ctx context.Context) *Integration {
-	node, err := iuo.Save(ctx)
+func (_u *IntegrationUpdateOne) SaveX(ctx context.Context) *Integration {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -852,38 +852,38 @@ func (iuo *IntegrationUpdateOne) SaveX(ctx context.Context) *Integration {
 }
 
 // Exec executes the query on the entity.
-func (iuo *IntegrationUpdateOne) Exec(ctx context.Context) error {
-	_, err := iuo.Save(ctx)
+func (_u *IntegrationUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (iuo *IntegrationUpdateOne) ExecX(ctx context.Context) {
-	if err := iuo.Exec(ctx); err != nil {
+func (_u *IntegrationUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (iuo *IntegrationUpdateOne) defaults() error {
-	if _, ok := iuo.mutation.UpdatedAt(); !ok && !iuo.mutation.UpdatedAtCleared() {
+func (_u *IntegrationUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if integration.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized integration.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := integration.UpdateDefaultUpdatedAt()
-		iuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (iuo *IntegrationUpdateOne) check() error {
-	if v, ok := iuo.mutation.OwnerID(); ok {
+func (_u *IntegrationUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := integration.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Integration.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := iuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := integration.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
 		}
@@ -892,22 +892,22 @@ func (iuo *IntegrationUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (iuo *IntegrationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationUpdateOne {
-	iuo.modifiers = append(iuo.modifiers, modifiers...)
-	return iuo
+func (_u *IntegrationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration, err error) {
-	if err := iuo.check(); err != nil {
+func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(integration.Table, integration.Columns, sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString))
-	id, ok := iuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Integration.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := iuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, integration.FieldID)
 		for _, f := range fields {
@@ -919,70 +919,70 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 			}
 		}
 	}
-	if ps := iuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if iuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(integration.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(integration.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if iuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(integration.FieldUpdatedAt, field.TypeTime)
 	}
-	if iuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(integration.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := iuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(integration.FieldUpdatedBy, field.TypeString, value)
 	}
-	if iuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(integration.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := iuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(integration.FieldDeletedAt, field.TypeTime, value)
 	}
-	if iuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(integration.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := iuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(integration.FieldDeletedBy, field.TypeString, value)
 	}
-	if iuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(integration.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := iuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(integration.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := iuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, integration.FieldTags, value)
 		})
 	}
-	if iuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(integration.FieldTags, field.TypeJSON)
 	}
-	if value, ok := iuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(integration.FieldName, field.TypeString, value)
 	}
-	if value, ok := iuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(integration.FieldDescription, field.TypeString, value)
 	}
-	if iuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(integration.FieldDescription, field.TypeString)
 	}
-	if value, ok := iuo.mutation.Kind(); ok {
+	if value, ok := _u.mutation.Kind(); ok {
 		_spec.SetField(integration.FieldKind, field.TypeString, value)
 	}
-	if iuo.mutation.KindCleared() {
+	if _u.mutation.KindCleared() {
 		_spec.ClearField(integration.FieldKind, field.TypeString)
 	}
-	if iuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -993,10 +993,10 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1007,13 +1007,13 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.Integration
+		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iuo.mutation.SecretsCleared() {
+	if _u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1024,10 +1024,10 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.IntegrationSecrets
+		edge.Schema = _u.schemaConfig.IntegrationSecrets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !iuo.mutation.SecretsCleared() {
+	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1038,13 +1038,13 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.IntegrationSecrets
+		edge.Schema = _u.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1055,13 +1055,13 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.IntegrationSecrets
+		edge.Schema = _u.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if iuo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1072,10 +1072,10 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.IntegrationEvents
+		edge.Schema = _u.schemaConfig.IntegrationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !iuo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1086,13 +1086,13 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.IntegrationEvents
+		edge.Schema = _u.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := iuo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1103,19 +1103,19 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = iuo.schemaConfig.IntegrationEvents
+		edge.Schema = _u.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = iuo.schemaConfig.Integration
-	ctx = internal.NewSchemaConfigContext(ctx, iuo.schemaConfig)
-	_spec.AddModifiers(iuo.modifiers...)
-	_node = &Integration{config: iuo.config}
+	_spec.Node.Schema = _u.schemaConfig.Integration
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Integration{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, iuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{integration.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1123,6 +1123,6 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 		}
 		return nil, err
 	}
-	iuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

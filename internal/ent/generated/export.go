@@ -121,7 +121,7 @@ func (*Export) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Export fields.
-func (e *Export) assignValues(columns []string, values []any) error {
+func (_m *Export) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -131,79 +131,79 @@ func (e *Export) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				e.ID = value.String
+				_m.ID = value.String
 			}
 		case export.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				e.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case export.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				e.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case export.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				e.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case export.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				e.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case export.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				e.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case export.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				e.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case export.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				e.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case export.FieldExportType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field export_type", values[i])
 			} else if value.Valid {
-				e.ExportType = enums.ExportType(value.String)
+				_m.ExportType = enums.ExportType(value.String)
 			}
 		case export.FieldFormat:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field format", values[i])
 			} else if value.Valid {
-				e.Format = enums.ExportFormat(value.String)
+				_m.Format = enums.ExportFormat(value.String)
 			}
 		case export.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				e.Status = enums.ExportStatus(value.String)
+				_m.Status = enums.ExportStatus(value.String)
 			}
 		case export.FieldRequestorID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field requestor_id", values[i])
 			} else if value.Valid {
-				e.RequestorID = value.String
+				_m.RequestorID = value.String
 			}
 		case export.FieldFields:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field fields", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &e.Fields); err != nil {
+				if err := json.Unmarshal(*value, &_m.Fields); err != nil {
 					return fmt.Errorf("unmarshal field fields: %w", err)
 				}
 			}
@@ -211,16 +211,16 @@ func (e *Export) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field filters", values[i])
 			} else if value.Valid {
-				e.Filters = value.String
+				_m.Filters = value.String
 			}
 		case export.FieldErrorMessage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field error_message", values[i])
 			} else if value.Valid {
-				e.ErrorMessage = value.String
+				_m.ErrorMessage = value.String
 			}
 		default:
-			e.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -228,138 +228,138 @@ func (e *Export) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Export.
 // This includes values selected through modifiers, order, etc.
-func (e *Export) Value(name string) (ent.Value, error) {
-	return e.selectValues.Get(name)
+func (_m *Export) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Export entity.
-func (e *Export) QueryOwner() *OrganizationQuery {
-	return NewExportClient(e.config).QueryOwner(e)
+func (_m *Export) QueryOwner() *OrganizationQuery {
+	return NewExportClient(_m.config).QueryOwner(_m)
 }
 
 // QueryEvents queries the "events" edge of the Export entity.
-func (e *Export) QueryEvents() *EventQuery {
-	return NewExportClient(e.config).QueryEvents(e)
+func (_m *Export) QueryEvents() *EventQuery {
+	return NewExportClient(_m.config).QueryEvents(_m)
 }
 
 // QueryFiles queries the "files" edge of the Export entity.
-func (e *Export) QueryFiles() *FileQuery {
-	return NewExportClient(e.config).QueryFiles(e)
+func (_m *Export) QueryFiles() *FileQuery {
+	return NewExportClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this Export.
 // Note that you need to call Export.Unwrap() before calling this method if this Export
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (e *Export) Update() *ExportUpdateOne {
-	return NewExportClient(e.config).UpdateOne(e)
+func (_m *Export) Update() *ExportUpdateOne {
+	return NewExportClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Export entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (e *Export) Unwrap() *Export {
-	_tx, ok := e.config.driver.(*txDriver)
+func (_m *Export) Unwrap() *Export {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Export is not a transactional entity")
 	}
-	e.config.driver = _tx.drv
-	return e
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (e *Export) String() string {
+func (_m *Export) String() string {
 	var builder strings.Builder
 	builder.WriteString("Export(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", e.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(e.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(e.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(e.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(e.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(e.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(e.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(e.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("export_type=")
-	builder.WriteString(fmt.Sprintf("%v", e.ExportType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExportType))
 	builder.WriteString(", ")
 	builder.WriteString("format=")
-	builder.WriteString(fmt.Sprintf("%v", e.Format))
+	builder.WriteString(fmt.Sprintf("%v", _m.Format))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", e.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("requestor_id=")
-	builder.WriteString(e.RequestorID)
+	builder.WriteString(_m.RequestorID)
 	builder.WriteString(", ")
 	builder.WriteString("fields=")
-	builder.WriteString(fmt.Sprintf("%v", e.Fields))
+	builder.WriteString(fmt.Sprintf("%v", _m.Fields))
 	builder.WriteString(", ")
 	builder.WriteString("filters=")
-	builder.WriteString(e.Filters)
+	builder.WriteString(_m.Filters)
 	builder.WriteString(", ")
 	builder.WriteString("error_message=")
-	builder.WriteString(e.ErrorMessage)
+	builder.WriteString(_m.ErrorMessage)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Export) NamedEvents(name string) ([]*Event, error) {
-	if e.Edges.namedEvents == nil {
+func (_m *Export) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Export) appendNamedEvents(name string, edges ...*Event) {
-	if e.Edges.namedEvents == nil {
-		e.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Export) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		e.Edges.namedEvents[name] = append(e.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (e *Export) NamedFiles(name string) ([]*File, error) {
-	if e.Edges.namedFiles == nil {
+func (_m *Export) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := e.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (e *Export) appendNamedFiles(name string, edges ...*File) {
-	if e.Edges.namedFiles == nil {
-		e.Edges.namedFiles = make(map[string][]*File)
+func (_m *Export) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		e.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		e.Edges.namedFiles[name] = append(e.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

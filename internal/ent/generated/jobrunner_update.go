@@ -30,292 +30,292 @@ type JobRunnerUpdate struct {
 }
 
 // Where appends a list predicates to the JobRunnerUpdate builder.
-func (jru *JobRunnerUpdate) Where(ps ...predicate.JobRunner) *JobRunnerUpdate {
-	jru.mutation.Where(ps...)
-	return jru
+func (_u *JobRunnerUpdate) Where(ps ...predicate.JobRunner) *JobRunnerUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jru *JobRunnerUpdate) SetUpdatedAt(t time.Time) *JobRunnerUpdate {
-	jru.mutation.SetUpdatedAt(t)
-	return jru
+func (_u *JobRunnerUpdate) SetUpdatedAt(v time.Time) *JobRunnerUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jru *JobRunnerUpdate) ClearUpdatedAt() *JobRunnerUpdate {
-	jru.mutation.ClearUpdatedAt()
-	return jru
+func (_u *JobRunnerUpdate) ClearUpdatedAt() *JobRunnerUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jru *JobRunnerUpdate) SetUpdatedBy(s string) *JobRunnerUpdate {
-	jru.mutation.SetUpdatedBy(s)
-	return jru
+func (_u *JobRunnerUpdate) SetUpdatedBy(v string) *JobRunnerUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableUpdatedBy(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetUpdatedBy(*s)
+func (_u *JobRunnerUpdate) SetNillableUpdatedBy(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jru *JobRunnerUpdate) ClearUpdatedBy() *JobRunnerUpdate {
-	jru.mutation.ClearUpdatedBy()
-	return jru
+func (_u *JobRunnerUpdate) ClearUpdatedBy() *JobRunnerUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jru *JobRunnerUpdate) SetDeletedAt(t time.Time) *JobRunnerUpdate {
-	jru.mutation.SetDeletedAt(t)
-	return jru
+func (_u *JobRunnerUpdate) SetDeletedAt(v time.Time) *JobRunnerUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableDeletedAt(t *time.Time) *JobRunnerUpdate {
-	if t != nil {
-		jru.SetDeletedAt(*t)
+func (_u *JobRunnerUpdate) SetNillableDeletedAt(v *time.Time) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jru *JobRunnerUpdate) ClearDeletedAt() *JobRunnerUpdate {
-	jru.mutation.ClearDeletedAt()
-	return jru
+func (_u *JobRunnerUpdate) ClearDeletedAt() *JobRunnerUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jru *JobRunnerUpdate) SetDeletedBy(s string) *JobRunnerUpdate {
-	jru.mutation.SetDeletedBy(s)
-	return jru
+func (_u *JobRunnerUpdate) SetDeletedBy(v string) *JobRunnerUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableDeletedBy(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetDeletedBy(*s)
+func (_u *JobRunnerUpdate) SetNillableDeletedBy(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jru *JobRunnerUpdate) ClearDeletedBy() *JobRunnerUpdate {
-	jru.mutation.ClearDeletedBy()
-	return jru
+func (_u *JobRunnerUpdate) ClearDeletedBy() *JobRunnerUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jru *JobRunnerUpdate) SetTags(s []string) *JobRunnerUpdate {
-	jru.mutation.SetTags(s)
-	return jru
+func (_u *JobRunnerUpdate) SetTags(v []string) *JobRunnerUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jru *JobRunnerUpdate) AppendTags(s []string) *JobRunnerUpdate {
-	jru.mutation.AppendTags(s)
-	return jru
+// AppendTags appends value to the "tags" field.
+func (_u *JobRunnerUpdate) AppendTags(v []string) *JobRunnerUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jru *JobRunnerUpdate) ClearTags() *JobRunnerUpdate {
-	jru.mutation.ClearTags()
-	return jru
+func (_u *JobRunnerUpdate) ClearTags() *JobRunnerUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jru *JobRunnerUpdate) SetOwnerID(s string) *JobRunnerUpdate {
-	jru.mutation.SetOwnerID(s)
-	return jru
+func (_u *JobRunnerUpdate) SetOwnerID(v string) *JobRunnerUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableOwnerID(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetOwnerID(*s)
+func (_u *JobRunnerUpdate) SetNillableOwnerID(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jru *JobRunnerUpdate) ClearOwnerID() *JobRunnerUpdate {
-	jru.mutation.ClearOwnerID()
-	return jru
+func (_u *JobRunnerUpdate) ClearOwnerID() *JobRunnerUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (jru *JobRunnerUpdate) SetName(s string) *JobRunnerUpdate {
-	jru.mutation.SetName(s)
-	return jru
+func (_u *JobRunnerUpdate) SetName(v string) *JobRunnerUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableName(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetName(*s)
+func (_u *JobRunnerUpdate) SetNillableName(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return jru
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (jru *JobRunnerUpdate) SetStatus(ers enums.JobRunnerStatus) *JobRunnerUpdate {
-	jru.mutation.SetStatus(ers)
-	return jru
+func (_u *JobRunnerUpdate) SetStatus(v enums.JobRunnerStatus) *JobRunnerUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableStatus(ers *enums.JobRunnerStatus) *JobRunnerUpdate {
-	if ers != nil {
-		jru.SetStatus(*ers)
+func (_u *JobRunnerUpdate) SetNillableStatus(v *enums.JobRunnerStatus) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return jru
+	return _u
 }
 
 // SetIPAddress sets the "ip_address" field.
-func (jru *JobRunnerUpdate) SetIPAddress(s string) *JobRunnerUpdate {
-	jru.mutation.SetIPAddress(s)
-	return jru
+func (_u *JobRunnerUpdate) SetIPAddress(v string) *JobRunnerUpdate {
+	_u.mutation.SetIPAddress(v)
+	return _u
 }
 
 // SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableIPAddress(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetIPAddress(*s)
+func (_u *JobRunnerUpdate) SetNillableIPAddress(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetIPAddress(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearIPAddress clears the value of the "ip_address" field.
-func (jru *JobRunnerUpdate) ClearIPAddress() *JobRunnerUpdate {
-	jru.mutation.ClearIPAddress()
-	return jru
+func (_u *JobRunnerUpdate) ClearIPAddress() *JobRunnerUpdate {
+	_u.mutation.ClearIPAddress()
+	return _u
 }
 
 // SetLastSeen sets the "last_seen" field.
-func (jru *JobRunnerUpdate) SetLastSeen(t time.Time) *JobRunnerUpdate {
-	jru.mutation.SetLastSeen(t)
-	return jru
+func (_u *JobRunnerUpdate) SetLastSeen(v time.Time) *JobRunnerUpdate {
+	_u.mutation.SetLastSeen(v)
+	return _u
 }
 
 // SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableLastSeen(t *time.Time) *JobRunnerUpdate {
-	if t != nil {
-		jru.SetLastSeen(*t)
+func (_u *JobRunnerUpdate) SetNillableLastSeen(v *time.Time) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetLastSeen(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearLastSeen clears the value of the "last_seen" field.
-func (jru *JobRunnerUpdate) ClearLastSeen() *JobRunnerUpdate {
-	jru.mutation.ClearLastSeen()
-	return jru
+func (_u *JobRunnerUpdate) ClearLastSeen() *JobRunnerUpdate {
+	_u.mutation.ClearLastSeen()
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (jru *JobRunnerUpdate) SetVersion(s string) *JobRunnerUpdate {
-	jru.mutation.SetVersion(s)
-	return jru
+func (_u *JobRunnerUpdate) SetVersion(v string) *JobRunnerUpdate {
+	_u.mutation.SetVersion(v)
+	return _u
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableVersion(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetVersion(*s)
+func (_u *JobRunnerUpdate) SetNillableVersion(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetVersion(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearVersion clears the value of the "version" field.
-func (jru *JobRunnerUpdate) ClearVersion() *JobRunnerUpdate {
-	jru.mutation.ClearVersion()
-	return jru
+func (_u *JobRunnerUpdate) ClearVersion() *JobRunnerUpdate {
+	_u.mutation.ClearVersion()
+	return _u
 }
 
 // SetOs sets the "os" field.
-func (jru *JobRunnerUpdate) SetOs(s string) *JobRunnerUpdate {
-	jru.mutation.SetOs(s)
-	return jru
+func (_u *JobRunnerUpdate) SetOs(v string) *JobRunnerUpdate {
+	_u.mutation.SetOs(v)
+	return _u
 }
 
 // SetNillableOs sets the "os" field if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableOs(s *string) *JobRunnerUpdate {
-	if s != nil {
-		jru.SetOs(*s)
+func (_u *JobRunnerUpdate) SetNillableOs(v *string) *JobRunnerUpdate {
+	if v != nil {
+		_u.SetOs(*v)
 	}
-	return jru
+	return _u
 }
 
 // ClearOs clears the value of the "os" field.
-func (jru *JobRunnerUpdate) ClearOs() *JobRunnerUpdate {
-	jru.mutation.ClearOs()
-	return jru
+func (_u *JobRunnerUpdate) ClearOs() *JobRunnerUpdate {
+	_u.mutation.ClearOs()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jru *JobRunnerUpdate) SetOwner(o *Organization) *JobRunnerUpdate {
-	return jru.SetOwnerID(o.ID)
+func (_u *JobRunnerUpdate) SetOwner(v *Organization) *JobRunnerUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (jru *JobRunnerUpdate) AddJobRunnerTokenIDs(ids ...string) *JobRunnerUpdate {
-	jru.mutation.AddJobRunnerTokenIDs(ids...)
-	return jru
+func (_u *JobRunnerUpdate) AddJobRunnerTokenIDs(ids ...string) *JobRunnerUpdate {
+	_u.mutation.AddJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (jru *JobRunnerUpdate) AddJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *JobRunnerUpdate) AddJobRunnerTokens(v ...*JobRunnerToken) *JobRunnerUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jru.AddJobRunnerTokenIDs(ids...)
+	return _u.AddJobRunnerTokenIDs(ids...)
 }
 
 // Mutation returns the JobRunnerMutation object of the builder.
-func (jru *JobRunnerUpdate) Mutation() *JobRunnerMutation {
-	return jru.mutation
+func (_u *JobRunnerUpdate) Mutation() *JobRunnerMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jru *JobRunnerUpdate) ClearOwner() *JobRunnerUpdate {
-	jru.mutation.ClearOwner()
-	return jru
+func (_u *JobRunnerUpdate) ClearOwner() *JobRunnerUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
-func (jru *JobRunnerUpdate) ClearJobRunnerTokens() *JobRunnerUpdate {
-	jru.mutation.ClearJobRunnerTokens()
-	return jru
+func (_u *JobRunnerUpdate) ClearJobRunnerTokens() *JobRunnerUpdate {
+	_u.mutation.ClearJobRunnerTokens()
+	return _u
 }
 
 // RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
-func (jru *JobRunnerUpdate) RemoveJobRunnerTokenIDs(ids ...string) *JobRunnerUpdate {
-	jru.mutation.RemoveJobRunnerTokenIDs(ids...)
-	return jru
+func (_u *JobRunnerUpdate) RemoveJobRunnerTokenIDs(ids ...string) *JobRunnerUpdate {
+	_u.mutation.RemoveJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
-func (jru *JobRunnerUpdate) RemoveJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerUpdate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *JobRunnerUpdate) RemoveJobRunnerTokens(v ...*JobRunnerToken) *JobRunnerUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jru.RemoveJobRunnerTokenIDs(ids...)
+	return _u.RemoveJobRunnerTokenIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (jru *JobRunnerUpdate) Save(ctx context.Context) (int, error) {
-	if err := jru.defaults(); err != nil {
+func (_u *JobRunnerUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, jru.sqlSave, jru.mutation, jru.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jru *JobRunnerUpdate) SaveX(ctx context.Context) int {
-	affected, err := jru.Save(ctx)
+func (_u *JobRunnerUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -323,33 +323,33 @@ func (jru *JobRunnerUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (jru *JobRunnerUpdate) Exec(ctx context.Context) error {
-	_, err := jru.Save(ctx)
+func (_u *JobRunnerUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jru *JobRunnerUpdate) ExecX(ctx context.Context) {
-	if err := jru.Exec(ctx); err != nil {
+func (_u *JobRunnerUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jru *JobRunnerUpdate) defaults() error {
-	if _, ok := jru.mutation.UpdatedAt(); !ok && !jru.mutation.UpdatedAtCleared() {
+func (_u *JobRunnerUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobrunner.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunner.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunner.UpdateDefaultUpdatedAt()
-		jru.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jru *JobRunnerUpdate) check() error {
-	if v, ok := jru.mutation.Status(); ok {
+func (_u *JobRunnerUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := jobrunner.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobRunner.status": %w`, err)}
 		}
@@ -358,98 +358,98 @@ func (jru *JobRunnerUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jru *JobRunnerUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerUpdate {
-	jru.modifiers = append(jru.modifiers, modifiers...)
-	return jru
+func (_u *JobRunnerUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := jru.check(); err != nil {
-		return n, err
+func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobrunner.Table, jobrunner.Columns, sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString))
-	if ps := jru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jru.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobrunner.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jru.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobrunner.FieldUpdatedAt, field.TypeTime)
 	}
-	if jru.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobrunner.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jru.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jru.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobrunner.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jru.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunner.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jru.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobrunner.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jru.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobrunner.FieldDeletedBy, field.TypeString, value)
 	}
-	if jru.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobrunner.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jru.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobrunner.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jru.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobrunner.FieldTags, value)
 		})
 	}
-	if jru.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobrunner.FieldTags, field.TypeJSON)
 	}
-	if jru.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobrunner.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := jru.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(jobrunner.FieldName, field.TypeString, value)
 	}
-	if value, ok := jru.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(jobrunner.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := jru.mutation.IPAddress(); ok {
+	if value, ok := _u.mutation.IPAddress(); ok {
 		_spec.SetField(jobrunner.FieldIPAddress, field.TypeString, value)
 	}
-	if jru.mutation.IPAddressCleared() {
+	if _u.mutation.IPAddressCleared() {
 		_spec.ClearField(jobrunner.FieldIPAddress, field.TypeString)
 	}
-	if value, ok := jru.mutation.LastSeen(); ok {
+	if value, ok := _u.mutation.LastSeen(); ok {
 		_spec.SetField(jobrunner.FieldLastSeen, field.TypeTime, value)
 	}
-	if jru.mutation.LastSeenCleared() {
+	if _u.mutation.LastSeenCleared() {
 		_spec.ClearField(jobrunner.FieldLastSeen, field.TypeTime)
 	}
-	if value, ok := jru.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(jobrunner.FieldVersion, field.TypeString, value)
 	}
-	if jru.mutation.VersionCleared() {
+	if _u.mutation.VersionCleared() {
 		_spec.ClearField(jobrunner.FieldVersion, field.TypeString)
 	}
-	if value, ok := jru.mutation.Os(); ok {
+	if value, ok := _u.mutation.Os(); ok {
 		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
 	}
-	if jru.mutation.OsCleared() {
+	if _u.mutation.OsCleared() {
 		_spec.ClearField(jobrunner.FieldOs, field.TypeString)
 	}
-	if jru.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -460,10 +460,10 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jru.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -474,13 +474,13 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jru.mutation.JobRunnerTokensCleared() {
+	if _u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -491,10 +491,10 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jru.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !jru.mutation.JobRunnerTokensCleared() {
+	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -505,13 +505,13 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jru.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -522,16 +522,16 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jru.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, jru.schemaConfig)
-	_spec.AddModifiers(jru.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, jru.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.JobRunner
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobrunner.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -539,8 +539,8 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	jru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // JobRunnerUpdateOne is the builder for updating a single JobRunner entity.
@@ -553,299 +553,299 @@ type JobRunnerUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jruo *JobRunnerUpdateOne) SetUpdatedAt(t time.Time) *JobRunnerUpdateOne {
-	jruo.mutation.SetUpdatedAt(t)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetUpdatedAt(v time.Time) *JobRunnerUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jruo *JobRunnerUpdateOne) ClearUpdatedAt() *JobRunnerUpdateOne {
-	jruo.mutation.ClearUpdatedAt()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearUpdatedAt() *JobRunnerUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jruo *JobRunnerUpdateOne) SetUpdatedBy(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetUpdatedBy(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetUpdatedBy(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableUpdatedBy(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetUpdatedBy(*s)
+func (_u *JobRunnerUpdateOne) SetNillableUpdatedBy(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jruo *JobRunnerUpdateOne) ClearUpdatedBy() *JobRunnerUpdateOne {
-	jruo.mutation.ClearUpdatedBy()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearUpdatedBy() *JobRunnerUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jruo *JobRunnerUpdateOne) SetDeletedAt(t time.Time) *JobRunnerUpdateOne {
-	jruo.mutation.SetDeletedAt(t)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetDeletedAt(v time.Time) *JobRunnerUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableDeletedAt(t *time.Time) *JobRunnerUpdateOne {
-	if t != nil {
-		jruo.SetDeletedAt(*t)
+func (_u *JobRunnerUpdateOne) SetNillableDeletedAt(v *time.Time) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jruo *JobRunnerUpdateOne) ClearDeletedAt() *JobRunnerUpdateOne {
-	jruo.mutation.ClearDeletedAt()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearDeletedAt() *JobRunnerUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jruo *JobRunnerUpdateOne) SetDeletedBy(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetDeletedBy(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetDeletedBy(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableDeletedBy(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetDeletedBy(*s)
+func (_u *JobRunnerUpdateOne) SetNillableDeletedBy(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jruo *JobRunnerUpdateOne) ClearDeletedBy() *JobRunnerUpdateOne {
-	jruo.mutation.ClearDeletedBy()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearDeletedBy() *JobRunnerUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jruo *JobRunnerUpdateOne) SetTags(s []string) *JobRunnerUpdateOne {
-	jruo.mutation.SetTags(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetTags(v []string) *JobRunnerUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jruo *JobRunnerUpdateOne) AppendTags(s []string) *JobRunnerUpdateOne {
-	jruo.mutation.AppendTags(s)
-	return jruo
+// AppendTags appends value to the "tags" field.
+func (_u *JobRunnerUpdateOne) AppendTags(v []string) *JobRunnerUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jruo *JobRunnerUpdateOne) ClearTags() *JobRunnerUpdateOne {
-	jruo.mutation.ClearTags()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearTags() *JobRunnerUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jruo *JobRunnerUpdateOne) SetOwnerID(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetOwnerID(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetOwnerID(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableOwnerID(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetOwnerID(*s)
+func (_u *JobRunnerUpdateOne) SetNillableOwnerID(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jruo *JobRunnerUpdateOne) ClearOwnerID() *JobRunnerUpdateOne {
-	jruo.mutation.ClearOwnerID()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearOwnerID() *JobRunnerUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (jruo *JobRunnerUpdateOne) SetName(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetName(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetName(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableName(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetName(*s)
+func (_u *JobRunnerUpdateOne) SetNillableName(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return jruo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (jruo *JobRunnerUpdateOne) SetStatus(ers enums.JobRunnerStatus) *JobRunnerUpdateOne {
-	jruo.mutation.SetStatus(ers)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetStatus(v enums.JobRunnerStatus) *JobRunnerUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableStatus(ers *enums.JobRunnerStatus) *JobRunnerUpdateOne {
-	if ers != nil {
-		jruo.SetStatus(*ers)
+func (_u *JobRunnerUpdateOne) SetNillableStatus(v *enums.JobRunnerStatus) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return jruo
+	return _u
 }
 
 // SetIPAddress sets the "ip_address" field.
-func (jruo *JobRunnerUpdateOne) SetIPAddress(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetIPAddress(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetIPAddress(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetIPAddress(v)
+	return _u
 }
 
 // SetNillableIPAddress sets the "ip_address" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableIPAddress(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetIPAddress(*s)
+func (_u *JobRunnerUpdateOne) SetNillableIPAddress(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetIPAddress(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearIPAddress clears the value of the "ip_address" field.
-func (jruo *JobRunnerUpdateOne) ClearIPAddress() *JobRunnerUpdateOne {
-	jruo.mutation.ClearIPAddress()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearIPAddress() *JobRunnerUpdateOne {
+	_u.mutation.ClearIPAddress()
+	return _u
 }
 
 // SetLastSeen sets the "last_seen" field.
-func (jruo *JobRunnerUpdateOne) SetLastSeen(t time.Time) *JobRunnerUpdateOne {
-	jruo.mutation.SetLastSeen(t)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetLastSeen(v time.Time) *JobRunnerUpdateOne {
+	_u.mutation.SetLastSeen(v)
+	return _u
 }
 
 // SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableLastSeen(t *time.Time) *JobRunnerUpdateOne {
-	if t != nil {
-		jruo.SetLastSeen(*t)
+func (_u *JobRunnerUpdateOne) SetNillableLastSeen(v *time.Time) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetLastSeen(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearLastSeen clears the value of the "last_seen" field.
-func (jruo *JobRunnerUpdateOne) ClearLastSeen() *JobRunnerUpdateOne {
-	jruo.mutation.ClearLastSeen()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearLastSeen() *JobRunnerUpdateOne {
+	_u.mutation.ClearLastSeen()
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (jruo *JobRunnerUpdateOne) SetVersion(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetVersion(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetVersion(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetVersion(v)
+	return _u
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableVersion(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetVersion(*s)
+func (_u *JobRunnerUpdateOne) SetNillableVersion(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetVersion(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearVersion clears the value of the "version" field.
-func (jruo *JobRunnerUpdateOne) ClearVersion() *JobRunnerUpdateOne {
-	jruo.mutation.ClearVersion()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearVersion() *JobRunnerUpdateOne {
+	_u.mutation.ClearVersion()
+	return _u
 }
 
 // SetOs sets the "os" field.
-func (jruo *JobRunnerUpdateOne) SetOs(s string) *JobRunnerUpdateOne {
-	jruo.mutation.SetOs(s)
-	return jruo
+func (_u *JobRunnerUpdateOne) SetOs(v string) *JobRunnerUpdateOne {
+	_u.mutation.SetOs(v)
+	return _u
 }
 
 // SetNillableOs sets the "os" field if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableOs(s *string) *JobRunnerUpdateOne {
-	if s != nil {
-		jruo.SetOs(*s)
+func (_u *JobRunnerUpdateOne) SetNillableOs(v *string) *JobRunnerUpdateOne {
+	if v != nil {
+		_u.SetOs(*v)
 	}
-	return jruo
+	return _u
 }
 
 // ClearOs clears the value of the "os" field.
-func (jruo *JobRunnerUpdateOne) ClearOs() *JobRunnerUpdateOne {
-	jruo.mutation.ClearOs()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearOs() *JobRunnerUpdateOne {
+	_u.mutation.ClearOs()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jruo *JobRunnerUpdateOne) SetOwner(o *Organization) *JobRunnerUpdateOne {
-	return jruo.SetOwnerID(o.ID)
+func (_u *JobRunnerUpdateOne) SetOwner(v *Organization) *JobRunnerUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (jruo *JobRunnerUpdateOne) AddJobRunnerTokenIDs(ids ...string) *JobRunnerUpdateOne {
-	jruo.mutation.AddJobRunnerTokenIDs(ids...)
-	return jruo
+func (_u *JobRunnerUpdateOne) AddJobRunnerTokenIDs(ids ...string) *JobRunnerUpdateOne {
+	_u.mutation.AddJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (jruo *JobRunnerUpdateOne) AddJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *JobRunnerUpdateOne) AddJobRunnerTokens(v ...*JobRunnerToken) *JobRunnerUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jruo.AddJobRunnerTokenIDs(ids...)
+	return _u.AddJobRunnerTokenIDs(ids...)
 }
 
 // Mutation returns the JobRunnerMutation object of the builder.
-func (jruo *JobRunnerUpdateOne) Mutation() *JobRunnerMutation {
-	return jruo.mutation
+func (_u *JobRunnerUpdateOne) Mutation() *JobRunnerMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jruo *JobRunnerUpdateOne) ClearOwner() *JobRunnerUpdateOne {
-	jruo.mutation.ClearOwner()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearOwner() *JobRunnerUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
-func (jruo *JobRunnerUpdateOne) ClearJobRunnerTokens() *JobRunnerUpdateOne {
-	jruo.mutation.ClearJobRunnerTokens()
-	return jruo
+func (_u *JobRunnerUpdateOne) ClearJobRunnerTokens() *JobRunnerUpdateOne {
+	_u.mutation.ClearJobRunnerTokens()
+	return _u
 }
 
 // RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
-func (jruo *JobRunnerUpdateOne) RemoveJobRunnerTokenIDs(ids ...string) *JobRunnerUpdateOne {
-	jruo.mutation.RemoveJobRunnerTokenIDs(ids...)
-	return jruo
+func (_u *JobRunnerUpdateOne) RemoveJobRunnerTokenIDs(ids ...string) *JobRunnerUpdateOne {
+	_u.mutation.RemoveJobRunnerTokenIDs(ids...)
+	return _u
 }
 
 // RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
-func (jruo *JobRunnerUpdateOne) RemoveJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerUpdateOne {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_u *JobRunnerUpdateOne) RemoveJobRunnerTokens(v ...*JobRunnerToken) *JobRunnerUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jruo.RemoveJobRunnerTokenIDs(ids...)
+	return _u.RemoveJobRunnerTokenIDs(ids...)
 }
 
 // Where appends a list predicates to the JobRunnerUpdate builder.
-func (jruo *JobRunnerUpdateOne) Where(ps ...predicate.JobRunner) *JobRunnerUpdateOne {
-	jruo.mutation.Where(ps...)
-	return jruo
+func (_u *JobRunnerUpdateOne) Where(ps ...predicate.JobRunner) *JobRunnerUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (jruo *JobRunnerUpdateOne) Select(field string, fields ...string) *JobRunnerUpdateOne {
-	jruo.fields = append([]string{field}, fields...)
-	return jruo
+func (_u *JobRunnerUpdateOne) Select(field string, fields ...string) *JobRunnerUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated JobRunner entity.
-func (jruo *JobRunnerUpdateOne) Save(ctx context.Context) (*JobRunner, error) {
-	if err := jruo.defaults(); err != nil {
+func (_u *JobRunnerUpdateOne) Save(ctx context.Context) (*JobRunner, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jruo.sqlSave, jruo.mutation, jruo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jruo *JobRunnerUpdateOne) SaveX(ctx context.Context) *JobRunner {
-	node, err := jruo.Save(ctx)
+func (_u *JobRunnerUpdateOne) SaveX(ctx context.Context) *JobRunner {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -853,33 +853,33 @@ func (jruo *JobRunnerUpdateOne) SaveX(ctx context.Context) *JobRunner {
 }
 
 // Exec executes the query on the entity.
-func (jruo *JobRunnerUpdateOne) Exec(ctx context.Context) error {
-	_, err := jruo.Save(ctx)
+func (_u *JobRunnerUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jruo *JobRunnerUpdateOne) ExecX(ctx context.Context) {
-	if err := jruo.Exec(ctx); err != nil {
+func (_u *JobRunnerUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jruo *JobRunnerUpdateOne) defaults() error {
-	if _, ok := jruo.mutation.UpdatedAt(); !ok && !jruo.mutation.UpdatedAtCleared() {
+func (_u *JobRunnerUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobrunner.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunner.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunner.UpdateDefaultUpdatedAt()
-		jruo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jruo *JobRunnerUpdateOne) check() error {
-	if v, ok := jruo.mutation.Status(); ok {
+func (_u *JobRunnerUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := jobrunner.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobRunner.status": %w`, err)}
 		}
@@ -888,22 +888,22 @@ func (jruo *JobRunnerUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jruo *JobRunnerUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerUpdateOne {
-	jruo.modifiers = append(jruo.modifiers, modifiers...)
-	return jruo
+func (_u *JobRunnerUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, err error) {
-	if err := jruo.check(); err != nil {
+func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobrunner.Table, jobrunner.Columns, sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString))
-	id, ok := jruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "JobRunner.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := jruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobrunner.FieldID)
 		for _, f := range fields {
@@ -915,88 +915,88 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 			}
 		}
 	}
-	if ps := jruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jruo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobrunner.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jruo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobrunner.FieldUpdatedAt, field.TypeTime)
 	}
-	if jruo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobrunner.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jruo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunner.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jruo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobrunner.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jruo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunner.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jruo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobrunner.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jruo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobrunner.FieldDeletedBy, field.TypeString, value)
 	}
-	if jruo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobrunner.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jruo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobrunner.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jruo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobrunner.FieldTags, value)
 		})
 	}
-	if jruo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobrunner.FieldTags, field.TypeJSON)
 	}
-	if jruo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobrunner.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := jruo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(jobrunner.FieldName, field.TypeString, value)
 	}
-	if value, ok := jruo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(jobrunner.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := jruo.mutation.IPAddress(); ok {
+	if value, ok := _u.mutation.IPAddress(); ok {
 		_spec.SetField(jobrunner.FieldIPAddress, field.TypeString, value)
 	}
-	if jruo.mutation.IPAddressCleared() {
+	if _u.mutation.IPAddressCleared() {
 		_spec.ClearField(jobrunner.FieldIPAddress, field.TypeString)
 	}
-	if value, ok := jruo.mutation.LastSeen(); ok {
+	if value, ok := _u.mutation.LastSeen(); ok {
 		_spec.SetField(jobrunner.FieldLastSeen, field.TypeTime, value)
 	}
-	if jruo.mutation.LastSeenCleared() {
+	if _u.mutation.LastSeenCleared() {
 		_spec.ClearField(jobrunner.FieldLastSeen, field.TypeTime)
 	}
-	if value, ok := jruo.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(jobrunner.FieldVersion, field.TypeString, value)
 	}
-	if jruo.mutation.VersionCleared() {
+	if _u.mutation.VersionCleared() {
 		_spec.ClearField(jobrunner.FieldVersion, field.TypeString)
 	}
-	if value, ok := jruo.mutation.Os(); ok {
+	if value, ok := _u.mutation.Os(); ok {
 		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
 	}
-	if jruo.mutation.OsCleared() {
+	if _u.mutation.OsCleared() {
 		_spec.ClearField(jobrunner.FieldOs, field.TypeString)
 	}
-	if jruo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1007,10 +1007,10 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jruo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1021,13 +1021,13 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunner
+		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jruo.mutation.JobRunnerTokensCleared() {
+	if _u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1038,10 +1038,10 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jruo.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !jruo.mutation.JobRunnerTokensCleared() {
+	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1052,13 +1052,13 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jruo.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1069,19 +1069,19 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunnerJobRunnerTokens
+		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jruo.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, jruo.schemaConfig)
-	_spec.AddModifiers(jruo.modifiers...)
-	_node = &JobRunner{config: jruo.config}
+	_spec.Node.Schema = _u.schemaConfig.JobRunner
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &JobRunner{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, jruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobrunner.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1089,6 +1089,6 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 		}
 		return nil, err
 	}
-	jruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

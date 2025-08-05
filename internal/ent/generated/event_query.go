@@ -71,44 +71,44 @@ type EventQuery struct {
 }
 
 // Where adds a new predicate for the EventQuery builder.
-func (eq *EventQuery) Where(ps ...predicate.Event) *EventQuery {
-	eq.predicates = append(eq.predicates, ps...)
-	return eq
+func (_q *EventQuery) Where(ps ...predicate.Event) *EventQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (eq *EventQuery) Limit(limit int) *EventQuery {
-	eq.ctx.Limit = &limit
-	return eq
+func (_q *EventQuery) Limit(limit int) *EventQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (eq *EventQuery) Offset(offset int) *EventQuery {
-	eq.ctx.Offset = &offset
-	return eq
+func (_q *EventQuery) Offset(offset int) *EventQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (eq *EventQuery) Unique(unique bool) *EventQuery {
-	eq.ctx.Unique = &unique
-	return eq
+func (_q *EventQuery) Unique(unique bool) *EventQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (eq *EventQuery) Order(o ...event.OrderOption) *EventQuery {
-	eq.order = append(eq.order, o...)
-	return eq
+func (_q *EventQuery) Order(o ...event.OrderOption) *EventQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryUsers chains the current query on the "users" edge.
-func (eq *EventQuery) QueryUsers() *UserQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryUsers() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -117,23 +117,23 @@ func (eq *EventQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.UsersTable, event.UsersPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryGroups chains the current query on the "groups" edge.
-func (eq *EventQuery) QueryGroups() *GroupQuery {
-	query := (&GroupClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -142,23 +142,23 @@ func (eq *EventQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupsTable, event.GroupsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.GroupEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryIntegrations chains the current query on the "integrations" edge.
-func (eq *EventQuery) QueryIntegrations() *IntegrationQuery {
-	query := (&IntegrationClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -167,23 +167,23 @@ func (eq *EventQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.IntegrationsTable, event.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.IntegrationEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrganizations chains the current query on the "organizations" edge.
-func (eq *EventQuery) QueryOrganizations() *OrganizationQuery {
-	query := (&OrganizationClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryOrganizations() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -192,23 +192,23 @@ func (eq *EventQuery) QueryOrganizations() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.OrganizationsTable, event.OrganizationsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrganizationEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryInvites chains the current query on the "invites" edge.
-func (eq *EventQuery) QueryInvites() *InviteQuery {
-	query := (&InviteClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryInvites() *InviteQuery {
+	query := (&InviteClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -217,23 +217,23 @@ func (eq *EventQuery) QueryInvites() *InviteQuery {
 			sqlgraph.To(invite.Table, invite.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.InvitesTable, event.InvitesPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Invite
 		step.Edge.Schema = schemaConfig.InviteEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryPersonalAccessTokens chains the current query on the "personal_access_tokens" edge.
-func (eq *EventQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
-	query := (&PersonalAccessTokenClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
+	query := (&PersonalAccessTokenClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -242,23 +242,23 @@ func (eq *EventQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
 			sqlgraph.To(personalaccesstoken.Table, personalaccesstoken.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.PersonalAccessTokensTable, event.PersonalAccessTokensPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.PersonalAccessToken
 		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySecrets chains the current query on the "secrets" edge.
-func (eq *EventQuery) QuerySecrets() *HushQuery {
-	query := (&HushClient{config: eq.config}).Query()
+func (_q *EventQuery) QuerySecrets() *HushQuery {
+	query := (&HushClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -267,23 +267,23 @@ func (eq *EventQuery) QuerySecrets() *HushQuery {
 			sqlgraph.To(hush.Table, hush.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.SecretsTable, event.SecretsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Hush
 		step.Edge.Schema = schemaConfig.HushEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrgMemberships chains the current query on the "org_memberships" edge.
-func (eq *EventQuery) QueryOrgMemberships() *OrgMembershipQuery {
-	query := (&OrgMembershipClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryOrgMemberships() *OrgMembershipQuery {
+	query := (&OrgMembershipClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -292,23 +292,23 @@ func (eq *EventQuery) QueryOrgMemberships() *OrgMembershipQuery {
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgMembershipsTable, event.OrgMembershipsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.OrgMembershipEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
-func (eq *EventQuery) QueryGroupMemberships() *GroupMembershipQuery {
-	query := (&GroupMembershipClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryGroupMemberships() *GroupMembershipQuery {
+	query := (&GroupMembershipClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -317,23 +317,23 @@ func (eq *EventQuery) QueryGroupMemberships() *GroupMembershipQuery {
 			sqlgraph.To(groupmembership.Table, groupmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupMembershipsTable, event.GroupMembershipsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.GroupMembership
 		step.Edge.Schema = schemaConfig.GroupMembershipEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubscribers chains the current query on the "subscribers" edge.
-func (eq *EventQuery) QuerySubscribers() *SubscriberQuery {
-	query := (&SubscriberClient{config: eq.config}).Query()
+func (_q *EventQuery) QuerySubscribers() *SubscriberQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -342,23 +342,23 @@ func (eq *EventQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.SubscribersTable, event.SubscribersPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subscriber
 		step.Edge.Schema = schemaConfig.SubscriberEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (eq *EventQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -367,23 +367,23 @@ func (eq *EventQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.FilesTable, event.FilesPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.FileEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrgSubscriptions chains the current query on the "org_subscriptions" edge.
-func (eq *EventQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
-	query := (&OrgSubscriptionClient{config: eq.config}).Query()
+func (_q *EventQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -392,10 +392,10 @@ func (eq *EventQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
 			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgSubscriptionsTable, event.OrgSubscriptionsPrimaryKey...),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -403,8 +403,8 @@ func (eq *EventQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
 
 // First returns the first Event entity from the query.
 // Returns a *NotFoundError when no Event was found.
-func (eq *EventQuery) First(ctx context.Context) (*Event, error) {
-	nodes, err := eq.Limit(1).All(setContextOp(ctx, eq.ctx, ent.OpQueryFirst))
+func (_q *EventQuery) First(ctx context.Context) (*Event, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -415,8 +415,8 @@ func (eq *EventQuery) First(ctx context.Context) (*Event, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (eq *EventQuery) FirstX(ctx context.Context) *Event {
-	node, err := eq.First(ctx)
+func (_q *EventQuery) FirstX(ctx context.Context) *Event {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -425,9 +425,9 @@ func (eq *EventQuery) FirstX(ctx context.Context) *Event {
 
 // FirstID returns the first Event ID from the query.
 // Returns a *NotFoundError when no Event ID was found.
-func (eq *EventQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *EventQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = eq.Limit(1).IDs(setContextOp(ctx, eq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -438,8 +438,8 @@ func (eq *EventQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (eq *EventQuery) FirstIDX(ctx context.Context) string {
-	id, err := eq.FirstID(ctx)
+func (_q *EventQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -449,8 +449,8 @@ func (eq *EventQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Event entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Event entity is found.
 // Returns a *NotFoundError when no Event entities are found.
-func (eq *EventQuery) Only(ctx context.Context) (*Event, error) {
-	nodes, err := eq.Limit(2).All(setContextOp(ctx, eq.ctx, ent.OpQueryOnly))
+func (_q *EventQuery) Only(ctx context.Context) (*Event, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -465,8 +465,8 @@ func (eq *EventQuery) Only(ctx context.Context) (*Event, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (eq *EventQuery) OnlyX(ctx context.Context) *Event {
-	node, err := eq.Only(ctx)
+func (_q *EventQuery) OnlyX(ctx context.Context) *Event {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -476,9 +476,9 @@ func (eq *EventQuery) OnlyX(ctx context.Context) *Event {
 // OnlyID is like Only, but returns the only Event ID in the query.
 // Returns a *NotSingularError when more than one Event ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (eq *EventQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *EventQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = eq.Limit(2).IDs(setContextOp(ctx, eq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -493,8 +493,8 @@ func (eq *EventQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (eq *EventQuery) OnlyIDX(ctx context.Context) string {
-	id, err := eq.OnlyID(ctx)
+func (_q *EventQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -502,18 +502,18 @@ func (eq *EventQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Events.
-func (eq *EventQuery) All(ctx context.Context) ([]*Event, error) {
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryAll)
-	if err := eq.prepareQuery(ctx); err != nil {
+func (_q *EventQuery) All(ctx context.Context) ([]*Event, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Event, *EventQuery]()
-	return withInterceptors[[]*Event](ctx, eq, qr, eq.inters)
+	return withInterceptors[[]*Event](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (eq *EventQuery) AllX(ctx context.Context) []*Event {
-	nodes, err := eq.All(ctx)
+func (_q *EventQuery) AllX(ctx context.Context) []*Event {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -521,20 +521,20 @@ func (eq *EventQuery) AllX(ctx context.Context) []*Event {
 }
 
 // IDs executes the query and returns a list of Event IDs.
-func (eq *EventQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if eq.ctx.Unique == nil && eq.path != nil {
-		eq.Unique(true)
+func (_q *EventQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
-	if err = eq.Select(event.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(event.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (eq *EventQuery) IDsX(ctx context.Context) []string {
-	ids, err := eq.IDs(ctx)
+func (_q *EventQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -542,17 +542,17 @@ func (eq *EventQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (eq *EventQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryCount)
-	if err := eq.prepareQuery(ctx); err != nil {
+func (_q *EventQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, eq, querierCount[*EventQuery](), eq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*EventQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (eq *EventQuery) CountX(ctx context.Context) int {
-	count, err := eq.Count(ctx)
+func (_q *EventQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -560,9 +560,9 @@ func (eq *EventQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (eq *EventQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryExist)
-	switch _, err := eq.FirstID(ctx); {
+func (_q *EventQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -573,8 +573,8 @@ func (eq *EventQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (eq *EventQuery) ExistX(ctx context.Context) bool {
-	exist, err := eq.Exist(ctx)
+func (_q *EventQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -583,165 +583,165 @@ func (eq *EventQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the EventQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (eq *EventQuery) Clone() *EventQuery {
-	if eq == nil {
+func (_q *EventQuery) Clone() *EventQuery {
+	if _q == nil {
 		return nil
 	}
 	return &EventQuery{
-		config:                   eq.config,
-		ctx:                      eq.ctx.Clone(),
-		order:                    append([]event.OrderOption{}, eq.order...),
-		inters:                   append([]Interceptor{}, eq.inters...),
-		predicates:               append([]predicate.Event{}, eq.predicates...),
-		withUsers:                eq.withUsers.Clone(),
-		withGroups:               eq.withGroups.Clone(),
-		withIntegrations:         eq.withIntegrations.Clone(),
-		withOrganizations:        eq.withOrganizations.Clone(),
-		withInvites:              eq.withInvites.Clone(),
-		withPersonalAccessTokens: eq.withPersonalAccessTokens.Clone(),
-		withSecrets:              eq.withSecrets.Clone(),
-		withOrgMemberships:       eq.withOrgMemberships.Clone(),
-		withGroupMemberships:     eq.withGroupMemberships.Clone(),
-		withSubscribers:          eq.withSubscribers.Clone(),
-		withFiles:                eq.withFiles.Clone(),
-		withOrgSubscriptions:     eq.withOrgSubscriptions.Clone(),
+		config:                   _q.config,
+		ctx:                      _q.ctx.Clone(),
+		order:                    append([]event.OrderOption{}, _q.order...),
+		inters:                   append([]Interceptor{}, _q.inters...),
+		predicates:               append([]predicate.Event{}, _q.predicates...),
+		withUsers:                _q.withUsers.Clone(),
+		withGroups:               _q.withGroups.Clone(),
+		withIntegrations:         _q.withIntegrations.Clone(),
+		withOrganizations:        _q.withOrganizations.Clone(),
+		withInvites:              _q.withInvites.Clone(),
+		withPersonalAccessTokens: _q.withPersonalAccessTokens.Clone(),
+		withSecrets:              _q.withSecrets.Clone(),
+		withOrgMemberships:       _q.withOrgMemberships.Clone(),
+		withGroupMemberships:     _q.withGroupMemberships.Clone(),
+		withSubscribers:          _q.withSubscribers.Clone(),
+		withFiles:                _q.withFiles.Clone(),
+		withOrgSubscriptions:     _q.withOrgSubscriptions.Clone(),
 		// clone intermediate query.
-		sql:       eq.sql.Clone(),
-		path:      eq.path,
-		modifiers: append([]func(*sql.Selector){}, eq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithUsers tells the query-builder to eager-load the nodes that are connected to
 // the "users" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithUsers(opts ...func(*UserQuery)) *EventQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (_q *EventQuery) WithUsers(opts ...func(*UserQuery)) *EventQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withUsers = query
-	return eq
+	_q.withUsers = query
+	return _q
 }
 
 // WithGroups tells the query-builder to eager-load the nodes that are connected to
 // the "groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithGroups(opts ...func(*GroupQuery)) *EventQuery {
-	query := (&GroupClient{config: eq.config}).Query()
+func (_q *EventQuery) WithGroups(opts ...func(*GroupQuery)) *EventQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withGroups = query
-	return eq
+	_q.withGroups = query
+	return _q
 }
 
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
 // the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *EventQuery {
-	query := (&IntegrationClient{config: eq.config}).Query()
+func (_q *EventQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *EventQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withIntegrations = query
-	return eq
+	_q.withIntegrations = query
+	return _q
 }
 
 // WithOrganizations tells the query-builder to eager-load the nodes that are connected to
 // the "organizations" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithOrganizations(opts ...func(*OrganizationQuery)) *EventQuery {
-	query := (&OrganizationClient{config: eq.config}).Query()
+func (_q *EventQuery) WithOrganizations(opts ...func(*OrganizationQuery)) *EventQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withOrganizations = query
-	return eq
+	_q.withOrganizations = query
+	return _q
 }
 
 // WithInvites tells the query-builder to eager-load the nodes that are connected to
 // the "invites" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithInvites(opts ...func(*InviteQuery)) *EventQuery {
-	query := (&InviteClient{config: eq.config}).Query()
+func (_q *EventQuery) WithInvites(opts ...func(*InviteQuery)) *EventQuery {
+	query := (&InviteClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withInvites = query
-	return eq
+	_q.withInvites = query
+	return _q
 }
 
 // WithPersonalAccessTokens tells the query-builder to eager-load the nodes that are connected to
 // the "personal_access_tokens" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithPersonalAccessTokens(opts ...func(*PersonalAccessTokenQuery)) *EventQuery {
-	query := (&PersonalAccessTokenClient{config: eq.config}).Query()
+func (_q *EventQuery) WithPersonalAccessTokens(opts ...func(*PersonalAccessTokenQuery)) *EventQuery {
+	query := (&PersonalAccessTokenClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withPersonalAccessTokens = query
-	return eq
+	_q.withPersonalAccessTokens = query
+	return _q
 }
 
 // WithSecrets tells the query-builder to eager-load the nodes that are connected to
 // the "secrets" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithSecrets(opts ...func(*HushQuery)) *EventQuery {
-	query := (&HushClient{config: eq.config}).Query()
+func (_q *EventQuery) WithSecrets(opts ...func(*HushQuery)) *EventQuery {
+	query := (&HushClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withSecrets = query
-	return eq
+	_q.withSecrets = query
+	return _q
 }
 
 // WithOrgMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "org_memberships" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithOrgMemberships(opts ...func(*OrgMembershipQuery)) *EventQuery {
-	query := (&OrgMembershipClient{config: eq.config}).Query()
+func (_q *EventQuery) WithOrgMemberships(opts ...func(*OrgMembershipQuery)) *EventQuery {
+	query := (&OrgMembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withOrgMemberships = query
-	return eq
+	_q.withOrgMemberships = query
+	return _q
 }
 
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *EventQuery {
-	query := (&GroupMembershipClient{config: eq.config}).Query()
+func (_q *EventQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *EventQuery {
+	query := (&GroupMembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withGroupMemberships = query
-	return eq
+	_q.withGroupMemberships = query
+	return _q
 }
 
 // WithSubscribers tells the query-builder to eager-load the nodes that are connected to
 // the "subscribers" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *EventQuery {
-	query := (&SubscriberClient{config: eq.config}).Query()
+func (_q *EventQuery) WithSubscribers(opts ...func(*SubscriberQuery)) *EventQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withSubscribers = query
-	return eq
+	_q.withSubscribers = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithFiles(opts ...func(*FileQuery)) *EventQuery {
-	query := (&FileClient{config: eq.config}).Query()
+func (_q *EventQuery) WithFiles(opts ...func(*FileQuery)) *EventQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withFiles = query
-	return eq
+	_q.withFiles = query
+	return _q
 }
 
 // WithOrgSubscriptions tells the query-builder to eager-load the nodes that are connected to
 // the "org_subscriptions" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithOrgSubscriptions(opts ...func(*OrgSubscriptionQuery)) *EventQuery {
-	query := (&OrgSubscriptionClient{config: eq.config}).Query()
+func (_q *EventQuery) WithOrgSubscriptions(opts ...func(*OrgSubscriptionQuery)) *EventQuery {
+	query := (&OrgSubscriptionClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withOrgSubscriptions = query
-	return eq
+	_q.withOrgSubscriptions = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -758,10 +758,10 @@ func (eq *EventQuery) WithOrgSubscriptions(opts ...func(*OrgSubscriptionQuery)) 
 //		GroupBy(event.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (eq *EventQuery) GroupBy(field string, fields ...string) *EventGroupBy {
-	eq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &EventGroupBy{build: eq}
-	grbuild.flds = &eq.ctx.Fields
+func (_q *EventQuery) GroupBy(field string, fields ...string) *EventGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &EventGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = event.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -779,69 +779,69 @@ func (eq *EventQuery) GroupBy(field string, fields ...string) *EventGroupBy {
 //	client.Event.Query().
 //		Select(event.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (eq *EventQuery) Select(fields ...string) *EventSelect {
-	eq.ctx.Fields = append(eq.ctx.Fields, fields...)
-	sbuild := &EventSelect{EventQuery: eq}
+func (_q *EventQuery) Select(fields ...string) *EventSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &EventSelect{EventQuery: _q}
 	sbuild.label = event.Label
-	sbuild.flds, sbuild.scan = &eq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a EventSelect configured with the given aggregations.
-func (eq *EventQuery) Aggregate(fns ...AggregateFunc) *EventSelect {
-	return eq.Select().Aggregate(fns...)
+func (_q *EventQuery) Aggregate(fns ...AggregateFunc) *EventSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (eq *EventQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range eq.inters {
+func (_q *EventQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, eq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range eq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !event.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if eq.path != nil {
-		prev, err := eq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		eq.sql = prev
+		_q.sql = prev
 	}
 	if event.Policy == nil {
 		return errors.New("generated: uninitialized event.Policy (forgotten import generated/runtime?)")
 	}
-	if err := event.Policy.EvalQuery(ctx, eq); err != nil {
+	if err := event.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event, error) {
+func (_q *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event, error) {
 	var (
 		nodes       = []*Event{}
-		withFKs     = eq.withFKs
-		_spec       = eq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [12]bool{
-			eq.withUsers != nil,
-			eq.withGroups != nil,
-			eq.withIntegrations != nil,
-			eq.withOrganizations != nil,
-			eq.withInvites != nil,
-			eq.withPersonalAccessTokens != nil,
-			eq.withSecrets != nil,
-			eq.withOrgMemberships != nil,
-			eq.withGroupMemberships != nil,
-			eq.withSubscribers != nil,
-			eq.withFiles != nil,
-			eq.withOrgSubscriptions != nil,
+			_q.withUsers != nil,
+			_q.withGroups != nil,
+			_q.withIntegrations != nil,
+			_q.withOrganizations != nil,
+			_q.withInvites != nil,
+			_q.withPersonalAccessTokens != nil,
+			_q.withSecrets != nil,
+			_q.withOrgMemberships != nil,
+			_q.withGroupMemberships != nil,
+			_q.withSubscribers != nil,
+			_q.withFiles != nil,
+			_q.withOrgSubscriptions != nil,
 		}
 	)
 	if withFKs {
@@ -851,62 +851,62 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 		return (*Event).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Event{config: eq.config}
+		node := &Event{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = eq.schemaConfig.Event
-	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
-	if len(eq.modifiers) > 0 {
-		_spec.Modifiers = eq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Event
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, eq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := eq.withUsers; query != nil {
-		if err := eq.loadUsers(ctx, query, nodes,
+	if query := _q.withUsers; query != nil {
+		if err := _q.loadUsers(ctx, query, nodes,
 			func(n *Event) { n.Edges.Users = []*User{} },
 			func(n *Event, e *User) { n.Edges.Users = append(n.Edges.Users, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withGroups; query != nil {
-		if err := eq.loadGroups(ctx, query, nodes,
+	if query := _q.withGroups; query != nil {
+		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *Event) { n.Edges.Groups = []*Group{} },
 			func(n *Event, e *Group) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withIntegrations; query != nil {
-		if err := eq.loadIntegrations(ctx, query, nodes,
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Event) { n.Edges.Integrations = []*Integration{} },
 			func(n *Event, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withOrganizations; query != nil {
-		if err := eq.loadOrganizations(ctx, query, nodes,
+	if query := _q.withOrganizations; query != nil {
+		if err := _q.loadOrganizations(ctx, query, nodes,
 			func(n *Event) { n.Edges.Organizations = []*Organization{} },
 			func(n *Event, e *Organization) { n.Edges.Organizations = append(n.Edges.Organizations, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withInvites; query != nil {
-		if err := eq.loadInvites(ctx, query, nodes,
+	if query := _q.withInvites; query != nil {
+		if err := _q.loadInvites(ctx, query, nodes,
 			func(n *Event) { n.Edges.Invites = []*Invite{} },
 			func(n *Event, e *Invite) { n.Edges.Invites = append(n.Edges.Invites, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withPersonalAccessTokens; query != nil {
-		if err := eq.loadPersonalAccessTokens(ctx, query, nodes,
+	if query := _q.withPersonalAccessTokens; query != nil {
+		if err := _q.loadPersonalAccessTokens(ctx, query, nodes,
 			func(n *Event) { n.Edges.PersonalAccessTokens = []*PersonalAccessToken{} },
 			func(n *Event, e *PersonalAccessToken) {
 				n.Edges.PersonalAccessTokens = append(n.Edges.PersonalAccessTokens, e)
@@ -914,141 +914,141 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 			return nil, err
 		}
 	}
-	if query := eq.withSecrets; query != nil {
-		if err := eq.loadSecrets(ctx, query, nodes,
+	if query := _q.withSecrets; query != nil {
+		if err := _q.loadSecrets(ctx, query, nodes,
 			func(n *Event) { n.Edges.Secrets = []*Hush{} },
 			func(n *Event, e *Hush) { n.Edges.Secrets = append(n.Edges.Secrets, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withOrgMemberships; query != nil {
-		if err := eq.loadOrgMemberships(ctx, query, nodes,
+	if query := _q.withOrgMemberships; query != nil {
+		if err := _q.loadOrgMemberships(ctx, query, nodes,
 			func(n *Event) { n.Edges.OrgMemberships = []*OrgMembership{} },
 			func(n *Event, e *OrgMembership) { n.Edges.OrgMemberships = append(n.Edges.OrgMemberships, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withGroupMemberships; query != nil {
-		if err := eq.loadGroupMemberships(ctx, query, nodes,
+	if query := _q.withGroupMemberships; query != nil {
+		if err := _q.loadGroupMemberships(ctx, query, nodes,
 			func(n *Event) { n.Edges.GroupMemberships = []*GroupMembership{} },
 			func(n *Event, e *GroupMembership) { n.Edges.GroupMemberships = append(n.Edges.GroupMemberships, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withSubscribers; query != nil {
-		if err := eq.loadSubscribers(ctx, query, nodes,
+	if query := _q.withSubscribers; query != nil {
+		if err := _q.loadSubscribers(ctx, query, nodes,
 			func(n *Event) { n.Edges.Subscribers = []*Subscriber{} },
 			func(n *Event, e *Subscriber) { n.Edges.Subscribers = append(n.Edges.Subscribers, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withFiles; query != nil {
-		if err := eq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Event) { n.Edges.Files = []*File{} },
 			func(n *Event, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withOrgSubscriptions; query != nil {
-		if err := eq.loadOrgSubscriptions(ctx, query, nodes,
+	if query := _q.withOrgSubscriptions; query != nil {
+		if err := _q.loadOrgSubscriptions(ctx, query, nodes,
 			func(n *Event) { n.Edges.OrgSubscriptions = []*OrgSubscription{} },
 			func(n *Event, e *OrgSubscription) { n.Edges.OrgSubscriptions = append(n.Edges.OrgSubscriptions, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedUsers {
-		if err := eq.loadUsers(ctx, query, nodes,
+	for name, query := range _q.withNamedUsers {
+		if err := _q.loadUsers(ctx, query, nodes,
 			func(n *Event) { n.appendNamedUsers(name) },
 			func(n *Event, e *User) { n.appendNamedUsers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedGroups {
-		if err := eq.loadGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedGroups {
+		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *Event) { n.appendNamedGroups(name) },
 			func(n *Event, e *Group) { n.appendNamedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedIntegrations {
-		if err := eq.loadIntegrations(ctx, query, nodes,
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Event) { n.appendNamedIntegrations(name) },
 			func(n *Event, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedOrganizations {
-		if err := eq.loadOrganizations(ctx, query, nodes,
+	for name, query := range _q.withNamedOrganizations {
+		if err := _q.loadOrganizations(ctx, query, nodes,
 			func(n *Event) { n.appendNamedOrganizations(name) },
 			func(n *Event, e *Organization) { n.appendNamedOrganizations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedInvites {
-		if err := eq.loadInvites(ctx, query, nodes,
+	for name, query := range _q.withNamedInvites {
+		if err := _q.loadInvites(ctx, query, nodes,
 			func(n *Event) { n.appendNamedInvites(name) },
 			func(n *Event, e *Invite) { n.appendNamedInvites(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedPersonalAccessTokens {
-		if err := eq.loadPersonalAccessTokens(ctx, query, nodes,
+	for name, query := range _q.withNamedPersonalAccessTokens {
+		if err := _q.loadPersonalAccessTokens(ctx, query, nodes,
 			func(n *Event) { n.appendNamedPersonalAccessTokens(name) },
 			func(n *Event, e *PersonalAccessToken) { n.appendNamedPersonalAccessTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedSecrets {
-		if err := eq.loadSecrets(ctx, query, nodes,
+	for name, query := range _q.withNamedSecrets {
+		if err := _q.loadSecrets(ctx, query, nodes,
 			func(n *Event) { n.appendNamedSecrets(name) },
 			func(n *Event, e *Hush) { n.appendNamedSecrets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedOrgMemberships {
-		if err := eq.loadOrgMemberships(ctx, query, nodes,
+	for name, query := range _q.withNamedOrgMemberships {
+		if err := _q.loadOrgMemberships(ctx, query, nodes,
 			func(n *Event) { n.appendNamedOrgMemberships(name) },
 			func(n *Event, e *OrgMembership) { n.appendNamedOrgMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedGroupMemberships {
-		if err := eq.loadGroupMemberships(ctx, query, nodes,
+	for name, query := range _q.withNamedGroupMemberships {
+		if err := _q.loadGroupMemberships(ctx, query, nodes,
 			func(n *Event) { n.appendNamedGroupMemberships(name) },
 			func(n *Event, e *GroupMembership) { n.appendNamedGroupMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedSubscribers {
-		if err := eq.loadSubscribers(ctx, query, nodes,
+	for name, query := range _q.withNamedSubscribers {
+		if err := _q.loadSubscribers(ctx, query, nodes,
 			func(n *Event) { n.appendNamedSubscribers(name) },
 			func(n *Event, e *Subscriber) { n.appendNamedSubscribers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedFiles {
-		if err := eq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Event) { n.appendNamedFiles(name) },
 			func(n *Event, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedOrgSubscriptions {
-		if err := eq.loadOrgSubscriptions(ctx, query, nodes,
+	for name, query := range _q.withNamedOrgSubscriptions {
+		if err := _q.loadOrgSubscriptions(ctx, query, nodes,
 			func(n *Event) { n.appendNamedOrgSubscriptions(name) },
 			func(n *Event, e *OrgSubscription) { n.appendNamedOrgSubscriptions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range eq.loadTotal {
-		if err := eq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (eq *EventQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
+func (_q *EventQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*Event, init func(*Event), assign func(*Event, *User)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1061,7 +1061,7 @@ func (eq *EventQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.UsersTable)
-		joinT.Schema(eq.schemaConfig.UserEvents)
+		joinT.Schema(_q.schemaConfig.UserEvents)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(event.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1110,7 +1110,7 @@ func (eq *EventQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*
 	}
 	return nil
 }
-func (eq *EventQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Event, init func(*Event), assign func(*Event, *Group)) error {
+func (_q *EventQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Event, init func(*Event), assign func(*Event, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1123,7 +1123,7 @@ func (eq *EventQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.GroupsTable)
-		joinT.Schema(eq.schemaConfig.GroupEvents)
+		joinT.Schema(_q.schemaConfig.GroupEvents)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(event.GroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.GroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1172,7 +1172,7 @@ func (eq *EventQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes [
 	}
 	return nil
 }
-func (eq *EventQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Event, init func(*Event), assign func(*Event, *Integration)) error {
+func (_q *EventQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Event, init func(*Event), assign func(*Event, *Integration)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1185,7 +1185,7 @@ func (eq *EventQuery) loadIntegrations(ctx context.Context, query *IntegrationQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.IntegrationsTable)
-		joinT.Schema(eq.schemaConfig.IntegrationEvents)
+		joinT.Schema(_q.schemaConfig.IntegrationEvents)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(event.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1234,7 +1234,7 @@ func (eq *EventQuery) loadIntegrations(ctx context.Context, query *IntegrationQu
 	}
 	return nil
 }
-func (eq *EventQuery) loadOrganizations(ctx context.Context, query *OrganizationQuery, nodes []*Event, init func(*Event), assign func(*Event, *Organization)) error {
+func (_q *EventQuery) loadOrganizations(ctx context.Context, query *OrganizationQuery, nodes []*Event, init func(*Event), assign func(*Event, *Organization)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1247,7 +1247,7 @@ func (eq *EventQuery) loadOrganizations(ctx context.Context, query *Organization
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.OrganizationsTable)
-		joinT.Schema(eq.schemaConfig.OrganizationEvents)
+		joinT.Schema(_q.schemaConfig.OrganizationEvents)
 		s.Join(joinT).On(s.C(organization.FieldID), joinT.C(event.OrganizationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.OrganizationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1296,7 +1296,7 @@ func (eq *EventQuery) loadOrganizations(ctx context.Context, query *Organization
 	}
 	return nil
 }
-func (eq *EventQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Event, init func(*Event), assign func(*Event, *Invite)) error {
+func (_q *EventQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Event, init func(*Event), assign func(*Event, *Invite)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1309,7 +1309,7 @@ func (eq *EventQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.InvitesTable)
-		joinT.Schema(eq.schemaConfig.InviteEvents)
+		joinT.Schema(_q.schemaConfig.InviteEvents)
 		s.Join(joinT).On(s.C(invite.FieldID), joinT.C(event.InvitesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.InvitesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1358,7 +1358,7 @@ func (eq *EventQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes
 	}
 	return nil
 }
-func (eq *EventQuery) loadPersonalAccessTokens(ctx context.Context, query *PersonalAccessTokenQuery, nodes []*Event, init func(*Event), assign func(*Event, *PersonalAccessToken)) error {
+func (_q *EventQuery) loadPersonalAccessTokens(ctx context.Context, query *PersonalAccessTokenQuery, nodes []*Event, init func(*Event), assign func(*Event, *PersonalAccessToken)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1371,7 +1371,7 @@ func (eq *EventQuery) loadPersonalAccessTokens(ctx context.Context, query *Perso
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.PersonalAccessTokensTable)
-		joinT.Schema(eq.schemaConfig.PersonalAccessTokenEvents)
+		joinT.Schema(_q.schemaConfig.PersonalAccessTokenEvents)
 		s.Join(joinT).On(s.C(personalaccesstoken.FieldID), joinT.C(event.PersonalAccessTokensPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.PersonalAccessTokensPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1420,7 +1420,7 @@ func (eq *EventQuery) loadPersonalAccessTokens(ctx context.Context, query *Perso
 	}
 	return nil
 }
-func (eq *EventQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes []*Event, init func(*Event), assign func(*Event, *Hush)) error {
+func (_q *EventQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes []*Event, init func(*Event), assign func(*Event, *Hush)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1433,7 +1433,7 @@ func (eq *EventQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.SecretsTable)
-		joinT.Schema(eq.schemaConfig.HushEvents)
+		joinT.Schema(_q.schemaConfig.HushEvents)
 		s.Join(joinT).On(s.C(hush.FieldID), joinT.C(event.SecretsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.SecretsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1482,7 +1482,7 @@ func (eq *EventQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes [
 	}
 	return nil
 }
-func (eq *EventQuery) loadOrgMemberships(ctx context.Context, query *OrgMembershipQuery, nodes []*Event, init func(*Event), assign func(*Event, *OrgMembership)) error {
+func (_q *EventQuery) loadOrgMemberships(ctx context.Context, query *OrgMembershipQuery, nodes []*Event, init func(*Event), assign func(*Event, *OrgMembership)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1495,7 +1495,7 @@ func (eq *EventQuery) loadOrgMemberships(ctx context.Context, query *OrgMembersh
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.OrgMembershipsTable)
-		joinT.Schema(eq.schemaConfig.OrgMembershipEvents)
+		joinT.Schema(_q.schemaConfig.OrgMembershipEvents)
 		s.Join(joinT).On(s.C(orgmembership.FieldID), joinT.C(event.OrgMembershipsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.OrgMembershipsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1544,7 +1544,7 @@ func (eq *EventQuery) loadOrgMemberships(ctx context.Context, query *OrgMembersh
 	}
 	return nil
 }
-func (eq *EventQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*Event, init func(*Event), assign func(*Event, *GroupMembership)) error {
+func (_q *EventQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*Event, init func(*Event), assign func(*Event, *GroupMembership)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1557,7 +1557,7 @@ func (eq *EventQuery) loadGroupMemberships(ctx context.Context, query *GroupMemb
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.GroupMembershipsTable)
-		joinT.Schema(eq.schemaConfig.GroupMembershipEvents)
+		joinT.Schema(_q.schemaConfig.GroupMembershipEvents)
 		s.Join(joinT).On(s.C(groupmembership.FieldID), joinT.C(event.GroupMembershipsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.GroupMembershipsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1606,7 +1606,7 @@ func (eq *EventQuery) loadGroupMemberships(ctx context.Context, query *GroupMemb
 	}
 	return nil
 }
-func (eq *EventQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*Event, init func(*Event), assign func(*Event, *Subscriber)) error {
+func (_q *EventQuery) loadSubscribers(ctx context.Context, query *SubscriberQuery, nodes []*Event, init func(*Event), assign func(*Event, *Subscriber)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1619,7 +1619,7 @@ func (eq *EventQuery) loadSubscribers(ctx context.Context, query *SubscriberQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.SubscribersTable)
-		joinT.Schema(eq.schemaConfig.SubscriberEvents)
+		joinT.Schema(_q.schemaConfig.SubscriberEvents)
 		s.Join(joinT).On(s.C(subscriber.FieldID), joinT.C(event.SubscribersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.SubscribersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1668,7 +1668,7 @@ func (eq *EventQuery) loadSubscribers(ctx context.Context, query *SubscriberQuer
 	}
 	return nil
 }
-func (eq *EventQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Event, init func(*Event), assign func(*Event, *File)) error {
+func (_q *EventQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Event, init func(*Event), assign func(*Event, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1681,7 +1681,7 @@ func (eq *EventQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.FilesTable)
-		joinT.Schema(eq.schemaConfig.FileEvents)
+		joinT.Schema(_q.schemaConfig.FileEvents)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(event.FilesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.FilesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1730,7 +1730,7 @@ func (eq *EventQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*
 	}
 	return nil
 }
-func (eq *EventQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscriptionQuery, nodes []*Event, init func(*Event), assign func(*Event, *OrgSubscription)) error {
+func (_q *EventQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscriptionQuery, nodes []*Event, init func(*Event), assign func(*Event, *OrgSubscription)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Event)
 	nids := make(map[string]map[*Event]struct{})
@@ -1743,7 +1743,7 @@ func (eq *EventQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.OrgSubscriptionsTable)
-		joinT.Schema(eq.schemaConfig.OrgSubscriptionEvents)
+		joinT.Schema(_q.schemaConfig.OrgSubscriptionEvents)
 		s.Join(joinT).On(s.C(orgsubscription.FieldID), joinT.C(event.OrgSubscriptionsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.OrgSubscriptionsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1793,29 +1793,29 @@ func (eq *EventQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscr
 	return nil
 }
 
-func (eq *EventQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := eq.querySpec()
-	_spec.Node.Schema = eq.schemaConfig.Event
-	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
-	if len(eq.modifiers) > 0 {
-		_spec.Modifiers = eq.modifiers
+func (_q *EventQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Event
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = eq.ctx.Fields
-	if len(eq.ctx.Fields) > 0 {
-		_spec.Unique = eq.ctx.Unique != nil && *eq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, eq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (eq *EventQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *EventQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(event.Table, event.Columns, sqlgraph.NewFieldSpec(event.FieldID, field.TypeString))
-	_spec.From = eq.sql
-	if unique := eq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if eq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := eq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, event.FieldID)
 		for i := range fields {
@@ -1824,20 +1824,20 @@ func (eq *EventQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := eq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := eq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := eq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := eq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -1847,216 +1847,216 @@ func (eq *EventQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (eq *EventQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(eq.driver.Dialect())
+func (_q *EventQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(event.Table)
-	columns := eq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = event.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if eq.sql != nil {
-		selector = eq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if eq.ctx.Unique != nil && *eq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(eq.schemaConfig.Event)
-	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Event)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range eq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range eq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range eq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := eq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := eq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (eq *EventQuery) Modify(modifiers ...func(s *sql.Selector)) *EventSelect {
-	eq.modifiers = append(eq.modifiers, modifiers...)
-	return eq.Select()
+func (_q *EventQuery) Modify(modifiers ...func(s *sql.Selector)) *EventSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedUsers tells the query-builder to eager-load the nodes that are connected to the "users"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *EventQuery {
-	query := (&UserClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *EventQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedUsers == nil {
-		eq.withNamedUsers = make(map[string]*UserQuery)
+	if _q.withNamedUsers == nil {
+		_q.withNamedUsers = make(map[string]*UserQuery)
 	}
-	eq.withNamedUsers[name] = query
-	return eq
+	_q.withNamedUsers[name] = query
+	return _q
 }
 
 // WithNamedGroups tells the query-builder to eager-load the nodes that are connected to the "groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *EventQuery {
-	query := (&GroupClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *EventQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedGroups == nil {
-		eq.withNamedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedGroups == nil {
+		_q.withNamedGroups = make(map[string]*GroupQuery)
 	}
-	eq.withNamedGroups[name] = query
-	return eq
+	_q.withNamedGroups[name] = query
+	return _q
 }
 
 // WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *EventQuery {
-	query := (&IntegrationClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *EventQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedIntegrations == nil {
-		eq.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
 	}
-	eq.withNamedIntegrations[name] = query
-	return eq
+	_q.withNamedIntegrations[name] = query
+	return _q
 }
 
 // WithNamedOrganizations tells the query-builder to eager-load the nodes that are connected to the "organizations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedOrganizations(name string, opts ...func(*OrganizationQuery)) *EventQuery {
-	query := (&OrganizationClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedOrganizations(name string, opts ...func(*OrganizationQuery)) *EventQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedOrganizations == nil {
-		eq.withNamedOrganizations = make(map[string]*OrganizationQuery)
+	if _q.withNamedOrganizations == nil {
+		_q.withNamedOrganizations = make(map[string]*OrganizationQuery)
 	}
-	eq.withNamedOrganizations[name] = query
-	return eq
+	_q.withNamedOrganizations[name] = query
+	return _q
 }
 
 // WithNamedInvites tells the query-builder to eager-load the nodes that are connected to the "invites"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedInvites(name string, opts ...func(*InviteQuery)) *EventQuery {
-	query := (&InviteClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedInvites(name string, opts ...func(*InviteQuery)) *EventQuery {
+	query := (&InviteClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedInvites == nil {
-		eq.withNamedInvites = make(map[string]*InviteQuery)
+	if _q.withNamedInvites == nil {
+		_q.withNamedInvites = make(map[string]*InviteQuery)
 	}
-	eq.withNamedInvites[name] = query
-	return eq
+	_q.withNamedInvites[name] = query
+	return _q
 }
 
 // WithNamedPersonalAccessTokens tells the query-builder to eager-load the nodes that are connected to the "personal_access_tokens"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedPersonalAccessTokens(name string, opts ...func(*PersonalAccessTokenQuery)) *EventQuery {
-	query := (&PersonalAccessTokenClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedPersonalAccessTokens(name string, opts ...func(*PersonalAccessTokenQuery)) *EventQuery {
+	query := (&PersonalAccessTokenClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedPersonalAccessTokens == nil {
-		eq.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery)
+	if _q.withNamedPersonalAccessTokens == nil {
+		_q.withNamedPersonalAccessTokens = make(map[string]*PersonalAccessTokenQuery)
 	}
-	eq.withNamedPersonalAccessTokens[name] = query
-	return eq
+	_q.withNamedPersonalAccessTokens[name] = query
+	return _q
 }
 
 // WithNamedSecrets tells the query-builder to eager-load the nodes that are connected to the "secrets"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedSecrets(name string, opts ...func(*HushQuery)) *EventQuery {
-	query := (&HushClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedSecrets(name string, opts ...func(*HushQuery)) *EventQuery {
+	query := (&HushClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedSecrets == nil {
-		eq.withNamedSecrets = make(map[string]*HushQuery)
+	if _q.withNamedSecrets == nil {
+		_q.withNamedSecrets = make(map[string]*HushQuery)
 	}
-	eq.withNamedSecrets[name] = query
-	return eq
+	_q.withNamedSecrets[name] = query
+	return _q
 }
 
 // WithNamedOrgMemberships tells the query-builder to eager-load the nodes that are connected to the "org_memberships"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedOrgMemberships(name string, opts ...func(*OrgMembershipQuery)) *EventQuery {
-	query := (&OrgMembershipClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedOrgMemberships(name string, opts ...func(*OrgMembershipQuery)) *EventQuery {
+	query := (&OrgMembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedOrgMemberships == nil {
-		eq.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery)
+	if _q.withNamedOrgMemberships == nil {
+		_q.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery)
 	}
-	eq.withNamedOrgMemberships[name] = query
-	return eq
+	_q.withNamedOrgMemberships[name] = query
+	return _q
 }
 
 // WithNamedGroupMemberships tells the query-builder to eager-load the nodes that are connected to the "group_memberships"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedGroupMemberships(name string, opts ...func(*GroupMembershipQuery)) *EventQuery {
-	query := (&GroupMembershipClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedGroupMemberships(name string, opts ...func(*GroupMembershipQuery)) *EventQuery {
+	query := (&GroupMembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedGroupMemberships == nil {
-		eq.withNamedGroupMemberships = make(map[string]*GroupMembershipQuery)
+	if _q.withNamedGroupMemberships == nil {
+		_q.withNamedGroupMemberships = make(map[string]*GroupMembershipQuery)
 	}
-	eq.withNamedGroupMemberships[name] = query
-	return eq
+	_q.withNamedGroupMemberships[name] = query
+	return _q
 }
 
 // WithNamedSubscribers tells the query-builder to eager-load the nodes that are connected to the "subscribers"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedSubscribers(name string, opts ...func(*SubscriberQuery)) *EventQuery {
-	query := (&SubscriberClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedSubscribers(name string, opts ...func(*SubscriberQuery)) *EventQuery {
+	query := (&SubscriberClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedSubscribers == nil {
-		eq.withNamedSubscribers = make(map[string]*SubscriberQuery)
+	if _q.withNamedSubscribers == nil {
+		_q.withNamedSubscribers = make(map[string]*SubscriberQuery)
 	}
-	eq.withNamedSubscribers[name] = query
-	return eq
+	_q.withNamedSubscribers[name] = query
+	return _q
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *EventQuery {
-	query := (&FileClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *EventQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedFiles == nil {
-		eq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	eq.withNamedFiles[name] = query
-	return eq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // WithNamedOrgSubscriptions tells the query-builder to eager-load the nodes that are connected to the "org_subscriptions"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *EventQuery) WithNamedOrgSubscriptions(name string, opts ...func(*OrgSubscriptionQuery)) *EventQuery {
-	query := (&OrgSubscriptionClient{config: eq.config}).Query()
+func (_q *EventQuery) WithNamedOrgSubscriptions(name string, opts ...func(*OrgSubscriptionQuery)) *EventQuery {
+	query := (&OrgSubscriptionClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedOrgSubscriptions == nil {
-		eq.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery)
+	if _q.withNamedOrgSubscriptions == nil {
+		_q.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery)
 	}
-	eq.withNamedOrgSubscriptions[name] = query
-	return eq
+	_q.withNamedOrgSubscriptions[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -2085,41 +2085,41 @@ type EventGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (egb *EventGroupBy) Aggregate(fns ...AggregateFunc) *EventGroupBy {
-	egb.fns = append(egb.fns, fns...)
-	return egb
+func (_g *EventGroupBy) Aggregate(fns ...AggregateFunc) *EventGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (egb *EventGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, egb.build.ctx, ent.OpQueryGroupBy)
-	if err := egb.build.prepareQuery(ctx); err != nil {
+func (_g *EventGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EventQuery, *EventGroupBy](ctx, egb.build, egb, egb.build.inters, v)
+	return scanWithInterceptors[*EventQuery, *EventGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (egb *EventGroupBy) sqlScan(ctx context.Context, root *EventQuery, v any) error {
+func (_g *EventGroupBy) sqlScan(ctx context.Context, root *EventQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(egb.fns))
-	for _, fn := range egb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*egb.flds)+len(egb.fns))
-		for _, f := range *egb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*egb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := egb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2133,27 +2133,27 @@ type EventSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (es *EventSelect) Aggregate(fns ...AggregateFunc) *EventSelect {
-	es.fns = append(es.fns, fns...)
-	return es
+func (_s *EventSelect) Aggregate(fns ...AggregateFunc) *EventSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (es *EventSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, es.ctx, ent.OpQuerySelect)
-	if err := es.prepareQuery(ctx); err != nil {
+func (_s *EventSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*EventQuery, *EventSelect](ctx, es.EventQuery, es, es.inters, v)
+	return scanWithInterceptors[*EventQuery, *EventSelect](ctx, _s.EventQuery, _s, _s.inters, v)
 }
 
-func (es *EventSelect) sqlScan(ctx context.Context, root *EventQuery, v any) error {
+func (_s *EventSelect) sqlScan(ctx context.Context, root *EventQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(es.fns))
-	for _, fn := range es.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*es.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -2161,7 +2161,7 @@ func (es *EventSelect) sqlScan(ctx context.Context, root *EventQuery, v any) err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := es.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2169,7 +2169,7 @@ func (es *EventSelect) sqlScan(ctx context.Context, root *EventQuery, v any) err
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (es *EventSelect) Modify(modifiers ...func(s *sql.Selector)) *EventSelect {
-	es.modifiers = append(es.modifiers, modifiers...)
-	return es
+func (_s *EventSelect) Modify(modifiers ...func(s *sql.Selector)) *EventSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

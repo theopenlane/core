@@ -137,7 +137,7 @@ func (*OrgPrice) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OrgPrice fields.
-func (op *OrgPrice) assignValues(columns []string, values []any) error {
+func (_m *OrgPrice) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -147,49 +147,49 @@ func (op *OrgPrice) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				op.ID = value.String
+				_m.ID = value.String
 			}
 		case orgprice.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				op.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case orgprice.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				op.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case orgprice.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				op.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case orgprice.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				op.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case orgprice.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				op.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case orgprice.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				op.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case orgprice.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &op.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -197,13 +197,13 @@ func (op *OrgPrice) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				op.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case orgprice.FieldPrice:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &op.Price); err != nil {
+				if err := json.Unmarshal(*value, &_m.Price); err != nil {
 					return fmt.Errorf("unmarshal field price: %w", err)
 				}
 			}
@@ -211,34 +211,34 @@ func (op *OrgPrice) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stripe_price_id", values[i])
 			} else if value.Valid {
-				op.StripePriceID = value.String
+				_m.StripePriceID = value.String
 			}
 		case orgprice.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				op.Status = value.String
+				_m.Status = value.String
 			}
 		case orgprice.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				op.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case orgprice.FieldProductID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_id", values[i])
 			} else if value.Valid {
-				op.ProductID = value.String
+				_m.ProductID = value.String
 			}
 		case orgprice.FieldSubscriptionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subscription_id", values[i])
 			} else if value.Valid {
-				op.SubscriptionID = value.String
+				_m.SubscriptionID = value.String
 			}
 		default:
-			op.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -246,143 +246,143 @@ func (op *OrgPrice) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OrgPrice.
 // This includes values selected through modifiers, order, etc.
-func (op *OrgPrice) Value(name string) (ent.Value, error) {
-	return op.selectValues.Get(name)
+func (_m *OrgPrice) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the OrgPrice entity.
-func (op *OrgPrice) QueryOwner() *OrganizationQuery {
-	return NewOrgPriceClient(op.config).QueryOwner(op)
+func (_m *OrgPrice) QueryOwner() *OrganizationQuery {
+	return NewOrgPriceClient(_m.config).QueryOwner(_m)
 }
 
 // QueryOrgProducts queries the "org_products" edge of the OrgPrice entity.
-func (op *OrgPrice) QueryOrgProducts() *OrgProductQuery {
-	return NewOrgPriceClient(op.config).QueryOrgProducts(op)
+func (_m *OrgPrice) QueryOrgProducts() *OrgProductQuery {
+	return NewOrgPriceClient(_m.config).QueryOrgProducts(_m)
 }
 
 // QueryOrgModules queries the "org_modules" edge of the OrgPrice entity.
-func (op *OrgPrice) QueryOrgModules() *OrgModuleQuery {
-	return NewOrgPriceClient(op.config).QueryOrgModules(op)
+func (_m *OrgPrice) QueryOrgModules() *OrgModuleQuery {
+	return NewOrgPriceClient(_m.config).QueryOrgModules(_m)
 }
 
 // QueryOrgSubscription queries the "org_subscription" edge of the OrgPrice entity.
-func (op *OrgPrice) QueryOrgSubscription() *OrgSubscriptionQuery {
-	return NewOrgPriceClient(op.config).QueryOrgSubscription(op)
+func (_m *OrgPrice) QueryOrgSubscription() *OrgSubscriptionQuery {
+	return NewOrgPriceClient(_m.config).QueryOrgSubscription(_m)
 }
 
 // Update returns a builder for updating this OrgPrice.
 // Note that you need to call OrgPrice.Unwrap() before calling this method if this OrgPrice
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (op *OrgPrice) Update() *OrgPriceUpdateOne {
-	return NewOrgPriceClient(op.config).UpdateOne(op)
+func (_m *OrgPrice) Update() *OrgPriceUpdateOne {
+	return NewOrgPriceClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OrgPrice entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (op *OrgPrice) Unwrap() *OrgPrice {
-	_tx, ok := op.config.driver.(*txDriver)
+func (_m *OrgPrice) Unwrap() *OrgPrice {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: OrgPrice is not a transactional entity")
 	}
-	op.config.driver = _tx.drv
-	return op
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (op *OrgPrice) String() string {
+func (_m *OrgPrice) String() string {
 	var builder strings.Builder
 	builder.WriteString("OrgPrice(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", op.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(op.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(op.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(op.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(op.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(op.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(op.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", op.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(op.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("price=")
-	builder.WriteString(fmt.Sprintf("%v", op.Price))
+	builder.WriteString(fmt.Sprintf("%v", _m.Price))
 	builder.WriteString(", ")
 	builder.WriteString("stripe_price_id=")
-	builder.WriteString(op.StripePriceID)
+	builder.WriteString(_m.StripePriceID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(op.Status)
+	builder.WriteString(_m.Status)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", op.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("product_id=")
-	builder.WriteString(op.ProductID)
+	builder.WriteString(_m.ProductID)
 	builder.WriteString(", ")
 	builder.WriteString("subscription_id=")
-	builder.WriteString(op.SubscriptionID)
+	builder.WriteString(_m.SubscriptionID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedOrgProducts returns the OrgProducts named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (op *OrgPrice) NamedOrgProducts(name string) ([]*OrgProduct, error) {
-	if op.Edges.namedOrgProducts == nil {
+func (_m *OrgPrice) NamedOrgProducts(name string) ([]*OrgProduct, error) {
+	if _m.Edges.namedOrgProducts == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := op.Edges.namedOrgProducts[name]
+	nodes, ok := _m.Edges.namedOrgProducts[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (op *OrgPrice) appendNamedOrgProducts(name string, edges ...*OrgProduct) {
-	if op.Edges.namedOrgProducts == nil {
-		op.Edges.namedOrgProducts = make(map[string][]*OrgProduct)
+func (_m *OrgPrice) appendNamedOrgProducts(name string, edges ...*OrgProduct) {
+	if _m.Edges.namedOrgProducts == nil {
+		_m.Edges.namedOrgProducts = make(map[string][]*OrgProduct)
 	}
 	if len(edges) == 0 {
-		op.Edges.namedOrgProducts[name] = []*OrgProduct{}
+		_m.Edges.namedOrgProducts[name] = []*OrgProduct{}
 	} else {
-		op.Edges.namedOrgProducts[name] = append(op.Edges.namedOrgProducts[name], edges...)
+		_m.Edges.namedOrgProducts[name] = append(_m.Edges.namedOrgProducts[name], edges...)
 	}
 }
 
 // NamedOrgModules returns the OrgModules named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (op *OrgPrice) NamedOrgModules(name string) ([]*OrgModule, error) {
-	if op.Edges.namedOrgModules == nil {
+func (_m *OrgPrice) NamedOrgModules(name string) ([]*OrgModule, error) {
+	if _m.Edges.namedOrgModules == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := op.Edges.namedOrgModules[name]
+	nodes, ok := _m.Edges.namedOrgModules[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (op *OrgPrice) appendNamedOrgModules(name string, edges ...*OrgModule) {
-	if op.Edges.namedOrgModules == nil {
-		op.Edges.namedOrgModules = make(map[string][]*OrgModule)
+func (_m *OrgPrice) appendNamedOrgModules(name string, edges ...*OrgModule) {
+	if _m.Edges.namedOrgModules == nil {
+		_m.Edges.namedOrgModules = make(map[string][]*OrgModule)
 	}
 	if len(edges) == 0 {
-		op.Edges.namedOrgModules[name] = []*OrgModule{}
+		_m.Edges.namedOrgModules[name] = []*OrgModule{}
 	} else {
-		op.Edges.namedOrgModules[name] = append(op.Edges.namedOrgModules[name], edges...)
+		_m.Edges.namedOrgModules[name] = append(_m.Edges.namedOrgModules[name], edges...)
 	}
 }
 

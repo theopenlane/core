@@ -42,44 +42,44 @@ type ExportQuery struct {
 }
 
 // Where adds a new predicate for the ExportQuery builder.
-func (eq *ExportQuery) Where(ps ...predicate.Export) *ExportQuery {
-	eq.predicates = append(eq.predicates, ps...)
-	return eq
+func (_q *ExportQuery) Where(ps ...predicate.Export) *ExportQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (eq *ExportQuery) Limit(limit int) *ExportQuery {
-	eq.ctx.Limit = &limit
-	return eq
+func (_q *ExportQuery) Limit(limit int) *ExportQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (eq *ExportQuery) Offset(offset int) *ExportQuery {
-	eq.ctx.Offset = &offset
-	return eq
+func (_q *ExportQuery) Offset(offset int) *ExportQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (eq *ExportQuery) Unique(unique bool) *ExportQuery {
-	eq.ctx.Unique = &unique
-	return eq
+func (_q *ExportQuery) Unique(unique bool) *ExportQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (eq *ExportQuery) Order(o ...export.OrderOption) *ExportQuery {
-	eq.order = append(eq.order, o...)
-	return eq
+func (_q *ExportQuery) Order(o ...export.OrderOption) *ExportQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (eq *ExportQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: eq.config}).Query()
+func (_q *ExportQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (eq *ExportQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, export.OwnerTable, export.OwnerColumn),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Export
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvents chains the current query on the "events" edge.
-func (eq *ExportQuery) QueryEvents() *EventQuery {
-	query := (&EventClient{config: eq.config}).Query()
+func (_q *ExportQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (eq *ExportQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, export.EventsTable, export.EventsColumn),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.Event
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (eq *ExportQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: eq.config}).Query()
+func (_q *ExportQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := eq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := eq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (eq *ExportQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, export.FilesTable, export.FilesColumn),
 		)
-		schemaConfig := eq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.File
-		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (eq *ExportQuery) QueryFiles() *FileQuery {
 
 // First returns the first Export entity from the query.
 // Returns a *NotFoundError when no Export was found.
-func (eq *ExportQuery) First(ctx context.Context) (*Export, error) {
-	nodes, err := eq.Limit(1).All(setContextOp(ctx, eq.ctx, ent.OpQueryFirst))
+func (_q *ExportQuery) First(ctx context.Context) (*Export, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (eq *ExportQuery) First(ctx context.Context) (*Export, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (eq *ExportQuery) FirstX(ctx context.Context) *Export {
-	node, err := eq.First(ctx)
+func (_q *ExportQuery) FirstX(ctx context.Context) *Export {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (eq *ExportQuery) FirstX(ctx context.Context) *Export {
 
 // FirstID returns the first Export ID from the query.
 // Returns a *NotFoundError when no Export ID was found.
-func (eq *ExportQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ExportQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = eq.Limit(1).IDs(setContextOp(ctx, eq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (eq *ExportQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (eq *ExportQuery) FirstIDX(ctx context.Context) string {
-	id, err := eq.FirstID(ctx)
+func (_q *ExportQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (eq *ExportQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Export entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Export entity is found.
 // Returns a *NotFoundError when no Export entities are found.
-func (eq *ExportQuery) Only(ctx context.Context) (*Export, error) {
-	nodes, err := eq.Limit(2).All(setContextOp(ctx, eq.ctx, ent.OpQueryOnly))
+func (_q *ExportQuery) Only(ctx context.Context) (*Export, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (eq *ExportQuery) Only(ctx context.Context) (*Export, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (eq *ExportQuery) OnlyX(ctx context.Context) *Export {
-	node, err := eq.Only(ctx)
+func (_q *ExportQuery) OnlyX(ctx context.Context) *Export {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (eq *ExportQuery) OnlyX(ctx context.Context) *Export {
 // OnlyID is like Only, but returns the only Export ID in the query.
 // Returns a *NotSingularError when more than one Export ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (eq *ExportQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ExportQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = eq.Limit(2).IDs(setContextOp(ctx, eq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (eq *ExportQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (eq *ExportQuery) OnlyIDX(ctx context.Context) string {
-	id, err := eq.OnlyID(ctx)
+func (_q *ExportQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (eq *ExportQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Exports.
-func (eq *ExportQuery) All(ctx context.Context) ([]*Export, error) {
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryAll)
-	if err := eq.prepareQuery(ctx); err != nil {
+func (_q *ExportQuery) All(ctx context.Context) ([]*Export, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Export, *ExportQuery]()
-	return withInterceptors[[]*Export](ctx, eq, qr, eq.inters)
+	return withInterceptors[[]*Export](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (eq *ExportQuery) AllX(ctx context.Context) []*Export {
-	nodes, err := eq.All(ctx)
+func (_q *ExportQuery) AllX(ctx context.Context) []*Export {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (eq *ExportQuery) AllX(ctx context.Context) []*Export {
 }
 
 // IDs executes the query and returns a list of Export IDs.
-func (eq *ExportQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if eq.ctx.Unique == nil && eq.path != nil {
-		eq.Unique(true)
+func (_q *ExportQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
-	if err = eq.Select(export.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(export.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (eq *ExportQuery) IDsX(ctx context.Context) []string {
-	ids, err := eq.IDs(ctx)
+func (_q *ExportQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (eq *ExportQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (eq *ExportQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryCount)
-	if err := eq.prepareQuery(ctx); err != nil {
+func (_q *ExportQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, eq, querierCount[*ExportQuery](), eq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ExportQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (eq *ExportQuery) CountX(ctx context.Context) int {
-	count, err := eq.Count(ctx)
+func (_q *ExportQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (eq *ExportQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (eq *ExportQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryExist)
-	switch _, err := eq.FirstID(ctx); {
+func (_q *ExportQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (eq *ExportQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (eq *ExportQuery) ExistX(ctx context.Context) bool {
-	exist, err := eq.Exist(ctx)
+func (_q *ExportQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (eq *ExportQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ExportQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (eq *ExportQuery) Clone() *ExportQuery {
-	if eq == nil {
+func (_q *ExportQuery) Clone() *ExportQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ExportQuery{
-		config:     eq.config,
-		ctx:        eq.ctx.Clone(),
-		order:      append([]export.OrderOption{}, eq.order...),
-		inters:     append([]Interceptor{}, eq.inters...),
-		predicates: append([]predicate.Export{}, eq.predicates...),
-		withOwner:  eq.withOwner.Clone(),
-		withEvents: eq.withEvents.Clone(),
-		withFiles:  eq.withFiles.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]export.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.Export{}, _q.predicates...),
+		withOwner:  _q.withOwner.Clone(),
+		withEvents: _q.withEvents.Clone(),
+		withFiles:  _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       eq.sql.Clone(),
-		path:      eq.path,
-		modifiers: append([]func(*sql.Selector){}, eq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *ExportQuery) WithOwner(opts ...func(*OrganizationQuery)) *ExportQuery {
-	query := (&OrganizationClient{config: eq.config}).Query()
+func (_q *ExportQuery) WithOwner(opts ...func(*OrganizationQuery)) *ExportQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withOwner = query
-	return eq
+	_q.withOwner = query
+	return _q
 }
 
 // WithEvents tells the query-builder to eager-load the nodes that are connected to
 // the "events" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *ExportQuery) WithEvents(opts ...func(*EventQuery)) *ExportQuery {
-	query := (&EventClient{config: eq.config}).Query()
+func (_q *ExportQuery) WithEvents(opts ...func(*EventQuery)) *ExportQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withEvents = query
-	return eq
+	_q.withEvents = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (eq *ExportQuery) WithFiles(opts ...func(*FileQuery)) *ExportQuery {
-	query := (&FileClient{config: eq.config}).Query()
+func (_q *ExportQuery) WithFiles(opts ...func(*FileQuery)) *ExportQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	eq.withFiles = query
-	return eq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (eq *ExportQuery) WithFiles(opts ...func(*FileQuery)) *ExportQuery {
 //		GroupBy(export.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (eq *ExportQuery) GroupBy(field string, fields ...string) *ExportGroupBy {
-	eq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ExportGroupBy{build: eq}
-	grbuild.flds = &eq.ctx.Fields
+func (_q *ExportQuery) GroupBy(field string, fields ...string) *ExportGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ExportGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = export.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,127 +417,127 @@ func (eq *ExportQuery) GroupBy(field string, fields ...string) *ExportGroupBy {
 //	client.Export.Query().
 //		Select(export.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (eq *ExportQuery) Select(fields ...string) *ExportSelect {
-	eq.ctx.Fields = append(eq.ctx.Fields, fields...)
-	sbuild := &ExportSelect{ExportQuery: eq}
+func (_q *ExportQuery) Select(fields ...string) *ExportSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ExportSelect{ExportQuery: _q}
 	sbuild.label = export.Label
-	sbuild.flds, sbuild.scan = &eq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ExportSelect configured with the given aggregations.
-func (eq *ExportQuery) Aggregate(fns ...AggregateFunc) *ExportSelect {
-	return eq.Select().Aggregate(fns...)
+func (_q *ExportQuery) Aggregate(fns ...AggregateFunc) *ExportSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (eq *ExportQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range eq.inters {
+func (_q *ExportQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, eq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range eq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !export.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if eq.path != nil {
-		prev, err := eq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		eq.sql = prev
+		_q.sql = prev
 	}
 	if export.Policy == nil {
 		return errors.New("generated: uninitialized export.Policy (forgotten import generated/runtime?)")
 	}
-	if err := export.Policy.EvalQuery(ctx, eq); err != nil {
+	if err := export.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (eq *ExportQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Export, error) {
+func (_q *ExportQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Export, error) {
 	var (
 		nodes       = []*Export{}
-		_spec       = eq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			eq.withOwner != nil,
-			eq.withEvents != nil,
-			eq.withFiles != nil,
+			_q.withOwner != nil,
+			_q.withEvents != nil,
+			_q.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Export).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Export{config: eq.config}
+		node := &Export{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = eq.schemaConfig.Export
-	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
-	if len(eq.modifiers) > 0 {
-		_spec.Modifiers = eq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Export
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, eq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := eq.withOwner; query != nil {
-		if err := eq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Export, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withEvents; query != nil {
-		if err := eq.loadEvents(ctx, query, nodes,
+	if query := _q.withEvents; query != nil {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Export) { n.Edges.Events = []*Event{} },
 			func(n *Export, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := eq.withFiles; query != nil {
-		if err := eq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Export) { n.Edges.Files = []*File{} },
 			func(n *Export, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedEvents {
-		if err := eq.loadEvents(ctx, query, nodes,
+	for name, query := range _q.withNamedEvents {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *Export) { n.appendNamedEvents(name) },
 			func(n *Export, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range eq.withNamedFiles {
-		if err := eq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Export) { n.appendNamedFiles(name) },
 			func(n *Export, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range eq.loadTotal {
-		if err := eq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (eq *ExportQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Export, init func(*Export), assign func(*Export, *Organization)) error {
+func (_q *ExportQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Export, init func(*Export), assign func(*Export, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Export)
 	for i := range nodes {
@@ -566,7 +566,7 @@ func (eq *ExportQuery) loadOwner(ctx context.Context, query *OrganizationQuery, 
 	}
 	return nil
 }
-func (eq *ExportQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Export, init func(*Export), assign func(*Export, *Event)) error {
+func (_q *ExportQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*Export, init func(*Export), assign func(*Export, *Event)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Export)
 	for i := range nodes {
@@ -597,7 +597,7 @@ func (eq *ExportQuery) loadEvents(ctx context.Context, query *EventQuery, nodes 
 	}
 	return nil
 }
-func (eq *ExportQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Export, init func(*Export), assign func(*Export, *File)) error {
+func (_q *ExportQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Export, init func(*Export), assign func(*Export, *File)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Export)
 	for i := range nodes {
@@ -629,29 +629,29 @@ func (eq *ExportQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []
 	return nil
 }
 
-func (eq *ExportQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := eq.querySpec()
-	_spec.Node.Schema = eq.schemaConfig.Export
-	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
-	if len(eq.modifiers) > 0 {
-		_spec.Modifiers = eq.modifiers
+func (_q *ExportQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Export
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = eq.ctx.Fields
-	if len(eq.ctx.Fields) > 0 {
-		_spec.Unique = eq.ctx.Unique != nil && *eq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, eq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (eq *ExportQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ExportQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(export.Table, export.Columns, sqlgraph.NewFieldSpec(export.FieldID, field.TypeString))
-	_spec.From = eq.sql
-	if unique := eq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if eq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := eq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, export.FieldID)
 		for i := range fields {
@@ -659,24 +659,24 @@ func (eq *ExportQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if eq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(export.FieldOwnerID)
 		}
 	}
-	if ps := eq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := eq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := eq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := eq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -686,76 +686,76 @@ func (eq *ExportQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (eq *ExportQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(eq.driver.Dialect())
+func (_q *ExportQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(export.Table)
-	columns := eq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = export.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if eq.sql != nil {
-		selector = eq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if eq.ctx.Unique != nil && *eq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(eq.schemaConfig.Export)
-	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Export)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range eq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range eq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range eq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := eq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := eq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (eq *ExportQuery) Modify(modifiers ...func(s *sql.Selector)) *ExportSelect {
-	eq.modifiers = append(eq.modifiers, modifiers...)
-	return eq.Select()
+func (_q *ExportQuery) Modify(modifiers ...func(s *sql.Selector)) *ExportSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *ExportQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *ExportQuery {
-	query := (&EventClient{config: eq.config}).Query()
+func (_q *ExportQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *ExportQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedEvents == nil {
-		eq.withNamedEvents = make(map[string]*EventQuery)
+	if _q.withNamedEvents == nil {
+		_q.withNamedEvents = make(map[string]*EventQuery)
 	}
-	eq.withNamedEvents[name] = query
-	return eq
+	_q.withNamedEvents[name] = query
+	return _q
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (eq *ExportQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *ExportQuery {
-	query := (&FileClient{config: eq.config}).Query()
+func (_q *ExportQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *ExportQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if eq.withNamedFiles == nil {
-		eq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	eq.withNamedFiles[name] = query
-	return eq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -784,41 +784,41 @@ type ExportGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (egb *ExportGroupBy) Aggregate(fns ...AggregateFunc) *ExportGroupBy {
-	egb.fns = append(egb.fns, fns...)
-	return egb
+func (_g *ExportGroupBy) Aggregate(fns ...AggregateFunc) *ExportGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (egb *ExportGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, egb.build.ctx, ent.OpQueryGroupBy)
-	if err := egb.build.prepareQuery(ctx); err != nil {
+func (_g *ExportGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ExportQuery, *ExportGroupBy](ctx, egb.build, egb, egb.build.inters, v)
+	return scanWithInterceptors[*ExportQuery, *ExportGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (egb *ExportGroupBy) sqlScan(ctx context.Context, root *ExportQuery, v any) error {
+func (_g *ExportGroupBy) sqlScan(ctx context.Context, root *ExportQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(egb.fns))
-	for _, fn := range egb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*egb.flds)+len(egb.fns))
-		for _, f := range *egb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*egb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := egb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -832,27 +832,27 @@ type ExportSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (es *ExportSelect) Aggregate(fns ...AggregateFunc) *ExportSelect {
-	es.fns = append(es.fns, fns...)
-	return es
+func (_s *ExportSelect) Aggregate(fns ...AggregateFunc) *ExportSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (es *ExportSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, es.ctx, ent.OpQuerySelect)
-	if err := es.prepareQuery(ctx); err != nil {
+func (_s *ExportSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ExportQuery, *ExportSelect](ctx, es.ExportQuery, es, es.inters, v)
+	return scanWithInterceptors[*ExportQuery, *ExportSelect](ctx, _s.ExportQuery, _s, _s.inters, v)
 }
 
-func (es *ExportSelect) sqlScan(ctx context.Context, root *ExportQuery, v any) error {
+func (_s *ExportSelect) sqlScan(ctx context.Context, root *ExportQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(es.fns))
-	for _, fn := range es.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*es.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -860,7 +860,7 @@ func (es *ExportSelect) sqlScan(ctx context.Context, root *ExportQuery, v any) e
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := es.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -868,7 +868,7 @@ func (es *ExportSelect) sqlScan(ctx context.Context, root *ExportQuery, v any) e
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (es *ExportSelect) Modify(modifiers ...func(s *sql.Selector)) *ExportSelect {
-	es.modifiers = append(es.modifiers, modifiers...)
-	return es
+func (_s *ExportSelect) Modify(modifiers ...func(s *sql.Selector)) *ExportSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

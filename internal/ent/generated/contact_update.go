@@ -31,348 +31,348 @@ type ContactUpdate struct {
 }
 
 // Where appends a list predicates to the ContactUpdate builder.
-func (cu *ContactUpdate) Where(ps ...predicate.Contact) *ContactUpdate {
-	cu.mutation.Where(ps...)
-	return cu
+func (_u *ContactUpdate) Where(ps ...predicate.Contact) *ContactUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cu *ContactUpdate) SetUpdatedAt(t time.Time) *ContactUpdate {
-	cu.mutation.SetUpdatedAt(t)
-	return cu
+func (_u *ContactUpdate) SetUpdatedAt(v time.Time) *ContactUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (cu *ContactUpdate) ClearUpdatedAt() *ContactUpdate {
-	cu.mutation.ClearUpdatedAt()
-	return cu
+func (_u *ContactUpdate) ClearUpdatedAt() *ContactUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cu *ContactUpdate) SetUpdatedBy(s string) *ContactUpdate {
-	cu.mutation.SetUpdatedBy(s)
-	return cu
+func (_u *ContactUpdate) SetUpdatedBy(v string) *ContactUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableUpdatedBy(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetUpdatedBy(*s)
+func (_u *ContactUpdate) SetNillableUpdatedBy(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
-	cu.mutation.ClearUpdatedBy()
-	return cu
+func (_u *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cu *ContactUpdate) SetDeletedAt(t time.Time) *ContactUpdate {
-	cu.mutation.SetDeletedAt(t)
-	return cu
+func (_u *ContactUpdate) SetDeletedAt(v time.Time) *ContactUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableDeletedAt(t *time.Time) *ContactUpdate {
-	if t != nil {
-		cu.SetDeletedAt(*t)
+func (_u *ContactUpdate) SetNillableDeletedAt(v *time.Time) *ContactUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (cu *ContactUpdate) ClearDeletedAt() *ContactUpdate {
-	cu.mutation.ClearDeletedAt()
-	return cu
+func (_u *ContactUpdate) ClearDeletedAt() *ContactUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cu *ContactUpdate) SetDeletedBy(s string) *ContactUpdate {
-	cu.mutation.SetDeletedBy(s)
-	return cu
+func (_u *ContactUpdate) SetDeletedBy(v string) *ContactUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableDeletedBy(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetDeletedBy(*s)
+func (_u *ContactUpdate) SetNillableDeletedBy(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (cu *ContactUpdate) ClearDeletedBy() *ContactUpdate {
-	cu.mutation.ClearDeletedBy()
-	return cu
+func (_u *ContactUpdate) ClearDeletedBy() *ContactUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (cu *ContactUpdate) SetTags(s []string) *ContactUpdate {
-	cu.mutation.SetTags(s)
-	return cu
+func (_u *ContactUpdate) SetTags(v []string) *ContactUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (cu *ContactUpdate) AppendTags(s []string) *ContactUpdate {
-	cu.mutation.AppendTags(s)
-	return cu
+// AppendTags appends value to the "tags" field.
+func (_u *ContactUpdate) AppendTags(v []string) *ContactUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (cu *ContactUpdate) ClearTags() *ContactUpdate {
-	cu.mutation.ClearTags()
-	return cu
+func (_u *ContactUpdate) ClearTags() *ContactUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cu *ContactUpdate) SetOwnerID(s string) *ContactUpdate {
-	cu.mutation.SetOwnerID(s)
-	return cu
+func (_u *ContactUpdate) SetOwnerID(v string) *ContactUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableOwnerID(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetOwnerID(*s)
+func (_u *ContactUpdate) SetNillableOwnerID(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (cu *ContactUpdate) ClearOwnerID() *ContactUpdate {
-	cu.mutation.ClearOwnerID()
-	return cu
+func (_u *ContactUpdate) ClearOwnerID() *ContactUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetFullName sets the "full_name" field.
-func (cu *ContactUpdate) SetFullName(s string) *ContactUpdate {
-	cu.mutation.SetFullName(s)
-	return cu
+func (_u *ContactUpdate) SetFullName(v string) *ContactUpdate {
+	_u.mutation.SetFullName(v)
+	return _u
 }
 
 // SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableFullName(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetFullName(*s)
+func (_u *ContactUpdate) SetNillableFullName(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetFullName(*v)
 	}
-	return cu
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (cu *ContactUpdate) SetTitle(s string) *ContactUpdate {
-	cu.mutation.SetTitle(s)
-	return cu
+func (_u *ContactUpdate) SetTitle(v string) *ContactUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableTitle(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetTitle(*s)
+func (_u *ContactUpdate) SetNillableTitle(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearTitle clears the value of the "title" field.
-func (cu *ContactUpdate) ClearTitle() *ContactUpdate {
-	cu.mutation.ClearTitle()
-	return cu
+func (_u *ContactUpdate) ClearTitle() *ContactUpdate {
+	_u.mutation.ClearTitle()
+	return _u
 }
 
 // SetCompany sets the "company" field.
-func (cu *ContactUpdate) SetCompany(s string) *ContactUpdate {
-	cu.mutation.SetCompany(s)
-	return cu
+func (_u *ContactUpdate) SetCompany(v string) *ContactUpdate {
+	_u.mutation.SetCompany(v)
+	return _u
 }
 
 // SetNillableCompany sets the "company" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableCompany(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetCompany(*s)
+func (_u *ContactUpdate) SetNillableCompany(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetCompany(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearCompany clears the value of the "company" field.
-func (cu *ContactUpdate) ClearCompany() *ContactUpdate {
-	cu.mutation.ClearCompany()
-	return cu
+func (_u *ContactUpdate) ClearCompany() *ContactUpdate {
+	_u.mutation.ClearCompany()
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (cu *ContactUpdate) SetEmail(s string) *ContactUpdate {
-	cu.mutation.SetEmail(s)
-	return cu
+func (_u *ContactUpdate) SetEmail(v string) *ContactUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableEmail(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetEmail(*s)
+func (_u *ContactUpdate) SetNillableEmail(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearEmail clears the value of the "email" field.
-func (cu *ContactUpdate) ClearEmail() *ContactUpdate {
-	cu.mutation.ClearEmail()
-	return cu
+func (_u *ContactUpdate) ClearEmail() *ContactUpdate {
+	_u.mutation.ClearEmail()
+	return _u
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (cu *ContactUpdate) SetPhoneNumber(s string) *ContactUpdate {
-	cu.mutation.SetPhoneNumber(s)
-	return cu
+func (_u *ContactUpdate) SetPhoneNumber(v string) *ContactUpdate {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillablePhoneNumber(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetPhoneNumber(*s)
+func (_u *ContactUpdate) SetNillablePhoneNumber(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearPhoneNumber clears the value of the "phone_number" field.
-func (cu *ContactUpdate) ClearPhoneNumber() *ContactUpdate {
-	cu.mutation.ClearPhoneNumber()
-	return cu
+func (_u *ContactUpdate) ClearPhoneNumber() *ContactUpdate {
+	_u.mutation.ClearPhoneNumber()
+	return _u
 }
 
 // SetAddress sets the "address" field.
-func (cu *ContactUpdate) SetAddress(s string) *ContactUpdate {
-	cu.mutation.SetAddress(s)
-	return cu
+func (_u *ContactUpdate) SetAddress(v string) *ContactUpdate {
+	_u.mutation.SetAddress(v)
+	return _u
 }
 
 // SetNillableAddress sets the "address" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableAddress(s *string) *ContactUpdate {
-	if s != nil {
-		cu.SetAddress(*s)
+func (_u *ContactUpdate) SetNillableAddress(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetAddress(*v)
 	}
-	return cu
+	return _u
 }
 
 // ClearAddress clears the value of the "address" field.
-func (cu *ContactUpdate) ClearAddress() *ContactUpdate {
-	cu.mutation.ClearAddress()
-	return cu
+func (_u *ContactUpdate) ClearAddress() *ContactUpdate {
+	_u.mutation.ClearAddress()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (cu *ContactUpdate) SetStatus(es enums.UserStatus) *ContactUpdate {
-	cu.mutation.SetStatus(es)
-	return cu
+func (_u *ContactUpdate) SetStatus(v enums.UserStatus) *ContactUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableStatus(es *enums.UserStatus) *ContactUpdate {
-	if es != nil {
-		cu.SetStatus(*es)
+func (_u *ContactUpdate) SetNillableStatus(v *enums.UserStatus) *ContactUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return cu
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cu *ContactUpdate) SetOwner(o *Organization) *ContactUpdate {
-	return cu.SetOwnerID(o.ID)
+func (_u *ContactUpdate) SetOwner(v *Organization) *ContactUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (cu *ContactUpdate) AddEntityIDs(ids ...string) *ContactUpdate {
-	cu.mutation.AddEntityIDs(ids...)
-	return cu
+func (_u *ContactUpdate) AddEntityIDs(ids ...string) *ContactUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (cu *ContactUpdate) AddEntities(e ...*Entity) *ContactUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ContactUpdate) AddEntities(v ...*Entity) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (cu *ContactUpdate) AddFileIDs(ids ...string) *ContactUpdate {
-	cu.mutation.AddFileIDs(ids...)
-	return cu
+func (_u *ContactUpdate) AddFileIDs(ids ...string) *ContactUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (cu *ContactUpdate) AddFiles(f ...*File) *ContactUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ContactUpdate) AddFiles(v ...*File) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the ContactMutation object of the builder.
-func (cu *ContactUpdate) Mutation() *ContactMutation {
-	return cu.mutation
+func (_u *ContactUpdate) Mutation() *ContactMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (cu *ContactUpdate) ClearOwner() *ContactUpdate {
-	cu.mutation.ClearOwner()
-	return cu
+func (_u *ContactUpdate) ClearOwner() *ContactUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (cu *ContactUpdate) ClearEntities() *ContactUpdate {
-	cu.mutation.ClearEntities()
-	return cu
+func (_u *ContactUpdate) ClearEntities() *ContactUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (cu *ContactUpdate) RemoveEntityIDs(ids ...string) *ContactUpdate {
-	cu.mutation.RemoveEntityIDs(ids...)
-	return cu
+func (_u *ContactUpdate) RemoveEntityIDs(ids ...string) *ContactUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (cu *ContactUpdate) RemoveEntities(e ...*Entity) *ContactUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ContactUpdate) RemoveEntities(v ...*Entity) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (cu *ContactUpdate) ClearFiles() *ContactUpdate {
-	cu.mutation.ClearFiles()
-	return cu
+func (_u *ContactUpdate) ClearFiles() *ContactUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (cu *ContactUpdate) RemoveFileIDs(ids ...string) *ContactUpdate {
-	cu.mutation.RemoveFileIDs(ids...)
-	return cu
+func (_u *ContactUpdate) RemoveFileIDs(ids ...string) *ContactUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (cu *ContactUpdate) RemoveFiles(f ...*File) *ContactUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ContactUpdate) RemoveFiles(v ...*File) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cu *ContactUpdate) Save(ctx context.Context) (int, error) {
-	if err := cu.defaults(); err != nil {
+func (_u *ContactUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cu *ContactUpdate) SaveX(ctx context.Context) int {
-	affected, err := cu.Save(ctx)
+func (_u *ContactUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -380,53 +380,53 @@ func (cu *ContactUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cu *ContactUpdate) Exec(ctx context.Context) error {
-	_, err := cu.Save(ctx)
+func (_u *ContactUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cu *ContactUpdate) ExecX(ctx context.Context) {
-	if err := cu.Exec(ctx); err != nil {
+func (_u *ContactUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cu *ContactUpdate) defaults() error {
-	if _, ok := cu.mutation.UpdatedAt(); !ok && !cu.mutation.UpdatedAtCleared() {
+func (_u *ContactUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if contact.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized contact.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := contact.UpdateDefaultUpdatedAt()
-		cu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cu *ContactUpdate) check() error {
-	if v, ok := cu.mutation.OwnerID(); ok {
+func (_u *ContactUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := contact.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Contact.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := cu.mutation.FullName(); ok {
+	if v, ok := _u.mutation.FullName(); ok {
 		if err := contact.FullNameValidator(v); err != nil {
 			return &ValidationError{Name: "full_name", err: fmt.Errorf(`generated: validator failed for field "Contact.full_name": %w`, err)}
 		}
 	}
-	if v, ok := cu.mutation.Email(); ok {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := contact.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "Contact.email": %w`, err)}
 		}
 	}
-	if v, ok := cu.mutation.PhoneNumber(); ok {
+	if v, ok := _u.mutation.PhoneNumber(); ok {
 		if err := contact.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "Contact.phone_number": %w`, err)}
 		}
 	}
-	if v, ok := cu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := contact.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Contact.status": %w`, err)}
 		}
@@ -435,101 +435,101 @@ func (cu *ContactUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (cu *ContactUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactUpdate {
-	cu.modifiers = append(cu.modifiers, modifiers...)
-	return cu
+func (_u *ContactUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cu.check(); err != nil {
-		return n, err
+func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(contact.Table, contact.Columns, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString))
-	if ps := cu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if cu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(contact.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := cu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(contact.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if cu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
-	if cu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(contact.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
 	}
-	if cu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(contact.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
 	}
-	if cu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(contact.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
 	}
-	if cu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(contact.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := cu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, contact.FieldTags, value)
 		})
 	}
-	if cu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(contact.FieldTags, field.TypeJSON)
 	}
-	if value, ok := cu.mutation.FullName(); ok {
+	if value, ok := _u.mutation.FullName(); ok {
 		_spec.SetField(contact.FieldFullName, field.TypeString, value)
 	}
-	if value, ok := cu.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(contact.FieldTitle, field.TypeString, value)
 	}
-	if cu.mutation.TitleCleared() {
+	if _u.mutation.TitleCleared() {
 		_spec.ClearField(contact.FieldTitle, field.TypeString)
 	}
-	if value, ok := cu.mutation.Company(); ok {
+	if value, ok := _u.mutation.Company(); ok {
 		_spec.SetField(contact.FieldCompany, field.TypeString, value)
 	}
-	if cu.mutation.CompanyCleared() {
+	if _u.mutation.CompanyCleared() {
 		_spec.ClearField(contact.FieldCompany, field.TypeString)
 	}
-	if value, ok := cu.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(contact.FieldEmail, field.TypeString, value)
 	}
-	if cu.mutation.EmailCleared() {
+	if _u.mutation.EmailCleared() {
 		_spec.ClearField(contact.FieldEmail, field.TypeString)
 	}
-	if value, ok := cu.mutation.PhoneNumber(); ok {
+	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(contact.FieldPhoneNumber, field.TypeString, value)
 	}
-	if cu.mutation.PhoneNumberCleared() {
+	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(contact.FieldPhoneNumber, field.TypeString)
 	}
-	if value, ok := cu.mutation.Address(); ok {
+	if value, ok := _u.mutation.Address(); ok {
 		_spec.SetField(contact.FieldAddress, field.TypeString, value)
 	}
-	if cu.mutation.AddressCleared() {
+	if _u.mutation.AddressCleared() {
 		_spec.ClearField(contact.FieldAddress, field.TypeString)
 	}
-	if value, ok := cu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 	}
-	if cu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -540,10 +540,10 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -554,13 +554,13 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -571,10 +571,10 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !cu.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -585,13 +585,13 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -602,13 +602,13 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -619,10 +619,10 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ContactFiles
+		edge.Schema = _u.schemaConfig.ContactFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !cu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -633,13 +633,13 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ContactFiles
+		edge.Schema = _u.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -650,16 +650,16 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ContactFiles
+		edge.Schema = _u.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = cu.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
-	_spec.AddModifiers(cu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Contact
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contact.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -667,8 +667,8 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	cu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ContactUpdateOne is the builder for updating a single Contact entity.
@@ -681,355 +681,355 @@ type ContactUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cuo *ContactUpdateOne) SetUpdatedAt(t time.Time) *ContactUpdateOne {
-	cuo.mutation.SetUpdatedAt(t)
-	return cuo
+func (_u *ContactUpdateOne) SetUpdatedAt(v time.Time) *ContactUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (cuo *ContactUpdateOne) ClearUpdatedAt() *ContactUpdateOne {
-	cuo.mutation.ClearUpdatedAt()
-	return cuo
+func (_u *ContactUpdateOne) ClearUpdatedAt() *ContactUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cuo *ContactUpdateOne) SetUpdatedBy(s string) *ContactUpdateOne {
-	cuo.mutation.SetUpdatedBy(s)
-	return cuo
+func (_u *ContactUpdateOne) SetUpdatedBy(v string) *ContactUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableUpdatedBy(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetUpdatedBy(*s)
+func (_u *ContactUpdateOne) SetNillableUpdatedBy(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
-	return cuo
+func (_u *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cuo *ContactUpdateOne) SetDeletedAt(t time.Time) *ContactUpdateOne {
-	cuo.mutation.SetDeletedAt(t)
-	return cuo
+func (_u *ContactUpdateOne) SetDeletedAt(v time.Time) *ContactUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableDeletedAt(t *time.Time) *ContactUpdateOne {
-	if t != nil {
-		cuo.SetDeletedAt(*t)
+func (_u *ContactUpdateOne) SetNillableDeletedAt(v *time.Time) *ContactUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (cuo *ContactUpdateOne) ClearDeletedAt() *ContactUpdateOne {
-	cuo.mutation.ClearDeletedAt()
-	return cuo
+func (_u *ContactUpdateOne) ClearDeletedAt() *ContactUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cuo *ContactUpdateOne) SetDeletedBy(s string) *ContactUpdateOne {
-	cuo.mutation.SetDeletedBy(s)
-	return cuo
+func (_u *ContactUpdateOne) SetDeletedBy(v string) *ContactUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableDeletedBy(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetDeletedBy(*s)
+func (_u *ContactUpdateOne) SetNillableDeletedBy(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (cuo *ContactUpdateOne) ClearDeletedBy() *ContactUpdateOne {
-	cuo.mutation.ClearDeletedBy()
-	return cuo
+func (_u *ContactUpdateOne) ClearDeletedBy() *ContactUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (cuo *ContactUpdateOne) SetTags(s []string) *ContactUpdateOne {
-	cuo.mutation.SetTags(s)
-	return cuo
+func (_u *ContactUpdateOne) SetTags(v []string) *ContactUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (cuo *ContactUpdateOne) AppendTags(s []string) *ContactUpdateOne {
-	cuo.mutation.AppendTags(s)
-	return cuo
+// AppendTags appends value to the "tags" field.
+func (_u *ContactUpdateOne) AppendTags(v []string) *ContactUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (cuo *ContactUpdateOne) ClearTags() *ContactUpdateOne {
-	cuo.mutation.ClearTags()
-	return cuo
+func (_u *ContactUpdateOne) ClearTags() *ContactUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cuo *ContactUpdateOne) SetOwnerID(s string) *ContactUpdateOne {
-	cuo.mutation.SetOwnerID(s)
-	return cuo
+func (_u *ContactUpdateOne) SetOwnerID(v string) *ContactUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableOwnerID(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetOwnerID(*s)
+func (_u *ContactUpdateOne) SetNillableOwnerID(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (cuo *ContactUpdateOne) ClearOwnerID() *ContactUpdateOne {
-	cuo.mutation.ClearOwnerID()
-	return cuo
+func (_u *ContactUpdateOne) ClearOwnerID() *ContactUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetFullName sets the "full_name" field.
-func (cuo *ContactUpdateOne) SetFullName(s string) *ContactUpdateOne {
-	cuo.mutation.SetFullName(s)
-	return cuo
+func (_u *ContactUpdateOne) SetFullName(v string) *ContactUpdateOne {
+	_u.mutation.SetFullName(v)
+	return _u
 }
 
 // SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableFullName(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetFullName(*s)
+func (_u *ContactUpdateOne) SetNillableFullName(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetFullName(*v)
 	}
-	return cuo
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (cuo *ContactUpdateOne) SetTitle(s string) *ContactUpdateOne {
-	cuo.mutation.SetTitle(s)
-	return cuo
+func (_u *ContactUpdateOne) SetTitle(v string) *ContactUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableTitle(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetTitle(*s)
+func (_u *ContactUpdateOne) SetNillableTitle(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearTitle clears the value of the "title" field.
-func (cuo *ContactUpdateOne) ClearTitle() *ContactUpdateOne {
-	cuo.mutation.ClearTitle()
-	return cuo
+func (_u *ContactUpdateOne) ClearTitle() *ContactUpdateOne {
+	_u.mutation.ClearTitle()
+	return _u
 }
 
 // SetCompany sets the "company" field.
-func (cuo *ContactUpdateOne) SetCompany(s string) *ContactUpdateOne {
-	cuo.mutation.SetCompany(s)
-	return cuo
+func (_u *ContactUpdateOne) SetCompany(v string) *ContactUpdateOne {
+	_u.mutation.SetCompany(v)
+	return _u
 }
 
 // SetNillableCompany sets the "company" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableCompany(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetCompany(*s)
+func (_u *ContactUpdateOne) SetNillableCompany(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetCompany(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearCompany clears the value of the "company" field.
-func (cuo *ContactUpdateOne) ClearCompany() *ContactUpdateOne {
-	cuo.mutation.ClearCompany()
-	return cuo
+func (_u *ContactUpdateOne) ClearCompany() *ContactUpdateOne {
+	_u.mutation.ClearCompany()
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (cuo *ContactUpdateOne) SetEmail(s string) *ContactUpdateOne {
-	cuo.mutation.SetEmail(s)
-	return cuo
+func (_u *ContactUpdateOne) SetEmail(v string) *ContactUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableEmail(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetEmail(*s)
+func (_u *ContactUpdateOne) SetNillableEmail(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearEmail clears the value of the "email" field.
-func (cuo *ContactUpdateOne) ClearEmail() *ContactUpdateOne {
-	cuo.mutation.ClearEmail()
-	return cuo
+func (_u *ContactUpdateOne) ClearEmail() *ContactUpdateOne {
+	_u.mutation.ClearEmail()
+	return _u
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (cuo *ContactUpdateOne) SetPhoneNumber(s string) *ContactUpdateOne {
-	cuo.mutation.SetPhoneNumber(s)
-	return cuo
+func (_u *ContactUpdateOne) SetPhoneNumber(v string) *ContactUpdateOne {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillablePhoneNumber(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetPhoneNumber(*s)
+func (_u *ContactUpdateOne) SetNillablePhoneNumber(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearPhoneNumber clears the value of the "phone_number" field.
-func (cuo *ContactUpdateOne) ClearPhoneNumber() *ContactUpdateOne {
-	cuo.mutation.ClearPhoneNumber()
-	return cuo
+func (_u *ContactUpdateOne) ClearPhoneNumber() *ContactUpdateOne {
+	_u.mutation.ClearPhoneNumber()
+	return _u
 }
 
 // SetAddress sets the "address" field.
-func (cuo *ContactUpdateOne) SetAddress(s string) *ContactUpdateOne {
-	cuo.mutation.SetAddress(s)
-	return cuo
+func (_u *ContactUpdateOne) SetAddress(v string) *ContactUpdateOne {
+	_u.mutation.SetAddress(v)
+	return _u
 }
 
 // SetNillableAddress sets the "address" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableAddress(s *string) *ContactUpdateOne {
-	if s != nil {
-		cuo.SetAddress(*s)
+func (_u *ContactUpdateOne) SetNillableAddress(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetAddress(*v)
 	}
-	return cuo
+	return _u
 }
 
 // ClearAddress clears the value of the "address" field.
-func (cuo *ContactUpdateOne) ClearAddress() *ContactUpdateOne {
-	cuo.mutation.ClearAddress()
-	return cuo
+func (_u *ContactUpdateOne) ClearAddress() *ContactUpdateOne {
+	_u.mutation.ClearAddress()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (cuo *ContactUpdateOne) SetStatus(es enums.UserStatus) *ContactUpdateOne {
-	cuo.mutation.SetStatus(es)
-	return cuo
+func (_u *ContactUpdateOne) SetStatus(v enums.UserStatus) *ContactUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableStatus(es *enums.UserStatus) *ContactUpdateOne {
-	if es != nil {
-		cuo.SetStatus(*es)
+func (_u *ContactUpdateOne) SetNillableStatus(v *enums.UserStatus) *ContactUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return cuo
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (cuo *ContactUpdateOne) SetOwner(o *Organization) *ContactUpdateOne {
-	return cuo.SetOwnerID(o.ID)
+func (_u *ContactUpdateOne) SetOwner(v *Organization) *ContactUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (cuo *ContactUpdateOne) AddEntityIDs(ids ...string) *ContactUpdateOne {
-	cuo.mutation.AddEntityIDs(ids...)
-	return cuo
+func (_u *ContactUpdateOne) AddEntityIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (cuo *ContactUpdateOne) AddEntities(e ...*Entity) *ContactUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ContactUpdateOne) AddEntities(v ...*Entity) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (cuo *ContactUpdateOne) AddFileIDs(ids ...string) *ContactUpdateOne {
-	cuo.mutation.AddFileIDs(ids...)
-	return cuo
+func (_u *ContactUpdateOne) AddFileIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (cuo *ContactUpdateOne) AddFiles(f ...*File) *ContactUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ContactUpdateOne) AddFiles(v ...*File) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the ContactMutation object of the builder.
-func (cuo *ContactUpdateOne) Mutation() *ContactMutation {
-	return cuo.mutation
+func (_u *ContactUpdateOne) Mutation() *ContactMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (cuo *ContactUpdateOne) ClearOwner() *ContactUpdateOne {
-	cuo.mutation.ClearOwner()
-	return cuo
+func (_u *ContactUpdateOne) ClearOwner() *ContactUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (cuo *ContactUpdateOne) ClearEntities() *ContactUpdateOne {
-	cuo.mutation.ClearEntities()
-	return cuo
+func (_u *ContactUpdateOne) ClearEntities() *ContactUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (cuo *ContactUpdateOne) RemoveEntityIDs(ids ...string) *ContactUpdateOne {
-	cuo.mutation.RemoveEntityIDs(ids...)
-	return cuo
+func (_u *ContactUpdateOne) RemoveEntityIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (cuo *ContactUpdateOne) RemoveEntities(e ...*Entity) *ContactUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ContactUpdateOne) RemoveEntities(v ...*Entity) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (cuo *ContactUpdateOne) ClearFiles() *ContactUpdateOne {
-	cuo.mutation.ClearFiles()
-	return cuo
+func (_u *ContactUpdateOne) ClearFiles() *ContactUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (cuo *ContactUpdateOne) RemoveFileIDs(ids ...string) *ContactUpdateOne {
-	cuo.mutation.RemoveFileIDs(ids...)
-	return cuo
+func (_u *ContactUpdateOne) RemoveFileIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (cuo *ContactUpdateOne) RemoveFiles(f ...*File) *ContactUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ContactUpdateOne) RemoveFiles(v ...*File) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the ContactUpdate builder.
-func (cuo *ContactUpdateOne) Where(ps ...predicate.Contact) *ContactUpdateOne {
-	cuo.mutation.Where(ps...)
-	return cuo
+func (_u *ContactUpdateOne) Where(ps ...predicate.Contact) *ContactUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cuo *ContactUpdateOne) Select(field string, fields ...string) *ContactUpdateOne {
-	cuo.fields = append([]string{field}, fields...)
-	return cuo
+func (_u *ContactUpdateOne) Select(field string, fields ...string) *ContactUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Contact entity.
-func (cuo *ContactUpdateOne) Save(ctx context.Context) (*Contact, error) {
-	if err := cuo.defaults(); err != nil {
+func (_u *ContactUpdateOne) Save(ctx context.Context) (*Contact, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cuo *ContactUpdateOne) SaveX(ctx context.Context) *Contact {
-	node, err := cuo.Save(ctx)
+func (_u *ContactUpdateOne) SaveX(ctx context.Context) *Contact {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1037,53 +1037,53 @@ func (cuo *ContactUpdateOne) SaveX(ctx context.Context) *Contact {
 }
 
 // Exec executes the query on the entity.
-func (cuo *ContactUpdateOne) Exec(ctx context.Context) error {
-	_, err := cuo.Save(ctx)
+func (_u *ContactUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cuo *ContactUpdateOne) ExecX(ctx context.Context) {
-	if err := cuo.Exec(ctx); err != nil {
+func (_u *ContactUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cuo *ContactUpdateOne) defaults() error {
-	if _, ok := cuo.mutation.UpdatedAt(); !ok && !cuo.mutation.UpdatedAtCleared() {
+func (_u *ContactUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if contact.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized contact.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := contact.UpdateDefaultUpdatedAt()
-		cuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cuo *ContactUpdateOne) check() error {
-	if v, ok := cuo.mutation.OwnerID(); ok {
+func (_u *ContactUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := contact.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Contact.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := cuo.mutation.FullName(); ok {
+	if v, ok := _u.mutation.FullName(); ok {
 		if err := contact.FullNameValidator(v); err != nil {
 			return &ValidationError{Name: "full_name", err: fmt.Errorf(`generated: validator failed for field "Contact.full_name": %w`, err)}
 		}
 	}
-	if v, ok := cuo.mutation.Email(); ok {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := contact.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "Contact.email": %w`, err)}
 		}
 	}
-	if v, ok := cuo.mutation.PhoneNumber(); ok {
+	if v, ok := _u.mutation.PhoneNumber(); ok {
 		if err := contact.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "Contact.phone_number": %w`, err)}
 		}
 	}
-	if v, ok := cuo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := contact.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Contact.status": %w`, err)}
 		}
@@ -1092,22 +1092,22 @@ func (cuo *ContactUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (cuo *ContactUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactUpdateOne {
-	cuo.modifiers = append(cuo.modifiers, modifiers...)
-	return cuo
+func (_u *ContactUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err error) {
-	if err := cuo.check(); err != nil {
+func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(contact.Table, contact.Columns, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString))
-	id, ok := cuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Contact.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, contact.FieldID)
 		for _, f := range fields {
@@ -1119,91 +1119,91 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			}
 		}
 	}
-	if ps := cuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if cuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(contact.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := cuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(contact.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if cuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
-	if cuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(contact.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(contact.FieldUpdatedBy, field.TypeString, value)
 	}
-	if cuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(contact.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := cuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
 	}
-	if cuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(contact.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := cuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
 	}
-	if cuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(contact.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := cuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, contact.FieldTags, value)
 		})
 	}
-	if cuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(contact.FieldTags, field.TypeJSON)
 	}
-	if value, ok := cuo.mutation.FullName(); ok {
+	if value, ok := _u.mutation.FullName(); ok {
 		_spec.SetField(contact.FieldFullName, field.TypeString, value)
 	}
-	if value, ok := cuo.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(contact.FieldTitle, field.TypeString, value)
 	}
-	if cuo.mutation.TitleCleared() {
+	if _u.mutation.TitleCleared() {
 		_spec.ClearField(contact.FieldTitle, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Company(); ok {
+	if value, ok := _u.mutation.Company(); ok {
 		_spec.SetField(contact.FieldCompany, field.TypeString, value)
 	}
-	if cuo.mutation.CompanyCleared() {
+	if _u.mutation.CompanyCleared() {
 		_spec.ClearField(contact.FieldCompany, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(contact.FieldEmail, field.TypeString, value)
 	}
-	if cuo.mutation.EmailCleared() {
+	if _u.mutation.EmailCleared() {
 		_spec.ClearField(contact.FieldEmail, field.TypeString)
 	}
-	if value, ok := cuo.mutation.PhoneNumber(); ok {
+	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(contact.FieldPhoneNumber, field.TypeString, value)
 	}
-	if cuo.mutation.PhoneNumberCleared() {
+	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(contact.FieldPhoneNumber, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Address(); ok {
+	if value, ok := _u.mutation.Address(); ok {
 		_spec.SetField(contact.FieldAddress, field.TypeString, value)
 	}
-	if cuo.mutation.AddressCleared() {
+	if _u.mutation.AddressCleared() {
 		_spec.ClearField(contact.FieldAddress, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 	}
-	if cuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1214,10 +1214,10 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1228,13 +1228,13 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.Contact
+		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1245,10 +1245,10 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !cuo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1259,13 +1259,13 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1276,13 +1276,13 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1293,10 +1293,10 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ContactFiles
+		edge.Schema = _u.schemaConfig.ContactFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !cuo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1307,13 +1307,13 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ContactFiles
+		edge.Schema = _u.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1324,19 +1324,19 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ContactFiles
+		edge.Schema = _u.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = cuo.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, cuo.schemaConfig)
-	_spec.AddModifiers(cuo.modifiers...)
-	_node = &Contact{config: cuo.config}
+	_spec.Node.Schema = _u.schemaConfig.Contact
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Contact{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contact.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1344,6 +1344,6 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 		}
 		return nil, err
 	}
-	cuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

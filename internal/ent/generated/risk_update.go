@@ -39,848 +39,848 @@ type RiskUpdate struct {
 }
 
 // Where appends a list predicates to the RiskUpdate builder.
-func (ru *RiskUpdate) Where(ps ...predicate.Risk) *RiskUpdate {
-	ru.mutation.Where(ps...)
-	return ru
+func (_u *RiskUpdate) Where(ps ...predicate.Risk) *RiskUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ru *RiskUpdate) SetUpdatedAt(t time.Time) *RiskUpdate {
-	ru.mutation.SetUpdatedAt(t)
-	return ru
+func (_u *RiskUpdate) SetUpdatedAt(v time.Time) *RiskUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ru *RiskUpdate) ClearUpdatedAt() *RiskUpdate {
-	ru.mutation.ClearUpdatedAt()
-	return ru
+func (_u *RiskUpdate) ClearUpdatedAt() *RiskUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ru *RiskUpdate) SetUpdatedBy(s string) *RiskUpdate {
-	ru.mutation.SetUpdatedBy(s)
-	return ru
+func (_u *RiskUpdate) SetUpdatedBy(v string) *RiskUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableUpdatedBy(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetUpdatedBy(*s)
+func (_u *RiskUpdate) SetNillableUpdatedBy(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ru *RiskUpdate) ClearUpdatedBy() *RiskUpdate {
-	ru.mutation.ClearUpdatedBy()
-	return ru
+func (_u *RiskUpdate) ClearUpdatedBy() *RiskUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ru *RiskUpdate) SetDeletedAt(t time.Time) *RiskUpdate {
-	ru.mutation.SetDeletedAt(t)
-	return ru
+func (_u *RiskUpdate) SetDeletedAt(v time.Time) *RiskUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDeletedAt(t *time.Time) *RiskUpdate {
-	if t != nil {
-		ru.SetDeletedAt(*t)
+func (_u *RiskUpdate) SetNillableDeletedAt(v *time.Time) *RiskUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ru *RiskUpdate) ClearDeletedAt() *RiskUpdate {
-	ru.mutation.ClearDeletedAt()
-	return ru
+func (_u *RiskUpdate) ClearDeletedAt() *RiskUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ru *RiskUpdate) SetDeletedBy(s string) *RiskUpdate {
-	ru.mutation.SetDeletedBy(s)
-	return ru
+func (_u *RiskUpdate) SetDeletedBy(v string) *RiskUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDeletedBy(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetDeletedBy(*s)
+func (_u *RiskUpdate) SetNillableDeletedBy(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ru *RiskUpdate) ClearDeletedBy() *RiskUpdate {
-	ru.mutation.ClearDeletedBy()
-	return ru
+func (_u *RiskUpdate) ClearDeletedBy() *RiskUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ru *RiskUpdate) SetTags(s []string) *RiskUpdate {
-	ru.mutation.SetTags(s)
-	return ru
+func (_u *RiskUpdate) SetTags(v []string) *RiskUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ru *RiskUpdate) AppendTags(s []string) *RiskUpdate {
-	ru.mutation.AppendTags(s)
-	return ru
+// AppendTags appends value to the "tags" field.
+func (_u *RiskUpdate) AppendTags(v []string) *RiskUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ru *RiskUpdate) ClearTags() *RiskUpdate {
-	ru.mutation.ClearTags()
-	return ru
+func (_u *RiskUpdate) ClearTags() *RiskUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ru *RiskUpdate) SetName(s string) *RiskUpdate {
-	ru.mutation.SetName(s)
-	return ru
+func (_u *RiskUpdate) SetName(v string) *RiskUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableName(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetName(*s)
+func (_u *RiskUpdate) SetNillableName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ru
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ru *RiskUpdate) SetStatus(es enums.RiskStatus) *RiskUpdate {
-	ru.mutation.SetStatus(es)
-	return ru
+func (_u *RiskUpdate) SetStatus(v enums.RiskStatus) *RiskUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableStatus(es *enums.RiskStatus) *RiskUpdate {
-	if es != nil {
-		ru.SetStatus(*es)
+func (_u *RiskUpdate) SetNillableStatus(v *enums.RiskStatus) *RiskUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (ru *RiskUpdate) ClearStatus() *RiskUpdate {
-	ru.mutation.ClearStatus()
-	return ru
+func (_u *RiskUpdate) ClearStatus() *RiskUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetRiskType sets the "risk_type" field.
-func (ru *RiskUpdate) SetRiskType(s string) *RiskUpdate {
-	ru.mutation.SetRiskType(s)
-	return ru
+func (_u *RiskUpdate) SetRiskType(v string) *RiskUpdate {
+	_u.mutation.SetRiskType(v)
+	return _u
 }
 
 // SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableRiskType(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetRiskType(*s)
+func (_u *RiskUpdate) SetNillableRiskType(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetRiskType(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearRiskType clears the value of the "risk_type" field.
-func (ru *RiskUpdate) ClearRiskType() *RiskUpdate {
-	ru.mutation.ClearRiskType()
-	return ru
+func (_u *RiskUpdate) ClearRiskType() *RiskUpdate {
+	_u.mutation.ClearRiskType()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (ru *RiskUpdate) SetCategory(s string) *RiskUpdate {
-	ru.mutation.SetCategory(s)
-	return ru
+func (_u *RiskUpdate) SetCategory(v string) *RiskUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableCategory(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetCategory(*s)
+func (_u *RiskUpdate) SetNillableCategory(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (ru *RiskUpdate) ClearCategory() *RiskUpdate {
-	ru.mutation.ClearCategory()
-	return ru
+func (_u *RiskUpdate) ClearCategory() *RiskUpdate {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetImpact sets the "impact" field.
-func (ru *RiskUpdate) SetImpact(ei enums.RiskImpact) *RiskUpdate {
-	ru.mutation.SetImpact(ei)
-	return ru
+func (_u *RiskUpdate) SetImpact(v enums.RiskImpact) *RiskUpdate {
+	_u.mutation.SetImpact(v)
+	return _u
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableImpact(ei *enums.RiskImpact) *RiskUpdate {
-	if ei != nil {
-		ru.SetImpact(*ei)
+func (_u *RiskUpdate) SetNillableImpact(v *enums.RiskImpact) *RiskUpdate {
+	if v != nil {
+		_u.SetImpact(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearImpact clears the value of the "impact" field.
-func (ru *RiskUpdate) ClearImpact() *RiskUpdate {
-	ru.mutation.ClearImpact()
-	return ru
+func (_u *RiskUpdate) ClearImpact() *RiskUpdate {
+	_u.mutation.ClearImpact()
+	return _u
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (ru *RiskUpdate) SetLikelihood(el enums.RiskLikelihood) *RiskUpdate {
-	ru.mutation.SetLikelihood(el)
-	return ru
+func (_u *RiskUpdate) SetLikelihood(v enums.RiskLikelihood) *RiskUpdate {
+	_u.mutation.SetLikelihood(v)
+	return _u
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskUpdate {
-	if el != nil {
-		ru.SetLikelihood(*el)
+func (_u *RiskUpdate) SetNillableLikelihood(v *enums.RiskLikelihood) *RiskUpdate {
+	if v != nil {
+		_u.SetLikelihood(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearLikelihood clears the value of the "likelihood" field.
-func (ru *RiskUpdate) ClearLikelihood() *RiskUpdate {
-	ru.mutation.ClearLikelihood()
-	return ru
+func (_u *RiskUpdate) ClearLikelihood() *RiskUpdate {
+	_u.mutation.ClearLikelihood()
+	return _u
 }
 
 // SetScore sets the "score" field.
-func (ru *RiskUpdate) SetScore(i int) *RiskUpdate {
-	ru.mutation.ResetScore()
-	ru.mutation.SetScore(i)
-	return ru
+func (_u *RiskUpdate) SetScore(v int) *RiskUpdate {
+	_u.mutation.ResetScore()
+	_u.mutation.SetScore(v)
+	return _u
 }
 
 // SetNillableScore sets the "score" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableScore(i *int) *RiskUpdate {
-	if i != nil {
-		ru.SetScore(*i)
+func (_u *RiskUpdate) SetNillableScore(v *int) *RiskUpdate {
+	if v != nil {
+		_u.SetScore(*v)
 	}
-	return ru
+	return _u
 }
 
-// AddScore adds i to the "score" field.
-func (ru *RiskUpdate) AddScore(i int) *RiskUpdate {
-	ru.mutation.AddScore(i)
-	return ru
+// AddScore adds value to the "score" field.
+func (_u *RiskUpdate) AddScore(v int) *RiskUpdate {
+	_u.mutation.AddScore(v)
+	return _u
 }
 
 // ClearScore clears the value of the "score" field.
-func (ru *RiskUpdate) ClearScore() *RiskUpdate {
-	ru.mutation.ClearScore()
-	return ru
+func (_u *RiskUpdate) ClearScore() *RiskUpdate {
+	_u.mutation.ClearScore()
+	return _u
 }
 
 // SetMitigation sets the "mitigation" field.
-func (ru *RiskUpdate) SetMitigation(s string) *RiskUpdate {
-	ru.mutation.SetMitigation(s)
-	return ru
+func (_u *RiskUpdate) SetMitigation(v string) *RiskUpdate {
+	_u.mutation.SetMitigation(v)
+	return _u
 }
 
 // SetNillableMitigation sets the "mitigation" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableMitigation(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetMitigation(*s)
+func (_u *RiskUpdate) SetNillableMitigation(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetMitigation(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearMitigation clears the value of the "mitigation" field.
-func (ru *RiskUpdate) ClearMitigation() *RiskUpdate {
-	ru.mutation.ClearMitigation()
-	return ru
+func (_u *RiskUpdate) ClearMitigation() *RiskUpdate {
+	_u.mutation.ClearMitigation()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (ru *RiskUpdate) SetDetails(s string) *RiskUpdate {
-	ru.mutation.SetDetails(s)
-	return ru
+func (_u *RiskUpdate) SetDetails(v string) *RiskUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDetails(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetDetails(*s)
+func (_u *RiskUpdate) SetNillableDetails(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (ru *RiskUpdate) ClearDetails() *RiskUpdate {
-	ru.mutation.ClearDetails()
-	return ru
+func (_u *RiskUpdate) ClearDetails() *RiskUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetBusinessCosts sets the "business_costs" field.
-func (ru *RiskUpdate) SetBusinessCosts(s string) *RiskUpdate {
-	ru.mutation.SetBusinessCosts(s)
-	return ru
+func (_u *RiskUpdate) SetBusinessCosts(v string) *RiskUpdate {
+	_u.mutation.SetBusinessCosts(v)
+	return _u
 }
 
 // SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableBusinessCosts(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetBusinessCosts(*s)
+func (_u *RiskUpdate) SetNillableBusinessCosts(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetBusinessCosts(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearBusinessCosts clears the value of the "business_costs" field.
-func (ru *RiskUpdate) ClearBusinessCosts() *RiskUpdate {
-	ru.mutation.ClearBusinessCosts()
-	return ru
+func (_u *RiskUpdate) ClearBusinessCosts() *RiskUpdate {
+	_u.mutation.ClearBusinessCosts()
+	return _u
 }
 
 // SetStakeholderID sets the "stakeholder_id" field.
-func (ru *RiskUpdate) SetStakeholderID(s string) *RiskUpdate {
-	ru.mutation.SetStakeholderID(s)
-	return ru
+func (_u *RiskUpdate) SetStakeholderID(v string) *RiskUpdate {
+	_u.mutation.SetStakeholderID(v)
+	return _u
 }
 
 // SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableStakeholderID(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetStakeholderID(*s)
+func (_u *RiskUpdate) SetNillableStakeholderID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetStakeholderID(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearStakeholderID clears the value of the "stakeholder_id" field.
-func (ru *RiskUpdate) ClearStakeholderID() *RiskUpdate {
-	ru.mutation.ClearStakeholderID()
-	return ru
+func (_u *RiskUpdate) ClearStakeholderID() *RiskUpdate {
+	_u.mutation.ClearStakeholderID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (ru *RiskUpdate) SetDelegateID(s string) *RiskUpdate {
-	ru.mutation.SetDelegateID(s)
-	return ru
+func (_u *RiskUpdate) SetDelegateID(v string) *RiskUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (ru *RiskUpdate) SetNillableDelegateID(s *string) *RiskUpdate {
-	if s != nil {
-		ru.SetDelegateID(*s)
+func (_u *RiskUpdate) SetNillableDelegateID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return ru
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (ru *RiskUpdate) ClearDelegateID() *RiskUpdate {
-	ru.mutation.ClearDelegateID()
-	return ru
+func (_u *RiskUpdate) ClearDelegateID() *RiskUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ru *RiskUpdate) AddBlockedGroupIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddBlockedGroupIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddBlockedGroupIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ru *RiskUpdate) AddBlockedGroups(g ...*Group) *RiskUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdate) AddBlockedGroups(v ...*Group) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ru *RiskUpdate) AddEditorIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddEditorIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddEditorIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (ru *RiskUpdate) AddEditors(g ...*Group) *RiskUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdate) AddEditors(v ...*Group) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (ru *RiskUpdate) AddViewerIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddViewerIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddViewerIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (ru *RiskUpdate) AddViewers(g ...*Group) *RiskUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdate) AddViewers(v ...*Group) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ru *RiskUpdate) AddControlIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddControlIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddControlIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ru *RiskUpdate) AddControls(c ...*Control) *RiskUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *RiskUpdate) AddControls(v ...*Control) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ru *RiskUpdate) AddSubcontrolIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddSubcontrolIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddSubcontrolIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ru *RiskUpdate) AddSubcontrols(s ...*Subcontrol) *RiskUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdate) AddSubcontrols(v ...*Subcontrol) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ru *RiskUpdate) AddProcedureIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddProcedureIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddProcedureIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ru *RiskUpdate) AddProcedures(p ...*Procedure) *RiskUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdate) AddProcedures(v ...*Procedure) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (ru *RiskUpdate) AddInternalPolicyIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddInternalPolicyIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddInternalPolicyIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (ru *RiskUpdate) AddInternalPolicies(i ...*InternalPolicy) *RiskUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *RiskUpdate) AddInternalPolicies(v ...*InternalPolicy) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ru *RiskUpdate) AddProgramIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddProgramIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddProgramIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ru *RiskUpdate) AddPrograms(p ...*Program) *RiskUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdate) AddPrograms(v ...*Program) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (ru *RiskUpdate) AddActionPlanIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddActionPlanIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddActionPlanIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (ru *RiskUpdate) AddActionPlans(a ...*ActionPlan) *RiskUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdate) AddActionPlans(v ...*ActionPlan) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddActionPlanIDs(ids...)
+	return _u.AddActionPlanIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ru *RiskUpdate) AddTaskIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddTaskIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddTaskIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ru *RiskUpdate) AddTasks(t ...*Task) *RiskUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *RiskUpdate) AddTasks(v ...*Task) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (ru *RiskUpdate) AddAssetIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddAssetIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddAssetIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (ru *RiskUpdate) AddAssets(a ...*Asset) *RiskUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdate) AddAssets(v ...*Asset) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (ru *RiskUpdate) AddEntityIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddEntityIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddEntityIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (ru *RiskUpdate) AddEntities(e ...*Entity) *RiskUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *RiskUpdate) AddEntities(v ...*Entity) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (ru *RiskUpdate) AddScanIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddScanIDs(ids...)
-	return ru
+func (_u *RiskUpdate) AddScanIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (ru *RiskUpdate) AddScans(s ...*Scan) *RiskUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdate) AddScans(v ...*Scan) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
-func (ru *RiskUpdate) SetStakeholder(g *Group) *RiskUpdate {
-	return ru.SetStakeholderID(g.ID)
+func (_u *RiskUpdate) SetStakeholder(v *Group) *RiskUpdate {
+	return _u.SetStakeholderID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (ru *RiskUpdate) SetDelegate(g *Group) *RiskUpdate {
-	return ru.SetDelegateID(g.ID)
+func (_u *RiskUpdate) SetDelegate(v *Group) *RiskUpdate {
+	return _u.SetDelegateID(v.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
-func (ru *RiskUpdate) Mutation() *RiskMutation {
-	return ru.mutation
+func (_u *RiskUpdate) Mutation() *RiskMutation {
+	return _u.mutation
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (ru *RiskUpdate) ClearBlockedGroups() *RiskUpdate {
-	ru.mutation.ClearBlockedGroups()
-	return ru
+func (_u *RiskUpdate) ClearBlockedGroups() *RiskUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (ru *RiskUpdate) RemoveBlockedGroupIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveBlockedGroupIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveBlockedGroupIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (ru *RiskUpdate) RemoveBlockedGroups(g ...*Group) *RiskUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdate) RemoveBlockedGroups(v ...*Group) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (ru *RiskUpdate) ClearEditors() *RiskUpdate {
-	ru.mutation.ClearEditors()
-	return ru
+func (_u *RiskUpdate) ClearEditors() *RiskUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (ru *RiskUpdate) RemoveEditorIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveEditorIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveEditorIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (ru *RiskUpdate) RemoveEditors(g ...*Group) *RiskUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdate) RemoveEditors(v ...*Group) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (ru *RiskUpdate) ClearViewers() *RiskUpdate {
-	ru.mutation.ClearViewers()
-	return ru
+func (_u *RiskUpdate) ClearViewers() *RiskUpdate {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (ru *RiskUpdate) RemoveViewerIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveViewerIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveViewerIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (ru *RiskUpdate) RemoveViewers(g ...*Group) *RiskUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdate) RemoveViewers(v ...*Group) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (ru *RiskUpdate) ClearControls() *RiskUpdate {
-	ru.mutation.ClearControls()
-	return ru
+func (_u *RiskUpdate) ClearControls() *RiskUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (ru *RiskUpdate) RemoveControlIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveControlIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveControlIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (ru *RiskUpdate) RemoveControls(c ...*Control) *RiskUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *RiskUpdate) RemoveControls(v ...*Control) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (ru *RiskUpdate) ClearSubcontrols() *RiskUpdate {
-	ru.mutation.ClearSubcontrols()
-	return ru
+func (_u *RiskUpdate) ClearSubcontrols() *RiskUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (ru *RiskUpdate) RemoveSubcontrolIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveSubcontrolIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveSubcontrolIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (ru *RiskUpdate) RemoveSubcontrols(s ...*Subcontrol) *RiskUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdate) RemoveSubcontrols(v ...*Subcontrol) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (ru *RiskUpdate) ClearProcedures() *RiskUpdate {
-	ru.mutation.ClearProcedures()
-	return ru
+func (_u *RiskUpdate) ClearProcedures() *RiskUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (ru *RiskUpdate) RemoveProcedureIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveProcedureIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveProcedureIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (ru *RiskUpdate) RemoveProcedures(p ...*Procedure) *RiskUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdate) RemoveProcedures(v ...*Procedure) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (ru *RiskUpdate) ClearInternalPolicies() *RiskUpdate {
-	ru.mutation.ClearInternalPolicies()
-	return ru
+func (_u *RiskUpdate) ClearInternalPolicies() *RiskUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (ru *RiskUpdate) RemoveInternalPolicyIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveInternalPolicyIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveInternalPolicyIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (ru *RiskUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *RiskUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *RiskUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (ru *RiskUpdate) ClearPrograms() *RiskUpdate {
-	ru.mutation.ClearPrograms()
-	return ru
+func (_u *RiskUpdate) ClearPrograms() *RiskUpdate {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ru *RiskUpdate) RemoveProgramIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveProgramIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveProgramIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (ru *RiskUpdate) RemovePrograms(p ...*Program) *RiskUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdate) RemovePrograms(v ...*Program) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (ru *RiskUpdate) ClearActionPlans() *RiskUpdate {
-	ru.mutation.ClearActionPlans()
-	return ru
+func (_u *RiskUpdate) ClearActionPlans() *RiskUpdate {
+	_u.mutation.ClearActionPlans()
+	return _u
 }
 
 // RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (ru *RiskUpdate) RemoveActionPlanIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveActionPlanIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveActionPlanIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
 }
 
 // RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (ru *RiskUpdate) RemoveActionPlans(a ...*ActionPlan) *RiskUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdate) RemoveActionPlans(v ...*ActionPlan) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveActionPlanIDs(ids...)
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (ru *RiskUpdate) ClearTasks() *RiskUpdate {
-	ru.mutation.ClearTasks()
-	return ru
+func (_u *RiskUpdate) ClearTasks() *RiskUpdate {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (ru *RiskUpdate) RemoveTaskIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveTaskIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveTaskIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (ru *RiskUpdate) RemoveTasks(t ...*Task) *RiskUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *RiskUpdate) RemoveTasks(v ...*Task) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (ru *RiskUpdate) ClearAssets() *RiskUpdate {
-	ru.mutation.ClearAssets()
-	return ru
+func (_u *RiskUpdate) ClearAssets() *RiskUpdate {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (ru *RiskUpdate) RemoveAssetIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveAssetIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveAssetIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (ru *RiskUpdate) RemoveAssets(a ...*Asset) *RiskUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdate) RemoveAssets(v ...*Asset) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (ru *RiskUpdate) ClearEntities() *RiskUpdate {
-	ru.mutation.ClearEntities()
-	return ru
+func (_u *RiskUpdate) ClearEntities() *RiskUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (ru *RiskUpdate) RemoveEntityIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveEntityIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveEntityIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (ru *RiskUpdate) RemoveEntities(e ...*Entity) *RiskUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *RiskUpdate) RemoveEntities(v ...*Entity) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (ru *RiskUpdate) ClearScans() *RiskUpdate {
-	ru.mutation.ClearScans()
-	return ru
+func (_u *RiskUpdate) ClearScans() *RiskUpdate {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (ru *RiskUpdate) RemoveScanIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveScanIDs(ids...)
-	return ru
+func (_u *RiskUpdate) RemoveScanIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (ru *RiskUpdate) RemoveScans(s ...*Scan) *RiskUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdate) RemoveScans(v ...*Scan) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearStakeholder clears the "stakeholder" edge to the Group entity.
-func (ru *RiskUpdate) ClearStakeholder() *RiskUpdate {
-	ru.mutation.ClearStakeholder()
-	return ru
+func (_u *RiskUpdate) ClearStakeholder() *RiskUpdate {
+	_u.mutation.ClearStakeholder()
+	return _u
 }
 
 // ClearDelegate clears the "delegate" edge to the Group entity.
-func (ru *RiskUpdate) ClearDelegate() *RiskUpdate {
-	ru.mutation.ClearDelegate()
-	return ru
+func (_u *RiskUpdate) ClearDelegate() *RiskUpdate {
+	_u.mutation.ClearDelegate()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ru *RiskUpdate) Save(ctx context.Context) (int, error) {
-	if err := ru.defaults(); err != nil {
+func (_u *RiskUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ru.sqlSave, ru.mutation, ru.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ru *RiskUpdate) SaveX(ctx context.Context) int {
-	affected, err := ru.Save(ctx)
+func (_u *RiskUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -888,48 +888,48 @@ func (ru *RiskUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ru *RiskUpdate) Exec(ctx context.Context) error {
-	_, err := ru.Save(ctx)
+func (_u *RiskUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ru *RiskUpdate) ExecX(ctx context.Context) {
-	if err := ru.Exec(ctx); err != nil {
+func (_u *RiskUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ru *RiskUpdate) defaults() error {
-	if _, ok := ru.mutation.UpdatedAt(); !ok && !ru.mutation.UpdatedAtCleared() {
+func (_u *RiskUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if risk.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized risk.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := risk.UpdateDefaultUpdatedAt()
-		ru.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ru *RiskUpdate) check() error {
-	if v, ok := ru.mutation.Name(); ok {
+func (_u *RiskUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
 		}
 	}
-	if v, ok := ru.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := risk.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Risk.status": %w`, err)}
 		}
 	}
-	if v, ok := ru.mutation.Impact(); ok {
+	if v, ok := _u.mutation.Impact(); ok {
 		if err := risk.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
 		}
 	}
-	if v, ok := ru.mutation.Likelihood(); ok {
+	if v, ok := _u.mutation.Likelihood(); ok {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
@@ -938,125 +938,125 @@ func (ru *RiskUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ru *RiskUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskUpdate {
-	ru.modifiers = append(ru.modifiers, modifiers...)
-	return ru
+func (_u *RiskUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ru.check(); err != nil {
-		return n, err
+func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(risk.Table, risk.Columns, sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString))
-	if ps := ru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ru.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(risk.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(risk.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ru.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(risk.FieldUpdatedAt, field.TypeTime)
 	}
-	if ru.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(risk.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ru.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(risk.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ru.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(risk.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ru.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(risk.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ru.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(risk.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ru.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
 	}
-	if ru.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(risk.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ru.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(risk.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ru.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, risk.FieldTags, value)
 		})
 	}
-	if ru.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(risk.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ru.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
-	if value, ok := ru.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(risk.FieldStatus, field.TypeEnum, value)
 	}
-	if ru.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(risk.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := ru.mutation.RiskType(); ok {
+	if value, ok := _u.mutation.RiskType(); ok {
 		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
 	}
-	if ru.mutation.RiskTypeCleared() {
+	if _u.mutation.RiskTypeCleared() {
 		_spec.ClearField(risk.FieldRiskType, field.TypeString)
 	}
-	if value, ok := ru.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(risk.FieldCategory, field.TypeString, value)
 	}
-	if ru.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(risk.FieldCategory, field.TypeString)
 	}
-	if value, ok := ru.mutation.Impact(); ok {
+	if value, ok := _u.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
 	}
-	if ru.mutation.ImpactCleared() {
+	if _u.mutation.ImpactCleared() {
 		_spec.ClearField(risk.FieldImpact, field.TypeEnum)
 	}
-	if value, ok := ru.mutation.Likelihood(); ok {
+	if value, ok := _u.mutation.Likelihood(); ok {
 		_spec.SetField(risk.FieldLikelihood, field.TypeEnum, value)
 	}
-	if ru.mutation.LikelihoodCleared() {
+	if _u.mutation.LikelihoodCleared() {
 		_spec.ClearField(risk.FieldLikelihood, field.TypeEnum)
 	}
-	if value, ok := ru.mutation.Score(); ok {
+	if value, ok := _u.mutation.Score(); ok {
 		_spec.SetField(risk.FieldScore, field.TypeInt, value)
 	}
-	if value, ok := ru.mutation.AddedScore(); ok {
+	if value, ok := _u.mutation.AddedScore(); ok {
 		_spec.AddField(risk.FieldScore, field.TypeInt, value)
 	}
-	if ru.mutation.ScoreCleared() {
+	if _u.mutation.ScoreCleared() {
 		_spec.ClearField(risk.FieldScore, field.TypeInt)
 	}
-	if value, ok := ru.mutation.Mitigation(); ok {
+	if value, ok := _u.mutation.Mitigation(); ok {
 		_spec.SetField(risk.FieldMitigation, field.TypeString, value)
 	}
-	if ru.mutation.MitigationCleared() {
+	if _u.mutation.MitigationCleared() {
 		_spec.ClearField(risk.FieldMitigation, field.TypeString)
 	}
-	if value, ok := ru.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 	}
-	if ru.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeString)
 	}
-	if value, ok := ru.mutation.BusinessCosts(); ok {
+	if value, ok := _u.mutation.BusinessCosts(); ok {
 		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
 	}
-	if ru.mutation.BusinessCostsCleared() {
+	if _u.mutation.BusinessCostsCleared() {
 		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
 	}
-	if ru.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1067,10 +1067,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskBlockedGroups
+		edge.Schema = _u.schemaConfig.RiskBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ru.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1081,13 +1081,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskBlockedGroups
+		edge.Schema = _u.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1098,13 +1098,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskBlockedGroups
+		edge.Schema = _u.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1115,10 +1115,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskEditors
+		edge.Schema = _u.schemaConfig.RiskEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ru.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1129,13 +1129,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskEditors
+		edge.Schema = _u.schemaConfig.RiskEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1146,13 +1146,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskEditors
+		edge.Schema = _u.schemaConfig.RiskEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1163,10 +1163,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskViewers
+		edge.Schema = _u.schemaConfig.RiskViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedViewersIDs(); len(nodes) > 0 && !ru.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1177,13 +1177,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskViewers
+		edge.Schema = _u.schemaConfig.RiskViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1194,13 +1194,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskViewers
+		edge.Schema = _u.schemaConfig.RiskViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1211,10 +1211,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ControlRisks
+		edge.Schema = _u.schemaConfig.ControlRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ru.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1225,13 +1225,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ControlRisks
+		edge.Schema = _u.schemaConfig.ControlRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1242,13 +1242,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ControlRisks
+		edge.Schema = _u.schemaConfig.ControlRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1259,10 +1259,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.SubcontrolRisks
+		edge.Schema = _u.schemaConfig.SubcontrolRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ru.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1273,13 +1273,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.SubcontrolRisks
+		edge.Schema = _u.schemaConfig.SubcontrolRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1290,13 +1290,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.SubcontrolRisks
+		edge.Schema = _u.schemaConfig.SubcontrolRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1307,10 +1307,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProcedureRisks
+		edge.Schema = _u.schemaConfig.ProcedureRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ru.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1321,13 +1321,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProcedureRisks
+		edge.Schema = _u.schemaConfig.ProcedureRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1338,13 +1338,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProcedureRisks
+		edge.Schema = _u.schemaConfig.ProcedureRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1355,10 +1355,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !ru.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1369,13 +1369,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1386,13 +1386,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1403,10 +1403,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ru.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1417,13 +1417,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1434,13 +1434,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.ActionPlansCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1451,10 +1451,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !ru.mutation.ActionPlansCleared() {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1465,13 +1465,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1482,13 +1482,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1499,10 +1499,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskTasks
+		edge.Schema = _u.schemaConfig.RiskTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ru.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1513,13 +1513,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskTasks
+		edge.Schema = _u.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1530,13 +1530,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.RiskTasks
+		edge.Schema = _u.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1547,10 +1547,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ru.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1561,13 +1561,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1578,13 +1578,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1595,10 +1595,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ru.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1609,13 +1609,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1626,13 +1626,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1643,10 +1643,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedScansIDs(); len(nodes) > 0 && !ru.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1657,13 +1657,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1674,13 +1674,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.StakeholderCleared() {
+	if _u.mutation.StakeholderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1691,10 +1691,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.StakeholderIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.StakeholderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1705,13 +1705,13 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ru.mutation.DelegateCleared() {
+	if _u.mutation.DelegateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1722,10 +1722,10 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1736,16 +1736,16 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ru.schemaConfig.Risk
-	ctx = internal.NewSchemaConfigContext(ctx, ru.schemaConfig)
-	_spec.AddModifiers(ru.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Risk
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{risk.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1753,8 +1753,8 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // RiskUpdateOne is the builder for updating a single Risk entity.
@@ -1767,855 +1767,855 @@ type RiskUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ruo *RiskUpdateOne) SetUpdatedAt(t time.Time) *RiskUpdateOne {
-	ruo.mutation.SetUpdatedAt(t)
-	return ruo
+func (_u *RiskUpdateOne) SetUpdatedAt(v time.Time) *RiskUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ruo *RiskUpdateOne) ClearUpdatedAt() *RiskUpdateOne {
-	ruo.mutation.ClearUpdatedAt()
-	return ruo
+func (_u *RiskUpdateOne) ClearUpdatedAt() *RiskUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ruo *RiskUpdateOne) SetUpdatedBy(s string) *RiskUpdateOne {
-	ruo.mutation.SetUpdatedBy(s)
-	return ruo
+func (_u *RiskUpdateOne) SetUpdatedBy(v string) *RiskUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableUpdatedBy(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetUpdatedBy(*s)
+func (_u *RiskUpdateOne) SetNillableUpdatedBy(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ruo *RiskUpdateOne) ClearUpdatedBy() *RiskUpdateOne {
-	ruo.mutation.ClearUpdatedBy()
-	return ruo
+func (_u *RiskUpdateOne) ClearUpdatedBy() *RiskUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ruo *RiskUpdateOne) SetDeletedAt(t time.Time) *RiskUpdateOne {
-	ruo.mutation.SetDeletedAt(t)
-	return ruo
+func (_u *RiskUpdateOne) SetDeletedAt(v time.Time) *RiskUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDeletedAt(t *time.Time) *RiskUpdateOne {
-	if t != nil {
-		ruo.SetDeletedAt(*t)
+func (_u *RiskUpdateOne) SetNillableDeletedAt(v *time.Time) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ruo *RiskUpdateOne) ClearDeletedAt() *RiskUpdateOne {
-	ruo.mutation.ClearDeletedAt()
-	return ruo
+func (_u *RiskUpdateOne) ClearDeletedAt() *RiskUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ruo *RiskUpdateOne) SetDeletedBy(s string) *RiskUpdateOne {
-	ruo.mutation.SetDeletedBy(s)
-	return ruo
+func (_u *RiskUpdateOne) SetDeletedBy(v string) *RiskUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDeletedBy(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetDeletedBy(*s)
+func (_u *RiskUpdateOne) SetNillableDeletedBy(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ruo *RiskUpdateOne) ClearDeletedBy() *RiskUpdateOne {
-	ruo.mutation.ClearDeletedBy()
-	return ruo
+func (_u *RiskUpdateOne) ClearDeletedBy() *RiskUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ruo *RiskUpdateOne) SetTags(s []string) *RiskUpdateOne {
-	ruo.mutation.SetTags(s)
-	return ruo
+func (_u *RiskUpdateOne) SetTags(v []string) *RiskUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ruo *RiskUpdateOne) AppendTags(s []string) *RiskUpdateOne {
-	ruo.mutation.AppendTags(s)
-	return ruo
+// AppendTags appends value to the "tags" field.
+func (_u *RiskUpdateOne) AppendTags(v []string) *RiskUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ruo *RiskUpdateOne) ClearTags() *RiskUpdateOne {
-	ruo.mutation.ClearTags()
-	return ruo
+func (_u *RiskUpdateOne) ClearTags() *RiskUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ruo *RiskUpdateOne) SetName(s string) *RiskUpdateOne {
-	ruo.mutation.SetName(s)
-	return ruo
+func (_u *RiskUpdateOne) SetName(v string) *RiskUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableName(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetName(*s)
+func (_u *RiskUpdateOne) SetNillableName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ruo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ruo *RiskUpdateOne) SetStatus(es enums.RiskStatus) *RiskUpdateOne {
-	ruo.mutation.SetStatus(es)
-	return ruo
+func (_u *RiskUpdateOne) SetStatus(v enums.RiskStatus) *RiskUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableStatus(es *enums.RiskStatus) *RiskUpdateOne {
-	if es != nil {
-		ruo.SetStatus(*es)
+func (_u *RiskUpdateOne) SetNillableStatus(v *enums.RiskStatus) *RiskUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (ruo *RiskUpdateOne) ClearStatus() *RiskUpdateOne {
-	ruo.mutation.ClearStatus()
-	return ruo
+func (_u *RiskUpdateOne) ClearStatus() *RiskUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetRiskType sets the "risk_type" field.
-func (ruo *RiskUpdateOne) SetRiskType(s string) *RiskUpdateOne {
-	ruo.mutation.SetRiskType(s)
-	return ruo
+func (_u *RiskUpdateOne) SetRiskType(v string) *RiskUpdateOne {
+	_u.mutation.SetRiskType(v)
+	return _u
 }
 
 // SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableRiskType(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetRiskType(*s)
+func (_u *RiskUpdateOne) SetNillableRiskType(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetRiskType(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearRiskType clears the value of the "risk_type" field.
-func (ruo *RiskUpdateOne) ClearRiskType() *RiskUpdateOne {
-	ruo.mutation.ClearRiskType()
-	return ruo
+func (_u *RiskUpdateOne) ClearRiskType() *RiskUpdateOne {
+	_u.mutation.ClearRiskType()
+	return _u
 }
 
 // SetCategory sets the "category" field.
-func (ruo *RiskUpdateOne) SetCategory(s string) *RiskUpdateOne {
-	ruo.mutation.SetCategory(s)
-	return ruo
+func (_u *RiskUpdateOne) SetCategory(v string) *RiskUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
 }
 
 // SetNillableCategory sets the "category" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableCategory(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetCategory(*s)
+func (_u *RiskUpdateOne) SetNillableCategory(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearCategory clears the value of the "category" field.
-func (ruo *RiskUpdateOne) ClearCategory() *RiskUpdateOne {
-	ruo.mutation.ClearCategory()
-	return ruo
+func (_u *RiskUpdateOne) ClearCategory() *RiskUpdateOne {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // SetImpact sets the "impact" field.
-func (ruo *RiskUpdateOne) SetImpact(ei enums.RiskImpact) *RiskUpdateOne {
-	ruo.mutation.SetImpact(ei)
-	return ruo
+func (_u *RiskUpdateOne) SetImpact(v enums.RiskImpact) *RiskUpdateOne {
+	_u.mutation.SetImpact(v)
+	return _u
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableImpact(ei *enums.RiskImpact) *RiskUpdateOne {
-	if ei != nil {
-		ruo.SetImpact(*ei)
+func (_u *RiskUpdateOne) SetNillableImpact(v *enums.RiskImpact) *RiskUpdateOne {
+	if v != nil {
+		_u.SetImpact(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearImpact clears the value of the "impact" field.
-func (ruo *RiskUpdateOne) ClearImpact() *RiskUpdateOne {
-	ruo.mutation.ClearImpact()
-	return ruo
+func (_u *RiskUpdateOne) ClearImpact() *RiskUpdateOne {
+	_u.mutation.ClearImpact()
+	return _u
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (ruo *RiskUpdateOne) SetLikelihood(el enums.RiskLikelihood) *RiskUpdateOne {
-	ruo.mutation.SetLikelihood(el)
-	return ruo
+func (_u *RiskUpdateOne) SetLikelihood(v enums.RiskLikelihood) *RiskUpdateOne {
+	_u.mutation.SetLikelihood(v)
+	return _u
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskUpdateOne {
-	if el != nil {
-		ruo.SetLikelihood(*el)
+func (_u *RiskUpdateOne) SetNillableLikelihood(v *enums.RiskLikelihood) *RiskUpdateOne {
+	if v != nil {
+		_u.SetLikelihood(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearLikelihood clears the value of the "likelihood" field.
-func (ruo *RiskUpdateOne) ClearLikelihood() *RiskUpdateOne {
-	ruo.mutation.ClearLikelihood()
-	return ruo
+func (_u *RiskUpdateOne) ClearLikelihood() *RiskUpdateOne {
+	_u.mutation.ClearLikelihood()
+	return _u
 }
 
 // SetScore sets the "score" field.
-func (ruo *RiskUpdateOne) SetScore(i int) *RiskUpdateOne {
-	ruo.mutation.ResetScore()
-	ruo.mutation.SetScore(i)
-	return ruo
+func (_u *RiskUpdateOne) SetScore(v int) *RiskUpdateOne {
+	_u.mutation.ResetScore()
+	_u.mutation.SetScore(v)
+	return _u
 }
 
 // SetNillableScore sets the "score" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableScore(i *int) *RiskUpdateOne {
-	if i != nil {
-		ruo.SetScore(*i)
+func (_u *RiskUpdateOne) SetNillableScore(v *int) *RiskUpdateOne {
+	if v != nil {
+		_u.SetScore(*v)
 	}
-	return ruo
+	return _u
 }
 
-// AddScore adds i to the "score" field.
-func (ruo *RiskUpdateOne) AddScore(i int) *RiskUpdateOne {
-	ruo.mutation.AddScore(i)
-	return ruo
+// AddScore adds value to the "score" field.
+func (_u *RiskUpdateOne) AddScore(v int) *RiskUpdateOne {
+	_u.mutation.AddScore(v)
+	return _u
 }
 
 // ClearScore clears the value of the "score" field.
-func (ruo *RiskUpdateOne) ClearScore() *RiskUpdateOne {
-	ruo.mutation.ClearScore()
-	return ruo
+func (_u *RiskUpdateOne) ClearScore() *RiskUpdateOne {
+	_u.mutation.ClearScore()
+	return _u
 }
 
 // SetMitigation sets the "mitigation" field.
-func (ruo *RiskUpdateOne) SetMitigation(s string) *RiskUpdateOne {
-	ruo.mutation.SetMitigation(s)
-	return ruo
+func (_u *RiskUpdateOne) SetMitigation(v string) *RiskUpdateOne {
+	_u.mutation.SetMitigation(v)
+	return _u
 }
 
 // SetNillableMitigation sets the "mitigation" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableMitigation(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetMitigation(*s)
+func (_u *RiskUpdateOne) SetNillableMitigation(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetMitigation(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearMitigation clears the value of the "mitigation" field.
-func (ruo *RiskUpdateOne) ClearMitigation() *RiskUpdateOne {
-	ruo.mutation.ClearMitigation()
-	return ruo
+func (_u *RiskUpdateOne) ClearMitigation() *RiskUpdateOne {
+	_u.mutation.ClearMitigation()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (ruo *RiskUpdateOne) SetDetails(s string) *RiskUpdateOne {
-	ruo.mutation.SetDetails(s)
-	return ruo
+func (_u *RiskUpdateOne) SetDetails(v string) *RiskUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDetails(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetDetails(*s)
+func (_u *RiskUpdateOne) SetNillableDetails(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (ruo *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
-	ruo.mutation.ClearDetails()
-	return ruo
+func (_u *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetBusinessCosts sets the "business_costs" field.
-func (ruo *RiskUpdateOne) SetBusinessCosts(s string) *RiskUpdateOne {
-	ruo.mutation.SetBusinessCosts(s)
-	return ruo
+func (_u *RiskUpdateOne) SetBusinessCosts(v string) *RiskUpdateOne {
+	_u.mutation.SetBusinessCosts(v)
+	return _u
 }
 
 // SetNillableBusinessCosts sets the "business_costs" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableBusinessCosts(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetBusinessCosts(*s)
+func (_u *RiskUpdateOne) SetNillableBusinessCosts(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetBusinessCosts(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearBusinessCosts clears the value of the "business_costs" field.
-func (ruo *RiskUpdateOne) ClearBusinessCosts() *RiskUpdateOne {
-	ruo.mutation.ClearBusinessCosts()
-	return ruo
+func (_u *RiskUpdateOne) ClearBusinessCosts() *RiskUpdateOne {
+	_u.mutation.ClearBusinessCosts()
+	return _u
 }
 
 // SetStakeholderID sets the "stakeholder_id" field.
-func (ruo *RiskUpdateOne) SetStakeholderID(s string) *RiskUpdateOne {
-	ruo.mutation.SetStakeholderID(s)
-	return ruo
+func (_u *RiskUpdateOne) SetStakeholderID(v string) *RiskUpdateOne {
+	_u.mutation.SetStakeholderID(v)
+	return _u
 }
 
 // SetNillableStakeholderID sets the "stakeholder_id" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableStakeholderID(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetStakeholderID(*s)
+func (_u *RiskUpdateOne) SetNillableStakeholderID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetStakeholderID(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearStakeholderID clears the value of the "stakeholder_id" field.
-func (ruo *RiskUpdateOne) ClearStakeholderID() *RiskUpdateOne {
-	ruo.mutation.ClearStakeholderID()
-	return ruo
+func (_u *RiskUpdateOne) ClearStakeholderID() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (ruo *RiskUpdateOne) SetDelegateID(s string) *RiskUpdateOne {
-	ruo.mutation.SetDelegateID(s)
-	return ruo
+func (_u *RiskUpdateOne) SetDelegateID(v string) *RiskUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (ruo *RiskUpdateOne) SetNillableDelegateID(s *string) *RiskUpdateOne {
-	if s != nil {
-		ruo.SetDelegateID(*s)
+func (_u *RiskUpdateOne) SetNillableDelegateID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return ruo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (ruo *RiskUpdateOne) ClearDelegateID() *RiskUpdateOne {
-	ruo.mutation.ClearDelegateID()
-	return ruo
+func (_u *RiskUpdateOne) ClearDelegateID() *RiskUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ruo *RiskUpdateOne) AddBlockedGroupIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddBlockedGroupIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddBlockedGroupIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ruo *RiskUpdateOne) AddBlockedGroups(g ...*Group) *RiskUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdateOne) AddBlockedGroups(v ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ruo *RiskUpdateOne) AddEditorIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddEditorIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddEditorIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (ruo *RiskUpdateOne) AddEditors(g ...*Group) *RiskUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdateOne) AddEditors(v ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (ruo *RiskUpdateOne) AddViewerIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddViewerIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddViewerIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (ruo *RiskUpdateOne) AddViewers(g ...*Group) *RiskUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdateOne) AddViewers(v ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (ruo *RiskUpdateOne) AddControlIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddControlIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddControlIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (ruo *RiskUpdateOne) AddControls(c ...*Control) *RiskUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *RiskUpdateOne) AddControls(v ...*Control) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (ruo *RiskUpdateOne) AddSubcontrolIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddSubcontrolIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddSubcontrolIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (ruo *RiskUpdateOne) AddSubcontrols(s ...*Subcontrol) *RiskUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdateOne) AddSubcontrols(v ...*Subcontrol) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (ruo *RiskUpdateOne) AddProcedureIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddProcedureIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddProcedureIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (ruo *RiskUpdateOne) AddProcedures(p ...*Procedure) *RiskUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdateOne) AddProcedures(v ...*Procedure) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (ruo *RiskUpdateOne) AddInternalPolicyIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddInternalPolicyIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddInternalPolicyIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (ruo *RiskUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *RiskUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *RiskUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (ruo *RiskUpdateOne) AddProgramIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddProgramIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddProgramIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddProgramIDs(ids...)
+	return _u
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (ruo *RiskUpdateOne) AddPrograms(p ...*Program) *RiskUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdateOne) AddPrograms(v ...*Program) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddProgramIDs(ids...)
+	return _u.AddProgramIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (ruo *RiskUpdateOne) AddActionPlanIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddActionPlanIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddActionPlanIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (ruo *RiskUpdateOne) AddActionPlans(a ...*ActionPlan) *RiskUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdateOne) AddActionPlans(v ...*ActionPlan) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddActionPlanIDs(ids...)
+	return _u.AddActionPlanIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (ruo *RiskUpdateOne) AddTaskIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddTaskIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddTaskIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (ruo *RiskUpdateOne) AddTasks(t ...*Task) *RiskUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *RiskUpdateOne) AddTasks(v ...*Task) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (ruo *RiskUpdateOne) AddAssetIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddAssetIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddAssetIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (ruo *RiskUpdateOne) AddAssets(a ...*Asset) *RiskUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdateOne) AddAssets(v ...*Asset) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (ruo *RiskUpdateOne) AddEntityIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddEntityIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddEntityIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (ruo *RiskUpdateOne) AddEntities(e ...*Entity) *RiskUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *RiskUpdateOne) AddEntities(v ...*Entity) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (ruo *RiskUpdateOne) AddScanIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddScanIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) AddScanIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (ruo *RiskUpdateOne) AddScans(s ...*Scan) *RiskUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdateOne) AddScans(v ...*Scan) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
-func (ruo *RiskUpdateOne) SetStakeholder(g *Group) *RiskUpdateOne {
-	return ruo.SetStakeholderID(g.ID)
+func (_u *RiskUpdateOne) SetStakeholder(v *Group) *RiskUpdateOne {
+	return _u.SetStakeholderID(v.ID)
 }
 
 // SetDelegate sets the "delegate" edge to the Group entity.
-func (ruo *RiskUpdateOne) SetDelegate(g *Group) *RiskUpdateOne {
-	return ruo.SetDelegateID(g.ID)
+func (_u *RiskUpdateOne) SetDelegate(v *Group) *RiskUpdateOne {
+	return _u.SetDelegateID(v.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
-func (ruo *RiskUpdateOne) Mutation() *RiskMutation {
-	return ruo.mutation
+func (_u *RiskUpdateOne) Mutation() *RiskMutation {
+	return _u.mutation
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (ruo *RiskUpdateOne) ClearBlockedGroups() *RiskUpdateOne {
-	ruo.mutation.ClearBlockedGroups()
-	return ruo
+func (_u *RiskUpdateOne) ClearBlockedGroups() *RiskUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (ruo *RiskUpdateOne) RemoveBlockedGroupIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveBlockedGroupIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveBlockedGroupIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (ruo *RiskUpdateOne) RemoveBlockedGroups(g ...*Group) *RiskUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdateOne) RemoveBlockedGroups(v ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (ruo *RiskUpdateOne) ClearEditors() *RiskUpdateOne {
-	ruo.mutation.ClearEditors()
-	return ruo
+func (_u *RiskUpdateOne) ClearEditors() *RiskUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (ruo *RiskUpdateOne) RemoveEditorIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveEditorIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveEditorIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (ruo *RiskUpdateOne) RemoveEditors(g ...*Group) *RiskUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdateOne) RemoveEditors(v ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (ruo *RiskUpdateOne) ClearViewers() *RiskUpdateOne {
-	ruo.mutation.ClearViewers()
-	return ruo
+func (_u *RiskUpdateOne) ClearViewers() *RiskUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (ruo *RiskUpdateOne) RemoveViewerIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveViewerIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveViewerIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (ruo *RiskUpdateOne) RemoveViewers(g ...*Group) *RiskUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *RiskUpdateOne) RemoveViewers(v ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (ruo *RiskUpdateOne) ClearControls() *RiskUpdateOne {
-	ruo.mutation.ClearControls()
-	return ruo
+func (_u *RiskUpdateOne) ClearControls() *RiskUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (ruo *RiskUpdateOne) RemoveControlIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveControlIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveControlIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (ruo *RiskUpdateOne) RemoveControls(c ...*Control) *RiskUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *RiskUpdateOne) RemoveControls(v ...*Control) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (ruo *RiskUpdateOne) ClearSubcontrols() *RiskUpdateOne {
-	ruo.mutation.ClearSubcontrols()
-	return ruo
+func (_u *RiskUpdateOne) ClearSubcontrols() *RiskUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (ruo *RiskUpdateOne) RemoveSubcontrolIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveSubcontrolIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveSubcontrolIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (ruo *RiskUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *RiskUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (ruo *RiskUpdateOne) ClearProcedures() *RiskUpdateOne {
-	ruo.mutation.ClearProcedures()
-	return ruo
+func (_u *RiskUpdateOne) ClearProcedures() *RiskUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (ruo *RiskUpdateOne) RemoveProcedureIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveProcedureIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveProcedureIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (ruo *RiskUpdateOne) RemoveProcedures(p ...*Procedure) *RiskUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdateOne) RemoveProcedures(v ...*Procedure) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (ruo *RiskUpdateOne) ClearInternalPolicies() *RiskUpdateOne {
-	ruo.mutation.ClearInternalPolicies()
-	return ruo
+func (_u *RiskUpdateOne) ClearInternalPolicies() *RiskUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (ruo *RiskUpdateOne) RemoveInternalPolicyIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveInternalPolicyIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveInternalPolicyIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (ruo *RiskUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *RiskUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *RiskUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
-func (ruo *RiskUpdateOne) ClearPrograms() *RiskUpdateOne {
-	ruo.mutation.ClearPrograms()
-	return ruo
+func (_u *RiskUpdateOne) ClearPrograms() *RiskUpdateOne {
+	_u.mutation.ClearPrograms()
+	return _u
 }
 
 // RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
-func (ruo *RiskUpdateOne) RemoveProgramIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveProgramIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveProgramIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveProgramIDs(ids...)
+	return _u
 }
 
 // RemovePrograms removes "programs" edges to Program entities.
-func (ruo *RiskUpdateOne) RemovePrograms(p ...*Program) *RiskUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *RiskUpdateOne) RemovePrograms(v ...*Program) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveProgramIDs(ids...)
+	return _u.RemoveProgramIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (ruo *RiskUpdateOne) ClearActionPlans() *RiskUpdateOne {
-	ruo.mutation.ClearActionPlans()
-	return ruo
+func (_u *RiskUpdateOne) ClearActionPlans() *RiskUpdateOne {
+	_u.mutation.ClearActionPlans()
+	return _u
 }
 
 // RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (ruo *RiskUpdateOne) RemoveActionPlanIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveActionPlanIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveActionPlanIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
 }
 
 // RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (ruo *RiskUpdateOne) RemoveActionPlans(a ...*ActionPlan) *RiskUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdateOne) RemoveActionPlans(v ...*ActionPlan) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveActionPlanIDs(ids...)
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (ruo *RiskUpdateOne) ClearTasks() *RiskUpdateOne {
-	ruo.mutation.ClearTasks()
-	return ruo
+func (_u *RiskUpdateOne) ClearTasks() *RiskUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (ruo *RiskUpdateOne) RemoveTaskIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveTaskIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveTaskIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (ruo *RiskUpdateOne) RemoveTasks(t ...*Task) *RiskUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *RiskUpdateOne) RemoveTasks(v ...*Task) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (ruo *RiskUpdateOne) ClearAssets() *RiskUpdateOne {
-	ruo.mutation.ClearAssets()
-	return ruo
+func (_u *RiskUpdateOne) ClearAssets() *RiskUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (ruo *RiskUpdateOne) RemoveAssetIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveAssetIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveAssetIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (ruo *RiskUpdateOne) RemoveAssets(a ...*Asset) *RiskUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *RiskUpdateOne) RemoveAssets(v ...*Asset) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (ruo *RiskUpdateOne) ClearEntities() *RiskUpdateOne {
-	ruo.mutation.ClearEntities()
-	return ruo
+func (_u *RiskUpdateOne) ClearEntities() *RiskUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (ruo *RiskUpdateOne) RemoveEntityIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveEntityIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveEntityIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (ruo *RiskUpdateOne) RemoveEntities(e ...*Entity) *RiskUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *RiskUpdateOne) RemoveEntities(v ...*Entity) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (ruo *RiskUpdateOne) ClearScans() *RiskUpdateOne {
-	ruo.mutation.ClearScans()
-	return ruo
+func (_u *RiskUpdateOne) ClearScans() *RiskUpdateOne {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (ruo *RiskUpdateOne) RemoveScanIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveScanIDs(ids...)
-	return ruo
+func (_u *RiskUpdateOne) RemoveScanIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (ruo *RiskUpdateOne) RemoveScans(s ...*Scan) *RiskUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *RiskUpdateOne) RemoveScans(v ...*Scan) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearStakeholder clears the "stakeholder" edge to the Group entity.
-func (ruo *RiskUpdateOne) ClearStakeholder() *RiskUpdateOne {
-	ruo.mutation.ClearStakeholder()
-	return ruo
+func (_u *RiskUpdateOne) ClearStakeholder() *RiskUpdateOne {
+	_u.mutation.ClearStakeholder()
+	return _u
 }
 
 // ClearDelegate clears the "delegate" edge to the Group entity.
-func (ruo *RiskUpdateOne) ClearDelegate() *RiskUpdateOne {
-	ruo.mutation.ClearDelegate()
-	return ruo
+func (_u *RiskUpdateOne) ClearDelegate() *RiskUpdateOne {
+	_u.mutation.ClearDelegate()
+	return _u
 }
 
 // Where appends a list predicates to the RiskUpdate builder.
-func (ruo *RiskUpdateOne) Where(ps ...predicate.Risk) *RiskUpdateOne {
-	ruo.mutation.Where(ps...)
-	return ruo
+func (_u *RiskUpdateOne) Where(ps ...predicate.Risk) *RiskUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ruo *RiskUpdateOne) Select(field string, fields ...string) *RiskUpdateOne {
-	ruo.fields = append([]string{field}, fields...)
-	return ruo
+func (_u *RiskUpdateOne) Select(field string, fields ...string) *RiskUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Risk entity.
-func (ruo *RiskUpdateOne) Save(ctx context.Context) (*Risk, error) {
-	if err := ruo.defaults(); err != nil {
+func (_u *RiskUpdateOne) Save(ctx context.Context) (*Risk, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ruo *RiskUpdateOne) SaveX(ctx context.Context) *Risk {
-	node, err := ruo.Save(ctx)
+func (_u *RiskUpdateOne) SaveX(ctx context.Context) *Risk {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -2623,48 +2623,48 @@ func (ruo *RiskUpdateOne) SaveX(ctx context.Context) *Risk {
 }
 
 // Exec executes the query on the entity.
-func (ruo *RiskUpdateOne) Exec(ctx context.Context) error {
-	_, err := ruo.Save(ctx)
+func (_u *RiskUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ruo *RiskUpdateOne) ExecX(ctx context.Context) {
-	if err := ruo.Exec(ctx); err != nil {
+func (_u *RiskUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ruo *RiskUpdateOne) defaults() error {
-	if _, ok := ruo.mutation.UpdatedAt(); !ok && !ruo.mutation.UpdatedAtCleared() {
+func (_u *RiskUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if risk.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized risk.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := risk.UpdateDefaultUpdatedAt()
-		ruo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ruo *RiskUpdateOne) check() error {
-	if v, ok := ruo.mutation.Name(); ok {
+func (_u *RiskUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := risk.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
 		}
 	}
-	if v, ok := ruo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := risk.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Risk.status": %w`, err)}
 		}
 	}
-	if v, ok := ruo.mutation.Impact(); ok {
+	if v, ok := _u.mutation.Impact(); ok {
 		if err := risk.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
 		}
 	}
-	if v, ok := ruo.mutation.Likelihood(); ok {
+	if v, ok := _u.mutation.Likelihood(); ok {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
@@ -2673,22 +2673,22 @@ func (ruo *RiskUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ruo *RiskUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskUpdateOne {
-	ruo.modifiers = append(ruo.modifiers, modifiers...)
-	return ruo
+func (_u *RiskUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
-	if err := ruo.check(); err != nil {
+func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(risk.Table, risk.Columns, sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString))
-	id, ok := ruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Risk.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, risk.FieldID)
 		for _, f := range fields {
@@ -2700,115 +2700,115 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			}
 		}
 	}
-	if ps := ruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ruo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(risk.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(risk.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ruo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(risk.FieldUpdatedAt, field.TypeTime)
 	}
-	if ruo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(risk.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ruo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(risk.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ruo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(risk.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ruo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(risk.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ruo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(risk.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ruo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(risk.FieldDeletedBy, field.TypeString, value)
 	}
-	if ruo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(risk.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ruo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(risk.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ruo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, risk.FieldTags, value)
 		})
 	}
-	if ruo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(risk.FieldTags, field.TypeJSON)
 	}
-	if value, ok := ruo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
 	}
-	if value, ok := ruo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(risk.FieldStatus, field.TypeEnum, value)
 	}
-	if ruo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(risk.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := ruo.mutation.RiskType(); ok {
+	if value, ok := _u.mutation.RiskType(); ok {
 		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
 	}
-	if ruo.mutation.RiskTypeCleared() {
+	if _u.mutation.RiskTypeCleared() {
 		_spec.ClearField(risk.FieldRiskType, field.TypeString)
 	}
-	if value, ok := ruo.mutation.Category(); ok {
+	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(risk.FieldCategory, field.TypeString, value)
 	}
-	if ruo.mutation.CategoryCleared() {
+	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(risk.FieldCategory, field.TypeString)
 	}
-	if value, ok := ruo.mutation.Impact(); ok {
+	if value, ok := _u.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
 	}
-	if ruo.mutation.ImpactCleared() {
+	if _u.mutation.ImpactCleared() {
 		_spec.ClearField(risk.FieldImpact, field.TypeEnum)
 	}
-	if value, ok := ruo.mutation.Likelihood(); ok {
+	if value, ok := _u.mutation.Likelihood(); ok {
 		_spec.SetField(risk.FieldLikelihood, field.TypeEnum, value)
 	}
-	if ruo.mutation.LikelihoodCleared() {
+	if _u.mutation.LikelihoodCleared() {
 		_spec.ClearField(risk.FieldLikelihood, field.TypeEnum)
 	}
-	if value, ok := ruo.mutation.Score(); ok {
+	if value, ok := _u.mutation.Score(); ok {
 		_spec.SetField(risk.FieldScore, field.TypeInt, value)
 	}
-	if value, ok := ruo.mutation.AddedScore(); ok {
+	if value, ok := _u.mutation.AddedScore(); ok {
 		_spec.AddField(risk.FieldScore, field.TypeInt, value)
 	}
-	if ruo.mutation.ScoreCleared() {
+	if _u.mutation.ScoreCleared() {
 		_spec.ClearField(risk.FieldScore, field.TypeInt)
 	}
-	if value, ok := ruo.mutation.Mitigation(); ok {
+	if value, ok := _u.mutation.Mitigation(); ok {
 		_spec.SetField(risk.FieldMitigation, field.TypeString, value)
 	}
-	if ruo.mutation.MitigationCleared() {
+	if _u.mutation.MitigationCleared() {
 		_spec.ClearField(risk.FieldMitigation, field.TypeString)
 	}
-	if value, ok := ruo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 	}
-	if ruo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeString)
 	}
-	if value, ok := ruo.mutation.BusinessCosts(); ok {
+	if value, ok := _u.mutation.BusinessCosts(); ok {
 		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
 	}
-	if ruo.mutation.BusinessCostsCleared() {
+	if _u.mutation.BusinessCostsCleared() {
 		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
 	}
-	if ruo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2819,10 +2819,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskBlockedGroups
+		edge.Schema = _u.schemaConfig.RiskBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ruo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2833,13 +2833,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskBlockedGroups
+		edge.Schema = _u.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2850,13 +2850,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskBlockedGroups
+		edge.Schema = _u.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2867,10 +2867,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskEditors
+		edge.Schema = _u.schemaConfig.RiskEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ruo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2881,13 +2881,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskEditors
+		edge.Schema = _u.schemaConfig.RiskEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2898,13 +2898,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskEditors
+		edge.Schema = _u.schemaConfig.RiskEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2915,10 +2915,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskViewers
+		edge.Schema = _u.schemaConfig.RiskViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !ruo.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2929,13 +2929,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskViewers
+		edge.Schema = _u.schemaConfig.RiskViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2946,13 +2946,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskViewers
+		edge.Schema = _u.schemaConfig.RiskViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2963,10 +2963,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ControlRisks
+		edge.Schema = _u.schemaConfig.ControlRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ruo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2977,13 +2977,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ControlRisks
+		edge.Schema = _u.schemaConfig.ControlRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2994,13 +2994,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ControlRisks
+		edge.Schema = _u.schemaConfig.ControlRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3011,10 +3011,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.SubcontrolRisks
+		edge.Schema = _u.schemaConfig.SubcontrolRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !ruo.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3025,13 +3025,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.SubcontrolRisks
+		edge.Schema = _u.schemaConfig.SubcontrolRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3042,13 +3042,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.SubcontrolRisks
+		edge.Schema = _u.schemaConfig.SubcontrolRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3059,10 +3059,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProcedureRisks
+		edge.Schema = _u.schemaConfig.ProcedureRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ruo.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3073,13 +3073,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProcedureRisks
+		edge.Schema = _u.schemaConfig.ProcedureRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3090,13 +3090,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProcedureRisks
+		edge.Schema = _u.schemaConfig.ProcedureRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3107,10 +3107,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !ruo.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3121,13 +3121,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3138,13 +3138,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.InternalPolicyRisks
+		edge.Schema = _u.schemaConfig.InternalPolicyRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.ProgramsCleared() {
+	if _u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3155,10 +3155,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !ruo.mutation.ProgramsCleared() {
+	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3169,13 +3169,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -3186,13 +3186,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.ActionPlansCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3203,10 +3203,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !ruo.mutation.ActionPlansCleared() {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3217,13 +3217,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3234,13 +3234,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskActionPlans
+		edge.Schema = _u.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3251,10 +3251,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskTasks
+		edge.Schema = _u.schemaConfig.RiskTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ruo.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3265,13 +3265,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskTasks
+		edge.Schema = _u.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3282,13 +3282,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.RiskTasks
+		edge.Schema = _u.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3299,10 +3299,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ruo.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3313,13 +3313,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3330,13 +3330,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Asset
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3347,10 +3347,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ruo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3361,13 +3361,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3378,13 +3378,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3395,10 +3395,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedScansIDs(); len(nodes) > 0 && !ruo.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3409,13 +3409,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3426,13 +3426,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.StakeholderCleared() {
+	if _u.mutation.StakeholderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -3443,10 +3443,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.StakeholderIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.StakeholderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -3457,13 +3457,13 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ruo.mutation.DelegateCleared() {
+	if _u.mutation.DelegateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -3474,10 +3474,10 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.DelegateIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DelegateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -3488,19 +3488,19 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = ruo.schemaConfig.Risk
-	ctx = internal.NewSchemaConfigContext(ctx, ruo.schemaConfig)
-	_spec.AddModifiers(ruo.modifiers...)
-	_node = &Risk{config: ruo.config}
+	_spec.Node.Schema = _u.schemaConfig.Risk
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Risk{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{risk.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -3508,6 +3508,6 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 		}
 		return nil, err
 	}
-	ruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

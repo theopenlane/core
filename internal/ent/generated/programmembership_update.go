@@ -27,73 +27,73 @@ type ProgramMembershipUpdate struct {
 }
 
 // Where appends a list predicates to the ProgramMembershipUpdate builder.
-func (pmu *ProgramMembershipUpdate) Where(ps ...predicate.ProgramMembership) *ProgramMembershipUpdate {
-	pmu.mutation.Where(ps...)
-	return pmu
+func (_u *ProgramMembershipUpdate) Where(ps ...predicate.ProgramMembership) *ProgramMembershipUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pmu *ProgramMembershipUpdate) SetUpdatedAt(t time.Time) *ProgramMembershipUpdate {
-	pmu.mutation.SetUpdatedAt(t)
-	return pmu
+func (_u *ProgramMembershipUpdate) SetUpdatedAt(v time.Time) *ProgramMembershipUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (pmu *ProgramMembershipUpdate) ClearUpdatedAt() *ProgramMembershipUpdate {
-	pmu.mutation.ClearUpdatedAt()
-	return pmu
+func (_u *ProgramMembershipUpdate) ClearUpdatedAt() *ProgramMembershipUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pmu *ProgramMembershipUpdate) SetUpdatedBy(s string) *ProgramMembershipUpdate {
-	pmu.mutation.SetUpdatedBy(s)
-	return pmu
+func (_u *ProgramMembershipUpdate) SetUpdatedBy(v string) *ProgramMembershipUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableUpdatedBy(s *string) *ProgramMembershipUpdate {
-	if s != nil {
-		pmu.SetUpdatedBy(*s)
+func (_u *ProgramMembershipUpdate) SetNillableUpdatedBy(v *string) *ProgramMembershipUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return pmu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (pmu *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
-	pmu.mutation.ClearUpdatedBy()
-	return pmu
+func (_u *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (pmu *ProgramMembershipUpdate) SetRole(e enums.Role) *ProgramMembershipUpdate {
-	pmu.mutation.SetRole(e)
-	return pmu
+func (_u *ProgramMembershipUpdate) SetRole(v enums.Role) *ProgramMembershipUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableRole(e *enums.Role) *ProgramMembershipUpdate {
-	if e != nil {
-		pmu.SetRole(*e)
+func (_u *ProgramMembershipUpdate) SetNillableRole(v *enums.Role) *ProgramMembershipUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return pmu
+	return _u
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
-func (pmu *ProgramMembershipUpdate) Mutation() *ProgramMembershipMutation {
-	return pmu.mutation
+func (_u *ProgramMembershipUpdate) Mutation() *ProgramMembershipMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (pmu *ProgramMembershipUpdate) Save(ctx context.Context) (int, error) {
-	if err := pmu.defaults(); err != nil {
+func (_u *ProgramMembershipUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, pmu.sqlSave, pmu.mutation, pmu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pmu *ProgramMembershipUpdate) SaveX(ctx context.Context) int {
-	affected, err := pmu.Save(ctx)
+func (_u *ProgramMembershipUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -101,89 +101,89 @@ func (pmu *ProgramMembershipUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (pmu *ProgramMembershipUpdate) Exec(ctx context.Context) error {
-	_, err := pmu.Save(ctx)
+func (_u *ProgramMembershipUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmu *ProgramMembershipUpdate) ExecX(ctx context.Context) {
-	if err := pmu.Exec(ctx); err != nil {
+func (_u *ProgramMembershipUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pmu *ProgramMembershipUpdate) defaults() error {
-	if _, ok := pmu.mutation.UpdatedAt(); !ok && !pmu.mutation.UpdatedAtCleared() {
+func (_u *ProgramMembershipUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if programmembership.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembership.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembership.UpdateDefaultUpdatedAt()
-		pmu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pmu *ProgramMembershipUpdate) check() error {
-	if v, ok := pmu.mutation.Role(); ok {
+func (_u *ProgramMembershipUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := programmembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "ProgramMembership.role": %w`, err)}
 		}
 	}
-	if pmu.mutation.ProgramCleared() && len(pmu.mutation.ProgramIDs()) > 0 {
+	if _u.mutation.ProgramCleared() && len(_u.mutation.ProgramIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ProgramMembership.program"`)
 	}
-	if pmu.mutation.UserCleared() && len(pmu.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ProgramMembership.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (pmu *ProgramMembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipUpdate {
-	pmu.modifiers = append(pmu.modifiers, modifiers...)
-	return pmu
+func (_u *ProgramMembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := pmu.check(); err != nil {
-		return n, err
+func (_u *ProgramMembershipUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(programmembership.Table, programmembership.Columns, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
-	if ps := pmu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if pmu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(programmembership.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := pmu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(programmembership.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if pmu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if pmu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(programmembership.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := pmu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
 	}
-	if pmu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pmu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = pmu.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, pmu.schemaConfig)
-	_spec.AddModifiers(pmu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, pmu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ProgramMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{programmembership.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -191,8 +191,8 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 		return 0, err
 	}
-	pmu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ProgramMembershipUpdateOne is the builder for updating a single ProgramMembership entity.
@@ -205,80 +205,80 @@ type ProgramMembershipUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pmuo *ProgramMembershipUpdateOne) SetUpdatedAt(t time.Time) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetUpdatedAt(t)
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) SetUpdatedAt(v time.Time) *ProgramMembershipUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedAt() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearUpdatedAt()
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) ClearUpdatedAt() *ProgramMembershipUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pmuo *ProgramMembershipUpdateOne) SetUpdatedBy(s string) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetUpdatedBy(s)
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) SetUpdatedBy(v string) *ProgramMembershipUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableUpdatedBy(s *string) *ProgramMembershipUpdateOne {
-	if s != nil {
-		pmuo.SetUpdatedBy(*s)
+func (_u *ProgramMembershipUpdateOne) SetNillableUpdatedBy(v *string) *ProgramMembershipUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return pmuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearUpdatedBy()
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (pmuo *ProgramMembershipUpdateOne) SetRole(e enums.Role) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetRole(e)
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) SetRole(v enums.Role) *ProgramMembershipUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableRole(e *enums.Role) *ProgramMembershipUpdateOne {
-	if e != nil {
-		pmuo.SetRole(*e)
+func (_u *ProgramMembershipUpdateOne) SetNillableRole(v *enums.Role) *ProgramMembershipUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return pmuo
+	return _u
 }
 
 // Mutation returns the ProgramMembershipMutation object of the builder.
-func (pmuo *ProgramMembershipUpdateOne) Mutation() *ProgramMembershipMutation {
-	return pmuo.mutation
+func (_u *ProgramMembershipUpdateOne) Mutation() *ProgramMembershipMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ProgramMembershipUpdate builder.
-func (pmuo *ProgramMembershipUpdateOne) Where(ps ...predicate.ProgramMembership) *ProgramMembershipUpdateOne {
-	pmuo.mutation.Where(ps...)
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) Where(ps ...predicate.ProgramMembership) *ProgramMembershipUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (pmuo *ProgramMembershipUpdateOne) Select(field string, fields ...string) *ProgramMembershipUpdateOne {
-	pmuo.fields = append([]string{field}, fields...)
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) Select(field string, fields ...string) *ProgramMembershipUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ProgramMembership entity.
-func (pmuo *ProgramMembershipUpdateOne) Save(ctx context.Context) (*ProgramMembership, error) {
-	if err := pmuo.defaults(); err != nil {
+func (_u *ProgramMembershipUpdateOne) Save(ctx context.Context) (*ProgramMembership, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, pmuo.sqlSave, pmuo.mutation, pmuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pmuo *ProgramMembershipUpdateOne) SaveX(ctx context.Context) *ProgramMembership {
-	node, err := pmuo.Save(ctx)
+func (_u *ProgramMembershipUpdateOne) SaveX(ctx context.Context) *ProgramMembership {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -286,63 +286,63 @@ func (pmuo *ProgramMembershipUpdateOne) SaveX(ctx context.Context) *ProgramMembe
 }
 
 // Exec executes the query on the entity.
-func (pmuo *ProgramMembershipUpdateOne) Exec(ctx context.Context) error {
-	_, err := pmuo.Save(ctx)
+func (_u *ProgramMembershipUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmuo *ProgramMembershipUpdateOne) ExecX(ctx context.Context) {
-	if err := pmuo.Exec(ctx); err != nil {
+func (_u *ProgramMembershipUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pmuo *ProgramMembershipUpdateOne) defaults() error {
-	if _, ok := pmuo.mutation.UpdatedAt(); !ok && !pmuo.mutation.UpdatedAtCleared() {
+func (_u *ProgramMembershipUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if programmembership.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembership.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembership.UpdateDefaultUpdatedAt()
-		pmuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pmuo *ProgramMembershipUpdateOne) check() error {
-	if v, ok := pmuo.mutation.Role(); ok {
+func (_u *ProgramMembershipUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := programmembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "ProgramMembership.role": %w`, err)}
 		}
 	}
-	if pmuo.mutation.ProgramCleared() && len(pmuo.mutation.ProgramIDs()) > 0 {
+	if _u.mutation.ProgramCleared() && len(_u.mutation.ProgramIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ProgramMembership.program"`)
 	}
-	if pmuo.mutation.UserCleared() && len(pmuo.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ProgramMembership.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (pmuo *ProgramMembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipUpdateOne {
-	pmuo.modifiers = append(pmuo.modifiers, modifiers...)
-	return pmuo
+func (_u *ProgramMembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *ProgramMembership, err error) {
-	if err := pmuo.check(); err != nil {
+func (_u *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *ProgramMembership, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(programmembership.Table, programmembership.Columns, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
-	id, ok := pmuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ProgramMembership.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := pmuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, programmembership.FieldID)
 		for _, f := range fields {
@@ -354,41 +354,41 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 			}
 		}
 	}
-	if ps := pmuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if pmuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(programmembership.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := pmuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(programmembership.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if pmuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if pmuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(programmembership.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := pmuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
 	}
-	if pmuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pmuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = pmuo.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, pmuo.schemaConfig)
-	_spec.AddModifiers(pmuo.modifiers...)
-	_node = &ProgramMembership{config: pmuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ProgramMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ProgramMembership{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, pmuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{programmembership.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -396,6 +396,6 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 		}
 		return nil, err
 	}
-	pmuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

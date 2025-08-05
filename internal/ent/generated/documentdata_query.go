@@ -44,44 +44,44 @@ type DocumentDataQuery struct {
 }
 
 // Where adds a new predicate for the DocumentDataQuery builder.
-func (ddq *DocumentDataQuery) Where(ps ...predicate.DocumentData) *DocumentDataQuery {
-	ddq.predicates = append(ddq.predicates, ps...)
-	return ddq
+func (_q *DocumentDataQuery) Where(ps ...predicate.DocumentData) *DocumentDataQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ddq *DocumentDataQuery) Limit(limit int) *DocumentDataQuery {
-	ddq.ctx.Limit = &limit
-	return ddq
+func (_q *DocumentDataQuery) Limit(limit int) *DocumentDataQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ddq *DocumentDataQuery) Offset(offset int) *DocumentDataQuery {
-	ddq.ctx.Offset = &offset
-	return ddq
+func (_q *DocumentDataQuery) Offset(offset int) *DocumentDataQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ddq *DocumentDataQuery) Unique(unique bool) *DocumentDataQuery {
-	ddq.ctx.Unique = &unique
-	return ddq
+func (_q *DocumentDataQuery) Unique(unique bool) *DocumentDataQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ddq *DocumentDataQuery) Order(o ...documentdata.OrderOption) *DocumentDataQuery {
-	ddq.order = append(ddq.order, o...)
-	return ddq
+func (_q *DocumentDataQuery) Order(o ...documentdata.OrderOption) *DocumentDataQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (ddq *DocumentDataQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ddq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := ddq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -90,23 +90,23 @@ func (ddq *DocumentDataQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, documentdata.OwnerTable, documentdata.OwnerColumn),
 		)
-		schemaConfig := ddq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.DocumentData
-		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTemplate chains the current query on the "template" edge.
-func (ddq *DocumentDataQuery) QueryTemplate() *TemplateQuery {
-	query := (&TemplateClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) QueryTemplate() *TemplateQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ddq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := ddq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -115,23 +115,23 @@ func (ddq *DocumentDataQuery) QueryTemplate() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, documentdata.TemplateTable, documentdata.TemplateColumn),
 		)
-		schemaConfig := ddq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.DocumentData
-		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEntities chains the current query on the "entities" edge.
-func (ddq *DocumentDataQuery) QueryEntities() *EntityQuery {
-	query := (&EntityClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ddq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := ddq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -140,23 +140,23 @@ func (ddq *DocumentDataQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, documentdata.EntitiesTable, documentdata.EntitiesPrimaryKey...),
 		)
-		schemaConfig := ddq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityDocuments
-		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (ddq *DocumentDataQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ddq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := ddq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -165,10 +165,10 @@ func (ddq *DocumentDataQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, documentdata.FilesTable, documentdata.FilesPrimaryKey...),
 		)
-		schemaConfig := ddq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.DocumentDataFiles
-		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -176,8 +176,8 @@ func (ddq *DocumentDataQuery) QueryFiles() *FileQuery {
 
 // First returns the first DocumentData entity from the query.
 // Returns a *NotFoundError when no DocumentData was found.
-func (ddq *DocumentDataQuery) First(ctx context.Context) (*DocumentData, error) {
-	nodes, err := ddq.Limit(1).All(setContextOp(ctx, ddq.ctx, ent.OpQueryFirst))
+func (_q *DocumentDataQuery) First(ctx context.Context) (*DocumentData, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -188,8 +188,8 @@ func (ddq *DocumentDataQuery) First(ctx context.Context) (*DocumentData, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ddq *DocumentDataQuery) FirstX(ctx context.Context) *DocumentData {
-	node, err := ddq.First(ctx)
+func (_q *DocumentDataQuery) FirstX(ctx context.Context) *DocumentData {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -198,9 +198,9 @@ func (ddq *DocumentDataQuery) FirstX(ctx context.Context) *DocumentData {
 
 // FirstID returns the first DocumentData ID from the query.
 // Returns a *NotFoundError when no DocumentData ID was found.
-func (ddq *DocumentDataQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *DocumentDataQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ddq.Limit(1).IDs(setContextOp(ctx, ddq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -211,8 +211,8 @@ func (ddq *DocumentDataQuery) FirstID(ctx context.Context) (id string, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ddq *DocumentDataQuery) FirstIDX(ctx context.Context) string {
-	id, err := ddq.FirstID(ctx)
+func (_q *DocumentDataQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -222,8 +222,8 @@ func (ddq *DocumentDataQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single DocumentData entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one DocumentData entity is found.
 // Returns a *NotFoundError when no DocumentData entities are found.
-func (ddq *DocumentDataQuery) Only(ctx context.Context) (*DocumentData, error) {
-	nodes, err := ddq.Limit(2).All(setContextOp(ctx, ddq.ctx, ent.OpQueryOnly))
+func (_q *DocumentDataQuery) Only(ctx context.Context) (*DocumentData, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -238,8 +238,8 @@ func (ddq *DocumentDataQuery) Only(ctx context.Context) (*DocumentData, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ddq *DocumentDataQuery) OnlyX(ctx context.Context) *DocumentData {
-	node, err := ddq.Only(ctx)
+func (_q *DocumentDataQuery) OnlyX(ctx context.Context) *DocumentData {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,9 +249,9 @@ func (ddq *DocumentDataQuery) OnlyX(ctx context.Context) *DocumentData {
 // OnlyID is like Only, but returns the only DocumentData ID in the query.
 // Returns a *NotSingularError when more than one DocumentData ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ddq *DocumentDataQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *DocumentDataQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ddq.Limit(2).IDs(setContextOp(ctx, ddq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -266,8 +266,8 @@ func (ddq *DocumentDataQuery) OnlyID(ctx context.Context) (id string, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ddq *DocumentDataQuery) OnlyIDX(ctx context.Context) string {
-	id, err := ddq.OnlyID(ctx)
+func (_q *DocumentDataQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -275,18 +275,18 @@ func (ddq *DocumentDataQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of DocumentDataSlice.
-func (ddq *DocumentDataQuery) All(ctx context.Context) ([]*DocumentData, error) {
-	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryAll)
-	if err := ddq.prepareQuery(ctx); err != nil {
+func (_q *DocumentDataQuery) All(ctx context.Context) ([]*DocumentData, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*DocumentData, *DocumentDataQuery]()
-	return withInterceptors[[]*DocumentData](ctx, ddq, qr, ddq.inters)
+	return withInterceptors[[]*DocumentData](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ddq *DocumentDataQuery) AllX(ctx context.Context) []*DocumentData {
-	nodes, err := ddq.All(ctx)
+func (_q *DocumentDataQuery) AllX(ctx context.Context) []*DocumentData {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -294,20 +294,20 @@ func (ddq *DocumentDataQuery) AllX(ctx context.Context) []*DocumentData {
 }
 
 // IDs executes the query and returns a list of DocumentData IDs.
-func (ddq *DocumentDataQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if ddq.ctx.Unique == nil && ddq.path != nil {
-		ddq.Unique(true)
+func (_q *DocumentDataQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryIDs)
-	if err = ddq.Select(documentdata.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(documentdata.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ddq *DocumentDataQuery) IDsX(ctx context.Context) []string {
-	ids, err := ddq.IDs(ctx)
+func (_q *DocumentDataQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -315,17 +315,17 @@ func (ddq *DocumentDataQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (ddq *DocumentDataQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryCount)
-	if err := ddq.prepareQuery(ctx); err != nil {
+func (_q *DocumentDataQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ddq, querierCount[*DocumentDataQuery](), ddq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*DocumentDataQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ddq *DocumentDataQuery) CountX(ctx context.Context) int {
-	count, err := ddq.Count(ctx)
+func (_q *DocumentDataQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -333,9 +333,9 @@ func (ddq *DocumentDataQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ddq *DocumentDataQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ddq.ctx, ent.OpQueryExist)
-	switch _, err := ddq.FirstID(ctx); {
+func (_q *DocumentDataQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -346,8 +346,8 @@ func (ddq *DocumentDataQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ddq *DocumentDataQuery) ExistX(ctx context.Context) bool {
-	exist, err := ddq.Exist(ctx)
+func (_q *DocumentDataQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -356,69 +356,69 @@ func (ddq *DocumentDataQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the DocumentDataQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ddq *DocumentDataQuery) Clone() *DocumentDataQuery {
-	if ddq == nil {
+func (_q *DocumentDataQuery) Clone() *DocumentDataQuery {
+	if _q == nil {
 		return nil
 	}
 	return &DocumentDataQuery{
-		config:       ddq.config,
-		ctx:          ddq.ctx.Clone(),
-		order:        append([]documentdata.OrderOption{}, ddq.order...),
-		inters:       append([]Interceptor{}, ddq.inters...),
-		predicates:   append([]predicate.DocumentData{}, ddq.predicates...),
-		withOwner:    ddq.withOwner.Clone(),
-		withTemplate: ddq.withTemplate.Clone(),
-		withEntities: ddq.withEntities.Clone(),
-		withFiles:    ddq.withFiles.Clone(),
+		config:       _q.config,
+		ctx:          _q.ctx.Clone(),
+		order:        append([]documentdata.OrderOption{}, _q.order...),
+		inters:       append([]Interceptor{}, _q.inters...),
+		predicates:   append([]predicate.DocumentData{}, _q.predicates...),
+		withOwner:    _q.withOwner.Clone(),
+		withTemplate: _q.withTemplate.Clone(),
+		withEntities: _q.withEntities.Clone(),
+		withFiles:    _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       ddq.sql.Clone(),
-		path:      ddq.path,
-		modifiers: append([]func(*sql.Selector){}, ddq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithOwner(opts ...func(*OrganizationQuery)) *DocumentDataQuery {
-	query := (&OrganizationClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) WithOwner(opts ...func(*OrganizationQuery)) *DocumentDataQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ddq.withOwner = query
-	return ddq
+	_q.withOwner = query
+	return _q
 }
 
 // WithTemplate tells the query-builder to eager-load the nodes that are connected to
 // the "template" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithTemplate(opts ...func(*TemplateQuery)) *DocumentDataQuery {
-	query := (&TemplateClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) WithTemplate(opts ...func(*TemplateQuery)) *DocumentDataQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ddq.withTemplate = query
-	return ddq
+	_q.withTemplate = query
+	return _q
 }
 
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithEntities(opts ...func(*EntityQuery)) *DocumentDataQuery {
-	query := (&EntityClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) WithEntities(opts ...func(*EntityQuery)) *DocumentDataQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ddq.withEntities = query
-	return ddq
+	_q.withEntities = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithFiles(opts ...func(*FileQuery)) *DocumentDataQuery {
-	query := (&FileClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) WithFiles(opts ...func(*FileQuery)) *DocumentDataQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	ddq.withFiles = query
-	return ddq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -435,10 +435,10 @@ func (ddq *DocumentDataQuery) WithFiles(opts ...func(*FileQuery)) *DocumentDataQ
 //		GroupBy(documentdata.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (ddq *DocumentDataQuery) GroupBy(field string, fields ...string) *DocumentDataGroupBy {
-	ddq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &DocumentDataGroupBy{build: ddq}
-	grbuild.flds = &ddq.ctx.Fields
+func (_q *DocumentDataQuery) GroupBy(field string, fields ...string) *DocumentDataGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &DocumentDataGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = documentdata.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -456,134 +456,134 @@ func (ddq *DocumentDataQuery) GroupBy(field string, fields ...string) *DocumentD
 //	client.DocumentData.Query().
 //		Select(documentdata.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (ddq *DocumentDataQuery) Select(fields ...string) *DocumentDataSelect {
-	ddq.ctx.Fields = append(ddq.ctx.Fields, fields...)
-	sbuild := &DocumentDataSelect{DocumentDataQuery: ddq}
+func (_q *DocumentDataQuery) Select(fields ...string) *DocumentDataSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &DocumentDataSelect{DocumentDataQuery: _q}
 	sbuild.label = documentdata.Label
-	sbuild.flds, sbuild.scan = &ddq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a DocumentDataSelect configured with the given aggregations.
-func (ddq *DocumentDataQuery) Aggregate(fns ...AggregateFunc) *DocumentDataSelect {
-	return ddq.Select().Aggregate(fns...)
+func (_q *DocumentDataQuery) Aggregate(fns ...AggregateFunc) *DocumentDataSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ddq *DocumentDataQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ddq.inters {
+func (_q *DocumentDataQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ddq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ddq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !documentdata.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if ddq.path != nil {
-		prev, err := ddq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ddq.sql = prev
+		_q.sql = prev
 	}
 	if documentdata.Policy == nil {
 		return errors.New("generated: uninitialized documentdata.Policy (forgotten import generated/runtime?)")
 	}
-	if err := documentdata.Policy.EvalQuery(ctx, ddq); err != nil {
+	if err := documentdata.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DocumentData, error) {
+func (_q *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DocumentData, error) {
 	var (
 		nodes       = []*DocumentData{}
-		_spec       = ddq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
-			ddq.withOwner != nil,
-			ddq.withTemplate != nil,
-			ddq.withEntities != nil,
-			ddq.withFiles != nil,
+			_q.withOwner != nil,
+			_q.withTemplate != nil,
+			_q.withEntities != nil,
+			_q.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DocumentData).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &DocumentData{config: ddq.config}
+		node := &DocumentData{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = ddq.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
-	if len(ddq.modifiers) > 0 {
-		_spec.Modifiers = ddq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.DocumentData
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ddq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := ddq.withOwner; query != nil {
-		if err := ddq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *DocumentData, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := ddq.withTemplate; query != nil {
-		if err := ddq.loadTemplate(ctx, query, nodes, nil,
+	if query := _q.withTemplate; query != nil {
+		if err := _q.loadTemplate(ctx, query, nodes, nil,
 			func(n *DocumentData, e *Template) { n.Edges.Template = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := ddq.withEntities; query != nil {
-		if err := ddq.loadEntities(ctx, query, nodes,
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *DocumentData) { n.Edges.Entities = []*Entity{} },
 			func(n *DocumentData, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := ddq.withFiles; query != nil {
-		if err := ddq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *DocumentData) { n.Edges.Files = []*File{} },
 			func(n *DocumentData, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range ddq.withNamedEntities {
-		if err := ddq.loadEntities(ctx, query, nodes,
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *DocumentData) { n.appendNamedEntities(name) },
 			func(n *DocumentData, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range ddq.withNamedFiles {
-		if err := ddq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *DocumentData) { n.appendNamedFiles(name) },
 			func(n *DocumentData, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range ddq.loadTotal {
-		if err := ddq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (ddq *DocumentDataQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Organization)) error {
+func (_q *DocumentDataQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DocumentData)
 	for i := range nodes {
@@ -612,7 +612,7 @@ func (ddq *DocumentDataQuery) loadOwner(ctx context.Context, query *Organization
 	}
 	return nil
 }
-func (ddq *DocumentDataQuery) loadTemplate(ctx context.Context, query *TemplateQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Template)) error {
+func (_q *DocumentDataQuery) loadTemplate(ctx context.Context, query *TemplateQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Template)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DocumentData)
 	for i := range nodes {
@@ -641,7 +641,7 @@ func (ddq *DocumentDataQuery) loadTemplate(ctx context.Context, query *TemplateQ
 	}
 	return nil
 }
-func (ddq *DocumentDataQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Entity)) error {
+func (_q *DocumentDataQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *Entity)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*DocumentData)
 	nids := make(map[string]map[*DocumentData]struct{})
@@ -654,7 +654,7 @@ func (ddq *DocumentDataQuery) loadEntities(ctx context.Context, query *EntityQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(documentdata.EntitiesTable)
-		joinT.Schema(ddq.schemaConfig.EntityDocuments)
+		joinT.Schema(_q.schemaConfig.EntityDocuments)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(documentdata.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(documentdata.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -703,7 +703,7 @@ func (ddq *DocumentDataQuery) loadEntities(ctx context.Context, query *EntityQue
 	}
 	return nil
 }
-func (ddq *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *File)) error {
+func (_q *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*DocumentData)
 	nids := make(map[string]map[*DocumentData]struct{})
@@ -716,7 +716,7 @@ func (ddq *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(documentdata.FilesTable)
-		joinT.Schema(ddq.schemaConfig.DocumentDataFiles)
+		joinT.Schema(_q.schemaConfig.DocumentDataFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(documentdata.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(documentdata.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -766,29 +766,29 @@ func (ddq *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, n
 	return nil
 }
 
-func (ddq *DocumentDataQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ddq.querySpec()
-	_spec.Node.Schema = ddq.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
-	if len(ddq.modifiers) > 0 {
-		_spec.Modifiers = ddq.modifiers
+func (_q *DocumentDataQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.DocumentData
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = ddq.ctx.Fields
-	if len(ddq.ctx.Fields) > 0 {
-		_spec.Unique = ddq.ctx.Unique != nil && *ddq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ddq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ddq *DocumentDataQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *DocumentDataQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(documentdata.Table, documentdata.Columns, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
-	_spec.From = ddq.sql
-	if unique := ddq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ddq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ddq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, documentdata.FieldID)
 		for i := range fields {
@@ -796,27 +796,27 @@ func (ddq *DocumentDataQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if ddq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(documentdata.FieldOwnerID)
 		}
-		if ddq.withTemplate != nil {
+		if _q.withTemplate != nil {
 			_spec.Node.AddColumnOnce(documentdata.FieldTemplateID)
 		}
 	}
-	if ps := ddq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ddq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ddq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ddq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -826,76 +826,76 @@ func (ddq *DocumentDataQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ddq *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ddq.driver.Dialect())
+func (_q *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(documentdata.Table)
-	columns := ddq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = documentdata.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ddq.sql != nil {
-		selector = ddq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ddq.ctx.Unique != nil && *ddq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(ddq.schemaConfig.DocumentData)
-	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
+	t1.Schema(_q.schemaConfig.DocumentData)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range ddq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range ddq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ddq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ddq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ddq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ddq *DocumentDataQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
-	ddq.modifiers = append(ddq.modifiers, modifiers...)
-	return ddq.Select()
+func (_q *DocumentDataQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *DocumentDataQuery {
-	query := (&EntityClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *DocumentDataQuery {
+	query := (&EntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if ddq.withNamedEntities == nil {
-		ddq.withNamedEntities = make(map[string]*EntityQuery)
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
-	ddq.withNamedEntities[name] = query
-	return ddq
+	_q.withNamedEntities[name] = query
+	return _q
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ddq *DocumentDataQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *DocumentDataQuery {
-	query := (&FileClient{config: ddq.config}).Query()
+func (_q *DocumentDataQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *DocumentDataQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if ddq.withNamedFiles == nil {
-		ddq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	ddq.withNamedFiles[name] = query
-	return ddq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -924,41 +924,41 @@ type DocumentDataGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ddgb *DocumentDataGroupBy) Aggregate(fns ...AggregateFunc) *DocumentDataGroupBy {
-	ddgb.fns = append(ddgb.fns, fns...)
-	return ddgb
+func (_g *DocumentDataGroupBy) Aggregate(fns ...AggregateFunc) *DocumentDataGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ddgb *DocumentDataGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ddgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ddgb.build.prepareQuery(ctx); err != nil {
+func (_g *DocumentDataGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DocumentDataQuery, *DocumentDataGroupBy](ctx, ddgb.build, ddgb, ddgb.build.inters, v)
+	return scanWithInterceptors[*DocumentDataQuery, *DocumentDataGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ddgb *DocumentDataGroupBy) sqlScan(ctx context.Context, root *DocumentDataQuery, v any) error {
+func (_g *DocumentDataGroupBy) sqlScan(ctx context.Context, root *DocumentDataQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ddgb.fns))
-	for _, fn := range ddgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ddgb.flds)+len(ddgb.fns))
-		for _, f := range *ddgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ddgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ddgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -972,27 +972,27 @@ type DocumentDataSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (dds *DocumentDataSelect) Aggregate(fns ...AggregateFunc) *DocumentDataSelect {
-	dds.fns = append(dds.fns, fns...)
-	return dds
+func (_s *DocumentDataSelect) Aggregate(fns ...AggregateFunc) *DocumentDataSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (dds *DocumentDataSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, dds.ctx, ent.OpQuerySelect)
-	if err := dds.prepareQuery(ctx); err != nil {
+func (_s *DocumentDataSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DocumentDataQuery, *DocumentDataSelect](ctx, dds.DocumentDataQuery, dds, dds.inters, v)
+	return scanWithInterceptors[*DocumentDataQuery, *DocumentDataSelect](ctx, _s.DocumentDataQuery, _s, _s.inters, v)
 }
 
-func (dds *DocumentDataSelect) sqlScan(ctx context.Context, root *DocumentDataQuery, v any) error {
+func (_s *DocumentDataSelect) sqlScan(ctx context.Context, root *DocumentDataQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(dds.fns))
-	for _, fn := range dds.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*dds.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -1000,7 +1000,7 @@ func (dds *DocumentDataSelect) sqlScan(ctx context.Context, root *DocumentDataQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := dds.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1008,7 +1008,7 @@ func (dds *DocumentDataSelect) sqlScan(ctx context.Context, root *DocumentDataQu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (dds *DocumentDataSelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
-	dds.modifiers = append(dds.modifiers, modifiers...)
-	return dds
+func (_s *DocumentDataSelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

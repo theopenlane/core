@@ -27,172 +27,172 @@ type PasswordResetTokenUpdate struct {
 }
 
 // Where appends a list predicates to the PasswordResetTokenUpdate builder.
-func (prtu *PasswordResetTokenUpdate) Where(ps ...predicate.PasswordResetToken) *PasswordResetTokenUpdate {
-	prtu.mutation.Where(ps...)
-	return prtu
+func (_u *PasswordResetTokenUpdate) Where(ps ...predicate.PasswordResetToken) *PasswordResetTokenUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (prtu *PasswordResetTokenUpdate) SetUpdatedAt(t time.Time) *PasswordResetTokenUpdate {
-	prtu.mutation.SetUpdatedAt(t)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetUpdatedAt(v time.Time) *PasswordResetTokenUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (prtu *PasswordResetTokenUpdate) ClearUpdatedAt() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearUpdatedAt()
-	return prtu
+func (_u *PasswordResetTokenUpdate) ClearUpdatedAt() *PasswordResetTokenUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (prtu *PasswordResetTokenUpdate) SetUpdatedBy(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetUpdatedBy(s)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetUpdatedBy(v string) *PasswordResetTokenUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableUpdatedBy(s *string) *PasswordResetTokenUpdate {
-	if s != nil {
-		prtu.SetUpdatedBy(*s)
+func (_u *PasswordResetTokenUpdate) SetNillableUpdatedBy(v *string) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return prtu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (prtu *PasswordResetTokenUpdate) ClearUpdatedBy() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearUpdatedBy()
-	return prtu
+func (_u *PasswordResetTokenUpdate) ClearUpdatedBy() *PasswordResetTokenUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (prtu *PasswordResetTokenUpdate) SetDeletedAt(t time.Time) *PasswordResetTokenUpdate {
-	prtu.mutation.SetDeletedAt(t)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetDeletedAt(v time.Time) *PasswordResetTokenUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableDeletedAt(t *time.Time) *PasswordResetTokenUpdate {
-	if t != nil {
-		prtu.SetDeletedAt(*t)
+func (_u *PasswordResetTokenUpdate) SetNillableDeletedAt(v *time.Time) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return prtu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (prtu *PasswordResetTokenUpdate) ClearDeletedAt() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearDeletedAt()
-	return prtu
+func (_u *PasswordResetTokenUpdate) ClearDeletedAt() *PasswordResetTokenUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (prtu *PasswordResetTokenUpdate) SetDeletedBy(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetDeletedBy(s)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetDeletedBy(v string) *PasswordResetTokenUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableDeletedBy(s *string) *PasswordResetTokenUpdate {
-	if s != nil {
-		prtu.SetDeletedBy(*s)
+func (_u *PasswordResetTokenUpdate) SetNillableDeletedBy(v *string) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return prtu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (prtu *PasswordResetTokenUpdate) ClearDeletedBy() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearDeletedBy()
-	return prtu
+func (_u *PasswordResetTokenUpdate) ClearDeletedBy() *PasswordResetTokenUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (prtu *PasswordResetTokenUpdate) SetOwnerID(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetOwnerID(s)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetOwnerID(v string) *PasswordResetTokenUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableOwnerID(s *string) *PasswordResetTokenUpdate {
-	if s != nil {
-		prtu.SetOwnerID(*s)
+func (_u *PasswordResetTokenUpdate) SetNillableOwnerID(v *string) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return prtu
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (prtu *PasswordResetTokenUpdate) SetToken(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetToken(s)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetToken(v string) *PasswordResetTokenUpdate {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableToken(s *string) *PasswordResetTokenUpdate {
-	if s != nil {
-		prtu.SetToken(*s)
+func (_u *PasswordResetTokenUpdate) SetNillableToken(v *string) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return prtu
+	return _u
 }
 
 // SetTTL sets the "ttl" field.
-func (prtu *PasswordResetTokenUpdate) SetTTL(t time.Time) *PasswordResetTokenUpdate {
-	prtu.mutation.SetTTL(t)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetTTL(v time.Time) *PasswordResetTokenUpdate {
+	_u.mutation.SetTTL(v)
+	return _u
 }
 
 // SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableTTL(t *time.Time) *PasswordResetTokenUpdate {
-	if t != nil {
-		prtu.SetTTL(*t)
+func (_u *PasswordResetTokenUpdate) SetNillableTTL(v *time.Time) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetTTL(*v)
 	}
-	return prtu
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (prtu *PasswordResetTokenUpdate) SetEmail(s string) *PasswordResetTokenUpdate {
-	prtu.mutation.SetEmail(s)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetEmail(v string) *PasswordResetTokenUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (prtu *PasswordResetTokenUpdate) SetNillableEmail(s *string) *PasswordResetTokenUpdate {
-	if s != nil {
-		prtu.SetEmail(*s)
+func (_u *PasswordResetTokenUpdate) SetNillableEmail(v *string) *PasswordResetTokenUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return prtu
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (prtu *PasswordResetTokenUpdate) SetSecret(b []byte) *PasswordResetTokenUpdate {
-	prtu.mutation.SetSecret(b)
-	return prtu
+func (_u *PasswordResetTokenUpdate) SetSecret(v []byte) *PasswordResetTokenUpdate {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (prtu *PasswordResetTokenUpdate) SetOwner(u *User) *PasswordResetTokenUpdate {
-	return prtu.SetOwnerID(u.ID)
+func (_u *PasswordResetTokenUpdate) SetOwner(v *User) *PasswordResetTokenUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the PasswordResetTokenMutation object of the builder.
-func (prtu *PasswordResetTokenUpdate) Mutation() *PasswordResetTokenMutation {
-	return prtu.mutation
+func (_u *PasswordResetTokenUpdate) Mutation() *PasswordResetTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (prtu *PasswordResetTokenUpdate) ClearOwner() *PasswordResetTokenUpdate {
-	prtu.mutation.ClearOwner()
-	return prtu
+func (_u *PasswordResetTokenUpdate) ClearOwner() *PasswordResetTokenUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (prtu *PasswordResetTokenUpdate) Save(ctx context.Context) (int, error) {
-	if err := prtu.defaults(); err != nil {
+func (_u *PasswordResetTokenUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, prtu.sqlSave, prtu.mutation, prtu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (prtu *PasswordResetTokenUpdate) SaveX(ctx context.Context) int {
-	affected, err := prtu.Save(ctx)
+func (_u *PasswordResetTokenUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,114 +200,114 @@ func (prtu *PasswordResetTokenUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (prtu *PasswordResetTokenUpdate) Exec(ctx context.Context) error {
-	_, err := prtu.Save(ctx)
+func (_u *PasswordResetTokenUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (prtu *PasswordResetTokenUpdate) ExecX(ctx context.Context) {
-	if err := prtu.Exec(ctx); err != nil {
+func (_u *PasswordResetTokenUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (prtu *PasswordResetTokenUpdate) defaults() error {
-	if _, ok := prtu.mutation.UpdatedAt(); !ok && !prtu.mutation.UpdatedAtCleared() {
+func (_u *PasswordResetTokenUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if passwordresettoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized passwordresettoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := passwordresettoken.UpdateDefaultUpdatedAt()
-		prtu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (prtu *PasswordResetTokenUpdate) check() error {
-	if v, ok := prtu.mutation.Token(); ok {
+func (_u *PasswordResetTokenUpdate) check() error {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := passwordresettoken.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "PasswordResetToken.token": %w`, err)}
 		}
 	}
-	if v, ok := prtu.mutation.Email(); ok {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := passwordresettoken.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "PasswordResetToken.email": %w`, err)}
 		}
 	}
-	if v, ok := prtu.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := passwordresettoken.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "PasswordResetToken.secret": %w`, err)}
 		}
 	}
-	if prtu.mutation.OwnerCleared() && len(prtu.mutation.OwnerIDs()) > 0 {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "PasswordResetToken.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (prtu *PasswordResetTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PasswordResetTokenUpdate {
-	prtu.modifiers = append(prtu.modifiers, modifiers...)
-	return prtu
+func (_u *PasswordResetTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PasswordResetTokenUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := prtu.check(); err != nil {
-		return n, err
+func (_u *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(passwordresettoken.Table, passwordresettoken.Columns, sqlgraph.NewFieldSpec(passwordresettoken.FieldID, field.TypeString))
-	if ps := prtu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if prtu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := prtu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if prtu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if prtu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(passwordresettoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := prtu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(passwordresettoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if prtu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := prtu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if prtu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := prtu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if prtu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := prtu.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(passwordresettoken.FieldToken, field.TypeString, value)
 	}
-	if value, ok := prtu.mutation.TTL(); ok {
+	if value, ok := _u.mutation.TTL(); ok {
 		_spec.SetField(passwordresettoken.FieldTTL, field.TypeTime, value)
 	}
-	if value, ok := prtu.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(passwordresettoken.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := prtu.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(passwordresettoken.FieldSecret, field.TypeBytes, value)
 	}
-	if prtu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -318,10 +318,10 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = prtu.schemaConfig.PasswordResetToken
+		edge.Schema = _u.schemaConfig.PasswordResetToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := prtu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -332,16 +332,16 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = prtu.schemaConfig.PasswordResetToken
+		edge.Schema = _u.schemaConfig.PasswordResetToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = prtu.schemaConfig.PasswordResetToken
-	ctx = internal.NewSchemaConfigContext(ctx, prtu.schemaConfig)
-	_spec.AddModifiers(prtu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, prtu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.PasswordResetToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{passwordresettoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -349,8 +349,8 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	prtu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // PasswordResetTokenUpdateOne is the builder for updating a single PasswordResetToken entity.
@@ -363,179 +363,179 @@ type PasswordResetTokenUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedAt(t time.Time) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetUpdatedAt(t)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetUpdatedAt(v time.Time) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedAt() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearUpdatedAt()
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) ClearUpdatedAt() *PasswordResetTokenUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetUpdatedBy(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetUpdatedBy(s)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetUpdatedBy(v string) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableUpdatedBy(s *string) *PasswordResetTokenUpdateOne {
-	if s != nil {
-		prtuo.SetUpdatedBy(*s)
+func (_u *PasswordResetTokenUpdateOne) SetNillableUpdatedBy(v *string) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) ClearUpdatedBy() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearUpdatedBy()
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) ClearUpdatedBy() *PasswordResetTokenUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetDeletedAt(t time.Time) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetDeletedAt(t)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetDeletedAt(v time.Time) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableDeletedAt(t *time.Time) *PasswordResetTokenUpdateOne {
-	if t != nil {
-		prtuo.SetDeletedAt(*t)
+func (_u *PasswordResetTokenUpdateOne) SetNillableDeletedAt(v *time.Time) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (prtuo *PasswordResetTokenUpdateOne) ClearDeletedAt() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearDeletedAt()
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) ClearDeletedAt() *PasswordResetTokenUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetDeletedBy(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetDeletedBy(s)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetDeletedBy(v string) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableDeletedBy(s *string) *PasswordResetTokenUpdateOne {
-	if s != nil {
-		prtuo.SetDeletedBy(*s)
+func (_u *PasswordResetTokenUpdateOne) SetNillableDeletedBy(v *string) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (prtuo *PasswordResetTokenUpdateOne) ClearDeletedBy() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearDeletedBy()
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) ClearDeletedBy() *PasswordResetTokenUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetOwnerID(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetOwnerID(s)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetOwnerID(v string) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableOwnerID(s *string) *PasswordResetTokenUpdateOne {
-	if s != nil {
-		prtuo.SetOwnerID(*s)
+func (_u *PasswordResetTokenUpdateOne) SetNillableOwnerID(v *string) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetToken(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetToken(s)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetToken(v string) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableToken(s *string) *PasswordResetTokenUpdateOne {
-	if s != nil {
-		prtuo.SetToken(*s)
+func (_u *PasswordResetTokenUpdateOne) SetNillableToken(v *string) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // SetTTL sets the "ttl" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetTTL(t time.Time) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetTTL(t)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetTTL(v time.Time) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetTTL(v)
+	return _u
 }
 
 // SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableTTL(t *time.Time) *PasswordResetTokenUpdateOne {
-	if t != nil {
-		prtuo.SetTTL(*t)
+func (_u *PasswordResetTokenUpdateOne) SetNillableTTL(v *time.Time) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetTTL(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetEmail(s string) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetEmail(s)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetEmail(v string) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (prtuo *PasswordResetTokenUpdateOne) SetNillableEmail(s *string) *PasswordResetTokenUpdateOne {
-	if s != nil {
-		prtuo.SetEmail(*s)
+func (_u *PasswordResetTokenUpdateOne) SetNillableEmail(v *string) *PasswordResetTokenUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return prtuo
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (prtuo *PasswordResetTokenUpdateOne) SetSecret(b []byte) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.SetSecret(b)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) SetSecret(v []byte) *PasswordResetTokenUpdateOne {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the User entity.
-func (prtuo *PasswordResetTokenUpdateOne) SetOwner(u *User) *PasswordResetTokenUpdateOne {
-	return prtuo.SetOwnerID(u.ID)
+func (_u *PasswordResetTokenUpdateOne) SetOwner(v *User) *PasswordResetTokenUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // Mutation returns the PasswordResetTokenMutation object of the builder.
-func (prtuo *PasswordResetTokenUpdateOne) Mutation() *PasswordResetTokenMutation {
-	return prtuo.mutation
+func (_u *PasswordResetTokenUpdateOne) Mutation() *PasswordResetTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the User entity.
-func (prtuo *PasswordResetTokenUpdateOne) ClearOwner() *PasswordResetTokenUpdateOne {
-	prtuo.mutation.ClearOwner()
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) ClearOwner() *PasswordResetTokenUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Where appends a list predicates to the PasswordResetTokenUpdate builder.
-func (prtuo *PasswordResetTokenUpdateOne) Where(ps ...predicate.PasswordResetToken) *PasswordResetTokenUpdateOne {
-	prtuo.mutation.Where(ps...)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) Where(ps ...predicate.PasswordResetToken) *PasswordResetTokenUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (prtuo *PasswordResetTokenUpdateOne) Select(field string, fields ...string) *PasswordResetTokenUpdateOne {
-	prtuo.fields = append([]string{field}, fields...)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) Select(field string, fields ...string) *PasswordResetTokenUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated PasswordResetToken entity.
-func (prtuo *PasswordResetTokenUpdateOne) Save(ctx context.Context) (*PasswordResetToken, error) {
-	if err := prtuo.defaults(); err != nil {
+func (_u *PasswordResetTokenUpdateOne) Save(ctx context.Context) (*PasswordResetToken, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, prtuo.sqlSave, prtuo.mutation, prtuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (prtuo *PasswordResetTokenUpdateOne) SaveX(ctx context.Context) *PasswordResetToken {
-	node, err := prtuo.Save(ctx)
+func (_u *PasswordResetTokenUpdateOne) SaveX(ctx context.Context) *PasswordResetToken {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -543,70 +543,70 @@ func (prtuo *PasswordResetTokenUpdateOne) SaveX(ctx context.Context) *PasswordRe
 }
 
 // Exec executes the query on the entity.
-func (prtuo *PasswordResetTokenUpdateOne) Exec(ctx context.Context) error {
-	_, err := prtuo.Save(ctx)
+func (_u *PasswordResetTokenUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (prtuo *PasswordResetTokenUpdateOne) ExecX(ctx context.Context) {
-	if err := prtuo.Exec(ctx); err != nil {
+func (_u *PasswordResetTokenUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (prtuo *PasswordResetTokenUpdateOne) defaults() error {
-	if _, ok := prtuo.mutation.UpdatedAt(); !ok && !prtuo.mutation.UpdatedAtCleared() {
+func (_u *PasswordResetTokenUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if passwordresettoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized passwordresettoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := passwordresettoken.UpdateDefaultUpdatedAt()
-		prtuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (prtuo *PasswordResetTokenUpdateOne) check() error {
-	if v, ok := prtuo.mutation.Token(); ok {
+func (_u *PasswordResetTokenUpdateOne) check() error {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := passwordresettoken.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "PasswordResetToken.token": %w`, err)}
 		}
 	}
-	if v, ok := prtuo.mutation.Email(); ok {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := passwordresettoken.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "PasswordResetToken.email": %w`, err)}
 		}
 	}
-	if v, ok := prtuo.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := passwordresettoken.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "PasswordResetToken.secret": %w`, err)}
 		}
 	}
-	if prtuo.mutation.OwnerCleared() && len(prtuo.mutation.OwnerIDs()) > 0 {
+	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "PasswordResetToken.owner"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (prtuo *PasswordResetTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PasswordResetTokenUpdateOne {
-	prtuo.modifiers = append(prtuo.modifiers, modifiers...)
-	return prtuo
+func (_u *PasswordResetTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PasswordResetTokenUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *PasswordResetToken, err error) {
-	if err := prtuo.check(); err != nil {
+func (_u *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *PasswordResetToken, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(passwordresettoken.Table, passwordresettoken.Columns, sqlgraph.NewFieldSpec(passwordresettoken.FieldID, field.TypeString))
-	id, ok := prtuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "PasswordResetToken.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := prtuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, passwordresettoken.FieldID)
 		for _, f := range fields {
@@ -618,56 +618,56 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 			}
 		}
 	}
-	if ps := prtuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if prtuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := prtuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if prtuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if prtuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(passwordresettoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := prtuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(passwordresettoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if prtuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(passwordresettoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := prtuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if prtuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := prtuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if prtuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(passwordresettoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := prtuo.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(passwordresettoken.FieldToken, field.TypeString, value)
 	}
-	if value, ok := prtuo.mutation.TTL(); ok {
+	if value, ok := _u.mutation.TTL(); ok {
 		_spec.SetField(passwordresettoken.FieldTTL, field.TypeTime, value)
 	}
-	if value, ok := prtuo.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(passwordresettoken.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := prtuo.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(passwordresettoken.FieldSecret, field.TypeBytes, value)
 	}
-	if prtuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -678,10 +678,10 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = prtuo.schemaConfig.PasswordResetToken
+		edge.Schema = _u.schemaConfig.PasswordResetToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := prtuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -692,19 +692,19 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = prtuo.schemaConfig.PasswordResetToken
+		edge.Schema = _u.schemaConfig.PasswordResetToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = prtuo.schemaConfig.PasswordResetToken
-	ctx = internal.NewSchemaConfigContext(ctx, prtuo.schemaConfig)
-	_spec.AddModifiers(prtuo.modifiers...)
-	_node = &PasswordResetToken{config: prtuo.config}
+	_spec.Node.Schema = _u.schemaConfig.PasswordResetToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &PasswordResetToken{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, prtuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{passwordresettoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -712,6 +712,6 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 		}
 		return nil, err
 	}
-	prtuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

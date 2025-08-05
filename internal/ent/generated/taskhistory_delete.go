@@ -22,58 +22,58 @@ type TaskHistoryDelete struct {
 }
 
 // Where appends a list predicates to the TaskHistoryDelete builder.
-func (thd *TaskHistoryDelete) Where(ps ...predicate.TaskHistory) *TaskHistoryDelete {
-	thd.mutation.Where(ps...)
-	return thd
+func (_d *TaskHistoryDelete) Where(ps ...predicate.TaskHistory) *TaskHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (thd *TaskHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, thd.sqlExec, thd.mutation, thd.hooks)
+func (_d *TaskHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thd *TaskHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := thd.Exec(ctx)
+func (_d *TaskHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (thd *TaskHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TaskHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(taskhistory.Table, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = thd.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thd.schemaConfig)
-	if ps := thd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TaskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, thd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	thd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TaskHistoryDeleteOne is the builder for deleting a single TaskHistory entity.
 type TaskHistoryDeleteOne struct {
-	thd *TaskHistoryDelete
+	_d *TaskHistoryDelete
 }
 
 // Where appends a list predicates to the TaskHistoryDelete builder.
-func (thdo *TaskHistoryDeleteOne) Where(ps ...predicate.TaskHistory) *TaskHistoryDeleteOne {
-	thdo.thd.mutation.Where(ps...)
-	return thdo
+func (_d *TaskHistoryDeleteOne) Where(ps ...predicate.TaskHistory) *TaskHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (thdo *TaskHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := thdo.thd.Exec(ctx)
+func (_d *TaskHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (thdo *TaskHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thdo *TaskHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := thdo.Exec(ctx); err != nil {
+func (_d *TaskHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

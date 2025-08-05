@@ -27,171 +27,171 @@ type NarrativeHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the NarrativeHistoryUpdate builder.
-func (nhu *NarrativeHistoryUpdate) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryUpdate {
-	nhu.mutation.Where(ps...)
-	return nhu
+func (_u *NarrativeHistoryUpdate) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nhu *NarrativeHistoryUpdate) SetUpdatedAt(t time.Time) *NarrativeHistoryUpdate {
-	nhu.mutation.SetUpdatedAt(t)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetUpdatedAt(v time.Time) *NarrativeHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nhu *NarrativeHistoryUpdate) ClearUpdatedAt() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearUpdatedAt()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearUpdatedAt() *NarrativeHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nhu *NarrativeHistoryUpdate) SetUpdatedBy(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetUpdatedBy(s)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetUpdatedBy(v string) *NarrativeHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableUpdatedBy(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetUpdatedBy(*s)
+func (_u *NarrativeHistoryUpdate) SetNillableUpdatedBy(v *string) *NarrativeHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nhu *NarrativeHistoryUpdate) ClearUpdatedBy() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearUpdatedBy()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearUpdatedBy() *NarrativeHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nhu *NarrativeHistoryUpdate) SetDeletedAt(t time.Time) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDeletedAt(t)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetDeletedAt(v time.Time) *NarrativeHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableDeletedAt(t *time.Time) *NarrativeHistoryUpdate {
-	if t != nil {
-		nhu.SetDeletedAt(*t)
+func (_u *NarrativeHistoryUpdate) SetNillableDeletedAt(v *time.Time) *NarrativeHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nhu *NarrativeHistoryUpdate) ClearDeletedAt() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearDeletedAt()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearDeletedAt() *NarrativeHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nhu *NarrativeHistoryUpdate) SetDeletedBy(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDeletedBy(s)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetDeletedBy(v string) *NarrativeHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableDeletedBy(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetDeletedBy(*s)
+func (_u *NarrativeHistoryUpdate) SetNillableDeletedBy(v *string) *NarrativeHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nhu *NarrativeHistoryUpdate) ClearDeletedBy() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearDeletedBy()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearDeletedBy() *NarrativeHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (nhu *NarrativeHistoryUpdate) SetTags(s []string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetTags(s)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetTags(v []string) *NarrativeHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (nhu *NarrativeHistoryUpdate) AppendTags(s []string) *NarrativeHistoryUpdate {
-	nhu.mutation.AppendTags(s)
-	return nhu
+// AppendTags appends value to the "tags" field.
+func (_u *NarrativeHistoryUpdate) AppendTags(v []string) *NarrativeHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (nhu *NarrativeHistoryUpdate) ClearTags() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearTags()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearTags() *NarrativeHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (nhu *NarrativeHistoryUpdate) SetName(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetName(s)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetName(v string) *NarrativeHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableName(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetName(*s)
+func (_u *NarrativeHistoryUpdate) SetNillableName(v *string) *NarrativeHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return nhu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (nhu *NarrativeHistoryUpdate) SetDescription(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDescription(s)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetDescription(v string) *NarrativeHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableDescription(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetDescription(*s)
+func (_u *NarrativeHistoryUpdate) SetNillableDescription(v *string) *NarrativeHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (nhu *NarrativeHistoryUpdate) ClearDescription() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearDescription()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearDescription() *NarrativeHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (nhu *NarrativeHistoryUpdate) SetDetails(s string) *NarrativeHistoryUpdate {
-	nhu.mutation.SetDetails(s)
-	return nhu
+func (_u *NarrativeHistoryUpdate) SetDetails(v string) *NarrativeHistoryUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (nhu *NarrativeHistoryUpdate) SetNillableDetails(s *string) *NarrativeHistoryUpdate {
-	if s != nil {
-		nhu.SetDetails(*s)
+func (_u *NarrativeHistoryUpdate) SetNillableDetails(v *string) *NarrativeHistoryUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (nhu *NarrativeHistoryUpdate) ClearDetails() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearDetails()
-	return nhu
+func (_u *NarrativeHistoryUpdate) ClearDetails() *NarrativeHistoryUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // Mutation returns the NarrativeHistoryMutation object of the builder.
-func (nhu *NarrativeHistoryUpdate) Mutation() *NarrativeHistoryMutation {
-	return nhu.mutation
+func (_u *NarrativeHistoryUpdate) Mutation() *NarrativeHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (nhu *NarrativeHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := nhu.defaults(); err != nil {
+func (_u *NarrativeHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, nhu.sqlSave, nhu.mutation, nhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nhu *NarrativeHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := nhu.Save(ctx)
+func (_u *NarrativeHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,111 +199,111 @@ func (nhu *NarrativeHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (nhu *NarrativeHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := nhu.Save(ctx)
+func (_u *NarrativeHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nhu *NarrativeHistoryUpdate) ExecX(ctx context.Context) {
-	if err := nhu.Exec(ctx); err != nil {
+func (_u *NarrativeHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nhu *NarrativeHistoryUpdate) defaults() error {
-	if _, ok := nhu.mutation.UpdatedAt(); !ok && !nhu.mutation.UpdatedAtCleared() {
+func (_u *NarrativeHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if narrativehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized narrativehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := narrativehistory.UpdateDefaultUpdatedAt()
-		nhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nhu *NarrativeHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeHistoryUpdate {
-	nhu.modifiers = append(nhu.modifiers, modifiers...)
-	return nhu
+func (_u *NarrativeHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(narrativehistory.Table, narrativehistory.Columns, sqlgraph.NewFieldSpec(narrativehistory.FieldID, field.TypeString))
-	if ps := nhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(narrativehistory.FieldRef, field.TypeString)
 	}
-	if nhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(narrativehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if nhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(narrativehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(narrativehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(narrativehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nhu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nhu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(narrativehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if nhu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(narrativehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := nhu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, narrativehistory.FieldTags, value)
 		})
 	}
-	if nhu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(narrativehistory.FieldTags, field.TypeJSON)
 	}
-	if nhu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(narrativehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := nhu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(narrativehistory.FieldDescription, field.TypeString, value)
 	}
-	if nhu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(narrativehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(narrativehistory.FieldDetails, field.TypeString, value)
 	}
-	if nhu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(narrativehistory.FieldDetails, field.TypeString)
 	}
-	_spec.Node.Schema = nhu.schemaConfig.NarrativeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhu.schemaConfig)
-	_spec.AddModifiers(nhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, nhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.NarrativeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{narrativehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -311,8 +311,8 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	nhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // NarrativeHistoryUpdateOne is the builder for updating a single NarrativeHistory entity.
@@ -325,178 +325,178 @@ type NarrativeHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetUpdatedAt(t time.Time) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetUpdatedAt(t)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetUpdatedAt(v time.Time) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedAt() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearUpdatedAt()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearUpdatedAt() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetUpdatedBy(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetUpdatedBy(s)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetUpdatedBy(v string) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableUpdatedBy(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetUpdatedBy(*s)
+func (_u *NarrativeHistoryUpdateOne) SetNillableUpdatedBy(v *string) *NarrativeHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearUpdatedBy() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearUpdatedBy()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearUpdatedBy() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDeletedAt(t time.Time) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDeletedAt(t)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetDeletedAt(v time.Time) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *NarrativeHistoryUpdateOne {
-	if t != nil {
-		nhuo.SetDeletedAt(*t)
+func (_u *NarrativeHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *NarrativeHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearDeletedAt() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearDeletedAt()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearDeletedAt() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDeletedBy(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDeletedBy(s)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetDeletedBy(v string) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableDeletedBy(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetDeletedBy(*s)
+func (_u *NarrativeHistoryUpdateOne) SetNillableDeletedBy(v *string) *NarrativeHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearDeletedBy() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearDeletedBy()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearDeletedBy() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetTags(s []string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetTags(s)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetTags(v []string) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (nhuo *NarrativeHistoryUpdateOne) AppendTags(s []string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.AppendTags(s)
-	return nhuo
+// AppendTags appends value to the "tags" field.
+func (_u *NarrativeHistoryUpdateOne) AppendTags(v []string) *NarrativeHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearTags() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearTags()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearTags() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetName(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetName(s)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetName(v string) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableName(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetName(*s)
+func (_u *NarrativeHistoryUpdateOne) SetNillableName(v *string) *NarrativeHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDescription(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDescription(s)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetDescription(v string) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableDescription(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetDescription(*s)
+func (_u *NarrativeHistoryUpdateOne) SetNillableDescription(v *string) *NarrativeHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearDescription() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearDescription()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearDescription() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetDetails(s string) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetDetails(s)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) SetDetails(v string) *NarrativeHistoryUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (nhuo *NarrativeHistoryUpdateOne) SetNillableDetails(s *string) *NarrativeHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetDetails(*s)
+func (_u *NarrativeHistoryUpdateOne) SetNillableDetails(v *string) *NarrativeHistoryUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearDetails() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearDetails()
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) ClearDetails() *NarrativeHistoryUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // Mutation returns the NarrativeHistoryMutation object of the builder.
-func (nhuo *NarrativeHistoryUpdateOne) Mutation() *NarrativeHistoryMutation {
-	return nhuo.mutation
+func (_u *NarrativeHistoryUpdateOne) Mutation() *NarrativeHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the NarrativeHistoryUpdate builder.
-func (nhuo *NarrativeHistoryUpdateOne) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.Where(ps...)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (nhuo *NarrativeHistoryUpdateOne) Select(field string, fields ...string) *NarrativeHistoryUpdateOne {
-	nhuo.fields = append([]string{field}, fields...)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) Select(field string, fields ...string) *NarrativeHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated NarrativeHistory entity.
-func (nhuo *NarrativeHistoryUpdateOne) Save(ctx context.Context) (*NarrativeHistory, error) {
-	if err := nhuo.defaults(); err != nil {
+func (_u *NarrativeHistoryUpdateOne) Save(ctx context.Context) (*NarrativeHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, nhuo.sqlSave, nhuo.mutation, nhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nhuo *NarrativeHistoryUpdateOne) SaveX(ctx context.Context) *NarrativeHistory {
-	node, err := nhuo.Save(ctx)
+func (_u *NarrativeHistoryUpdateOne) SaveX(ctx context.Context) *NarrativeHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -504,44 +504,44 @@ func (nhuo *NarrativeHistoryUpdateOne) SaveX(ctx context.Context) *NarrativeHist
 }
 
 // Exec executes the query on the entity.
-func (nhuo *NarrativeHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := nhuo.Save(ctx)
+func (_u *NarrativeHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nhuo *NarrativeHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := nhuo.Exec(ctx); err != nil {
+func (_u *NarrativeHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nhuo *NarrativeHistoryUpdateOne) defaults() error {
-	if _, ok := nhuo.mutation.UpdatedAt(); !ok && !nhuo.mutation.UpdatedAtCleared() {
+func (_u *NarrativeHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if narrativehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized narrativehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := narrativehistory.UpdateDefaultUpdatedAt()
-		nhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nhuo *NarrativeHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeHistoryUpdateOne {
-	nhuo.modifiers = append(nhuo.modifiers, modifiers...)
-	return nhuo
+func (_u *NarrativeHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NarrativeHistory, err error) {
+func (_u *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NarrativeHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(narrativehistory.Table, narrativehistory.Columns, sqlgraph.NewFieldSpec(narrativehistory.FieldID, field.TypeString))
-	id, ok := nhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "NarrativeHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := nhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, narrativehistory.FieldID)
 		for _, f := range fields {
@@ -553,82 +553,82 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 			}
 		}
 	}
-	if ps := nhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(narrativehistory.FieldRef, field.TypeString)
 	}
-	if nhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(narrativehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if nhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(narrativehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(narrativehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(narrativehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(narrativehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nhuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nhuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(narrativehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if nhuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(narrativehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(narrativehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := nhuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, narrativehistory.FieldTags, value)
 		})
 	}
-	if nhuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(narrativehistory.FieldTags, field.TypeJSON)
 	}
-	if nhuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(narrativehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := nhuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(narrativehistory.FieldDescription, field.TypeString, value)
 	}
-	if nhuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(narrativehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(narrativehistory.FieldDetails, field.TypeString, value)
 	}
-	if nhuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(narrativehistory.FieldDetails, field.TypeString)
 	}
-	_spec.Node.Schema = nhuo.schemaConfig.NarrativeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhuo.schemaConfig)
-	_spec.AddModifiers(nhuo.modifiers...)
-	_node = &NarrativeHistory{config: nhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.NarrativeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &NarrativeHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, nhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{narrativehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -636,6 +636,6 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 		}
 		return nil, err
 	}
-	nhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

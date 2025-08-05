@@ -22,58 +22,58 @@ type RiskHistoryDelete struct {
 }
 
 // Where appends a list predicates to the RiskHistoryDelete builder.
-func (rhd *RiskHistoryDelete) Where(ps ...predicate.RiskHistory) *RiskHistoryDelete {
-	rhd.mutation.Where(ps...)
-	return rhd
+func (_d *RiskHistoryDelete) Where(ps ...predicate.RiskHistory) *RiskHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (rhd *RiskHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, rhd.sqlExec, rhd.mutation, rhd.hooks)
+func (_d *RiskHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhd *RiskHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := rhd.Exec(ctx)
+func (_d *RiskHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (rhd *RiskHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *RiskHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(riskhistory.Table, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = rhd.schemaConfig.RiskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, rhd.schemaConfig)
-	if ps := rhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.RiskHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, rhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	rhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // RiskHistoryDeleteOne is the builder for deleting a single RiskHistory entity.
 type RiskHistoryDeleteOne struct {
-	rhd *RiskHistoryDelete
+	_d *RiskHistoryDelete
 }
 
 // Where appends a list predicates to the RiskHistoryDelete builder.
-func (rhdo *RiskHistoryDeleteOne) Where(ps ...predicate.RiskHistory) *RiskHistoryDeleteOne {
-	rhdo.rhd.mutation.Where(ps...)
-	return rhdo
+func (_d *RiskHistoryDeleteOne) Where(ps ...predicate.RiskHistory) *RiskHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (rhdo *RiskHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := rhdo.rhd.Exec(ctx)
+func (_d *RiskHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (rhdo *RiskHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhdo *RiskHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := rhdo.Exec(ctx); err != nil {
+func (_d *RiskHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

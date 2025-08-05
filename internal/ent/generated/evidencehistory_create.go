@@ -23,297 +23,297 @@ type EvidenceHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (ehc *EvidenceHistoryCreate) SetHistoryTime(t time.Time) *EvidenceHistoryCreate {
-	ehc.mutation.SetHistoryTime(t)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetHistoryTime(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableHistoryTime(t *time.Time) *EvidenceHistoryCreate {
-	if t != nil {
-		ehc.SetHistoryTime(*t)
+func (_c *EvidenceHistoryCreate) SetNillableHistoryTime(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (ehc *EvidenceHistoryCreate) SetRef(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetRef(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetRef(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableRef(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetRef(*s)
+func (_c *EvidenceHistoryCreate) SetNillableRef(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (ehc *EvidenceHistoryCreate) SetOperation(ht history.OpType) *EvidenceHistoryCreate {
-	ehc.mutation.SetOperation(ht)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetOperation(v history.OpType) *EvidenceHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ehc *EvidenceHistoryCreate) SetCreatedAt(t time.Time) *EvidenceHistoryCreate {
-	ehc.mutation.SetCreatedAt(t)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetCreatedAt(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableCreatedAt(t *time.Time) *EvidenceHistoryCreate {
-	if t != nil {
-		ehc.SetCreatedAt(*t)
+func (_c *EvidenceHistoryCreate) SetNillableCreatedAt(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ehc *EvidenceHistoryCreate) SetUpdatedAt(t time.Time) *EvidenceHistoryCreate {
-	ehc.mutation.SetUpdatedAt(t)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetUpdatedAt(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableUpdatedAt(t *time.Time) *EvidenceHistoryCreate {
-	if t != nil {
-		ehc.SetUpdatedAt(*t)
+func (_c *EvidenceHistoryCreate) SetNillableUpdatedAt(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ehc *EvidenceHistoryCreate) SetCreatedBy(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetCreatedBy(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetCreatedBy(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableCreatedBy(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetCreatedBy(*s)
+func (_c *EvidenceHistoryCreate) SetNillableCreatedBy(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ehc *EvidenceHistoryCreate) SetUpdatedBy(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetUpdatedBy(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetUpdatedBy(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableUpdatedBy(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetUpdatedBy(*s)
+func (_c *EvidenceHistoryCreate) SetNillableUpdatedBy(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ehc *EvidenceHistoryCreate) SetDeletedAt(t time.Time) *EvidenceHistoryCreate {
-	ehc.mutation.SetDeletedAt(t)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetDeletedAt(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableDeletedAt(t *time.Time) *EvidenceHistoryCreate {
-	if t != nil {
-		ehc.SetDeletedAt(*t)
+func (_c *EvidenceHistoryCreate) SetNillableDeletedAt(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ehc *EvidenceHistoryCreate) SetDeletedBy(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetDeletedBy(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetDeletedBy(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableDeletedBy(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetDeletedBy(*s)
+func (_c *EvidenceHistoryCreate) SetNillableDeletedBy(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (ehc *EvidenceHistoryCreate) SetDisplayID(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetDisplayID(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetDisplayID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ehc *EvidenceHistoryCreate) SetTags(s []string) *EvidenceHistoryCreate {
-	ehc.mutation.SetTags(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetTags(v []string) *EvidenceHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ehc *EvidenceHistoryCreate) SetOwnerID(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetOwnerID(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetOwnerID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableOwnerID(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetOwnerID(*s)
+func (_c *EvidenceHistoryCreate) SetNillableOwnerID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ehc *EvidenceHistoryCreate) SetName(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetName(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetName(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (ehc *EvidenceHistoryCreate) SetDescription(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetDescription(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetDescription(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableDescription(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetDescription(*s)
+func (_c *EvidenceHistoryCreate) SetNillableDescription(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetCollectionProcedure sets the "collection_procedure" field.
-func (ehc *EvidenceHistoryCreate) SetCollectionProcedure(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetCollectionProcedure(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetCollectionProcedure(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetCollectionProcedure(v)
+	return _c
 }
 
 // SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableCollectionProcedure(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetCollectionProcedure(*s)
+func (_c *EvidenceHistoryCreate) SetNillableCollectionProcedure(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetCollectionProcedure(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (ehc *EvidenceHistoryCreate) SetCreationDate(t time.Time) *EvidenceHistoryCreate {
-	ehc.mutation.SetCreationDate(t)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetCreationDate(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetCreationDate(v)
+	return _c
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableCreationDate(t *time.Time) *EvidenceHistoryCreate {
-	if t != nil {
-		ehc.SetCreationDate(*t)
+func (_c *EvidenceHistoryCreate) SetNillableCreationDate(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetCreationDate(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (ehc *EvidenceHistoryCreate) SetRenewalDate(t time.Time) *EvidenceHistoryCreate {
-	ehc.mutation.SetRenewalDate(t)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetRenewalDate(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetRenewalDate(v)
+	return _c
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableRenewalDate(t *time.Time) *EvidenceHistoryCreate {
-	if t != nil {
-		ehc.SetRenewalDate(*t)
+func (_c *EvidenceHistoryCreate) SetNillableRenewalDate(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetRenewalDate(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetSource sets the "source" field.
-func (ehc *EvidenceHistoryCreate) SetSource(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetSource(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetSource(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetSource(v)
+	return _c
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableSource(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetSource(*s)
+func (_c *EvidenceHistoryCreate) SetNillableSource(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetSource(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetIsAutomated sets the "is_automated" field.
-func (ehc *EvidenceHistoryCreate) SetIsAutomated(b bool) *EvidenceHistoryCreate {
-	ehc.mutation.SetIsAutomated(b)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetIsAutomated(v bool) *EvidenceHistoryCreate {
+	_c.mutation.SetIsAutomated(v)
+	return _c
 }
 
 // SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableIsAutomated(b *bool) *EvidenceHistoryCreate {
-	if b != nil {
-		ehc.SetIsAutomated(*b)
+func (_c *EvidenceHistoryCreate) SetNillableIsAutomated(v *bool) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetIsAutomated(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetURL sets the "url" field.
-func (ehc *EvidenceHistoryCreate) SetURL(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetURL(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetURL(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetURL(v)
+	return _c
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableURL(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetURL(*s)
+func (_c *EvidenceHistoryCreate) SetNillableURL(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetURL(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (ehc *EvidenceHistoryCreate) SetStatus(es enums.EvidenceStatus) *EvidenceHistoryCreate {
-	ehc.mutation.SetStatus(es)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetStatus(v enums.EvidenceStatus) *EvidenceHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceHistoryCreate {
-	if es != nil {
-		ehc.SetStatus(*es)
+func (_c *EvidenceHistoryCreate) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return ehc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ehc *EvidenceHistoryCreate) SetID(s string) *EvidenceHistoryCreate {
-	ehc.mutation.SetID(s)
-	return ehc
+func (_c *EvidenceHistoryCreate) SetID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ehc *EvidenceHistoryCreate) SetNillableID(s *string) *EvidenceHistoryCreate {
-	if s != nil {
-		ehc.SetID(*s)
+func (_c *EvidenceHistoryCreate) SetNillableID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ehc
+	return _c
 }
 
 // Mutation returns the EvidenceHistoryMutation object of the builder.
-func (ehc *EvidenceHistoryCreate) Mutation() *EvidenceHistoryMutation {
-	return ehc.mutation
+func (_c *EvidenceHistoryCreate) Mutation() *EvidenceHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the EvidenceHistory in the database.
-func (ehc *EvidenceHistoryCreate) Save(ctx context.Context) (*EvidenceHistory, error) {
-	if err := ehc.defaults(); err != nil {
+func (_c *EvidenceHistoryCreate) Save(ctx context.Context) (*EvidenceHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ehc.sqlSave, ehc.mutation, ehc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ehc *EvidenceHistoryCreate) SaveX(ctx context.Context) *EvidenceHistory {
-	v, err := ehc.Save(ctx)
+func (_c *EvidenceHistoryCreate) SaveX(ctx context.Context) *EvidenceHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -321,97 +321,97 @@ func (ehc *EvidenceHistoryCreate) SaveX(ctx context.Context) *EvidenceHistory {
 }
 
 // Exec executes the query.
-func (ehc *EvidenceHistoryCreate) Exec(ctx context.Context) error {
-	_, err := ehc.Save(ctx)
+func (_c *EvidenceHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ehc *EvidenceHistoryCreate) ExecX(ctx context.Context) {
-	if err := ehc.Exec(ctx); err != nil {
+func (_c *EvidenceHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ehc *EvidenceHistoryCreate) defaults() error {
-	if _, ok := ehc.mutation.HistoryTime(); !ok {
+func (_c *EvidenceHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if evidencehistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.DefaultHistoryTime()
-		ehc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := ehc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if evidencehistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.DefaultCreatedAt()
-		ehc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ehc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if evidencehistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.DefaultUpdatedAt()
-		ehc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ehc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := evidencehistory.DefaultTags
-		ehc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ehc.mutation.CreationDate(); !ok {
+	if _, ok := _c.mutation.CreationDate(); !ok {
 		if evidencehistory.DefaultCreationDate == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultCreationDate (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.DefaultCreationDate()
-		ehc.mutation.SetCreationDate(v)
+		_c.mutation.SetCreationDate(v)
 	}
-	if _, ok := ehc.mutation.RenewalDate(); !ok {
+	if _, ok := _c.mutation.RenewalDate(); !ok {
 		v := evidencehistory.DefaultRenewalDate
-		ehc.mutation.SetRenewalDate(v)
+		_c.mutation.SetRenewalDate(v)
 	}
-	if _, ok := ehc.mutation.IsAutomated(); !ok {
+	if _, ok := _c.mutation.IsAutomated(); !ok {
 		v := evidencehistory.DefaultIsAutomated
-		ehc.mutation.SetIsAutomated(v)
+		_c.mutation.SetIsAutomated(v)
 	}
-	if _, ok := ehc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := evidencehistory.DefaultStatus
-		ehc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := ehc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if evidencehistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.DefaultID()
-		ehc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ehc *EvidenceHistoryCreate) check() error {
-	if _, ok := ehc.mutation.HistoryTime(); !ok {
+func (_c *EvidenceHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "EvidenceHistory.history_time"`)}
 	}
-	if _, ok := ehc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "EvidenceHistory.operation"`)}
 	}
-	if v, ok := ehc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := evidencehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := ehc.mutation.DisplayID(); !ok {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "EvidenceHistory.display_id"`)}
 	}
-	if _, ok := ehc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "EvidenceHistory.name"`)}
 	}
-	if _, ok := ehc.mutation.CreationDate(); !ok {
+	if _, ok := _c.mutation.CreationDate(); !ok {
 		return &ValidationError{Name: "creation_date", err: errors.New(`generated: missing required field "EvidenceHistory.creation_date"`)}
 	}
-	if v, ok := ehc.mutation.Status(); ok {
+	if v, ok := _c.mutation.Status(); ok {
 		if err := evidencehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.status": %w`, err)}
 		}
@@ -419,12 +419,12 @@ func (ehc *EvidenceHistoryCreate) check() error {
 	return nil
 }
 
-func (ehc *EvidenceHistoryCreate) sqlSave(ctx context.Context) (*EvidenceHistory, error) {
-	if err := ehc.check(); err != nil {
+func (_c *EvidenceHistoryCreate) sqlSave(ctx context.Context) (*EvidenceHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ehc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ehc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -437,102 +437,102 @@ func (ehc *EvidenceHistoryCreate) sqlSave(ctx context.Context) (*EvidenceHistory
 			return nil, fmt.Errorf("unexpected EvidenceHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ehc.mutation.id = &_node.ID
-	ehc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ehc *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.CreateSpec) {
+func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &EvidenceHistory{config: ehc.config}
+		_node = &EvidenceHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(evidencehistory.Table, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = ehc.schemaConfig.EvidenceHistory
-	if id, ok := ehc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.EvidenceHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ehc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(evidencehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := ehc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(evidencehistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := ehc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(evidencehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := ehc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(evidencehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ehc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(evidencehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ehc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(evidencehistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ehc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(evidencehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ehc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ehc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ehc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(evidencehistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := ehc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ehc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := ehc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ehc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(evidencehistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ehc.mutation.CollectionProcedure(); ok {
+	if value, ok := _c.mutation.CollectionProcedure(); ok {
 		_spec.SetField(evidencehistory.FieldCollectionProcedure, field.TypeString, value)
 		_node.CollectionProcedure = value
 	}
-	if value, ok := ehc.mutation.CreationDate(); ok {
+	if value, ok := _c.mutation.CreationDate(); ok {
 		_spec.SetField(evidencehistory.FieldCreationDate, field.TypeTime, value)
 		_node.CreationDate = value
 	}
-	if value, ok := ehc.mutation.RenewalDate(); ok {
+	if value, ok := _c.mutation.RenewalDate(); ok {
 		_spec.SetField(evidencehistory.FieldRenewalDate, field.TypeTime, value)
 		_node.RenewalDate = value
 	}
-	if value, ok := ehc.mutation.Source(); ok {
+	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(evidencehistory.FieldSource, field.TypeString, value)
 		_node.Source = value
 	}
-	if value, ok := ehc.mutation.IsAutomated(); ok {
+	if value, ok := _c.mutation.IsAutomated(); ok {
 		_spec.SetField(evidencehistory.FieldIsAutomated, field.TypeBool, value)
 		_node.IsAutomated = value
 	}
-	if value, ok := ehc.mutation.URL(); ok {
+	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(evidencehistory.FieldURL, field.TypeString, value)
 		_node.URL = value
 	}
-	if value, ok := ehc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
@@ -547,16 +547,16 @@ type EvidenceHistoryCreateBulk struct {
 }
 
 // Save creates the EvidenceHistory entities in the database.
-func (ehcb *EvidenceHistoryCreateBulk) Save(ctx context.Context) ([]*EvidenceHistory, error) {
-	if ehcb.err != nil {
-		return nil, ehcb.err
+func (_c *EvidenceHistoryCreateBulk) Save(ctx context.Context) ([]*EvidenceHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ehcb.builders))
-	nodes := make([]*EvidenceHistory, len(ehcb.builders))
-	mutators := make([]Mutator, len(ehcb.builders))
-	for i := range ehcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*EvidenceHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ehcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*EvidenceHistoryMutation)
@@ -570,11 +570,11 @@ func (ehcb *EvidenceHistoryCreateBulk) Save(ctx context.Context) ([]*EvidenceHis
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ehcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ehcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -594,7 +594,7 @@ func (ehcb *EvidenceHistoryCreateBulk) Save(ctx context.Context) ([]*EvidenceHis
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ehcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -602,8 +602,8 @@ func (ehcb *EvidenceHistoryCreateBulk) Save(ctx context.Context) ([]*EvidenceHis
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ehcb *EvidenceHistoryCreateBulk) SaveX(ctx context.Context) []*EvidenceHistory {
-	v, err := ehcb.Save(ctx)
+func (_c *EvidenceHistoryCreateBulk) SaveX(ctx context.Context) []*EvidenceHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -611,14 +611,14 @@ func (ehcb *EvidenceHistoryCreateBulk) SaveX(ctx context.Context) []*EvidenceHis
 }
 
 // Exec executes the query.
-func (ehcb *EvidenceHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := ehcb.Save(ctx)
+func (_c *EvidenceHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ehcb *EvidenceHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := ehcb.Exec(ctx); err != nil {
+func (_c *EvidenceHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -71,1260 +71,1260 @@ type OrganizationCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (oc *OrganizationCreate) SetCreatedAt(t time.Time) *OrganizationCreate {
-	oc.mutation.SetCreatedAt(t)
-	return oc
+func (_c *OrganizationCreate) SetCreatedAt(v time.Time) *OrganizationCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableCreatedAt(t *time.Time) *OrganizationCreate {
-	if t != nil {
-		oc.SetCreatedAt(*t)
+func (_c *OrganizationCreate) SetNillableCreatedAt(v *time.Time) *OrganizationCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oc *OrganizationCreate) SetUpdatedAt(t time.Time) *OrganizationCreate {
-	oc.mutation.SetUpdatedAt(t)
-	return oc
+func (_c *OrganizationCreate) SetUpdatedAt(v time.Time) *OrganizationCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationCreate {
-	if t != nil {
-		oc.SetUpdatedAt(*t)
+func (_c *OrganizationCreate) SetNillableUpdatedAt(v *time.Time) *OrganizationCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (oc *OrganizationCreate) SetCreatedBy(s string) *OrganizationCreate {
-	oc.mutation.SetCreatedBy(s)
-	return oc
+func (_c *OrganizationCreate) SetCreatedBy(v string) *OrganizationCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableCreatedBy(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetCreatedBy(*s)
+func (_c *OrganizationCreate) SetNillableCreatedBy(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (oc *OrganizationCreate) SetUpdatedBy(s string) *OrganizationCreate {
-	oc.mutation.SetUpdatedBy(s)
-	return oc
+func (_c *OrganizationCreate) SetUpdatedBy(v string) *OrganizationCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableUpdatedBy(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetUpdatedBy(*s)
+func (_c *OrganizationCreate) SetNillableUpdatedBy(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (oc *OrganizationCreate) SetDeletedAt(t time.Time) *OrganizationCreate {
-	oc.mutation.SetDeletedAt(t)
-	return oc
+func (_c *OrganizationCreate) SetDeletedAt(v time.Time) *OrganizationCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDeletedAt(t *time.Time) *OrganizationCreate {
-	if t != nil {
-		oc.SetDeletedAt(*t)
+func (_c *OrganizationCreate) SetNillableDeletedAt(v *time.Time) *OrganizationCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (oc *OrganizationCreate) SetDeletedBy(s string) *OrganizationCreate {
-	oc.mutation.SetDeletedBy(s)
-	return oc
+func (_c *OrganizationCreate) SetDeletedBy(v string) *OrganizationCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDeletedBy(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetDeletedBy(*s)
+func (_c *OrganizationCreate) SetNillableDeletedBy(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (oc *OrganizationCreate) SetTags(s []string) *OrganizationCreate {
-	oc.mutation.SetTags(s)
-	return oc
+func (_c *OrganizationCreate) SetTags(v []string) *OrganizationCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (oc *OrganizationCreate) SetName(s string) *OrganizationCreate {
-	oc.mutation.SetName(s)
-	return oc
+func (_c *OrganizationCreate) SetName(v string) *OrganizationCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDisplayName sets the "display_name" field.
-func (oc *OrganizationCreate) SetDisplayName(s string) *OrganizationCreate {
-	oc.mutation.SetDisplayName(s)
-	return oc
+func (_c *OrganizationCreate) SetDisplayName(v string) *OrganizationCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDisplayName(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetDisplayName(*s)
+func (_c *OrganizationCreate) SetNillableDisplayName(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (oc *OrganizationCreate) SetDescription(s string) *OrganizationCreate {
-	oc.mutation.SetDescription(s)
-	return oc
+func (_c *OrganizationCreate) SetDescription(v string) *OrganizationCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDescription(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetDescription(*s)
+func (_c *OrganizationCreate) SetNillableDescription(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetParentOrganizationID sets the "parent_organization_id" field.
-func (oc *OrganizationCreate) SetParentOrganizationID(s string) *OrganizationCreate {
-	oc.mutation.SetParentOrganizationID(s)
-	return oc
+func (_c *OrganizationCreate) SetParentOrganizationID(v string) *OrganizationCreate {
+	_c.mutation.SetParentOrganizationID(v)
+	return _c
 }
 
 // SetNillableParentOrganizationID sets the "parent_organization_id" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableParentOrganizationID(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetParentOrganizationID(*s)
+func (_c *OrganizationCreate) SetNillableParentOrganizationID(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetParentOrganizationID(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetPersonalOrg sets the "personal_org" field.
-func (oc *OrganizationCreate) SetPersonalOrg(b bool) *OrganizationCreate {
-	oc.mutation.SetPersonalOrg(b)
-	return oc
+func (_c *OrganizationCreate) SetPersonalOrg(v bool) *OrganizationCreate {
+	_c.mutation.SetPersonalOrg(v)
+	return _c
 }
 
 // SetNillablePersonalOrg sets the "personal_org" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillablePersonalOrg(b *bool) *OrganizationCreate {
-	if b != nil {
-		oc.SetPersonalOrg(*b)
+func (_c *OrganizationCreate) SetNillablePersonalOrg(v *bool) *OrganizationCreate {
+	if v != nil {
+		_c.SetPersonalOrg(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (oc *OrganizationCreate) SetAvatarRemoteURL(s string) *OrganizationCreate {
-	oc.mutation.SetAvatarRemoteURL(s)
-	return oc
+func (_c *OrganizationCreate) SetAvatarRemoteURL(v string) *OrganizationCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableAvatarRemoteURL(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetAvatarRemoteURL(*s)
+func (_c *OrganizationCreate) SetNillableAvatarRemoteURL(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (oc *OrganizationCreate) SetAvatarLocalFileID(s string) *OrganizationCreate {
-	oc.mutation.SetAvatarLocalFileID(s)
-	return oc
+func (_c *OrganizationCreate) SetAvatarLocalFileID(v string) *OrganizationCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableAvatarLocalFileID(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetAvatarLocalFileID(*s)
+func (_c *OrganizationCreate) SetNillableAvatarLocalFileID(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (oc *OrganizationCreate) SetAvatarUpdatedAt(t time.Time) *OrganizationCreate {
-	oc.mutation.SetAvatarUpdatedAt(t)
-	return oc
+func (_c *OrganizationCreate) SetAvatarUpdatedAt(v time.Time) *OrganizationCreate {
+	_c.mutation.SetAvatarUpdatedAt(v)
+	return _c
 }
 
 // SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableAvatarUpdatedAt(t *time.Time) *OrganizationCreate {
-	if t != nil {
-		oc.SetAvatarUpdatedAt(*t)
+func (_c *OrganizationCreate) SetNillableAvatarUpdatedAt(v *time.Time) *OrganizationCreate {
+	if v != nil {
+		_c.SetAvatarUpdatedAt(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
-func (oc *OrganizationCreate) SetDedicatedDb(b bool) *OrganizationCreate {
-	oc.mutation.SetDedicatedDb(b)
-	return oc
+func (_c *OrganizationCreate) SetDedicatedDb(v bool) *OrganizationCreate {
+	_c.mutation.SetDedicatedDb(v)
+	return _c
 }
 
 // SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableDedicatedDb(b *bool) *OrganizationCreate {
-	if b != nil {
-		oc.SetDedicatedDb(*b)
+func (_c *OrganizationCreate) SetNillableDedicatedDb(v *bool) *OrganizationCreate {
+	if v != nil {
+		_c.SetDedicatedDb(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (oc *OrganizationCreate) SetID(s string) *OrganizationCreate {
-	oc.mutation.SetID(s)
-	return oc
+func (_c *OrganizationCreate) SetID(v string) *OrganizationCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableID(s *string) *OrganizationCreate {
-	if s != nil {
-		oc.SetID(*s)
+func (_c *OrganizationCreate) SetNillableID(v *string) *OrganizationCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return oc
+	return _c
 }
 
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddControlCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddControlCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddControlCreatorIDs(ids...)
+	return _c
 }
 
 // AddControlCreators adds the "control_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddControlCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddControlCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddControlCreatorIDs(ids...)
+	return _c.AddControlCreatorIDs(ids...)
 }
 
 // AddControlImplementationCreatorIDs adds the "control_implementation_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddControlImplementationCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlImplementationCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddControlImplementationCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddControlImplementationCreatorIDs(ids...)
+	return _c
 }
 
 // AddControlImplementationCreators adds the "control_implementation_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddControlImplementationCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddControlImplementationCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddControlImplementationCreatorIDs(ids...)
+	return _c.AddControlImplementationCreatorIDs(ids...)
 }
 
 // AddControlObjectiveCreatorIDs adds the "control_objective_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddControlObjectiveCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlObjectiveCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddControlObjectiveCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddControlObjectiveCreatorIDs(ids...)
+	return _c
 }
 
 // AddControlObjectiveCreators adds the "control_objective_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddControlObjectiveCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddControlObjectiveCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddControlObjectiveCreatorIDs(ids...)
+	return _c.AddControlObjectiveCreatorIDs(ids...)
 }
 
 // AddEvidenceCreatorIDs adds the "evidence_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddEvidenceCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEvidenceCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddEvidenceCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEvidenceCreatorIDs(ids...)
+	return _c
 }
 
 // AddEvidenceCreators adds the "evidence_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddEvidenceCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddEvidenceCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddEvidenceCreatorIDs(ids...)
+	return _c.AddEvidenceCreatorIDs(ids...)
 }
 
 // AddGroupCreatorIDs adds the "group_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddGroupCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddGroupCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddGroupCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddGroupCreatorIDs(ids...)
+	return _c
 }
 
 // AddGroupCreators adds the "group_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddGroupCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddGroupCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddGroupCreatorIDs(ids...)
+	return _c.AddGroupCreatorIDs(ids...)
 }
 
 // AddInternalPolicyCreatorIDs adds the "internal_policy_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddInternalPolicyCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddInternalPolicyCreatorIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicyCreators adds the "internal_policy_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddInternalPolicyCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddInternalPolicyCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddInternalPolicyCreatorIDs(ids...)
+	return _c.AddInternalPolicyCreatorIDs(ids...)
 }
 
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddMappedControlCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddMappedControlCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddMappedControlCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddMappedControlCreatorIDs(ids...)
+	return _c
 }
 
 // AddMappedControlCreators adds the "mapped_control_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddMappedControlCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddMappedControlCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddMappedControlCreatorIDs(ids...)
+	return _c.AddMappedControlCreatorIDs(ids...)
 }
 
 // AddNarrativeCreatorIDs adds the "narrative_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddNarrativeCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddNarrativeCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddNarrativeCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddNarrativeCreatorIDs(ids...)
+	return _c
 }
 
 // AddNarrativeCreators adds the "narrative_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddNarrativeCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddNarrativeCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddNarrativeCreatorIDs(ids...)
+	return _c.AddNarrativeCreatorIDs(ids...)
 }
 
 // AddProcedureCreatorIDs adds the "procedure_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddProcedureCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddProcedureCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddProcedureCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddProcedureCreatorIDs(ids...)
+	return _c
 }
 
 // AddProcedureCreators adds the "procedure_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddProcedureCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddProcedureCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddProcedureCreatorIDs(ids...)
+	return _c.AddProcedureCreatorIDs(ids...)
 }
 
 // AddProgramCreatorIDs adds the "program_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddProgramCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddProgramCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddProgramCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddProgramCreatorIDs(ids...)
+	return _c
 }
 
 // AddProgramCreators adds the "program_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddProgramCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddProgramCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddProgramCreatorIDs(ids...)
+	return _c.AddProgramCreatorIDs(ids...)
 }
 
 // AddRiskCreatorIDs adds the "risk_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddRiskCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddRiskCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddRiskCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddRiskCreatorIDs(ids...)
+	return _c
 }
 
 // AddRiskCreators adds the "risk_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddRiskCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddRiskCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddRiskCreatorIDs(ids...)
+	return _c.AddRiskCreatorIDs(ids...)
 }
 
 // AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddScheduledJobCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddScheduledJobCreatorIDs(ids...)
+	return _c
 }
 
 // AddScheduledJobCreators adds the "scheduled_job_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddScheduledJobCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddScheduledJobCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddScheduledJobCreatorIDs(ids...)
+	return _c.AddScheduledJobCreatorIDs(ids...)
 }
 
 // AddStandardCreatorIDs adds the "standard_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddStandardCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddStandardCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddStandardCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddStandardCreatorIDs(ids...)
+	return _c
 }
 
 // AddStandardCreators adds the "standard_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddStandardCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddStandardCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddStandardCreatorIDs(ids...)
+	return _c.AddStandardCreatorIDs(ids...)
 }
 
 // AddTemplateCreatorIDs adds the "template_creators" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddTemplateCreatorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddTemplateCreatorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddTemplateCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTemplateCreatorIDs(ids...)
+	return _c
 }
 
 // AddTemplateCreators adds the "template_creators" edges to the Group entity.
-func (oc *OrganizationCreate) AddTemplateCreators(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddTemplateCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddTemplateCreatorIDs(ids...)
+	return _c.AddTemplateCreatorIDs(ids...)
 }
 
 // SetParentID sets the "parent" edge to the Organization entity by ID.
-func (oc *OrganizationCreate) SetParentID(id string) *OrganizationCreate {
-	oc.mutation.SetParentID(id)
-	return oc
+func (_c *OrganizationCreate) SetParentID(id string) *OrganizationCreate {
+	_c.mutation.SetParentID(id)
+	return _c
 }
 
 // SetNillableParentID sets the "parent" edge to the Organization entity by ID if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableParentID(id *string) *OrganizationCreate {
+func (_c *OrganizationCreate) SetNillableParentID(id *string) *OrganizationCreate {
 	if id != nil {
-		oc = oc.SetParentID(*id)
+		_c = _c.SetParentID(*id)
 	}
-	return oc
+	return _c
 }
 
 // SetParent sets the "parent" edge to the Organization entity.
-func (oc *OrganizationCreate) SetParent(o *Organization) *OrganizationCreate {
-	return oc.SetParentID(o.ID)
+func (_c *OrganizationCreate) SetParent(v *Organization) *OrganizationCreate {
+	return _c.SetParentID(v.ID)
 }
 
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
-func (oc *OrganizationCreate) AddChildIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddChildIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddChildIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddChildIDs(ids...)
+	return _c
 }
 
 // AddChildren adds the "children" edges to the Organization entity.
-func (oc *OrganizationCreate) AddChildren(o ...*Organization) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrganizationCreate) AddChildren(v ...*Organization) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddChildIDs(ids...)
+	return _c.AddChildIDs(ids...)
 }
 
 // SetSettingID sets the "setting" edge to the OrganizationSetting entity by ID.
-func (oc *OrganizationCreate) SetSettingID(id string) *OrganizationCreate {
-	oc.mutation.SetSettingID(id)
-	return oc
+func (_c *OrganizationCreate) SetSettingID(id string) *OrganizationCreate {
+	_c.mutation.SetSettingID(id)
+	return _c
 }
 
 // SetNillableSettingID sets the "setting" edge to the OrganizationSetting entity by ID if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableSettingID(id *string) *OrganizationCreate {
+func (_c *OrganizationCreate) SetNillableSettingID(id *string) *OrganizationCreate {
 	if id != nil {
-		oc = oc.SetSettingID(*id)
+		_c = _c.SetSettingID(*id)
 	}
-	return oc
+	return _c
 }
 
 // SetSetting sets the "setting" edge to the OrganizationSetting entity.
-func (oc *OrganizationCreate) SetSetting(o *OrganizationSetting) *OrganizationCreate {
-	return oc.SetSettingID(o.ID)
+func (_c *OrganizationCreate) SetSetting(v *OrganizationSetting) *OrganizationCreate {
+	return _c.SetSettingID(v.ID)
 }
 
 // AddPersonalAccessTokenIDs adds the "personal_access_tokens" edge to the PersonalAccessToken entity by IDs.
-func (oc *OrganizationCreate) AddPersonalAccessTokenIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddPersonalAccessTokenIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddPersonalAccessTokenIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddPersonalAccessTokenIDs(ids...)
+	return _c
 }
 
 // AddPersonalAccessTokens adds the "personal_access_tokens" edges to the PersonalAccessToken entity.
-func (oc *OrganizationCreate) AddPersonalAccessTokens(p ...*PersonalAccessToken) *OrganizationCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *OrganizationCreate) AddPersonalAccessTokens(v ...*PersonalAccessToken) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddPersonalAccessTokenIDs(ids...)
+	return _c.AddPersonalAccessTokenIDs(ids...)
 }
 
 // AddAPITokenIDs adds the "api_tokens" edge to the APIToken entity by IDs.
-func (oc *OrganizationCreate) AddAPITokenIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddAPITokenIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddAPITokenIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAPITokenIDs(ids...)
+	return _c
 }
 
 // AddAPITokens adds the "api_tokens" edges to the APIToken entity.
-func (oc *OrganizationCreate) AddAPITokens(a ...*APIToken) *OrganizationCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *OrganizationCreate) AddAPITokens(v ...*APIToken) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddAPITokenIDs(ids...)
+	return _c.AddAPITokenIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (oc *OrganizationCreate) AddUserIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddUserIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddUserIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddUserIDs(ids...)
+	return _c
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (oc *OrganizationCreate) AddUsers(u ...*User) *OrganizationCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *OrganizationCreate) AddUsers(v ...*User) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddUserIDs(ids...)
+	return _c.AddUserIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (oc *OrganizationCreate) AddFileIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddFileIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddFileIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (oc *OrganizationCreate) AddFiles(f ...*File) *OrganizationCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *OrganizationCreate) AddFiles(v ...*File) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (oc *OrganizationCreate) AddEventIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEventIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddEventIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (oc *OrganizationCreate) AddEvents(e ...*Event) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *OrganizationCreate) AddEvents(v ...*Event) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // AddSecretIDs adds the "secrets" edge to the Hush entity by IDs.
-func (oc *OrganizationCreate) AddSecretIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddSecretIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddSecretIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSecretIDs(ids...)
+	return _c
 }
 
 // AddSecrets adds the "secrets" edges to the Hush entity.
-func (oc *OrganizationCreate) AddSecrets(h ...*Hush) *OrganizationCreate {
-	ids := make([]string, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
+func (_c *OrganizationCreate) AddSecrets(v ...*Hush) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddSecretIDs(ids...)
+	return _c.AddSecretIDs(ids...)
 }
 
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
-func (oc *OrganizationCreate) SetAvatarFileID(id string) *OrganizationCreate {
-	oc.mutation.SetAvatarFileID(id)
-	return oc
+func (_c *OrganizationCreate) SetAvatarFileID(id string) *OrganizationCreate {
+	_c.mutation.SetAvatarFileID(id)
+	return _c
 }
 
 // SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableAvatarFileID(id *string) *OrganizationCreate {
+func (_c *OrganizationCreate) SetNillableAvatarFileID(id *string) *OrganizationCreate {
 	if id != nil {
-		oc = oc.SetAvatarFileID(*id)
+		_c = _c.SetAvatarFileID(*id)
 	}
-	return oc
+	return _c
 }
 
 // SetAvatarFile sets the "avatar_file" edge to the File entity.
-func (oc *OrganizationCreate) SetAvatarFile(f *File) *OrganizationCreate {
-	return oc.SetAvatarFileID(f.ID)
+func (_c *OrganizationCreate) SetAvatarFile(v *File) *OrganizationCreate {
+	return _c.SetAvatarFileID(v.ID)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
-func (oc *OrganizationCreate) AddGroupIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddGroupIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddGroupIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddGroupIDs(ids...)
+	return _c
 }
 
 // AddGroups adds the "groups" edges to the Group entity.
-func (oc *OrganizationCreate) AddGroups(g ...*Group) *OrganizationCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_c *OrganizationCreate) AddGroups(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddGroupIDs(ids...)
+	return _c.AddGroupIDs(ids...)
 }
 
 // AddTemplateIDs adds the "templates" edge to the Template entity by IDs.
-func (oc *OrganizationCreate) AddTemplateIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddTemplateIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddTemplateIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTemplateIDs(ids...)
+	return _c
 }
 
 // AddTemplates adds the "templates" edges to the Template entity.
-func (oc *OrganizationCreate) AddTemplates(t ...*Template) *OrganizationCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *OrganizationCreate) AddTemplates(v ...*Template) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddTemplateIDs(ids...)
+	return _c.AddTemplateIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (oc *OrganizationCreate) AddIntegrationIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddIntegrationIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddIntegrationIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
 }
 
 // AddIntegrations adds the "integrations" edges to the Integration entity.
-func (oc *OrganizationCreate) AddIntegrations(i ...*Integration) *OrganizationCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *OrganizationCreate) AddIntegrations(v ...*Integration) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddIntegrationIDs(ids...)
+	return _c.AddIntegrationIDs(ids...)
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
-func (oc *OrganizationCreate) AddDocumentIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddDocumentIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddDocumentIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDocumentIDs(ids...)
+	return _c
 }
 
 // AddDocuments adds the "documents" edges to the DocumentData entity.
-func (oc *OrganizationCreate) AddDocuments(d ...*DocumentData) *OrganizationCreate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_c *OrganizationCreate) AddDocuments(v ...*DocumentData) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddDocumentIDs(ids...)
+	return _c.AddDocumentIDs(ids...)
 }
 
 // AddOrgSubscriptionIDs adds the "org_subscriptions" edge to the OrgSubscription entity by IDs.
-func (oc *OrganizationCreate) AddOrgSubscriptionIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOrgSubscriptionIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddOrgSubscriptionIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOrgSubscriptionIDs(ids...)
+	return _c
 }
 
 // AddOrgSubscriptions adds the "org_subscriptions" edges to the OrgSubscription entity.
-func (oc *OrganizationCreate) AddOrgSubscriptions(o ...*OrgSubscription) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrganizationCreate) AddOrgSubscriptions(v ...*OrgSubscription) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddOrgSubscriptionIDs(ids...)
+	return _c.AddOrgSubscriptionIDs(ids...)
 }
 
 // AddOrgProductIDs adds the "org_products" edge to the OrgProduct entity by IDs.
-func (oc *OrganizationCreate) AddOrgProductIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOrgProductIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddOrgProductIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOrgProductIDs(ids...)
+	return _c
 }
 
 // AddOrgProducts adds the "org_products" edges to the OrgProduct entity.
-func (oc *OrganizationCreate) AddOrgProducts(o ...*OrgProduct) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrganizationCreate) AddOrgProducts(v ...*OrgProduct) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddOrgProductIDs(ids...)
+	return _c.AddOrgProductIDs(ids...)
 }
 
 // AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
-func (oc *OrganizationCreate) AddOrgPriceIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOrgPriceIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddOrgPriceIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOrgPriceIDs(ids...)
+	return _c
 }
 
 // AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
-func (oc *OrganizationCreate) AddOrgPrices(o ...*OrgPrice) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrganizationCreate) AddOrgPrices(v ...*OrgPrice) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddOrgPriceIDs(ids...)
+	return _c.AddOrgPriceIDs(ids...)
 }
 
 // AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
-func (oc *OrganizationCreate) AddOrgModuleIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddOrgModuleIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddOrgModuleIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOrgModuleIDs(ids...)
+	return _c
 }
 
 // AddOrgModules adds the "org_modules" edges to the OrgModule entity.
-func (oc *OrganizationCreate) AddOrgModules(o ...*OrgModule) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrganizationCreate) AddOrgModules(v ...*OrgModule) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddOrgModuleIDs(ids...)
+	return _c.AddOrgModuleIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
-func (oc *OrganizationCreate) AddInviteIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddInviteIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddInviteIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddInviteIDs(ids...)
+	return _c
 }
 
 // AddInvites adds the "invites" edges to the Invite entity.
-func (oc *OrganizationCreate) AddInvites(i ...*Invite) *OrganizationCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *OrganizationCreate) AddInvites(v ...*Invite) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddInviteIDs(ids...)
+	return _c.AddInviteIDs(ids...)
 }
 
 // AddSubscriberIDs adds the "subscribers" edge to the Subscriber entity by IDs.
-func (oc *OrganizationCreate) AddSubscriberIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddSubscriberIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddSubscriberIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSubscriberIDs(ids...)
+	return _c
 }
 
 // AddSubscribers adds the "subscribers" edges to the Subscriber entity.
-func (oc *OrganizationCreate) AddSubscribers(s ...*Subscriber) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddSubscribers(v ...*Subscriber) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddSubscriberIDs(ids...)
+	return _c.AddSubscriberIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (oc *OrganizationCreate) AddEntityIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEntityIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddEntityIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (oc *OrganizationCreate) AddEntities(e ...*Entity) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *OrganizationCreate) AddEntities(v ...*Entity) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddEntityIDs(ids...)
+	return _c.AddEntityIDs(ids...)
 }
 
 // AddEntityTypeIDs adds the "entity_types" edge to the EntityType entity by IDs.
-func (oc *OrganizationCreate) AddEntityTypeIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEntityTypeIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddEntityTypeIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEntityTypeIDs(ids...)
+	return _c
 }
 
 // AddEntityTypes adds the "entity_types" edges to the EntityType entity.
-func (oc *OrganizationCreate) AddEntityTypes(e ...*EntityType) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *OrganizationCreate) AddEntityTypes(v ...*EntityType) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddEntityTypeIDs(ids...)
+	return _c.AddEntityTypeIDs(ids...)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
-func (oc *OrganizationCreate) AddContactIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddContactIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddContactIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddContactIDs(ids...)
+	return _c
 }
 
 // AddContacts adds the "contacts" edges to the Contact entity.
-func (oc *OrganizationCreate) AddContacts(c ...*Contact) *OrganizationCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *OrganizationCreate) AddContacts(v ...*Contact) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddContactIDs(ids...)
+	return _c.AddContactIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (oc *OrganizationCreate) AddNoteIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddNoteIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddNoteIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddNoteIDs(ids...)
+	return _c
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (oc *OrganizationCreate) AddNotes(n ...*Note) *OrganizationCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *OrganizationCreate) AddNotes(v ...*Note) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddNoteIDs(ids...)
+	return _c.AddNoteIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (oc *OrganizationCreate) AddTaskIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddTaskIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddTaskIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (oc *OrganizationCreate) AddTasks(t ...*Task) *OrganizationCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *OrganizationCreate) AddTasks(v ...*Task) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddTaskIDs(ids...)
+	return _c.AddTaskIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
-func (oc *OrganizationCreate) AddProgramIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddProgramIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddProgramIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddProgramIDs(ids...)
+	return _c
 }
 
 // AddPrograms adds the "programs" edges to the Program entity.
-func (oc *OrganizationCreate) AddPrograms(p ...*Program) *OrganizationCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *OrganizationCreate) AddPrograms(v ...*Program) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddProgramIDs(ids...)
+	return _c.AddProgramIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (oc *OrganizationCreate) AddProcedureIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddProcedureIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddProcedureIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (oc *OrganizationCreate) AddProcedures(p ...*Procedure) *OrganizationCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *OrganizationCreate) AddProcedures(v ...*Procedure) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddProcedureIDs(ids...)
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (oc *OrganizationCreate) AddInternalPolicyIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddInternalPolicyIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddInternalPolicyIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (oc *OrganizationCreate) AddInternalPolicies(i ...*InternalPolicy) *OrganizationCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *OrganizationCreate) AddInternalPolicies(v ...*InternalPolicy) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddInternalPolicyIDs(ids...)
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (oc *OrganizationCreate) AddRiskIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddRiskIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddRiskIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (oc *OrganizationCreate) AddRisks(r ...*Risk) *OrganizationCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_c *OrganizationCreate) AddRisks(v ...*Risk) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddRiskIDs(ids...)
+	return _c.AddRiskIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (oc *OrganizationCreate) AddControlObjectiveIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlObjectiveIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddControlObjectiveIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddControlObjectiveIDs(ids...)
+	return _c
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (oc *OrganizationCreate) AddControlObjectives(c ...*ControlObjective) *OrganizationCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *OrganizationCreate) AddControlObjectives(v ...*ControlObjective) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddControlObjectiveIDs(ids...)
+	return _c.AddControlObjectiveIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (oc *OrganizationCreate) AddNarrativeIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddNarrativeIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddNarrativeIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddNarrativeIDs(ids...)
+	return _c
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (oc *OrganizationCreate) AddNarratives(n ...*Narrative) *OrganizationCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_c *OrganizationCreate) AddNarratives(v ...*Narrative) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddNarrativeIDs(ids...)
+	return _c.AddNarrativeIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (oc *OrganizationCreate) AddControlIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddControlIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (oc *OrganizationCreate) AddControls(c ...*Control) *OrganizationCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *OrganizationCreate) AddControls(v ...*Control) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddControlIDs(ids...)
+	return _c.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (oc *OrganizationCreate) AddSubcontrolIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddSubcontrolIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddSubcontrolIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (oc *OrganizationCreate) AddSubcontrols(s ...*Subcontrol) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddSubcontrols(v ...*Subcontrol) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddSubcontrolIDs(ids...)
+	return _c.AddSubcontrolIDs(ids...)
 }
 
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
-func (oc *OrganizationCreate) AddControlImplementationIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddControlImplementationIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddControlImplementationIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddControlImplementationIDs(ids...)
+	return _c
 }
 
 // AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
-func (oc *OrganizationCreate) AddControlImplementations(c ...*ControlImplementation) *OrganizationCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *OrganizationCreate) AddControlImplementations(v ...*ControlImplementation) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddControlImplementationIDs(ids...)
+	return _c.AddControlImplementationIDs(ids...)
 }
 
 // AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (oc *OrganizationCreate) AddMappedControlIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddMappedControlIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddMappedControlIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddMappedControlIDs(ids...)
+	return _c
 }
 
 // AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (oc *OrganizationCreate) AddMappedControls(m ...*MappedControl) *OrganizationCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *OrganizationCreate) AddMappedControls(v ...*MappedControl) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddMappedControlIDs(ids...)
+	return _c.AddMappedControlIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (oc *OrganizationCreate) AddEvidenceIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddEvidenceIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddEvidenceIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (oc *OrganizationCreate) AddEvidence(e ...*Evidence) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *OrganizationCreate) AddEvidence(v ...*Evidence) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddEvidenceIDs(ids...)
+	return _c.AddEvidenceIDs(ids...)
 }
 
 // AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
-func (oc *OrganizationCreate) AddStandardIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddStandardIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddStandardIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddStandardIDs(ids...)
+	return _c
 }
 
 // AddStandards adds the "standards" edges to the Standard entity.
-func (oc *OrganizationCreate) AddStandards(s ...*Standard) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddStandards(v ...*Standard) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddStandardIDs(ids...)
+	return _c.AddStandardIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (oc *OrganizationCreate) AddActionPlanIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddActionPlanIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddActionPlanIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (oc *OrganizationCreate) AddActionPlans(a ...*ActionPlan) *OrganizationCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *OrganizationCreate) AddActionPlans(v ...*ActionPlan) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddActionPlanIDs(ids...)
+	return _c.AddActionPlanIDs(ids...)
 }
 
 // AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
-func (oc *OrganizationCreate) AddCustomDomainIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddCustomDomainIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddCustomDomainIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCustomDomainIDs(ids...)
+	return _c
 }
 
 // AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
-func (oc *OrganizationCreate) AddCustomDomains(c ...*CustomDomain) *OrganizationCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *OrganizationCreate) AddCustomDomains(v ...*CustomDomain) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddCustomDomainIDs(ids...)
+	return _c.AddCustomDomainIDs(ids...)
 }
 
 // AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
-func (oc *OrganizationCreate) AddJobRunnerIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddJobRunnerIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddJobRunnerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerIDs(ids...)
+	return _c
 }
 
 // AddJobRunners adds the "job_runners" edges to the JobRunner entity.
-func (oc *OrganizationCreate) AddJobRunners(j ...*JobRunner) *OrganizationCreate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_c *OrganizationCreate) AddJobRunners(v ...*JobRunner) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddJobRunnerIDs(ids...)
+	return _c.AddJobRunnerIDs(ids...)
 }
 
 // AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (oc *OrganizationCreate) AddJobRunnerTokenIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddJobRunnerTokenIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddJobRunnerTokenIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerTokenIDs(ids...)
+	return _c
 }
 
 // AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (oc *OrganizationCreate) AddJobRunnerTokens(j ...*JobRunnerToken) *OrganizationCreate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_c *OrganizationCreate) AddJobRunnerTokens(v ...*JobRunnerToken) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddJobRunnerTokenIDs(ids...)
+	return _c.AddJobRunnerTokenIDs(ids...)
 }
 
 // AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
-func (oc *OrganizationCreate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
+	return _c
 }
 
 // AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (oc *OrganizationCreate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationCreate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_c *OrganizationCreate) AddJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddJobRunnerRegistrationTokenIDs(ids...)
+	return _c.AddJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
-func (oc *OrganizationCreate) AddDNSVerificationIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddDNSVerificationIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddDNSVerificationIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDNSVerificationIDs(ids...)
+	return _c
 }
 
 // AddDNSVerifications adds the "dns_verifications" edges to the DNSVerification entity.
-func (oc *OrganizationCreate) AddDNSVerifications(d ...*DNSVerification) *OrganizationCreate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_c *OrganizationCreate) AddDNSVerifications(v ...*DNSVerification) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddDNSVerificationIDs(ids...)
+	return _c.AddDNSVerificationIDs(ids...)
 }
 
 // AddJobTemplateIDs adds the "job_templates" edge to the JobTemplate entity by IDs.
-func (oc *OrganizationCreate) AddJobTemplateIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddJobTemplateIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddJobTemplateIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobTemplateIDs(ids...)
+	return _c
 }
 
 // AddJobTemplates adds the "job_templates" edges to the JobTemplate entity.
-func (oc *OrganizationCreate) AddJobTemplates(j ...*JobTemplate) *OrganizationCreate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_c *OrganizationCreate) AddJobTemplates(v ...*JobTemplate) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddJobTemplateIDs(ids...)
+	return _c.AddJobTemplateIDs(ids...)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (oc *OrganizationCreate) AddScheduledJobIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddScheduledJobIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddScheduledJobIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddScheduledJobIDs(ids...)
+	return _c
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (oc *OrganizationCreate) AddScheduledJobs(s ...*ScheduledJob) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddScheduledJobs(v ...*ScheduledJob) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddScheduledJobIDs(ids...)
+	return _c.AddScheduledJobIDs(ids...)
 }
 
 // AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
-func (oc *OrganizationCreate) AddJobResultIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddJobResultIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddJobResultIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobResultIDs(ids...)
+	return _c
 }
 
 // AddJobResults adds the "job_results" edges to the JobResult entity.
-func (oc *OrganizationCreate) AddJobResults(j ...*JobResult) *OrganizationCreate {
-	ids := make([]string, len(j))
-	for i := range j {
-		ids[i] = j[i].ID
+func (_c *OrganizationCreate) AddJobResults(v ...*JobResult) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddJobResultIDs(ids...)
+	return _c.AddJobResultIDs(ids...)
 }
 
 // AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
-func (oc *OrganizationCreate) AddScheduledJobRunIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddScheduledJobRunIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddScheduledJobRunIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddScheduledJobRunIDs(ids...)
+	return _c
 }
 
 // AddScheduledJobRuns adds the "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (oc *OrganizationCreate) AddScheduledJobRuns(s ...*ScheduledJobRun) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddScheduledJobRunIDs(ids...)
+	return _c.AddScheduledJobRunIDs(ids...)
 }
 
 // AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
-func (oc *OrganizationCreate) AddTrustCenterIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddTrustCenterIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddTrustCenterIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterIDs(ids...)
+	return _c
 }
 
 // AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
-func (oc *OrganizationCreate) AddTrustCenters(t ...*TrustCenter) *OrganizationCreate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *OrganizationCreate) AddTrustCenters(v ...*TrustCenter) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddTrustCenterIDs(ids...)
+	return _c.AddTrustCenterIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (oc *OrganizationCreate) AddAssetIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddAssetIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddAssetIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (oc *OrganizationCreate) AddAssets(a ...*Asset) *OrganizationCreate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *OrganizationCreate) AddAssets(v ...*Asset) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddAssetIDs(ids...)
+	return _c.AddAssetIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (oc *OrganizationCreate) AddScanIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddScanIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddScanIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (oc *OrganizationCreate) AddScans(s ...*Scan) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddScans(v ...*Scan) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddScanIDs(ids...)
+	return _c.AddScanIDs(ids...)
 }
 
 // AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
-func (oc *OrganizationCreate) AddSubprocessorIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddSubprocessorIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddSubprocessorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSubprocessorIDs(ids...)
+	return _c
 }
 
 // AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
-func (oc *OrganizationCreate) AddSubprocessors(s ...*Subprocessor) *OrganizationCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *OrganizationCreate) AddSubprocessors(v ...*Subprocessor) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddSubprocessorIDs(ids...)
+	return _c.AddSubprocessorIDs(ids...)
 }
 
 // AddExportIDs adds the "exports" edge to the Export entity by IDs.
-func (oc *OrganizationCreate) AddExportIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddExportIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddExportIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddExportIDs(ids...)
+	return _c
 }
 
 // AddExports adds the "exports" edges to the Export entity.
-func (oc *OrganizationCreate) AddExports(e ...*Export) *OrganizationCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *OrganizationCreate) AddExports(v ...*Export) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddExportIDs(ids...)
+	return _c.AddExportIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
-func (oc *OrganizationCreate) AddMemberIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddMemberIDs(ids...)
-	return oc
+func (_c *OrganizationCreate) AddMemberIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddMemberIDs(ids...)
+	return _c
 }
 
 // AddMembers adds the "members" edges to the OrgMembership entity.
-func (oc *OrganizationCreate) AddMembers(o ...*OrgMembership) *OrganizationCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrganizationCreate) AddMembers(v ...*OrgMembership) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return oc.AddMemberIDs(ids...)
+	return _c.AddMemberIDs(ids...)
 }
 
 // Mutation returns the OrganizationMutation object of the builder.
-func (oc *OrganizationCreate) Mutation() *OrganizationMutation {
-	return oc.mutation
+func (_c *OrganizationCreate) Mutation() *OrganizationMutation {
+	return _c.mutation
 }
 
 // Save creates the Organization in the database.
-func (oc *OrganizationCreate) Save(ctx context.Context) (*Organization, error) {
-	if err := oc.defaults(); err != nil {
+func (_c *OrganizationCreate) Save(ctx context.Context) (*Organization, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, oc.sqlSave, oc.mutation, oc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (oc *OrganizationCreate) SaveX(ctx context.Context) *Organization {
-	v, err := oc.Save(ctx)
+func (_c *OrganizationCreate) SaveX(ctx context.Context) *Organization {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1332,102 +1332,102 @@ func (oc *OrganizationCreate) SaveX(ctx context.Context) *Organization {
 }
 
 // Exec executes the query.
-func (oc *OrganizationCreate) Exec(ctx context.Context) error {
-	_, err := oc.Save(ctx)
+func (_c *OrganizationCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oc *OrganizationCreate) ExecX(ctx context.Context) {
-	if err := oc.Exec(ctx); err != nil {
+func (_c *OrganizationCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oc *OrganizationCreate) defaults() error {
-	if _, ok := oc.mutation.CreatedAt(); !ok {
+func (_c *OrganizationCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if organization.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.DefaultCreatedAt()
-		oc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := oc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if organization.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.DefaultUpdatedAt()
-		oc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := oc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := organization.DefaultTags
-		oc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := oc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		v := organization.DefaultDisplayName
-		oc.mutation.SetDisplayName(v)
+		_c.mutation.SetDisplayName(v)
 	}
-	if _, ok := oc.mutation.PersonalOrg(); !ok {
+	if _, ok := _c.mutation.PersonalOrg(); !ok {
 		v := organization.DefaultPersonalOrg
-		oc.mutation.SetPersonalOrg(v)
+		_c.mutation.SetPersonalOrg(v)
 	}
-	if _, ok := oc.mutation.AvatarUpdatedAt(); !ok {
+	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
 		if organization.DefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organization.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organization.DefaultAvatarUpdatedAt()
-		oc.mutation.SetAvatarUpdatedAt(v)
+		_c.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := oc.mutation.DedicatedDb(); !ok {
+	if _, ok := _c.mutation.DedicatedDb(); !ok {
 		v := organization.DefaultDedicatedDb
-		oc.mutation.SetDedicatedDb(v)
+		_c.mutation.SetDedicatedDb(v)
 	}
-	if _, ok := oc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if organization.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organization.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := organization.DefaultID()
-		oc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oc *OrganizationCreate) check() error {
-	if _, ok := oc.mutation.Name(); !ok {
+func (_c *OrganizationCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Organization.name"`)}
 	}
-	if v, ok := oc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := organization.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Organization.name": %w`, err)}
 		}
 	}
-	if _, ok := oc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`generated: missing required field "Organization.display_name"`)}
 	}
-	if v, ok := oc.mutation.DisplayName(); ok {
+	if v, ok := _c.mutation.DisplayName(); ok {
 		if err := organization.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Organization.display_name": %w`, err)}
 		}
 	}
-	if v, ok := oc.mutation.AvatarRemoteURL(); ok {
+	if v, ok := _c.mutation.AvatarRemoteURL(); ok {
 		if err := organization.AvatarRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
-	if _, ok := oc.mutation.DedicatedDb(); !ok {
+	if _, ok := _c.mutation.DedicatedDb(); !ok {
 		return &ValidationError{Name: "dedicated_db", err: errors.New(`generated: missing required field "Organization.dedicated_db"`)}
 	}
 	return nil
 }
 
-func (oc *OrganizationCreate) sqlSave(ctx context.Context) (*Organization, error) {
-	if err := oc.check(); err != nil {
+func (_c *OrganizationCreate) sqlSave(ctx context.Context) (*Organization, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := oc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, oc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -1440,78 +1440,78 @@ func (oc *OrganizationCreate) sqlSave(ctx context.Context) (*Organization, error
 			return nil, fmt.Errorf("unexpected Organization.ID type: %T", _spec.ID.Value)
 		}
 	}
-	oc.mutation.id = &_node.ID
-	oc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec) {
+func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Organization{config: oc.config}
+		_node = &Organization{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(organization.Table, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString))
 	)
-	_spec.Schema = oc.schemaConfig.Organization
-	if id, ok := oc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Organization
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := oc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(organization.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := oc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(organization.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(organization.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := oc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(organization.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := oc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := oc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := oc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(organization.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := oc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := oc.mutation.DisplayName(); ok {
+	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
 	}
-	if value, ok := oc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(organization.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := oc.mutation.PersonalOrg(); ok {
+	if value, ok := _c.mutation.PersonalOrg(); ok {
 		_spec.SetField(organization.FieldPersonalOrg, field.TypeBool, value)
 		_node.PersonalOrg = value
 	}
-	if value, ok := oc.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organization.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
 	}
-	if value, ok := oc.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
 		_node.AvatarUpdatedAt = &value
 	}
-	if value, ok := oc.mutation.DedicatedDb(); ok {
+	if value, ok := _c.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 		_node.DedicatedDb = value
 	}
-	if nodes := oc.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1522,13 +1522,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ControlImplementationCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1539,13 +1539,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1556,13 +1556,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1573,13 +1573,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1590,13 +1590,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1607,13 +1607,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1624,13 +1624,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1641,13 +1641,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1658,13 +1658,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1675,13 +1675,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1692,13 +1692,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1709,13 +1709,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1726,13 +1726,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1743,13 +1743,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ParentIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ParentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1760,14 +1760,14 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Organization
+		edge.Schema = _c.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ParentOrganizationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ChildrenIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ChildrenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1778,13 +1778,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Organization
+		edge.Schema = _c.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.SettingIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: false,
@@ -1795,13 +1795,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrganizationSetting
+		edge.Schema = _c.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PersonalAccessTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1812,13 +1812,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrganizationPersonalAccessTokens
+		edge.Schema = _c.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.APITokensIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.APITokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1829,13 +1829,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.APIToken
+		edge.Schema = _c.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1846,11 +1846,11 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrgMembership
+		edge.Schema = _c.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &OrgMembershipCreate{config: oc.config, mutation: newOrgMembershipMutation(oc.config, OpCreate)}
+		createE := &OrgMembershipCreate{config: _c.config, mutation: newOrgMembershipMutation(_c.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -1859,7 +1859,7 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1870,13 +1870,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrganizationFiles
+		edge.Schema = _c.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1887,13 +1887,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrganizationEvents
+		edge.Schema = _c.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.SecretsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SecretsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1904,13 +1904,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Hush
+		edge.Schema = _c.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.AvatarFileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AvatarFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1921,14 +1921,14 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Organization
+		edge.Schema = _c.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AvatarLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.GroupsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1939,13 +1939,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Group
+		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.TemplatesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1956,13 +1956,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Template
+		edge.Schema = _c.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.IntegrationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1973,13 +1973,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Integration
+		edge.Schema = _c.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.DocumentsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1990,13 +1990,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.DocumentData
+		edge.Schema = _c.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgSubscriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2007,13 +2007,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrgSubscription
+		edge.Schema = _c.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.OrgProductsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2024,13 +2024,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrgProduct
+		edge.Schema = _c.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.OrgPricesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2041,13 +2041,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrgPrice
+		edge.Schema = _c.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.OrgModulesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2058,13 +2058,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrgModule
+		edge.Schema = _c.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.InvitesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InvitesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2075,13 +2075,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Invite
+		edge.Schema = _c.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.SubscribersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubscribersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2092,13 +2092,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Subscriber
+		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2109,13 +2109,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Entity
+		edge.Schema = _c.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EntityTypesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntityTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2126,13 +2126,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.EntityType
+		edge.Schema = _c.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ContactsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2143,13 +2143,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Contact
+		edge.Schema = _c.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2160,13 +2160,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2177,13 +2177,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Task
+		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ProgramsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2194,13 +2194,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Program
+		edge.Schema = _c.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2211,13 +2211,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Procedure
+		edge.Schema = _c.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2228,13 +2228,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.InternalPolicy
+		edge.Schema = _c.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2245,13 +2245,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Risk
+		edge.Schema = _c.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2262,13 +2262,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.ControlObjective
+		edge.Schema = _c.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2279,13 +2279,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Narrative
+		edge.Schema = _c.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2296,13 +2296,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Control
+		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2313,13 +2313,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Subcontrol
+		edge.Schema = _c.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2330,13 +2330,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.ControlImplementation
+		edge.Schema = _c.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.MappedControlsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MappedControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2347,13 +2347,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.MappedControl
+		edge.Schema = _c.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2364,13 +2364,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Evidence
+		edge.Schema = _c.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.StandardsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.StandardsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2381,13 +2381,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Standard
+		edge.Schema = _c.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2398,13 +2398,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.ActionPlan
+		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CustomDomainsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2415,13 +2415,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.CustomDomain
+		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.JobRunnersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobRunnersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2432,13 +2432,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.JobRunner
+		edge.Schema = _c.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2449,13 +2449,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.JobRunnerToken
+		edge.Schema = _c.schemaConfig.JobRunnerToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2466,13 +2466,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _c.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2483,13 +2483,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.DNSVerification
+		edge.Schema = _c.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.JobTemplatesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobTemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2500,13 +2500,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.JobTemplate
+		edge.Schema = _c.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2517,13 +2517,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.ScheduledJob
+		edge.Schema = _c.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.JobResultsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.JobResultsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2534,13 +2534,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.JobResult
+		edge.Schema = _c.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2551,13 +2551,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.ScheduledJobRun
+		edge.Schema = _c.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.TrustCentersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCentersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2568,13 +2568,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.TrustCenter
+		edge.Schema = _c.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2585,13 +2585,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Asset
+		edge.Schema = _c.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2602,13 +2602,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Scan
+		edge.Schema = _c.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2619,13 +2619,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Subprocessor
+		edge.Schema = _c.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ExportsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ExportsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2636,13 +2636,13 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Export
+		edge.Schema = _c.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -2653,7 +2653,7 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.OrgMembership
+		edge.Schema = _c.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2670,16 +2670,16 @@ type OrganizationCreateBulk struct {
 }
 
 // Save creates the Organization entities in the database.
-func (ocb *OrganizationCreateBulk) Save(ctx context.Context) ([]*Organization, error) {
-	if ocb.err != nil {
-		return nil, ocb.err
+func (_c *OrganizationCreateBulk) Save(ctx context.Context) ([]*Organization, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ocb.builders))
-	nodes := make([]*Organization, len(ocb.builders))
-	mutators := make([]Mutator, len(ocb.builders))
-	for i := range ocb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Organization, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ocb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrganizationMutation)
@@ -2693,11 +2693,11 @@ func (ocb *OrganizationCreateBulk) Save(ctx context.Context) ([]*Organization, e
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ocb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ocb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -2717,7 +2717,7 @@ func (ocb *OrganizationCreateBulk) Save(ctx context.Context) ([]*Organization, e
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ocb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -2725,8 +2725,8 @@ func (ocb *OrganizationCreateBulk) Save(ctx context.Context) ([]*Organization, e
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ocb *OrganizationCreateBulk) SaveX(ctx context.Context) []*Organization {
-	v, err := ocb.Save(ctx)
+func (_c *OrganizationCreateBulk) SaveX(ctx context.Context) []*Organization {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -2734,14 +2734,14 @@ func (ocb *OrganizationCreateBulk) SaveX(ctx context.Context) []*Organization {
 }
 
 // Exec executes the query.
-func (ocb *OrganizationCreateBulk) Exec(ctx context.Context) error {
-	_, err := ocb.Save(ctx)
+func (_c *OrganizationCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ocb *OrganizationCreateBulk) ExecX(ctx context.Context) {
-	if err := ocb.Exec(ctx); err != nil {
+func (_c *OrganizationCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

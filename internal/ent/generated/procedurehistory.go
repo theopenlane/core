@@ -105,7 +105,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ProcedureHistory fields.
-func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
+func (_m *ProcedureHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -115,73 +115,73 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ph.ID = value.String
+				_m.ID = value.String
 			}
 		case procedurehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ph.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case procedurehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ph.Ref = value.String
+				_m.Ref = value.String
 			}
 		case procedurehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ph.Operation = *value
+				_m.Operation = *value
 			}
 		case procedurehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ph.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case procedurehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ph.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case procedurehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ph.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case procedurehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ph.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case procedurehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ph.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case procedurehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ph.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case procedurehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				ph.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case procedurehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -189,79 +189,79 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				ph.Revision = value.String
+				_m.Revision = value.String
 			}
 		case procedurehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ph.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case procedurehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ph.Name = value.String
+				_m.Name = value.String
 			}
 		case procedurehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ph.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case procedurehistory.FieldProcedureType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field procedure_type", values[i])
 			} else if value.Valid {
-				ph.ProcedureType = value.String
+				_m.ProcedureType = value.String
 			}
 		case procedurehistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				ph.Details = value.String
+				_m.Details = value.String
 			}
 		case procedurehistory.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
 			} else if value.Valid {
-				ph.ApprovalRequired = value.Bool
+				_m.ApprovalRequired = value.Bool
 			}
 		case procedurehistory.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
-				ph.ReviewDue = value.Time
+				_m.ReviewDue = value.Time
 			}
 		case procedurehistory.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				ph.ReviewFrequency = enums.Frequency(value.String)
+				_m.ReviewFrequency = enums.Frequency(value.String)
 			}
 		case procedurehistory.FieldApproverID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
 			} else if value.Valid {
-				ph.ApproverID = value.String
+				_m.ApproverID = value.String
 			}
 		case procedurehistory.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				ph.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case procedurehistory.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
-				ph.Summary = value.String
+				_m.Summary = value.String
 			}
 		case procedurehistory.FieldTagSuggestions:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.TagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.TagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
 				}
 			}
@@ -269,7 +269,7 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.DismissedTagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedTagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
 				}
 			}
@@ -277,7 +277,7 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.ControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
 				}
 			}
@@ -285,7 +285,7 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.DismissedControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
 				}
 			}
@@ -293,7 +293,7 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.ImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
 				}
 			}
@@ -301,12 +301,12 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.DismissedImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
 		default:
-			ph.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -314,119 +314,119 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ProcedureHistory.
 // This includes values selected through modifiers, order, etc.
-func (ph *ProcedureHistory) Value(name string) (ent.Value, error) {
-	return ph.selectValues.Get(name)
+func (_m *ProcedureHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ProcedureHistory.
 // Note that you need to call ProcedureHistory.Unwrap() before calling this method if this ProcedureHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ph *ProcedureHistory) Update() *ProcedureHistoryUpdateOne {
-	return NewProcedureHistoryClient(ph.config).UpdateOne(ph)
+func (_m *ProcedureHistory) Update() *ProcedureHistoryUpdateOne {
+	return NewProcedureHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ProcedureHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ph *ProcedureHistory) Unwrap() *ProcedureHistory {
-	_tx, ok := ph.config.driver.(*txDriver)
+func (_m *ProcedureHistory) Unwrap() *ProcedureHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ProcedureHistory is not a transactional entity")
 	}
-	ph.config.driver = _tx.drv
-	return ph
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ph *ProcedureHistory) String() string {
+func (_m *ProcedureHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ProcedureHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ph.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ph.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ph.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ph.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ph.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ph.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ph.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ph.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ph.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(ph.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(ph.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ph.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ph.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("procedure_type=")
-	builder.WriteString(ph.ProcedureType)
+	builder.WriteString(_m.ProcedureType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(ph.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
-	builder.WriteString(fmt.Sprintf("%v", ph.ApprovalRequired))
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
 	builder.WriteString(", ")
 	builder.WriteString("review_due=")
-	builder.WriteString(ph.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(_m.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
-	builder.WriteString(fmt.Sprintf("%v", ph.ReviewFrequency))
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
 	builder.WriteString(", ")
 	builder.WriteString("approver_id=")
-	builder.WriteString(ph.ApproverID)
+	builder.WriteString(_m.ApproverID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(ph.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
-	builder.WriteString(ph.Summary)
+	builder.WriteString(_m.Summary)
 	builder.WriteString(", ")
 	builder.WriteString("tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ph.TagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ph.DismissedTagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedTagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ph.ControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ph.DismissedControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ph.ImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ph.DismissedImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteByte(')')
 	return builder.String()
 }

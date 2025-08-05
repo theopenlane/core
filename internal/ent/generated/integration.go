@@ -117,95 +117,95 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Integration fields.
-func (i *Integration) assignValues(columns []string, values []any) error {
+func (_m *Integration) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
-	for j := range columns {
-		switch columns[j] {
+	for i := range columns {
+		switch columns[i] {
 		case integration.FieldID:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				i.ID = value.String
+				_m.ID = value.String
 			}
 		case integration.FieldCreatedAt:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				i.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case integration.FieldUpdatedAt:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				i.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case integration.FieldCreatedBy:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				i.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case integration.FieldUpdatedBy:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				i.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case integration.FieldDeletedAt:
-			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[j])
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				i.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case integration.FieldDeletedBy:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				i.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case integration.FieldTags:
-			if value, ok := values[j].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[j])
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &i.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
 		case integration.FieldOwnerID:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				i.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case integration.FieldName:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				i.Name = value.String
+				_m.Name = value.String
 			}
 		case integration.FieldDescription:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				i.Description = value.String
+				_m.Description = value.String
 			}
 		case integration.FieldKind:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field kind", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field kind", values[i])
 			} else if value.Valid {
-				i.Kind = value.String
+				_m.Kind = value.String
 			}
 		case integration.ForeignKeys[0]:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field group_integrations", values[j])
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field group_integrations", values[i])
 			} else if value.Valid {
-				i.group_integrations = new(string)
-				*i.group_integrations = value.String
+				_m.group_integrations = new(string)
+				*_m.group_integrations = value.String
 			}
 		default:
-			i.selectValues.Set(columns[j], values[j])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -213,129 +213,129 @@ func (i *Integration) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Integration.
 // This includes values selected through modifiers, order, etc.
-func (i *Integration) Value(name string) (ent.Value, error) {
-	return i.selectValues.Get(name)
+func (_m *Integration) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Integration entity.
-func (i *Integration) QueryOwner() *OrganizationQuery {
-	return NewIntegrationClient(i.config).QueryOwner(i)
+func (_m *Integration) QueryOwner() *OrganizationQuery {
+	return NewIntegrationClient(_m.config).QueryOwner(_m)
 }
 
 // QuerySecrets queries the "secrets" edge of the Integration entity.
-func (i *Integration) QuerySecrets() *HushQuery {
-	return NewIntegrationClient(i.config).QuerySecrets(i)
+func (_m *Integration) QuerySecrets() *HushQuery {
+	return NewIntegrationClient(_m.config).QuerySecrets(_m)
 }
 
 // QueryEvents queries the "events" edge of the Integration entity.
-func (i *Integration) QueryEvents() *EventQuery {
-	return NewIntegrationClient(i.config).QueryEvents(i)
+func (_m *Integration) QueryEvents() *EventQuery {
+	return NewIntegrationClient(_m.config).QueryEvents(_m)
 }
 
 // Update returns a builder for updating this Integration.
 // Note that you need to call Integration.Unwrap() before calling this method if this Integration
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (i *Integration) Update() *IntegrationUpdateOne {
-	return NewIntegrationClient(i.config).UpdateOne(i)
+func (_m *Integration) Update() *IntegrationUpdateOne {
+	return NewIntegrationClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Integration entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (i *Integration) Unwrap() *Integration {
-	_tx, ok := i.config.driver.(*txDriver)
+func (_m *Integration) Unwrap() *Integration {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Integration is not a transactional entity")
 	}
-	i.config.driver = _tx.drv
-	return i
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (i *Integration) String() string {
+func (_m *Integration) String() string {
 	var builder strings.Builder
 	builder.WriteString("Integration(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", i.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(i.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(i.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(i.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(i.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(i.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(i.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", i.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(i.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(i.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(i.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("kind=")
-	builder.WriteString(i.Kind)
+	builder.WriteString(_m.Kind)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedSecrets returns the Secrets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (i *Integration) NamedSecrets(name string) ([]*Hush, error) {
-	if i.Edges.namedSecrets == nil {
+func (_m *Integration) NamedSecrets(name string) ([]*Hush, error) {
+	if _m.Edges.namedSecrets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := i.Edges.namedSecrets[name]
+	nodes, ok := _m.Edges.namedSecrets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (i *Integration) appendNamedSecrets(name string, edges ...*Hush) {
-	if i.Edges.namedSecrets == nil {
-		i.Edges.namedSecrets = make(map[string][]*Hush)
+func (_m *Integration) appendNamedSecrets(name string, edges ...*Hush) {
+	if _m.Edges.namedSecrets == nil {
+		_m.Edges.namedSecrets = make(map[string][]*Hush)
 	}
 	if len(edges) == 0 {
-		i.Edges.namedSecrets[name] = []*Hush{}
+		_m.Edges.namedSecrets[name] = []*Hush{}
 	} else {
-		i.Edges.namedSecrets[name] = append(i.Edges.namedSecrets[name], edges...)
+		_m.Edges.namedSecrets[name] = append(_m.Edges.namedSecrets[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (i *Integration) NamedEvents(name string) ([]*Event, error) {
-	if i.Edges.namedEvents == nil {
+func (_m *Integration) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := i.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (i *Integration) appendNamedEvents(name string, edges ...*Event) {
-	if i.Edges.namedEvents == nil {
-		i.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Integration) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		i.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		i.Edges.namedEvents[name] = append(i.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 

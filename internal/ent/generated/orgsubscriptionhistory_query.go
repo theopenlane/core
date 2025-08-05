@@ -32,40 +32,40 @@ type OrgSubscriptionHistoryQuery struct {
 }
 
 // Where adds a new predicate for the OrgSubscriptionHistoryQuery builder.
-func (oshq *OrgSubscriptionHistoryQuery) Where(ps ...predicate.OrgSubscriptionHistory) *OrgSubscriptionHistoryQuery {
-	oshq.predicates = append(oshq.predicates, ps...)
-	return oshq
+func (_q *OrgSubscriptionHistoryQuery) Where(ps ...predicate.OrgSubscriptionHistory) *OrgSubscriptionHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (oshq *OrgSubscriptionHistoryQuery) Limit(limit int) *OrgSubscriptionHistoryQuery {
-	oshq.ctx.Limit = &limit
-	return oshq
+func (_q *OrgSubscriptionHistoryQuery) Limit(limit int) *OrgSubscriptionHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (oshq *OrgSubscriptionHistoryQuery) Offset(offset int) *OrgSubscriptionHistoryQuery {
-	oshq.ctx.Offset = &offset
-	return oshq
+func (_q *OrgSubscriptionHistoryQuery) Offset(offset int) *OrgSubscriptionHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (oshq *OrgSubscriptionHistoryQuery) Unique(unique bool) *OrgSubscriptionHistoryQuery {
-	oshq.ctx.Unique = &unique
-	return oshq
+func (_q *OrgSubscriptionHistoryQuery) Unique(unique bool) *OrgSubscriptionHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (oshq *OrgSubscriptionHistoryQuery) Order(o ...orgsubscriptionhistory.OrderOption) *OrgSubscriptionHistoryQuery {
-	oshq.order = append(oshq.order, o...)
-	return oshq
+func (_q *OrgSubscriptionHistoryQuery) Order(o ...orgsubscriptionhistory.OrderOption) *OrgSubscriptionHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first OrgSubscriptionHistory entity from the query.
 // Returns a *NotFoundError when no OrgSubscriptionHistory was found.
-func (oshq *OrgSubscriptionHistoryQuery) First(ctx context.Context) (*OrgSubscriptionHistory, error) {
-	nodes, err := oshq.Limit(1).All(setContextOp(ctx, oshq.ctx, ent.OpQueryFirst))
+func (_q *OrgSubscriptionHistoryQuery) First(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -76,8 +76,8 @@ func (oshq *OrgSubscriptionHistoryQuery) First(ctx context.Context) (*OrgSubscri
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) FirstX(ctx context.Context) *OrgSubscriptionHistory {
-	node, err := oshq.First(ctx)
+func (_q *OrgSubscriptionHistoryQuery) FirstX(ctx context.Context) *OrgSubscriptionHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -86,9 +86,9 @@ func (oshq *OrgSubscriptionHistoryQuery) FirstX(ctx context.Context) *OrgSubscri
 
 // FirstID returns the first OrgSubscriptionHistory ID from the query.
 // Returns a *NotFoundError when no OrgSubscriptionHistory ID was found.
-func (oshq *OrgSubscriptionHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *OrgSubscriptionHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = oshq.Limit(1).IDs(setContextOp(ctx, oshq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -99,8 +99,8 @@ func (oshq *OrgSubscriptionHistoryQuery) FirstID(ctx context.Context) (id string
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := oshq.FirstID(ctx)
+func (_q *OrgSubscriptionHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -110,8 +110,8 @@ func (oshq *OrgSubscriptionHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single OrgSubscriptionHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one OrgSubscriptionHistory entity is found.
 // Returns a *NotFoundError when no OrgSubscriptionHistory entities are found.
-func (oshq *OrgSubscriptionHistoryQuery) Only(ctx context.Context) (*OrgSubscriptionHistory, error) {
-	nodes, err := oshq.Limit(2).All(setContextOp(ctx, oshq.ctx, ent.OpQueryOnly))
+func (_q *OrgSubscriptionHistoryQuery) Only(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -126,8 +126,8 @@ func (oshq *OrgSubscriptionHistoryQuery) Only(ctx context.Context) (*OrgSubscrip
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) OnlyX(ctx context.Context) *OrgSubscriptionHistory {
-	node, err := oshq.Only(ctx)
+func (_q *OrgSubscriptionHistoryQuery) OnlyX(ctx context.Context) *OrgSubscriptionHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -137,9 +137,9 @@ func (oshq *OrgSubscriptionHistoryQuery) OnlyX(ctx context.Context) *OrgSubscrip
 // OnlyID is like Only, but returns the only OrgSubscriptionHistory ID in the query.
 // Returns a *NotSingularError when more than one OrgSubscriptionHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (oshq *OrgSubscriptionHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *OrgSubscriptionHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = oshq.Limit(2).IDs(setContextOp(ctx, oshq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -154,8 +154,8 @@ func (oshq *OrgSubscriptionHistoryQuery) OnlyID(ctx context.Context) (id string,
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := oshq.OnlyID(ctx)
+func (_q *OrgSubscriptionHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -163,18 +163,18 @@ func (oshq *OrgSubscriptionHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of OrgSubscriptionHistories.
-func (oshq *OrgSubscriptionHistoryQuery) All(ctx context.Context) ([]*OrgSubscriptionHistory, error) {
-	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryAll)
-	if err := oshq.prepareQuery(ctx); err != nil {
+func (_q *OrgSubscriptionHistoryQuery) All(ctx context.Context) ([]*OrgSubscriptionHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*OrgSubscriptionHistory, *OrgSubscriptionHistoryQuery]()
-	return withInterceptors[[]*OrgSubscriptionHistory](ctx, oshq, qr, oshq.inters)
+	return withInterceptors[[]*OrgSubscriptionHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) AllX(ctx context.Context) []*OrgSubscriptionHistory {
-	nodes, err := oshq.All(ctx)
+func (_q *OrgSubscriptionHistoryQuery) AllX(ctx context.Context) []*OrgSubscriptionHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -182,20 +182,20 @@ func (oshq *OrgSubscriptionHistoryQuery) AllX(ctx context.Context) []*OrgSubscri
 }
 
 // IDs executes the query and returns a list of OrgSubscriptionHistory IDs.
-func (oshq *OrgSubscriptionHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if oshq.ctx.Unique == nil && oshq.path != nil {
-		oshq.Unique(true)
+func (_q *OrgSubscriptionHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryIDs)
-	if err = oshq.Select(orgsubscriptionhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(orgsubscriptionhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := oshq.IDs(ctx)
+func (_q *OrgSubscriptionHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -203,17 +203,17 @@ func (oshq *OrgSubscriptionHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (oshq *OrgSubscriptionHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryCount)
-	if err := oshq.prepareQuery(ctx); err != nil {
+func (_q *OrgSubscriptionHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, oshq, querierCount[*OrgSubscriptionHistoryQuery](), oshq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OrgSubscriptionHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) CountX(ctx context.Context) int {
-	count, err := oshq.Count(ctx)
+func (_q *OrgSubscriptionHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -221,9 +221,9 @@ func (oshq *OrgSubscriptionHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (oshq *OrgSubscriptionHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryExist)
-	switch _, err := oshq.FirstID(ctx); {
+func (_q *OrgSubscriptionHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -234,8 +234,8 @@ func (oshq *OrgSubscriptionHistoryQuery) Exist(ctx context.Context) (bool, error
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (oshq *OrgSubscriptionHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := oshq.Exist(ctx)
+func (_q *OrgSubscriptionHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -244,20 +244,20 @@ func (oshq *OrgSubscriptionHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OrgSubscriptionHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (oshq *OrgSubscriptionHistoryQuery) Clone() *OrgSubscriptionHistoryQuery {
-	if oshq == nil {
+func (_q *OrgSubscriptionHistoryQuery) Clone() *OrgSubscriptionHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OrgSubscriptionHistoryQuery{
-		config:     oshq.config,
-		ctx:        oshq.ctx.Clone(),
-		order:      append([]orgsubscriptionhistory.OrderOption{}, oshq.order...),
-		inters:     append([]Interceptor{}, oshq.inters...),
-		predicates: append([]predicate.OrgSubscriptionHistory{}, oshq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]orgsubscriptionhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.OrgSubscriptionHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       oshq.sql.Clone(),
-		path:      oshq.path,
-		modifiers: append([]func(*sql.Selector){}, oshq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -275,10 +275,10 @@ func (oshq *OrgSubscriptionHistoryQuery) Clone() *OrgSubscriptionHistoryQuery {
 //		GroupBy(orgsubscriptionhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (oshq *OrgSubscriptionHistoryQuery) GroupBy(field string, fields ...string) *OrgSubscriptionHistoryGroupBy {
-	oshq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OrgSubscriptionHistoryGroupBy{build: oshq}
-	grbuild.flds = &oshq.ctx.Fields
+func (_q *OrgSubscriptionHistoryQuery) GroupBy(field string, fields ...string) *OrgSubscriptionHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OrgSubscriptionHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = orgsubscriptionhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -296,103 +296,103 @@ func (oshq *OrgSubscriptionHistoryQuery) GroupBy(field string, fields ...string)
 //	client.OrgSubscriptionHistory.Query().
 //		Select(orgsubscriptionhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (oshq *OrgSubscriptionHistoryQuery) Select(fields ...string) *OrgSubscriptionHistorySelect {
-	oshq.ctx.Fields = append(oshq.ctx.Fields, fields...)
-	sbuild := &OrgSubscriptionHistorySelect{OrgSubscriptionHistoryQuery: oshq}
+func (_q *OrgSubscriptionHistoryQuery) Select(fields ...string) *OrgSubscriptionHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OrgSubscriptionHistorySelect{OrgSubscriptionHistoryQuery: _q}
 	sbuild.label = orgsubscriptionhistory.Label
-	sbuild.flds, sbuild.scan = &oshq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OrgSubscriptionHistorySelect configured with the given aggregations.
-func (oshq *OrgSubscriptionHistoryQuery) Aggregate(fns ...AggregateFunc) *OrgSubscriptionHistorySelect {
-	return oshq.Select().Aggregate(fns...)
+func (_q *OrgSubscriptionHistoryQuery) Aggregate(fns ...AggregateFunc) *OrgSubscriptionHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (oshq *OrgSubscriptionHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range oshq.inters {
+func (_q *OrgSubscriptionHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, oshq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range oshq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !orgsubscriptionhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if oshq.path != nil {
-		prev, err := oshq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		oshq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (oshq *OrgSubscriptionHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgSubscriptionHistory, error) {
+func (_q *OrgSubscriptionHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgSubscriptionHistory, error) {
 	var (
 		nodes = []*OrgSubscriptionHistory{}
-		_spec = oshq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OrgSubscriptionHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &OrgSubscriptionHistory{config: oshq.config}
+		node := &OrgSubscriptionHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = oshq.schemaConfig.OrgSubscriptionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, oshq.schemaConfig)
-	if len(oshq.modifiers) > 0 {
-		_spec.Modifiers = oshq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.OrgSubscriptionHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, oshq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range oshq.loadTotal {
-		if err := oshq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (oshq *OrgSubscriptionHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := oshq.querySpec()
-	_spec.Node.Schema = oshq.schemaConfig.OrgSubscriptionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, oshq.schemaConfig)
-	if len(oshq.modifiers) > 0 {
-		_spec.Modifiers = oshq.modifiers
+func (_q *OrgSubscriptionHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.OrgSubscriptionHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = oshq.ctx.Fields
-	if len(oshq.ctx.Fields) > 0 {
-		_spec.Unique = oshq.ctx.Unique != nil && *oshq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, oshq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (oshq *OrgSubscriptionHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OrgSubscriptionHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(orgsubscriptionhistory.Table, orgsubscriptionhistory.Columns, sqlgraph.NewFieldSpec(orgsubscriptionhistory.FieldID, field.TypeString))
-	_spec.From = oshq.sql
-	if unique := oshq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if oshq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := oshq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgsubscriptionhistory.FieldID)
 		for i := range fields {
@@ -401,20 +401,20 @@ func (oshq *OrgSubscriptionHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := oshq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := oshq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := oshq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := oshq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -424,48 +424,48 @@ func (oshq *OrgSubscriptionHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (oshq *OrgSubscriptionHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(oshq.driver.Dialect())
+func (_q *OrgSubscriptionHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(orgsubscriptionhistory.Table)
-	columns := oshq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = orgsubscriptionhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if oshq.sql != nil {
-		selector = oshq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if oshq.ctx.Unique != nil && *oshq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(oshq.schemaConfig.OrgSubscriptionHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, oshq.schemaConfig)
+	t1.Schema(_q.schemaConfig.OrgSubscriptionHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range oshq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range oshq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range oshq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := oshq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := oshq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oshq *OrgSubscriptionHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgSubscriptionHistorySelect {
-	oshq.modifiers = append(oshq.modifiers, modifiers...)
-	return oshq.Select()
+func (_q *OrgSubscriptionHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgSubscriptionHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -494,41 +494,41 @@ type OrgSubscriptionHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (oshgb *OrgSubscriptionHistoryGroupBy) Aggregate(fns ...AggregateFunc) *OrgSubscriptionHistoryGroupBy {
-	oshgb.fns = append(oshgb.fns, fns...)
-	return oshgb
+func (_g *OrgSubscriptionHistoryGroupBy) Aggregate(fns ...AggregateFunc) *OrgSubscriptionHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (oshgb *OrgSubscriptionHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oshgb.build.ctx, ent.OpQueryGroupBy)
-	if err := oshgb.build.prepareQuery(ctx); err != nil {
+func (_g *OrgSubscriptionHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrgSubscriptionHistoryQuery, *OrgSubscriptionHistoryGroupBy](ctx, oshgb.build, oshgb, oshgb.build.inters, v)
+	return scanWithInterceptors[*OrgSubscriptionHistoryQuery, *OrgSubscriptionHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (oshgb *OrgSubscriptionHistoryGroupBy) sqlScan(ctx context.Context, root *OrgSubscriptionHistoryQuery, v any) error {
+func (_g *OrgSubscriptionHistoryGroupBy) sqlScan(ctx context.Context, root *OrgSubscriptionHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(oshgb.fns))
-	for _, fn := range oshgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*oshgb.flds)+len(oshgb.fns))
-		for _, f := range *oshgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*oshgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := oshgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -542,27 +542,27 @@ type OrgSubscriptionHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (oshs *OrgSubscriptionHistorySelect) Aggregate(fns ...AggregateFunc) *OrgSubscriptionHistorySelect {
-	oshs.fns = append(oshs.fns, fns...)
-	return oshs
+func (_s *OrgSubscriptionHistorySelect) Aggregate(fns ...AggregateFunc) *OrgSubscriptionHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (oshs *OrgSubscriptionHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oshs.ctx, ent.OpQuerySelect)
-	if err := oshs.prepareQuery(ctx); err != nil {
+func (_s *OrgSubscriptionHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrgSubscriptionHistoryQuery, *OrgSubscriptionHistorySelect](ctx, oshs.OrgSubscriptionHistoryQuery, oshs, oshs.inters, v)
+	return scanWithInterceptors[*OrgSubscriptionHistoryQuery, *OrgSubscriptionHistorySelect](ctx, _s.OrgSubscriptionHistoryQuery, _s, _s.inters, v)
 }
 
-func (oshs *OrgSubscriptionHistorySelect) sqlScan(ctx context.Context, root *OrgSubscriptionHistoryQuery, v any) error {
+func (_s *OrgSubscriptionHistorySelect) sqlScan(ctx context.Context, root *OrgSubscriptionHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(oshs.fns))
-	for _, fn := range oshs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*oshs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -570,7 +570,7 @@ func (oshs *OrgSubscriptionHistorySelect) sqlScan(ctx context.Context, root *Org
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := oshs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -578,7 +578,7 @@ func (oshs *OrgSubscriptionHistorySelect) sqlScan(ctx context.Context, root *Org
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oshs *OrgSubscriptionHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *OrgSubscriptionHistorySelect {
-	oshs.modifiers = append(oshs.modifiers, modifiers...)
-	return oshs
+func (_s *OrgSubscriptionHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *OrgSubscriptionHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

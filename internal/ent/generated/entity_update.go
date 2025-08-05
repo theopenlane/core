@@ -36,601 +36,601 @@ type EntityUpdate struct {
 }
 
 // Where appends a list predicates to the EntityUpdate builder.
-func (eu *EntityUpdate) Where(ps ...predicate.Entity) *EntityUpdate {
-	eu.mutation.Where(ps...)
-	return eu
+func (_u *EntityUpdate) Where(ps ...predicate.Entity) *EntityUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (eu *EntityUpdate) SetUpdatedAt(t time.Time) *EntityUpdate {
-	eu.mutation.SetUpdatedAt(t)
-	return eu
+func (_u *EntityUpdate) SetUpdatedAt(v time.Time) *EntityUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (eu *EntityUpdate) ClearUpdatedAt() *EntityUpdate {
-	eu.mutation.ClearUpdatedAt()
-	return eu
+func (_u *EntityUpdate) ClearUpdatedAt() *EntityUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (eu *EntityUpdate) SetUpdatedBy(s string) *EntityUpdate {
-	eu.mutation.SetUpdatedBy(s)
-	return eu
+func (_u *EntityUpdate) SetUpdatedBy(v string) *EntityUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableUpdatedBy(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetUpdatedBy(*s)
+func (_u *EntityUpdate) SetNillableUpdatedBy(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (eu *EntityUpdate) ClearUpdatedBy() *EntityUpdate {
-	eu.mutation.ClearUpdatedBy()
-	return eu
+func (_u *EntityUpdate) ClearUpdatedBy() *EntityUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (eu *EntityUpdate) SetDeletedAt(t time.Time) *EntityUpdate {
-	eu.mutation.SetDeletedAt(t)
-	return eu
+func (_u *EntityUpdate) SetDeletedAt(v time.Time) *EntityUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableDeletedAt(t *time.Time) *EntityUpdate {
-	if t != nil {
-		eu.SetDeletedAt(*t)
+func (_u *EntityUpdate) SetNillableDeletedAt(v *time.Time) *EntityUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (eu *EntityUpdate) ClearDeletedAt() *EntityUpdate {
-	eu.mutation.ClearDeletedAt()
-	return eu
+func (_u *EntityUpdate) ClearDeletedAt() *EntityUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (eu *EntityUpdate) SetDeletedBy(s string) *EntityUpdate {
-	eu.mutation.SetDeletedBy(s)
-	return eu
+func (_u *EntityUpdate) SetDeletedBy(v string) *EntityUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableDeletedBy(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetDeletedBy(*s)
+func (_u *EntityUpdate) SetNillableDeletedBy(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (eu *EntityUpdate) ClearDeletedBy() *EntityUpdate {
-	eu.mutation.ClearDeletedBy()
-	return eu
+func (_u *EntityUpdate) ClearDeletedBy() *EntityUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (eu *EntityUpdate) SetTags(s []string) *EntityUpdate {
-	eu.mutation.SetTags(s)
-	return eu
+func (_u *EntityUpdate) SetTags(v []string) *EntityUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (eu *EntityUpdate) AppendTags(s []string) *EntityUpdate {
-	eu.mutation.AppendTags(s)
-	return eu
+// AppendTags appends value to the "tags" field.
+func (_u *EntityUpdate) AppendTags(v []string) *EntityUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (eu *EntityUpdate) ClearTags() *EntityUpdate {
-	eu.mutation.ClearTags()
-	return eu
+func (_u *EntityUpdate) ClearTags() *EntityUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (eu *EntityUpdate) SetOwnerID(s string) *EntityUpdate {
-	eu.mutation.SetOwnerID(s)
-	return eu
+func (_u *EntityUpdate) SetOwnerID(v string) *EntityUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableOwnerID(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetOwnerID(*s)
+func (_u *EntityUpdate) SetNillableOwnerID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (eu *EntityUpdate) ClearOwnerID() *EntityUpdate {
-	eu.mutation.ClearOwnerID()
-	return eu
+func (_u *EntityUpdate) ClearOwnerID() *EntityUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (eu *EntityUpdate) SetName(s string) *EntityUpdate {
-	eu.mutation.SetName(s)
-	return eu
+func (_u *EntityUpdate) SetName(v string) *EntityUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableName(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetName(*s)
+func (_u *EntityUpdate) SetNillableName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearName clears the value of the "name" field.
-func (eu *EntityUpdate) ClearName() *EntityUpdate {
-	eu.mutation.ClearName()
-	return eu
+func (_u *EntityUpdate) ClearName() *EntityUpdate {
+	_u.mutation.ClearName()
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (eu *EntityUpdate) SetDisplayName(s string) *EntityUpdate {
-	eu.mutation.SetDisplayName(s)
-	return eu
+func (_u *EntityUpdate) SetDisplayName(v string) *EntityUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableDisplayName(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetDisplayName(*s)
+func (_u *EntityUpdate) SetNillableDisplayName(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDisplayName clears the value of the "display_name" field.
-func (eu *EntityUpdate) ClearDisplayName() *EntityUpdate {
-	eu.mutation.ClearDisplayName()
-	return eu
+func (_u *EntityUpdate) ClearDisplayName() *EntityUpdate {
+	_u.mutation.ClearDisplayName()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (eu *EntityUpdate) SetDescription(s string) *EntityUpdate {
-	eu.mutation.SetDescription(s)
-	return eu
+func (_u *EntityUpdate) SetDescription(v string) *EntityUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableDescription(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetDescription(*s)
+func (_u *EntityUpdate) SetNillableDescription(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (eu *EntityUpdate) ClearDescription() *EntityUpdate {
-	eu.mutation.ClearDescription()
-	return eu
+func (_u *EntityUpdate) ClearDescription() *EntityUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (eu *EntityUpdate) SetDomains(s []string) *EntityUpdate {
-	eu.mutation.SetDomains(s)
-	return eu
+func (_u *EntityUpdate) SetDomains(v []string) *EntityUpdate {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (eu *EntityUpdate) AppendDomains(s []string) *EntityUpdate {
-	eu.mutation.AppendDomains(s)
-	return eu
+// AppendDomains appends value to the "domains" field.
+func (_u *EntityUpdate) AppendDomains(v []string) *EntityUpdate {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (eu *EntityUpdate) ClearDomains() *EntityUpdate {
-	eu.mutation.ClearDomains()
-	return eu
+func (_u *EntityUpdate) ClearDomains() *EntityUpdate {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetEntityTypeID sets the "entity_type_id" field.
-func (eu *EntityUpdate) SetEntityTypeID(s string) *EntityUpdate {
-	eu.mutation.SetEntityTypeID(s)
-	return eu
+func (_u *EntityUpdate) SetEntityTypeID(v string) *EntityUpdate {
+	_u.mutation.SetEntityTypeID(v)
+	return _u
 }
 
 // SetNillableEntityTypeID sets the "entity_type_id" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableEntityTypeID(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetEntityTypeID(*s)
+func (_u *EntityUpdate) SetNillableEntityTypeID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetEntityTypeID(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearEntityTypeID clears the value of the "entity_type_id" field.
-func (eu *EntityUpdate) ClearEntityTypeID() *EntityUpdate {
-	eu.mutation.ClearEntityTypeID()
-	return eu
+func (_u *EntityUpdate) ClearEntityTypeID() *EntityUpdate {
+	_u.mutation.ClearEntityTypeID()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (eu *EntityUpdate) SetStatus(s string) *EntityUpdate {
-	eu.mutation.SetStatus(s)
-	return eu
+func (_u *EntityUpdate) SetStatus(v string) *EntityUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (eu *EntityUpdate) SetNillableStatus(s *string) *EntityUpdate {
-	if s != nil {
-		eu.SetStatus(*s)
+func (_u *EntityUpdate) SetNillableStatus(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return eu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (eu *EntityUpdate) ClearStatus() *EntityUpdate {
-	eu.mutation.ClearStatus()
-	return eu
+func (_u *EntityUpdate) ClearStatus() *EntityUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (eu *EntityUpdate) SetOwner(o *Organization) *EntityUpdate {
-	return eu.SetOwnerID(o.ID)
+func (_u *EntityUpdate) SetOwner(v *Organization) *EntityUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (eu *EntityUpdate) AddBlockedGroupIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddBlockedGroupIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddBlockedGroupIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (eu *EntityUpdate) AddBlockedGroups(g ...*Group) *EntityUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdate) AddBlockedGroups(v ...*Group) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (eu *EntityUpdate) AddEditorIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddEditorIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddEditorIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (eu *EntityUpdate) AddEditors(g ...*Group) *EntityUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdate) AddEditors(v ...*Group) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (eu *EntityUpdate) AddViewerIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddViewerIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddViewerIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (eu *EntityUpdate) AddViewers(g ...*Group) *EntityUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdate) AddViewers(v ...*Group) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
-func (eu *EntityUpdate) AddContactIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddContactIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddContactIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
 }
 
 // AddContacts adds the "contacts" edges to the Contact entity.
-func (eu *EntityUpdate) AddContacts(c ...*Contact) *EntityUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EntityUpdate) AddContacts(v ...*Contact) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddContactIDs(ids...)
+	return _u.AddContactIDs(ids...)
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
-func (eu *EntityUpdate) AddDocumentIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddDocumentIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddDocumentIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddDocumentIDs(ids...)
+	return _u
 }
 
 // AddDocuments adds the "documents" edges to the DocumentData entity.
-func (eu *EntityUpdate) AddDocuments(d ...*DocumentData) *EntityUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *EntityUpdate) AddDocuments(v ...*DocumentData) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddDocumentIDs(ids...)
+	return _u.AddDocumentIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (eu *EntityUpdate) AddNoteIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddNoteIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddNoteIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddNoteIDs(ids...)
+	return _u
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (eu *EntityUpdate) AddNotes(n ...*Note) *EntityUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *EntityUpdate) AddNotes(v ...*Note) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddNoteIDs(ids...)
+	return _u.AddNoteIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (eu *EntityUpdate) AddFileIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddFileIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddFileIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (eu *EntityUpdate) AddFiles(f ...*File) *EntityUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EntityUpdate) AddFiles(v ...*File) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (eu *EntityUpdate) AddAssetIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddAssetIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddAssetIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (eu *EntityUpdate) AddAssets(a ...*Asset) *EntityUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *EntityUpdate) AddAssets(v ...*Asset) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (eu *EntityUpdate) AddScanIDs(ids ...string) *EntityUpdate {
-	eu.mutation.AddScanIDs(ids...)
-	return eu
+func (_u *EntityUpdate) AddScanIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (eu *EntityUpdate) AddScans(s ...*Scan) *EntityUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EntityUpdate) AddScans(v ...*Scan) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
-func (eu *EntityUpdate) SetEntityType(e *EntityType) *EntityUpdate {
-	return eu.SetEntityTypeID(e.ID)
+func (_u *EntityUpdate) SetEntityType(v *EntityType) *EntityUpdate {
+	return _u.SetEntityTypeID(v.ID)
 }
 
 // Mutation returns the EntityMutation object of the builder.
-func (eu *EntityUpdate) Mutation() *EntityMutation {
-	return eu.mutation
+func (_u *EntityUpdate) Mutation() *EntityMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (eu *EntityUpdate) ClearOwner() *EntityUpdate {
-	eu.mutation.ClearOwner()
-	return eu
+func (_u *EntityUpdate) ClearOwner() *EntityUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (eu *EntityUpdate) ClearBlockedGroups() *EntityUpdate {
-	eu.mutation.ClearBlockedGroups()
-	return eu
+func (_u *EntityUpdate) ClearBlockedGroups() *EntityUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (eu *EntityUpdate) RemoveBlockedGroupIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveBlockedGroupIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveBlockedGroupIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (eu *EntityUpdate) RemoveBlockedGroups(g ...*Group) *EntityUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdate) RemoveBlockedGroups(v ...*Group) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (eu *EntityUpdate) ClearEditors() *EntityUpdate {
-	eu.mutation.ClearEditors()
-	return eu
+func (_u *EntityUpdate) ClearEditors() *EntityUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (eu *EntityUpdate) RemoveEditorIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveEditorIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveEditorIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (eu *EntityUpdate) RemoveEditors(g ...*Group) *EntityUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdate) RemoveEditors(v ...*Group) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (eu *EntityUpdate) ClearViewers() *EntityUpdate {
-	eu.mutation.ClearViewers()
-	return eu
+func (_u *EntityUpdate) ClearViewers() *EntityUpdate {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (eu *EntityUpdate) RemoveViewerIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveViewerIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveViewerIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (eu *EntityUpdate) RemoveViewers(g ...*Group) *EntityUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdate) RemoveViewers(v ...*Group) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearContacts clears all "contacts" edges to the Contact entity.
-func (eu *EntityUpdate) ClearContacts() *EntityUpdate {
-	eu.mutation.ClearContacts()
-	return eu
+func (_u *EntityUpdate) ClearContacts() *EntityUpdate {
+	_u.mutation.ClearContacts()
+	return _u
 }
 
 // RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
-func (eu *EntityUpdate) RemoveContactIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveContactIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveContactIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
 }
 
 // RemoveContacts removes "contacts" edges to Contact entities.
-func (eu *EntityUpdate) RemoveContacts(c ...*Contact) *EntityUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EntityUpdate) RemoveContacts(v ...*Contact) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveContactIDs(ids...)
+	return _u.RemoveContactIDs(ids...)
 }
 
 // ClearDocuments clears all "documents" edges to the DocumentData entity.
-func (eu *EntityUpdate) ClearDocuments() *EntityUpdate {
-	eu.mutation.ClearDocuments()
-	return eu
+func (_u *EntityUpdate) ClearDocuments() *EntityUpdate {
+	_u.mutation.ClearDocuments()
+	return _u
 }
 
 // RemoveDocumentIDs removes the "documents" edge to DocumentData entities by IDs.
-func (eu *EntityUpdate) RemoveDocumentIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveDocumentIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveDocumentIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveDocumentIDs(ids...)
+	return _u
 }
 
 // RemoveDocuments removes "documents" edges to DocumentData entities.
-func (eu *EntityUpdate) RemoveDocuments(d ...*DocumentData) *EntityUpdate {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *EntityUpdate) RemoveDocuments(v ...*DocumentData) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveDocumentIDs(ids...)
+	return _u.RemoveDocumentIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
-func (eu *EntityUpdate) ClearNotes() *EntityUpdate {
-	eu.mutation.ClearNotes()
-	return eu
+func (_u *EntityUpdate) ClearNotes() *EntityUpdate {
+	_u.mutation.ClearNotes()
+	return _u
 }
 
 // RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (eu *EntityUpdate) RemoveNoteIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveNoteIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveNoteIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveNoteIDs(ids...)
+	return _u
 }
 
 // RemoveNotes removes "notes" edges to Note entities.
-func (eu *EntityUpdate) RemoveNotes(n ...*Note) *EntityUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *EntityUpdate) RemoveNotes(v ...*Note) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveNoteIDs(ids...)
+	return _u.RemoveNoteIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (eu *EntityUpdate) ClearFiles() *EntityUpdate {
-	eu.mutation.ClearFiles()
-	return eu
+func (_u *EntityUpdate) ClearFiles() *EntityUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (eu *EntityUpdate) RemoveFileIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveFileIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveFileIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (eu *EntityUpdate) RemoveFiles(f ...*File) *EntityUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EntityUpdate) RemoveFiles(v ...*File) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (eu *EntityUpdate) ClearAssets() *EntityUpdate {
-	eu.mutation.ClearAssets()
-	return eu
+func (_u *EntityUpdate) ClearAssets() *EntityUpdate {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (eu *EntityUpdate) RemoveAssetIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveAssetIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveAssetIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (eu *EntityUpdate) RemoveAssets(a ...*Asset) *EntityUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *EntityUpdate) RemoveAssets(v ...*Asset) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (eu *EntityUpdate) ClearScans() *EntityUpdate {
-	eu.mutation.ClearScans()
-	return eu
+func (_u *EntityUpdate) ClearScans() *EntityUpdate {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (eu *EntityUpdate) RemoveScanIDs(ids ...string) *EntityUpdate {
-	eu.mutation.RemoveScanIDs(ids...)
-	return eu
+func (_u *EntityUpdate) RemoveScanIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (eu *EntityUpdate) RemoveScans(s ...*Scan) *EntityUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EntityUpdate) RemoveScans(v ...*Scan) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return eu.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearEntityType clears the "entity_type" edge to the EntityType entity.
-func (eu *EntityUpdate) ClearEntityType() *EntityUpdate {
-	eu.mutation.ClearEntityType()
-	return eu
+func (_u *EntityUpdate) ClearEntityType() *EntityUpdate {
+	_u.mutation.ClearEntityType()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (eu *EntityUpdate) Save(ctx context.Context) (int, error) {
-	if err := eu.defaults(); err != nil {
+func (_u *EntityUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, eu.sqlSave, eu.mutation, eu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (eu *EntityUpdate) SaveX(ctx context.Context) int {
-	affected, err := eu.Save(ctx)
+func (_u *EntityUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -638,48 +638,48 @@ func (eu *EntityUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (eu *EntityUpdate) Exec(ctx context.Context) error {
-	_, err := eu.Save(ctx)
+func (_u *EntityUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (eu *EntityUpdate) ExecX(ctx context.Context) {
-	if err := eu.Exec(ctx); err != nil {
+func (_u *EntityUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (eu *EntityUpdate) defaults() error {
-	if _, ok := eu.mutation.UpdatedAt(); !ok && !eu.mutation.UpdatedAtCleared() {
+func (_u *EntityUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if entity.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entity.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entity.UpdateDefaultUpdatedAt()
-		eu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (eu *EntityUpdate) check() error {
-	if v, ok := eu.mutation.OwnerID(); ok {
+func (_u *EntityUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := entity.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Entity.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := eu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := entity.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Entity.name": %w`, err)}
 		}
 	}
-	if v, ok := eu.mutation.DisplayName(); ok {
+	if v, ok := _u.mutation.DisplayName(); ok {
 		if err := entity.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Entity.display_name": %w`, err)}
 		}
 	}
-	if v, ok := eu.mutation.Domains(); ok {
+	if v, ok := _u.mutation.Domains(); ok {
 		if err := entity.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
 		}
@@ -688,100 +688,100 @@ func (eu *EntityUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (eu *EntityUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityUpdate {
-	eu.modifiers = append(eu.modifiers, modifiers...)
-	return eu
+func (_u *EntityUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := eu.check(); err != nil {
-		return n, err
+func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(entity.Table, entity.Columns, sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString))
-	if ps := eu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if eu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(entity.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := eu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(entity.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if eu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entity.FieldUpdatedAt, field.TypeTime)
 	}
-	if eu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(entity.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := eu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(entity.FieldUpdatedBy, field.TypeString, value)
 	}
-	if eu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entity.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := eu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entity.FieldDeletedAt, field.TypeTime, value)
 	}
-	if eu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(entity.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := eu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(entity.FieldDeletedBy, field.TypeString, value)
 	}
-	if eu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(entity.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := eu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(entity.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := eu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entity.FieldTags, value)
 		})
 	}
-	if eu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entity.FieldTags, field.TypeJSON)
 	}
-	if value, ok := eu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entity.FieldName, field.TypeString, value)
 	}
-	if eu.mutation.NameCleared() {
+	if _u.mutation.NameCleared() {
 		_spec.ClearField(entity.FieldName, field.TypeString)
 	}
-	if value, ok := eu.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(entity.FieldDisplayName, field.TypeString, value)
 	}
-	if eu.mutation.DisplayNameCleared() {
+	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(entity.FieldDisplayName, field.TypeString)
 	}
-	if value, ok := eu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(entity.FieldDescription, field.TypeString, value)
 	}
-	if eu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(entity.FieldDescription, field.TypeString)
 	}
-	if value, ok := eu.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(entity.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := eu.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entity.FieldDomains, value)
 		})
 	}
-	if eu.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := eu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(entity.FieldStatus, field.TypeString, value)
 	}
-	if eu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(entity.FieldStatus, field.TypeString)
 	}
-	if eu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -792,10 +792,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -806,13 +806,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -823,10 +823,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityBlockedGroups
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !eu.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -837,13 +837,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityBlockedGroups
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -854,13 +854,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityBlockedGroups
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -871,10 +871,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityEditors
+		edge.Schema = _u.schemaConfig.EntityEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !eu.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -885,13 +885,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityEditors
+		edge.Schema = _u.schemaConfig.EntityEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -902,13 +902,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityEditors
+		edge.Schema = _u.schemaConfig.EntityEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -919,10 +919,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityViewers
+		edge.Schema = _u.schemaConfig.EntityViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !eu.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -933,13 +933,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityViewers
+		edge.Schema = _u.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -950,13 +950,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityViewers
+		edge.Schema = _u.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.ContactsCleared() {
+	if _u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -967,10 +967,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedContactsIDs(); len(nodes) > 0 && !eu.mutation.ContactsCleared() {
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -981,13 +981,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.ContactsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -998,13 +998,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.DocumentsCleared() {
+	if _u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1015,10 +1015,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !eu.mutation.DocumentsCleared() {
+	if nodes := _u.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !_u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1029,13 +1029,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.DocumentsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1046,13 +1046,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.NotesCleared() {
+	if _u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1063,10 +1063,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedNotesIDs(); len(nodes) > 0 && !eu.mutation.NotesCleared() {
+	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1077,13 +1077,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1094,13 +1094,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1111,10 +1111,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityFiles
+		edge.Schema = _u.schemaConfig.EntityFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !eu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1125,13 +1125,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityFiles
+		edge.Schema = _u.schemaConfig.EntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1142,13 +1142,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityFiles
+		edge.Schema = _u.schemaConfig.EntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1159,10 +1159,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !eu.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1173,13 +1173,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1190,13 +1190,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1207,10 +1207,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.RemovedScansIDs(); len(nodes) > 0 && !eu.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1221,13 +1221,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1238,13 +1238,13 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if eu.mutation.EntityTypeCleared() {
+	if _u.mutation.EntityTypeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1255,10 +1255,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := eu.mutation.EntityTypeIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntityTypeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1269,16 +1269,16 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = eu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = eu.schemaConfig.Entity
-	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
-	_spec.AddModifiers(eu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Entity
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entity.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1286,8 +1286,8 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	eu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EntityUpdateOne is the builder for updating a single Entity entity.
@@ -1300,608 +1300,608 @@ type EntityUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (euo *EntityUpdateOne) SetUpdatedAt(t time.Time) *EntityUpdateOne {
-	euo.mutation.SetUpdatedAt(t)
-	return euo
+func (_u *EntityUpdateOne) SetUpdatedAt(v time.Time) *EntityUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (euo *EntityUpdateOne) ClearUpdatedAt() *EntityUpdateOne {
-	euo.mutation.ClearUpdatedAt()
-	return euo
+func (_u *EntityUpdateOne) ClearUpdatedAt() *EntityUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (euo *EntityUpdateOne) SetUpdatedBy(s string) *EntityUpdateOne {
-	euo.mutation.SetUpdatedBy(s)
-	return euo
+func (_u *EntityUpdateOne) SetUpdatedBy(v string) *EntityUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableUpdatedBy(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetUpdatedBy(*s)
+func (_u *EntityUpdateOne) SetNillableUpdatedBy(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (euo *EntityUpdateOne) ClearUpdatedBy() *EntityUpdateOne {
-	euo.mutation.ClearUpdatedBy()
-	return euo
+func (_u *EntityUpdateOne) ClearUpdatedBy() *EntityUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (euo *EntityUpdateOne) SetDeletedAt(t time.Time) *EntityUpdateOne {
-	euo.mutation.SetDeletedAt(t)
-	return euo
+func (_u *EntityUpdateOne) SetDeletedAt(v time.Time) *EntityUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableDeletedAt(t *time.Time) *EntityUpdateOne {
-	if t != nil {
-		euo.SetDeletedAt(*t)
+func (_u *EntityUpdateOne) SetNillableDeletedAt(v *time.Time) *EntityUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (euo *EntityUpdateOne) ClearDeletedAt() *EntityUpdateOne {
-	euo.mutation.ClearDeletedAt()
-	return euo
+func (_u *EntityUpdateOne) ClearDeletedAt() *EntityUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (euo *EntityUpdateOne) SetDeletedBy(s string) *EntityUpdateOne {
-	euo.mutation.SetDeletedBy(s)
-	return euo
+func (_u *EntityUpdateOne) SetDeletedBy(v string) *EntityUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableDeletedBy(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetDeletedBy(*s)
+func (_u *EntityUpdateOne) SetNillableDeletedBy(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (euo *EntityUpdateOne) ClearDeletedBy() *EntityUpdateOne {
-	euo.mutation.ClearDeletedBy()
-	return euo
+func (_u *EntityUpdateOne) ClearDeletedBy() *EntityUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (euo *EntityUpdateOne) SetTags(s []string) *EntityUpdateOne {
-	euo.mutation.SetTags(s)
-	return euo
+func (_u *EntityUpdateOne) SetTags(v []string) *EntityUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (euo *EntityUpdateOne) AppendTags(s []string) *EntityUpdateOne {
-	euo.mutation.AppendTags(s)
-	return euo
+// AppendTags appends value to the "tags" field.
+func (_u *EntityUpdateOne) AppendTags(v []string) *EntityUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (euo *EntityUpdateOne) ClearTags() *EntityUpdateOne {
-	euo.mutation.ClearTags()
-	return euo
+func (_u *EntityUpdateOne) ClearTags() *EntityUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (euo *EntityUpdateOne) SetOwnerID(s string) *EntityUpdateOne {
-	euo.mutation.SetOwnerID(s)
-	return euo
+func (_u *EntityUpdateOne) SetOwnerID(v string) *EntityUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableOwnerID(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetOwnerID(*s)
+func (_u *EntityUpdateOne) SetNillableOwnerID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (euo *EntityUpdateOne) ClearOwnerID() *EntityUpdateOne {
-	euo.mutation.ClearOwnerID()
-	return euo
+func (_u *EntityUpdateOne) ClearOwnerID() *EntityUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (euo *EntityUpdateOne) SetName(s string) *EntityUpdateOne {
-	euo.mutation.SetName(s)
-	return euo
+func (_u *EntityUpdateOne) SetName(v string) *EntityUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableName(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetName(*s)
+func (_u *EntityUpdateOne) SetNillableName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearName clears the value of the "name" field.
-func (euo *EntityUpdateOne) ClearName() *EntityUpdateOne {
-	euo.mutation.ClearName()
-	return euo
+func (_u *EntityUpdateOne) ClearName() *EntityUpdateOne {
+	_u.mutation.ClearName()
+	return _u
 }
 
 // SetDisplayName sets the "display_name" field.
-func (euo *EntityUpdateOne) SetDisplayName(s string) *EntityUpdateOne {
-	euo.mutation.SetDisplayName(s)
-	return euo
+func (_u *EntityUpdateOne) SetDisplayName(v string) *EntityUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
 }
 
 // SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableDisplayName(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetDisplayName(*s)
+func (_u *EntityUpdateOne) SetNillableDisplayName(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDisplayName clears the value of the "display_name" field.
-func (euo *EntityUpdateOne) ClearDisplayName() *EntityUpdateOne {
-	euo.mutation.ClearDisplayName()
-	return euo
+func (_u *EntityUpdateOne) ClearDisplayName() *EntityUpdateOne {
+	_u.mutation.ClearDisplayName()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (euo *EntityUpdateOne) SetDescription(s string) *EntityUpdateOne {
-	euo.mutation.SetDescription(s)
-	return euo
+func (_u *EntityUpdateOne) SetDescription(v string) *EntityUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableDescription(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetDescription(*s)
+func (_u *EntityUpdateOne) SetNillableDescription(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (euo *EntityUpdateOne) ClearDescription() *EntityUpdateOne {
-	euo.mutation.ClearDescription()
-	return euo
+func (_u *EntityUpdateOne) ClearDescription() *EntityUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (euo *EntityUpdateOne) SetDomains(s []string) *EntityUpdateOne {
-	euo.mutation.SetDomains(s)
-	return euo
+func (_u *EntityUpdateOne) SetDomains(v []string) *EntityUpdateOne {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (euo *EntityUpdateOne) AppendDomains(s []string) *EntityUpdateOne {
-	euo.mutation.AppendDomains(s)
-	return euo
+// AppendDomains appends value to the "domains" field.
+func (_u *EntityUpdateOne) AppendDomains(v []string) *EntityUpdateOne {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (euo *EntityUpdateOne) ClearDomains() *EntityUpdateOne {
-	euo.mutation.ClearDomains()
-	return euo
+func (_u *EntityUpdateOne) ClearDomains() *EntityUpdateOne {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetEntityTypeID sets the "entity_type_id" field.
-func (euo *EntityUpdateOne) SetEntityTypeID(s string) *EntityUpdateOne {
-	euo.mutation.SetEntityTypeID(s)
-	return euo
+func (_u *EntityUpdateOne) SetEntityTypeID(v string) *EntityUpdateOne {
+	_u.mutation.SetEntityTypeID(v)
+	return _u
 }
 
 // SetNillableEntityTypeID sets the "entity_type_id" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableEntityTypeID(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetEntityTypeID(*s)
+func (_u *EntityUpdateOne) SetNillableEntityTypeID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetEntityTypeID(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearEntityTypeID clears the value of the "entity_type_id" field.
-func (euo *EntityUpdateOne) ClearEntityTypeID() *EntityUpdateOne {
-	euo.mutation.ClearEntityTypeID()
-	return euo
+func (_u *EntityUpdateOne) ClearEntityTypeID() *EntityUpdateOne {
+	_u.mutation.ClearEntityTypeID()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (euo *EntityUpdateOne) SetStatus(s string) *EntityUpdateOne {
-	euo.mutation.SetStatus(s)
-	return euo
+func (_u *EntityUpdateOne) SetStatus(v string) *EntityUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (euo *EntityUpdateOne) SetNillableStatus(s *string) *EntityUpdateOne {
-	if s != nil {
-		euo.SetStatus(*s)
+func (_u *EntityUpdateOne) SetNillableStatus(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return euo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (euo *EntityUpdateOne) ClearStatus() *EntityUpdateOne {
-	euo.mutation.ClearStatus()
-	return euo
+func (_u *EntityUpdateOne) ClearStatus() *EntityUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (euo *EntityUpdateOne) SetOwner(o *Organization) *EntityUpdateOne {
-	return euo.SetOwnerID(o.ID)
+func (_u *EntityUpdateOne) SetOwner(v *Organization) *EntityUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (euo *EntityUpdateOne) AddBlockedGroupIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddBlockedGroupIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddBlockedGroupIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (euo *EntityUpdateOne) AddBlockedGroups(g ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdateOne) AddBlockedGroups(v ...*Group) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (euo *EntityUpdateOne) AddEditorIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddEditorIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddEditorIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (euo *EntityUpdateOne) AddEditors(g ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdateOne) AddEditors(v ...*Group) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (euo *EntityUpdateOne) AddViewerIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddViewerIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddViewerIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (euo *EntityUpdateOne) AddViewers(g ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdateOne) AddViewers(v ...*Group) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
-func (euo *EntityUpdateOne) AddContactIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddContactIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddContactIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
 }
 
 // AddContacts adds the "contacts" edges to the Contact entity.
-func (euo *EntityUpdateOne) AddContacts(c ...*Contact) *EntityUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EntityUpdateOne) AddContacts(v ...*Contact) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddContactIDs(ids...)
+	return _u.AddContactIDs(ids...)
 }
 
 // AddDocumentIDs adds the "documents" edge to the DocumentData entity by IDs.
-func (euo *EntityUpdateOne) AddDocumentIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddDocumentIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddDocumentIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddDocumentIDs(ids...)
+	return _u
 }
 
 // AddDocuments adds the "documents" edges to the DocumentData entity.
-func (euo *EntityUpdateOne) AddDocuments(d ...*DocumentData) *EntityUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *EntityUpdateOne) AddDocuments(v ...*DocumentData) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddDocumentIDs(ids...)
+	return _u.AddDocumentIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (euo *EntityUpdateOne) AddNoteIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddNoteIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddNoteIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddNoteIDs(ids...)
+	return _u
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (euo *EntityUpdateOne) AddNotes(n ...*Note) *EntityUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *EntityUpdateOne) AddNotes(v ...*Note) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddNoteIDs(ids...)
+	return _u.AddNoteIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (euo *EntityUpdateOne) AddFileIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddFileIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddFileIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (euo *EntityUpdateOne) AddFiles(f ...*File) *EntityUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EntityUpdateOne) AddFiles(v ...*File) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (euo *EntityUpdateOne) AddAssetIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddAssetIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddAssetIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (euo *EntityUpdateOne) AddAssets(a ...*Asset) *EntityUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *EntityUpdateOne) AddAssets(v ...*Asset) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (euo *EntityUpdateOne) AddScanIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.AddScanIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) AddScanIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
 }
 
 // AddScans adds the "scans" edges to the Scan entity.
-func (euo *EntityUpdateOne) AddScans(s ...*Scan) *EntityUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EntityUpdateOne) AddScans(v ...*Scan) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.AddScanIDs(ids...)
+	return _u.AddScanIDs(ids...)
 }
 
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
-func (euo *EntityUpdateOne) SetEntityType(e *EntityType) *EntityUpdateOne {
-	return euo.SetEntityTypeID(e.ID)
+func (_u *EntityUpdateOne) SetEntityType(v *EntityType) *EntityUpdateOne {
+	return _u.SetEntityTypeID(v.ID)
 }
 
 // Mutation returns the EntityMutation object of the builder.
-func (euo *EntityUpdateOne) Mutation() *EntityMutation {
-	return euo.mutation
+func (_u *EntityUpdateOne) Mutation() *EntityMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (euo *EntityUpdateOne) ClearOwner() *EntityUpdateOne {
-	euo.mutation.ClearOwner()
-	return euo
+func (_u *EntityUpdateOne) ClearOwner() *EntityUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (euo *EntityUpdateOne) ClearBlockedGroups() *EntityUpdateOne {
-	euo.mutation.ClearBlockedGroups()
-	return euo
+func (_u *EntityUpdateOne) ClearBlockedGroups() *EntityUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (euo *EntityUpdateOne) RemoveBlockedGroupIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveBlockedGroupIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveBlockedGroupIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (euo *EntityUpdateOne) RemoveBlockedGroups(g ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdateOne) RemoveBlockedGroups(v ...*Group) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (euo *EntityUpdateOne) ClearEditors() *EntityUpdateOne {
-	euo.mutation.ClearEditors()
-	return euo
+func (_u *EntityUpdateOne) ClearEditors() *EntityUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (euo *EntityUpdateOne) RemoveEditorIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveEditorIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveEditorIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (euo *EntityUpdateOne) RemoveEditors(g ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdateOne) RemoveEditors(v ...*Group) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (euo *EntityUpdateOne) ClearViewers() *EntityUpdateOne {
-	euo.mutation.ClearViewers()
-	return euo
+func (_u *EntityUpdateOne) ClearViewers() *EntityUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (euo *EntityUpdateOne) RemoveViewerIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveViewerIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveViewerIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (euo *EntityUpdateOne) RemoveViewers(g ...*Group) *EntityUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *EntityUpdateOne) RemoveViewers(v ...*Group) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearContacts clears all "contacts" edges to the Contact entity.
-func (euo *EntityUpdateOne) ClearContacts() *EntityUpdateOne {
-	euo.mutation.ClearContacts()
-	return euo
+func (_u *EntityUpdateOne) ClearContacts() *EntityUpdateOne {
+	_u.mutation.ClearContacts()
+	return _u
 }
 
 // RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
-func (euo *EntityUpdateOne) RemoveContactIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveContactIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveContactIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
 }
 
 // RemoveContacts removes "contacts" edges to Contact entities.
-func (euo *EntityUpdateOne) RemoveContacts(c ...*Contact) *EntityUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *EntityUpdateOne) RemoveContacts(v ...*Contact) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveContactIDs(ids...)
+	return _u.RemoveContactIDs(ids...)
 }
 
 // ClearDocuments clears all "documents" edges to the DocumentData entity.
-func (euo *EntityUpdateOne) ClearDocuments() *EntityUpdateOne {
-	euo.mutation.ClearDocuments()
-	return euo
+func (_u *EntityUpdateOne) ClearDocuments() *EntityUpdateOne {
+	_u.mutation.ClearDocuments()
+	return _u
 }
 
 // RemoveDocumentIDs removes the "documents" edge to DocumentData entities by IDs.
-func (euo *EntityUpdateOne) RemoveDocumentIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveDocumentIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveDocumentIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveDocumentIDs(ids...)
+	return _u
 }
 
 // RemoveDocuments removes "documents" edges to DocumentData entities.
-func (euo *EntityUpdateOne) RemoveDocuments(d ...*DocumentData) *EntityUpdateOne {
-	ids := make([]string, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *EntityUpdateOne) RemoveDocuments(v ...*DocumentData) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveDocumentIDs(ids...)
+	return _u.RemoveDocumentIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
-func (euo *EntityUpdateOne) ClearNotes() *EntityUpdateOne {
-	euo.mutation.ClearNotes()
-	return euo
+func (_u *EntityUpdateOne) ClearNotes() *EntityUpdateOne {
+	_u.mutation.ClearNotes()
+	return _u
 }
 
 // RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (euo *EntityUpdateOne) RemoveNoteIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveNoteIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveNoteIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveNoteIDs(ids...)
+	return _u
 }
 
 // RemoveNotes removes "notes" edges to Note entities.
-func (euo *EntityUpdateOne) RemoveNotes(n ...*Note) *EntityUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *EntityUpdateOne) RemoveNotes(v ...*Note) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveNoteIDs(ids...)
+	return _u.RemoveNoteIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (euo *EntityUpdateOne) ClearFiles() *EntityUpdateOne {
-	euo.mutation.ClearFiles()
-	return euo
+func (_u *EntityUpdateOne) ClearFiles() *EntityUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (euo *EntityUpdateOne) RemoveFileIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveFileIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveFileIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (euo *EntityUpdateOne) RemoveFiles(f ...*File) *EntityUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *EntityUpdateOne) RemoveFiles(v ...*File) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (euo *EntityUpdateOne) ClearAssets() *EntityUpdateOne {
-	euo.mutation.ClearAssets()
-	return euo
+func (_u *EntityUpdateOne) ClearAssets() *EntityUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (euo *EntityUpdateOne) RemoveAssetIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveAssetIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveAssetIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (euo *EntityUpdateOne) RemoveAssets(a ...*Asset) *EntityUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *EntityUpdateOne) RemoveAssets(v ...*Asset) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
-func (euo *EntityUpdateOne) ClearScans() *EntityUpdateOne {
-	euo.mutation.ClearScans()
-	return euo
+func (_u *EntityUpdateOne) ClearScans() *EntityUpdateOne {
+	_u.mutation.ClearScans()
+	return _u
 }
 
 // RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (euo *EntityUpdateOne) RemoveScanIDs(ids ...string) *EntityUpdateOne {
-	euo.mutation.RemoveScanIDs(ids...)
-	return euo
+func (_u *EntityUpdateOne) RemoveScanIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
 }
 
 // RemoveScans removes "scans" edges to Scan entities.
-func (euo *EntityUpdateOne) RemoveScans(s ...*Scan) *EntityUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *EntityUpdateOne) RemoveScans(v ...*Scan) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return euo.RemoveScanIDs(ids...)
+	return _u.RemoveScanIDs(ids...)
 }
 
 // ClearEntityType clears the "entity_type" edge to the EntityType entity.
-func (euo *EntityUpdateOne) ClearEntityType() *EntityUpdateOne {
-	euo.mutation.ClearEntityType()
-	return euo
+func (_u *EntityUpdateOne) ClearEntityType() *EntityUpdateOne {
+	_u.mutation.ClearEntityType()
+	return _u
 }
 
 // Where appends a list predicates to the EntityUpdate builder.
-func (euo *EntityUpdateOne) Where(ps ...predicate.Entity) *EntityUpdateOne {
-	euo.mutation.Where(ps...)
-	return euo
+func (_u *EntityUpdateOne) Where(ps ...predicate.Entity) *EntityUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (euo *EntityUpdateOne) Select(field string, fields ...string) *EntityUpdateOne {
-	euo.fields = append([]string{field}, fields...)
-	return euo
+func (_u *EntityUpdateOne) Select(field string, fields ...string) *EntityUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Entity entity.
-func (euo *EntityUpdateOne) Save(ctx context.Context) (*Entity, error) {
-	if err := euo.defaults(); err != nil {
+func (_u *EntityUpdateOne) Save(ctx context.Context) (*Entity, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, euo.sqlSave, euo.mutation, euo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (euo *EntityUpdateOne) SaveX(ctx context.Context) *Entity {
-	node, err := euo.Save(ctx)
+func (_u *EntityUpdateOne) SaveX(ctx context.Context) *Entity {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1909,48 +1909,48 @@ func (euo *EntityUpdateOne) SaveX(ctx context.Context) *Entity {
 }
 
 // Exec executes the query on the entity.
-func (euo *EntityUpdateOne) Exec(ctx context.Context) error {
-	_, err := euo.Save(ctx)
+func (_u *EntityUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (euo *EntityUpdateOne) ExecX(ctx context.Context) {
-	if err := euo.Exec(ctx); err != nil {
+func (_u *EntityUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (euo *EntityUpdateOne) defaults() error {
-	if _, ok := euo.mutation.UpdatedAt(); !ok && !euo.mutation.UpdatedAtCleared() {
+func (_u *EntityUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if entity.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entity.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entity.UpdateDefaultUpdatedAt()
-		euo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (euo *EntityUpdateOne) check() error {
-	if v, ok := euo.mutation.OwnerID(); ok {
+func (_u *EntityUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := entity.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Entity.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := euo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := entity.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Entity.name": %w`, err)}
 		}
 	}
-	if v, ok := euo.mutation.DisplayName(); ok {
+	if v, ok := _u.mutation.DisplayName(); ok {
 		if err := entity.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Entity.display_name": %w`, err)}
 		}
 	}
-	if v, ok := euo.mutation.Domains(); ok {
+	if v, ok := _u.mutation.Domains(); ok {
 		if err := entity.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
 		}
@@ -1959,22 +1959,22 @@ func (euo *EntityUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (euo *EntityUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityUpdateOne {
-	euo.modifiers = append(euo.modifiers, modifiers...)
-	return euo
+func (_u *EntityUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err error) {
-	if err := euo.check(); err != nil {
+func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(entity.Table, entity.Columns, sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString))
-	id, ok := euo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Entity.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := euo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, entity.FieldID)
 		for _, f := range fields {
@@ -1986,90 +1986,90 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 			}
 		}
 	}
-	if ps := euo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if euo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(entity.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := euo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(entity.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if euo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entity.FieldUpdatedAt, field.TypeTime)
 	}
-	if euo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(entity.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := euo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(entity.FieldUpdatedBy, field.TypeString, value)
 	}
-	if euo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entity.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := euo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entity.FieldDeletedAt, field.TypeTime, value)
 	}
-	if euo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(entity.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := euo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(entity.FieldDeletedBy, field.TypeString, value)
 	}
-	if euo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(entity.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := euo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(entity.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := euo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entity.FieldTags, value)
 		})
 	}
-	if euo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entity.FieldTags, field.TypeJSON)
 	}
-	if value, ok := euo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entity.FieldName, field.TypeString, value)
 	}
-	if euo.mutation.NameCleared() {
+	if _u.mutation.NameCleared() {
 		_spec.ClearField(entity.FieldName, field.TypeString)
 	}
-	if value, ok := euo.mutation.DisplayName(); ok {
+	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(entity.FieldDisplayName, field.TypeString, value)
 	}
-	if euo.mutation.DisplayNameCleared() {
+	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(entity.FieldDisplayName, field.TypeString)
 	}
-	if value, ok := euo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(entity.FieldDescription, field.TypeString, value)
 	}
-	if euo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(entity.FieldDescription, field.TypeString)
 	}
-	if value, ok := euo.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(entity.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := euo.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entity.FieldDomains, value)
 		})
 	}
-	if euo.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := euo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(entity.FieldStatus, field.TypeString, value)
 	}
-	if euo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(entity.FieldStatus, field.TypeString)
 	}
-	if euo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -2080,10 +2080,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -2094,13 +2094,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2111,10 +2111,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityBlockedGroups
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !euo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2125,13 +2125,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityBlockedGroups
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2142,13 +2142,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityBlockedGroups
+		edge.Schema = _u.schemaConfig.EntityBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2159,10 +2159,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityEditors
+		edge.Schema = _u.schemaConfig.EntityEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !euo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2173,13 +2173,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityEditors
+		edge.Schema = _u.schemaConfig.EntityEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2190,13 +2190,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityEditors
+		edge.Schema = _u.schemaConfig.EntityEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2207,10 +2207,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityViewers
+		edge.Schema = _u.schemaConfig.EntityViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !euo.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2221,13 +2221,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityViewers
+		edge.Schema = _u.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2238,13 +2238,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityViewers
+		edge.Schema = _u.schemaConfig.EntityViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.ContactsCleared() {
+	if _u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2255,10 +2255,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedContactsIDs(); len(nodes) > 0 && !euo.mutation.ContactsCleared() {
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2269,13 +2269,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.ContactsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2286,13 +2286,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityContacts
+		edge.Schema = _u.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.DocumentsCleared() {
+	if _u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2303,10 +2303,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !euo.mutation.DocumentsCleared() {
+	if nodes := _u.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !_u.mutation.DocumentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2317,13 +2317,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.DocumentsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2334,13 +2334,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityDocuments
+		edge.Schema = _u.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.NotesCleared() {
+	if _u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2351,10 +2351,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedNotesIDs(); len(nodes) > 0 && !euo.mutation.NotesCleared() {
+	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2365,13 +2365,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2382,13 +2382,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2399,10 +2399,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityFiles
+		edge.Schema = _u.schemaConfig.EntityFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !euo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2413,13 +2413,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityFiles
+		edge.Schema = _u.schemaConfig.EntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2430,13 +2430,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityFiles
+		edge.Schema = _u.schemaConfig.EntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2447,10 +2447,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !euo.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2461,13 +2461,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -2478,13 +2478,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.EntityAssets
+		edge.Schema = _u.schemaConfig.EntityAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.ScansCleared() {
+	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2495,10 +2495,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.RemovedScansIDs(); len(nodes) > 0 && !euo.mutation.ScansCleared() {
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2509,13 +2509,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.ScansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -2526,13 +2526,13 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if euo.mutation.EntityTypeCleared() {
+	if _u.mutation.EntityTypeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2543,10 +2543,10 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := euo.mutation.EntityTypeIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntityTypeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -2557,19 +2557,19 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = euo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = euo.schemaConfig.Entity
-	ctx = internal.NewSchemaConfigContext(ctx, euo.schemaConfig)
-	_spec.AddModifiers(euo.modifiers...)
-	_node = &Entity{config: euo.config}
+	_spec.Node.Schema = _u.schemaConfig.Entity
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Entity{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, euo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entity.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -2577,6 +2577,6 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 		}
 		return nil, err
 	}
-	euo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

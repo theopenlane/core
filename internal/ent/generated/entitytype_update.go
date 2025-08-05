@@ -29,198 +29,198 @@ type EntityTypeUpdate struct {
 }
 
 // Where appends a list predicates to the EntityTypeUpdate builder.
-func (etu *EntityTypeUpdate) Where(ps ...predicate.EntityType) *EntityTypeUpdate {
-	etu.mutation.Where(ps...)
-	return etu
+func (_u *EntityTypeUpdate) Where(ps ...predicate.EntityType) *EntityTypeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (etu *EntityTypeUpdate) SetUpdatedAt(t time.Time) *EntityTypeUpdate {
-	etu.mutation.SetUpdatedAt(t)
-	return etu
+func (_u *EntityTypeUpdate) SetUpdatedAt(v time.Time) *EntityTypeUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (etu *EntityTypeUpdate) ClearUpdatedAt() *EntityTypeUpdate {
-	etu.mutation.ClearUpdatedAt()
-	return etu
+func (_u *EntityTypeUpdate) ClearUpdatedAt() *EntityTypeUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (etu *EntityTypeUpdate) SetUpdatedBy(s string) *EntityTypeUpdate {
-	etu.mutation.SetUpdatedBy(s)
-	return etu
+func (_u *EntityTypeUpdate) SetUpdatedBy(v string) *EntityTypeUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableUpdatedBy(s *string) *EntityTypeUpdate {
-	if s != nil {
-		etu.SetUpdatedBy(*s)
+func (_u *EntityTypeUpdate) SetNillableUpdatedBy(v *string) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return etu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (etu *EntityTypeUpdate) ClearUpdatedBy() *EntityTypeUpdate {
-	etu.mutation.ClearUpdatedBy()
-	return etu
+func (_u *EntityTypeUpdate) ClearUpdatedBy() *EntityTypeUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (etu *EntityTypeUpdate) SetDeletedAt(t time.Time) *EntityTypeUpdate {
-	etu.mutation.SetDeletedAt(t)
-	return etu
+func (_u *EntityTypeUpdate) SetDeletedAt(v time.Time) *EntityTypeUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableDeletedAt(t *time.Time) *EntityTypeUpdate {
-	if t != nil {
-		etu.SetDeletedAt(*t)
+func (_u *EntityTypeUpdate) SetNillableDeletedAt(v *time.Time) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return etu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (etu *EntityTypeUpdate) ClearDeletedAt() *EntityTypeUpdate {
-	etu.mutation.ClearDeletedAt()
-	return etu
+func (_u *EntityTypeUpdate) ClearDeletedAt() *EntityTypeUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (etu *EntityTypeUpdate) SetDeletedBy(s string) *EntityTypeUpdate {
-	etu.mutation.SetDeletedBy(s)
-	return etu
+func (_u *EntityTypeUpdate) SetDeletedBy(v string) *EntityTypeUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableDeletedBy(s *string) *EntityTypeUpdate {
-	if s != nil {
-		etu.SetDeletedBy(*s)
+func (_u *EntityTypeUpdate) SetNillableDeletedBy(v *string) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return etu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (etu *EntityTypeUpdate) ClearDeletedBy() *EntityTypeUpdate {
-	etu.mutation.ClearDeletedBy()
-	return etu
+func (_u *EntityTypeUpdate) ClearDeletedBy() *EntityTypeUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (etu *EntityTypeUpdate) SetTags(s []string) *EntityTypeUpdate {
-	etu.mutation.SetTags(s)
-	return etu
+func (_u *EntityTypeUpdate) SetTags(v []string) *EntityTypeUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (etu *EntityTypeUpdate) AppendTags(s []string) *EntityTypeUpdate {
-	etu.mutation.AppendTags(s)
-	return etu
+// AppendTags appends value to the "tags" field.
+func (_u *EntityTypeUpdate) AppendTags(v []string) *EntityTypeUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (etu *EntityTypeUpdate) ClearTags() *EntityTypeUpdate {
-	etu.mutation.ClearTags()
-	return etu
+func (_u *EntityTypeUpdate) ClearTags() *EntityTypeUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (etu *EntityTypeUpdate) SetOwnerID(s string) *EntityTypeUpdate {
-	etu.mutation.SetOwnerID(s)
-	return etu
+func (_u *EntityTypeUpdate) SetOwnerID(v string) *EntityTypeUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableOwnerID(s *string) *EntityTypeUpdate {
-	if s != nil {
-		etu.SetOwnerID(*s)
+func (_u *EntityTypeUpdate) SetNillableOwnerID(v *string) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return etu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (etu *EntityTypeUpdate) ClearOwnerID() *EntityTypeUpdate {
-	etu.mutation.ClearOwnerID()
-	return etu
+func (_u *EntityTypeUpdate) ClearOwnerID() *EntityTypeUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (etu *EntityTypeUpdate) SetName(s string) *EntityTypeUpdate {
-	etu.mutation.SetName(s)
-	return etu
+func (_u *EntityTypeUpdate) SetName(v string) *EntityTypeUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (etu *EntityTypeUpdate) SetNillableName(s *string) *EntityTypeUpdate {
-	if s != nil {
-		etu.SetName(*s)
+func (_u *EntityTypeUpdate) SetNillableName(v *string) *EntityTypeUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return etu
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (etu *EntityTypeUpdate) SetOwner(o *Organization) *EntityTypeUpdate {
-	return etu.SetOwnerID(o.ID)
+func (_u *EntityTypeUpdate) SetOwner(v *Organization) *EntityTypeUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (etu *EntityTypeUpdate) AddEntityIDs(ids ...string) *EntityTypeUpdate {
-	etu.mutation.AddEntityIDs(ids...)
-	return etu
+func (_u *EntityTypeUpdate) AddEntityIDs(ids ...string) *EntityTypeUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (etu *EntityTypeUpdate) AddEntities(e ...*Entity) *EntityTypeUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *EntityTypeUpdate) AddEntities(v ...*Entity) *EntityTypeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return etu.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // Mutation returns the EntityTypeMutation object of the builder.
-func (etu *EntityTypeUpdate) Mutation() *EntityTypeMutation {
-	return etu.mutation
+func (_u *EntityTypeUpdate) Mutation() *EntityTypeMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (etu *EntityTypeUpdate) ClearOwner() *EntityTypeUpdate {
-	etu.mutation.ClearOwner()
-	return etu
+func (_u *EntityTypeUpdate) ClearOwner() *EntityTypeUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (etu *EntityTypeUpdate) ClearEntities() *EntityTypeUpdate {
-	etu.mutation.ClearEntities()
-	return etu
+func (_u *EntityTypeUpdate) ClearEntities() *EntityTypeUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (etu *EntityTypeUpdate) RemoveEntityIDs(ids ...string) *EntityTypeUpdate {
-	etu.mutation.RemoveEntityIDs(ids...)
-	return etu
+func (_u *EntityTypeUpdate) RemoveEntityIDs(ids ...string) *EntityTypeUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (etu *EntityTypeUpdate) RemoveEntities(e ...*Entity) *EntityTypeUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *EntityTypeUpdate) RemoveEntities(v ...*Entity) *EntityTypeUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return etu.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (etu *EntityTypeUpdate) Save(ctx context.Context) (int, error) {
-	if err := etu.defaults(); err != nil {
+func (_u *EntityTypeUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, etu.sqlSave, etu.mutation, etu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (etu *EntityTypeUpdate) SaveX(ctx context.Context) int {
-	affected, err := etu.Save(ctx)
+func (_u *EntityTypeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -228,38 +228,38 @@ func (etu *EntityTypeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (etu *EntityTypeUpdate) Exec(ctx context.Context) error {
-	_, err := etu.Save(ctx)
+func (_u *EntityTypeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (etu *EntityTypeUpdate) ExecX(ctx context.Context) {
-	if err := etu.Exec(ctx); err != nil {
+func (_u *EntityTypeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (etu *EntityTypeUpdate) defaults() error {
-	if _, ok := etu.mutation.UpdatedAt(); !ok && !etu.mutation.UpdatedAtCleared() {
+func (_u *EntityTypeUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if entitytype.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entitytype.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entitytype.UpdateDefaultUpdatedAt()
-		etu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (etu *EntityTypeUpdate) check() error {
-	if v, ok := etu.mutation.OwnerID(); ok {
+func (_u *EntityTypeUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := entitytype.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "EntityType.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := etu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := entitytype.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "EntityType.name": %w`, err)}
 		}
@@ -268,68 +268,68 @@ func (etu *EntityTypeUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (etu *EntityTypeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeUpdate {
-	etu.modifiers = append(etu.modifiers, modifiers...)
-	return etu
+func (_u *EntityTypeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := etu.check(); err != nil {
-		return n, err
+func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(entitytype.Table, entitytype.Columns, sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString))
-	if ps := etu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if etu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(entitytype.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := etu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(entitytype.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if etu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedAt, field.TypeTime)
 	}
-	if etu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(entitytype.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := etu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
 	}
-	if etu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := etu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)
 	}
-	if etu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytype.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := etu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(entitytype.FieldDeletedBy, field.TypeString, value)
 	}
-	if etu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(entitytype.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := etu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(entitytype.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := etu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entitytype.FieldTags, value)
 		})
 	}
-	if etu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entitytype.FieldTags, field.TypeJSON)
 	}
-	if value, ok := etu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)
 	}
-	if etu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -340,10 +340,10 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etu.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -354,13 +354,13 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etu.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if etu.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -371,10 +371,10 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etu.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !etu.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -385,13 +385,13 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etu.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -402,16 +402,16 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etu.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = etu.schemaConfig.EntityType
-	ctx = internal.NewSchemaConfigContext(ctx, etu.schemaConfig)
-	_spec.AddModifiers(etu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, etu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.EntityType
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitytype.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -419,8 +419,8 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	etu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EntityTypeUpdateOne is the builder for updating a single EntityType entity.
@@ -433,205 +433,205 @@ type EntityTypeUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (etuo *EntityTypeUpdateOne) SetUpdatedAt(t time.Time) *EntityTypeUpdateOne {
-	etuo.mutation.SetUpdatedAt(t)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetUpdatedAt(v time.Time) *EntityTypeUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (etuo *EntityTypeUpdateOne) ClearUpdatedAt() *EntityTypeUpdateOne {
-	etuo.mutation.ClearUpdatedAt()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearUpdatedAt() *EntityTypeUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (etuo *EntityTypeUpdateOne) SetUpdatedBy(s string) *EntityTypeUpdateOne {
-	etuo.mutation.SetUpdatedBy(s)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetUpdatedBy(v string) *EntityTypeUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableUpdatedBy(s *string) *EntityTypeUpdateOne {
-	if s != nil {
-		etuo.SetUpdatedBy(*s)
+func (_u *EntityTypeUpdateOne) SetNillableUpdatedBy(v *string) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return etuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (etuo *EntityTypeUpdateOne) ClearUpdatedBy() *EntityTypeUpdateOne {
-	etuo.mutation.ClearUpdatedBy()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearUpdatedBy() *EntityTypeUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (etuo *EntityTypeUpdateOne) SetDeletedAt(t time.Time) *EntityTypeUpdateOne {
-	etuo.mutation.SetDeletedAt(t)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetDeletedAt(v time.Time) *EntityTypeUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableDeletedAt(t *time.Time) *EntityTypeUpdateOne {
-	if t != nil {
-		etuo.SetDeletedAt(*t)
+func (_u *EntityTypeUpdateOne) SetNillableDeletedAt(v *time.Time) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return etuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (etuo *EntityTypeUpdateOne) ClearDeletedAt() *EntityTypeUpdateOne {
-	etuo.mutation.ClearDeletedAt()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearDeletedAt() *EntityTypeUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (etuo *EntityTypeUpdateOne) SetDeletedBy(s string) *EntityTypeUpdateOne {
-	etuo.mutation.SetDeletedBy(s)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetDeletedBy(v string) *EntityTypeUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableDeletedBy(s *string) *EntityTypeUpdateOne {
-	if s != nil {
-		etuo.SetDeletedBy(*s)
+func (_u *EntityTypeUpdateOne) SetNillableDeletedBy(v *string) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return etuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (etuo *EntityTypeUpdateOne) ClearDeletedBy() *EntityTypeUpdateOne {
-	etuo.mutation.ClearDeletedBy()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearDeletedBy() *EntityTypeUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (etuo *EntityTypeUpdateOne) SetTags(s []string) *EntityTypeUpdateOne {
-	etuo.mutation.SetTags(s)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetTags(v []string) *EntityTypeUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (etuo *EntityTypeUpdateOne) AppendTags(s []string) *EntityTypeUpdateOne {
-	etuo.mutation.AppendTags(s)
-	return etuo
+// AppendTags appends value to the "tags" field.
+func (_u *EntityTypeUpdateOne) AppendTags(v []string) *EntityTypeUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (etuo *EntityTypeUpdateOne) ClearTags() *EntityTypeUpdateOne {
-	etuo.mutation.ClearTags()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearTags() *EntityTypeUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (etuo *EntityTypeUpdateOne) SetOwnerID(s string) *EntityTypeUpdateOne {
-	etuo.mutation.SetOwnerID(s)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetOwnerID(v string) *EntityTypeUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableOwnerID(s *string) *EntityTypeUpdateOne {
-	if s != nil {
-		etuo.SetOwnerID(*s)
+func (_u *EntityTypeUpdateOne) SetNillableOwnerID(v *string) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return etuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (etuo *EntityTypeUpdateOne) ClearOwnerID() *EntityTypeUpdateOne {
-	etuo.mutation.ClearOwnerID()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearOwnerID() *EntityTypeUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (etuo *EntityTypeUpdateOne) SetName(s string) *EntityTypeUpdateOne {
-	etuo.mutation.SetName(s)
-	return etuo
+func (_u *EntityTypeUpdateOne) SetName(v string) *EntityTypeUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (etuo *EntityTypeUpdateOne) SetNillableName(s *string) *EntityTypeUpdateOne {
-	if s != nil {
-		etuo.SetName(*s)
+func (_u *EntityTypeUpdateOne) SetNillableName(v *string) *EntityTypeUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return etuo
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (etuo *EntityTypeUpdateOne) SetOwner(o *Organization) *EntityTypeUpdateOne {
-	return etuo.SetOwnerID(o.ID)
+func (_u *EntityTypeUpdateOne) SetOwner(v *Organization) *EntityTypeUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (etuo *EntityTypeUpdateOne) AddEntityIDs(ids ...string) *EntityTypeUpdateOne {
-	etuo.mutation.AddEntityIDs(ids...)
-	return etuo
+func (_u *EntityTypeUpdateOne) AddEntityIDs(ids ...string) *EntityTypeUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (etuo *EntityTypeUpdateOne) AddEntities(e ...*Entity) *EntityTypeUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *EntityTypeUpdateOne) AddEntities(v ...*Entity) *EntityTypeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return etuo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // Mutation returns the EntityTypeMutation object of the builder.
-func (etuo *EntityTypeUpdateOne) Mutation() *EntityTypeMutation {
-	return etuo.mutation
+func (_u *EntityTypeUpdateOne) Mutation() *EntityTypeMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (etuo *EntityTypeUpdateOne) ClearOwner() *EntityTypeUpdateOne {
-	etuo.mutation.ClearOwner()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearOwner() *EntityTypeUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (etuo *EntityTypeUpdateOne) ClearEntities() *EntityTypeUpdateOne {
-	etuo.mutation.ClearEntities()
-	return etuo
+func (_u *EntityTypeUpdateOne) ClearEntities() *EntityTypeUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (etuo *EntityTypeUpdateOne) RemoveEntityIDs(ids ...string) *EntityTypeUpdateOne {
-	etuo.mutation.RemoveEntityIDs(ids...)
-	return etuo
+func (_u *EntityTypeUpdateOne) RemoveEntityIDs(ids ...string) *EntityTypeUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (etuo *EntityTypeUpdateOne) RemoveEntities(e ...*Entity) *EntityTypeUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *EntityTypeUpdateOne) RemoveEntities(v ...*Entity) *EntityTypeUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return etuo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // Where appends a list predicates to the EntityTypeUpdate builder.
-func (etuo *EntityTypeUpdateOne) Where(ps ...predicate.EntityType) *EntityTypeUpdateOne {
-	etuo.mutation.Where(ps...)
-	return etuo
+func (_u *EntityTypeUpdateOne) Where(ps ...predicate.EntityType) *EntityTypeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (etuo *EntityTypeUpdateOne) Select(field string, fields ...string) *EntityTypeUpdateOne {
-	etuo.fields = append([]string{field}, fields...)
-	return etuo
+func (_u *EntityTypeUpdateOne) Select(field string, fields ...string) *EntityTypeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated EntityType entity.
-func (etuo *EntityTypeUpdateOne) Save(ctx context.Context) (*EntityType, error) {
-	if err := etuo.defaults(); err != nil {
+func (_u *EntityTypeUpdateOne) Save(ctx context.Context) (*EntityType, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, etuo.sqlSave, etuo.mutation, etuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (etuo *EntityTypeUpdateOne) SaveX(ctx context.Context) *EntityType {
-	node, err := etuo.Save(ctx)
+func (_u *EntityTypeUpdateOne) SaveX(ctx context.Context) *EntityType {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -639,38 +639,38 @@ func (etuo *EntityTypeUpdateOne) SaveX(ctx context.Context) *EntityType {
 }
 
 // Exec executes the query on the entity.
-func (etuo *EntityTypeUpdateOne) Exec(ctx context.Context) error {
-	_, err := etuo.Save(ctx)
+func (_u *EntityTypeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (etuo *EntityTypeUpdateOne) ExecX(ctx context.Context) {
-	if err := etuo.Exec(ctx); err != nil {
+func (_u *EntityTypeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (etuo *EntityTypeUpdateOne) defaults() error {
-	if _, ok := etuo.mutation.UpdatedAt(); !ok && !etuo.mutation.UpdatedAtCleared() {
+func (_u *EntityTypeUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if entitytype.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized entitytype.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := entitytype.UpdateDefaultUpdatedAt()
-		etuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (etuo *EntityTypeUpdateOne) check() error {
-	if v, ok := etuo.mutation.OwnerID(); ok {
+func (_u *EntityTypeUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := entitytype.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "EntityType.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := etuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := entitytype.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "EntityType.name": %w`, err)}
 		}
@@ -679,22 +679,22 @@ func (etuo *EntityTypeUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (etuo *EntityTypeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeUpdateOne {
-	etuo.modifiers = append(etuo.modifiers, modifiers...)
-	return etuo
+func (_u *EntityTypeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, err error) {
-	if err := etuo.check(); err != nil {
+func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(entitytype.Table, entitytype.Columns, sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString))
-	id, ok := etuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "EntityType.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := etuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, entitytype.FieldID)
 		for _, f := range fields {
@@ -706,58 +706,58 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 			}
 		}
 	}
-	if ps := etuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if etuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(entitytype.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := etuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(entitytype.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if etuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedAt, field.TypeTime)
 	}
-	if etuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(entitytype.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := etuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(entitytype.FieldUpdatedBy, field.TypeString, value)
 	}
-	if etuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(entitytype.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := etuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)
 	}
-	if etuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(entitytype.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := etuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(entitytype.FieldDeletedBy, field.TypeString, value)
 	}
-	if etuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(entitytype.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := etuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(entitytype.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := etuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, entitytype.FieldTags, value)
 		})
 	}
-	if etuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entitytype.FieldTags, field.TypeJSON)
 	}
-	if value, ok := etuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entitytype.FieldName, field.TypeString, value)
 	}
-	if etuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -768,10 +768,10 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etuo.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -782,13 +782,13 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etuo.schemaConfig.EntityType
+		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if etuo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -799,10 +799,10 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etuo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etuo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !etuo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -813,13 +813,13 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etuo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := etuo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -830,19 +830,19 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = etuo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = etuo.schemaConfig.EntityType
-	ctx = internal.NewSchemaConfigContext(ctx, etuo.schemaConfig)
-	_spec.AddModifiers(etuo.modifiers...)
-	_node = &EntityType{config: etuo.config}
+	_spec.Node.Schema = _u.schemaConfig.EntityType
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &EntityType{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, etuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitytype.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -850,6 +850,6 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 		}
 		return nil, err
 	}
-	etuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

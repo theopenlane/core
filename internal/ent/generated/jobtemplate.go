@@ -120,7 +120,7 @@ func (*JobTemplate) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the JobTemplate fields.
-func (jt *JobTemplate) assignValues(columns []string, values []any) error {
+func (_m *JobTemplate) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -130,55 +130,55 @@ func (jt *JobTemplate) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				jt.ID = value.String
+				_m.ID = value.String
 			}
 		case jobtemplate.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				jt.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case jobtemplate.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				jt.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case jobtemplate.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				jt.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case jobtemplate.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				jt.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case jobtemplate.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				jt.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case jobtemplate.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				jt.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case jobtemplate.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				jt.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case jobtemplate.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &jt.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -186,49 +186,49 @@ func (jt *JobTemplate) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				jt.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case jobtemplate.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
-				jt.SystemOwned = value.Bool
+				_m.SystemOwned = value.Bool
 			}
 		case jobtemplate.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				jt.Title = value.String
+				_m.Title = value.String
 			}
 		case jobtemplate.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				jt.Description = value.String
+				_m.Description = value.String
 			}
 		case jobtemplate.FieldPlatform:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field platform", values[i])
 			} else if value.Valid {
-				jt.Platform = enums.JobPlatformType(value.String)
+				_m.Platform = enums.JobPlatformType(value.String)
 			}
 		case jobtemplate.FieldWindmillPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
 			} else if value.Valid {
-				jt.WindmillPath = value.String
+				_m.WindmillPath = value.String
 			}
 		case jobtemplate.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field download_url", values[i])
 			} else if value.Valid {
-				jt.DownloadURL = value.String
+				_m.DownloadURL = value.String
 			}
 		case jobtemplate.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field configuration", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &jt.Configuration); err != nil {
+				if err := json.Unmarshal(*value, &_m.Configuration); err != nil {
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
@@ -236,11 +236,11 @@ func (jt *JobTemplate) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
-				jt.Cron = new(models.Cron)
-				*jt.Cron = *value.S.(*models.Cron)
+				_m.Cron = new(models.Cron)
+				*_m.Cron = *value.S.(*models.Cron)
 			}
 		default:
-			jt.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -248,92 +248,92 @@ func (jt *JobTemplate) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the JobTemplate.
 // This includes values selected through modifiers, order, etc.
-func (jt *JobTemplate) Value(name string) (ent.Value, error) {
-	return jt.selectValues.Get(name)
+func (_m *JobTemplate) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the JobTemplate entity.
-func (jt *JobTemplate) QueryOwner() *OrganizationQuery {
-	return NewJobTemplateClient(jt.config).QueryOwner(jt)
+func (_m *JobTemplate) QueryOwner() *OrganizationQuery {
+	return NewJobTemplateClient(_m.config).QueryOwner(_m)
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the JobTemplate entity.
-func (jt *JobTemplate) QueryScheduledJobs() *ScheduledJobQuery {
-	return NewJobTemplateClient(jt.config).QueryScheduledJobs(jt)
+func (_m *JobTemplate) QueryScheduledJobs() *ScheduledJobQuery {
+	return NewJobTemplateClient(_m.config).QueryScheduledJobs(_m)
 }
 
 // Update returns a builder for updating this JobTemplate.
 // Note that you need to call JobTemplate.Unwrap() before calling this method if this JobTemplate
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (jt *JobTemplate) Update() *JobTemplateUpdateOne {
-	return NewJobTemplateClient(jt.config).UpdateOne(jt)
+func (_m *JobTemplate) Update() *JobTemplateUpdateOne {
+	return NewJobTemplateClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the JobTemplate entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (jt *JobTemplate) Unwrap() *JobTemplate {
-	_tx, ok := jt.config.driver.(*txDriver)
+func (_m *JobTemplate) Unwrap() *JobTemplate {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: JobTemplate is not a transactional entity")
 	}
-	jt.config.driver = _tx.drv
-	return jt
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (jt *JobTemplate) String() string {
+func (_m *JobTemplate) String() string {
 	var builder strings.Builder
 	builder.WriteString("JobTemplate(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", jt.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(jt.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(jt.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(jt.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(jt.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(jt.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(jt.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(jt.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", jt.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(jt.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", jt.SystemOwned))
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(jt.Title)
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(jt.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("platform=")
-	builder.WriteString(fmt.Sprintf("%v", jt.Platform))
+	builder.WriteString(fmt.Sprintf("%v", _m.Platform))
 	builder.WriteString(", ")
 	builder.WriteString("windmill_path=")
-	builder.WriteString(jt.WindmillPath)
+	builder.WriteString(_m.WindmillPath)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
-	builder.WriteString(jt.DownloadURL)
+	builder.WriteString(_m.DownloadURL)
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
-	builder.WriteString(fmt.Sprintf("%v", jt.Configuration))
+	builder.WriteString(fmt.Sprintf("%v", _m.Configuration))
 	builder.WriteString(", ")
-	if v := jt.Cron; v != nil {
+	if v := _m.Cron; v != nil {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
@@ -343,25 +343,25 @@ func (jt *JobTemplate) String() string {
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (jt *JobTemplate) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
-	if jt.Edges.namedScheduledJobs == nil {
+func (_m *JobTemplate) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
+	if _m.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := jt.Edges.namedScheduledJobs[name]
+	nodes, ok := _m.Edges.namedScheduledJobs[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (jt *JobTemplate) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
-	if jt.Edges.namedScheduledJobs == nil {
-		jt.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
+func (_m *JobTemplate) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
+	if _m.Edges.namedScheduledJobs == nil {
+		_m.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		jt.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
+		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
-		jt.Edges.namedScheduledJobs[name] = append(jt.Edges.namedScheduledJobs[name], edges...)
+		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 

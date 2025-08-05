@@ -64,7 +64,7 @@ func (*TrustCenterComplianceHistory) scanValues(columns []string) ([]any, error)
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TrustCenterComplianceHistory fields.
-func (tcch *TrustCenterComplianceHistory) assignValues(columns []string, values []any) error {
+func (_m *TrustCenterComplianceHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -74,72 +74,72 @@ func (tcch *TrustCenterComplianceHistory) assignValues(columns []string, values 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				tcch.ID = value.String
+				_m.ID = value.String
 			}
 		case trustcentercompliancehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				tcch.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case trustcentercompliancehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				tcch.Ref = value.String
+				_m.Ref = value.String
 			}
 		case trustcentercompliancehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				tcch.Operation = *value
+				_m.Operation = *value
 			}
 		case trustcentercompliancehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcch.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case trustcentercompliancehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcch.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case trustcentercompliancehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tcch.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case trustcentercompliancehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tcch.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case trustcentercompliancehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tcch.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case trustcentercompliancehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tcch.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case trustcentercompliancehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tcch.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
 		default:
-			tcch.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -147,62 +147,62 @@ func (tcch *TrustCenterComplianceHistory) assignValues(columns []string, values 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterComplianceHistory.
 // This includes values selected through modifiers, order, etc.
-func (tcch *TrustCenterComplianceHistory) Value(name string) (ent.Value, error) {
-	return tcch.selectValues.Get(name)
+func (_m *TrustCenterComplianceHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TrustCenterComplianceHistory.
 // Note that you need to call TrustCenterComplianceHistory.Unwrap() before calling this method if this TrustCenterComplianceHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcch *TrustCenterComplianceHistory) Update() *TrustCenterComplianceHistoryUpdateOne {
-	return NewTrustCenterComplianceHistoryClient(tcch.config).UpdateOne(tcch)
+func (_m *TrustCenterComplianceHistory) Update() *TrustCenterComplianceHistoryUpdateOne {
+	return NewTrustCenterComplianceHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TrustCenterComplianceHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcch *TrustCenterComplianceHistory) Unwrap() *TrustCenterComplianceHistory {
-	_tx, ok := tcch.config.driver.(*txDriver)
+func (_m *TrustCenterComplianceHistory) Unwrap() *TrustCenterComplianceHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: TrustCenterComplianceHistory is not a transactional entity")
 	}
-	tcch.config.driver = _tx.drv
-	return tcch
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcch *TrustCenterComplianceHistory) String() string {
+func (_m *TrustCenterComplianceHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TrustCenterComplianceHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcch.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(tcch.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(tcch.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", tcch.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(tcch.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tcch.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(tcch.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(tcch.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tcch.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(tcch.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", tcch.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteByte(')')
 	return builder.String()
 }

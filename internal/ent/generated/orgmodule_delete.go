@@ -22,58 +22,58 @@ type OrgModuleDelete struct {
 }
 
 // Where appends a list predicates to the OrgModuleDelete builder.
-func (omd *OrgModuleDelete) Where(ps ...predicate.OrgModule) *OrgModuleDelete {
-	omd.mutation.Where(ps...)
-	return omd
+func (_d *OrgModuleDelete) Where(ps ...predicate.OrgModule) *OrgModuleDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (omd *OrgModuleDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, omd.sqlExec, omd.mutation, omd.hooks)
+func (_d *OrgModuleDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omd *OrgModuleDelete) ExecX(ctx context.Context) int {
-	n, err := omd.Exec(ctx)
+func (_d *OrgModuleDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (omd *OrgModuleDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrgModuleDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orgmodule.Table, sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString))
-	_spec.Node.Schema = omd.schemaConfig.OrgModule
-	ctx = internal.NewSchemaConfigContext(ctx, omd.schemaConfig)
-	if ps := omd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrgModule
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, omd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	omd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrgModuleDeleteOne is the builder for deleting a single OrgModule entity.
 type OrgModuleDeleteOne struct {
-	omd *OrgModuleDelete
+	_d *OrgModuleDelete
 }
 
 // Where appends a list predicates to the OrgModuleDelete builder.
-func (omdo *OrgModuleDeleteOne) Where(ps ...predicate.OrgModule) *OrgModuleDeleteOne {
-	omdo.omd.mutation.Where(ps...)
-	return omdo
+func (_d *OrgModuleDeleteOne) Where(ps ...predicate.OrgModule) *OrgModuleDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (omdo *OrgModuleDeleteOne) Exec(ctx context.Context) error {
-	n, err := omdo.omd.Exec(ctx)
+func (_d *OrgModuleDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (omdo *OrgModuleDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omdo *OrgModuleDeleteOne) ExecX(ctx context.Context) {
-	if err := omdo.Exec(ctx); err != nil {
+func (_d *OrgModuleDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

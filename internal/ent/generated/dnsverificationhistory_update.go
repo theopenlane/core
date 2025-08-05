@@ -28,273 +28,273 @@ type DNSVerificationHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the DNSVerificationHistoryUpdate builder.
-func (dvhu *DNSVerificationHistoryUpdate) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.Where(ps...)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetUpdatedAt(t time.Time) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetUpdatedAt(t)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetUpdatedAt(v time.Time) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearUpdatedAt() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearUpdatedAt()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearUpdatedAt() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetUpdatedBy(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetUpdatedBy(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetUpdatedBy(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableUpdatedBy(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetUpdatedBy(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableUpdatedBy(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearUpdatedBy() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearUpdatedBy()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearUpdatedBy() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetDeletedAt(t time.Time) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetDeletedAt(t)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetDeletedAt(v time.Time) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableDeletedAt(t *time.Time) *DNSVerificationHistoryUpdate {
-	if t != nil {
-		dvhu.SetDeletedAt(*t)
+func (_u *DNSVerificationHistoryUpdate) SetNillableDeletedAt(v *time.Time) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearDeletedAt() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearDeletedAt()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearDeletedAt() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetDeletedBy(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetDeletedBy(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetDeletedBy(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableDeletedBy(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetDeletedBy(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableDeletedBy(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearDeletedBy() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearDeletedBy()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearDeletedBy() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetTags(s []string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetTags(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetTags(v []string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (dvhu *DNSVerificationHistoryUpdate) AppendTags(s []string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.AppendTags(s)
-	return dvhu
+// AppendTags appends value to the "tags" field.
+func (_u *DNSVerificationHistoryUpdate) AppendTags(v []string) *DNSVerificationHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearTags() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearTags()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearTags() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetOwnerID(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetOwnerID(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetOwnerID(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableOwnerID(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetOwnerID(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableOwnerID(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearOwnerID() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearOwnerID()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearOwnerID() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetDNSTxtRecord sets the "dns_txt_record" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetDNSTxtRecord(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetDNSTxtRecord(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetDNSTxtRecord(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetDNSTxtRecord(v)
+	return _u
 }
 
 // SetNillableDNSTxtRecord sets the "dns_txt_record" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableDNSTxtRecord(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetDNSTxtRecord(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableDNSTxtRecord(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetDNSTxtRecord(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // SetDNSTxtValue sets the "dns_txt_value" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetDNSTxtValue(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetDNSTxtValue(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetDNSTxtValue(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetDNSTxtValue(v)
+	return _u
 }
 
 // SetNillableDNSTxtValue sets the "dns_txt_value" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableDNSTxtValue(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetDNSTxtValue(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableDNSTxtValue(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetDNSTxtValue(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // SetDNSVerificationStatus sets the "dns_verification_status" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetDNSVerificationStatus(evs enums.DNSVerificationStatus) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetDNSVerificationStatus(evs)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetDNSVerificationStatus(v enums.DNSVerificationStatus) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetDNSVerificationStatus(v)
+	return _u
 }
 
 // SetNillableDNSVerificationStatus sets the "dns_verification_status" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableDNSVerificationStatus(evs *enums.DNSVerificationStatus) *DNSVerificationHistoryUpdate {
-	if evs != nil {
-		dvhu.SetDNSVerificationStatus(*evs)
+func (_u *DNSVerificationHistoryUpdate) SetNillableDNSVerificationStatus(v *enums.DNSVerificationStatus) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetDNSVerificationStatus(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // SetDNSVerificationStatusReason sets the "dns_verification_status_reason" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetDNSVerificationStatusReason(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetDNSVerificationStatusReason(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetDNSVerificationStatusReason(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetDNSVerificationStatusReason(v)
+	return _u
 }
 
 // SetNillableDNSVerificationStatusReason sets the "dns_verification_status_reason" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableDNSVerificationStatusReason(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetDNSVerificationStatusReason(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableDNSVerificationStatusReason(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetDNSVerificationStatusReason(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearDNSVerificationStatusReason clears the value of the "dns_verification_status_reason" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearDNSVerificationStatusReason() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearDNSVerificationStatusReason()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearDNSVerificationStatusReason() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearDNSVerificationStatusReason()
+	return _u
 }
 
 // SetAcmeChallengePath sets the "acme_challenge_path" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetAcmeChallengePath(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetAcmeChallengePath(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetAcmeChallengePath(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetAcmeChallengePath(v)
+	return _u
 }
 
 // SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableAcmeChallengePath(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetAcmeChallengePath(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableAcmeChallengePath(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetAcmeChallengePath(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearAcmeChallengePath clears the value of the "acme_challenge_path" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearAcmeChallengePath() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearAcmeChallengePath()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearAcmeChallengePath() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearAcmeChallengePath()
+	return _u
 }
 
 // SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetExpectedAcmeChallengeValue(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetExpectedAcmeChallengeValue(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetExpectedAcmeChallengeValue(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetExpectedAcmeChallengeValue(v)
+	return _u
 }
 
 // SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetExpectedAcmeChallengeValue(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableExpectedAcmeChallengeValue(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetExpectedAcmeChallengeValue(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearExpectedAcmeChallengeValue clears the value of the "expected_acme_challenge_value" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearExpectedAcmeChallengeValue() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearExpectedAcmeChallengeValue()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearExpectedAcmeChallengeValue() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearExpectedAcmeChallengeValue()
+	return _u
 }
 
 // SetAcmeChallengeStatus sets the "acme_challenge_status" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetAcmeChallengeStatus(evs enums.SSLVerificationStatus) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetAcmeChallengeStatus(evs)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetAcmeChallengeStatus(v enums.SSLVerificationStatus) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetAcmeChallengeStatus(v)
+	return _u
 }
 
 // SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableAcmeChallengeStatus(evs *enums.SSLVerificationStatus) *DNSVerificationHistoryUpdate {
-	if evs != nil {
-		dvhu.SetAcmeChallengeStatus(*evs)
+func (_u *DNSVerificationHistoryUpdate) SetNillableAcmeChallengeStatus(v *enums.SSLVerificationStatus) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetAcmeChallengeStatus(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
-func (dvhu *DNSVerificationHistoryUpdate) SetAcmeChallengeStatusReason(s string) *DNSVerificationHistoryUpdate {
-	dvhu.mutation.SetAcmeChallengeStatusReason(s)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) SetAcmeChallengeStatusReason(v string) *DNSVerificationHistoryUpdate {
+	_u.mutation.SetAcmeChallengeStatusReason(v)
+	return _u
 }
 
 // SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
-func (dvhu *DNSVerificationHistoryUpdate) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationHistoryUpdate {
-	if s != nil {
-		dvhu.SetAcmeChallengeStatusReason(*s)
+func (_u *DNSVerificationHistoryUpdate) SetNillableAcmeChallengeStatusReason(v *string) *DNSVerificationHistoryUpdate {
+	if v != nil {
+		_u.SetAcmeChallengeStatusReason(*v)
 	}
-	return dvhu
+	return _u
 }
 
 // ClearAcmeChallengeStatusReason clears the value of the "acme_challenge_status_reason" field.
-func (dvhu *DNSVerificationHistoryUpdate) ClearAcmeChallengeStatusReason() *DNSVerificationHistoryUpdate {
-	dvhu.mutation.ClearAcmeChallengeStatusReason()
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) ClearAcmeChallengeStatusReason() *DNSVerificationHistoryUpdate {
+	_u.mutation.ClearAcmeChallengeStatusReason()
+	return _u
 }
 
 // Mutation returns the DNSVerificationHistoryMutation object of the builder.
-func (dvhu *DNSVerificationHistoryUpdate) Mutation() *DNSVerificationHistoryMutation {
-	return dvhu.mutation
+func (_u *DNSVerificationHistoryUpdate) Mutation() *DNSVerificationHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (dvhu *DNSVerificationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := dvhu.defaults(); err != nil {
+func (_u *DNSVerificationHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, dvhu.sqlSave, dvhu.mutation, dvhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dvhu *DNSVerificationHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := dvhu.Save(ctx)
+func (_u *DNSVerificationHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -302,38 +302,38 @@ func (dvhu *DNSVerificationHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (dvhu *DNSVerificationHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := dvhu.Save(ctx)
+func (_u *DNSVerificationHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvhu *DNSVerificationHistoryUpdate) ExecX(ctx context.Context) {
-	if err := dvhu.Exec(ctx); err != nil {
+func (_u *DNSVerificationHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (dvhu *DNSVerificationHistoryUpdate) defaults() error {
-	if _, ok := dvhu.mutation.UpdatedAt(); !ok && !dvhu.mutation.UpdatedAtCleared() {
+func (_u *DNSVerificationHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if dnsverificationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized dnsverificationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := dnsverificationhistory.UpdateDefaultUpdatedAt()
-		dvhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dvhu *DNSVerificationHistoryUpdate) check() error {
-	if v, ok := dvhu.mutation.DNSVerificationStatus(); ok {
+func (_u *DNSVerificationHistoryUpdate) check() error {
+	if v, ok := _u.mutation.DNSVerificationStatus(); ok {
 		if err := dnsverificationhistory.DNSVerificationStatusValidator(v); err != nil {
 			return &ValidationError{Name: "dns_verification_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.dns_verification_status": %w`, err)}
 		}
 	}
-	if v, ok := dvhu.mutation.AcmeChallengeStatus(); ok {
+	if v, ok := _u.mutation.AcmeChallengeStatus(); ok {
 		if err := dnsverificationhistory.AcmeChallengeStatusValidator(v); err != nil {
 			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.acme_challenge_status": %w`, err)}
 		}
@@ -342,113 +342,113 @@ func (dvhu *DNSVerificationHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (dvhu *DNSVerificationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DNSVerificationHistoryUpdate {
-	dvhu.modifiers = append(dvhu.modifiers, modifiers...)
-	return dvhu
+func (_u *DNSVerificationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DNSVerificationHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (dvhu *DNSVerificationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := dvhu.check(); err != nil {
-		return n, err
+func (_u *DNSVerificationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(dnsverificationhistory.Table, dnsverificationhistory.Columns, sqlgraph.NewFieldSpec(dnsverificationhistory.FieldID, field.TypeString))
-	if ps := dvhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if dvhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldRef, field.TypeString)
 	}
-	if dvhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := dvhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if dvhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if dvhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if dvhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if dvhu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := dvhu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if dvhu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(dnsverificationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := dvhu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, dnsverificationhistory.FieldTags, value)
 		})
 	}
-	if dvhu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := dvhu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(dnsverificationhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if dvhu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.DNSTxtRecord(); ok {
+	if value, ok := _u.mutation.DNSTxtRecord(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSTxtRecord, field.TypeString, value)
 	}
-	if value, ok := dvhu.mutation.DNSTxtValue(); ok {
+	if value, ok := _u.mutation.DNSTxtValue(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSTxtValue, field.TypeString, value)
 	}
-	if value, ok := dvhu.mutation.DNSVerificationStatus(); ok {
+	if value, ok := _u.mutation.DNSVerificationStatus(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatus, field.TypeEnum, value)
 	}
-	if value, ok := dvhu.mutation.DNSVerificationStatusReason(); ok {
+	if value, ok := _u.mutation.DNSVerificationStatusReason(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatusReason, field.TypeString, value)
 	}
-	if dvhu.mutation.DNSVerificationStatusReasonCleared() {
+	if _u.mutation.DNSVerificationStatusReasonCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldDNSVerificationStatusReason, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.AcmeChallengePath(); ok {
+	if value, ok := _u.mutation.AcmeChallengePath(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengePath, field.TypeString, value)
 	}
-	if dvhu.mutation.AcmeChallengePathCleared() {
+	if _u.mutation.AcmeChallengePathCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldAcmeChallengePath, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.ExpectedAcmeChallengeValue(); ok {
+	if value, ok := _u.mutation.ExpectedAcmeChallengeValue(); ok {
 		_spec.SetField(dnsverificationhistory.FieldExpectedAcmeChallengeValue, field.TypeString, value)
 	}
-	if dvhu.mutation.ExpectedAcmeChallengeValueCleared() {
+	if _u.mutation.ExpectedAcmeChallengeValueCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldExpectedAcmeChallengeValue, field.TypeString)
 	}
-	if value, ok := dvhu.mutation.AcmeChallengeStatus(); ok {
+	if value, ok := _u.mutation.AcmeChallengeStatus(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatus, field.TypeEnum, value)
 	}
-	if value, ok := dvhu.mutation.AcmeChallengeStatusReason(); ok {
+	if value, ok := _u.mutation.AcmeChallengeStatusReason(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatusReason, field.TypeString, value)
 	}
-	if dvhu.mutation.AcmeChallengeStatusReasonCleared() {
+	if _u.mutation.AcmeChallengeStatusReasonCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldAcmeChallengeStatusReason, field.TypeString)
 	}
-	_spec.Node.Schema = dvhu.schemaConfig.DNSVerificationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, dvhu.schemaConfig)
-	_spec.AddModifiers(dvhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, dvhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.DNSVerificationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{dnsverificationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -456,8 +456,8 @@ func (dvhu *DNSVerificationHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		return 0, err
 	}
-	dvhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // DNSVerificationHistoryUpdateOne is the builder for updating a single DNSVerificationHistory entity.
@@ -470,280 +470,280 @@ type DNSVerificationHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetUpdatedAt(t time.Time) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetUpdatedAt(t)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetUpdatedAt(v time.Time) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearUpdatedAt() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearUpdatedAt()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearUpdatedAt() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetUpdatedBy(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetUpdatedBy(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetUpdatedBy(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableUpdatedBy(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetUpdatedBy(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearUpdatedBy() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearUpdatedBy()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearUpdatedBy() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetDeletedAt(t time.Time) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetDeletedAt(t)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetDeletedAt(v time.Time) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *DNSVerificationHistoryUpdateOne {
-	if t != nil {
-		dvhuo.SetDeletedAt(*t)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearDeletedAt() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearDeletedAt()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearDeletedAt() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetDeletedBy(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetDeletedBy(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetDeletedBy(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableDeletedBy(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetDeletedBy(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableDeletedBy(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearDeletedBy() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearDeletedBy()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearDeletedBy() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetTags(s []string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetTags(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetTags(v []string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) AppendTags(s []string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.AppendTags(s)
-	return dvhuo
+// AppendTags appends value to the "tags" field.
+func (_u *DNSVerificationHistoryUpdateOne) AppendTags(v []string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearTags() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearTags()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearTags() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetOwnerID(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetOwnerID(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetOwnerID(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableOwnerID(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetOwnerID(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableOwnerID(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearOwnerID() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearOwnerID()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearOwnerID() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetDNSTxtRecord sets the "dns_txt_record" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetDNSTxtRecord(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetDNSTxtRecord(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetDNSTxtRecord(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetDNSTxtRecord(v)
+	return _u
 }
 
 // SetNillableDNSTxtRecord sets the "dns_txt_record" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableDNSTxtRecord(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetDNSTxtRecord(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableDNSTxtRecord(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDNSTxtRecord(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // SetDNSTxtValue sets the "dns_txt_value" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetDNSTxtValue(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetDNSTxtValue(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetDNSTxtValue(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetDNSTxtValue(v)
+	return _u
 }
 
 // SetNillableDNSTxtValue sets the "dns_txt_value" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableDNSTxtValue(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetDNSTxtValue(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableDNSTxtValue(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDNSTxtValue(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // SetDNSVerificationStatus sets the "dns_verification_status" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetDNSVerificationStatus(evs enums.DNSVerificationStatus) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetDNSVerificationStatus(evs)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetDNSVerificationStatus(v enums.DNSVerificationStatus) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetDNSVerificationStatus(v)
+	return _u
 }
 
 // SetNillableDNSVerificationStatus sets the "dns_verification_status" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableDNSVerificationStatus(evs *enums.DNSVerificationStatus) *DNSVerificationHistoryUpdateOne {
-	if evs != nil {
-		dvhuo.SetDNSVerificationStatus(*evs)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableDNSVerificationStatus(v *enums.DNSVerificationStatus) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDNSVerificationStatus(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // SetDNSVerificationStatusReason sets the "dns_verification_status_reason" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetDNSVerificationStatusReason(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetDNSVerificationStatusReason(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetDNSVerificationStatusReason(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetDNSVerificationStatusReason(v)
+	return _u
 }
 
 // SetNillableDNSVerificationStatusReason sets the "dns_verification_status_reason" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableDNSVerificationStatusReason(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetDNSVerificationStatusReason(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableDNSVerificationStatusReason(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetDNSVerificationStatusReason(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearDNSVerificationStatusReason clears the value of the "dns_verification_status_reason" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearDNSVerificationStatusReason() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearDNSVerificationStatusReason()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearDNSVerificationStatusReason() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearDNSVerificationStatusReason()
+	return _u
 }
 
 // SetAcmeChallengePath sets the "acme_challenge_path" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetAcmeChallengePath(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetAcmeChallengePath(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetAcmeChallengePath(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetAcmeChallengePath(v)
+	return _u
 }
 
 // SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableAcmeChallengePath(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetAcmeChallengePath(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableAcmeChallengePath(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetAcmeChallengePath(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearAcmeChallengePath clears the value of the "acme_challenge_path" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearAcmeChallengePath() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearAcmeChallengePath()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearAcmeChallengePath() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearAcmeChallengePath()
+	return _u
 }
 
 // SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetExpectedAcmeChallengeValue(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetExpectedAcmeChallengeValue(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetExpectedAcmeChallengeValue(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetExpectedAcmeChallengeValue(v)
+	return _u
 }
 
 // SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetExpectedAcmeChallengeValue(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableExpectedAcmeChallengeValue(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetExpectedAcmeChallengeValue(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearExpectedAcmeChallengeValue clears the value of the "expected_acme_challenge_value" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearExpectedAcmeChallengeValue() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearExpectedAcmeChallengeValue()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearExpectedAcmeChallengeValue() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearExpectedAcmeChallengeValue()
+	return _u
 }
 
 // SetAcmeChallengeStatus sets the "acme_challenge_status" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetAcmeChallengeStatus(evs enums.SSLVerificationStatus) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetAcmeChallengeStatus(evs)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetAcmeChallengeStatus(v enums.SSLVerificationStatus) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetAcmeChallengeStatus(v)
+	return _u
 }
 
 // SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableAcmeChallengeStatus(evs *enums.SSLVerificationStatus) *DNSVerificationHistoryUpdateOne {
-	if evs != nil {
-		dvhuo.SetAcmeChallengeStatus(*evs)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableAcmeChallengeStatus(v *enums.SSLVerificationStatus) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetAcmeChallengeStatus(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetAcmeChallengeStatusReason(s string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.SetAcmeChallengeStatusReason(s)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) SetAcmeChallengeStatusReason(v string) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.SetAcmeChallengeStatusReason(v)
+	return _u
 }
 
 // SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationHistoryUpdateOne {
-	if s != nil {
-		dvhuo.SetAcmeChallengeStatusReason(*s)
+func (_u *DNSVerificationHistoryUpdateOne) SetNillableAcmeChallengeStatusReason(v *string) *DNSVerificationHistoryUpdateOne {
+	if v != nil {
+		_u.SetAcmeChallengeStatusReason(*v)
 	}
-	return dvhuo
+	return _u
 }
 
 // ClearAcmeChallengeStatusReason clears the value of the "acme_challenge_status_reason" field.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ClearAcmeChallengeStatusReason() *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.ClearAcmeChallengeStatusReason()
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) ClearAcmeChallengeStatusReason() *DNSVerificationHistoryUpdateOne {
+	_u.mutation.ClearAcmeChallengeStatusReason()
+	return _u
 }
 
 // Mutation returns the DNSVerificationHistoryMutation object of the builder.
-func (dvhuo *DNSVerificationHistoryUpdateOne) Mutation() *DNSVerificationHistoryMutation {
-	return dvhuo.mutation
+func (_u *DNSVerificationHistoryUpdateOne) Mutation() *DNSVerificationHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the DNSVerificationHistoryUpdate builder.
-func (dvhuo *DNSVerificationHistoryUpdateOne) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryUpdateOne {
-	dvhuo.mutation.Where(ps...)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) Where(ps ...predicate.DNSVerificationHistory) *DNSVerificationHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (dvhuo *DNSVerificationHistoryUpdateOne) Select(field string, fields ...string) *DNSVerificationHistoryUpdateOne {
-	dvhuo.fields = append([]string{field}, fields...)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) Select(field string, fields ...string) *DNSVerificationHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated DNSVerificationHistory entity.
-func (dvhuo *DNSVerificationHistoryUpdateOne) Save(ctx context.Context) (*DNSVerificationHistory, error) {
-	if err := dvhuo.defaults(); err != nil {
+func (_u *DNSVerificationHistoryUpdateOne) Save(ctx context.Context) (*DNSVerificationHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, dvhuo.sqlSave, dvhuo.mutation, dvhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dvhuo *DNSVerificationHistoryUpdateOne) SaveX(ctx context.Context) *DNSVerificationHistory {
-	node, err := dvhuo.Save(ctx)
+func (_u *DNSVerificationHistoryUpdateOne) SaveX(ctx context.Context) *DNSVerificationHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -751,38 +751,38 @@ func (dvhuo *DNSVerificationHistoryUpdateOne) SaveX(ctx context.Context) *DNSVer
 }
 
 // Exec executes the query on the entity.
-func (dvhuo *DNSVerificationHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := dvhuo.Save(ctx)
+func (_u *DNSVerificationHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvhuo *DNSVerificationHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := dvhuo.Exec(ctx); err != nil {
+func (_u *DNSVerificationHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (dvhuo *DNSVerificationHistoryUpdateOne) defaults() error {
-	if _, ok := dvhuo.mutation.UpdatedAt(); !ok && !dvhuo.mutation.UpdatedAtCleared() {
+func (_u *DNSVerificationHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if dnsverificationhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized dnsverificationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := dnsverificationhistory.UpdateDefaultUpdatedAt()
-		dvhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dvhuo *DNSVerificationHistoryUpdateOne) check() error {
-	if v, ok := dvhuo.mutation.DNSVerificationStatus(); ok {
+func (_u *DNSVerificationHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.DNSVerificationStatus(); ok {
 		if err := dnsverificationhistory.DNSVerificationStatusValidator(v); err != nil {
 			return &ValidationError{Name: "dns_verification_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.dns_verification_status": %w`, err)}
 		}
 	}
-	if v, ok := dvhuo.mutation.AcmeChallengeStatus(); ok {
+	if v, ok := _u.mutation.AcmeChallengeStatus(); ok {
 		if err := dnsverificationhistory.AcmeChallengeStatusValidator(v); err != nil {
 			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.acme_challenge_status": %w`, err)}
 		}
@@ -791,22 +791,22 @@ func (dvhuo *DNSVerificationHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (dvhuo *DNSVerificationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DNSVerificationHistoryUpdateOne {
-	dvhuo.modifiers = append(dvhuo.modifiers, modifiers...)
-	return dvhuo
+func (_u *DNSVerificationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DNSVerificationHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (dvhuo *DNSVerificationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DNSVerificationHistory, err error) {
-	if err := dvhuo.check(); err != nil {
+func (_u *DNSVerificationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DNSVerificationHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(dnsverificationhistory.Table, dnsverificationhistory.Columns, sqlgraph.NewFieldSpec(dnsverificationhistory.FieldID, field.TypeString))
-	id, ok := dvhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "DNSVerificationHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := dvhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, dnsverificationhistory.FieldID)
 		for _, f := range fields {
@@ -818,106 +818,106 @@ func (dvhuo *DNSVerificationHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 			}
 		}
 	}
-	if ps := dvhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if dvhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldRef, field.TypeString)
 	}
-	if dvhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := dvhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if dvhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if dvhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if dvhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if dvhuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := dvhuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if dvhuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(dnsverificationhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := dvhuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, dnsverificationhistory.FieldTags, value)
 		})
 	}
-	if dvhuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := dvhuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(dnsverificationhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if dvhuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.DNSTxtRecord(); ok {
+	if value, ok := _u.mutation.DNSTxtRecord(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSTxtRecord, field.TypeString, value)
 	}
-	if value, ok := dvhuo.mutation.DNSTxtValue(); ok {
+	if value, ok := _u.mutation.DNSTxtValue(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSTxtValue, field.TypeString, value)
 	}
-	if value, ok := dvhuo.mutation.DNSVerificationStatus(); ok {
+	if value, ok := _u.mutation.DNSVerificationStatus(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatus, field.TypeEnum, value)
 	}
-	if value, ok := dvhuo.mutation.DNSVerificationStatusReason(); ok {
+	if value, ok := _u.mutation.DNSVerificationStatusReason(); ok {
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatusReason, field.TypeString, value)
 	}
-	if dvhuo.mutation.DNSVerificationStatusReasonCleared() {
+	if _u.mutation.DNSVerificationStatusReasonCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldDNSVerificationStatusReason, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.AcmeChallengePath(); ok {
+	if value, ok := _u.mutation.AcmeChallengePath(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengePath, field.TypeString, value)
 	}
-	if dvhuo.mutation.AcmeChallengePathCleared() {
+	if _u.mutation.AcmeChallengePathCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldAcmeChallengePath, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.ExpectedAcmeChallengeValue(); ok {
+	if value, ok := _u.mutation.ExpectedAcmeChallengeValue(); ok {
 		_spec.SetField(dnsverificationhistory.FieldExpectedAcmeChallengeValue, field.TypeString, value)
 	}
-	if dvhuo.mutation.ExpectedAcmeChallengeValueCleared() {
+	if _u.mutation.ExpectedAcmeChallengeValueCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldExpectedAcmeChallengeValue, field.TypeString)
 	}
-	if value, ok := dvhuo.mutation.AcmeChallengeStatus(); ok {
+	if value, ok := _u.mutation.AcmeChallengeStatus(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatus, field.TypeEnum, value)
 	}
-	if value, ok := dvhuo.mutation.AcmeChallengeStatusReason(); ok {
+	if value, ok := _u.mutation.AcmeChallengeStatusReason(); ok {
 		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatusReason, field.TypeString, value)
 	}
-	if dvhuo.mutation.AcmeChallengeStatusReasonCleared() {
+	if _u.mutation.AcmeChallengeStatusReasonCleared() {
 		_spec.ClearField(dnsverificationhistory.FieldAcmeChallengeStatusReason, field.TypeString)
 	}
-	_spec.Node.Schema = dvhuo.schemaConfig.DNSVerificationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, dvhuo.schemaConfig)
-	_spec.AddModifiers(dvhuo.modifiers...)
-	_node = &DNSVerificationHistory{config: dvhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.DNSVerificationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &DNSVerificationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, dvhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{dnsverificationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -925,6 +925,6 @@ func (dvhuo *DNSVerificationHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		return nil, err
 	}
-	dvhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

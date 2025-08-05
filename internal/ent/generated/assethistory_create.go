@@ -23,255 +23,255 @@ type AssetHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (ahc *AssetHistoryCreate) SetHistoryTime(t time.Time) *AssetHistoryCreate {
-	ahc.mutation.SetHistoryTime(t)
-	return ahc
+func (_c *AssetHistoryCreate) SetHistoryTime(v time.Time) *AssetHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableHistoryTime(t *time.Time) *AssetHistoryCreate {
-	if t != nil {
-		ahc.SetHistoryTime(*t)
+func (_c *AssetHistoryCreate) SetNillableHistoryTime(v *time.Time) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (ahc *AssetHistoryCreate) SetRef(s string) *AssetHistoryCreate {
-	ahc.mutation.SetRef(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetRef(v string) *AssetHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableRef(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetRef(*s)
+func (_c *AssetHistoryCreate) SetNillableRef(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (ahc *AssetHistoryCreate) SetOperation(ht history.OpType) *AssetHistoryCreate {
-	ahc.mutation.SetOperation(ht)
-	return ahc
+func (_c *AssetHistoryCreate) SetOperation(v history.OpType) *AssetHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ahc *AssetHistoryCreate) SetCreatedAt(t time.Time) *AssetHistoryCreate {
-	ahc.mutation.SetCreatedAt(t)
-	return ahc
+func (_c *AssetHistoryCreate) SetCreatedAt(v time.Time) *AssetHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableCreatedAt(t *time.Time) *AssetHistoryCreate {
-	if t != nil {
-		ahc.SetCreatedAt(*t)
+func (_c *AssetHistoryCreate) SetNillableCreatedAt(v *time.Time) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ahc *AssetHistoryCreate) SetUpdatedAt(t time.Time) *AssetHistoryCreate {
-	ahc.mutation.SetUpdatedAt(t)
-	return ahc
+func (_c *AssetHistoryCreate) SetUpdatedAt(v time.Time) *AssetHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableUpdatedAt(t *time.Time) *AssetHistoryCreate {
-	if t != nil {
-		ahc.SetUpdatedAt(*t)
+func (_c *AssetHistoryCreate) SetNillableUpdatedAt(v *time.Time) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ahc *AssetHistoryCreate) SetCreatedBy(s string) *AssetHistoryCreate {
-	ahc.mutation.SetCreatedBy(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetCreatedBy(v string) *AssetHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableCreatedBy(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetCreatedBy(*s)
+func (_c *AssetHistoryCreate) SetNillableCreatedBy(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ahc *AssetHistoryCreate) SetUpdatedBy(s string) *AssetHistoryCreate {
-	ahc.mutation.SetUpdatedBy(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetUpdatedBy(v string) *AssetHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableUpdatedBy(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetUpdatedBy(*s)
+func (_c *AssetHistoryCreate) SetNillableUpdatedBy(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ahc *AssetHistoryCreate) SetDeletedAt(t time.Time) *AssetHistoryCreate {
-	ahc.mutation.SetDeletedAt(t)
-	return ahc
+func (_c *AssetHistoryCreate) SetDeletedAt(v time.Time) *AssetHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableDeletedAt(t *time.Time) *AssetHistoryCreate {
-	if t != nil {
-		ahc.SetDeletedAt(*t)
+func (_c *AssetHistoryCreate) SetNillableDeletedAt(v *time.Time) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ahc *AssetHistoryCreate) SetDeletedBy(s string) *AssetHistoryCreate {
-	ahc.mutation.SetDeletedBy(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetDeletedBy(v string) *AssetHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableDeletedBy(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetDeletedBy(*s)
+func (_c *AssetHistoryCreate) SetNillableDeletedBy(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (ahc *AssetHistoryCreate) SetTags(s []string) *AssetHistoryCreate {
-	ahc.mutation.SetTags(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetTags(v []string) *AssetHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (ahc *AssetHistoryCreate) SetOwnerID(s string) *AssetHistoryCreate {
-	ahc.mutation.SetOwnerID(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetOwnerID(v string) *AssetHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableOwnerID(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetOwnerID(*s)
+func (_c *AssetHistoryCreate) SetNillableOwnerID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetAssetType sets the "asset_type" field.
-func (ahc *AssetHistoryCreate) SetAssetType(et enums.AssetType) *AssetHistoryCreate {
-	ahc.mutation.SetAssetType(et)
-	return ahc
+func (_c *AssetHistoryCreate) SetAssetType(v enums.AssetType) *AssetHistoryCreate {
+	_c.mutation.SetAssetType(v)
+	return _c
 }
 
 // SetNillableAssetType sets the "asset_type" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableAssetType(et *enums.AssetType) *AssetHistoryCreate {
-	if et != nil {
-		ahc.SetAssetType(*et)
+func (_c *AssetHistoryCreate) SetNillableAssetType(v *enums.AssetType) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAssetType(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ahc *AssetHistoryCreate) SetName(s string) *AssetHistoryCreate {
-	ahc.mutation.SetName(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetName(v string) *AssetHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (ahc *AssetHistoryCreate) SetDescription(s string) *AssetHistoryCreate {
-	ahc.mutation.SetDescription(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetDescription(v string) *AssetHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableDescription(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetDescription(*s)
+func (_c *AssetHistoryCreate) SetNillableDescription(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetIdentifier sets the "identifier" field.
-func (ahc *AssetHistoryCreate) SetIdentifier(s string) *AssetHistoryCreate {
-	ahc.mutation.SetIdentifier(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetIdentifier(v string) *AssetHistoryCreate {
+	_c.mutation.SetIdentifier(v)
+	return _c
 }
 
 // SetNillableIdentifier sets the "identifier" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableIdentifier(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetIdentifier(*s)
+func (_c *AssetHistoryCreate) SetNillableIdentifier(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetIdentifier(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetWebsite sets the "website" field.
-func (ahc *AssetHistoryCreate) SetWebsite(s string) *AssetHistoryCreate {
-	ahc.mutation.SetWebsite(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetWebsite(v string) *AssetHistoryCreate {
+	_c.mutation.SetWebsite(v)
+	return _c
 }
 
 // SetNillableWebsite sets the "website" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableWebsite(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetWebsite(*s)
+func (_c *AssetHistoryCreate) SetNillableWebsite(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetWebsite(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetCpe sets the "cpe" field.
-func (ahc *AssetHistoryCreate) SetCpe(s string) *AssetHistoryCreate {
-	ahc.mutation.SetCpe(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetCpe(v string) *AssetHistoryCreate {
+	_c.mutation.SetCpe(v)
+	return _c
 }
 
 // SetNillableCpe sets the "cpe" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableCpe(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetCpe(*s)
+func (_c *AssetHistoryCreate) SetNillableCpe(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetCpe(*v)
 	}
-	return ahc
+	return _c
 }
 
 // SetCategories sets the "categories" field.
-func (ahc *AssetHistoryCreate) SetCategories(s []string) *AssetHistoryCreate {
-	ahc.mutation.SetCategories(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetCategories(v []string) *AssetHistoryCreate {
+	_c.mutation.SetCategories(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ahc *AssetHistoryCreate) SetID(s string) *AssetHistoryCreate {
-	ahc.mutation.SetID(s)
-	return ahc
+func (_c *AssetHistoryCreate) SetID(v string) *AssetHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ahc *AssetHistoryCreate) SetNillableID(s *string) *AssetHistoryCreate {
-	if s != nil {
-		ahc.SetID(*s)
+func (_c *AssetHistoryCreate) SetNillableID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ahc
+	return _c
 }
 
 // Mutation returns the AssetHistoryMutation object of the builder.
-func (ahc *AssetHistoryCreate) Mutation() *AssetHistoryMutation {
-	return ahc.mutation
+func (_c *AssetHistoryCreate) Mutation() *AssetHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the AssetHistory in the database.
-func (ahc *AssetHistoryCreate) Save(ctx context.Context) (*AssetHistory, error) {
-	if err := ahc.defaults(); err != nil {
+func (_c *AssetHistoryCreate) Save(ctx context.Context) (*AssetHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ahc.sqlSave, ahc.mutation, ahc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ahc *AssetHistoryCreate) SaveX(ctx context.Context) *AssetHistory {
-	v, err := ahc.Save(ctx)
+func (_c *AssetHistoryCreate) SaveX(ctx context.Context) *AssetHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -279,92 +279,92 @@ func (ahc *AssetHistoryCreate) SaveX(ctx context.Context) *AssetHistory {
 }
 
 // Exec executes the query.
-func (ahc *AssetHistoryCreate) Exec(ctx context.Context) error {
-	_, err := ahc.Save(ctx)
+func (_c *AssetHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ahc *AssetHistoryCreate) ExecX(ctx context.Context) {
-	if err := ahc.Exec(ctx); err != nil {
+func (_c *AssetHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ahc *AssetHistoryCreate) defaults() error {
-	if _, ok := ahc.mutation.HistoryTime(); !ok {
+func (_c *AssetHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if assethistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized assethistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := assethistory.DefaultHistoryTime()
-		ahc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := ahc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if assethistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized assethistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := assethistory.DefaultCreatedAt()
-		ahc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ahc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if assethistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized assethistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := assethistory.DefaultUpdatedAt()
-		ahc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ahc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := assethistory.DefaultTags
-		ahc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := ahc.mutation.AssetType(); !ok {
+	if _, ok := _c.mutation.AssetType(); !ok {
 		v := assethistory.DefaultAssetType
-		ahc.mutation.SetAssetType(v)
+		_c.mutation.SetAssetType(v)
 	}
-	if _, ok := ahc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if assethistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized assethistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := assethistory.DefaultID()
-		ahc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ahc *AssetHistoryCreate) check() error {
-	if _, ok := ahc.mutation.HistoryTime(); !ok {
+func (_c *AssetHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "AssetHistory.history_time"`)}
 	}
-	if _, ok := ahc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "AssetHistory.operation"`)}
 	}
-	if v, ok := ahc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := assethistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "AssetHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := ahc.mutation.AssetType(); !ok {
+	if _, ok := _c.mutation.AssetType(); !ok {
 		return &ValidationError{Name: "asset_type", err: errors.New(`generated: missing required field "AssetHistory.asset_type"`)}
 	}
-	if v, ok := ahc.mutation.AssetType(); ok {
+	if v, ok := _c.mutation.AssetType(); ok {
 		if err := assethistory.AssetTypeValidator(v); err != nil {
 			return &ValidationError{Name: "asset_type", err: fmt.Errorf(`generated: validator failed for field "AssetHistory.asset_type": %w`, err)}
 		}
 	}
-	if _, ok := ahc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "AssetHistory.name"`)}
 	}
 	return nil
 }
 
-func (ahc *AssetHistoryCreate) sqlSave(ctx context.Context) (*AssetHistory, error) {
-	if err := ahc.check(); err != nil {
+func (_c *AssetHistoryCreate) sqlSave(ctx context.Context) (*AssetHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ahc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ahc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -377,90 +377,90 @@ func (ahc *AssetHistoryCreate) sqlSave(ctx context.Context) (*AssetHistory, erro
 			return nil, fmt.Errorf("unexpected AssetHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	ahc.mutation.id = &_node.ID
-	ahc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ahc *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec) {
+func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &AssetHistory{config: ahc.config}
+		_node = &AssetHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(assethistory.Table, sqlgraph.NewFieldSpec(assethistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = ahc.schemaConfig.AssetHistory
-	if id, ok := ahc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.AssetHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ahc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(assethistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := ahc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(assethistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := ahc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(assethistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := ahc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(assethistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ahc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(assethistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ahc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(assethistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ahc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(assethistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ahc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(assethistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ahc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(assethistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ahc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(assethistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := ahc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := ahc.mutation.AssetType(); ok {
+	if value, ok := _c.mutation.AssetType(); ok {
 		_spec.SetField(assethistory.FieldAssetType, field.TypeEnum, value)
 		_node.AssetType = value
 	}
-	if value, ok := ahc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(assethistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ahc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(assethistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ahc.mutation.Identifier(); ok {
+	if value, ok := _c.mutation.Identifier(); ok {
 		_spec.SetField(assethistory.FieldIdentifier, field.TypeString, value)
 		_node.Identifier = value
 	}
-	if value, ok := ahc.mutation.Website(); ok {
+	if value, ok := _c.mutation.Website(); ok {
 		_spec.SetField(assethistory.FieldWebsite, field.TypeString, value)
 		_node.Website = value
 	}
-	if value, ok := ahc.mutation.Cpe(); ok {
+	if value, ok := _c.mutation.Cpe(); ok {
 		_spec.SetField(assethistory.FieldCpe, field.TypeString, value)
 		_node.Cpe = value
 	}
-	if value, ok := ahc.mutation.Categories(); ok {
+	if value, ok := _c.mutation.Categories(); ok {
 		_spec.SetField(assethistory.FieldCategories, field.TypeJSON, value)
 		_node.Categories = value
 	}
@@ -475,16 +475,16 @@ type AssetHistoryCreateBulk struct {
 }
 
 // Save creates the AssetHistory entities in the database.
-func (ahcb *AssetHistoryCreateBulk) Save(ctx context.Context) ([]*AssetHistory, error) {
-	if ahcb.err != nil {
-		return nil, ahcb.err
+func (_c *AssetHistoryCreateBulk) Save(ctx context.Context) ([]*AssetHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ahcb.builders))
-	nodes := make([]*AssetHistory, len(ahcb.builders))
-	mutators := make([]Mutator, len(ahcb.builders))
-	for i := range ahcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*AssetHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ahcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AssetHistoryMutation)
@@ -498,11 +498,11 @@ func (ahcb *AssetHistoryCreateBulk) Save(ctx context.Context) ([]*AssetHistory, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ahcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ahcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -522,7 +522,7 @@ func (ahcb *AssetHistoryCreateBulk) Save(ctx context.Context) ([]*AssetHistory, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ahcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -530,8 +530,8 @@ func (ahcb *AssetHistoryCreateBulk) Save(ctx context.Context) ([]*AssetHistory, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ahcb *AssetHistoryCreateBulk) SaveX(ctx context.Context) []*AssetHistory {
-	v, err := ahcb.Save(ctx)
+func (_c *AssetHistoryCreateBulk) SaveX(ctx context.Context) []*AssetHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -539,14 +539,14 @@ func (ahcb *AssetHistoryCreateBulk) SaveX(ctx context.Context) []*AssetHistory {
 }
 
 // Exec executes the query.
-func (ahcb *AssetHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := ahcb.Save(ctx)
+func (_c *AssetHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ahcb *AssetHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := ahcb.Exec(ctx); err != nil {
+func (_c *AssetHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

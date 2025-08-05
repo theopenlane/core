@@ -33,40 +33,40 @@ type UserSettingHistoryQuery struct {
 }
 
 // Where adds a new predicate for the UserSettingHistoryQuery builder.
-func (ushq *UserSettingHistoryQuery) Where(ps ...predicate.UserSettingHistory) *UserSettingHistoryQuery {
-	ushq.predicates = append(ushq.predicates, ps...)
-	return ushq
+func (_q *UserSettingHistoryQuery) Where(ps ...predicate.UserSettingHistory) *UserSettingHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ushq *UserSettingHistoryQuery) Limit(limit int) *UserSettingHistoryQuery {
-	ushq.ctx.Limit = &limit
-	return ushq
+func (_q *UserSettingHistoryQuery) Limit(limit int) *UserSettingHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ushq *UserSettingHistoryQuery) Offset(offset int) *UserSettingHistoryQuery {
-	ushq.ctx.Offset = &offset
-	return ushq
+func (_q *UserSettingHistoryQuery) Offset(offset int) *UserSettingHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ushq *UserSettingHistoryQuery) Unique(unique bool) *UserSettingHistoryQuery {
-	ushq.ctx.Unique = &unique
-	return ushq
+func (_q *UserSettingHistoryQuery) Unique(unique bool) *UserSettingHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ushq *UserSettingHistoryQuery) Order(o ...usersettinghistory.OrderOption) *UserSettingHistoryQuery {
-	ushq.order = append(ushq.order, o...)
-	return ushq
+func (_q *UserSettingHistoryQuery) Order(o ...usersettinghistory.OrderOption) *UserSettingHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first UserSettingHistory entity from the query.
 // Returns a *NotFoundError when no UserSettingHistory was found.
-func (ushq *UserSettingHistoryQuery) First(ctx context.Context) (*UserSettingHistory, error) {
-	nodes, err := ushq.Limit(1).All(setContextOp(ctx, ushq.ctx, ent.OpQueryFirst))
+func (_q *UserSettingHistoryQuery) First(ctx context.Context) (*UserSettingHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (ushq *UserSettingHistoryQuery) First(ctx context.Context) (*UserSettingHis
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) FirstX(ctx context.Context) *UserSettingHistory {
-	node, err := ushq.First(ctx)
+func (_q *UserSettingHistoryQuery) FirstX(ctx context.Context) *UserSettingHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (ushq *UserSettingHistoryQuery) FirstX(ctx context.Context) *UserSettingHis
 
 // FirstID returns the first UserSettingHistory ID from the query.
 // Returns a *NotFoundError when no UserSettingHistory ID was found.
-func (ushq *UserSettingHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *UserSettingHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ushq.Limit(1).IDs(setContextOp(ctx, ushq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (ushq *UserSettingHistoryQuery) FirstID(ctx context.Context) (id string, er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := ushq.FirstID(ctx)
+func (_q *UserSettingHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (ushq *UserSettingHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single UserSettingHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one UserSettingHistory entity is found.
 // Returns a *NotFoundError when no UserSettingHistory entities are found.
-func (ushq *UserSettingHistoryQuery) Only(ctx context.Context) (*UserSettingHistory, error) {
-	nodes, err := ushq.Limit(2).All(setContextOp(ctx, ushq.ctx, ent.OpQueryOnly))
+func (_q *UserSettingHistoryQuery) Only(ctx context.Context) (*UserSettingHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (ushq *UserSettingHistoryQuery) Only(ctx context.Context) (*UserSettingHist
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) OnlyX(ctx context.Context) *UserSettingHistory {
-	node, err := ushq.Only(ctx)
+func (_q *UserSettingHistoryQuery) OnlyX(ctx context.Context) *UserSettingHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (ushq *UserSettingHistoryQuery) OnlyX(ctx context.Context) *UserSettingHist
 // OnlyID is like Only, but returns the only UserSettingHistory ID in the query.
 // Returns a *NotSingularError when more than one UserSettingHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ushq *UserSettingHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *UserSettingHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = ushq.Limit(2).IDs(setContextOp(ctx, ushq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (ushq *UserSettingHistoryQuery) OnlyID(ctx context.Context) (id string, err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := ushq.OnlyID(ctx)
+func (_q *UserSettingHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (ushq *UserSettingHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of UserSettingHistories.
-func (ushq *UserSettingHistoryQuery) All(ctx context.Context) ([]*UserSettingHistory, error) {
-	ctx = setContextOp(ctx, ushq.ctx, ent.OpQueryAll)
-	if err := ushq.prepareQuery(ctx); err != nil {
+func (_q *UserSettingHistoryQuery) All(ctx context.Context) ([]*UserSettingHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*UserSettingHistory, *UserSettingHistoryQuery]()
-	return withInterceptors[[]*UserSettingHistory](ctx, ushq, qr, ushq.inters)
+	return withInterceptors[[]*UserSettingHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) AllX(ctx context.Context) []*UserSettingHistory {
-	nodes, err := ushq.All(ctx)
+func (_q *UserSettingHistoryQuery) AllX(ctx context.Context) []*UserSettingHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (ushq *UserSettingHistoryQuery) AllX(ctx context.Context) []*UserSettingHis
 }
 
 // IDs executes the query and returns a list of UserSettingHistory IDs.
-func (ushq *UserSettingHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if ushq.ctx.Unique == nil && ushq.path != nil {
-		ushq.Unique(true)
+func (_q *UserSettingHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ushq.ctx, ent.OpQueryIDs)
-	if err = ushq.Select(usersettinghistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(usersettinghistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := ushq.IDs(ctx)
+func (_q *UserSettingHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (ushq *UserSettingHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (ushq *UserSettingHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ushq.ctx, ent.OpQueryCount)
-	if err := ushq.prepareQuery(ctx); err != nil {
+func (_q *UserSettingHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ushq, querierCount[*UserSettingHistoryQuery](), ushq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*UserSettingHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) CountX(ctx context.Context) int {
-	count, err := ushq.Count(ctx)
+func (_q *UserSettingHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (ushq *UserSettingHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ushq *UserSettingHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ushq.ctx, ent.OpQueryExist)
-	switch _, err := ushq.FirstID(ctx); {
+func (_q *UserSettingHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (ushq *UserSettingHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ushq *UserSettingHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := ushq.Exist(ctx)
+func (_q *UserSettingHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (ushq *UserSettingHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the UserSettingHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ushq *UserSettingHistoryQuery) Clone() *UserSettingHistoryQuery {
-	if ushq == nil {
+func (_q *UserSettingHistoryQuery) Clone() *UserSettingHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &UserSettingHistoryQuery{
-		config:     ushq.config,
-		ctx:        ushq.ctx.Clone(),
-		order:      append([]usersettinghistory.OrderOption{}, ushq.order...),
-		inters:     append([]Interceptor{}, ushq.inters...),
-		predicates: append([]predicate.UserSettingHistory{}, ushq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]usersettinghistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.UserSettingHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       ushq.sql.Clone(),
-		path:      ushq.path,
-		modifiers: append([]func(*sql.Selector){}, ushq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (ushq *UserSettingHistoryQuery) Clone() *UserSettingHistoryQuery {
 //		GroupBy(usersettinghistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (ushq *UserSettingHistoryQuery) GroupBy(field string, fields ...string) *UserSettingHistoryGroupBy {
-	ushq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &UserSettingHistoryGroupBy{build: ushq}
-	grbuild.flds = &ushq.ctx.Fields
+func (_q *UserSettingHistoryQuery) GroupBy(field string, fields ...string) *UserSettingHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &UserSettingHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = usersettinghistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (ushq *UserSettingHistoryQuery) GroupBy(field string, fields ...string) *Us
 //	client.UserSettingHistory.Query().
 //		Select(usersettinghistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (ushq *UserSettingHistoryQuery) Select(fields ...string) *UserSettingHistorySelect {
-	ushq.ctx.Fields = append(ushq.ctx.Fields, fields...)
-	sbuild := &UserSettingHistorySelect{UserSettingHistoryQuery: ushq}
+func (_q *UserSettingHistoryQuery) Select(fields ...string) *UserSettingHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &UserSettingHistorySelect{UserSettingHistoryQuery: _q}
 	sbuild.label = usersettinghistory.Label
-	sbuild.flds, sbuild.scan = &ushq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a UserSettingHistorySelect configured with the given aggregations.
-func (ushq *UserSettingHistoryQuery) Aggregate(fns ...AggregateFunc) *UserSettingHistorySelect {
-	return ushq.Select().Aggregate(fns...)
+func (_q *UserSettingHistoryQuery) Aggregate(fns ...AggregateFunc) *UserSettingHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ushq *UserSettingHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ushq.inters {
+func (_q *UserSettingHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ushq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ushq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !usersettinghistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if ushq.path != nil {
-		prev, err := ushq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ushq.sql = prev
+		_q.sql = prev
 	}
 	if usersettinghistory.Policy == nil {
 		return errors.New("generated: uninitialized usersettinghistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := usersettinghistory.Policy.EvalQuery(ctx, ushq); err != nil {
+	if err := usersettinghistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (ushq *UserSettingHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*UserSettingHistory, error) {
+func (_q *UserSettingHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*UserSettingHistory, error) {
 	var (
 		nodes = []*UserSettingHistory{}
-		_spec = ushq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*UserSettingHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &UserSettingHistory{config: ushq.config}
+		node := &UserSettingHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = ushq.schemaConfig.UserSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ushq.schemaConfig)
-	if len(ushq.modifiers) > 0 {
-		_spec.Modifiers = ushq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.UserSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ushq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range ushq.loadTotal {
-		if err := ushq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (ushq *UserSettingHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ushq.querySpec()
-	_spec.Node.Schema = ushq.schemaConfig.UserSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ushq.schemaConfig)
-	if len(ushq.modifiers) > 0 {
-		_spec.Modifiers = ushq.modifiers
+func (_q *UserSettingHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.UserSettingHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = ushq.ctx.Fields
-	if len(ushq.ctx.Fields) > 0 {
-		_spec.Unique = ushq.ctx.Unique != nil && *ushq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ushq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ushq *UserSettingHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *UserSettingHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(usersettinghistory.Table, usersettinghistory.Columns, sqlgraph.NewFieldSpec(usersettinghistory.FieldID, field.TypeString))
-	_spec.From = ushq.sql
-	if unique := ushq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ushq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ushq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, usersettinghistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (ushq *UserSettingHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := ushq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ushq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ushq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ushq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (ushq *UserSettingHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ushq *UserSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ushq.driver.Dialect())
+func (_q *UserSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(usersettinghistory.Table)
-	columns := ushq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = usersettinghistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ushq.sql != nil {
-		selector = ushq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ushq.ctx.Unique != nil && *ushq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(ushq.schemaConfig.UserSettingHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, ushq.schemaConfig)
+	t1.Schema(_q.schemaConfig.UserSettingHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range ushq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range ushq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ushq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ushq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ushq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ushq *UserSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSettingHistorySelect {
-	ushq.modifiers = append(ushq.modifiers, modifiers...)
-	return ushq.Select()
+func (_q *UserSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSettingHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type UserSettingHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ushgb *UserSettingHistoryGroupBy) Aggregate(fns ...AggregateFunc) *UserSettingHistoryGroupBy {
-	ushgb.fns = append(ushgb.fns, fns...)
-	return ushgb
+func (_g *UserSettingHistoryGroupBy) Aggregate(fns ...AggregateFunc) *UserSettingHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ushgb *UserSettingHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ushgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ushgb.build.prepareQuery(ctx); err != nil {
+func (_g *UserSettingHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*UserSettingHistoryQuery, *UserSettingHistoryGroupBy](ctx, ushgb.build, ushgb, ushgb.build.inters, v)
+	return scanWithInterceptors[*UserSettingHistoryQuery, *UserSettingHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ushgb *UserSettingHistoryGroupBy) sqlScan(ctx context.Context, root *UserSettingHistoryQuery, v any) error {
+func (_g *UserSettingHistoryGroupBy) sqlScan(ctx context.Context, root *UserSettingHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ushgb.fns))
-	for _, fn := range ushgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ushgb.flds)+len(ushgb.fns))
-		for _, f := range *ushgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ushgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ushgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type UserSettingHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ushs *UserSettingHistorySelect) Aggregate(fns ...AggregateFunc) *UserSettingHistorySelect {
-	ushs.fns = append(ushs.fns, fns...)
-	return ushs
+func (_s *UserSettingHistorySelect) Aggregate(fns ...AggregateFunc) *UserSettingHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ushs *UserSettingHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ushs.ctx, ent.OpQuerySelect)
-	if err := ushs.prepareQuery(ctx); err != nil {
+func (_s *UserSettingHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*UserSettingHistoryQuery, *UserSettingHistorySelect](ctx, ushs.UserSettingHistoryQuery, ushs, ushs.inters, v)
+	return scanWithInterceptors[*UserSettingHistoryQuery, *UserSettingHistorySelect](ctx, _s.UserSettingHistoryQuery, _s, _s.inters, v)
 }
 
-func (ushs *UserSettingHistorySelect) sqlScan(ctx context.Context, root *UserSettingHistoryQuery, v any) error {
+func (_s *UserSettingHistorySelect) sqlScan(ctx context.Context, root *UserSettingHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ushs.fns))
-	for _, fn := range ushs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ushs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (ushs *UserSettingHistorySelect) sqlScan(ctx context.Context, root *UserSet
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ushs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (ushs *UserSettingHistorySelect) sqlScan(ctx context.Context, root *UserSet
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ushs *UserSettingHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *UserSettingHistorySelect {
-	ushs.modifiers = append(ushs.modifiers, modifiers...)
-	return ushs
+func (_s *UserSettingHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *UserSettingHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

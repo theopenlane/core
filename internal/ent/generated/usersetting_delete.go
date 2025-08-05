@@ -22,58 +22,58 @@ type UserSettingDelete struct {
 }
 
 // Where appends a list predicates to the UserSettingDelete builder.
-func (usd *UserSettingDelete) Where(ps ...predicate.UserSetting) *UserSettingDelete {
-	usd.mutation.Where(ps...)
-	return usd
+func (_d *UserSettingDelete) Where(ps ...predicate.UserSetting) *UserSettingDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (usd *UserSettingDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, usd.sqlExec, usd.mutation, usd.hooks)
+func (_d *UserSettingDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (usd *UserSettingDelete) ExecX(ctx context.Context) int {
-	n, err := usd.Exec(ctx)
+func (_d *UserSettingDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (usd *UserSettingDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *UserSettingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(usersetting.Table, sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString))
-	_spec.Node.Schema = usd.schemaConfig.UserSetting
-	ctx = internal.NewSchemaConfigContext(ctx, usd.schemaConfig)
-	if ps := usd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.UserSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, usd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	usd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // UserSettingDeleteOne is the builder for deleting a single UserSetting entity.
 type UserSettingDeleteOne struct {
-	usd *UserSettingDelete
+	_d *UserSettingDelete
 }
 
 // Where appends a list predicates to the UserSettingDelete builder.
-func (usdo *UserSettingDeleteOne) Where(ps ...predicate.UserSetting) *UserSettingDeleteOne {
-	usdo.usd.mutation.Where(ps...)
-	return usdo
+func (_d *UserSettingDeleteOne) Where(ps ...predicate.UserSetting) *UserSettingDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (usdo *UserSettingDeleteOne) Exec(ctx context.Context) error {
-	n, err := usdo.usd.Exec(ctx)
+func (_d *UserSettingDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (usdo *UserSettingDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (usdo *UserSettingDeleteOne) ExecX(ctx context.Context) {
-	if err := usdo.Exec(ctx); err != nil {
+func (_d *UserSettingDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

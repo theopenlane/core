@@ -77,7 +77,7 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the MappedControlHistory fields.
-func (mch *MappedControlHistory) assignValues(columns []string, values []any) error {
+func (_m *MappedControlHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -87,67 +87,67 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				mch.ID = value.String
+				_m.ID = value.String
 			}
 		case mappedcontrolhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				mch.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case mappedcontrolhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				mch.Ref = value.String
+				_m.Ref = value.String
 			}
 		case mappedcontrolhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				mch.Operation = *value
+				_m.Operation = *value
 			}
 		case mappedcontrolhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				mch.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case mappedcontrolhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				mch.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case mappedcontrolhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				mch.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case mappedcontrolhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				mch.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case mappedcontrolhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				mch.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case mappedcontrolhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				mch.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case mappedcontrolhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &mch.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -155,35 +155,35 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				mch.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case mappedcontrolhistory.FieldMappingType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
 			} else if value.Valid {
-				mch.MappingType = enums.MappingType(value.String)
+				_m.MappingType = enums.MappingType(value.String)
 			}
 		case mappedcontrolhistory.FieldRelation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field relation", values[i])
 			} else if value.Valid {
-				mch.Relation = value.String
+				_m.Relation = value.String
 			}
 		case mappedcontrolhistory.FieldConfidence:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field confidence", values[i])
 			} else if value.Valid {
-				mch.Confidence = new(int)
-				*mch.Confidence = int(value.Int64)
+				_m.Confidence = new(int)
+				*_m.Confidence = int(value.Int64)
 			}
 		case mappedcontrolhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				mch.Source = enums.MappingSource(value.String)
+				_m.Source = enums.MappingSource(value.String)
 			}
 		default:
-			mch.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -191,79 +191,79 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 
 // Value returns the ent.Value that was dynamically selected and assigned to the MappedControlHistory.
 // This includes values selected through modifiers, order, etc.
-func (mch *MappedControlHistory) Value(name string) (ent.Value, error) {
-	return mch.selectValues.Get(name)
+func (_m *MappedControlHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this MappedControlHistory.
 // Note that you need to call MappedControlHistory.Unwrap() before calling this method if this MappedControlHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (mch *MappedControlHistory) Update() *MappedControlHistoryUpdateOne {
-	return NewMappedControlHistoryClient(mch.config).UpdateOne(mch)
+func (_m *MappedControlHistory) Update() *MappedControlHistoryUpdateOne {
+	return NewMappedControlHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the MappedControlHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (mch *MappedControlHistory) Unwrap() *MappedControlHistory {
-	_tx, ok := mch.config.driver.(*txDriver)
+func (_m *MappedControlHistory) Unwrap() *MappedControlHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: MappedControlHistory is not a transactional entity")
 	}
-	mch.config.driver = _tx.drv
-	return mch
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (mch *MappedControlHistory) String() string {
+func (_m *MappedControlHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("MappedControlHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", mch.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(mch.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(mch.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", mch.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(mch.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(mch.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(mch.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(mch.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(mch.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(mch.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", mch.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(mch.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
-	builder.WriteString(fmt.Sprintf("%v", mch.MappingType))
+	builder.WriteString(fmt.Sprintf("%v", _m.MappingType))
 	builder.WriteString(", ")
 	builder.WriteString("relation=")
-	builder.WriteString(mch.Relation)
+	builder.WriteString(_m.Relation)
 	builder.WriteString(", ")
-	if v := mch.Confidence; v != nil {
+	if v := _m.Confidence; v != nil {
 		builder.WriteString("confidence=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", mch.Source))
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteByte(')')
 	return builder.String()
 }

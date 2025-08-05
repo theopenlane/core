@@ -22,58 +22,58 @@ type DNSVerificationDelete struct {
 }
 
 // Where appends a list predicates to the DNSVerificationDelete builder.
-func (dvd *DNSVerificationDelete) Where(ps ...predicate.DNSVerification) *DNSVerificationDelete {
-	dvd.mutation.Where(ps...)
-	return dvd
+func (_d *DNSVerificationDelete) Where(ps ...predicate.DNSVerification) *DNSVerificationDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (dvd *DNSVerificationDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, dvd.sqlExec, dvd.mutation, dvd.hooks)
+func (_d *DNSVerificationDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvd *DNSVerificationDelete) ExecX(ctx context.Context) int {
-	n, err := dvd.Exec(ctx)
+func (_d *DNSVerificationDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (dvd *DNSVerificationDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *DNSVerificationDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(dnsverification.Table, sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString))
-	_spec.Node.Schema = dvd.schemaConfig.DNSVerification
-	ctx = internal.NewSchemaConfigContext(ctx, dvd.schemaConfig)
-	if ps := dvd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.DNSVerification
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, dvd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	dvd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // DNSVerificationDeleteOne is the builder for deleting a single DNSVerification entity.
 type DNSVerificationDeleteOne struct {
-	dvd *DNSVerificationDelete
+	_d *DNSVerificationDelete
 }
 
 // Where appends a list predicates to the DNSVerificationDelete builder.
-func (dvdo *DNSVerificationDeleteOne) Where(ps ...predicate.DNSVerification) *DNSVerificationDeleteOne {
-	dvdo.dvd.mutation.Where(ps...)
-	return dvdo
+func (_d *DNSVerificationDeleteOne) Where(ps ...predicate.DNSVerification) *DNSVerificationDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (dvdo *DNSVerificationDeleteOne) Exec(ctx context.Context) error {
-	n, err := dvdo.dvd.Exec(ctx)
+func (_d *DNSVerificationDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (dvdo *DNSVerificationDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dvdo *DNSVerificationDeleteOne) ExecX(ctx context.Context) {
-	if err := dvdo.Exec(ctx); err != nil {
+func (_d *DNSVerificationDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

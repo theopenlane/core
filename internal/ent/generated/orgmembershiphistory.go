@@ -62,7 +62,7 @@ func (*OrgMembershipHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OrgMembershipHistory fields.
-func (omh *OrgMembershipHistory) assignValues(columns []string, values []any) error {
+func (_m *OrgMembershipHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -72,70 +72,70 @@ func (omh *OrgMembershipHistory) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				omh.ID = value.String
+				_m.ID = value.String
 			}
 		case orgmembershiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				omh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case orgmembershiphistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				omh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case orgmembershiphistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				omh.Operation = *value
+				_m.Operation = *value
 			}
 		case orgmembershiphistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				omh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case orgmembershiphistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				omh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case orgmembershiphistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				omh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case orgmembershiphistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				omh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case orgmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
-				omh.Role = enums.Role(value.String)
+				_m.Role = enums.Role(value.String)
 			}
 		case orgmembershiphistory.FieldOrganizationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value.Valid {
-				omh.OrganizationID = value.String
+				_m.OrganizationID = value.String
 			}
 		case orgmembershiphistory.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				omh.UserID = value.String
+				_m.UserID = value.String
 			}
 		default:
-			omh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -143,62 +143,62 @@ func (omh *OrgMembershipHistory) assignValues(columns []string, values []any) er
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OrgMembershipHistory.
 // This includes values selected through modifiers, order, etc.
-func (omh *OrgMembershipHistory) Value(name string) (ent.Value, error) {
-	return omh.selectValues.Get(name)
+func (_m *OrgMembershipHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this OrgMembershipHistory.
 // Note that you need to call OrgMembershipHistory.Unwrap() before calling this method if this OrgMembershipHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (omh *OrgMembershipHistory) Update() *OrgMembershipHistoryUpdateOne {
-	return NewOrgMembershipHistoryClient(omh.config).UpdateOne(omh)
+func (_m *OrgMembershipHistory) Update() *OrgMembershipHistoryUpdateOne {
+	return NewOrgMembershipHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OrgMembershipHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (omh *OrgMembershipHistory) Unwrap() *OrgMembershipHistory {
-	_tx, ok := omh.config.driver.(*txDriver)
+func (_m *OrgMembershipHistory) Unwrap() *OrgMembershipHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: OrgMembershipHistory is not a transactional entity")
 	}
-	omh.config.driver = _tx.drv
-	return omh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (omh *OrgMembershipHistory) String() string {
+func (_m *OrgMembershipHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("OrgMembershipHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", omh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(omh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(omh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", omh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(omh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(omh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(omh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(omh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", omh.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
-	builder.WriteString(omh.OrganizationID)
+	builder.WriteString(_m.OrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(omh.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteByte(')')
 	return builder.String()
 }

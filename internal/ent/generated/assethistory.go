@@ -81,7 +81,7 @@ func (*AssetHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the AssetHistory fields.
-func (ah *AssetHistory) assignValues(columns []string, values []any) error {
+func (_m *AssetHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -91,67 +91,67 @@ func (ah *AssetHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ah.ID = value.String
+				_m.ID = value.String
 			}
 		case assethistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ah.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case assethistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				ah.Ref = value.String
+				_m.Ref = value.String
 			}
 		case assethistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				ah.Operation = *value
+				_m.Operation = *value
 			}
 		case assethistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ah.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case assethistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ah.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case assethistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ah.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case assethistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ah.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case assethistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ah.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case assethistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ah.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case assethistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ah.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -159,54 +159,54 @@ func (ah *AssetHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ah.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case assethistory.FieldAssetType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field asset_type", values[i])
 			} else if value.Valid {
-				ah.AssetType = enums.AssetType(value.String)
+				_m.AssetType = enums.AssetType(value.String)
 			}
 		case assethistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ah.Name = value.String
+				_m.Name = value.String
 			}
 		case assethistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				ah.Description = value.String
+				_m.Description = value.String
 			}
 		case assethistory.FieldIdentifier:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field identifier", values[i])
 			} else if value.Valid {
-				ah.Identifier = value.String
+				_m.Identifier = value.String
 			}
 		case assethistory.FieldWebsite:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field website", values[i])
 			} else if value.Valid {
-				ah.Website = value.String
+				_m.Website = value.String
 			}
 		case assethistory.FieldCpe:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cpe", values[i])
 			} else if value.Valid {
-				ah.Cpe = value.String
+				_m.Cpe = value.String
 			}
 		case assethistory.FieldCategories:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field categories", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ah.Categories); err != nil {
+				if err := json.Unmarshal(*value, &_m.Categories); err != nil {
 					return fmt.Errorf("unmarshal field categories: %w", err)
 				}
 			}
 		default:
-			ah.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -214,86 +214,86 @@ func (ah *AssetHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the AssetHistory.
 // This includes values selected through modifiers, order, etc.
-func (ah *AssetHistory) Value(name string) (ent.Value, error) {
-	return ah.selectValues.Get(name)
+func (_m *AssetHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this AssetHistory.
 // Note that you need to call AssetHistory.Unwrap() before calling this method if this AssetHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ah *AssetHistory) Update() *AssetHistoryUpdateOne {
-	return NewAssetHistoryClient(ah.config).UpdateOne(ah)
+func (_m *AssetHistory) Update() *AssetHistoryUpdateOne {
+	return NewAssetHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the AssetHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ah *AssetHistory) Unwrap() *AssetHistory {
-	_tx, ok := ah.config.driver.(*txDriver)
+func (_m *AssetHistory) Unwrap() *AssetHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: AssetHistory is not a transactional entity")
 	}
-	ah.config.driver = _tx.drv
-	return ah
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ah *AssetHistory) String() string {
+func (_m *AssetHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("AssetHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ah.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ah.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(ah.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ah.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ah.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ah.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ah.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ah.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ah.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ah.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ah.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ah.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("asset_type=")
-	builder.WriteString(fmt.Sprintf("%v", ah.AssetType))
+	builder.WriteString(fmt.Sprintf("%v", _m.AssetType))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ah.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(ah.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("identifier=")
-	builder.WriteString(ah.Identifier)
+	builder.WriteString(_m.Identifier)
 	builder.WriteString(", ")
 	builder.WriteString("website=")
-	builder.WriteString(ah.Website)
+	builder.WriteString(_m.Website)
 	builder.WriteString(", ")
 	builder.WriteString("cpe=")
-	builder.WriteString(ah.Cpe)
+	builder.WriteString(_m.Cpe)
 	builder.WriteString(", ")
 	builder.WriteString("categories=")
-	builder.WriteString(fmt.Sprintf("%v", ah.Categories))
+	builder.WriteString(fmt.Sprintf("%v", _m.Categories))
 	builder.WriteByte(')')
 	return builder.String()
 }

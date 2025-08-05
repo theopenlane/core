@@ -30,319 +30,319 @@ type SubprocessorUpdate struct {
 }
 
 // Where appends a list predicates to the SubprocessorUpdate builder.
-func (su *SubprocessorUpdate) Where(ps ...predicate.Subprocessor) *SubprocessorUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *SubprocessorUpdate) Where(ps ...predicate.Subprocessor) *SubprocessorUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (su *SubprocessorUpdate) SetUpdatedAt(t time.Time) *SubprocessorUpdate {
-	su.mutation.SetUpdatedAt(t)
-	return su
+func (_u *SubprocessorUpdate) SetUpdatedAt(v time.Time) *SubprocessorUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (su *SubprocessorUpdate) ClearUpdatedAt() *SubprocessorUpdate {
-	su.mutation.ClearUpdatedAt()
-	return su
+func (_u *SubprocessorUpdate) ClearUpdatedAt() *SubprocessorUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (su *SubprocessorUpdate) SetUpdatedBy(s string) *SubprocessorUpdate {
-	su.mutation.SetUpdatedBy(s)
-	return su
+func (_u *SubprocessorUpdate) SetUpdatedBy(v string) *SubprocessorUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableUpdatedBy(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetUpdatedBy(*s)
+func (_u *SubprocessorUpdate) SetNillableUpdatedBy(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *SubprocessorUpdate) ClearUpdatedBy() *SubprocessorUpdate {
-	su.mutation.ClearUpdatedBy()
-	return su
+func (_u *SubprocessorUpdate) ClearUpdatedBy() *SubprocessorUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (su *SubprocessorUpdate) SetDeletedAt(t time.Time) *SubprocessorUpdate {
-	su.mutation.SetDeletedAt(t)
-	return su
+func (_u *SubprocessorUpdate) SetDeletedAt(v time.Time) *SubprocessorUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableDeletedAt(t *time.Time) *SubprocessorUpdate {
-	if t != nil {
-		su.SetDeletedAt(*t)
+func (_u *SubprocessorUpdate) SetNillableDeletedAt(v *time.Time) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (su *SubprocessorUpdate) ClearDeletedAt() *SubprocessorUpdate {
-	su.mutation.ClearDeletedAt()
-	return su
+func (_u *SubprocessorUpdate) ClearDeletedAt() *SubprocessorUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (su *SubprocessorUpdate) SetDeletedBy(s string) *SubprocessorUpdate {
-	su.mutation.SetDeletedBy(s)
-	return su
+func (_u *SubprocessorUpdate) SetDeletedBy(v string) *SubprocessorUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableDeletedBy(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetDeletedBy(*s)
+func (_u *SubprocessorUpdate) SetNillableDeletedBy(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *SubprocessorUpdate) ClearDeletedBy() *SubprocessorUpdate {
-	su.mutation.ClearDeletedBy()
-	return su
+func (_u *SubprocessorUpdate) ClearDeletedBy() *SubprocessorUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (su *SubprocessorUpdate) SetTags(s []string) *SubprocessorUpdate {
-	su.mutation.SetTags(s)
-	return su
+func (_u *SubprocessorUpdate) SetTags(v []string) *SubprocessorUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (su *SubprocessorUpdate) AppendTags(s []string) *SubprocessorUpdate {
-	su.mutation.AppendTags(s)
-	return su
+// AppendTags appends value to the "tags" field.
+func (_u *SubprocessorUpdate) AppendTags(v []string) *SubprocessorUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (su *SubprocessorUpdate) ClearTags() *SubprocessorUpdate {
-	su.mutation.ClearTags()
-	return su
+func (_u *SubprocessorUpdate) ClearTags() *SubprocessorUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (su *SubprocessorUpdate) SetOwnerID(s string) *SubprocessorUpdate {
-	su.mutation.SetOwnerID(s)
-	return su
+func (_u *SubprocessorUpdate) SetOwnerID(v string) *SubprocessorUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableOwnerID(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetOwnerID(*s)
+func (_u *SubprocessorUpdate) SetNillableOwnerID(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (su *SubprocessorUpdate) ClearOwnerID() *SubprocessorUpdate {
-	su.mutation.ClearOwnerID()
-	return su
+func (_u *SubprocessorUpdate) ClearOwnerID() *SubprocessorUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (su *SubprocessorUpdate) SetName(s string) *SubprocessorUpdate {
-	su.mutation.SetName(s)
-	return su
+func (_u *SubprocessorUpdate) SetName(v string) *SubprocessorUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableName(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetName(*s)
+func (_u *SubprocessorUpdate) SetNillableName(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return su
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (su *SubprocessorUpdate) SetDescription(s string) *SubprocessorUpdate {
-	su.mutation.SetDescription(s)
-	return su
+func (_u *SubprocessorUpdate) SetDescription(v string) *SubprocessorUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableDescription(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetDescription(*s)
+func (_u *SubprocessorUpdate) SetNillableDescription(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (su *SubprocessorUpdate) ClearDescription() *SubprocessorUpdate {
-	su.mutation.ClearDescription()
-	return su
+func (_u *SubprocessorUpdate) ClearDescription() *SubprocessorUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (su *SubprocessorUpdate) SetLogoRemoteURL(s string) *SubprocessorUpdate {
-	su.mutation.SetLogoRemoteURL(s)
-	return su
+func (_u *SubprocessorUpdate) SetLogoRemoteURL(v string) *SubprocessorUpdate {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableLogoRemoteURL(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetLogoRemoteURL(*s)
+func (_u *SubprocessorUpdate) SetNillableLogoRemoteURL(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (su *SubprocessorUpdate) ClearLogoRemoteURL() *SubprocessorUpdate {
-	su.mutation.ClearLogoRemoteURL()
-	return su
+func (_u *SubprocessorUpdate) ClearLogoRemoteURL() *SubprocessorUpdate {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (su *SubprocessorUpdate) SetLogoLocalFileID(s string) *SubprocessorUpdate {
-	su.mutation.SetLogoLocalFileID(s)
-	return su
+func (_u *SubprocessorUpdate) SetLogoLocalFileID(v string) *SubprocessorUpdate {
+	_u.mutation.SetLogoLocalFileID(v)
+	return _u
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableLogoLocalFileID(s *string) *SubprocessorUpdate {
-	if s != nil {
-		su.SetLogoLocalFileID(*s)
+func (_u *SubprocessorUpdate) SetNillableLogoLocalFileID(v *string) *SubprocessorUpdate {
+	if v != nil {
+		_u.SetLogoLocalFileID(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (su *SubprocessorUpdate) ClearLogoLocalFileID() *SubprocessorUpdate {
-	su.mutation.ClearLogoLocalFileID()
-	return su
+func (_u *SubprocessorUpdate) ClearLogoLocalFileID() *SubprocessorUpdate {
+	_u.mutation.ClearLogoLocalFileID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (su *SubprocessorUpdate) SetOwner(o *Organization) *SubprocessorUpdate {
-	return su.SetOwnerID(o.ID)
+func (_u *SubprocessorUpdate) SetOwner(v *Organization) *SubprocessorUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (su *SubprocessorUpdate) AddFileIDs(ids ...string) *SubprocessorUpdate {
-	su.mutation.AddFileIDs(ids...)
-	return su
+func (_u *SubprocessorUpdate) AddFileIDs(ids ...string) *SubprocessorUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (su *SubprocessorUpdate) AddFiles(f ...*File) *SubprocessorUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SubprocessorUpdate) AddFiles(v ...*File) *SubprocessorUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (su *SubprocessorUpdate) SetLogoFileID(id string) *SubprocessorUpdate {
-	su.mutation.SetLogoFileID(id)
-	return su
+func (_u *SubprocessorUpdate) SetLogoFileID(id string) *SubprocessorUpdate {
+	_u.mutation.SetLogoFileID(id)
+	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (su *SubprocessorUpdate) SetNillableLogoFileID(id *string) *SubprocessorUpdate {
+func (_u *SubprocessorUpdate) SetNillableLogoFileID(id *string) *SubprocessorUpdate {
 	if id != nil {
-		su = su.SetLogoFileID(*id)
+		_u = _u.SetLogoFileID(*id)
 	}
-	return su
+	return _u
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (su *SubprocessorUpdate) SetLogoFile(f *File) *SubprocessorUpdate {
-	return su.SetLogoFileID(f.ID)
+func (_u *SubprocessorUpdate) SetLogoFile(v *File) *SubprocessorUpdate {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
-func (su *SubprocessorUpdate) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdate {
-	su.mutation.AddTrustCenterSubprocessorIDs(ids...)
-	return su
+func (_u *SubprocessorUpdate) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdate {
+	_u.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (su *SubprocessorUpdate) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SubprocessorUpdate) AddTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *SubprocessorUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddTrustCenterSubprocessorIDs(ids...)
+	return _u.AddTrustCenterSubprocessorIDs(ids...)
 }
 
 // Mutation returns the SubprocessorMutation object of the builder.
-func (su *SubprocessorUpdate) Mutation() *SubprocessorMutation {
-	return su.mutation
+func (_u *SubprocessorUpdate) Mutation() *SubprocessorMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (su *SubprocessorUpdate) ClearOwner() *SubprocessorUpdate {
-	su.mutation.ClearOwner()
-	return su
+func (_u *SubprocessorUpdate) ClearOwner() *SubprocessorUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (su *SubprocessorUpdate) ClearFiles() *SubprocessorUpdate {
-	su.mutation.ClearFiles()
-	return su
+func (_u *SubprocessorUpdate) ClearFiles() *SubprocessorUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (su *SubprocessorUpdate) RemoveFileIDs(ids ...string) *SubprocessorUpdate {
-	su.mutation.RemoveFileIDs(ids...)
-	return su
+func (_u *SubprocessorUpdate) RemoveFileIDs(ids ...string) *SubprocessorUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (su *SubprocessorUpdate) RemoveFiles(f ...*File) *SubprocessorUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SubprocessorUpdate) RemoveFiles(v ...*File) *SubprocessorUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
-func (su *SubprocessorUpdate) ClearLogoFile() *SubprocessorUpdate {
-	su.mutation.ClearLogoFile()
-	return su
+func (_u *SubprocessorUpdate) ClearLogoFile() *SubprocessorUpdate {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // ClearTrustCenterSubprocessors clears all "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (su *SubprocessorUpdate) ClearTrustCenterSubprocessors() *SubprocessorUpdate {
-	su.mutation.ClearTrustCenterSubprocessors()
-	return su
+func (_u *SubprocessorUpdate) ClearTrustCenterSubprocessors() *SubprocessorUpdate {
+	_u.mutation.ClearTrustCenterSubprocessors()
+	return _u
 }
 
 // RemoveTrustCenterSubprocessorIDs removes the "trust_center_subprocessors" edge to TrustCenterSubprocessor entities by IDs.
-func (su *SubprocessorUpdate) RemoveTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdate {
-	su.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
-	return su
+func (_u *SubprocessorUpdate) RemoveTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdate {
+	_u.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // RemoveTrustCenterSubprocessors removes "trust_center_subprocessors" edges to TrustCenterSubprocessor entities.
-func (su *SubprocessorUpdate) RemoveTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SubprocessorUpdate) RemoveTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *SubprocessorUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u.RemoveTrustCenterSubprocessorIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *SubprocessorUpdate) Save(ctx context.Context) (int, error) {
-	if err := su.defaults(); err != nil {
+func (_u *SubprocessorUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *SubprocessorUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *SubprocessorUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -350,38 +350,38 @@ func (su *SubprocessorUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *SubprocessorUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *SubprocessorUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *SubprocessorUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *SubprocessorUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (su *SubprocessorUpdate) defaults() error {
-	if _, ok := su.mutation.UpdatedAt(); !ok && !su.mutation.UpdatedAtCleared() {
+func (_u *SubprocessorUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if subprocessor.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessor.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessor.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *SubprocessorUpdate) check() error {
-	if v, ok := su.mutation.Name(); ok {
+func (_u *SubprocessorUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := subprocessor.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.name": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.LogoRemoteURL(); ok {
+	if v, ok := _u.mutation.LogoRemoteURL(); ok {
 		if err := subprocessor.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.logo_remote_url": %w`, err)}
 		}
@@ -390,83 +390,83 @@ func (su *SubprocessorUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (su *SubprocessorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorUpdate {
-	su.modifiers = append(su.modifiers, modifiers...)
-	return su
+func (_u *SubprocessorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *SubprocessorUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(subprocessor.Table, subprocessor.Columns, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if su.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(subprocessor.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if su.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subprocessor.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(subprocessor.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedBy, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(subprocessor.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessor.FieldDeletedAt, field.TypeTime, value)
 	}
-	if su.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(subprocessor.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(subprocessor.FieldDeletedBy, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(subprocessor.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(subprocessor.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := su.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, subprocessor.FieldTags, value)
 		})
 	}
-	if su.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subprocessor.FieldTags, field.TypeJSON)
 	}
-	if su.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subprocessor.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := su.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subprocessor.FieldDescription, field.TypeString, value)
 	}
-	if su.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subprocessor.FieldDescription, field.TypeString)
 	}
-	if value, ok := su.mutation.LogoRemoteURL(); ok {
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(subprocessor.FieldLogoRemoteURL, field.TypeString, value)
 	}
-	if su.mutation.LogoRemoteURLCleared() {
+	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessor.FieldLogoRemoteURL, field.TypeString)
 	}
-	if su.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -477,10 +477,10 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -491,13 +491,13 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -508,10 +508,10 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.SubprocessorFiles
+		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedFilesIDs(); len(nodes) > 0 && !su.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -522,13 +522,13 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.SubprocessorFiles
+		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -539,13 +539,13 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.SubprocessorFiles
+		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.LogoFileCleared() {
+	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -556,10 +556,10 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.LogoFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -570,13 +570,13 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.TrustCenterSubprocessorsCleared() {
+	if _u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -587,10 +587,10 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !su.mutation.TrustCenterSubprocessorsCleared() {
+	if nodes := _u.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -601,13 +601,13 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -618,16 +618,16 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = su.schemaConfig.Subprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
-	_spec.AddModifiers(su.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Subprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subprocessor.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -635,8 +635,8 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SubprocessorUpdateOne is the builder for updating a single Subprocessor entity.
@@ -649,326 +649,326 @@ type SubprocessorUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suo *SubprocessorUpdateOne) SetUpdatedAt(t time.Time) *SubprocessorUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
-	return suo
+func (_u *SubprocessorUpdateOne) SetUpdatedAt(v time.Time) *SubprocessorUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (suo *SubprocessorUpdateOne) ClearUpdatedAt() *SubprocessorUpdateOne {
-	suo.mutation.ClearUpdatedAt()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearUpdatedAt() *SubprocessorUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suo *SubprocessorUpdateOne) SetUpdatedBy(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetUpdatedBy(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableUpdatedBy(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetUpdatedBy(*s)
+func (_u *SubprocessorUpdateOne) SetNillableUpdatedBy(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *SubprocessorUpdateOne) ClearUpdatedBy() *SubprocessorUpdateOne {
-	suo.mutation.ClearUpdatedBy()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearUpdatedBy() *SubprocessorUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (suo *SubprocessorUpdateOne) SetDeletedAt(t time.Time) *SubprocessorUpdateOne {
-	suo.mutation.SetDeletedAt(t)
-	return suo
+func (_u *SubprocessorUpdateOne) SetDeletedAt(v time.Time) *SubprocessorUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableDeletedAt(t *time.Time) *SubprocessorUpdateOne {
-	if t != nil {
-		suo.SetDeletedAt(*t)
+func (_u *SubprocessorUpdateOne) SetNillableDeletedAt(v *time.Time) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (suo *SubprocessorUpdateOne) ClearDeletedAt() *SubprocessorUpdateOne {
-	suo.mutation.ClearDeletedAt()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearDeletedAt() *SubprocessorUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (suo *SubprocessorUpdateOne) SetDeletedBy(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetDeletedBy(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetDeletedBy(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableDeletedBy(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetDeletedBy(*s)
+func (_u *SubprocessorUpdateOne) SetNillableDeletedBy(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *SubprocessorUpdateOne) ClearDeletedBy() *SubprocessorUpdateOne {
-	suo.mutation.ClearDeletedBy()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearDeletedBy() *SubprocessorUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (suo *SubprocessorUpdateOne) SetTags(s []string) *SubprocessorUpdateOne {
-	suo.mutation.SetTags(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetTags(v []string) *SubprocessorUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (suo *SubprocessorUpdateOne) AppendTags(s []string) *SubprocessorUpdateOne {
-	suo.mutation.AppendTags(s)
-	return suo
+// AppendTags appends value to the "tags" field.
+func (_u *SubprocessorUpdateOne) AppendTags(v []string) *SubprocessorUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (suo *SubprocessorUpdateOne) ClearTags() *SubprocessorUpdateOne {
-	suo.mutation.ClearTags()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearTags() *SubprocessorUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (suo *SubprocessorUpdateOne) SetOwnerID(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetOwnerID(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetOwnerID(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableOwnerID(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetOwnerID(*s)
+func (_u *SubprocessorUpdateOne) SetNillableOwnerID(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (suo *SubprocessorUpdateOne) ClearOwnerID() *SubprocessorUpdateOne {
-	suo.mutation.ClearOwnerID()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearOwnerID() *SubprocessorUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (suo *SubprocessorUpdateOne) SetName(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetName(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetName(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableName(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetName(*s)
+func (_u *SubprocessorUpdateOne) SetNillableName(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (suo *SubprocessorUpdateOne) SetDescription(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetDescription(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetDescription(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableDescription(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetDescription(*s)
+func (_u *SubprocessorUpdateOne) SetNillableDescription(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (suo *SubprocessorUpdateOne) ClearDescription() *SubprocessorUpdateOne {
-	suo.mutation.ClearDescription()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearDescription() *SubprocessorUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (suo *SubprocessorUpdateOne) SetLogoRemoteURL(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetLogoRemoteURL(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetLogoRemoteURL(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableLogoRemoteURL(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetLogoRemoteURL(*s)
+func (_u *SubprocessorUpdateOne) SetNillableLogoRemoteURL(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (suo *SubprocessorUpdateOne) ClearLogoRemoteURL() *SubprocessorUpdateOne {
-	suo.mutation.ClearLogoRemoteURL()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearLogoRemoteURL() *SubprocessorUpdateOne {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (suo *SubprocessorUpdateOne) SetLogoLocalFileID(s string) *SubprocessorUpdateOne {
-	suo.mutation.SetLogoLocalFileID(s)
-	return suo
+func (_u *SubprocessorUpdateOne) SetLogoLocalFileID(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetLogoLocalFileID(v)
+	return _u
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableLogoLocalFileID(s *string) *SubprocessorUpdateOne {
-	if s != nil {
-		suo.SetLogoLocalFileID(*s)
+func (_u *SubprocessorUpdateOne) SetNillableLogoLocalFileID(v *string) *SubprocessorUpdateOne {
+	if v != nil {
+		_u.SetLogoLocalFileID(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (suo *SubprocessorUpdateOne) ClearLogoLocalFileID() *SubprocessorUpdateOne {
-	suo.mutation.ClearLogoLocalFileID()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearLogoLocalFileID() *SubprocessorUpdateOne {
+	_u.mutation.ClearLogoLocalFileID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (suo *SubprocessorUpdateOne) SetOwner(o *Organization) *SubprocessorUpdateOne {
-	return suo.SetOwnerID(o.ID)
+func (_u *SubprocessorUpdateOne) SetOwner(v *Organization) *SubprocessorUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (suo *SubprocessorUpdateOne) AddFileIDs(ids ...string) *SubprocessorUpdateOne {
-	suo.mutation.AddFileIDs(ids...)
-	return suo
+func (_u *SubprocessorUpdateOne) AddFileIDs(ids ...string) *SubprocessorUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (suo *SubprocessorUpdateOne) AddFiles(f ...*File) *SubprocessorUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SubprocessorUpdateOne) AddFiles(v ...*File) *SubprocessorUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (suo *SubprocessorUpdateOne) SetLogoFileID(id string) *SubprocessorUpdateOne {
-	suo.mutation.SetLogoFileID(id)
-	return suo
+func (_u *SubprocessorUpdateOne) SetLogoFileID(id string) *SubprocessorUpdateOne {
+	_u.mutation.SetLogoFileID(id)
+	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (suo *SubprocessorUpdateOne) SetNillableLogoFileID(id *string) *SubprocessorUpdateOne {
+func (_u *SubprocessorUpdateOne) SetNillableLogoFileID(id *string) *SubprocessorUpdateOne {
 	if id != nil {
-		suo = suo.SetLogoFileID(*id)
+		_u = _u.SetLogoFileID(*id)
 	}
-	return suo
+	return _u
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (suo *SubprocessorUpdateOne) SetLogoFile(f *File) *SubprocessorUpdateOne {
-	return suo.SetLogoFileID(f.ID)
+func (_u *SubprocessorUpdateOne) SetLogoFile(v *File) *SubprocessorUpdateOne {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
-func (suo *SubprocessorUpdateOne) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdateOne {
-	suo.mutation.AddTrustCenterSubprocessorIDs(ids...)
-	return suo
+func (_u *SubprocessorUpdateOne) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdateOne {
+	_u.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (suo *SubprocessorUpdateOne) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SubprocessorUpdateOne) AddTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *SubprocessorUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddTrustCenterSubprocessorIDs(ids...)
+	return _u.AddTrustCenterSubprocessorIDs(ids...)
 }
 
 // Mutation returns the SubprocessorMutation object of the builder.
-func (suo *SubprocessorUpdateOne) Mutation() *SubprocessorMutation {
-	return suo.mutation
+func (_u *SubprocessorUpdateOne) Mutation() *SubprocessorMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (suo *SubprocessorUpdateOne) ClearOwner() *SubprocessorUpdateOne {
-	suo.mutation.ClearOwner()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearOwner() *SubprocessorUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (suo *SubprocessorUpdateOne) ClearFiles() *SubprocessorUpdateOne {
-	suo.mutation.ClearFiles()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearFiles() *SubprocessorUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (suo *SubprocessorUpdateOne) RemoveFileIDs(ids ...string) *SubprocessorUpdateOne {
-	suo.mutation.RemoveFileIDs(ids...)
-	return suo
+func (_u *SubprocessorUpdateOne) RemoveFileIDs(ids ...string) *SubprocessorUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (suo *SubprocessorUpdateOne) RemoveFiles(f ...*File) *SubprocessorUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SubprocessorUpdateOne) RemoveFiles(v ...*File) *SubprocessorUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
-func (suo *SubprocessorUpdateOne) ClearLogoFile() *SubprocessorUpdateOne {
-	suo.mutation.ClearLogoFile()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearLogoFile() *SubprocessorUpdateOne {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // ClearTrustCenterSubprocessors clears all "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
-func (suo *SubprocessorUpdateOne) ClearTrustCenterSubprocessors() *SubprocessorUpdateOne {
-	suo.mutation.ClearTrustCenterSubprocessors()
-	return suo
+func (_u *SubprocessorUpdateOne) ClearTrustCenterSubprocessors() *SubprocessorUpdateOne {
+	_u.mutation.ClearTrustCenterSubprocessors()
+	return _u
 }
 
 // RemoveTrustCenterSubprocessorIDs removes the "trust_center_subprocessors" edge to TrustCenterSubprocessor entities by IDs.
-func (suo *SubprocessorUpdateOne) RemoveTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdateOne {
-	suo.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
-	return suo
+func (_u *SubprocessorUpdateOne) RemoveTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdateOne {
+	_u.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u
 }
 
 // RemoveTrustCenterSubprocessors removes "trust_center_subprocessors" edges to TrustCenterSubprocessor entities.
-func (suo *SubprocessorUpdateOne) RemoveTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SubprocessorUpdateOne) RemoveTrustCenterSubprocessors(v ...*TrustCenterSubprocessor) *SubprocessorUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveTrustCenterSubprocessorIDs(ids...)
+	return _u.RemoveTrustCenterSubprocessorIDs(ids...)
 }
 
 // Where appends a list predicates to the SubprocessorUpdate builder.
-func (suo *SubprocessorUpdateOne) Where(ps ...predicate.Subprocessor) *SubprocessorUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *SubprocessorUpdateOne) Where(ps ...predicate.Subprocessor) *SubprocessorUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *SubprocessorUpdateOne) Select(field string, fields ...string) *SubprocessorUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *SubprocessorUpdateOne) Select(field string, fields ...string) *SubprocessorUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Subprocessor entity.
-func (suo *SubprocessorUpdateOne) Save(ctx context.Context) (*Subprocessor, error) {
-	if err := suo.defaults(); err != nil {
+func (_u *SubprocessorUpdateOne) Save(ctx context.Context) (*Subprocessor, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *SubprocessorUpdateOne) SaveX(ctx context.Context) *Subprocessor {
-	node, err := suo.Save(ctx)
+func (_u *SubprocessorUpdateOne) SaveX(ctx context.Context) *Subprocessor {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -976,38 +976,38 @@ func (suo *SubprocessorUpdateOne) SaveX(ctx context.Context) *Subprocessor {
 }
 
 // Exec executes the query on the entity.
-func (suo *SubprocessorUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *SubprocessorUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *SubprocessorUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *SubprocessorUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suo *SubprocessorUpdateOne) defaults() error {
-	if _, ok := suo.mutation.UpdatedAt(); !ok && !suo.mutation.UpdatedAtCleared() {
+func (_u *SubprocessorUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if subprocessor.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subprocessor.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subprocessor.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *SubprocessorUpdateOne) check() error {
-	if v, ok := suo.mutation.Name(); ok {
+func (_u *SubprocessorUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := subprocessor.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.name": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.LogoRemoteURL(); ok {
+	if v, ok := _u.mutation.LogoRemoteURL(); ok {
 		if err := subprocessor.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.logo_remote_url": %w`, err)}
 		}
@@ -1016,22 +1016,22 @@ func (suo *SubprocessorUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suo *SubprocessorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorUpdateOne {
-	suo.modifiers = append(suo.modifiers, modifiers...)
-	return suo
+func (_u *SubprocessorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subprocessor, err error) {
-	if err := suo.check(); err != nil {
+func (_u *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subprocessor, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(subprocessor.Table, subprocessor.Columns, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Subprocessor.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, subprocessor.FieldID)
 		for _, f := range fields {
@@ -1043,73 +1043,73 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if suo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(subprocessor.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if suo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subprocessor.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(subprocessor.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(subprocessor.FieldUpdatedBy, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(subprocessor.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(subprocessor.FieldDeletedAt, field.TypeTime, value)
 	}
-	if suo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(subprocessor.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(subprocessor.FieldDeletedBy, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(subprocessor.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(subprocessor.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := suo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, subprocessor.FieldTags, value)
 		})
 	}
-	if suo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subprocessor.FieldTags, field.TypeJSON)
 	}
-	if suo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subprocessor.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := suo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(subprocessor.FieldDescription, field.TypeString, value)
 	}
-	if suo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subprocessor.FieldDescription, field.TypeString)
 	}
-	if value, ok := suo.mutation.LogoRemoteURL(); ok {
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(subprocessor.FieldLogoRemoteURL, field.TypeString, value)
 	}
-	if suo.mutation.LogoRemoteURLCleared() {
+	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessor.FieldLogoRemoteURL, field.TypeString)
 	}
-	if suo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1120,10 +1120,10 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1134,13 +1134,13 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1151,10 +1151,10 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.SubprocessorFiles
+		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !suo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1165,13 +1165,13 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.SubprocessorFiles
+		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1182,13 +1182,13 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.SubprocessorFiles
+		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.LogoFileCleared() {
+	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1199,10 +1199,10 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.LogoFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1213,13 +1213,13 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Subprocessor
+		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.TrustCenterSubprocessorsCleared() {
+	if _u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1230,10 +1230,10 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !suo.mutation.TrustCenterSubprocessorsCleared() {
+	if nodes := _u.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1244,13 +1244,13 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1261,19 +1261,19 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.TrustCenterSubprocessor
+		edge.Schema = _u.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = suo.schemaConfig.Subprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)
-	_spec.AddModifiers(suo.modifiers...)
-	_node = &Subprocessor{config: suo.config}
+	_spec.Node.Schema = _u.schemaConfig.Subprocessor
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Subprocessor{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subprocessor.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1281,6 +1281,6 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

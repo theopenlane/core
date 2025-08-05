@@ -23,151 +23,151 @@ type ProgramMembershipHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetHistoryTime(t time.Time) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetHistoryTime(t)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetHistoryTime(v time.Time) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableHistoryTime(t *time.Time) *ProgramMembershipHistoryCreate {
-	if t != nil {
-		pmhc.SetHistoryTime(*t)
+func (_c *ProgramMembershipHistoryCreate) SetNillableHistoryTime(v *time.Time) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetRef(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetRef(s)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetRef(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableRef(s *string) *ProgramMembershipHistoryCreate {
-	if s != nil {
-		pmhc.SetRef(*s)
+func (_c *ProgramMembershipHistoryCreate) SetNillableRef(v *string) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetOperation(ht history.OpType) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetOperation(ht)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetOperation(v history.OpType) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetCreatedAt(t time.Time) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetCreatedAt(t)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetCreatedAt(v time.Time) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableCreatedAt(t *time.Time) *ProgramMembershipHistoryCreate {
-	if t != nil {
-		pmhc.SetCreatedAt(*t)
+func (_c *ProgramMembershipHistoryCreate) SetNillableCreatedAt(v *time.Time) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetUpdatedAt(t time.Time) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetUpdatedAt(t)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetUpdatedAt(v time.Time) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ProgramMembershipHistoryCreate {
-	if t != nil {
-		pmhc.SetUpdatedAt(*t)
+func (_c *ProgramMembershipHistoryCreate) SetNillableUpdatedAt(v *time.Time) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetCreatedBy(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetCreatedBy(s)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetCreatedBy(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableCreatedBy(s *string) *ProgramMembershipHistoryCreate {
-	if s != nil {
-		pmhc.SetCreatedBy(*s)
+func (_c *ProgramMembershipHistoryCreate) SetNillableCreatedBy(v *string) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetUpdatedBy(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetUpdatedBy(s)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetUpdatedBy(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *ProgramMembershipHistoryCreate {
-	if s != nil {
-		pmhc.SetUpdatedBy(*s)
+func (_c *ProgramMembershipHistoryCreate) SetNillableUpdatedBy(v *string) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetRole(e enums.Role) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetRole(e)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetRole(v enums.Role) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableRole(e *enums.Role) *ProgramMembershipHistoryCreate {
-	if e != nil {
-		pmhc.SetRole(*e)
+func (_c *ProgramMembershipHistoryCreate) SetNillableRole(v *enums.Role) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRole(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // SetProgramID sets the "program_id" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetProgramID(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetProgramID(s)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetProgramID(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetProgramID(v)
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetUserID(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetUserID(s)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetUserID(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetID(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetID(s)
-	return pmhc
+func (_c *ProgramMembershipHistoryCreate) SetID(v string) *ProgramMembershipHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableID(s *string) *ProgramMembershipHistoryCreate {
-	if s != nil {
-		pmhc.SetID(*s)
+func (_c *ProgramMembershipHistoryCreate) SetNillableID(v *string) *ProgramMembershipHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return pmhc
+	return _c
 }
 
 // Mutation returns the ProgramMembershipHistoryMutation object of the builder.
-func (pmhc *ProgramMembershipHistoryCreate) Mutation() *ProgramMembershipHistoryMutation {
-	return pmhc.mutation
+func (_c *ProgramMembershipHistoryCreate) Mutation() *ProgramMembershipHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the ProgramMembershipHistory in the database.
-func (pmhc *ProgramMembershipHistoryCreate) Save(ctx context.Context) (*ProgramMembershipHistory, error) {
-	if err := pmhc.defaults(); err != nil {
+func (_c *ProgramMembershipHistoryCreate) Save(ctx context.Context) (*ProgramMembershipHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, pmhc.sqlSave, pmhc.mutation, pmhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (pmhc *ProgramMembershipHistoryCreate) SaveX(ctx context.Context) *ProgramMembershipHistory {
-	v, err := pmhc.Save(ctx)
+func (_c *ProgramMembershipHistoryCreate) SaveX(ctx context.Context) *ProgramMembershipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -175,91 +175,91 @@ func (pmhc *ProgramMembershipHistoryCreate) SaveX(ctx context.Context) *ProgramM
 }
 
 // Exec executes the query.
-func (pmhc *ProgramMembershipHistoryCreate) Exec(ctx context.Context) error {
-	_, err := pmhc.Save(ctx)
+func (_c *ProgramMembershipHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmhc *ProgramMembershipHistoryCreate) ExecX(ctx context.Context) {
-	if err := pmhc.Exec(ctx); err != nil {
+func (_c *ProgramMembershipHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pmhc *ProgramMembershipHistoryCreate) defaults() error {
-	if _, ok := pmhc.mutation.HistoryTime(); !ok {
+func (_c *ProgramMembershipHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if programmembershiphistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := programmembershiphistory.DefaultHistoryTime()
-		pmhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := pmhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if programmembershiphistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembershiphistory.DefaultCreatedAt()
-		pmhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := pmhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if programmembershiphistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembershiphistory.DefaultUpdatedAt()
-		pmhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := pmhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		v := programmembershiphistory.DefaultRole
-		pmhc.mutation.SetRole(v)
+		_c.mutation.SetRole(v)
 	}
-	if _, ok := pmhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if programmembershiphistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := programmembershiphistory.DefaultID()
-		pmhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pmhc *ProgramMembershipHistoryCreate) check() error {
-	if _, ok := pmhc.mutation.HistoryTime(); !ok {
+func (_c *ProgramMembershipHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "ProgramMembershipHistory.history_time"`)}
 	}
-	if _, ok := pmhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "ProgramMembershipHistory.operation"`)}
 	}
-	if v, ok := pmhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := programmembershiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ProgramMembershipHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := pmhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`generated: missing required field "ProgramMembershipHistory.role"`)}
 	}
-	if v, ok := pmhc.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := programmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "ProgramMembershipHistory.role": %w`, err)}
 		}
 	}
-	if _, ok := pmhc.mutation.ProgramID(); !ok {
+	if _, ok := _c.mutation.ProgramID(); !ok {
 		return &ValidationError{Name: "program_id", err: errors.New(`generated: missing required field "ProgramMembershipHistory.program_id"`)}
 	}
-	if _, ok := pmhc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`generated: missing required field "ProgramMembershipHistory.user_id"`)}
 	}
 	return nil
 }
 
-func (pmhc *ProgramMembershipHistoryCreate) sqlSave(ctx context.Context) (*ProgramMembershipHistory, error) {
-	if err := pmhc.check(); err != nil {
+func (_c *ProgramMembershipHistoryCreate) sqlSave(ctx context.Context) (*ProgramMembershipHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := pmhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, pmhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -272,58 +272,58 @@ func (pmhc *ProgramMembershipHistoryCreate) sqlSave(ctx context.Context) (*Progr
 			return nil, fmt.Errorf("unexpected ProgramMembershipHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	pmhc.mutation.id = &_node.ID
-	pmhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (pmhc *ProgramMembershipHistoryCreate) createSpec() (*ProgramMembershipHistory, *sqlgraph.CreateSpec) {
+func (_c *ProgramMembershipHistoryCreate) createSpec() (*ProgramMembershipHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ProgramMembershipHistory{config: pmhc.config}
+		_node = &ProgramMembershipHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(programmembershiphistory.Table, sqlgraph.NewFieldSpec(programmembershiphistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = pmhc.schemaConfig.ProgramMembershipHistory
-	if id, ok := pmhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ProgramMembershipHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := pmhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(programmembershiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := pmhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(programmembershiphistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := pmhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(programmembershiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := pmhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(programmembershiphistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := pmhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pmhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := pmhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := pmhc.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if value, ok := pmhc.mutation.ProgramID(); ok {
+	if value, ok := _c.mutation.ProgramID(); ok {
 		_spec.SetField(programmembershiphistory.FieldProgramID, field.TypeString, value)
 		_node.ProgramID = value
 	}
-	if value, ok := pmhc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(programmembershiphistory.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
@@ -338,16 +338,16 @@ type ProgramMembershipHistoryCreateBulk struct {
 }
 
 // Save creates the ProgramMembershipHistory entities in the database.
-func (pmhcb *ProgramMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramMembershipHistory, error) {
-	if pmhcb.err != nil {
-		return nil, pmhcb.err
+func (_c *ProgramMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*ProgramMembershipHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(pmhcb.builders))
-	nodes := make([]*ProgramMembershipHistory, len(pmhcb.builders))
-	mutators := make([]Mutator, len(pmhcb.builders))
-	for i := range pmhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ProgramMembershipHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := pmhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProgramMembershipHistoryMutation)
@@ -361,11 +361,11 @@ func (pmhcb *ProgramMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*P
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, pmhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, pmhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -385,7 +385,7 @@ func (pmhcb *ProgramMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*P
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, pmhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -393,8 +393,8 @@ func (pmhcb *ProgramMembershipHistoryCreateBulk) Save(ctx context.Context) ([]*P
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pmhcb *ProgramMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*ProgramMembershipHistory {
-	v, err := pmhcb.Save(ctx)
+func (_c *ProgramMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*ProgramMembershipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -402,14 +402,14 @@ func (pmhcb *ProgramMembershipHistoryCreateBulk) SaveX(ctx context.Context) []*P
 }
 
 // Exec executes the query.
-func (pmhcb *ProgramMembershipHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := pmhcb.Save(ctx)
+func (_c *ProgramMembershipHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmhcb *ProgramMembershipHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := pmhcb.Exec(ctx); err != nil {
+func (_c *ProgramMembershipHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

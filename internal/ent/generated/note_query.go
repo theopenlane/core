@@ -42,44 +42,44 @@ type NoteQuery struct {
 }
 
 // Where adds a new predicate for the NoteQuery builder.
-func (nq *NoteQuery) Where(ps ...predicate.Note) *NoteQuery {
-	nq.predicates = append(nq.predicates, ps...)
-	return nq
+func (_q *NoteQuery) Where(ps ...predicate.Note) *NoteQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (nq *NoteQuery) Limit(limit int) *NoteQuery {
-	nq.ctx.Limit = &limit
-	return nq
+func (_q *NoteQuery) Limit(limit int) *NoteQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (nq *NoteQuery) Offset(offset int) *NoteQuery {
-	nq.ctx.Offset = &offset
-	return nq
+func (_q *NoteQuery) Offset(offset int) *NoteQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (nq *NoteQuery) Unique(unique bool) *NoteQuery {
-	nq.ctx.Unique = &unique
-	return nq
+func (_q *NoteQuery) Unique(unique bool) *NoteQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (nq *NoteQuery) Order(o ...note.OrderOption) *NoteQuery {
-	nq.order = append(nq.order, o...)
-	return nq
+func (_q *NoteQuery) Order(o ...note.OrderOption) *NoteQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (nq *NoteQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: nq.config}).Query()
+func (_q *NoteQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -88,23 +88,23 @@ func (nq *NoteQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, note.OwnerTable, note.OwnerColumn),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Note
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTask chains the current query on the "task" edge.
-func (nq *NoteQuery) QueryTask() *TaskQuery {
-	query := (&TaskClient{config: nq.config}).Query()
+func (_q *NoteQuery) QueryTask() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -113,23 +113,23 @@ func (nq *NoteQuery) QueryTask() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, note.TaskTable, note.TaskColumn),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Note
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (nq *NoteQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: nq.config}).Query()
+func (_q *NoteQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := nq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := nq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -138,10 +138,10 @@ func (nq *NoteQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, note.FilesTable, note.FilesColumn),
 		)
-		schemaConfig := nq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.File
-		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -149,8 +149,8 @@ func (nq *NoteQuery) QueryFiles() *FileQuery {
 
 // First returns the first Note entity from the query.
 // Returns a *NotFoundError when no Note was found.
-func (nq *NoteQuery) First(ctx context.Context) (*Note, error) {
-	nodes, err := nq.Limit(1).All(setContextOp(ctx, nq.ctx, ent.OpQueryFirst))
+func (_q *NoteQuery) First(ctx context.Context) (*Note, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,8 @@ func (nq *NoteQuery) First(ctx context.Context) (*Note, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (nq *NoteQuery) FirstX(ctx context.Context) *Note {
-	node, err := nq.First(ctx)
+func (_q *NoteQuery) FirstX(ctx context.Context) *Note {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -171,9 +171,9 @@ func (nq *NoteQuery) FirstX(ctx context.Context) *Note {
 
 // FirstID returns the first Note ID from the query.
 // Returns a *NotFoundError when no Note ID was found.
-func (nq *NoteQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *NoteQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = nq.Limit(1).IDs(setContextOp(ctx, nq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -184,8 +184,8 @@ func (nq *NoteQuery) FirstID(ctx context.Context) (id string, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (nq *NoteQuery) FirstIDX(ctx context.Context) string {
-	id, err := nq.FirstID(ctx)
+func (_q *NoteQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -195,8 +195,8 @@ func (nq *NoteQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single Note entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Note entity is found.
 // Returns a *NotFoundError when no Note entities are found.
-func (nq *NoteQuery) Only(ctx context.Context) (*Note, error) {
-	nodes, err := nq.Limit(2).All(setContextOp(ctx, nq.ctx, ent.OpQueryOnly))
+func (_q *NoteQuery) Only(ctx context.Context) (*Note, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -211,8 +211,8 @@ func (nq *NoteQuery) Only(ctx context.Context) (*Note, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (nq *NoteQuery) OnlyX(ctx context.Context) *Note {
-	node, err := nq.Only(ctx)
+func (_q *NoteQuery) OnlyX(ctx context.Context) *Note {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (nq *NoteQuery) OnlyX(ctx context.Context) *Note {
 // OnlyID is like Only, but returns the only Note ID in the query.
 // Returns a *NotSingularError when more than one Note ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (nq *NoteQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *NoteQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = nq.Limit(2).IDs(setContextOp(ctx, nq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -239,8 +239,8 @@ func (nq *NoteQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (nq *NoteQuery) OnlyIDX(ctx context.Context) string {
-	id, err := nq.OnlyID(ctx)
+func (_q *NoteQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -248,18 +248,18 @@ func (nq *NoteQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of Notes.
-func (nq *NoteQuery) All(ctx context.Context) ([]*Note, error) {
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryAll)
-	if err := nq.prepareQuery(ctx); err != nil {
+func (_q *NoteQuery) All(ctx context.Context) ([]*Note, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Note, *NoteQuery]()
-	return withInterceptors[[]*Note](ctx, nq, qr, nq.inters)
+	return withInterceptors[[]*Note](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (nq *NoteQuery) AllX(ctx context.Context) []*Note {
-	nodes, err := nq.All(ctx)
+func (_q *NoteQuery) AllX(ctx context.Context) []*Note {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -267,20 +267,20 @@ func (nq *NoteQuery) AllX(ctx context.Context) []*Note {
 }
 
 // IDs executes the query and returns a list of Note IDs.
-func (nq *NoteQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if nq.ctx.Unique == nil && nq.path != nil {
-		nq.Unique(true)
+func (_q *NoteQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryIDs)
-	if err = nq.Select(note.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(note.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (nq *NoteQuery) IDsX(ctx context.Context) []string {
-	ids, err := nq.IDs(ctx)
+func (_q *NoteQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,17 +288,17 @@ func (nq *NoteQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (nq *NoteQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryCount)
-	if err := nq.prepareQuery(ctx); err != nil {
+func (_q *NoteQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, nq, querierCount[*NoteQuery](), nq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*NoteQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (nq *NoteQuery) CountX(ctx context.Context) int {
-	count, err := nq.Count(ctx)
+func (_q *NoteQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -306,9 +306,9 @@ func (nq *NoteQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (nq *NoteQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryExist)
-	switch _, err := nq.FirstID(ctx); {
+func (_q *NoteQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -319,8 +319,8 @@ func (nq *NoteQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (nq *NoteQuery) ExistX(ctx context.Context) bool {
-	exist, err := nq.Exist(ctx)
+func (_q *NoteQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -329,57 +329,57 @@ func (nq *NoteQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the NoteQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (nq *NoteQuery) Clone() *NoteQuery {
-	if nq == nil {
+func (_q *NoteQuery) Clone() *NoteQuery {
+	if _q == nil {
 		return nil
 	}
 	return &NoteQuery{
-		config:     nq.config,
-		ctx:        nq.ctx.Clone(),
-		order:      append([]note.OrderOption{}, nq.order...),
-		inters:     append([]Interceptor{}, nq.inters...),
-		predicates: append([]predicate.Note{}, nq.predicates...),
-		withOwner:  nq.withOwner.Clone(),
-		withTask:   nq.withTask.Clone(),
-		withFiles:  nq.withFiles.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]note.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.Note{}, _q.predicates...),
+		withOwner:  _q.withOwner.Clone(),
+		withTask:   _q.withTask.Clone(),
+		withFiles:  _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       nq.sql.Clone(),
-		path:      nq.path,
-		modifiers: append([]func(*sql.Selector){}, nq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithOwner(opts ...func(*OrganizationQuery)) *NoteQuery {
-	query := (&OrganizationClient{config: nq.config}).Query()
+func (_q *NoteQuery) WithOwner(opts ...func(*OrganizationQuery)) *NoteQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withOwner = query
-	return nq
+	_q.withOwner = query
+	return _q
 }
 
 // WithTask tells the query-builder to eager-load the nodes that are connected to
 // the "task" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithTask(opts ...func(*TaskQuery)) *NoteQuery {
-	query := (&TaskClient{config: nq.config}).Query()
+func (_q *NoteQuery) WithTask(opts ...func(*TaskQuery)) *NoteQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withTask = query
-	return nq
+	_q.withTask = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithFiles(opts ...func(*FileQuery)) *NoteQuery {
-	query := (&FileClient{config: nq.config}).Query()
+func (_q *NoteQuery) WithFiles(opts ...func(*FileQuery)) *NoteQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withFiles = query
-	return nq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -396,10 +396,10 @@ func (nq *NoteQuery) WithFiles(opts ...func(*FileQuery)) *NoteQuery {
 //		GroupBy(note.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (nq *NoteQuery) GroupBy(field string, fields ...string) *NoteGroupBy {
-	nq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &NoteGroupBy{build: nq}
-	grbuild.flds = &nq.ctx.Fields
+func (_q *NoteQuery) GroupBy(field string, fields ...string) *NoteGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &NoteGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = note.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -417,63 +417,63 @@ func (nq *NoteQuery) GroupBy(field string, fields ...string) *NoteGroupBy {
 //	client.Note.Query().
 //		Select(note.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (nq *NoteQuery) Select(fields ...string) *NoteSelect {
-	nq.ctx.Fields = append(nq.ctx.Fields, fields...)
-	sbuild := &NoteSelect{NoteQuery: nq}
+func (_q *NoteQuery) Select(fields ...string) *NoteSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &NoteSelect{NoteQuery: _q}
 	sbuild.label = note.Label
-	sbuild.flds, sbuild.scan = &nq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a NoteSelect configured with the given aggregations.
-func (nq *NoteQuery) Aggregate(fns ...AggregateFunc) *NoteSelect {
-	return nq.Select().Aggregate(fns...)
+func (_q *NoteQuery) Aggregate(fns ...AggregateFunc) *NoteSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (nq *NoteQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range nq.inters {
+func (_q *NoteQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, nq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range nq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !note.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if nq.path != nil {
-		prev, err := nq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		nq.sql = prev
+		_q.sql = prev
 	}
 	if note.Policy == nil {
 		return errors.New("generated: uninitialized note.Policy (forgotten import generated/runtime?)")
 	}
-	if err := note.Policy.EvalQuery(ctx, nq); err != nil {
+	if err := note.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, error) {
+func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, error) {
 	var (
 		nodes       = []*Note{}
-		withFKs     = nq.withFKs
-		_spec       = nq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			nq.withOwner != nil,
-			nq.withTask != nil,
-			nq.withFiles != nil,
+			_q.withOwner != nil,
+			_q.withTask != nil,
+			_q.withFiles != nil,
 		}
 	)
-	if nq.withTask != nil {
+	if _q.withTask != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -483,60 +483,60 @@ func (nq *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		return (*Note).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Note{config: nq.config}
+		node := &Note{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = nq.schemaConfig.Note
-	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
-	if len(nq.modifiers) > 0 {
-		_spec.Modifiers = nq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.Note
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, nq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := nq.withOwner; query != nil {
-		if err := nq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Note, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withTask; query != nil {
-		if err := nq.loadTask(ctx, query, nodes, nil,
+	if query := _q.withTask; query != nil {
+		if err := _q.loadTask(ctx, query, nodes, nil,
 			func(n *Note, e *Task) { n.Edges.Task = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := nq.withFiles; query != nil {
-		if err := nq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Note) { n.Edges.Files = []*File{} },
 			func(n *Note, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedFiles {
-		if err := nq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Note) { n.appendNamedFiles(name) },
 			func(n *Note, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range nq.loadTotal {
-		if err := nq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (nq *NoteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Note, init func(*Note), assign func(*Note, *Organization)) error {
+func (_q *NoteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Note, init func(*Note), assign func(*Note, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
@@ -565,7 +565,7 @@ func (nq *NoteQuery) loadOwner(ctx context.Context, query *OrganizationQuery, no
 	}
 	return nil
 }
-func (nq *NoteQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*Note, init func(*Note), assign func(*Note, *Task)) error {
+func (_q *NoteQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*Note, init func(*Note), assign func(*Note, *Task)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
@@ -597,7 +597,7 @@ func (nq *NoteQuery) loadTask(ctx context.Context, query *TaskQuery, nodes []*No
 	}
 	return nil
 }
-func (nq *NoteQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Note, init func(*Note), assign func(*Note, *File)) error {
+func (_q *NoteQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Note, init func(*Note), assign func(*Note, *File)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Note)
 	for i := range nodes {
@@ -629,29 +629,29 @@ func (nq *NoteQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*N
 	return nil
 }
 
-func (nq *NoteQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := nq.querySpec()
-	_spec.Node.Schema = nq.schemaConfig.Note
-	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
-	if len(nq.modifiers) > 0 {
-		_spec.Modifiers = nq.modifiers
+func (_q *NoteQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.Note
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = nq.ctx.Fields
-	if len(nq.ctx.Fields) > 0 {
-		_spec.Unique = nq.ctx.Unique != nil && *nq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, nq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (nq *NoteQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(note.Table, note.Columns, sqlgraph.NewFieldSpec(note.FieldID, field.TypeString))
-	_spec.From = nq.sql
-	if unique := nq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if nq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := nq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, note.FieldID)
 		for i := range fields {
@@ -659,24 +659,24 @@ func (nq *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if nq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(note.FieldOwnerID)
 		}
 	}
-	if ps := nq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := nq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := nq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := nq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -686,62 +686,62 @@ func (nq *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (nq *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(nq.driver.Dialect())
+func (_q *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(note.Table)
-	columns := nq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = note.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if nq.sql != nil {
-		selector = nq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if nq.ctx.Unique != nil && *nq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(nq.schemaConfig.Note)
-	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
+	t1.Schema(_q.schemaConfig.Note)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range nq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range nq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range nq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := nq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := nq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (nq *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
-	nq.modifiers = append(nq.modifiers, modifiers...)
-	return nq.Select()
+func (_q *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NoteQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *NoteQuery {
-	query := (&FileClient{config: nq.config}).Query()
+func (_q *NoteQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *NoteQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedFiles == nil {
-		nq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	nq.withNamedFiles[name] = query
-	return nq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -770,41 +770,41 @@ type NoteGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ngb *NoteGroupBy) Aggregate(fns ...AggregateFunc) *NoteGroupBy {
-	ngb.fns = append(ngb.fns, fns...)
-	return ngb
+func (_g *NoteGroupBy) Aggregate(fns ...AggregateFunc) *NoteGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ngb *NoteGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ngb.build.ctx, ent.OpQueryGroupBy)
-	if err := ngb.build.prepareQuery(ctx); err != nil {
+func (_g *NoteGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*NoteQuery, *NoteGroupBy](ctx, ngb.build, ngb, ngb.build.inters, v)
+	return scanWithInterceptors[*NoteQuery, *NoteGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ngb *NoteGroupBy) sqlScan(ctx context.Context, root *NoteQuery, v any) error {
+func (_g *NoteGroupBy) sqlScan(ctx context.Context, root *NoteQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ngb.fns))
-	for _, fn := range ngb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ngb.flds)+len(ngb.fns))
-		for _, f := range *ngb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ngb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ngb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -818,27 +818,27 @@ type NoteSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ns *NoteSelect) Aggregate(fns ...AggregateFunc) *NoteSelect {
-	ns.fns = append(ns.fns, fns...)
-	return ns
+func (_s *NoteSelect) Aggregate(fns ...AggregateFunc) *NoteSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ns *NoteSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ns.ctx, ent.OpQuerySelect)
-	if err := ns.prepareQuery(ctx); err != nil {
+func (_s *NoteSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*NoteQuery, *NoteSelect](ctx, ns.NoteQuery, ns, ns.inters, v)
+	return scanWithInterceptors[*NoteQuery, *NoteSelect](ctx, _s.NoteQuery, _s, _s.inters, v)
 }
 
-func (ns *NoteSelect) sqlScan(ctx context.Context, root *NoteQuery, v any) error {
+func (_s *NoteSelect) sqlScan(ctx context.Context, root *NoteQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ns.fns))
-	for _, fn := range ns.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ns.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -846,7 +846,7 @@ func (ns *NoteSelect) sqlScan(ctx context.Context, root *NoteQuery, v any) error
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ns.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -854,7 +854,7 @@ func (ns *NoteSelect) sqlScan(ctx context.Context, root *NoteQuery, v any) error
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ns *NoteSelect) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
-	ns.modifiers = append(ns.modifiers, modifiers...)
-	return ns
+func (_s *NoteSelect) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

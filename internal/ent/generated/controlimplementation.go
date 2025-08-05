@@ -157,7 +157,7 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ControlImplementation fields.
-func (ci *ControlImplementation) assignValues(columns []string, values []any) error {
+func (_m *ControlImplementation) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -167,49 +167,49 @@ func (ci *ControlImplementation) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ci.ID = value.String
+				_m.ID = value.String
 			}
 		case controlimplementation.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ci.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case controlimplementation.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ci.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case controlimplementation.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ci.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case controlimplementation.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ci.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case controlimplementation.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ci.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case controlimplementation.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ci.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case controlimplementation.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ci.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -217,40 +217,40 @@ func (ci *ControlImplementation) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ci.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case controlimplementation.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ci.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case controlimplementation.FieldImplementationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_date", values[i])
 			} else if value.Valid {
-				ci.ImplementationDate = value.Time
+				_m.ImplementationDate = value.Time
 			}
 		case controlimplementation.FieldVerified:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field verified", values[i])
 			} else if value.Valid {
-				ci.Verified = value.Bool
+				_m.Verified = value.Bool
 			}
 		case controlimplementation.FieldVerificationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field verification_date", values[i])
 			} else if value.Valid {
-				ci.VerificationDate = value.Time
+				_m.VerificationDate = value.Time
 			}
 		case controlimplementation.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				ci.Details = value.String
+				_m.Details = value.String
 			}
 		default:
-			ci.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -258,222 +258,222 @@ func (ci *ControlImplementation) assignValues(columns []string, values []any) er
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ControlImplementation.
 // This includes values selected through modifiers, order, etc.
-func (ci *ControlImplementation) Value(name string) (ent.Value, error) {
-	return ci.selectValues.Get(name)
+func (_m *ControlImplementation) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QueryOwner() *OrganizationQuery {
-	return NewControlImplementationClient(ci.config).QueryOwner(ci)
+func (_m *ControlImplementation) QueryOwner() *OrganizationQuery {
+	return NewControlImplementationClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QueryBlockedGroups() *GroupQuery {
-	return NewControlImplementationClient(ci.config).QueryBlockedGroups(ci)
+func (_m *ControlImplementation) QueryBlockedGroups() *GroupQuery {
+	return NewControlImplementationClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QueryEditors() *GroupQuery {
-	return NewControlImplementationClient(ci.config).QueryEditors(ci)
+func (_m *ControlImplementation) QueryEditors() *GroupQuery {
+	return NewControlImplementationClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QueryViewers() *GroupQuery {
-	return NewControlImplementationClient(ci.config).QueryViewers(ci)
+func (_m *ControlImplementation) QueryViewers() *GroupQuery {
+	return NewControlImplementationClient(_m.config).QueryViewers(_m)
 }
 
 // QueryControls queries the "controls" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QueryControls() *ControlQuery {
-	return NewControlImplementationClient(ci.config).QueryControls(ci)
+func (_m *ControlImplementation) QueryControls() *ControlQuery {
+	return NewControlImplementationClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the ControlImplementation entity.
-func (ci *ControlImplementation) QuerySubcontrols() *SubcontrolQuery {
-	return NewControlImplementationClient(ci.config).QuerySubcontrols(ci)
+func (_m *ControlImplementation) QuerySubcontrols() *SubcontrolQuery {
+	return NewControlImplementationClient(_m.config).QuerySubcontrols(_m)
 }
 
 // Update returns a builder for updating this ControlImplementation.
 // Note that you need to call ControlImplementation.Unwrap() before calling this method if this ControlImplementation
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ci *ControlImplementation) Update() *ControlImplementationUpdateOne {
-	return NewControlImplementationClient(ci.config).UpdateOne(ci)
+func (_m *ControlImplementation) Update() *ControlImplementationUpdateOne {
+	return NewControlImplementationClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ControlImplementation entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ci *ControlImplementation) Unwrap() *ControlImplementation {
-	_tx, ok := ci.config.driver.(*txDriver)
+func (_m *ControlImplementation) Unwrap() *ControlImplementation {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ControlImplementation is not a transactional entity")
 	}
-	ci.config.driver = _tx.drv
-	return ci
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ci *ControlImplementation) String() string {
+func (_m *ControlImplementation) String() string {
 	var builder strings.Builder
 	builder.WriteString("ControlImplementation(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ci.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(ci.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ci.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ci.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ci.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ci.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ci.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ci.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_date=")
-	builder.WriteString(ci.ImplementationDate.Format(time.ANSIC))
+	builder.WriteString(_m.ImplementationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("verified=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Verified))
+	builder.WriteString(fmt.Sprintf("%v", _m.Verified))
 	builder.WriteString(", ")
 	builder.WriteString("verification_date=")
-	builder.WriteString(ci.VerificationDate.Format(time.ANSIC))
+	builder.WriteString(_m.VerificationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(ci.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ci *ControlImplementation) NamedBlockedGroups(name string) ([]*Group, error) {
-	if ci.Edges.namedBlockedGroups == nil {
+func (_m *ControlImplementation) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ci.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ci *ControlImplementation) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if ci.Edges.namedBlockedGroups == nil {
-		ci.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *ControlImplementation) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		ci.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		ci.Edges.namedBlockedGroups[name] = append(ci.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ci *ControlImplementation) NamedEditors(name string) ([]*Group, error) {
-	if ci.Edges.namedEditors == nil {
+func (_m *ControlImplementation) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ci.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ci *ControlImplementation) appendNamedEditors(name string, edges ...*Group) {
-	if ci.Edges.namedEditors == nil {
-		ci.Edges.namedEditors = make(map[string][]*Group)
+func (_m *ControlImplementation) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		ci.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		ci.Edges.namedEditors[name] = append(ci.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ci *ControlImplementation) NamedViewers(name string) ([]*Group, error) {
-	if ci.Edges.namedViewers == nil {
+func (_m *ControlImplementation) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ci.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ci *ControlImplementation) appendNamedViewers(name string, edges ...*Group) {
-	if ci.Edges.namedViewers == nil {
-		ci.Edges.namedViewers = make(map[string][]*Group)
+func (_m *ControlImplementation) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		ci.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		ci.Edges.namedViewers[name] = append(ci.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ci *ControlImplementation) NamedControls(name string) ([]*Control, error) {
-	if ci.Edges.namedControls == nil {
+func (_m *ControlImplementation) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ci.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ci *ControlImplementation) appendNamedControls(name string, edges ...*Control) {
-	if ci.Edges.namedControls == nil {
-		ci.Edges.namedControls = make(map[string][]*Control)
+func (_m *ControlImplementation) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		ci.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		ci.Edges.namedControls[name] = append(ci.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ci *ControlImplementation) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if ci.Edges.namedSubcontrols == nil {
+func (_m *ControlImplementation) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ci.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ci *ControlImplementation) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if ci.Edges.namedSubcontrols == nil {
-		ci.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *ControlImplementation) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		ci.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		ci.Edges.namedSubcontrols[name] = append(ci.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 

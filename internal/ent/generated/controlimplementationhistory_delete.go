@@ -22,58 +22,58 @@ type ControlImplementationHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ControlImplementationHistoryDelete builder.
-func (cihd *ControlImplementationHistoryDelete) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryDelete {
-	cihd.mutation.Where(ps...)
-	return cihd
+func (_d *ControlImplementationHistoryDelete) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cihd *ControlImplementationHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cihd.sqlExec, cihd.mutation, cihd.hooks)
+func (_d *ControlImplementationHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cihd *ControlImplementationHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := cihd.Exec(ctx)
+func (_d *ControlImplementationHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cihd *ControlImplementationHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ControlImplementationHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(controlimplementationhistory.Table, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = cihd.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cihd.schemaConfig)
-	if ps := cihd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ControlImplementationHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cihd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cihd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ControlImplementationHistoryDeleteOne is the builder for deleting a single ControlImplementationHistory entity.
 type ControlImplementationHistoryDeleteOne struct {
-	cihd *ControlImplementationHistoryDelete
+	_d *ControlImplementationHistoryDelete
 }
 
 // Where appends a list predicates to the ControlImplementationHistoryDelete builder.
-func (cihdo *ControlImplementationHistoryDeleteOne) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryDeleteOne {
-	cihdo.cihd.mutation.Where(ps...)
-	return cihdo
+func (_d *ControlImplementationHistoryDeleteOne) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cihdo *ControlImplementationHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := cihdo.cihd.Exec(ctx)
+func (_d *ControlImplementationHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (cihdo *ControlImplementationHistoryDeleteOne) Exec(ctx context.Context) er
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cihdo *ControlImplementationHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := cihdo.Exec(ctx); err != nil {
+func (_d *ControlImplementationHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

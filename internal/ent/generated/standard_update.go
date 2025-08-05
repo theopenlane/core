@@ -30,456 +30,456 @@ type StandardUpdate struct {
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
-func (su *StandardUpdate) Where(ps ...predicate.Standard) *StandardUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *StandardUpdate) Where(ps ...predicate.Standard) *StandardUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (su *StandardUpdate) SetUpdatedAt(t time.Time) *StandardUpdate {
-	su.mutation.SetUpdatedAt(t)
-	return su
+func (_u *StandardUpdate) SetUpdatedAt(v time.Time) *StandardUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (su *StandardUpdate) ClearUpdatedAt() *StandardUpdate {
-	su.mutation.ClearUpdatedAt()
-	return su
+func (_u *StandardUpdate) ClearUpdatedAt() *StandardUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (su *StandardUpdate) SetUpdatedBy(s string) *StandardUpdate {
-	su.mutation.SetUpdatedBy(s)
-	return su
+func (_u *StandardUpdate) SetUpdatedBy(v string) *StandardUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableUpdatedBy(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetUpdatedBy(*s)
+func (_u *StandardUpdate) SetNillableUpdatedBy(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *StandardUpdate) ClearUpdatedBy() *StandardUpdate {
-	su.mutation.ClearUpdatedBy()
-	return su
+func (_u *StandardUpdate) ClearUpdatedBy() *StandardUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (su *StandardUpdate) SetDeletedAt(t time.Time) *StandardUpdate {
-	su.mutation.SetDeletedAt(t)
-	return su
+func (_u *StandardUpdate) SetDeletedAt(v time.Time) *StandardUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableDeletedAt(t *time.Time) *StandardUpdate {
-	if t != nil {
-		su.SetDeletedAt(*t)
+func (_u *StandardUpdate) SetNillableDeletedAt(v *time.Time) *StandardUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (su *StandardUpdate) ClearDeletedAt() *StandardUpdate {
-	su.mutation.ClearDeletedAt()
-	return su
+func (_u *StandardUpdate) ClearDeletedAt() *StandardUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (su *StandardUpdate) SetDeletedBy(s string) *StandardUpdate {
-	su.mutation.SetDeletedBy(s)
-	return su
+func (_u *StandardUpdate) SetDeletedBy(v string) *StandardUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableDeletedBy(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetDeletedBy(*s)
+func (_u *StandardUpdate) SetNillableDeletedBy(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *StandardUpdate) ClearDeletedBy() *StandardUpdate {
-	su.mutation.ClearDeletedBy()
-	return su
+func (_u *StandardUpdate) ClearDeletedBy() *StandardUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (su *StandardUpdate) SetTags(s []string) *StandardUpdate {
-	su.mutation.SetTags(s)
-	return su
+func (_u *StandardUpdate) SetTags(v []string) *StandardUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (su *StandardUpdate) AppendTags(s []string) *StandardUpdate {
-	su.mutation.AppendTags(s)
-	return su
+// AppendTags appends value to the "tags" field.
+func (_u *StandardUpdate) AppendTags(v []string) *StandardUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (su *StandardUpdate) ClearTags() *StandardUpdate {
-	su.mutation.ClearTags()
-	return su
+func (_u *StandardUpdate) ClearTags() *StandardUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (su *StandardUpdate) SetRevision(s string) *StandardUpdate {
-	su.mutation.SetRevision(s)
-	return su
+func (_u *StandardUpdate) SetRevision(v string) *StandardUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableRevision(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetRevision(*s)
+func (_u *StandardUpdate) SetNillableRevision(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (su *StandardUpdate) ClearRevision() *StandardUpdate {
-	su.mutation.ClearRevision()
-	return su
+func (_u *StandardUpdate) ClearRevision() *StandardUpdate {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (su *StandardUpdate) SetOwnerID(s string) *StandardUpdate {
-	su.mutation.SetOwnerID(s)
-	return su
+func (_u *StandardUpdate) SetOwnerID(v string) *StandardUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableOwnerID(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetOwnerID(*s)
+func (_u *StandardUpdate) SetNillableOwnerID(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (su *StandardUpdate) ClearOwnerID() *StandardUpdate {
-	su.mutation.ClearOwnerID()
-	return su
+func (_u *StandardUpdate) ClearOwnerID() *StandardUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (su *StandardUpdate) SetName(s string) *StandardUpdate {
-	su.mutation.SetName(s)
-	return su
+func (_u *StandardUpdate) SetName(v string) *StandardUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableName(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetName(*s)
+func (_u *StandardUpdate) SetNillableName(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return su
+	return _u
 }
 
 // SetShortName sets the "short_name" field.
-func (su *StandardUpdate) SetShortName(s string) *StandardUpdate {
-	su.mutation.SetShortName(s)
-	return su
+func (_u *StandardUpdate) SetShortName(v string) *StandardUpdate {
+	_u.mutation.SetShortName(v)
+	return _u
 }
 
 // SetNillableShortName sets the "short_name" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableShortName(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetShortName(*s)
+func (_u *StandardUpdate) SetNillableShortName(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetShortName(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearShortName clears the value of the "short_name" field.
-func (su *StandardUpdate) ClearShortName() *StandardUpdate {
-	su.mutation.ClearShortName()
-	return su
+func (_u *StandardUpdate) ClearShortName() *StandardUpdate {
+	_u.mutation.ClearShortName()
+	return _u
 }
 
 // SetFramework sets the "framework" field.
-func (su *StandardUpdate) SetFramework(s string) *StandardUpdate {
-	su.mutation.SetFramework(s)
-	return su
+func (_u *StandardUpdate) SetFramework(v string) *StandardUpdate {
+	_u.mutation.SetFramework(v)
+	return _u
 }
 
 // SetNillableFramework sets the "framework" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableFramework(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetFramework(*s)
+func (_u *StandardUpdate) SetNillableFramework(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetFramework(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearFramework clears the value of the "framework" field.
-func (su *StandardUpdate) ClearFramework() *StandardUpdate {
-	su.mutation.ClearFramework()
-	return su
+func (_u *StandardUpdate) ClearFramework() *StandardUpdate {
+	_u.mutation.ClearFramework()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (su *StandardUpdate) SetDescription(s string) *StandardUpdate {
-	su.mutation.SetDescription(s)
-	return su
+func (_u *StandardUpdate) SetDescription(v string) *StandardUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableDescription(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetDescription(*s)
+func (_u *StandardUpdate) SetNillableDescription(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (su *StandardUpdate) ClearDescription() *StandardUpdate {
-	su.mutation.ClearDescription()
-	return su
+func (_u *StandardUpdate) ClearDescription() *StandardUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
-func (su *StandardUpdate) SetGoverningBodyLogoURL(s string) *StandardUpdate {
-	su.mutation.SetGoverningBodyLogoURL(s)
-	return su
+func (_u *StandardUpdate) SetGoverningBodyLogoURL(v string) *StandardUpdate {
+	_u.mutation.SetGoverningBodyLogoURL(v)
+	return _u
 }
 
 // SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableGoverningBodyLogoURL(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetGoverningBodyLogoURL(*s)
+func (_u *StandardUpdate) SetNillableGoverningBodyLogoURL(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetGoverningBodyLogoURL(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearGoverningBodyLogoURL clears the value of the "governing_body_logo_url" field.
-func (su *StandardUpdate) ClearGoverningBodyLogoURL() *StandardUpdate {
-	su.mutation.ClearGoverningBodyLogoURL()
-	return su
+func (_u *StandardUpdate) ClearGoverningBodyLogoURL() *StandardUpdate {
+	_u.mutation.ClearGoverningBodyLogoURL()
+	return _u
 }
 
 // SetGoverningBody sets the "governing_body" field.
-func (su *StandardUpdate) SetGoverningBody(s string) *StandardUpdate {
-	su.mutation.SetGoverningBody(s)
-	return su
+func (_u *StandardUpdate) SetGoverningBody(v string) *StandardUpdate {
+	_u.mutation.SetGoverningBody(v)
+	return _u
 }
 
 // SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableGoverningBody(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetGoverningBody(*s)
+func (_u *StandardUpdate) SetNillableGoverningBody(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetGoverningBody(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearGoverningBody clears the value of the "governing_body" field.
-func (su *StandardUpdate) ClearGoverningBody() *StandardUpdate {
-	su.mutation.ClearGoverningBody()
-	return su
+func (_u *StandardUpdate) ClearGoverningBody() *StandardUpdate {
+	_u.mutation.ClearGoverningBody()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (su *StandardUpdate) SetDomains(s []string) *StandardUpdate {
-	su.mutation.SetDomains(s)
-	return su
+func (_u *StandardUpdate) SetDomains(v []string) *StandardUpdate {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (su *StandardUpdate) AppendDomains(s []string) *StandardUpdate {
-	su.mutation.AppendDomains(s)
-	return su
+// AppendDomains appends value to the "domains" field.
+func (_u *StandardUpdate) AppendDomains(v []string) *StandardUpdate {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (su *StandardUpdate) ClearDomains() *StandardUpdate {
-	su.mutation.ClearDomains()
-	return su
+func (_u *StandardUpdate) ClearDomains() *StandardUpdate {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetLink sets the "link" field.
-func (su *StandardUpdate) SetLink(s string) *StandardUpdate {
-	su.mutation.SetLink(s)
-	return su
+func (_u *StandardUpdate) SetLink(v string) *StandardUpdate {
+	_u.mutation.SetLink(v)
+	return _u
 }
 
 // SetNillableLink sets the "link" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableLink(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetLink(*s)
+func (_u *StandardUpdate) SetNillableLink(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetLink(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearLink clears the value of the "link" field.
-func (su *StandardUpdate) ClearLink() *StandardUpdate {
-	su.mutation.ClearLink()
-	return su
+func (_u *StandardUpdate) ClearLink() *StandardUpdate {
+	_u.mutation.ClearLink()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (su *StandardUpdate) SetStatus(es enums.StandardStatus) *StandardUpdate {
-	su.mutation.SetStatus(es)
-	return su
+func (_u *StandardUpdate) SetStatus(v enums.StandardStatus) *StandardUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableStatus(es *enums.StandardStatus) *StandardUpdate {
-	if es != nil {
-		su.SetStatus(*es)
+func (_u *StandardUpdate) SetNillableStatus(v *enums.StandardStatus) *StandardUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (su *StandardUpdate) ClearStatus() *StandardUpdate {
-	su.mutation.ClearStatus()
-	return su
+func (_u *StandardUpdate) ClearStatus() *StandardUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetIsPublic sets the "is_public" field.
-func (su *StandardUpdate) SetIsPublic(b bool) *StandardUpdate {
-	su.mutation.SetIsPublic(b)
-	return su
+func (_u *StandardUpdate) SetIsPublic(v bool) *StandardUpdate {
+	_u.mutation.SetIsPublic(v)
+	return _u
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableIsPublic(b *bool) *StandardUpdate {
-	if b != nil {
-		su.SetIsPublic(*b)
+func (_u *StandardUpdate) SetNillableIsPublic(v *bool) *StandardUpdate {
+	if v != nil {
+		_u.SetIsPublic(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearIsPublic clears the value of the "is_public" field.
-func (su *StandardUpdate) ClearIsPublic() *StandardUpdate {
-	su.mutation.ClearIsPublic()
-	return su
+func (_u *StandardUpdate) ClearIsPublic() *StandardUpdate {
+	_u.mutation.ClearIsPublic()
+	return _u
 }
 
 // SetFreeToUse sets the "free_to_use" field.
-func (su *StandardUpdate) SetFreeToUse(b bool) *StandardUpdate {
-	su.mutation.SetFreeToUse(b)
-	return su
+func (_u *StandardUpdate) SetFreeToUse(v bool) *StandardUpdate {
+	_u.mutation.SetFreeToUse(v)
+	return _u
 }
 
 // SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableFreeToUse(b *bool) *StandardUpdate {
-	if b != nil {
-		su.SetFreeToUse(*b)
+func (_u *StandardUpdate) SetNillableFreeToUse(v *bool) *StandardUpdate {
+	if v != nil {
+		_u.SetFreeToUse(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearFreeToUse clears the value of the "free_to_use" field.
-func (su *StandardUpdate) ClearFreeToUse() *StandardUpdate {
-	su.mutation.ClearFreeToUse()
-	return su
+func (_u *StandardUpdate) ClearFreeToUse() *StandardUpdate {
+	_u.mutation.ClearFreeToUse()
+	return _u
 }
 
 // SetStandardType sets the "standard_type" field.
-func (su *StandardUpdate) SetStandardType(s string) *StandardUpdate {
-	su.mutation.SetStandardType(s)
-	return su
+func (_u *StandardUpdate) SetStandardType(v string) *StandardUpdate {
+	_u.mutation.SetStandardType(v)
+	return _u
 }
 
 // SetNillableStandardType sets the "standard_type" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableStandardType(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetStandardType(*s)
+func (_u *StandardUpdate) SetNillableStandardType(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetStandardType(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearStandardType clears the value of the "standard_type" field.
-func (su *StandardUpdate) ClearStandardType() *StandardUpdate {
-	su.mutation.ClearStandardType()
-	return su
+func (_u *StandardUpdate) ClearStandardType() *StandardUpdate {
+	_u.mutation.ClearStandardType()
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (su *StandardUpdate) SetVersion(s string) *StandardUpdate {
-	su.mutation.SetVersion(s)
-	return su
+func (_u *StandardUpdate) SetVersion(v string) *StandardUpdate {
+	_u.mutation.SetVersion(v)
+	return _u
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (su *StandardUpdate) SetNillableVersion(s *string) *StandardUpdate {
-	if s != nil {
-		su.SetVersion(*s)
+func (_u *StandardUpdate) SetNillableVersion(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetVersion(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearVersion clears the value of the "version" field.
-func (su *StandardUpdate) ClearVersion() *StandardUpdate {
-	su.mutation.ClearVersion()
-	return su
+func (_u *StandardUpdate) ClearVersion() *StandardUpdate {
+	_u.mutation.ClearVersion()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (su *StandardUpdate) SetOwner(o *Organization) *StandardUpdate {
-	return su.SetOwnerID(o.ID)
+func (_u *StandardUpdate) SetOwner(v *Organization) *StandardUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (su *StandardUpdate) AddControlIDs(ids ...string) *StandardUpdate {
-	su.mutation.AddControlIDs(ids...)
-	return su
+func (_u *StandardUpdate) AddControlIDs(ids ...string) *StandardUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (su *StandardUpdate) AddControls(c ...*Control) *StandardUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *StandardUpdate) AddControls(v ...*Control) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // Mutation returns the StandardMutation object of the builder.
-func (su *StandardUpdate) Mutation() *StandardMutation {
-	return su.mutation
+func (_u *StandardUpdate) Mutation() *StandardMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (su *StandardUpdate) ClearOwner() *StandardUpdate {
-	su.mutation.ClearOwner()
-	return su
+func (_u *StandardUpdate) ClearOwner() *StandardUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (su *StandardUpdate) ClearControls() *StandardUpdate {
-	su.mutation.ClearControls()
-	return su
+func (_u *StandardUpdate) ClearControls() *StandardUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (su *StandardUpdate) RemoveControlIDs(ids ...string) *StandardUpdate {
-	su.mutation.RemoveControlIDs(ids...)
-	return su
+func (_u *StandardUpdate) RemoveControlIDs(ids ...string) *StandardUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (su *StandardUpdate) RemoveControls(c ...*Control) *StandardUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *StandardUpdate) RemoveControls(v ...*Control) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *StandardUpdate) Save(ctx context.Context) (int, error) {
-	if err := su.defaults(); err != nil {
+func (_u *StandardUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *StandardUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *StandardUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -487,53 +487,53 @@ func (su *StandardUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *StandardUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *StandardUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *StandardUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *StandardUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (su *StandardUpdate) defaults() error {
-	if _, ok := su.mutation.UpdatedAt(); !ok && !su.mutation.UpdatedAtCleared() {
+func (_u *StandardUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if standard.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standard.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := standard.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *StandardUpdate) check() error {
-	if v, ok := su.mutation.Revision(); ok {
+func (_u *StandardUpdate) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
 		if err := standard.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Standard.revision": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.GoverningBodyLogoURL(); ok {
+	if v, ok := _u.mutation.GoverningBodyLogoURL(); ok {
 		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
 			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Link(); ok {
+	if v, ok := _u.mutation.Link(); ok {
 		if err := standard.LinkValidator(v); err != nil {
 			return &ValidationError{Name: "link", err: fmt.Errorf(`generated: validator failed for field "Standard.link": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := standard.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
@@ -542,154 +542,154 @@ func (su *StandardUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (su *StandardUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardUpdate {
-	su.modifiers = append(su.modifiers, modifiers...)
-	return su
+func (_u *StandardUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *StandardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(standard.Table, standard.Columns, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if su.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(standard.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(standard.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if su.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standard.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(standard.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(standard.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
 	}
-	if su.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(standard.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(standard.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := su.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standard.FieldTags, value)
 		})
 	}
-	if su.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(standard.FieldTags, field.TypeJSON)
 	}
-	if value, ok := su.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(standard.FieldRevision, field.TypeString, value)
 	}
-	if su.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
-	if su.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := su.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.ShortName(); ok {
+	if value, ok := _u.mutation.ShortName(); ok {
 		_spec.SetField(standard.FieldShortName, field.TypeString, value)
 	}
-	if su.mutation.ShortNameCleared() {
+	if _u.mutation.ShortNameCleared() {
 		_spec.ClearField(standard.FieldShortName, field.TypeString)
 	}
-	if value, ok := su.mutation.Framework(); ok {
+	if value, ok := _u.mutation.Framework(); ok {
 		_spec.SetField(standard.FieldFramework, field.TypeString, value)
 	}
-	if su.mutation.FrameworkCleared() {
+	if _u.mutation.FrameworkCleared() {
 		_spec.ClearField(standard.FieldFramework, field.TypeString)
 	}
-	if value, ok := su.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 	}
-	if su.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(standard.FieldDescription, field.TypeString)
 	}
-	if value, ok := su.mutation.GoverningBodyLogoURL(); ok {
+	if value, ok := _u.mutation.GoverningBodyLogoURL(); ok {
 		_spec.SetField(standard.FieldGoverningBodyLogoURL, field.TypeString, value)
 	}
-	if su.mutation.GoverningBodyLogoURLCleared() {
+	if _u.mutation.GoverningBodyLogoURLCleared() {
 		_spec.ClearField(standard.FieldGoverningBodyLogoURL, field.TypeString)
 	}
-	if value, ok := su.mutation.GoverningBody(); ok {
+	if value, ok := _u.mutation.GoverningBody(); ok {
 		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
 	}
-	if su.mutation.GoverningBodyCleared() {
+	if _u.mutation.GoverningBodyCleared() {
 		_spec.ClearField(standard.FieldGoverningBody, field.TypeString)
 	}
-	if value, ok := su.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(standard.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := su.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standard.FieldDomains, value)
 		})
 	}
-	if su.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(standard.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := su.mutation.Link(); ok {
+	if value, ok := _u.mutation.Link(); ok {
 		_spec.SetField(standard.FieldLink, field.TypeString, value)
 	}
-	if su.mutation.LinkCleared() {
+	if _u.mutation.LinkCleared() {
 		_spec.ClearField(standard.FieldLink, field.TypeString)
 	}
-	if value, ok := su.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(standard.FieldStatus, field.TypeEnum, value)
 	}
-	if su.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(standard.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := su.mutation.IsPublic(); ok {
+	if value, ok := _u.mutation.IsPublic(); ok {
 		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
 	}
-	if su.mutation.IsPublicCleared() {
+	if _u.mutation.IsPublicCleared() {
 		_spec.ClearField(standard.FieldIsPublic, field.TypeBool)
 	}
-	if value, ok := su.mutation.FreeToUse(); ok {
+	if value, ok := _u.mutation.FreeToUse(); ok {
 		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
 	}
-	if su.mutation.FreeToUseCleared() {
+	if _u.mutation.FreeToUseCleared() {
 		_spec.ClearField(standard.FieldFreeToUse, field.TypeBool)
 	}
-	if value, ok := su.mutation.StandardType(); ok {
+	if value, ok := _u.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
 	}
-	if su.mutation.StandardTypeCleared() {
+	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standard.FieldStandardType, field.TypeString)
 	}
-	if value, ok := su.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)
 	}
-	if su.mutation.VersionCleared() {
+	if _u.mutation.VersionCleared() {
 		_spec.ClearField(standard.FieldVersion, field.TypeString)
 	}
-	if su.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -700,10 +700,10 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -714,13 +714,13 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -731,10 +731,10 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedControlsIDs(); len(nodes) > 0 && !su.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -745,13 +745,13 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -762,16 +762,16 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = su.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
-	_spec.AddModifiers(su.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Standard
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{standard.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -779,8 +779,8 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StandardUpdateOne is the builder for updating a single Standard entity.
@@ -793,463 +793,463 @@ type StandardUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suo *StandardUpdateOne) SetUpdatedAt(t time.Time) *StandardUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
-	return suo
+func (_u *StandardUpdateOne) SetUpdatedAt(v time.Time) *StandardUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (suo *StandardUpdateOne) ClearUpdatedAt() *StandardUpdateOne {
-	suo.mutation.ClearUpdatedAt()
-	return suo
+func (_u *StandardUpdateOne) ClearUpdatedAt() *StandardUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suo *StandardUpdateOne) SetUpdatedBy(s string) *StandardUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
-	return suo
+func (_u *StandardUpdateOne) SetUpdatedBy(v string) *StandardUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableUpdatedBy(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetUpdatedBy(*s)
+func (_u *StandardUpdateOne) SetNillableUpdatedBy(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *StandardUpdateOne) ClearUpdatedBy() *StandardUpdateOne {
-	suo.mutation.ClearUpdatedBy()
-	return suo
+func (_u *StandardUpdateOne) ClearUpdatedBy() *StandardUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (suo *StandardUpdateOne) SetDeletedAt(t time.Time) *StandardUpdateOne {
-	suo.mutation.SetDeletedAt(t)
-	return suo
+func (_u *StandardUpdateOne) SetDeletedAt(v time.Time) *StandardUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableDeletedAt(t *time.Time) *StandardUpdateOne {
-	if t != nil {
-		suo.SetDeletedAt(*t)
+func (_u *StandardUpdateOne) SetNillableDeletedAt(v *time.Time) *StandardUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (suo *StandardUpdateOne) ClearDeletedAt() *StandardUpdateOne {
-	suo.mutation.ClearDeletedAt()
-	return suo
+func (_u *StandardUpdateOne) ClearDeletedAt() *StandardUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (suo *StandardUpdateOne) SetDeletedBy(s string) *StandardUpdateOne {
-	suo.mutation.SetDeletedBy(s)
-	return suo
+func (_u *StandardUpdateOne) SetDeletedBy(v string) *StandardUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableDeletedBy(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetDeletedBy(*s)
+func (_u *StandardUpdateOne) SetNillableDeletedBy(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *StandardUpdateOne) ClearDeletedBy() *StandardUpdateOne {
-	suo.mutation.ClearDeletedBy()
-	return suo
+func (_u *StandardUpdateOne) ClearDeletedBy() *StandardUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (suo *StandardUpdateOne) SetTags(s []string) *StandardUpdateOne {
-	suo.mutation.SetTags(s)
-	return suo
+func (_u *StandardUpdateOne) SetTags(v []string) *StandardUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (suo *StandardUpdateOne) AppendTags(s []string) *StandardUpdateOne {
-	suo.mutation.AppendTags(s)
-	return suo
+// AppendTags appends value to the "tags" field.
+func (_u *StandardUpdateOne) AppendTags(v []string) *StandardUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (suo *StandardUpdateOne) ClearTags() *StandardUpdateOne {
-	suo.mutation.ClearTags()
-	return suo
+func (_u *StandardUpdateOne) ClearTags() *StandardUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (suo *StandardUpdateOne) SetRevision(s string) *StandardUpdateOne {
-	suo.mutation.SetRevision(s)
-	return suo
+func (_u *StandardUpdateOne) SetRevision(v string) *StandardUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableRevision(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetRevision(*s)
+func (_u *StandardUpdateOne) SetNillableRevision(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (suo *StandardUpdateOne) ClearRevision() *StandardUpdateOne {
-	suo.mutation.ClearRevision()
-	return suo
+func (_u *StandardUpdateOne) ClearRevision() *StandardUpdateOne {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (suo *StandardUpdateOne) SetOwnerID(s string) *StandardUpdateOne {
-	suo.mutation.SetOwnerID(s)
-	return suo
+func (_u *StandardUpdateOne) SetOwnerID(v string) *StandardUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableOwnerID(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetOwnerID(*s)
+func (_u *StandardUpdateOne) SetNillableOwnerID(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (suo *StandardUpdateOne) ClearOwnerID() *StandardUpdateOne {
-	suo.mutation.ClearOwnerID()
-	return suo
+func (_u *StandardUpdateOne) ClearOwnerID() *StandardUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (suo *StandardUpdateOne) SetName(s string) *StandardUpdateOne {
-	suo.mutation.SetName(s)
-	return suo
+func (_u *StandardUpdateOne) SetName(v string) *StandardUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableName(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetName(*s)
+func (_u *StandardUpdateOne) SetNillableName(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetShortName sets the "short_name" field.
-func (suo *StandardUpdateOne) SetShortName(s string) *StandardUpdateOne {
-	suo.mutation.SetShortName(s)
-	return suo
+func (_u *StandardUpdateOne) SetShortName(v string) *StandardUpdateOne {
+	_u.mutation.SetShortName(v)
+	return _u
 }
 
 // SetNillableShortName sets the "short_name" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableShortName(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetShortName(*s)
+func (_u *StandardUpdateOne) SetNillableShortName(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetShortName(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearShortName clears the value of the "short_name" field.
-func (suo *StandardUpdateOne) ClearShortName() *StandardUpdateOne {
-	suo.mutation.ClearShortName()
-	return suo
+func (_u *StandardUpdateOne) ClearShortName() *StandardUpdateOne {
+	_u.mutation.ClearShortName()
+	return _u
 }
 
 // SetFramework sets the "framework" field.
-func (suo *StandardUpdateOne) SetFramework(s string) *StandardUpdateOne {
-	suo.mutation.SetFramework(s)
-	return suo
+func (_u *StandardUpdateOne) SetFramework(v string) *StandardUpdateOne {
+	_u.mutation.SetFramework(v)
+	return _u
 }
 
 // SetNillableFramework sets the "framework" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableFramework(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetFramework(*s)
+func (_u *StandardUpdateOne) SetNillableFramework(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetFramework(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearFramework clears the value of the "framework" field.
-func (suo *StandardUpdateOne) ClearFramework() *StandardUpdateOne {
-	suo.mutation.ClearFramework()
-	return suo
+func (_u *StandardUpdateOne) ClearFramework() *StandardUpdateOne {
+	_u.mutation.ClearFramework()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (suo *StandardUpdateOne) SetDescription(s string) *StandardUpdateOne {
-	suo.mutation.SetDescription(s)
-	return suo
+func (_u *StandardUpdateOne) SetDescription(v string) *StandardUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableDescription(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetDescription(*s)
+func (_u *StandardUpdateOne) SetNillableDescription(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (suo *StandardUpdateOne) ClearDescription() *StandardUpdateOne {
-	suo.mutation.ClearDescription()
-	return suo
+func (_u *StandardUpdateOne) ClearDescription() *StandardUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetGoverningBodyLogoURL sets the "governing_body_logo_url" field.
-func (suo *StandardUpdateOne) SetGoverningBodyLogoURL(s string) *StandardUpdateOne {
-	suo.mutation.SetGoverningBodyLogoURL(s)
-	return suo
+func (_u *StandardUpdateOne) SetGoverningBodyLogoURL(v string) *StandardUpdateOne {
+	_u.mutation.SetGoverningBodyLogoURL(v)
+	return _u
 }
 
 // SetNillableGoverningBodyLogoURL sets the "governing_body_logo_url" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableGoverningBodyLogoURL(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetGoverningBodyLogoURL(*s)
+func (_u *StandardUpdateOne) SetNillableGoverningBodyLogoURL(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetGoverningBodyLogoURL(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearGoverningBodyLogoURL clears the value of the "governing_body_logo_url" field.
-func (suo *StandardUpdateOne) ClearGoverningBodyLogoURL() *StandardUpdateOne {
-	suo.mutation.ClearGoverningBodyLogoURL()
-	return suo
+func (_u *StandardUpdateOne) ClearGoverningBodyLogoURL() *StandardUpdateOne {
+	_u.mutation.ClearGoverningBodyLogoURL()
+	return _u
 }
 
 // SetGoverningBody sets the "governing_body" field.
-func (suo *StandardUpdateOne) SetGoverningBody(s string) *StandardUpdateOne {
-	suo.mutation.SetGoverningBody(s)
-	return suo
+func (_u *StandardUpdateOne) SetGoverningBody(v string) *StandardUpdateOne {
+	_u.mutation.SetGoverningBody(v)
+	return _u
 }
 
 // SetNillableGoverningBody sets the "governing_body" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableGoverningBody(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetGoverningBody(*s)
+func (_u *StandardUpdateOne) SetNillableGoverningBody(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetGoverningBody(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearGoverningBody clears the value of the "governing_body" field.
-func (suo *StandardUpdateOne) ClearGoverningBody() *StandardUpdateOne {
-	suo.mutation.ClearGoverningBody()
-	return suo
+func (_u *StandardUpdateOne) ClearGoverningBody() *StandardUpdateOne {
+	_u.mutation.ClearGoverningBody()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (suo *StandardUpdateOne) SetDomains(s []string) *StandardUpdateOne {
-	suo.mutation.SetDomains(s)
-	return suo
+func (_u *StandardUpdateOne) SetDomains(v []string) *StandardUpdateOne {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (suo *StandardUpdateOne) AppendDomains(s []string) *StandardUpdateOne {
-	suo.mutation.AppendDomains(s)
-	return suo
+// AppendDomains appends value to the "domains" field.
+func (_u *StandardUpdateOne) AppendDomains(v []string) *StandardUpdateOne {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (suo *StandardUpdateOne) ClearDomains() *StandardUpdateOne {
-	suo.mutation.ClearDomains()
-	return suo
+func (_u *StandardUpdateOne) ClearDomains() *StandardUpdateOne {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetLink sets the "link" field.
-func (suo *StandardUpdateOne) SetLink(s string) *StandardUpdateOne {
-	suo.mutation.SetLink(s)
-	return suo
+func (_u *StandardUpdateOne) SetLink(v string) *StandardUpdateOne {
+	_u.mutation.SetLink(v)
+	return _u
 }
 
 // SetNillableLink sets the "link" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableLink(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetLink(*s)
+func (_u *StandardUpdateOne) SetNillableLink(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetLink(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearLink clears the value of the "link" field.
-func (suo *StandardUpdateOne) ClearLink() *StandardUpdateOne {
-	suo.mutation.ClearLink()
-	return suo
+func (_u *StandardUpdateOne) ClearLink() *StandardUpdateOne {
+	_u.mutation.ClearLink()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (suo *StandardUpdateOne) SetStatus(es enums.StandardStatus) *StandardUpdateOne {
-	suo.mutation.SetStatus(es)
-	return suo
+func (_u *StandardUpdateOne) SetStatus(v enums.StandardStatus) *StandardUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableStatus(es *enums.StandardStatus) *StandardUpdateOne {
-	if es != nil {
-		suo.SetStatus(*es)
+func (_u *StandardUpdateOne) SetNillableStatus(v *enums.StandardStatus) *StandardUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (suo *StandardUpdateOne) ClearStatus() *StandardUpdateOne {
-	suo.mutation.ClearStatus()
-	return suo
+func (_u *StandardUpdateOne) ClearStatus() *StandardUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetIsPublic sets the "is_public" field.
-func (suo *StandardUpdateOne) SetIsPublic(b bool) *StandardUpdateOne {
-	suo.mutation.SetIsPublic(b)
-	return suo
+func (_u *StandardUpdateOne) SetIsPublic(v bool) *StandardUpdateOne {
+	_u.mutation.SetIsPublic(v)
+	return _u
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableIsPublic(b *bool) *StandardUpdateOne {
-	if b != nil {
-		suo.SetIsPublic(*b)
+func (_u *StandardUpdateOne) SetNillableIsPublic(v *bool) *StandardUpdateOne {
+	if v != nil {
+		_u.SetIsPublic(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearIsPublic clears the value of the "is_public" field.
-func (suo *StandardUpdateOne) ClearIsPublic() *StandardUpdateOne {
-	suo.mutation.ClearIsPublic()
-	return suo
+func (_u *StandardUpdateOne) ClearIsPublic() *StandardUpdateOne {
+	_u.mutation.ClearIsPublic()
+	return _u
 }
 
 // SetFreeToUse sets the "free_to_use" field.
-func (suo *StandardUpdateOne) SetFreeToUse(b bool) *StandardUpdateOne {
-	suo.mutation.SetFreeToUse(b)
-	return suo
+func (_u *StandardUpdateOne) SetFreeToUse(v bool) *StandardUpdateOne {
+	_u.mutation.SetFreeToUse(v)
+	return _u
 }
 
 // SetNillableFreeToUse sets the "free_to_use" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableFreeToUse(b *bool) *StandardUpdateOne {
-	if b != nil {
-		suo.SetFreeToUse(*b)
+func (_u *StandardUpdateOne) SetNillableFreeToUse(v *bool) *StandardUpdateOne {
+	if v != nil {
+		_u.SetFreeToUse(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearFreeToUse clears the value of the "free_to_use" field.
-func (suo *StandardUpdateOne) ClearFreeToUse() *StandardUpdateOne {
-	suo.mutation.ClearFreeToUse()
-	return suo
+func (_u *StandardUpdateOne) ClearFreeToUse() *StandardUpdateOne {
+	_u.mutation.ClearFreeToUse()
+	return _u
 }
 
 // SetStandardType sets the "standard_type" field.
-func (suo *StandardUpdateOne) SetStandardType(s string) *StandardUpdateOne {
-	suo.mutation.SetStandardType(s)
-	return suo
+func (_u *StandardUpdateOne) SetStandardType(v string) *StandardUpdateOne {
+	_u.mutation.SetStandardType(v)
+	return _u
 }
 
 // SetNillableStandardType sets the "standard_type" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableStandardType(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetStandardType(*s)
+func (_u *StandardUpdateOne) SetNillableStandardType(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetStandardType(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearStandardType clears the value of the "standard_type" field.
-func (suo *StandardUpdateOne) ClearStandardType() *StandardUpdateOne {
-	suo.mutation.ClearStandardType()
-	return suo
+func (_u *StandardUpdateOne) ClearStandardType() *StandardUpdateOne {
+	_u.mutation.ClearStandardType()
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (suo *StandardUpdateOne) SetVersion(s string) *StandardUpdateOne {
-	suo.mutation.SetVersion(s)
-	return suo
+func (_u *StandardUpdateOne) SetVersion(v string) *StandardUpdateOne {
+	_u.mutation.SetVersion(v)
+	return _u
 }
 
 // SetNillableVersion sets the "version" field if the given value is not nil.
-func (suo *StandardUpdateOne) SetNillableVersion(s *string) *StandardUpdateOne {
-	if s != nil {
-		suo.SetVersion(*s)
+func (_u *StandardUpdateOne) SetNillableVersion(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetVersion(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearVersion clears the value of the "version" field.
-func (suo *StandardUpdateOne) ClearVersion() *StandardUpdateOne {
-	suo.mutation.ClearVersion()
-	return suo
+func (_u *StandardUpdateOne) ClearVersion() *StandardUpdateOne {
+	_u.mutation.ClearVersion()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (suo *StandardUpdateOne) SetOwner(o *Organization) *StandardUpdateOne {
-	return suo.SetOwnerID(o.ID)
+func (_u *StandardUpdateOne) SetOwner(v *Organization) *StandardUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (suo *StandardUpdateOne) AddControlIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.AddControlIDs(ids...)
-	return suo
+func (_u *StandardUpdateOne) AddControlIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (suo *StandardUpdateOne) AddControls(c ...*Control) *StandardUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *StandardUpdateOne) AddControls(v ...*Control) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // Mutation returns the StandardMutation object of the builder.
-func (suo *StandardUpdateOne) Mutation() *StandardMutation {
-	return suo.mutation
+func (_u *StandardUpdateOne) Mutation() *StandardMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (suo *StandardUpdateOne) ClearOwner() *StandardUpdateOne {
-	suo.mutation.ClearOwner()
-	return suo
+func (_u *StandardUpdateOne) ClearOwner() *StandardUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (suo *StandardUpdateOne) ClearControls() *StandardUpdateOne {
-	suo.mutation.ClearControls()
-	return suo
+func (_u *StandardUpdateOne) ClearControls() *StandardUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (suo *StandardUpdateOne) RemoveControlIDs(ids ...string) *StandardUpdateOne {
-	suo.mutation.RemoveControlIDs(ids...)
-	return suo
+func (_u *StandardUpdateOne) RemoveControlIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (suo *StandardUpdateOne) RemoveControls(c ...*Control) *StandardUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *StandardUpdateOne) RemoveControls(v ...*Control) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
-func (suo *StandardUpdateOne) Where(ps ...predicate.Standard) *StandardUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *StandardUpdateOne) Where(ps ...predicate.Standard) *StandardUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *StandardUpdateOne) Select(field string, fields ...string) *StandardUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *StandardUpdateOne) Select(field string, fields ...string) *StandardUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Standard entity.
-func (suo *StandardUpdateOne) Save(ctx context.Context) (*Standard, error) {
-	if err := suo.defaults(); err != nil {
+func (_u *StandardUpdateOne) Save(ctx context.Context) (*Standard, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *StandardUpdateOne) SaveX(ctx context.Context) *Standard {
-	node, err := suo.Save(ctx)
+func (_u *StandardUpdateOne) SaveX(ctx context.Context) *Standard {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1257,53 +1257,53 @@ func (suo *StandardUpdateOne) SaveX(ctx context.Context) *Standard {
 }
 
 // Exec executes the query on the entity.
-func (suo *StandardUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *StandardUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *StandardUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *StandardUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suo *StandardUpdateOne) defaults() error {
-	if _, ok := suo.mutation.UpdatedAt(); !ok && !suo.mutation.UpdatedAtCleared() {
+func (_u *StandardUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if standard.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized standard.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := standard.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *StandardUpdateOne) check() error {
-	if v, ok := suo.mutation.Revision(); ok {
+func (_u *StandardUpdateOne) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
 		if err := standard.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Standard.revision": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := standard.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Standard.name": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.GoverningBodyLogoURL(); ok {
+	if v, ok := _u.mutation.GoverningBodyLogoURL(); ok {
 		if err := standard.GoverningBodyLogoURLValidator(v); err != nil {
 			return &ValidationError{Name: "governing_body_logo_url", err: fmt.Errorf(`generated: validator failed for field "Standard.governing_body_logo_url": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Link(); ok {
+	if v, ok := _u.mutation.Link(); ok {
 		if err := standard.LinkValidator(v); err != nil {
 			return &ValidationError{Name: "link", err: fmt.Errorf(`generated: validator failed for field "Standard.link": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := standard.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Standard.status": %w`, err)}
 		}
@@ -1312,22 +1312,22 @@ func (suo *StandardUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suo *StandardUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardUpdateOne {
-	suo.modifiers = append(suo.modifiers, modifiers...)
-	return suo
+func (_u *StandardUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StandardUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err error) {
-	if err := suo.check(); err != nil {
+func (_u *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(standard.Table, standard.Columns, sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Standard.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, standard.FieldID)
 		for _, f := range fields {
@@ -1339,144 +1339,144 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if suo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(standard.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(standard.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if suo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(standard.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(standard.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(standard.FieldUpdatedBy, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(standard.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(standard.FieldDeletedAt, field.TypeTime, value)
 	}
-	if suo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(standard.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(standard.FieldDeletedBy, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(standard.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(standard.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := suo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standard.FieldTags, value)
 		})
 	}
-	if suo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(standard.FieldTags, field.TypeJSON)
 	}
-	if value, ok := suo.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(standard.FieldRevision, field.TypeString, value)
 	}
-	if suo.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(standard.FieldRevision, field.TypeString)
 	}
-	if suo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(standard.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := suo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(standard.FieldName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.ShortName(); ok {
+	if value, ok := _u.mutation.ShortName(); ok {
 		_spec.SetField(standard.FieldShortName, field.TypeString, value)
 	}
-	if suo.mutation.ShortNameCleared() {
+	if _u.mutation.ShortNameCleared() {
 		_spec.ClearField(standard.FieldShortName, field.TypeString)
 	}
-	if value, ok := suo.mutation.Framework(); ok {
+	if value, ok := _u.mutation.Framework(); ok {
 		_spec.SetField(standard.FieldFramework, field.TypeString, value)
 	}
-	if suo.mutation.FrameworkCleared() {
+	if _u.mutation.FrameworkCleared() {
 		_spec.ClearField(standard.FieldFramework, field.TypeString)
 	}
-	if value, ok := suo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(standard.FieldDescription, field.TypeString, value)
 	}
-	if suo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(standard.FieldDescription, field.TypeString)
 	}
-	if value, ok := suo.mutation.GoverningBodyLogoURL(); ok {
+	if value, ok := _u.mutation.GoverningBodyLogoURL(); ok {
 		_spec.SetField(standard.FieldGoverningBodyLogoURL, field.TypeString, value)
 	}
-	if suo.mutation.GoverningBodyLogoURLCleared() {
+	if _u.mutation.GoverningBodyLogoURLCleared() {
 		_spec.ClearField(standard.FieldGoverningBodyLogoURL, field.TypeString)
 	}
-	if value, ok := suo.mutation.GoverningBody(); ok {
+	if value, ok := _u.mutation.GoverningBody(); ok {
 		_spec.SetField(standard.FieldGoverningBody, field.TypeString, value)
 	}
-	if suo.mutation.GoverningBodyCleared() {
+	if _u.mutation.GoverningBodyCleared() {
 		_spec.ClearField(standard.FieldGoverningBody, field.TypeString)
 	}
-	if value, ok := suo.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(standard.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := suo.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, standard.FieldDomains, value)
 		})
 	}
-	if suo.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(standard.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := suo.mutation.Link(); ok {
+	if value, ok := _u.mutation.Link(); ok {
 		_spec.SetField(standard.FieldLink, field.TypeString, value)
 	}
-	if suo.mutation.LinkCleared() {
+	if _u.mutation.LinkCleared() {
 		_spec.ClearField(standard.FieldLink, field.TypeString)
 	}
-	if value, ok := suo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(standard.FieldStatus, field.TypeEnum, value)
 	}
-	if suo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(standard.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := suo.mutation.IsPublic(); ok {
+	if value, ok := _u.mutation.IsPublic(); ok {
 		_spec.SetField(standard.FieldIsPublic, field.TypeBool, value)
 	}
-	if suo.mutation.IsPublicCleared() {
+	if _u.mutation.IsPublicCleared() {
 		_spec.ClearField(standard.FieldIsPublic, field.TypeBool)
 	}
-	if value, ok := suo.mutation.FreeToUse(); ok {
+	if value, ok := _u.mutation.FreeToUse(); ok {
 		_spec.SetField(standard.FieldFreeToUse, field.TypeBool, value)
 	}
-	if suo.mutation.FreeToUseCleared() {
+	if _u.mutation.FreeToUseCleared() {
 		_spec.ClearField(standard.FieldFreeToUse, field.TypeBool)
 	}
-	if value, ok := suo.mutation.StandardType(); ok {
+	if value, ok := _u.mutation.StandardType(); ok {
 		_spec.SetField(standard.FieldStandardType, field.TypeString, value)
 	}
-	if suo.mutation.StandardTypeCleared() {
+	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standard.FieldStandardType, field.TypeString)
 	}
-	if value, ok := suo.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)
 	}
-	if suo.mutation.VersionCleared() {
+	if _u.mutation.VersionCleared() {
 		_spec.ClearField(standard.FieldVersion, field.TypeString)
 	}
-	if suo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1487,10 +1487,10 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1501,13 +1501,13 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Standard
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1518,10 +1518,10 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !suo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1532,13 +1532,13 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1549,19 +1549,19 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Control
+		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = suo.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)
-	_spec.AddModifiers(suo.modifiers...)
-	_node = &Standard{config: suo.config}
+	_spec.Node.Schema = _u.schemaConfig.Standard
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Standard{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{standard.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1569,6 +1569,6 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

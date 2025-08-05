@@ -28,459 +28,459 @@ type ProcedureHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ProcedureHistoryUpdate builder.
-func (phu *ProcedureHistoryUpdate) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryUpdate {
-	phu.mutation.Where(ps...)
-	return phu
+func (_u *ProcedureHistoryUpdate) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (phu *ProcedureHistoryUpdate) SetUpdatedAt(t time.Time) *ProcedureHistoryUpdate {
-	phu.mutation.SetUpdatedAt(t)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetUpdatedAt(v time.Time) *ProcedureHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (phu *ProcedureHistoryUpdate) ClearUpdatedAt() *ProcedureHistoryUpdate {
-	phu.mutation.ClearUpdatedAt()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearUpdatedAt() *ProcedureHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (phu *ProcedureHistoryUpdate) SetUpdatedBy(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetUpdatedBy(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetUpdatedBy(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableUpdatedBy(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetUpdatedBy(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableUpdatedBy(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (phu *ProcedureHistoryUpdate) ClearUpdatedBy() *ProcedureHistoryUpdate {
-	phu.mutation.ClearUpdatedBy()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearUpdatedBy() *ProcedureHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (phu *ProcedureHistoryUpdate) SetDeletedAt(t time.Time) *ProcedureHistoryUpdate {
-	phu.mutation.SetDeletedAt(t)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDeletedAt(v time.Time) *ProcedureHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ProcedureHistoryUpdate {
-	if t != nil {
-		phu.SetDeletedAt(*t)
+func (_u *ProcedureHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (phu *ProcedureHistoryUpdate) ClearDeletedAt() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDeletedAt()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDeletedAt() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (phu *ProcedureHistoryUpdate) SetDeletedBy(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDeletedBy(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDeletedBy(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableDeletedBy(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetDeletedBy(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableDeletedBy(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (phu *ProcedureHistoryUpdate) ClearDeletedBy() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDeletedBy()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDeletedBy() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (phu *ProcedureHistoryUpdate) SetTags(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetTags(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetTags(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (phu *ProcedureHistoryUpdate) AppendTags(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendTags(s)
-	return phu
+// AppendTags appends value to the "tags" field.
+func (_u *ProcedureHistoryUpdate) AppendTags(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (phu *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
-	phu.mutation.ClearTags()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (phu *ProcedureHistoryUpdate) SetRevision(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetRevision(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetRevision(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableRevision(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetRevision(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableRevision(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (phu *ProcedureHistoryUpdate) ClearRevision() *ProcedureHistoryUpdate {
-	phu.mutation.ClearRevision()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearRevision() *ProcedureHistoryUpdate {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (phu *ProcedureHistoryUpdate) SetOwnerID(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetOwnerID(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetOwnerID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableOwnerID(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetOwnerID(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableOwnerID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (phu *ProcedureHistoryUpdate) ClearOwnerID() *ProcedureHistoryUpdate {
-	phu.mutation.ClearOwnerID()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearOwnerID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (phu *ProcedureHistoryUpdate) SetName(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetName(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetName(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableName(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetName(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableName(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (phu *ProcedureHistoryUpdate) SetStatus(es enums.DocumentStatus) *ProcedureHistoryUpdate {
-	phu.mutation.SetStatus(es)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetStatus(v enums.DocumentStatus) *ProcedureHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableStatus(es *enums.DocumentStatus) *ProcedureHistoryUpdate {
-	if es != nil {
-		phu.SetStatus(*es)
+func (_u *ProcedureHistoryUpdate) SetNillableStatus(v *enums.DocumentStatus) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (phu *ProcedureHistoryUpdate) ClearStatus() *ProcedureHistoryUpdate {
-	phu.mutation.ClearStatus()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearStatus() *ProcedureHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetProcedureType sets the "procedure_type" field.
-func (phu *ProcedureHistoryUpdate) SetProcedureType(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetProcedureType(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetProcedureType(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetProcedureType(v)
+	return _u
 }
 
 // SetNillableProcedureType sets the "procedure_type" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableProcedureType(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetProcedureType(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableProcedureType(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetProcedureType(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearProcedureType clears the value of the "procedure_type" field.
-func (phu *ProcedureHistoryUpdate) ClearProcedureType() *ProcedureHistoryUpdate {
-	phu.mutation.ClearProcedureType()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearProcedureType() *ProcedureHistoryUpdate {
+	_u.mutation.ClearProcedureType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (phu *ProcedureHistoryUpdate) SetDetails(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDetails(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDetails(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableDetails(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetDetails(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableDetails(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (phu *ProcedureHistoryUpdate) ClearDetails() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDetails()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDetails() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (phu *ProcedureHistoryUpdate) SetApprovalRequired(b bool) *ProcedureHistoryUpdate {
-	phu.mutation.SetApprovalRequired(b)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetApprovalRequired(v bool) *ProcedureHistoryUpdate {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableApprovalRequired(b *bool) *ProcedureHistoryUpdate {
-	if b != nil {
-		phu.SetApprovalRequired(*b)
+func (_u *ProcedureHistoryUpdate) SetNillableApprovalRequired(v *bool) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (phu *ProcedureHistoryUpdate) ClearApprovalRequired() *ProcedureHistoryUpdate {
-	phu.mutation.ClearApprovalRequired()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearApprovalRequired() *ProcedureHistoryUpdate {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (phu *ProcedureHistoryUpdate) SetReviewDue(t time.Time) *ProcedureHistoryUpdate {
-	phu.mutation.SetReviewDue(t)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetReviewDue(v time.Time) *ProcedureHistoryUpdate {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableReviewDue(t *time.Time) *ProcedureHistoryUpdate {
-	if t != nil {
-		phu.SetReviewDue(*t)
+func (_u *ProcedureHistoryUpdate) SetNillableReviewDue(v *time.Time) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (phu *ProcedureHistoryUpdate) ClearReviewDue() *ProcedureHistoryUpdate {
-	phu.mutation.ClearReviewDue()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearReviewDue() *ProcedureHistoryUpdate {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (phu *ProcedureHistoryUpdate) SetReviewFrequency(e enums.Frequency) *ProcedureHistoryUpdate {
-	phu.mutation.SetReviewFrequency(e)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetReviewFrequency(v enums.Frequency) *ProcedureHistoryUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureHistoryUpdate {
-	if e != nil {
-		phu.SetReviewFrequency(*e)
+func (_u *ProcedureHistoryUpdate) SetNillableReviewFrequency(v *enums.Frequency) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (phu *ProcedureHistoryUpdate) ClearReviewFrequency() *ProcedureHistoryUpdate {
-	phu.mutation.ClearReviewFrequency()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearReviewFrequency() *ProcedureHistoryUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (phu *ProcedureHistoryUpdate) SetApproverID(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetApproverID(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetApproverID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableApproverID(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetApproverID(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableApproverID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (phu *ProcedureHistoryUpdate) ClearApproverID() *ProcedureHistoryUpdate {
-	phu.mutation.ClearApproverID()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearApproverID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (phu *ProcedureHistoryUpdate) SetDelegateID(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDelegateID(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDelegateID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableDelegateID(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetDelegateID(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableDelegateID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (phu *ProcedureHistoryUpdate) ClearDelegateID() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDelegateID()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDelegateID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (phu *ProcedureHistoryUpdate) SetSummary(s string) *ProcedureHistoryUpdate {
-	phu.mutation.SetSummary(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetSummary(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (phu *ProcedureHistoryUpdate) SetNillableSummary(s *string) *ProcedureHistoryUpdate {
-	if s != nil {
-		phu.SetSummary(*s)
+func (_u *ProcedureHistoryUpdate) SetNillableSummary(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (phu *ProcedureHistoryUpdate) ClearSummary() *ProcedureHistoryUpdate {
-	phu.mutation.ClearSummary()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearSummary() *ProcedureHistoryUpdate {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (phu *ProcedureHistoryUpdate) SetTagSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetTagSuggestions(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetTagSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (phu *ProcedureHistoryUpdate) AppendTagSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendTagSuggestions(s)
-	return phu
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *ProcedureHistoryUpdate) AppendTagSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (phu *ProcedureHistoryUpdate) ClearTagSuggestions() *ProcedureHistoryUpdate {
-	phu.mutation.ClearTagSuggestions()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearTagSuggestions() *ProcedureHistoryUpdate {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (phu *ProcedureHistoryUpdate) SetDismissedTagSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDismissedTagSuggestions(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDismissedTagSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (phu *ProcedureHistoryUpdate) AppendDismissedTagSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendDismissedTagSuggestions(s)
-	return phu
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *ProcedureHistoryUpdate) AppendDismissedTagSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (phu *ProcedureHistoryUpdate) ClearDismissedTagSuggestions() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDismissedTagSuggestions()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDismissedTagSuggestions() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (phu *ProcedureHistoryUpdate) SetControlSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetControlSuggestions(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetControlSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (phu *ProcedureHistoryUpdate) AppendControlSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendControlSuggestions(s)
-	return phu
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *ProcedureHistoryUpdate) AppendControlSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (phu *ProcedureHistoryUpdate) ClearControlSuggestions() *ProcedureHistoryUpdate {
-	phu.mutation.ClearControlSuggestions()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearControlSuggestions() *ProcedureHistoryUpdate {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (phu *ProcedureHistoryUpdate) SetDismissedControlSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDismissedControlSuggestions(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDismissedControlSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (phu *ProcedureHistoryUpdate) AppendDismissedControlSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendDismissedControlSuggestions(s)
-	return phu
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *ProcedureHistoryUpdate) AppendDismissedControlSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (phu *ProcedureHistoryUpdate) ClearDismissedControlSuggestions() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDismissedControlSuggestions()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDismissedControlSuggestions() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (phu *ProcedureHistoryUpdate) SetImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetImprovementSuggestions(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (phu *ProcedureHistoryUpdate) AppendImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendImprovementSuggestions(s)
-	return phu
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *ProcedureHistoryUpdate) AppendImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (phu *ProcedureHistoryUpdate) ClearImprovementSuggestions() *ProcedureHistoryUpdate {
-	phu.mutation.ClearImprovementSuggestions()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearImprovementSuggestions() *ProcedureHistoryUpdate {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (phu *ProcedureHistoryUpdate) SetDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.SetDismissedImprovementSuggestions(s)
-	return phu
+func (_u *ProcedureHistoryUpdate) SetDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (phu *ProcedureHistoryUpdate) AppendDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
-	phu.mutation.AppendDismissedImprovementSuggestions(s)
-	return phu
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *ProcedureHistoryUpdate) AppendDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (phu *ProcedureHistoryUpdate) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdate {
-	phu.mutation.ClearDismissedImprovementSuggestions()
-	return phu
+func (_u *ProcedureHistoryUpdate) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdate {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // Mutation returns the ProcedureHistoryMutation object of the builder.
-func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
-	return phu.mutation
+func (_u *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (phu *ProcedureHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := phu.defaults(); err != nil {
+func (_u *ProcedureHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, phu.sqlSave, phu.mutation, phu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (phu *ProcedureHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := phu.Save(ctx)
+func (_u *ProcedureHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -488,38 +488,38 @@ func (phu *ProcedureHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (phu *ProcedureHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := phu.Save(ctx)
+func (_u *ProcedureHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phu *ProcedureHistoryUpdate) ExecX(ctx context.Context) {
-	if err := phu.Exec(ctx); err != nil {
+func (_u *ProcedureHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (phu *ProcedureHistoryUpdate) defaults() error {
-	if _, ok := phu.mutation.UpdatedAt(); !ok && !phu.mutation.UpdatedAtCleared() {
+func (_u *ProcedureHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if procedurehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := procedurehistory.UpdateDefaultUpdatedAt()
-		phu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (phu *ProcedureHistoryUpdate) check() error {
-	if v, ok := phu.mutation.Status(); ok {
+func (_u *ProcedureHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := procedurehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := phu.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
 		}
@@ -528,206 +528,206 @@ func (phu *ProcedureHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (phu *ProcedureHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdate {
-	phu.modifiers = append(phu.modifiers, modifiers...)
-	return phu
+func (_u *ProcedureHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := phu.check(); err != nil {
-		return n, err
+func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(procedurehistory.Table, procedurehistory.Columns, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
-	if ps := phu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if phu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(procedurehistory.FieldRef, field.TypeString)
 	}
-	if phu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := phu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(procedurehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if phu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if phu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if phu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if phu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldTags, value)
 		})
 	}
-	if phu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
 	}
-	if phu.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := phu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if phu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(procedurehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := phu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := phu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 	}
-	if phu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := phu.mutation.ProcedureType(); ok {
+	if value, ok := _u.mutation.ProcedureType(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureType, field.TypeString, value)
 	}
-	if phu.mutation.ProcedureTypeCleared() {
+	if _u.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureType, field.TypeString)
 	}
-	if value, ok := phu.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
 	}
-	if phu.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedurehistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := phu.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if phu.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(procedurehistory.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := phu.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
 	}
-	if phu.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := phu.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if phu.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := phu.mutation.ApproverID(); ok {
+	if value, ok := _u.mutation.ApproverID(); ok {
 		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
 	}
-	if phu.mutation.ApproverIDCleared() {
+	if _u.mutation.ApproverIDCleared() {
 		_spec.ClearField(procedurehistory.FieldApproverID, field.TypeString)
 	}
-	if value, ok := phu.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
 	}
-	if phu.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
 	}
-	if value, ok := phu.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
 	}
-	if phu.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
 	}
-	if value, ok := phu.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldTagSuggestions, value)
 		})
 	}
-	if phu.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if phu.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldControlSuggestions, value)
 		})
 	}
-	if phu.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if phu.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldImprovementSuggestions, value)
 		})
 	}
-	if phu.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if phu.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
-	_spec.AddModifiers(phu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, phu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{procedurehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -735,8 +735,8 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	phu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ProcedureHistoryUpdateOne is the builder for updating a single ProcedureHistory entity.
@@ -749,466 +749,466 @@ type ProcedureHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (phuo *ProcedureHistoryUpdateOne) SetUpdatedAt(t time.Time) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetUpdatedAt(t)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetUpdatedAt(v time.Time) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedAt() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearUpdatedAt()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearUpdatedAt() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (phuo *ProcedureHistoryUpdateOne) SetUpdatedBy(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetUpdatedBy(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetUpdatedBy(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetUpdatedBy(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearUpdatedBy() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearUpdatedBy()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearUpdatedBy() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDeletedAt(t time.Time) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDeletedAt(t)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDeletedAt(v time.Time) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ProcedureHistoryUpdateOne {
-	if t != nil {
-		phuo.SetDeletedAt(*t)
+func (_u *ProcedureHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDeletedAt() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDeletedAt()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDeletedAt() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDeletedBy(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDeletedBy(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDeletedBy(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableDeletedBy(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDeletedBy(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableDeletedBy(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDeletedBy() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDeletedBy()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDeletedBy() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) SetTags(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetTags(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetTags(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendTags(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendTags(s)
-	return phuo
+// AppendTags appends value to the "tags" field.
+func (_u *ProcedureHistoryUpdateOne) AppendTags(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearTags()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetRevision sets the "revision" field.
-func (phuo *ProcedureHistoryUpdateOne) SetRevision(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetRevision(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetRevision(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
 }
 
 // SetNillableRevision sets the "revision" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableRevision(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetRevision(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableRevision(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearRevision clears the value of the "revision" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearRevision() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearRevision()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearRevision() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearRevision()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (phuo *ProcedureHistoryUpdateOne) SetOwnerID(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetOwnerID(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetOwnerID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableOwnerID(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetOwnerID(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableOwnerID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearOwnerID() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearOwnerID()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearOwnerID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (phuo *ProcedureHistoryUpdateOne) SetName(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetName(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetName(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableName(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetName(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableName(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (phuo *ProcedureHistoryUpdateOne) SetStatus(es enums.DocumentStatus) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetStatus(es)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetStatus(v enums.DocumentStatus) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableStatus(es *enums.DocumentStatus) *ProcedureHistoryUpdateOne {
-	if es != nil {
-		phuo.SetStatus(*es)
+func (_u *ProcedureHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearStatus() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearStatus()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearStatus() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetProcedureType sets the "procedure_type" field.
-func (phuo *ProcedureHistoryUpdateOne) SetProcedureType(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetProcedureType(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetProcedureType(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetProcedureType(v)
+	return _u
 }
 
 // SetNillableProcedureType sets the "procedure_type" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableProcedureType(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetProcedureType(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableProcedureType(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetProcedureType(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearProcedureType clears the value of the "procedure_type" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearProcedureType() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearProcedureType()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearProcedureType() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearProcedureType()
+	return _u
 }
 
 // SetDetails sets the "details" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDetails(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDetails(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDetails(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDetails(v)
+	return _u
 }
 
 // SetNillableDetails sets the "details" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableDetails(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDetails(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableDetails(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetDetails(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDetails clears the value of the "details" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDetails() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDetails()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDetails() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDetails()
+	return _u
 }
 
 // SetApprovalRequired sets the "approval_required" field.
-func (phuo *ProcedureHistoryUpdateOne) SetApprovalRequired(b bool) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetApprovalRequired(b)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetApprovalRequired(v bool) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetApprovalRequired(v)
+	return _u
 }
 
 // SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableApprovalRequired(b *bool) *ProcedureHistoryUpdateOne {
-	if b != nil {
-		phuo.SetApprovalRequired(*b)
+func (_u *ProcedureHistoryUpdateOne) SetNillableApprovalRequired(v *bool) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovalRequired(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearApprovalRequired clears the value of the "approval_required" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearApprovalRequired() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearApprovalRequired()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearApprovalRequired() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearApprovalRequired()
+	return _u
 }
 
 // SetReviewDue sets the "review_due" field.
-func (phuo *ProcedureHistoryUpdateOne) SetReviewDue(t time.Time) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetReviewDue(t)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetReviewDue(v time.Time) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetReviewDue(v)
+	return _u
 }
 
 // SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableReviewDue(t *time.Time) *ProcedureHistoryUpdateOne {
-	if t != nil {
-		phuo.SetReviewDue(*t)
+func (_u *ProcedureHistoryUpdateOne) SetNillableReviewDue(v *time.Time) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewDue(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearReviewDue clears the value of the "review_due" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearReviewDue() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearReviewDue()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearReviewDue() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearReviewDue()
+	return _u
 }
 
 // SetReviewFrequency sets the "review_frequency" field.
-func (phuo *ProcedureHistoryUpdateOne) SetReviewFrequency(e enums.Frequency) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetReviewFrequency(e)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetReviewFrequency(v enums.Frequency) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
 }
 
 // SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableReviewFrequency(e *enums.Frequency) *ProcedureHistoryUpdateOne {
-	if e != nil {
-		phuo.SetReviewFrequency(*e)
+func (_u *ProcedureHistoryUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearReviewFrequency clears the value of the "review_frequency" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearReviewFrequency() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearReviewFrequency()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearReviewFrequency() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
 }
 
 // SetApproverID sets the "approver_id" field.
-func (phuo *ProcedureHistoryUpdateOne) SetApproverID(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetApproverID(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetApproverID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetApproverID(v)
+	return _u
 }
 
 // SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableApproverID(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetApproverID(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableApproverID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetApproverID(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearApproverID clears the value of the "approver_id" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearApproverID() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearApproverID()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearApproverID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearApproverID()
+	return _u
 }
 
 // SetDelegateID sets the "delegate_id" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDelegateID(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDelegateID(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDelegateID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDelegateID(v)
+	return _u
 }
 
 // SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableDelegateID(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDelegateID(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableDelegateID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetDelegateID(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDelegateID clears the value of the "delegate_id" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDelegateID() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDelegateID()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDelegateID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDelegateID()
+	return _u
 }
 
 // SetSummary sets the "summary" field.
-func (phuo *ProcedureHistoryUpdateOne) SetSummary(s string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetSummary(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetSummary(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetSummary(v)
+	return _u
 }
 
 // SetNillableSummary sets the "summary" field if the given value is not nil.
-func (phuo *ProcedureHistoryUpdateOne) SetNillableSummary(s *string) *ProcedureHistoryUpdateOne {
-	if s != nil {
-		phuo.SetSummary(*s)
+func (_u *ProcedureHistoryUpdateOne) SetNillableSummary(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetSummary(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearSummary clears the value of the "summary" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearSummary() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearSummary()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearSummary() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearSummary()
+	return _u
 }
 
 // SetTagSuggestions sets the "tag_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) SetTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetTagSuggestions(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetTagSuggestions(v)
+	return _u
 }
 
-// AppendTagSuggestions appends s to the "tag_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendTagSuggestions(s)
-	return phuo
+// AppendTagSuggestions appends value to the "tag_suggestions" field.
+func (_u *ProcedureHistoryUpdateOne) AppendTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendTagSuggestions(v)
+	return _u
 }
 
 // ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearTagSuggestions() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearTagSuggestions()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearTagSuggestions() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearTagSuggestions()
+	return _u
 }
 
 // SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDismissedTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDismissedTagSuggestions(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDismissedTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDismissedTagSuggestions(v)
+	return _u
 }
 
-// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendDismissedTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendDismissedTagSuggestions(s)
-	return phuo
+// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
+func (_u *ProcedureHistoryUpdateOne) AppendDismissedTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendDismissedTagSuggestions(v)
+	return _u
 }
 
 // ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDismissedTagSuggestions() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDismissedTagSuggestions()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDismissedTagSuggestions() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDismissedTagSuggestions()
+	return _u
 }
 
 // SetControlSuggestions sets the "control_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) SetControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetControlSuggestions(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetControlSuggestions(v)
+	return _u
 }
 
-// AppendControlSuggestions appends s to the "control_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendControlSuggestions(s)
-	return phuo
+// AppendControlSuggestions appends value to the "control_suggestions" field.
+func (_u *ProcedureHistoryUpdateOne) AppendControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendControlSuggestions(v)
+	return _u
 }
 
 // ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearControlSuggestions() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearControlSuggestions()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearControlSuggestions() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearControlSuggestions()
+	return _u
 }
 
 // SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDismissedControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDismissedControlSuggestions(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDismissedControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDismissedControlSuggestions(v)
+	return _u
 }
 
-// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendDismissedControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendDismissedControlSuggestions(s)
-	return phuo
+// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
+func (_u *ProcedureHistoryUpdateOne) AppendDismissedControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendDismissedControlSuggestions(v)
+	return _u
 }
 
 // ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDismissedControlSuggestions() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDismissedControlSuggestions()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDismissedControlSuggestions() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDismissedControlSuggestions()
+	return _u
 }
 
 // SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) SetImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetImprovementSuggestions(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetImprovementSuggestions(v)
+	return _u
 }
 
-// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendImprovementSuggestions(s)
-	return phuo
+// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
+func (_u *ProcedureHistoryUpdateOne) AppendImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendImprovementSuggestions(v)
+	return _u
 }
 
 // ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearImprovementSuggestions() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearImprovementSuggestions()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearImprovementSuggestions() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearImprovementSuggestions()
+	return _u
 }
 
 // SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) SetDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetDismissedImprovementSuggestions(s)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) SetDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetDismissedImprovementSuggestions(v)
+	return _u
 }
 
-// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) AppendDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
-	phuo.mutation.AppendDismissedImprovementSuggestions(s)
-	return phuo
+// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
+func (_u *ProcedureHistoryUpdateOne) AppendDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
+	_u.mutation.AppendDismissedImprovementSuggestions(v)
+	return _u
 }
 
 // ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearDismissedImprovementSuggestions()
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearDismissedImprovementSuggestions()
+	return _u
 }
 
 // Mutation returns the ProcedureHistoryMutation object of the builder.
-func (phuo *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
-	return phuo.mutation
+func (_u *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ProcedureHistoryUpdate builder.
-func (phuo *ProcedureHistoryUpdateOne) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryUpdateOne {
-	phuo.mutation.Where(ps...)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (phuo *ProcedureHistoryUpdateOne) Select(field string, fields ...string) *ProcedureHistoryUpdateOne {
-	phuo.fields = append([]string{field}, fields...)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) Select(field string, fields ...string) *ProcedureHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ProcedureHistory entity.
-func (phuo *ProcedureHistoryUpdateOne) Save(ctx context.Context) (*ProcedureHistory, error) {
-	if err := phuo.defaults(); err != nil {
+func (_u *ProcedureHistoryUpdateOne) Save(ctx context.Context) (*ProcedureHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, phuo.sqlSave, phuo.mutation, phuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (phuo *ProcedureHistoryUpdateOne) SaveX(ctx context.Context) *ProcedureHistory {
-	node, err := phuo.Save(ctx)
+func (_u *ProcedureHistoryUpdateOne) SaveX(ctx context.Context) *ProcedureHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1216,38 +1216,38 @@ func (phuo *ProcedureHistoryUpdateOne) SaveX(ctx context.Context) *ProcedureHist
 }
 
 // Exec executes the query on the entity.
-func (phuo *ProcedureHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := phuo.Save(ctx)
+func (_u *ProcedureHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phuo *ProcedureHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := phuo.Exec(ctx); err != nil {
+func (_u *ProcedureHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (phuo *ProcedureHistoryUpdateOne) defaults() error {
-	if _, ok := phuo.mutation.UpdatedAt(); !ok && !phuo.mutation.UpdatedAtCleared() {
+func (_u *ProcedureHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if procedurehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := procedurehistory.UpdateDefaultUpdatedAt()
-		phuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (phuo *ProcedureHistoryUpdateOne) check() error {
-	if v, ok := phuo.mutation.Status(); ok {
+func (_u *ProcedureHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := procedurehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := phuo.mutation.ReviewFrequency(); ok {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
 		}
@@ -1256,22 +1256,22 @@ func (phuo *ProcedureHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (phuo *ProcedureHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdateOne {
-	phuo.modifiers = append(phuo.modifiers, modifiers...)
-	return phuo
+func (_u *ProcedureHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProcedureHistory, err error) {
-	if err := phuo.check(); err != nil {
+func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProcedureHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(procedurehistory.Table, procedurehistory.Columns, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
-	id, ok := phuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ProcedureHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := phuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, procedurehistory.FieldID)
 		for _, f := range fields {
@@ -1283,199 +1283,199 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 			}
 		}
 	}
-	if ps := phuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if phuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(procedurehistory.FieldRef, field.TypeString)
 	}
-	if phuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(procedurehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if phuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if phuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if phuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if phuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldTags, value)
 		})
 	}
-	if phuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.Revision(); ok {
+	if value, ok := _u.mutation.Revision(); ok {
 		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
 	}
-	if phuo.mutation.RevisionCleared() {
+	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := phuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if phuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(procedurehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := phuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 	}
-	if phuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := phuo.mutation.ProcedureType(); ok {
+	if value, ok := _u.mutation.ProcedureType(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureType, field.TypeString, value)
 	}
-	if phuo.mutation.ProcedureTypeCleared() {
+	if _u.mutation.ProcedureTypeCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureType, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Details(); ok {
+	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
 	}
-	if phuo.mutation.DetailsCleared() {
+	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedurehistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := phuo.mutation.ApprovalRequired(); ok {
+	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
 	}
-	if phuo.mutation.ApprovalRequiredCleared() {
+	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(procedurehistory.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := phuo.mutation.ReviewDue(); ok {
+	if value, ok := _u.mutation.ReviewDue(); ok {
 		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
 	}
-	if phuo.mutation.ReviewDueCleared() {
+	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.ReviewFrequency(); ok {
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
-	if phuo.mutation.ReviewFrequencyCleared() {
+	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := phuo.mutation.ApproverID(); ok {
+	if value, ok := _u.mutation.ApproverID(); ok {
 		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
 	}
-	if phuo.mutation.ApproverIDCleared() {
+	if _u.mutation.ApproverIDCleared() {
 		_spec.ClearField(procedurehistory.FieldApproverID, field.TypeString)
 	}
-	if value, ok := phuo.mutation.DelegateID(); ok {
+	if value, ok := _u.mutation.DelegateID(); ok {
 		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
 	}
-	if phuo.mutation.DelegateIDCleared() {
+	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Summary(); ok {
+	if value, ok := _u.mutation.Summary(); ok {
 		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
 	}
-	if phuo.mutation.SummaryCleared() {
+	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
 	}
-	if value, ok := phuo.mutation.TagSuggestions(); ok {
+	if value, ok := _u.mutation.TagSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldTagSuggestions, value)
 		})
 	}
-	if phuo.mutation.TagSuggestionsCleared() {
+	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.DismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedDismissedTagSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldDismissedTagSuggestions, value)
 		})
 	}
-	if phuo.mutation.DismissedTagSuggestionsCleared() {
+	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.ControlSuggestions(); ok {
+	if value, ok := _u.mutation.ControlSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldControlSuggestions, value)
 		})
 	}
-	if phuo.mutation.ControlSuggestionsCleared() {
+	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.DismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedDismissedControlSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldDismissedControlSuggestions, value)
 		})
 	}
-	if phuo.mutation.DismissedControlSuggestionsCleared() {
+	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.ImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldImprovementSuggestions, value)
 		})
 	}
-	if phuo.mutation.ImprovementSuggestionsCleared() {
+	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.DismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
 		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, procedurehistory.FieldDismissedImprovementSuggestions, value)
 		})
 	}
-	if phuo.mutation.DismissedImprovementSuggestionsCleared() {
+	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
-	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)
-	_spec.AddModifiers(phuo.modifiers...)
-	_node = &ProcedureHistory{config: phuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ProcedureHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, phuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{procedurehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1483,6 +1483,6 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 		}
 		return nil, err
 	}
-	phuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

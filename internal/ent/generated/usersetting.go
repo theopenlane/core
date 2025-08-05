@@ -132,7 +132,7 @@ func (*UserSetting) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the UserSetting fields.
-func (us *UserSetting) assignValues(columns []string, values []any) error {
+func (_m *UserSetting) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -142,49 +142,49 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				us.ID = value.String
+				_m.ID = value.String
 			}
 		case usersetting.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				us.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case usersetting.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				us.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case usersetting.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				us.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case usersetting.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				us.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case usersetting.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				us.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case usersetting.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				us.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case usersetting.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &us.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -192,68 +192,68 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				us.UserID = value.String
+				_m.UserID = value.String
 			}
 		case usersetting.FieldLocked:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field locked", values[i])
 			} else if value.Valid {
-				us.Locked = value.Bool
+				_m.Locked = value.Bool
 			}
 		case usersetting.FieldSilencedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field silenced_at", values[i])
 			} else if value.Valid {
-				us.SilencedAt = new(time.Time)
-				*us.SilencedAt = value.Time
+				_m.SilencedAt = new(time.Time)
+				*_m.SilencedAt = value.Time
 			}
 		case usersetting.FieldSuspendedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field suspended_at", values[i])
 			} else if value.Valid {
-				us.SuspendedAt = new(time.Time)
-				*us.SuspendedAt = value.Time
+				_m.SuspendedAt = new(time.Time)
+				*_m.SuspendedAt = value.Time
 			}
 		case usersetting.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				us.Status = enums.UserStatus(value.String)
+				_m.Status = enums.UserStatus(value.String)
 			}
 		case usersetting.FieldEmailConfirmed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field email_confirmed", values[i])
 			} else if value.Valid {
-				us.EmailConfirmed = value.Bool
+				_m.EmailConfirmed = value.Bool
 			}
 		case usersetting.FieldIsWebauthnAllowed:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_webauthn_allowed", values[i])
 			} else if value.Valid {
-				us.IsWebauthnAllowed = value.Bool
+				_m.IsWebauthnAllowed = value.Bool
 			}
 		case usersetting.FieldIsTfaEnabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_tfa_enabled", values[i])
 			} else if value.Valid {
-				us.IsTfaEnabled = value.Bool
+				_m.IsTfaEnabled = value.Bool
 			}
 		case usersetting.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
 			} else if value.Valid {
-				us.PhoneNumber = new(string)
-				*us.PhoneNumber = value.String
+				_m.PhoneNumber = new(string)
+				*_m.PhoneNumber = value.String
 			}
 		case usersetting.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_setting_default_org", values[i])
 			} else if value.Valid {
-				us.user_setting_default_org = new(string)
-				*us.user_setting_default_org = value.String
+				_m.user_setting_default_org = new(string)
+				*_m.user_setting_default_org = value.String
 			}
 		default:
-			us.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -261,98 +261,98 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the UserSetting.
 // This includes values selected through modifiers, order, etc.
-func (us *UserSetting) Value(name string) (ent.Value, error) {
-	return us.selectValues.Get(name)
+func (_m *UserSetting) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryUser queries the "user" edge of the UserSetting entity.
-func (us *UserSetting) QueryUser() *UserQuery {
-	return NewUserSettingClient(us.config).QueryUser(us)
+func (_m *UserSetting) QueryUser() *UserQuery {
+	return NewUserSettingClient(_m.config).QueryUser(_m)
 }
 
 // QueryDefaultOrg queries the "default_org" edge of the UserSetting entity.
-func (us *UserSetting) QueryDefaultOrg() *OrganizationQuery {
-	return NewUserSettingClient(us.config).QueryDefaultOrg(us)
+func (_m *UserSetting) QueryDefaultOrg() *OrganizationQuery {
+	return NewUserSettingClient(_m.config).QueryDefaultOrg(_m)
 }
 
 // QueryFiles queries the "files" edge of the UserSetting entity.
-func (us *UserSetting) QueryFiles() *FileQuery {
-	return NewUserSettingClient(us.config).QueryFiles(us)
+func (_m *UserSetting) QueryFiles() *FileQuery {
+	return NewUserSettingClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this UserSetting.
 // Note that you need to call UserSetting.Unwrap() before calling this method if this UserSetting
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (us *UserSetting) Update() *UserSettingUpdateOne {
-	return NewUserSettingClient(us.config).UpdateOne(us)
+func (_m *UserSetting) Update() *UserSettingUpdateOne {
+	return NewUserSettingClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the UserSetting entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (us *UserSetting) Unwrap() *UserSetting {
-	_tx, ok := us.config.driver.(*txDriver)
+func (_m *UserSetting) Unwrap() *UserSetting {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: UserSetting is not a transactional entity")
 	}
-	us.config.driver = _tx.drv
-	return us
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (us *UserSetting) String() string {
+func (_m *UserSetting) String() string {
 	var builder strings.Builder
 	builder.WriteString("UserSetting(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", us.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(us.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(us.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(us.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(us.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(us.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(us.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", us.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(us.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteString(", ")
 	builder.WriteString("locked=")
-	builder.WriteString(fmt.Sprintf("%v", us.Locked))
+	builder.WriteString(fmt.Sprintf("%v", _m.Locked))
 	builder.WriteString(", ")
-	if v := us.SilencedAt; v != nil {
+	if v := _m.SilencedAt; v != nil {
 		builder.WriteString("silenced_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := us.SuspendedAt; v != nil {
+	if v := _m.SuspendedAt; v != nil {
 		builder.WriteString("suspended_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", us.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("email_confirmed=")
-	builder.WriteString(fmt.Sprintf("%v", us.EmailConfirmed))
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailConfirmed))
 	builder.WriteString(", ")
 	builder.WriteString("is_webauthn_allowed=")
-	builder.WriteString(fmt.Sprintf("%v", us.IsWebauthnAllowed))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsWebauthnAllowed))
 	builder.WriteString(", ")
 	builder.WriteString("is_tfa_enabled=")
-	builder.WriteString(fmt.Sprintf("%v", us.IsTfaEnabled))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTfaEnabled))
 	builder.WriteString(", ")
-	if v := us.PhoneNumber; v != nil {
+	if v := _m.PhoneNumber; v != nil {
 		builder.WriteString("phone_number=")
 		builder.WriteString(*v)
 	}
@@ -362,25 +362,25 @@ func (us *UserSetting) String() string {
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (us *UserSetting) NamedFiles(name string) ([]*File, error) {
-	if us.Edges.namedFiles == nil {
+func (_m *UserSetting) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := us.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (us *UserSetting) appendNamedFiles(name string, edges ...*File) {
-	if us.Edges.namedFiles == nil {
-		us.Edges.namedFiles = make(map[string][]*File)
+func (_m *UserSetting) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		us.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		us.Edges.namedFiles[name] = append(us.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

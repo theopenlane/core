@@ -27,73 +27,73 @@ type ProgramMembershipHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ProgramMembershipHistoryUpdate builder.
-func (pmhu *ProgramMembershipHistoryUpdate) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.Where(ps...)
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pmhu *ProgramMembershipHistoryUpdate) SetUpdatedAt(t time.Time) *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.SetUpdatedAt(t)
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) SetUpdatedAt(v time.Time) *ProgramMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (pmhu *ProgramMembershipHistoryUpdate) ClearUpdatedAt() *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.ClearUpdatedAt()
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) ClearUpdatedAt() *ProgramMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pmhu *ProgramMembershipHistoryUpdate) SetUpdatedBy(s string) *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.SetUpdatedBy(s)
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) SetUpdatedBy(v string) *ProgramMembershipHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmhu *ProgramMembershipHistoryUpdate) SetNillableUpdatedBy(s *string) *ProgramMembershipHistoryUpdate {
-	if s != nil {
-		pmhu.SetUpdatedBy(*s)
+func (_u *ProgramMembershipHistoryUpdate) SetNillableUpdatedBy(v *string) *ProgramMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return pmhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (pmhu *ProgramMembershipHistoryUpdate) ClearUpdatedBy() *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.ClearUpdatedBy()
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) ClearUpdatedBy() *ProgramMembershipHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (pmhu *ProgramMembershipHistoryUpdate) SetRole(e enums.Role) *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.SetRole(e)
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) SetRole(v enums.Role) *ProgramMembershipHistoryUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (pmhu *ProgramMembershipHistoryUpdate) SetNillableRole(e *enums.Role) *ProgramMembershipHistoryUpdate {
-	if e != nil {
-		pmhu.SetRole(*e)
+func (_u *ProgramMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *ProgramMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return pmhu
+	return _u
 }
 
 // Mutation returns the ProgramMembershipHistoryMutation object of the builder.
-func (pmhu *ProgramMembershipHistoryUpdate) Mutation() *ProgramMembershipHistoryMutation {
-	return pmhu.mutation
+func (_u *ProgramMembershipHistoryUpdate) Mutation() *ProgramMembershipHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (pmhu *ProgramMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := pmhu.defaults(); err != nil {
+func (_u *ProgramMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, pmhu.sqlSave, pmhu.mutation, pmhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pmhu *ProgramMembershipHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := pmhu.Save(ctx)
+func (_u *ProgramMembershipHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -101,33 +101,33 @@ func (pmhu *ProgramMembershipHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (pmhu *ProgramMembershipHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := pmhu.Save(ctx)
+func (_u *ProgramMembershipHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmhu *ProgramMembershipHistoryUpdate) ExecX(ctx context.Context) {
-	if err := pmhu.Exec(ctx); err != nil {
+func (_u *ProgramMembershipHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pmhu *ProgramMembershipHistoryUpdate) defaults() error {
-	if _, ok := pmhu.mutation.UpdatedAt(); !ok && !pmhu.mutation.UpdatedAtCleared() {
+func (_u *ProgramMembershipHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if programmembershiphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembershiphistory.UpdateDefaultUpdatedAt()
-		pmhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pmhu *ProgramMembershipHistoryUpdate) check() error {
-	if v, ok := pmhu.mutation.Role(); ok {
+func (_u *ProgramMembershipHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := programmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "ProgramMembershipHistory.role": %w`, err)}
 		}
@@ -136,51 +136,51 @@ func (pmhu *ProgramMembershipHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (pmhu *ProgramMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipHistoryUpdate {
-	pmhu.modifiers = append(pmhu.modifiers, modifiers...)
-	return pmhu
+func (_u *ProgramMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (pmhu *ProgramMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := pmhu.check(); err != nil {
-		return n, err
+func (_u *ProgramMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(programmembershiphistory.Table, programmembershiphistory.Columns, sqlgraph.NewFieldSpec(programmembershiphistory.FieldID, field.TypeString))
-	if ps := pmhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if pmhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(programmembershiphistory.FieldRef, field.TypeString)
 	}
-	if pmhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(programmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := pmhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if pmhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if pmhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(programmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := pmhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if pmhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pmhu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = pmhu.schemaConfig.ProgramMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, pmhu.schemaConfig)
-	_spec.AddModifiers(pmhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, pmhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ProgramMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{programmembershiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -188,8 +188,8 @@ func (pmhu *ProgramMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int,
 		}
 		return 0, err
 	}
-	pmhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ProgramMembershipHistoryUpdateOne is the builder for updating a single ProgramMembershipHistory entity.
@@ -202,80 +202,80 @@ type ProgramMembershipHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetUpdatedAt(t time.Time) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.SetUpdatedAt(t)
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) SetUpdatedAt(v time.Time) *ProgramMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearUpdatedAt() *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.ClearUpdatedAt()
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) ClearUpdatedAt() *ProgramMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetUpdatedBy(s string) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.SetUpdatedBy(s)
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) SetUpdatedBy(v string) *ProgramMembershipHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ProgramMembershipHistoryUpdateOne {
-	if s != nil {
-		pmhuo.SetUpdatedBy(*s)
+func (_u *ProgramMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ProgramMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return pmhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearUpdatedBy() *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.ClearUpdatedBy()
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) ClearUpdatedBy() *ProgramMembershipHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetRole(e enums.Role) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.SetRole(e)
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) SetRole(v enums.Role) *ProgramMembershipHistoryUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableRole(e *enums.Role) *ProgramMembershipHistoryUpdateOne {
-	if e != nil {
-		pmhuo.SetRole(*e)
+func (_u *ProgramMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *ProgramMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return pmhuo
+	return _u
 }
 
 // Mutation returns the ProgramMembershipHistoryMutation object of the builder.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) Mutation() *ProgramMembershipHistoryMutation {
-	return pmhuo.mutation
+func (_u *ProgramMembershipHistoryUpdateOne) Mutation() *ProgramMembershipHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ProgramMembershipHistoryUpdate builder.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.Where(ps...)
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) Where(ps ...predicate.ProgramMembershipHistory) *ProgramMembershipHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) Select(field string, fields ...string) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.fields = append([]string{field}, fields...)
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) Select(field string, fields ...string) *ProgramMembershipHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ProgramMembershipHistory entity.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) Save(ctx context.Context) (*ProgramMembershipHistory, error) {
-	if err := pmhuo.defaults(); err != nil {
+func (_u *ProgramMembershipHistoryUpdateOne) Save(ctx context.Context) (*ProgramMembershipHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, pmhuo.sqlSave, pmhuo.mutation, pmhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SaveX(ctx context.Context) *ProgramMembershipHistory {
-	node, err := pmhuo.Save(ctx)
+func (_u *ProgramMembershipHistoryUpdateOne) SaveX(ctx context.Context) *ProgramMembershipHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -283,33 +283,33 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) SaveX(ctx context.Context) *Prog
 }
 
 // Exec executes the query on the entity.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := pmhuo.Save(ctx)
+func (_u *ProgramMembershipHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := pmhuo.Exec(ctx); err != nil {
+func (_u *ProgramMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) defaults() error {
-	if _, ok := pmhuo.mutation.UpdatedAt(); !ok && !pmhuo.mutation.UpdatedAtCleared() {
+func (_u *ProgramMembershipHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if programmembershiphistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programmembershiphistory.UpdateDefaultUpdatedAt()
-		pmhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) check() error {
-	if v, ok := pmhuo.mutation.Role(); ok {
+func (_u *ProgramMembershipHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := programmembershiphistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "ProgramMembershipHistory.role": %w`, err)}
 		}
@@ -318,22 +318,22 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.modifiers = append(pmhuo.modifiers, modifiers...)
-	return pmhuo
+func (_u *ProgramMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramMembershipHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (pmhuo *ProgramMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramMembershipHistory, err error) {
-	if err := pmhuo.check(); err != nil {
+func (_u *ProgramMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramMembershipHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(programmembershiphistory.Table, programmembershiphistory.Columns, sqlgraph.NewFieldSpec(programmembershiphistory.FieldID, field.TypeString))
-	id, ok := pmhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ProgramMembershipHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := pmhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, programmembershiphistory.FieldID)
 		for _, f := range fields {
@@ -345,44 +345,44 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_n
 			}
 		}
 	}
-	if ps := pmhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if pmhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(programmembershiphistory.FieldRef, field.TypeString)
 	}
-	if pmhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(programmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := pmhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if pmhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if pmhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(programmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := pmhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if pmhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pmhuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = pmhuo.schemaConfig.ProgramMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, pmhuo.schemaConfig)
-	_spec.AddModifiers(pmhuo.modifiers...)
-	_node = &ProgramMembershipHistory{config: pmhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ProgramMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ProgramMembershipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, pmhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{programmembershiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -390,6 +390,6 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_n
 		}
 		return nil, err
 	}
-	pmhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

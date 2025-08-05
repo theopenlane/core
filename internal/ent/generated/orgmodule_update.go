@@ -32,413 +32,413 @@ type OrgModuleUpdate struct {
 }
 
 // Where appends a list predicates to the OrgModuleUpdate builder.
-func (omu *OrgModuleUpdate) Where(ps ...predicate.OrgModule) *OrgModuleUpdate {
-	omu.mutation.Where(ps...)
-	return omu
+func (_u *OrgModuleUpdate) Where(ps ...predicate.OrgModule) *OrgModuleUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omu *OrgModuleUpdate) SetUpdatedAt(t time.Time) *OrgModuleUpdate {
-	omu.mutation.SetUpdatedAt(t)
-	return omu
+func (_u *OrgModuleUpdate) SetUpdatedAt(v time.Time) *OrgModuleUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (omu *OrgModuleUpdate) ClearUpdatedAt() *OrgModuleUpdate {
-	omu.mutation.ClearUpdatedAt()
-	return omu
+func (_u *OrgModuleUpdate) ClearUpdatedAt() *OrgModuleUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omu *OrgModuleUpdate) SetUpdatedBy(s string) *OrgModuleUpdate {
-	omu.mutation.SetUpdatedBy(s)
-	return omu
+func (_u *OrgModuleUpdate) SetUpdatedBy(v string) *OrgModuleUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableUpdatedBy(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetUpdatedBy(*s)
+func (_u *OrgModuleUpdate) SetNillableUpdatedBy(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (omu *OrgModuleUpdate) ClearUpdatedBy() *OrgModuleUpdate {
-	omu.mutation.ClearUpdatedBy()
-	return omu
+func (_u *OrgModuleUpdate) ClearUpdatedBy() *OrgModuleUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (omu *OrgModuleUpdate) SetDeletedAt(t time.Time) *OrgModuleUpdate {
-	omu.mutation.SetDeletedAt(t)
-	return omu
+func (_u *OrgModuleUpdate) SetDeletedAt(v time.Time) *OrgModuleUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableDeletedAt(t *time.Time) *OrgModuleUpdate {
-	if t != nil {
-		omu.SetDeletedAt(*t)
+func (_u *OrgModuleUpdate) SetNillableDeletedAt(v *time.Time) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (omu *OrgModuleUpdate) ClearDeletedAt() *OrgModuleUpdate {
-	omu.mutation.ClearDeletedAt()
-	return omu
+func (_u *OrgModuleUpdate) ClearDeletedAt() *OrgModuleUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (omu *OrgModuleUpdate) SetDeletedBy(s string) *OrgModuleUpdate {
-	omu.mutation.SetDeletedBy(s)
-	return omu
+func (_u *OrgModuleUpdate) SetDeletedBy(v string) *OrgModuleUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableDeletedBy(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetDeletedBy(*s)
+func (_u *OrgModuleUpdate) SetNillableDeletedBy(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (omu *OrgModuleUpdate) ClearDeletedBy() *OrgModuleUpdate {
-	omu.mutation.ClearDeletedBy()
-	return omu
+func (_u *OrgModuleUpdate) ClearDeletedBy() *OrgModuleUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (omu *OrgModuleUpdate) SetTags(s []string) *OrgModuleUpdate {
-	omu.mutation.SetTags(s)
-	return omu
+func (_u *OrgModuleUpdate) SetTags(v []string) *OrgModuleUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (omu *OrgModuleUpdate) AppendTags(s []string) *OrgModuleUpdate {
-	omu.mutation.AppendTags(s)
-	return omu
+// AppendTags appends value to the "tags" field.
+func (_u *OrgModuleUpdate) AppendTags(v []string) *OrgModuleUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (omu *OrgModuleUpdate) ClearTags() *OrgModuleUpdate {
-	omu.mutation.ClearTags()
-	return omu
+func (_u *OrgModuleUpdate) ClearTags() *OrgModuleUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (omu *OrgModuleUpdate) SetOwnerID(s string) *OrgModuleUpdate {
-	omu.mutation.SetOwnerID(s)
-	return omu
+func (_u *OrgModuleUpdate) SetOwnerID(v string) *OrgModuleUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableOwnerID(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetOwnerID(*s)
+func (_u *OrgModuleUpdate) SetNillableOwnerID(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (omu *OrgModuleUpdate) ClearOwnerID() *OrgModuleUpdate {
-	omu.mutation.ClearOwnerID()
-	return omu
+func (_u *OrgModuleUpdate) ClearOwnerID() *OrgModuleUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetModule sets the "module" field.
-func (omu *OrgModuleUpdate) SetModule(s string) *OrgModuleUpdate {
-	omu.mutation.SetModule(s)
-	return omu
+func (_u *OrgModuleUpdate) SetModule(v string) *OrgModuleUpdate {
+	_u.mutation.SetModule(v)
+	return _u
 }
 
 // SetNillableModule sets the "module" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableModule(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetModule(*s)
+func (_u *OrgModuleUpdate) SetNillableModule(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetModule(*v)
 	}
-	return omu
+	return _u
 }
 
 // SetPrice sets the "price" field.
-func (omu *OrgModuleUpdate) SetPrice(m models.Price) *OrgModuleUpdate {
-	omu.mutation.SetPrice(m)
-	return omu
+func (_u *OrgModuleUpdate) SetPrice(v models.Price) *OrgModuleUpdate {
+	_u.mutation.SetPrice(v)
+	return _u
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillablePrice(m *models.Price) *OrgModuleUpdate {
-	if m != nil {
-		omu.SetPrice(*m)
+func (_u *OrgModuleUpdate) SetNillablePrice(v *models.Price) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetPrice(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearPrice clears the value of the "price" field.
-func (omu *OrgModuleUpdate) ClearPrice() *OrgModuleUpdate {
-	omu.mutation.ClearPrice()
-	return omu
+func (_u *OrgModuleUpdate) ClearPrice() *OrgModuleUpdate {
+	_u.mutation.ClearPrice()
+	return _u
 }
 
 // SetStripePriceID sets the "stripe_price_id" field.
-func (omu *OrgModuleUpdate) SetStripePriceID(s string) *OrgModuleUpdate {
-	omu.mutation.SetStripePriceID(s)
-	return omu
+func (_u *OrgModuleUpdate) SetStripePriceID(v string) *OrgModuleUpdate {
+	_u.mutation.SetStripePriceID(v)
+	return _u
 }
 
 // SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableStripePriceID(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetStripePriceID(*s)
+func (_u *OrgModuleUpdate) SetNillableStripePriceID(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetStripePriceID(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearStripePriceID clears the value of the "stripe_price_id" field.
-func (omu *OrgModuleUpdate) ClearStripePriceID() *OrgModuleUpdate {
-	omu.mutation.ClearStripePriceID()
-	return omu
+func (_u *OrgModuleUpdate) ClearStripePriceID() *OrgModuleUpdate {
+	_u.mutation.ClearStripePriceID()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (omu *OrgModuleUpdate) SetStatus(s string) *OrgModuleUpdate {
-	omu.mutation.SetStatus(s)
-	return omu
+func (_u *OrgModuleUpdate) SetStatus(v string) *OrgModuleUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableStatus(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetStatus(*s)
+func (_u *OrgModuleUpdate) SetNillableStatus(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (omu *OrgModuleUpdate) ClearStatus() *OrgModuleUpdate {
-	omu.mutation.ClearStatus()
-	return omu
+func (_u *OrgModuleUpdate) ClearStatus() *OrgModuleUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetVisibility sets the "visibility" field.
-func (omu *OrgModuleUpdate) SetVisibility(s string) *OrgModuleUpdate {
-	omu.mutation.SetVisibility(s)
-	return omu
+func (_u *OrgModuleUpdate) SetVisibility(v string) *OrgModuleUpdate {
+	_u.mutation.SetVisibility(v)
+	return _u
 }
 
 // SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableVisibility(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetVisibility(*s)
+func (_u *OrgModuleUpdate) SetNillableVisibility(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetVisibility(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearVisibility clears the value of the "visibility" field.
-func (omu *OrgModuleUpdate) ClearVisibility() *OrgModuleUpdate {
-	omu.mutation.ClearVisibility()
-	return omu
+func (_u *OrgModuleUpdate) ClearVisibility() *OrgModuleUpdate {
+	_u.mutation.ClearVisibility()
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (omu *OrgModuleUpdate) SetActive(b bool) *OrgModuleUpdate {
-	omu.mutation.SetActive(b)
-	return omu
+func (_u *OrgModuleUpdate) SetActive(v bool) *OrgModuleUpdate {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableActive(b *bool) *OrgModuleUpdate {
-	if b != nil {
-		omu.SetActive(*b)
+func (_u *OrgModuleUpdate) SetNillableActive(v *bool) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return omu
+	return _u
 }
 
 // SetModuleLookupKey sets the "module_lookup_key" field.
-func (omu *OrgModuleUpdate) SetModuleLookupKey(s string) *OrgModuleUpdate {
-	omu.mutation.SetModuleLookupKey(s)
-	return omu
+func (_u *OrgModuleUpdate) SetModuleLookupKey(v string) *OrgModuleUpdate {
+	_u.mutation.SetModuleLookupKey(v)
+	return _u
 }
 
 // SetNillableModuleLookupKey sets the "module_lookup_key" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableModuleLookupKey(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetModuleLookupKey(*s)
+func (_u *OrgModuleUpdate) SetNillableModuleLookupKey(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetModuleLookupKey(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearModuleLookupKey clears the value of the "module_lookup_key" field.
-func (omu *OrgModuleUpdate) ClearModuleLookupKey() *OrgModuleUpdate {
-	omu.mutation.ClearModuleLookupKey()
-	return omu
+func (_u *OrgModuleUpdate) ClearModuleLookupKey() *OrgModuleUpdate {
+	_u.mutation.ClearModuleLookupKey()
+	return _u
 }
 
 // SetSubscriptionID sets the "subscription_id" field.
-func (omu *OrgModuleUpdate) SetSubscriptionID(s string) *OrgModuleUpdate {
-	omu.mutation.SetSubscriptionID(s)
-	return omu
+func (_u *OrgModuleUpdate) SetSubscriptionID(v string) *OrgModuleUpdate {
+	_u.mutation.SetSubscriptionID(v)
+	return _u
 }
 
 // SetNillableSubscriptionID sets the "subscription_id" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableSubscriptionID(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetSubscriptionID(*s)
+func (_u *OrgModuleUpdate) SetNillableSubscriptionID(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetSubscriptionID(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearSubscriptionID clears the value of the "subscription_id" field.
-func (omu *OrgModuleUpdate) ClearSubscriptionID() *OrgModuleUpdate {
-	omu.mutation.ClearSubscriptionID()
-	return omu
+func (_u *OrgModuleUpdate) ClearSubscriptionID() *OrgModuleUpdate {
+	_u.mutation.ClearSubscriptionID()
+	return _u
 }
 
 // SetPriceID sets the "price_id" field.
-func (omu *OrgModuleUpdate) SetPriceID(s string) *OrgModuleUpdate {
-	omu.mutation.SetPriceID(s)
-	return omu
+func (_u *OrgModuleUpdate) SetPriceID(v string) *OrgModuleUpdate {
+	_u.mutation.SetPriceID(v)
+	return _u
 }
 
 // SetNillablePriceID sets the "price_id" field if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillablePriceID(s *string) *OrgModuleUpdate {
-	if s != nil {
-		omu.SetPriceID(*s)
+func (_u *OrgModuleUpdate) SetNillablePriceID(v *string) *OrgModuleUpdate {
+	if v != nil {
+		_u.SetPriceID(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearPriceID clears the value of the "price_id" field.
-func (omu *OrgModuleUpdate) ClearPriceID() *OrgModuleUpdate {
-	omu.mutation.ClearPriceID()
-	return omu
+func (_u *OrgModuleUpdate) ClearPriceID() *OrgModuleUpdate {
+	_u.mutation.ClearPriceID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (omu *OrgModuleUpdate) SetOwner(o *Organization) *OrgModuleUpdate {
-	return omu.SetOwnerID(o.ID)
+func (_u *OrgModuleUpdate) SetOwner(v *Organization) *OrgModuleUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetOrgSubscriptionID sets the "org_subscription" edge to the OrgSubscription entity by ID.
-func (omu *OrgModuleUpdate) SetOrgSubscriptionID(id string) *OrgModuleUpdate {
-	omu.mutation.SetOrgSubscriptionID(id)
-	return omu
+func (_u *OrgModuleUpdate) SetOrgSubscriptionID(id string) *OrgModuleUpdate {
+	_u.mutation.SetOrgSubscriptionID(id)
+	return _u
 }
 
 // SetNillableOrgSubscriptionID sets the "org_subscription" edge to the OrgSubscription entity by ID if the given value is not nil.
-func (omu *OrgModuleUpdate) SetNillableOrgSubscriptionID(id *string) *OrgModuleUpdate {
+func (_u *OrgModuleUpdate) SetNillableOrgSubscriptionID(id *string) *OrgModuleUpdate {
 	if id != nil {
-		omu = omu.SetOrgSubscriptionID(*id)
+		_u = _u.SetOrgSubscriptionID(*id)
 	}
-	return omu
+	return _u
 }
 
 // SetOrgSubscription sets the "org_subscription" edge to the OrgSubscription entity.
-func (omu *OrgModuleUpdate) SetOrgSubscription(o *OrgSubscription) *OrgModuleUpdate {
-	return omu.SetOrgSubscriptionID(o.ID)
+func (_u *OrgModuleUpdate) SetOrgSubscription(v *OrgSubscription) *OrgModuleUpdate {
+	return _u.SetOrgSubscriptionID(v.ID)
 }
 
 // AddOrgProductIDs adds the "org_products" edge to the OrgProduct entity by IDs.
-func (omu *OrgModuleUpdate) AddOrgProductIDs(ids ...string) *OrgModuleUpdate {
-	omu.mutation.AddOrgProductIDs(ids...)
-	return omu
+func (_u *OrgModuleUpdate) AddOrgProductIDs(ids ...string) *OrgModuleUpdate {
+	_u.mutation.AddOrgProductIDs(ids...)
+	return _u
 }
 
 // AddOrgProducts adds the "org_products" edges to the OrgProduct entity.
-func (omu *OrgModuleUpdate) AddOrgProducts(o ...*OrgProduct) *OrgModuleUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdate) AddOrgProducts(v ...*OrgProduct) *OrgModuleUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omu.AddOrgProductIDs(ids...)
+	return _u.AddOrgProductIDs(ids...)
 }
 
 // AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
-func (omu *OrgModuleUpdate) AddOrgPriceIDs(ids ...string) *OrgModuleUpdate {
-	omu.mutation.AddOrgPriceIDs(ids...)
-	return omu
+func (_u *OrgModuleUpdate) AddOrgPriceIDs(ids ...string) *OrgModuleUpdate {
+	_u.mutation.AddOrgPriceIDs(ids...)
+	return _u
 }
 
 // AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
-func (omu *OrgModuleUpdate) AddOrgPrices(o ...*OrgPrice) *OrgModuleUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdate) AddOrgPrices(v ...*OrgPrice) *OrgModuleUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omu.AddOrgPriceIDs(ids...)
+	return _u.AddOrgPriceIDs(ids...)
 }
 
 // Mutation returns the OrgModuleMutation object of the builder.
-func (omu *OrgModuleUpdate) Mutation() *OrgModuleMutation {
-	return omu.mutation
+func (_u *OrgModuleUpdate) Mutation() *OrgModuleMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (omu *OrgModuleUpdate) ClearOwner() *OrgModuleUpdate {
-	omu.mutation.ClearOwner()
-	return omu
+func (_u *OrgModuleUpdate) ClearOwner() *OrgModuleUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearOrgSubscription clears the "org_subscription" edge to the OrgSubscription entity.
-func (omu *OrgModuleUpdate) ClearOrgSubscription() *OrgModuleUpdate {
-	omu.mutation.ClearOrgSubscription()
-	return omu
+func (_u *OrgModuleUpdate) ClearOrgSubscription() *OrgModuleUpdate {
+	_u.mutation.ClearOrgSubscription()
+	return _u
 }
 
 // ClearOrgProducts clears all "org_products" edges to the OrgProduct entity.
-func (omu *OrgModuleUpdate) ClearOrgProducts() *OrgModuleUpdate {
-	omu.mutation.ClearOrgProducts()
-	return omu
+func (_u *OrgModuleUpdate) ClearOrgProducts() *OrgModuleUpdate {
+	_u.mutation.ClearOrgProducts()
+	return _u
 }
 
 // RemoveOrgProductIDs removes the "org_products" edge to OrgProduct entities by IDs.
-func (omu *OrgModuleUpdate) RemoveOrgProductIDs(ids ...string) *OrgModuleUpdate {
-	omu.mutation.RemoveOrgProductIDs(ids...)
-	return omu
+func (_u *OrgModuleUpdate) RemoveOrgProductIDs(ids ...string) *OrgModuleUpdate {
+	_u.mutation.RemoveOrgProductIDs(ids...)
+	return _u
 }
 
 // RemoveOrgProducts removes "org_products" edges to OrgProduct entities.
-func (omu *OrgModuleUpdate) RemoveOrgProducts(o ...*OrgProduct) *OrgModuleUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdate) RemoveOrgProducts(v ...*OrgProduct) *OrgModuleUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omu.RemoveOrgProductIDs(ids...)
+	return _u.RemoveOrgProductIDs(ids...)
 }
 
 // ClearOrgPrices clears all "org_prices" edges to the OrgPrice entity.
-func (omu *OrgModuleUpdate) ClearOrgPrices() *OrgModuleUpdate {
-	omu.mutation.ClearOrgPrices()
-	return omu
+func (_u *OrgModuleUpdate) ClearOrgPrices() *OrgModuleUpdate {
+	_u.mutation.ClearOrgPrices()
+	return _u
 }
 
 // RemoveOrgPriceIDs removes the "org_prices" edge to OrgPrice entities by IDs.
-func (omu *OrgModuleUpdate) RemoveOrgPriceIDs(ids ...string) *OrgModuleUpdate {
-	omu.mutation.RemoveOrgPriceIDs(ids...)
-	return omu
+func (_u *OrgModuleUpdate) RemoveOrgPriceIDs(ids ...string) *OrgModuleUpdate {
+	_u.mutation.RemoveOrgPriceIDs(ids...)
+	return _u
 }
 
 // RemoveOrgPrices removes "org_prices" edges to OrgPrice entities.
-func (omu *OrgModuleUpdate) RemoveOrgPrices(o ...*OrgPrice) *OrgModuleUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdate) RemoveOrgPrices(v ...*OrgPrice) *OrgModuleUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omu.RemoveOrgPriceIDs(ids...)
+	return _u.RemoveOrgPriceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (omu *OrgModuleUpdate) Save(ctx context.Context) (int, error) {
-	if err := omu.defaults(); err != nil {
+func (_u *OrgModuleUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, omu.sqlSave, omu.mutation, omu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omu *OrgModuleUpdate) SaveX(ctx context.Context) int {
-	affected, err := omu.Save(ctx)
+func (_u *OrgModuleUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -446,33 +446,33 @@ func (omu *OrgModuleUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (omu *OrgModuleUpdate) Exec(ctx context.Context) error {
-	_, err := omu.Save(ctx)
+func (_u *OrgModuleUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omu *OrgModuleUpdate) ExecX(ctx context.Context) {
-	if err := omu.Exec(ctx); err != nil {
+func (_u *OrgModuleUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omu *OrgModuleUpdate) defaults() error {
-	if _, ok := omu.mutation.UpdatedAt(); !ok && !omu.mutation.UpdatedAtCleared() {
+func (_u *OrgModuleUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgmodule.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmodule.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmodule.UpdateDefaultUpdatedAt()
-		omu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omu *OrgModuleUpdate) check() error {
-	if v, ok := omu.mutation.OwnerID(); ok {
+func (_u *OrgModuleUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := orgmodule.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgModule.owner_id": %w`, err)}
 		}
@@ -481,107 +481,107 @@ func (omu *OrgModuleUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (omu *OrgModuleUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgModuleUpdate {
-	omu.modifiers = append(omu.modifiers, modifiers...)
-	return omu
+func (_u *OrgModuleUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgModuleUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := omu.check(); err != nil {
-		return n, err
+func (_u *OrgModuleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgmodule.Table, orgmodule.Columns, sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString))
-	if ps := omu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if omu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmodule.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := omu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmodule.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if omu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmodule.FieldUpdatedAt, field.TypeTime)
 	}
-	if omu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmodule.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := omu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmodule.FieldUpdatedBy, field.TypeString, value)
 	}
-	if omu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmodule.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmodule.FieldDeletedAt, field.TypeTime, value)
 	}
-	if omu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgmodule.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := omu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(orgmodule.FieldDeletedBy, field.TypeString, value)
 	}
-	if omu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(orgmodule.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := omu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(orgmodule.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := omu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgmodule.FieldTags, value)
 		})
 	}
-	if omu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(orgmodule.FieldTags, field.TypeJSON)
 	}
-	if value, ok := omu.mutation.Module(); ok {
+	if value, ok := _u.mutation.Module(); ok {
 		_spec.SetField(orgmodule.FieldModule, field.TypeString, value)
 	}
-	if value, ok := omu.mutation.Price(); ok {
+	if value, ok := _u.mutation.Price(); ok {
 		_spec.SetField(orgmodule.FieldPrice, field.TypeJSON, value)
 	}
-	if omu.mutation.PriceCleared() {
+	if _u.mutation.PriceCleared() {
 		_spec.ClearField(orgmodule.FieldPrice, field.TypeJSON)
 	}
-	if value, ok := omu.mutation.StripePriceID(); ok {
+	if value, ok := _u.mutation.StripePriceID(); ok {
 		_spec.SetField(orgmodule.FieldStripePriceID, field.TypeString, value)
 	}
-	if omu.mutation.StripePriceIDCleared() {
+	if _u.mutation.StripePriceIDCleared() {
 		_spec.ClearField(orgmodule.FieldStripePriceID, field.TypeString)
 	}
-	if value, ok := omu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(orgmodule.FieldStatus, field.TypeString, value)
 	}
-	if omu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(orgmodule.FieldStatus, field.TypeString)
 	}
-	if value, ok := omu.mutation.Visibility(); ok {
+	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(orgmodule.FieldVisibility, field.TypeString, value)
 	}
-	if omu.mutation.VisibilityCleared() {
+	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(orgmodule.FieldVisibility, field.TypeString)
 	}
-	if value, ok := omu.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgmodule.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := omu.mutation.ModuleLookupKey(); ok {
+	if value, ok := _u.mutation.ModuleLookupKey(); ok {
 		_spec.SetField(orgmodule.FieldModuleLookupKey, field.TypeString, value)
 	}
-	if omu.mutation.ModuleLookupKeyCleared() {
+	if _u.mutation.ModuleLookupKeyCleared() {
 		_spec.ClearField(orgmodule.FieldModuleLookupKey, field.TypeString)
 	}
-	if value, ok := omu.mutation.PriceID(); ok {
+	if value, ok := _u.mutation.PriceID(); ok {
 		_spec.SetField(orgmodule.FieldPriceID, field.TypeString, value)
 	}
-	if omu.mutation.PriceIDCleared() {
+	if _u.mutation.PriceIDCleared() {
 		_spec.ClearField(orgmodule.FieldPriceID, field.TypeString)
 	}
-	if omu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -592,10 +592,10 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -606,13 +606,13 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if omu.mutation.OrgSubscriptionCleared() {
+	if _u.mutation.OrgSubscriptionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -623,10 +623,10 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.OrgSubscriptionIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgSubscriptionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -637,13 +637,13 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if omu.mutation.OrgProductsCleared() {
+	if _u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -654,10 +654,10 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !omu.mutation.OrgProductsCleared() {
+	if nodes := _u.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !_u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -668,13 +668,13 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.OrgProductsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -685,13 +685,13 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if omu.mutation.OrgPricesCleared() {
+	if _u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -702,10 +702,10 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModuleOrgPrices
+		edge.Schema = _u.schemaConfig.OrgModuleOrgPrices
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !omu.mutation.OrgPricesCleared() {
+	if nodes := _u.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !_u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -716,13 +716,13 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModuleOrgPrices
+		edge.Schema = _u.schemaConfig.OrgModuleOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.OrgPricesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -733,16 +733,16 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgModuleOrgPrices
+		edge.Schema = _u.schemaConfig.OrgModuleOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = omu.schemaConfig.OrgModule
-	ctx = internal.NewSchemaConfigContext(ctx, omu.schemaConfig)
-	_spec.AddModifiers(omu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, omu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrgModule
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmodule.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -750,8 +750,8 @@ func (omu *OrgModuleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	omu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrgModuleUpdateOne is the builder for updating a single OrgModule entity.
@@ -764,420 +764,420 @@ type OrgModuleUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omuo *OrgModuleUpdateOne) SetUpdatedAt(t time.Time) *OrgModuleUpdateOne {
-	omuo.mutation.SetUpdatedAt(t)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetUpdatedAt(v time.Time) *OrgModuleUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (omuo *OrgModuleUpdateOne) ClearUpdatedAt() *OrgModuleUpdateOne {
-	omuo.mutation.ClearUpdatedAt()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearUpdatedAt() *OrgModuleUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omuo *OrgModuleUpdateOne) SetUpdatedBy(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetUpdatedBy(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetUpdatedBy(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableUpdatedBy(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetUpdatedBy(*s)
+func (_u *OrgModuleUpdateOne) SetNillableUpdatedBy(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (omuo *OrgModuleUpdateOne) ClearUpdatedBy() *OrgModuleUpdateOne {
-	omuo.mutation.ClearUpdatedBy()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearUpdatedBy() *OrgModuleUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (omuo *OrgModuleUpdateOne) SetDeletedAt(t time.Time) *OrgModuleUpdateOne {
-	omuo.mutation.SetDeletedAt(t)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetDeletedAt(v time.Time) *OrgModuleUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableDeletedAt(t *time.Time) *OrgModuleUpdateOne {
-	if t != nil {
-		omuo.SetDeletedAt(*t)
+func (_u *OrgModuleUpdateOne) SetNillableDeletedAt(v *time.Time) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (omuo *OrgModuleUpdateOne) ClearDeletedAt() *OrgModuleUpdateOne {
-	omuo.mutation.ClearDeletedAt()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearDeletedAt() *OrgModuleUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (omuo *OrgModuleUpdateOne) SetDeletedBy(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetDeletedBy(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetDeletedBy(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableDeletedBy(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetDeletedBy(*s)
+func (_u *OrgModuleUpdateOne) SetNillableDeletedBy(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (omuo *OrgModuleUpdateOne) ClearDeletedBy() *OrgModuleUpdateOne {
-	omuo.mutation.ClearDeletedBy()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearDeletedBy() *OrgModuleUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (omuo *OrgModuleUpdateOne) SetTags(s []string) *OrgModuleUpdateOne {
-	omuo.mutation.SetTags(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetTags(v []string) *OrgModuleUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (omuo *OrgModuleUpdateOne) AppendTags(s []string) *OrgModuleUpdateOne {
-	omuo.mutation.AppendTags(s)
-	return omuo
+// AppendTags appends value to the "tags" field.
+func (_u *OrgModuleUpdateOne) AppendTags(v []string) *OrgModuleUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (omuo *OrgModuleUpdateOne) ClearTags() *OrgModuleUpdateOne {
-	omuo.mutation.ClearTags()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearTags() *OrgModuleUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (omuo *OrgModuleUpdateOne) SetOwnerID(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetOwnerID(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetOwnerID(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableOwnerID(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetOwnerID(*s)
+func (_u *OrgModuleUpdateOne) SetNillableOwnerID(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (omuo *OrgModuleUpdateOne) ClearOwnerID() *OrgModuleUpdateOne {
-	omuo.mutation.ClearOwnerID()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearOwnerID() *OrgModuleUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetModule sets the "module" field.
-func (omuo *OrgModuleUpdateOne) SetModule(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetModule(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetModule(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetModule(v)
+	return _u
 }
 
 // SetNillableModule sets the "module" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableModule(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetModule(*s)
+func (_u *OrgModuleUpdateOne) SetNillableModule(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetModule(*v)
 	}
-	return omuo
+	return _u
 }
 
 // SetPrice sets the "price" field.
-func (omuo *OrgModuleUpdateOne) SetPrice(m models.Price) *OrgModuleUpdateOne {
-	omuo.mutation.SetPrice(m)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetPrice(v models.Price) *OrgModuleUpdateOne {
+	_u.mutation.SetPrice(v)
+	return _u
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillablePrice(m *models.Price) *OrgModuleUpdateOne {
-	if m != nil {
-		omuo.SetPrice(*m)
+func (_u *OrgModuleUpdateOne) SetNillablePrice(v *models.Price) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetPrice(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearPrice clears the value of the "price" field.
-func (omuo *OrgModuleUpdateOne) ClearPrice() *OrgModuleUpdateOne {
-	omuo.mutation.ClearPrice()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearPrice() *OrgModuleUpdateOne {
+	_u.mutation.ClearPrice()
+	return _u
 }
 
 // SetStripePriceID sets the "stripe_price_id" field.
-func (omuo *OrgModuleUpdateOne) SetStripePriceID(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetStripePriceID(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetStripePriceID(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetStripePriceID(v)
+	return _u
 }
 
 // SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableStripePriceID(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetStripePriceID(*s)
+func (_u *OrgModuleUpdateOne) SetNillableStripePriceID(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetStripePriceID(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearStripePriceID clears the value of the "stripe_price_id" field.
-func (omuo *OrgModuleUpdateOne) ClearStripePriceID() *OrgModuleUpdateOne {
-	omuo.mutation.ClearStripePriceID()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearStripePriceID() *OrgModuleUpdateOne {
+	_u.mutation.ClearStripePriceID()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (omuo *OrgModuleUpdateOne) SetStatus(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetStatus(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetStatus(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableStatus(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetStatus(*s)
+func (_u *OrgModuleUpdateOne) SetNillableStatus(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (omuo *OrgModuleUpdateOne) ClearStatus() *OrgModuleUpdateOne {
-	omuo.mutation.ClearStatus()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearStatus() *OrgModuleUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // SetVisibility sets the "visibility" field.
-func (omuo *OrgModuleUpdateOne) SetVisibility(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetVisibility(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetVisibility(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetVisibility(v)
+	return _u
 }
 
 // SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableVisibility(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetVisibility(*s)
+func (_u *OrgModuleUpdateOne) SetNillableVisibility(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetVisibility(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearVisibility clears the value of the "visibility" field.
-func (omuo *OrgModuleUpdateOne) ClearVisibility() *OrgModuleUpdateOne {
-	omuo.mutation.ClearVisibility()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearVisibility() *OrgModuleUpdateOne {
+	_u.mutation.ClearVisibility()
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (omuo *OrgModuleUpdateOne) SetActive(b bool) *OrgModuleUpdateOne {
-	omuo.mutation.SetActive(b)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetActive(v bool) *OrgModuleUpdateOne {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableActive(b *bool) *OrgModuleUpdateOne {
-	if b != nil {
-		omuo.SetActive(*b)
+func (_u *OrgModuleUpdateOne) SetNillableActive(v *bool) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return omuo
+	return _u
 }
 
 // SetModuleLookupKey sets the "module_lookup_key" field.
-func (omuo *OrgModuleUpdateOne) SetModuleLookupKey(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetModuleLookupKey(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetModuleLookupKey(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetModuleLookupKey(v)
+	return _u
 }
 
 // SetNillableModuleLookupKey sets the "module_lookup_key" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableModuleLookupKey(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetModuleLookupKey(*s)
+func (_u *OrgModuleUpdateOne) SetNillableModuleLookupKey(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetModuleLookupKey(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearModuleLookupKey clears the value of the "module_lookup_key" field.
-func (omuo *OrgModuleUpdateOne) ClearModuleLookupKey() *OrgModuleUpdateOne {
-	omuo.mutation.ClearModuleLookupKey()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearModuleLookupKey() *OrgModuleUpdateOne {
+	_u.mutation.ClearModuleLookupKey()
+	return _u
 }
 
 // SetSubscriptionID sets the "subscription_id" field.
-func (omuo *OrgModuleUpdateOne) SetSubscriptionID(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetSubscriptionID(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetSubscriptionID(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetSubscriptionID(v)
+	return _u
 }
 
 // SetNillableSubscriptionID sets the "subscription_id" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableSubscriptionID(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetSubscriptionID(*s)
+func (_u *OrgModuleUpdateOne) SetNillableSubscriptionID(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetSubscriptionID(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearSubscriptionID clears the value of the "subscription_id" field.
-func (omuo *OrgModuleUpdateOne) ClearSubscriptionID() *OrgModuleUpdateOne {
-	omuo.mutation.ClearSubscriptionID()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearSubscriptionID() *OrgModuleUpdateOne {
+	_u.mutation.ClearSubscriptionID()
+	return _u
 }
 
 // SetPriceID sets the "price_id" field.
-func (omuo *OrgModuleUpdateOne) SetPriceID(s string) *OrgModuleUpdateOne {
-	omuo.mutation.SetPriceID(s)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetPriceID(v string) *OrgModuleUpdateOne {
+	_u.mutation.SetPriceID(v)
+	return _u
 }
 
 // SetNillablePriceID sets the "price_id" field if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillablePriceID(s *string) *OrgModuleUpdateOne {
-	if s != nil {
-		omuo.SetPriceID(*s)
+func (_u *OrgModuleUpdateOne) SetNillablePriceID(v *string) *OrgModuleUpdateOne {
+	if v != nil {
+		_u.SetPriceID(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearPriceID clears the value of the "price_id" field.
-func (omuo *OrgModuleUpdateOne) ClearPriceID() *OrgModuleUpdateOne {
-	omuo.mutation.ClearPriceID()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearPriceID() *OrgModuleUpdateOne {
+	_u.mutation.ClearPriceID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (omuo *OrgModuleUpdateOne) SetOwner(o *Organization) *OrgModuleUpdateOne {
-	return omuo.SetOwnerID(o.ID)
+func (_u *OrgModuleUpdateOne) SetOwner(v *Organization) *OrgModuleUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetOrgSubscriptionID sets the "org_subscription" edge to the OrgSubscription entity by ID.
-func (omuo *OrgModuleUpdateOne) SetOrgSubscriptionID(id string) *OrgModuleUpdateOne {
-	omuo.mutation.SetOrgSubscriptionID(id)
-	return omuo
+func (_u *OrgModuleUpdateOne) SetOrgSubscriptionID(id string) *OrgModuleUpdateOne {
+	_u.mutation.SetOrgSubscriptionID(id)
+	return _u
 }
 
 // SetNillableOrgSubscriptionID sets the "org_subscription" edge to the OrgSubscription entity by ID if the given value is not nil.
-func (omuo *OrgModuleUpdateOne) SetNillableOrgSubscriptionID(id *string) *OrgModuleUpdateOne {
+func (_u *OrgModuleUpdateOne) SetNillableOrgSubscriptionID(id *string) *OrgModuleUpdateOne {
 	if id != nil {
-		omuo = omuo.SetOrgSubscriptionID(*id)
+		_u = _u.SetOrgSubscriptionID(*id)
 	}
-	return omuo
+	return _u
 }
 
 // SetOrgSubscription sets the "org_subscription" edge to the OrgSubscription entity.
-func (omuo *OrgModuleUpdateOne) SetOrgSubscription(o *OrgSubscription) *OrgModuleUpdateOne {
-	return omuo.SetOrgSubscriptionID(o.ID)
+func (_u *OrgModuleUpdateOne) SetOrgSubscription(v *OrgSubscription) *OrgModuleUpdateOne {
+	return _u.SetOrgSubscriptionID(v.ID)
 }
 
 // AddOrgProductIDs adds the "org_products" edge to the OrgProduct entity by IDs.
-func (omuo *OrgModuleUpdateOne) AddOrgProductIDs(ids ...string) *OrgModuleUpdateOne {
-	omuo.mutation.AddOrgProductIDs(ids...)
-	return omuo
+func (_u *OrgModuleUpdateOne) AddOrgProductIDs(ids ...string) *OrgModuleUpdateOne {
+	_u.mutation.AddOrgProductIDs(ids...)
+	return _u
 }
 
 // AddOrgProducts adds the "org_products" edges to the OrgProduct entity.
-func (omuo *OrgModuleUpdateOne) AddOrgProducts(o ...*OrgProduct) *OrgModuleUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdateOne) AddOrgProducts(v ...*OrgProduct) *OrgModuleUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omuo.AddOrgProductIDs(ids...)
+	return _u.AddOrgProductIDs(ids...)
 }
 
 // AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
-func (omuo *OrgModuleUpdateOne) AddOrgPriceIDs(ids ...string) *OrgModuleUpdateOne {
-	omuo.mutation.AddOrgPriceIDs(ids...)
-	return omuo
+func (_u *OrgModuleUpdateOne) AddOrgPriceIDs(ids ...string) *OrgModuleUpdateOne {
+	_u.mutation.AddOrgPriceIDs(ids...)
+	return _u
 }
 
 // AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
-func (omuo *OrgModuleUpdateOne) AddOrgPrices(o ...*OrgPrice) *OrgModuleUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdateOne) AddOrgPrices(v ...*OrgPrice) *OrgModuleUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omuo.AddOrgPriceIDs(ids...)
+	return _u.AddOrgPriceIDs(ids...)
 }
 
 // Mutation returns the OrgModuleMutation object of the builder.
-func (omuo *OrgModuleUpdateOne) Mutation() *OrgModuleMutation {
-	return omuo.mutation
+func (_u *OrgModuleUpdateOne) Mutation() *OrgModuleMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (omuo *OrgModuleUpdateOne) ClearOwner() *OrgModuleUpdateOne {
-	omuo.mutation.ClearOwner()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearOwner() *OrgModuleUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearOrgSubscription clears the "org_subscription" edge to the OrgSubscription entity.
-func (omuo *OrgModuleUpdateOne) ClearOrgSubscription() *OrgModuleUpdateOne {
-	omuo.mutation.ClearOrgSubscription()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearOrgSubscription() *OrgModuleUpdateOne {
+	_u.mutation.ClearOrgSubscription()
+	return _u
 }
 
 // ClearOrgProducts clears all "org_products" edges to the OrgProduct entity.
-func (omuo *OrgModuleUpdateOne) ClearOrgProducts() *OrgModuleUpdateOne {
-	omuo.mutation.ClearOrgProducts()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearOrgProducts() *OrgModuleUpdateOne {
+	_u.mutation.ClearOrgProducts()
+	return _u
 }
 
 // RemoveOrgProductIDs removes the "org_products" edge to OrgProduct entities by IDs.
-func (omuo *OrgModuleUpdateOne) RemoveOrgProductIDs(ids ...string) *OrgModuleUpdateOne {
-	omuo.mutation.RemoveOrgProductIDs(ids...)
-	return omuo
+func (_u *OrgModuleUpdateOne) RemoveOrgProductIDs(ids ...string) *OrgModuleUpdateOne {
+	_u.mutation.RemoveOrgProductIDs(ids...)
+	return _u
 }
 
 // RemoveOrgProducts removes "org_products" edges to OrgProduct entities.
-func (omuo *OrgModuleUpdateOne) RemoveOrgProducts(o ...*OrgProduct) *OrgModuleUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdateOne) RemoveOrgProducts(v ...*OrgProduct) *OrgModuleUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omuo.RemoveOrgProductIDs(ids...)
+	return _u.RemoveOrgProductIDs(ids...)
 }
 
 // ClearOrgPrices clears all "org_prices" edges to the OrgPrice entity.
-func (omuo *OrgModuleUpdateOne) ClearOrgPrices() *OrgModuleUpdateOne {
-	omuo.mutation.ClearOrgPrices()
-	return omuo
+func (_u *OrgModuleUpdateOne) ClearOrgPrices() *OrgModuleUpdateOne {
+	_u.mutation.ClearOrgPrices()
+	return _u
 }
 
 // RemoveOrgPriceIDs removes the "org_prices" edge to OrgPrice entities by IDs.
-func (omuo *OrgModuleUpdateOne) RemoveOrgPriceIDs(ids ...string) *OrgModuleUpdateOne {
-	omuo.mutation.RemoveOrgPriceIDs(ids...)
-	return omuo
+func (_u *OrgModuleUpdateOne) RemoveOrgPriceIDs(ids ...string) *OrgModuleUpdateOne {
+	_u.mutation.RemoveOrgPriceIDs(ids...)
+	return _u
 }
 
 // RemoveOrgPrices removes "org_prices" edges to OrgPrice entities.
-func (omuo *OrgModuleUpdateOne) RemoveOrgPrices(o ...*OrgPrice) *OrgModuleUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *OrgModuleUpdateOne) RemoveOrgPrices(v ...*OrgPrice) *OrgModuleUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omuo.RemoveOrgPriceIDs(ids...)
+	return _u.RemoveOrgPriceIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgModuleUpdate builder.
-func (omuo *OrgModuleUpdateOne) Where(ps ...predicate.OrgModule) *OrgModuleUpdateOne {
-	omuo.mutation.Where(ps...)
-	return omuo
+func (_u *OrgModuleUpdateOne) Where(ps ...predicate.OrgModule) *OrgModuleUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (omuo *OrgModuleUpdateOne) Select(field string, fields ...string) *OrgModuleUpdateOne {
-	omuo.fields = append([]string{field}, fields...)
-	return omuo
+func (_u *OrgModuleUpdateOne) Select(field string, fields ...string) *OrgModuleUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrgModule entity.
-func (omuo *OrgModuleUpdateOne) Save(ctx context.Context) (*OrgModule, error) {
-	if err := omuo.defaults(); err != nil {
+func (_u *OrgModuleUpdateOne) Save(ctx context.Context) (*OrgModule, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, omuo.sqlSave, omuo.mutation, omuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omuo *OrgModuleUpdateOne) SaveX(ctx context.Context) *OrgModule {
-	node, err := omuo.Save(ctx)
+func (_u *OrgModuleUpdateOne) SaveX(ctx context.Context) *OrgModule {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1185,33 +1185,33 @@ func (omuo *OrgModuleUpdateOne) SaveX(ctx context.Context) *OrgModule {
 }
 
 // Exec executes the query on the entity.
-func (omuo *OrgModuleUpdateOne) Exec(ctx context.Context) error {
-	_, err := omuo.Save(ctx)
+func (_u *OrgModuleUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omuo *OrgModuleUpdateOne) ExecX(ctx context.Context) {
-	if err := omuo.Exec(ctx); err != nil {
+func (_u *OrgModuleUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omuo *OrgModuleUpdateOne) defaults() error {
-	if _, ok := omuo.mutation.UpdatedAt(); !ok && !omuo.mutation.UpdatedAtCleared() {
+func (_u *OrgModuleUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgmodule.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmodule.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmodule.UpdateDefaultUpdatedAt()
-		omuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omuo *OrgModuleUpdateOne) check() error {
-	if v, ok := omuo.mutation.OwnerID(); ok {
+func (_u *OrgModuleUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := orgmodule.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgModule.owner_id": %w`, err)}
 		}
@@ -1220,22 +1220,22 @@ func (omuo *OrgModuleUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (omuo *OrgModuleUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgModuleUpdateOne {
-	omuo.modifiers = append(omuo.modifiers, modifiers...)
-	return omuo
+func (_u *OrgModuleUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgModuleUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, err error) {
-	if err := omuo.check(); err != nil {
+func (_u *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgmodule.Table, orgmodule.Columns, sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString))
-	id, ok := omuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrgModule.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := omuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgmodule.FieldID)
 		for _, f := range fields {
@@ -1247,97 +1247,97 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 			}
 		}
 	}
-	if ps := omuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if omuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmodule.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := omuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmodule.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if omuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmodule.FieldUpdatedAt, field.TypeTime)
 	}
-	if omuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmodule.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := omuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmodule.FieldUpdatedBy, field.TypeString, value)
 	}
-	if omuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmodule.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmodule.FieldDeletedAt, field.TypeTime, value)
 	}
-	if omuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(orgmodule.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := omuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(orgmodule.FieldDeletedBy, field.TypeString, value)
 	}
-	if omuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(orgmodule.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := omuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(orgmodule.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := omuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, orgmodule.FieldTags, value)
 		})
 	}
-	if omuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(orgmodule.FieldTags, field.TypeJSON)
 	}
-	if value, ok := omuo.mutation.Module(); ok {
+	if value, ok := _u.mutation.Module(); ok {
 		_spec.SetField(orgmodule.FieldModule, field.TypeString, value)
 	}
-	if value, ok := omuo.mutation.Price(); ok {
+	if value, ok := _u.mutation.Price(); ok {
 		_spec.SetField(orgmodule.FieldPrice, field.TypeJSON, value)
 	}
-	if omuo.mutation.PriceCleared() {
+	if _u.mutation.PriceCleared() {
 		_spec.ClearField(orgmodule.FieldPrice, field.TypeJSON)
 	}
-	if value, ok := omuo.mutation.StripePriceID(); ok {
+	if value, ok := _u.mutation.StripePriceID(); ok {
 		_spec.SetField(orgmodule.FieldStripePriceID, field.TypeString, value)
 	}
-	if omuo.mutation.StripePriceIDCleared() {
+	if _u.mutation.StripePriceIDCleared() {
 		_spec.ClearField(orgmodule.FieldStripePriceID, field.TypeString)
 	}
-	if value, ok := omuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(orgmodule.FieldStatus, field.TypeString, value)
 	}
-	if omuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(orgmodule.FieldStatus, field.TypeString)
 	}
-	if value, ok := omuo.mutation.Visibility(); ok {
+	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(orgmodule.FieldVisibility, field.TypeString, value)
 	}
-	if omuo.mutation.VisibilityCleared() {
+	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(orgmodule.FieldVisibility, field.TypeString)
 	}
-	if value, ok := omuo.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(orgmodule.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := omuo.mutation.ModuleLookupKey(); ok {
+	if value, ok := _u.mutation.ModuleLookupKey(); ok {
 		_spec.SetField(orgmodule.FieldModuleLookupKey, field.TypeString, value)
 	}
-	if omuo.mutation.ModuleLookupKeyCleared() {
+	if _u.mutation.ModuleLookupKeyCleared() {
 		_spec.ClearField(orgmodule.FieldModuleLookupKey, field.TypeString)
 	}
-	if value, ok := omuo.mutation.PriceID(); ok {
+	if value, ok := _u.mutation.PriceID(); ok {
 		_spec.SetField(orgmodule.FieldPriceID, field.TypeString, value)
 	}
-	if omuo.mutation.PriceIDCleared() {
+	if _u.mutation.PriceIDCleared() {
 		_spec.ClearField(orgmodule.FieldPriceID, field.TypeString)
 	}
-	if omuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1348,10 +1348,10 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1362,13 +1362,13 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if omuo.mutation.OrgSubscriptionCleared() {
+	if _u.mutation.OrgSubscriptionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1379,10 +1379,10 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.OrgSubscriptionIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgSubscriptionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1393,13 +1393,13 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModule
+		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if omuo.mutation.OrgProductsCleared() {
+	if _u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1410,10 +1410,10 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !omuo.mutation.OrgProductsCleared() {
+	if nodes := _u.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !_u.mutation.OrgProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1424,13 +1424,13 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.OrgProductsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1441,13 +1441,13 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgProduct
+		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if omuo.mutation.OrgPricesCleared() {
+	if _u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1458,10 +1458,10 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModuleOrgPrices
+		edge.Schema = _u.schemaConfig.OrgModuleOrgPrices
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !omuo.mutation.OrgPricesCleared() {
+	if nodes := _u.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !_u.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1472,13 +1472,13 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModuleOrgPrices
+		edge.Schema = _u.schemaConfig.OrgModuleOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.OrgPricesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1489,19 +1489,19 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgModuleOrgPrices
+		edge.Schema = _u.schemaConfig.OrgModuleOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = omuo.schemaConfig.OrgModule
-	ctx = internal.NewSchemaConfigContext(ctx, omuo.schemaConfig)
-	_spec.AddModifiers(omuo.modifiers...)
-	_node = &OrgModule{config: omuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrgModule
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrgModule{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, omuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmodule.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1509,6 +1509,6 @@ func (omuo *OrgModuleUpdateOne) sqlSave(ctx context.Context) (_node *OrgModule, 
 		}
 		return nil, err
 	}
-	omuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -23,194 +23,194 @@ type GroupSettingCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (gsc *GroupSettingCreate) SetCreatedAt(t time.Time) *GroupSettingCreate {
-	gsc.mutation.SetCreatedAt(t)
-	return gsc
+func (_c *GroupSettingCreate) SetCreatedAt(v time.Time) *GroupSettingCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableCreatedAt(t *time.Time) *GroupSettingCreate {
-	if t != nil {
-		gsc.SetCreatedAt(*t)
+func (_c *GroupSettingCreate) SetNillableCreatedAt(v *time.Time) *GroupSettingCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (gsc *GroupSettingCreate) SetUpdatedAt(t time.Time) *GroupSettingCreate {
-	gsc.mutation.SetUpdatedAt(t)
-	return gsc
+func (_c *GroupSettingCreate) SetUpdatedAt(v time.Time) *GroupSettingCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableUpdatedAt(t *time.Time) *GroupSettingCreate {
-	if t != nil {
-		gsc.SetUpdatedAt(*t)
+func (_c *GroupSettingCreate) SetNillableUpdatedAt(v *time.Time) *GroupSettingCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (gsc *GroupSettingCreate) SetCreatedBy(s string) *GroupSettingCreate {
-	gsc.mutation.SetCreatedBy(s)
-	return gsc
+func (_c *GroupSettingCreate) SetCreatedBy(v string) *GroupSettingCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableCreatedBy(s *string) *GroupSettingCreate {
-	if s != nil {
-		gsc.SetCreatedBy(*s)
+func (_c *GroupSettingCreate) SetNillableCreatedBy(v *string) *GroupSettingCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (gsc *GroupSettingCreate) SetUpdatedBy(s string) *GroupSettingCreate {
-	gsc.mutation.SetUpdatedBy(s)
-	return gsc
+func (_c *GroupSettingCreate) SetUpdatedBy(v string) *GroupSettingCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableUpdatedBy(s *string) *GroupSettingCreate {
-	if s != nil {
-		gsc.SetUpdatedBy(*s)
+func (_c *GroupSettingCreate) SetNillableUpdatedBy(v *string) *GroupSettingCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (gsc *GroupSettingCreate) SetDeletedAt(t time.Time) *GroupSettingCreate {
-	gsc.mutation.SetDeletedAt(t)
-	return gsc
+func (_c *GroupSettingCreate) SetDeletedAt(v time.Time) *GroupSettingCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableDeletedAt(t *time.Time) *GroupSettingCreate {
-	if t != nil {
-		gsc.SetDeletedAt(*t)
+func (_c *GroupSettingCreate) SetNillableDeletedAt(v *time.Time) *GroupSettingCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (gsc *GroupSettingCreate) SetDeletedBy(s string) *GroupSettingCreate {
-	gsc.mutation.SetDeletedBy(s)
-	return gsc
+func (_c *GroupSettingCreate) SetDeletedBy(v string) *GroupSettingCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableDeletedBy(s *string) *GroupSettingCreate {
-	if s != nil {
-		gsc.SetDeletedBy(*s)
+func (_c *GroupSettingCreate) SetNillableDeletedBy(v *string) *GroupSettingCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetVisibility sets the "visibility" field.
-func (gsc *GroupSettingCreate) SetVisibility(e enums.Visibility) *GroupSettingCreate {
-	gsc.mutation.SetVisibility(e)
-	return gsc
+func (_c *GroupSettingCreate) SetVisibility(v enums.Visibility) *GroupSettingCreate {
+	_c.mutation.SetVisibility(v)
+	return _c
 }
 
 // SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableVisibility(e *enums.Visibility) *GroupSettingCreate {
-	if e != nil {
-		gsc.SetVisibility(*e)
+func (_c *GroupSettingCreate) SetNillableVisibility(v *enums.Visibility) *GroupSettingCreate {
+	if v != nil {
+		_c.SetVisibility(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetJoinPolicy sets the "join_policy" field.
-func (gsc *GroupSettingCreate) SetJoinPolicy(ep enums.JoinPolicy) *GroupSettingCreate {
-	gsc.mutation.SetJoinPolicy(ep)
-	return gsc
+func (_c *GroupSettingCreate) SetJoinPolicy(v enums.JoinPolicy) *GroupSettingCreate {
+	_c.mutation.SetJoinPolicy(v)
+	return _c
 }
 
 // SetNillableJoinPolicy sets the "join_policy" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableJoinPolicy(ep *enums.JoinPolicy) *GroupSettingCreate {
-	if ep != nil {
-		gsc.SetJoinPolicy(*ep)
+func (_c *GroupSettingCreate) SetNillableJoinPolicy(v *enums.JoinPolicy) *GroupSettingCreate {
+	if v != nil {
+		_c.SetJoinPolicy(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetSyncToSlack sets the "sync_to_slack" field.
-func (gsc *GroupSettingCreate) SetSyncToSlack(b bool) *GroupSettingCreate {
-	gsc.mutation.SetSyncToSlack(b)
-	return gsc
+func (_c *GroupSettingCreate) SetSyncToSlack(v bool) *GroupSettingCreate {
+	_c.mutation.SetSyncToSlack(v)
+	return _c
 }
 
 // SetNillableSyncToSlack sets the "sync_to_slack" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableSyncToSlack(b *bool) *GroupSettingCreate {
-	if b != nil {
-		gsc.SetSyncToSlack(*b)
+func (_c *GroupSettingCreate) SetNillableSyncToSlack(v *bool) *GroupSettingCreate {
+	if v != nil {
+		_c.SetSyncToSlack(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetSyncToGithub sets the "sync_to_github" field.
-func (gsc *GroupSettingCreate) SetSyncToGithub(b bool) *GroupSettingCreate {
-	gsc.mutation.SetSyncToGithub(b)
-	return gsc
+func (_c *GroupSettingCreate) SetSyncToGithub(v bool) *GroupSettingCreate {
+	_c.mutation.SetSyncToGithub(v)
+	return _c
 }
 
 // SetNillableSyncToGithub sets the "sync_to_github" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableSyncToGithub(b *bool) *GroupSettingCreate {
-	if b != nil {
-		gsc.SetSyncToGithub(*b)
+func (_c *GroupSettingCreate) SetNillableSyncToGithub(v *bool) *GroupSettingCreate {
+	if v != nil {
+		_c.SetSyncToGithub(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetGroupID sets the "group_id" field.
-func (gsc *GroupSettingCreate) SetGroupID(s string) *GroupSettingCreate {
-	gsc.mutation.SetGroupID(s)
-	return gsc
+func (_c *GroupSettingCreate) SetGroupID(v string) *GroupSettingCreate {
+	_c.mutation.SetGroupID(v)
+	return _c
 }
 
 // SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableGroupID(s *string) *GroupSettingCreate {
-	if s != nil {
-		gsc.SetGroupID(*s)
+func (_c *GroupSettingCreate) SetNillableGroupID(v *string) *GroupSettingCreate {
+	if v != nil {
+		_c.SetGroupID(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (gsc *GroupSettingCreate) SetID(s string) *GroupSettingCreate {
-	gsc.mutation.SetID(s)
-	return gsc
+func (_c *GroupSettingCreate) SetID(v string) *GroupSettingCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (gsc *GroupSettingCreate) SetNillableID(s *string) *GroupSettingCreate {
-	if s != nil {
-		gsc.SetID(*s)
+func (_c *GroupSettingCreate) SetNillableID(v *string) *GroupSettingCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return gsc
+	return _c
 }
 
 // SetGroup sets the "group" edge to the Group entity.
-func (gsc *GroupSettingCreate) SetGroup(g *Group) *GroupSettingCreate {
-	return gsc.SetGroupID(g.ID)
+func (_c *GroupSettingCreate) SetGroup(v *Group) *GroupSettingCreate {
+	return _c.SetGroupID(v.ID)
 }
 
 // Mutation returns the GroupSettingMutation object of the builder.
-func (gsc *GroupSettingCreate) Mutation() *GroupSettingMutation {
-	return gsc.mutation
+func (_c *GroupSettingCreate) Mutation() *GroupSettingMutation {
+	return _c.mutation
 }
 
 // Save creates the GroupSetting in the database.
-func (gsc *GroupSettingCreate) Save(ctx context.Context) (*GroupSetting, error) {
-	if err := gsc.defaults(); err != nil {
+func (_c *GroupSettingCreate) Save(ctx context.Context) (*GroupSetting, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, gsc.sqlSave, gsc.mutation, gsc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (gsc *GroupSettingCreate) SaveX(ctx context.Context) *GroupSetting {
-	v, err := gsc.Save(ctx)
+func (_c *GroupSettingCreate) SaveX(ctx context.Context) *GroupSetting {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,74 +218,74 @@ func (gsc *GroupSettingCreate) SaveX(ctx context.Context) *GroupSetting {
 }
 
 // Exec executes the query.
-func (gsc *GroupSettingCreate) Exec(ctx context.Context) error {
-	_, err := gsc.Save(ctx)
+func (_c *GroupSettingCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gsc *GroupSettingCreate) ExecX(ctx context.Context) {
-	if err := gsc.Exec(ctx); err != nil {
+func (_c *GroupSettingCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gsc *GroupSettingCreate) defaults() error {
-	if _, ok := gsc.mutation.CreatedAt(); !ok {
+func (_c *GroupSettingCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if groupsetting.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupsetting.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupsetting.DefaultCreatedAt()
-		gsc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := gsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if groupsetting.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized groupsetting.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := groupsetting.DefaultUpdatedAt()
-		gsc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := gsc.mutation.Visibility(); !ok {
+	if _, ok := _c.mutation.Visibility(); !ok {
 		v := groupsetting.DefaultVisibility
-		gsc.mutation.SetVisibility(v)
+		_c.mutation.SetVisibility(v)
 	}
-	if _, ok := gsc.mutation.JoinPolicy(); !ok {
+	if _, ok := _c.mutation.JoinPolicy(); !ok {
 		v := groupsetting.DefaultJoinPolicy
-		gsc.mutation.SetJoinPolicy(v)
+		_c.mutation.SetJoinPolicy(v)
 	}
-	if _, ok := gsc.mutation.SyncToSlack(); !ok {
+	if _, ok := _c.mutation.SyncToSlack(); !ok {
 		v := groupsetting.DefaultSyncToSlack
-		gsc.mutation.SetSyncToSlack(v)
+		_c.mutation.SetSyncToSlack(v)
 	}
-	if _, ok := gsc.mutation.SyncToGithub(); !ok {
+	if _, ok := _c.mutation.SyncToGithub(); !ok {
 		v := groupsetting.DefaultSyncToGithub
-		gsc.mutation.SetSyncToGithub(v)
+		_c.mutation.SetSyncToGithub(v)
 	}
-	if _, ok := gsc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if groupsetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized groupsetting.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := groupsetting.DefaultID()
-		gsc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gsc *GroupSettingCreate) check() error {
-	if _, ok := gsc.mutation.Visibility(); !ok {
+func (_c *GroupSettingCreate) check() error {
+	if _, ok := _c.mutation.Visibility(); !ok {
 		return &ValidationError{Name: "visibility", err: errors.New(`generated: missing required field "GroupSetting.visibility"`)}
 	}
-	if v, ok := gsc.mutation.Visibility(); ok {
+	if v, ok := _c.mutation.Visibility(); ok {
 		if err := groupsetting.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "GroupSetting.visibility": %w`, err)}
 		}
 	}
-	if _, ok := gsc.mutation.JoinPolicy(); !ok {
+	if _, ok := _c.mutation.JoinPolicy(); !ok {
 		return &ValidationError{Name: "join_policy", err: errors.New(`generated: missing required field "GroupSetting.join_policy"`)}
 	}
-	if v, ok := gsc.mutation.JoinPolicy(); ok {
+	if v, ok := _c.mutation.JoinPolicy(); ok {
 		if err := groupsetting.JoinPolicyValidator(v); err != nil {
 			return &ValidationError{Name: "join_policy", err: fmt.Errorf(`generated: validator failed for field "GroupSetting.join_policy": %w`, err)}
 		}
@@ -293,12 +293,12 @@ func (gsc *GroupSettingCreate) check() error {
 	return nil
 }
 
-func (gsc *GroupSettingCreate) sqlSave(ctx context.Context) (*GroupSetting, error) {
-	if err := gsc.check(); err != nil {
+func (_c *GroupSettingCreate) sqlSave(ctx context.Context) (*GroupSetting, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := gsc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, gsc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -311,62 +311,62 @@ func (gsc *GroupSettingCreate) sqlSave(ctx context.Context) (*GroupSetting, erro
 			return nil, fmt.Errorf("unexpected GroupSetting.ID type: %T", _spec.ID.Value)
 		}
 	}
-	gsc.mutation.id = &_node.ID
-	gsc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec) {
+func (_c *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec) {
 	var (
-		_node = &GroupSetting{config: gsc.config}
+		_node = &GroupSetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupsetting.Table, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = gsc.schemaConfig.GroupSetting
-	if id, ok := gsc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.GroupSetting
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := gsc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(groupsetting.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := gsc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := gsc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(groupsetting.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := gsc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupsetting.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := gsc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := gsc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := gsc.mutation.Visibility(); ok {
+	if value, ok := _c.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)
 		_node.Visibility = value
 	}
-	if value, ok := gsc.mutation.JoinPolicy(); ok {
+	if value, ok := _c.mutation.JoinPolicy(); ok {
 		_spec.SetField(groupsetting.FieldJoinPolicy, field.TypeEnum, value)
 		_node.JoinPolicy = value
 	}
-	if value, ok := gsc.mutation.SyncToSlack(); ok {
+	if value, ok := _c.mutation.SyncToSlack(); ok {
 		_spec.SetField(groupsetting.FieldSyncToSlack, field.TypeBool, value)
 		_node.SyncToSlack = value
 	}
-	if value, ok := gsc.mutation.SyncToGithub(); ok {
+	if value, ok := _c.mutation.SyncToGithub(); ok {
 		_spec.SetField(groupsetting.FieldSyncToGithub, field.TypeBool, value)
 		_node.SyncToGithub = value
 	}
-	if nodes := gsc.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -377,7 +377,7 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = gsc.schemaConfig.GroupSetting
+		edge.Schema = _c.schemaConfig.GroupSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -395,16 +395,16 @@ type GroupSettingCreateBulk struct {
 }
 
 // Save creates the GroupSetting entities in the database.
-func (gscb *GroupSettingCreateBulk) Save(ctx context.Context) ([]*GroupSetting, error) {
-	if gscb.err != nil {
-		return nil, gscb.err
+func (_c *GroupSettingCreateBulk) Save(ctx context.Context) ([]*GroupSetting, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(gscb.builders))
-	nodes := make([]*GroupSetting, len(gscb.builders))
-	mutators := make([]Mutator, len(gscb.builders))
-	for i := range gscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*GroupSetting, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := gscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*GroupSettingMutation)
@@ -418,11 +418,11 @@ func (gscb *GroupSettingCreateBulk) Save(ctx context.Context) ([]*GroupSetting, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, gscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, gscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -442,7 +442,7 @@ func (gscb *GroupSettingCreateBulk) Save(ctx context.Context) ([]*GroupSetting, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, gscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -450,8 +450,8 @@ func (gscb *GroupSettingCreateBulk) Save(ctx context.Context) ([]*GroupSetting, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gscb *GroupSettingCreateBulk) SaveX(ctx context.Context) []*GroupSetting {
-	v, err := gscb.Save(ctx)
+func (_c *GroupSettingCreateBulk) SaveX(ctx context.Context) []*GroupSetting {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -459,14 +459,14 @@ func (gscb *GroupSettingCreateBulk) SaveX(ctx context.Context) []*GroupSetting {
 }
 
 // Exec executes the query.
-func (gscb *GroupSettingCreateBulk) Exec(ctx context.Context) error {
-	_, err := gscb.Save(ctx)
+func (_c *GroupSettingCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gscb *GroupSettingCreateBulk) ExecX(ctx context.Context) {
-	if err := gscb.Exec(ctx); err != nil {
+func (_c *GroupSettingCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

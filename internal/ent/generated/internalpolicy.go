@@ -270,7 +270,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the InternalPolicy fields.
-func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
+func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -280,55 +280,55 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				ip.ID = value.String
+				_m.ID = value.String
 			}
 		case internalpolicy.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ip.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case internalpolicy.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ip.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case internalpolicy.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				ip.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case internalpolicy.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				ip.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case internalpolicy.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ip.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case internalpolicy.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ip.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case internalpolicy.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				ip.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case internalpolicy.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -336,79 +336,79 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				ip.Revision = value.String
+				_m.Revision = value.String
 			}
 		case internalpolicy.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				ip.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case internalpolicy.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ip.Name = value.String
+				_m.Name = value.String
 			}
 		case internalpolicy.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ip.Status = enums.DocumentStatus(value.String)
+				_m.Status = enums.DocumentStatus(value.String)
 			}
 		case internalpolicy.FieldPolicyType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field policy_type", values[i])
 			} else if value.Valid {
-				ip.PolicyType = value.String
+				_m.PolicyType = value.String
 			}
 		case internalpolicy.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
-				ip.Details = value.String
+				_m.Details = value.String
 			}
 		case internalpolicy.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field approval_required", values[i])
 			} else if value.Valid {
-				ip.ApprovalRequired = value.Bool
+				_m.ApprovalRequired = value.Bool
 			}
 		case internalpolicy.FieldReviewDue:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field review_due", values[i])
 			} else if value.Valid {
-				ip.ReviewDue = value.Time
+				_m.ReviewDue = value.Time
 			}
 		case internalpolicy.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
-				ip.ReviewFrequency = enums.Frequency(value.String)
+				_m.ReviewFrequency = enums.Frequency(value.String)
 			}
 		case internalpolicy.FieldApproverID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
 			} else if value.Valid {
-				ip.ApproverID = value.String
+				_m.ApproverID = value.String
 			}
 		case internalpolicy.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
-				ip.DelegateID = value.String
+				_m.DelegateID = value.String
 			}
 		case internalpolicy.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
-				ip.Summary = value.String
+				_m.Summary = value.String
 			}
 		case internalpolicy.FieldTagSuggestions:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.TagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.TagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
 				}
 			}
@@ -416,7 +416,7 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.DismissedTagSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedTagSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
 				}
 			}
@@ -424,7 +424,7 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.ControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
 				}
 			}
@@ -432,7 +432,7 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.DismissedControlSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedControlSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
 				}
 			}
@@ -440,7 +440,7 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.ImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.ImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
 				}
 			}
@@ -448,12 +448,12 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.DismissedImprovementSuggestions); err != nil {
+				if err := json.Unmarshal(*value, &_m.DismissedImprovementSuggestions); err != nil {
 					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
 				}
 			}
 		default:
-			ip.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -461,416 +461,416 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the InternalPolicy.
 // This includes values selected through modifiers, order, etc.
-func (ip *InternalPolicy) Value(name string) (ent.Value, error) {
-	return ip.selectValues.Get(name)
+func (_m *InternalPolicy) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryOwner() *OrganizationQuery {
-	return NewInternalPolicyClient(ip.config).QueryOwner(ip)
+func (_m *InternalPolicy) QueryOwner() *OrganizationQuery {
+	return NewInternalPolicyClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryBlockedGroups() *GroupQuery {
-	return NewInternalPolicyClient(ip.config).QueryBlockedGroups(ip)
+func (_m *InternalPolicy) QueryBlockedGroups() *GroupQuery {
+	return NewInternalPolicyClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryEditors() *GroupQuery {
-	return NewInternalPolicyClient(ip.config).QueryEditors(ip)
+func (_m *InternalPolicy) QueryEditors() *GroupQuery {
+	return NewInternalPolicyClient(_m.config).QueryEditors(_m)
 }
 
 // QueryApprover queries the "approver" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryApprover() *GroupQuery {
-	return NewInternalPolicyClient(ip.config).QueryApprover(ip)
+func (_m *InternalPolicy) QueryApprover() *GroupQuery {
+	return NewInternalPolicyClient(_m.config).QueryApprover(_m)
 }
 
 // QueryDelegate queries the "delegate" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryDelegate() *GroupQuery {
-	return NewInternalPolicyClient(ip.config).QueryDelegate(ip)
+func (_m *InternalPolicy) QueryDelegate() *GroupQuery {
+	return NewInternalPolicyClient(_m.config).QueryDelegate(_m)
 }
 
 // QueryControlObjectives queries the "control_objectives" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryControlObjectives() *ControlObjectiveQuery {
-	return NewInternalPolicyClient(ip.config).QueryControlObjectives(ip)
+func (_m *InternalPolicy) QueryControlObjectives() *ControlObjectiveQuery {
+	return NewInternalPolicyClient(_m.config).QueryControlObjectives(_m)
 }
 
 // QueryControls queries the "controls" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryControls() *ControlQuery {
-	return NewInternalPolicyClient(ip.config).QueryControls(ip)
+func (_m *InternalPolicy) QueryControls() *ControlQuery {
+	return NewInternalPolicyClient(_m.config).QueryControls(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QuerySubcontrols() *SubcontrolQuery {
-	return NewInternalPolicyClient(ip.config).QuerySubcontrols(ip)
+func (_m *InternalPolicy) QuerySubcontrols() *SubcontrolQuery {
+	return NewInternalPolicyClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryProcedures queries the "procedures" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryProcedures() *ProcedureQuery {
-	return NewInternalPolicyClient(ip.config).QueryProcedures(ip)
+func (_m *InternalPolicy) QueryProcedures() *ProcedureQuery {
+	return NewInternalPolicyClient(_m.config).QueryProcedures(_m)
 }
 
 // QueryNarratives queries the "narratives" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryNarratives() *NarrativeQuery {
-	return NewInternalPolicyClient(ip.config).QueryNarratives(ip)
+func (_m *InternalPolicy) QueryNarratives() *NarrativeQuery {
+	return NewInternalPolicyClient(_m.config).QueryNarratives(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryTasks() *TaskQuery {
-	return NewInternalPolicyClient(ip.config).QueryTasks(ip)
+func (_m *InternalPolicy) QueryTasks() *TaskQuery {
+	return NewInternalPolicyClient(_m.config).QueryTasks(_m)
 }
 
 // QueryRisks queries the "risks" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryRisks() *RiskQuery {
-	return NewInternalPolicyClient(ip.config).QueryRisks(ip)
+func (_m *InternalPolicy) QueryRisks() *RiskQuery {
+	return NewInternalPolicyClient(_m.config).QueryRisks(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the InternalPolicy entity.
-func (ip *InternalPolicy) QueryPrograms() *ProgramQuery {
-	return NewInternalPolicyClient(ip.config).QueryPrograms(ip)
+func (_m *InternalPolicy) QueryPrograms() *ProgramQuery {
+	return NewInternalPolicyClient(_m.config).QueryPrograms(_m)
 }
 
 // Update returns a builder for updating this InternalPolicy.
 // Note that you need to call InternalPolicy.Unwrap() before calling this method if this InternalPolicy
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ip *InternalPolicy) Update() *InternalPolicyUpdateOne {
-	return NewInternalPolicyClient(ip.config).UpdateOne(ip)
+func (_m *InternalPolicy) Update() *InternalPolicyUpdateOne {
+	return NewInternalPolicyClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the InternalPolicy entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ip *InternalPolicy) Unwrap() *InternalPolicy {
-	_tx, ok := ip.config.driver.(*txDriver)
+func (_m *InternalPolicy) Unwrap() *InternalPolicy {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: InternalPolicy is not a transactional entity")
 	}
-	ip.config.driver = _tx.drv
-	return ip
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ip *InternalPolicy) String() string {
+func (_m *InternalPolicy) String() string {
 	var builder strings.Builder
 	builder.WriteString("InternalPolicy(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ip.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(ip.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ip.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(ip.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(ip.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(ip.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(ip.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(ip.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", ip.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(ip.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(ip.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ip.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ip.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("policy_type=")
-	builder.WriteString(ip.PolicyType)
+	builder.WriteString(_m.PolicyType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
-	builder.WriteString(ip.Details)
+	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
-	builder.WriteString(fmt.Sprintf("%v", ip.ApprovalRequired))
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
 	builder.WriteString(", ")
 	builder.WriteString("review_due=")
-	builder.WriteString(ip.ReviewDue.Format(time.ANSIC))
+	builder.WriteString(_m.ReviewDue.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
-	builder.WriteString(fmt.Sprintf("%v", ip.ReviewFrequency))
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
 	builder.WriteString(", ")
 	builder.WriteString("approver_id=")
-	builder.WriteString(ip.ApproverID)
+	builder.WriteString(_m.ApproverID)
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
-	builder.WriteString(ip.DelegateID)
+	builder.WriteString(_m.DelegateID)
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
-	builder.WriteString(ip.Summary)
+	builder.WriteString(_m.Summary)
 	builder.WriteString(", ")
 	builder.WriteString("tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ip.TagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_tag_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ip.DismissedTagSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedTagSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ip.ControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_control_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ip.DismissedControlSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedControlSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ip.ImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("dismissed_improvement_suggestions=")
-	builder.WriteString(fmt.Sprintf("%v", ip.DismissedImprovementSuggestions))
+	builder.WriteString(fmt.Sprintf("%v", _m.DismissedImprovementSuggestions))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedBlockedGroups(name string) ([]*Group, error) {
-	if ip.Edges.namedBlockedGroups == nil {
+func (_m *InternalPolicy) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if ip.Edges.namedBlockedGroups == nil {
-		ip.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *InternalPolicy) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		ip.Edges.namedBlockedGroups[name] = append(ip.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedEditors(name string) ([]*Group, error) {
-	if ip.Edges.namedEditors == nil {
+func (_m *InternalPolicy) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedEditors(name string, edges ...*Group) {
-	if ip.Edges.namedEditors == nil {
-		ip.Edges.namedEditors = make(map[string][]*Group)
+func (_m *InternalPolicy) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		ip.Edges.namedEditors[name] = append(ip.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedControlObjectives returns the ControlObjectives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedControlObjectives(name string) ([]*ControlObjective, error) {
-	if ip.Edges.namedControlObjectives == nil {
+func (_m *InternalPolicy) NamedControlObjectives(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedControlObjectives[name]
+	nodes, ok := _m.Edges.namedControlObjectives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
-	if ip.Edges.namedControlObjectives == nil {
-		ip.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
+func (_m *InternalPolicy) appendNamedControlObjectives(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectives == nil {
+		_m.Edges.namedControlObjectives = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedControlObjectives[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
-		ip.Edges.namedControlObjectives[name] = append(ip.Edges.namedControlObjectives[name], edges...)
+		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
 	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedControls(name string) ([]*Control, error) {
-	if ip.Edges.namedControls == nil {
+func (_m *InternalPolicy) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedControls[name]
+	nodes, ok := _m.Edges.namedControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedControls(name string, edges ...*Control) {
-	if ip.Edges.namedControls == nil {
-		ip.Edges.namedControls = make(map[string][]*Control)
+func (_m *InternalPolicy) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedControls[name] = []*Control{}
+		_m.Edges.namedControls[name] = []*Control{}
 	} else {
-		ip.Edges.namedControls[name] = append(ip.Edges.namedControls[name], edges...)
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 
 // NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if ip.Edges.namedSubcontrols == nil {
+func (_m *InternalPolicy) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedSubcontrols[name]
+	nodes, ok := _m.Edges.namedSubcontrols[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if ip.Edges.namedSubcontrols == nil {
-		ip.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (_m *InternalPolicy) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
-		ip.Edges.namedSubcontrols[name] = append(ip.Edges.namedSubcontrols[name], edges...)
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
 // NamedProcedures returns the Procedures named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedProcedures(name string) ([]*Procedure, error) {
-	if ip.Edges.namedProcedures == nil {
+func (_m *InternalPolicy) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedProcedures[name]
+	nodes, ok := _m.Edges.namedProcedures[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedProcedures(name string, edges ...*Procedure) {
-	if ip.Edges.namedProcedures == nil {
-		ip.Edges.namedProcedures = make(map[string][]*Procedure)
+func (_m *InternalPolicy) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedProcedures[name] = []*Procedure{}
+		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
-		ip.Edges.namedProcedures[name] = append(ip.Edges.namedProcedures[name], edges...)
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
 // NamedNarratives returns the Narratives named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedNarratives(name string) ([]*Narrative, error) {
-	if ip.Edges.namedNarratives == nil {
+func (_m *InternalPolicy) NamedNarratives(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarratives == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedNarratives[name]
+	nodes, ok := _m.Edges.namedNarratives[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedNarratives(name string, edges ...*Narrative) {
-	if ip.Edges.namedNarratives == nil {
-		ip.Edges.namedNarratives = make(map[string][]*Narrative)
+func (_m *InternalPolicy) appendNamedNarratives(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarratives == nil {
+		_m.Edges.namedNarratives = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedNarratives[name] = []*Narrative{}
+		_m.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
-		ip.Edges.namedNarratives[name] = append(ip.Edges.namedNarratives[name], edges...)
+		_m.Edges.namedNarratives[name] = append(_m.Edges.namedNarratives[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedTasks(name string) ([]*Task, error) {
-	if ip.Edges.namedTasks == nil {
+func (_m *InternalPolicy) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedTasks(name string, edges ...*Task) {
-	if ip.Edges.namedTasks == nil {
-		ip.Edges.namedTasks = make(map[string][]*Task)
+func (_m *InternalPolicy) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		ip.Edges.namedTasks[name] = append(ip.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedRisks(name string) ([]*Risk, error) {
-	if ip.Edges.namedRisks == nil {
+func (_m *InternalPolicy) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedRisks[name]
+	nodes, ok := _m.Edges.namedRisks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedRisks(name string, edges ...*Risk) {
-	if ip.Edges.namedRisks == nil {
-		ip.Edges.namedRisks = make(map[string][]*Risk)
+func (_m *InternalPolicy) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedRisks[name] = []*Risk{}
+		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
-		ip.Edges.namedRisks[name] = append(ip.Edges.namedRisks[name], edges...)
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (ip *InternalPolicy) NamedPrograms(name string) ([]*Program, error) {
-	if ip.Edges.namedPrograms == nil {
+func (_m *InternalPolicy) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := ip.Edges.namedPrograms[name]
+	nodes, ok := _m.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (ip *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
-	if ip.Edges.namedPrograms == nil {
-		ip.Edges.namedPrograms = make(map[string][]*Program)
+func (_m *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		ip.Edges.namedPrograms[name] = []*Program{}
+		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		ip.Edges.namedPrograms[name] = append(ip.Edges.namedPrograms[name], edges...)
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
 	}
 }
 

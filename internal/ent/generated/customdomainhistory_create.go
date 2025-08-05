@@ -22,199 +22,199 @@ type CustomDomainHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (cdhc *CustomDomainHistoryCreate) SetHistoryTime(t time.Time) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetHistoryTime(t)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetHistoryTime(v time.Time) *CustomDomainHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableHistoryTime(t *time.Time) *CustomDomainHistoryCreate {
-	if t != nil {
-		cdhc.SetHistoryTime(*t)
+func (_c *CustomDomainHistoryCreate) SetNillableHistoryTime(v *time.Time) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (cdhc *CustomDomainHistoryCreate) SetRef(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetRef(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetRef(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableRef(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetRef(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableRef(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (cdhc *CustomDomainHistoryCreate) SetOperation(ht history.OpType) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetOperation(ht)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetOperation(v history.OpType) *CustomDomainHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cdhc *CustomDomainHistoryCreate) SetCreatedAt(t time.Time) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetCreatedAt(t)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetCreatedAt(v time.Time) *CustomDomainHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableCreatedAt(t *time.Time) *CustomDomainHistoryCreate {
-	if t != nil {
-		cdhc.SetCreatedAt(*t)
+func (_c *CustomDomainHistoryCreate) SetNillableCreatedAt(v *time.Time) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cdhc *CustomDomainHistoryCreate) SetUpdatedAt(t time.Time) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetUpdatedAt(t)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetUpdatedAt(v time.Time) *CustomDomainHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableUpdatedAt(t *time.Time) *CustomDomainHistoryCreate {
-	if t != nil {
-		cdhc.SetUpdatedAt(*t)
+func (_c *CustomDomainHistoryCreate) SetNillableUpdatedAt(v *time.Time) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (cdhc *CustomDomainHistoryCreate) SetCreatedBy(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetCreatedBy(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetCreatedBy(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableCreatedBy(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetCreatedBy(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableCreatedBy(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (cdhc *CustomDomainHistoryCreate) SetUpdatedBy(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetUpdatedBy(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetUpdatedBy(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableUpdatedBy(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetUpdatedBy(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableUpdatedBy(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (cdhc *CustomDomainHistoryCreate) SetDeletedAt(t time.Time) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetDeletedAt(t)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetDeletedAt(v time.Time) *CustomDomainHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableDeletedAt(t *time.Time) *CustomDomainHistoryCreate {
-	if t != nil {
-		cdhc.SetDeletedAt(*t)
+func (_c *CustomDomainHistoryCreate) SetNillableDeletedAt(v *time.Time) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (cdhc *CustomDomainHistoryCreate) SetDeletedBy(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetDeletedBy(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetDeletedBy(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableDeletedBy(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetDeletedBy(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableDeletedBy(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (cdhc *CustomDomainHistoryCreate) SetTags(s []string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetTags(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetTags(v []string) *CustomDomainHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (cdhc *CustomDomainHistoryCreate) SetOwnerID(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetOwnerID(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetOwnerID(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableOwnerID(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetOwnerID(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableOwnerID(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetCnameRecord sets the "cname_record" field.
-func (cdhc *CustomDomainHistoryCreate) SetCnameRecord(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetCnameRecord(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetCnameRecord(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetCnameRecord(v)
+	return _c
 }
 
 // SetMappableDomainID sets the "mappable_domain_id" field.
-func (cdhc *CustomDomainHistoryCreate) SetMappableDomainID(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetMappableDomainID(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetMappableDomainID(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetMappableDomainID(v)
+	return _c
 }
 
 // SetDNSVerificationID sets the "dns_verification_id" field.
-func (cdhc *CustomDomainHistoryCreate) SetDNSVerificationID(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetDNSVerificationID(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetDNSVerificationID(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetDNSVerificationID(v)
+	return _c
 }
 
 // SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableDNSVerificationID(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetDNSVerificationID(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableDNSVerificationID(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetDNSVerificationID(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cdhc *CustomDomainHistoryCreate) SetID(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetID(s)
-	return cdhc
+func (_c *CustomDomainHistoryCreate) SetID(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableID(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetID(*s)
+func (_c *CustomDomainHistoryCreate) SetNillableID(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cdhc
+	return _c
 }
 
 // Mutation returns the CustomDomainHistoryMutation object of the builder.
-func (cdhc *CustomDomainHistoryCreate) Mutation() *CustomDomainHistoryMutation {
-	return cdhc.mutation
+func (_c *CustomDomainHistoryCreate) Mutation() *CustomDomainHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the CustomDomainHistory in the database.
-func (cdhc *CustomDomainHistoryCreate) Save(ctx context.Context) (*CustomDomainHistory, error) {
-	if err := cdhc.defaults(); err != nil {
+func (_c *CustomDomainHistoryCreate) Save(ctx context.Context) (*CustomDomainHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, cdhc.sqlSave, cdhc.mutation, cdhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cdhc *CustomDomainHistoryCreate) SaveX(ctx context.Context) *CustomDomainHistory {
-	v, err := cdhc.Save(ctx)
+func (_c *CustomDomainHistoryCreate) SaveX(ctx context.Context) *CustomDomainHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,83 +222,83 @@ func (cdhc *CustomDomainHistoryCreate) SaveX(ctx context.Context) *CustomDomainH
 }
 
 // Exec executes the query.
-func (cdhc *CustomDomainHistoryCreate) Exec(ctx context.Context) error {
-	_, err := cdhc.Save(ctx)
+func (_c *CustomDomainHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdhc *CustomDomainHistoryCreate) ExecX(ctx context.Context) {
-	if err := cdhc.Exec(ctx); err != nil {
+func (_c *CustomDomainHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cdhc *CustomDomainHistoryCreate) defaults() error {
-	if _, ok := cdhc.mutation.HistoryTime(); !ok {
+func (_c *CustomDomainHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if customdomainhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := customdomainhistory.DefaultHistoryTime()
-		cdhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := cdhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if customdomainhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := customdomainhistory.DefaultCreatedAt()
-		cdhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cdhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if customdomainhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := customdomainhistory.DefaultUpdatedAt()
-		cdhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := cdhc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := customdomainhistory.DefaultTags
-		cdhc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := cdhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if customdomainhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := customdomainhistory.DefaultID()
-		cdhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cdhc *CustomDomainHistoryCreate) check() error {
-	if _, ok := cdhc.mutation.HistoryTime(); !ok {
+func (_c *CustomDomainHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "CustomDomainHistory.history_time"`)}
 	}
-	if _, ok := cdhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "CustomDomainHistory.operation"`)}
 	}
-	if v, ok := cdhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := customdomainhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "CustomDomainHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := cdhc.mutation.CnameRecord(); !ok {
+	if _, ok := _c.mutation.CnameRecord(); !ok {
 		return &ValidationError{Name: "cname_record", err: errors.New(`generated: missing required field "CustomDomainHistory.cname_record"`)}
 	}
-	if _, ok := cdhc.mutation.MappableDomainID(); !ok {
+	if _, ok := _c.mutation.MappableDomainID(); !ok {
 		return &ValidationError{Name: "mappable_domain_id", err: errors.New(`generated: missing required field "CustomDomainHistory.mappable_domain_id"`)}
 	}
 	return nil
 }
 
-func (cdhc *CustomDomainHistoryCreate) sqlSave(ctx context.Context) (*CustomDomainHistory, error) {
-	if err := cdhc.check(); err != nil {
+func (_c *CustomDomainHistoryCreate) sqlSave(ctx context.Context) (*CustomDomainHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cdhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cdhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -311,74 +311,74 @@ func (cdhc *CustomDomainHistoryCreate) sqlSave(ctx context.Context) (*CustomDoma
 			return nil, fmt.Errorf("unexpected CustomDomainHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	cdhc.mutation.id = &_node.ID
-	cdhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cdhc *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgraph.CreateSpec) {
+func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CustomDomainHistory{config: cdhc.config}
+		_node = &CustomDomainHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(customdomainhistory.Table, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = cdhc.schemaConfig.CustomDomainHistory
-	if id, ok := cdhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.CustomDomainHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cdhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(customdomainhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := cdhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(customdomainhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := cdhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(customdomainhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := cdhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(customdomainhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cdhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(customdomainhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cdhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(customdomainhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := cdhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(customdomainhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := cdhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(customdomainhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := cdhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(customdomainhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := cdhc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(customdomainhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := cdhc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(customdomainhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := cdhc.mutation.CnameRecord(); ok {
+	if value, ok := _c.mutation.CnameRecord(); ok {
 		_spec.SetField(customdomainhistory.FieldCnameRecord, field.TypeString, value)
 		_node.CnameRecord = value
 	}
-	if value, ok := cdhc.mutation.MappableDomainID(); ok {
+	if value, ok := _c.mutation.MappableDomainID(); ok {
 		_spec.SetField(customdomainhistory.FieldMappableDomainID, field.TypeString, value)
 		_node.MappableDomainID = value
 	}
-	if value, ok := cdhc.mutation.DNSVerificationID(); ok {
+	if value, ok := _c.mutation.DNSVerificationID(); ok {
 		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
 		_node.DNSVerificationID = value
 	}
@@ -393,16 +393,16 @@ type CustomDomainHistoryCreateBulk struct {
 }
 
 // Save creates the CustomDomainHistory entities in the database.
-func (cdhcb *CustomDomainHistoryCreateBulk) Save(ctx context.Context) ([]*CustomDomainHistory, error) {
-	if cdhcb.err != nil {
-		return nil, cdhcb.err
+func (_c *CustomDomainHistoryCreateBulk) Save(ctx context.Context) ([]*CustomDomainHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(cdhcb.builders))
-	nodes := make([]*CustomDomainHistory, len(cdhcb.builders))
-	mutators := make([]Mutator, len(cdhcb.builders))
-	for i := range cdhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CustomDomainHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cdhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CustomDomainHistoryMutation)
@@ -416,11 +416,11 @@ func (cdhcb *CustomDomainHistoryCreateBulk) Save(ctx context.Context) ([]*Custom
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cdhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cdhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -440,7 +440,7 @@ func (cdhcb *CustomDomainHistoryCreateBulk) Save(ctx context.Context) ([]*Custom
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cdhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -448,8 +448,8 @@ func (cdhcb *CustomDomainHistoryCreateBulk) Save(ctx context.Context) ([]*Custom
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cdhcb *CustomDomainHistoryCreateBulk) SaveX(ctx context.Context) []*CustomDomainHistory {
-	v, err := cdhcb.Save(ctx)
+func (_c *CustomDomainHistoryCreateBulk) SaveX(ctx context.Context) []*CustomDomainHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -457,14 +457,14 @@ func (cdhcb *CustomDomainHistoryCreateBulk) SaveX(ctx context.Context) []*Custom
 }
 
 // Exec executes the query.
-func (cdhcb *CustomDomainHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := cdhcb.Save(ctx)
+func (_c *CustomDomainHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdhcb *CustomDomainHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := cdhcb.Exec(ctx); err != nil {
+func (_c *CustomDomainHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

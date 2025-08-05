@@ -22,58 +22,58 @@ type ScheduledJobHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ScheduledJobHistoryDelete builder.
-func (sjhd *ScheduledJobHistoryDelete) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryDelete {
-	sjhd.mutation.Where(ps...)
-	return sjhd
+func (_d *ScheduledJobHistoryDelete) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (sjhd *ScheduledJobHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, sjhd.sqlExec, sjhd.mutation, sjhd.hooks)
+func (_d *ScheduledJobHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjhd *ScheduledJobHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := sjhd.Exec(ctx)
+func (_d *ScheduledJobHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (sjhd *ScheduledJobHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ScheduledJobHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(scheduledjobhistory.Table, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = sjhd.schemaConfig.ScheduledJobHistory
-	ctx = internal.NewSchemaConfigContext(ctx, sjhd.schemaConfig)
-	if ps := sjhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ScheduledJobHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, sjhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	sjhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ScheduledJobHistoryDeleteOne is the builder for deleting a single ScheduledJobHistory entity.
 type ScheduledJobHistoryDeleteOne struct {
-	sjhd *ScheduledJobHistoryDelete
+	_d *ScheduledJobHistoryDelete
 }
 
 // Where appends a list predicates to the ScheduledJobHistoryDelete builder.
-func (sjhdo *ScheduledJobHistoryDeleteOne) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryDeleteOne {
-	sjhdo.sjhd.mutation.Where(ps...)
-	return sjhdo
+func (_d *ScheduledJobHistoryDeleteOne) Where(ps ...predicate.ScheduledJobHistory) *ScheduledJobHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (sjhdo *ScheduledJobHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := sjhdo.sjhd.Exec(ctx)
+func (_d *ScheduledJobHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (sjhdo *ScheduledJobHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sjhdo *ScheduledJobHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := sjhdo.Exec(ctx); err != nil {
+func (_d *ScheduledJobHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

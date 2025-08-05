@@ -89,7 +89,7 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the EvidenceHistory fields.
-func (eh *EvidenceHistory) assignValues(columns []string, values []any) error {
+func (_m *EvidenceHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -99,73 +99,73 @@ func (eh *EvidenceHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				eh.ID = value.String
+				_m.ID = value.String
 			}
 		case evidencehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				eh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case evidencehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				eh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case evidencehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				eh.Operation = *value
+				_m.Operation = *value
 			}
 		case evidencehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				eh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case evidencehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				eh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case evidencehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				eh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case evidencehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				eh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case evidencehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				eh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case evidencehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				eh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case evidencehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				eh.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case evidencehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &eh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -173,64 +173,64 @@ func (eh *EvidenceHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				eh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case evidencehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				eh.Name = value.String
+				_m.Name = value.String
 			}
 		case evidencehistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				eh.Description = value.String
+				_m.Description = value.String
 			}
 		case evidencehistory.FieldCollectionProcedure:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field collection_procedure", values[i])
 			} else if value.Valid {
-				eh.CollectionProcedure = value.String
+				_m.CollectionProcedure = value.String
 			}
 		case evidencehistory.FieldCreationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field creation_date", values[i])
 			} else if value.Valid {
-				eh.CreationDate = value.Time
+				_m.CreationDate = value.Time
 			}
 		case evidencehistory.FieldRenewalDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field renewal_date", values[i])
 			} else if value.Valid {
-				eh.RenewalDate = value.Time
+				_m.RenewalDate = value.Time
 			}
 		case evidencehistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				eh.Source = value.String
+				_m.Source = value.String
 			}
 		case evidencehistory.FieldIsAutomated:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_automated", values[i])
 			} else if value.Valid {
-				eh.IsAutomated = value.Bool
+				_m.IsAutomated = value.Bool
 			}
 		case evidencehistory.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
 			} else if value.Valid {
-				eh.URL = value.String
+				_m.URL = value.String
 			}
 		case evidencehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				eh.Status = enums.EvidenceStatus(value.String)
+				_m.Status = enums.EvidenceStatus(value.String)
 			}
 		default:
-			eh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -238,95 +238,95 @@ func (eh *EvidenceHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the EvidenceHistory.
 // This includes values selected through modifiers, order, etc.
-func (eh *EvidenceHistory) Value(name string) (ent.Value, error) {
-	return eh.selectValues.Get(name)
+func (_m *EvidenceHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this EvidenceHistory.
 // Note that you need to call EvidenceHistory.Unwrap() before calling this method if this EvidenceHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (eh *EvidenceHistory) Update() *EvidenceHistoryUpdateOne {
-	return NewEvidenceHistoryClient(eh.config).UpdateOne(eh)
+func (_m *EvidenceHistory) Update() *EvidenceHistoryUpdateOne {
+	return NewEvidenceHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the EvidenceHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (eh *EvidenceHistory) Unwrap() *EvidenceHistory {
-	_tx, ok := eh.config.driver.(*txDriver)
+func (_m *EvidenceHistory) Unwrap() *EvidenceHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: EvidenceHistory is not a transactional entity")
 	}
-	eh.config.driver = _tx.drv
-	return eh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (eh *EvidenceHistory) String() string {
+func (_m *EvidenceHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("EvidenceHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", eh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(eh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(eh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", eh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(eh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(eh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(eh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(eh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(eh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(eh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(eh.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", eh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(eh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(eh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(eh.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("collection_procedure=")
-	builder.WriteString(eh.CollectionProcedure)
+	builder.WriteString(_m.CollectionProcedure)
 	builder.WriteString(", ")
 	builder.WriteString("creation_date=")
-	builder.WriteString(eh.CreationDate.Format(time.ANSIC))
+	builder.WriteString(_m.CreationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("renewal_date=")
-	builder.WriteString(eh.RenewalDate.Format(time.ANSIC))
+	builder.WriteString(_m.RenewalDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(eh.Source)
+	builder.WriteString(_m.Source)
 	builder.WriteString(", ")
 	builder.WriteString("is_automated=")
-	builder.WriteString(fmt.Sprintf("%v", eh.IsAutomated))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsAutomated))
 	builder.WriteString(", ")
 	builder.WriteString("url=")
-	builder.WriteString(eh.URL)
+	builder.WriteString(_m.URL)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", eh.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -33,40 +33,40 @@ type HushHistoryQuery struct {
 }
 
 // Where adds a new predicate for the HushHistoryQuery builder.
-func (hhq *HushHistoryQuery) Where(ps ...predicate.HushHistory) *HushHistoryQuery {
-	hhq.predicates = append(hhq.predicates, ps...)
-	return hhq
+func (_q *HushHistoryQuery) Where(ps ...predicate.HushHistory) *HushHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (hhq *HushHistoryQuery) Limit(limit int) *HushHistoryQuery {
-	hhq.ctx.Limit = &limit
-	return hhq
+func (_q *HushHistoryQuery) Limit(limit int) *HushHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (hhq *HushHistoryQuery) Offset(offset int) *HushHistoryQuery {
-	hhq.ctx.Offset = &offset
-	return hhq
+func (_q *HushHistoryQuery) Offset(offset int) *HushHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (hhq *HushHistoryQuery) Unique(unique bool) *HushHistoryQuery {
-	hhq.ctx.Unique = &unique
-	return hhq
+func (_q *HushHistoryQuery) Unique(unique bool) *HushHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (hhq *HushHistoryQuery) Order(o ...hushhistory.OrderOption) *HushHistoryQuery {
-	hhq.order = append(hhq.order, o...)
-	return hhq
+func (_q *HushHistoryQuery) Order(o ...hushhistory.OrderOption) *HushHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first HushHistory entity from the query.
 // Returns a *NotFoundError when no HushHistory was found.
-func (hhq *HushHistoryQuery) First(ctx context.Context) (*HushHistory, error) {
-	nodes, err := hhq.Limit(1).All(setContextOp(ctx, hhq.ctx, ent.OpQueryFirst))
+func (_q *HushHistoryQuery) First(ctx context.Context) (*HushHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (hhq *HushHistoryQuery) First(ctx context.Context) (*HushHistory, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (hhq *HushHistoryQuery) FirstX(ctx context.Context) *HushHistory {
-	node, err := hhq.First(ctx)
+func (_q *HushHistoryQuery) FirstX(ctx context.Context) *HushHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (hhq *HushHistoryQuery) FirstX(ctx context.Context) *HushHistory {
 
 // FirstID returns the first HushHistory ID from the query.
 // Returns a *NotFoundError when no HushHistory ID was found.
-func (hhq *HushHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *HushHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = hhq.Limit(1).IDs(setContextOp(ctx, hhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (hhq *HushHistoryQuery) FirstID(ctx context.Context) (id string, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (hhq *HushHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := hhq.FirstID(ctx)
+func (_q *HushHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (hhq *HushHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single HushHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one HushHistory entity is found.
 // Returns a *NotFoundError when no HushHistory entities are found.
-func (hhq *HushHistoryQuery) Only(ctx context.Context) (*HushHistory, error) {
-	nodes, err := hhq.Limit(2).All(setContextOp(ctx, hhq.ctx, ent.OpQueryOnly))
+func (_q *HushHistoryQuery) Only(ctx context.Context) (*HushHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (hhq *HushHistoryQuery) Only(ctx context.Context) (*HushHistory, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (hhq *HushHistoryQuery) OnlyX(ctx context.Context) *HushHistory {
-	node, err := hhq.Only(ctx)
+func (_q *HushHistoryQuery) OnlyX(ctx context.Context) *HushHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (hhq *HushHistoryQuery) OnlyX(ctx context.Context) *HushHistory {
 // OnlyID is like Only, but returns the only HushHistory ID in the query.
 // Returns a *NotSingularError when more than one HushHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (hhq *HushHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *HushHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = hhq.Limit(2).IDs(setContextOp(ctx, hhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (hhq *HushHistoryQuery) OnlyID(ctx context.Context) (id string, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (hhq *HushHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := hhq.OnlyID(ctx)
+func (_q *HushHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (hhq *HushHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of HushHistories.
-func (hhq *HushHistoryQuery) All(ctx context.Context) ([]*HushHistory, error) {
-	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryAll)
-	if err := hhq.prepareQuery(ctx); err != nil {
+func (_q *HushHistoryQuery) All(ctx context.Context) ([]*HushHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*HushHistory, *HushHistoryQuery]()
-	return withInterceptors[[]*HushHistory](ctx, hhq, qr, hhq.inters)
+	return withInterceptors[[]*HushHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (hhq *HushHistoryQuery) AllX(ctx context.Context) []*HushHistory {
-	nodes, err := hhq.All(ctx)
+func (_q *HushHistoryQuery) AllX(ctx context.Context) []*HushHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (hhq *HushHistoryQuery) AllX(ctx context.Context) []*HushHistory {
 }
 
 // IDs executes the query and returns a list of HushHistory IDs.
-func (hhq *HushHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if hhq.ctx.Unique == nil && hhq.path != nil {
-		hhq.Unique(true)
+func (_q *HushHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryIDs)
-	if err = hhq.Select(hushhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(hushhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (hhq *HushHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := hhq.IDs(ctx)
+func (_q *HushHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (hhq *HushHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (hhq *HushHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryCount)
-	if err := hhq.prepareQuery(ctx); err != nil {
+func (_q *HushHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, hhq, querierCount[*HushHistoryQuery](), hhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*HushHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (hhq *HushHistoryQuery) CountX(ctx context.Context) int {
-	count, err := hhq.Count(ctx)
+func (_q *HushHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (hhq *HushHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (hhq *HushHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryExist)
-	switch _, err := hhq.FirstID(ctx); {
+func (_q *HushHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (hhq *HushHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (hhq *HushHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := hhq.Exist(ctx)
+func (_q *HushHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (hhq *HushHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the HushHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (hhq *HushHistoryQuery) Clone() *HushHistoryQuery {
-	if hhq == nil {
+func (_q *HushHistoryQuery) Clone() *HushHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &HushHistoryQuery{
-		config:     hhq.config,
-		ctx:        hhq.ctx.Clone(),
-		order:      append([]hushhistory.OrderOption{}, hhq.order...),
-		inters:     append([]Interceptor{}, hhq.inters...),
-		predicates: append([]predicate.HushHistory{}, hhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]hushhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.HushHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       hhq.sql.Clone(),
-		path:      hhq.path,
-		modifiers: append([]func(*sql.Selector){}, hhq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (hhq *HushHistoryQuery) Clone() *HushHistoryQuery {
 //		GroupBy(hushhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (hhq *HushHistoryQuery) GroupBy(field string, fields ...string) *HushHistoryGroupBy {
-	hhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &HushHistoryGroupBy{build: hhq}
-	grbuild.flds = &hhq.ctx.Fields
+func (_q *HushHistoryQuery) GroupBy(field string, fields ...string) *HushHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &HushHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = hushhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (hhq *HushHistoryQuery) GroupBy(field string, fields ...string) *HushHistor
 //	client.HushHistory.Query().
 //		Select(hushhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (hhq *HushHistoryQuery) Select(fields ...string) *HushHistorySelect {
-	hhq.ctx.Fields = append(hhq.ctx.Fields, fields...)
-	sbuild := &HushHistorySelect{HushHistoryQuery: hhq}
+func (_q *HushHistoryQuery) Select(fields ...string) *HushHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &HushHistorySelect{HushHistoryQuery: _q}
 	sbuild.label = hushhistory.Label
-	sbuild.flds, sbuild.scan = &hhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a HushHistorySelect configured with the given aggregations.
-func (hhq *HushHistoryQuery) Aggregate(fns ...AggregateFunc) *HushHistorySelect {
-	return hhq.Select().Aggregate(fns...)
+func (_q *HushHistoryQuery) Aggregate(fns ...AggregateFunc) *HushHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (hhq *HushHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range hhq.inters {
+func (_q *HushHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, hhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range hhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !hushhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if hhq.path != nil {
-		prev, err := hhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		hhq.sql = prev
+		_q.sql = prev
 	}
 	if hushhistory.Policy == nil {
 		return errors.New("generated: uninitialized hushhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := hushhistory.Policy.EvalQuery(ctx, hhq); err != nil {
+	if err := hushhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (hhq *HushHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*HushHistory, error) {
+func (_q *HushHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*HushHistory, error) {
 	var (
 		nodes = []*HushHistory{}
-		_spec = hhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*HushHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &HushHistory{config: hhq.config}
+		node := &HushHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = hhq.schemaConfig.HushHistory
-	ctx = internal.NewSchemaConfigContext(ctx, hhq.schemaConfig)
-	if len(hhq.modifiers) > 0 {
-		_spec.Modifiers = hhq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.HushHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, hhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range hhq.loadTotal {
-		if err := hhq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (hhq *HushHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := hhq.querySpec()
-	_spec.Node.Schema = hhq.schemaConfig.HushHistory
-	ctx = internal.NewSchemaConfigContext(ctx, hhq.schemaConfig)
-	if len(hhq.modifiers) > 0 {
-		_spec.Modifiers = hhq.modifiers
+func (_q *HushHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.HushHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = hhq.ctx.Fields
-	if len(hhq.ctx.Fields) > 0 {
-		_spec.Unique = hhq.ctx.Unique != nil && *hhq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, hhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (hhq *HushHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *HushHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(hushhistory.Table, hushhistory.Columns, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
-	_spec.From = hhq.sql
-	if unique := hhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if hhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := hhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, hushhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (hhq *HushHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := hhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := hhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := hhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := hhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (hhq *HushHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (hhq *HushHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(hhq.driver.Dialect())
+func (_q *HushHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(hushhistory.Table)
-	columns := hhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = hushhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if hhq.sql != nil {
-		selector = hhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if hhq.ctx.Unique != nil && *hhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(hhq.schemaConfig.HushHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, hhq.schemaConfig)
+	t1.Schema(_q.schemaConfig.HushHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range hhq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range hhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range hhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := hhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := hhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (hhq *HushHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *HushHistorySelect {
-	hhq.modifiers = append(hhq.modifiers, modifiers...)
-	return hhq.Select()
+func (_q *HushHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *HushHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type HushHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (hhgb *HushHistoryGroupBy) Aggregate(fns ...AggregateFunc) *HushHistoryGroupBy {
-	hhgb.fns = append(hhgb.fns, fns...)
-	return hhgb
+func (_g *HushHistoryGroupBy) Aggregate(fns ...AggregateFunc) *HushHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (hhgb *HushHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, hhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := hhgb.build.prepareQuery(ctx); err != nil {
+func (_g *HushHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*HushHistoryQuery, *HushHistoryGroupBy](ctx, hhgb.build, hhgb, hhgb.build.inters, v)
+	return scanWithInterceptors[*HushHistoryQuery, *HushHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (hhgb *HushHistoryGroupBy) sqlScan(ctx context.Context, root *HushHistoryQuery, v any) error {
+func (_g *HushHistoryGroupBy) sqlScan(ctx context.Context, root *HushHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(hhgb.fns))
-	for _, fn := range hhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*hhgb.flds)+len(hhgb.fns))
-		for _, f := range *hhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*hhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := hhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type HushHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (hhs *HushHistorySelect) Aggregate(fns ...AggregateFunc) *HushHistorySelect {
-	hhs.fns = append(hhs.fns, fns...)
-	return hhs
+func (_s *HushHistorySelect) Aggregate(fns ...AggregateFunc) *HushHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (hhs *HushHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, hhs.ctx, ent.OpQuerySelect)
-	if err := hhs.prepareQuery(ctx); err != nil {
+func (_s *HushHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*HushHistoryQuery, *HushHistorySelect](ctx, hhs.HushHistoryQuery, hhs, hhs.inters, v)
+	return scanWithInterceptors[*HushHistoryQuery, *HushHistorySelect](ctx, _s.HushHistoryQuery, _s, _s.inters, v)
 }
 
-func (hhs *HushHistorySelect) sqlScan(ctx context.Context, root *HushHistoryQuery, v any) error {
+func (_s *HushHistorySelect) sqlScan(ctx context.Context, root *HushHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(hhs.fns))
-	for _, fn := range hhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*hhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (hhs *HushHistorySelect) sqlScan(ctx context.Context, root *HushHistoryQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := hhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (hhs *HushHistorySelect) sqlScan(ctx context.Context, root *HushHistoryQuer
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (hhs *HushHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *HushHistorySelect {
-	hhs.modifiers = append(hhs.modifiers, modifiers...)
-	return hhs
+func (_s *HushHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *HushHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

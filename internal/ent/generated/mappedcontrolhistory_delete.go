@@ -22,58 +22,58 @@ type MappedControlHistoryDelete struct {
 }
 
 // Where appends a list predicates to the MappedControlHistoryDelete builder.
-func (mchd *MappedControlHistoryDelete) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryDelete {
-	mchd.mutation.Where(ps...)
-	return mchd
+func (_d *MappedControlHistoryDelete) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (mchd *MappedControlHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, mchd.sqlExec, mchd.mutation, mchd.hooks)
+func (_d *MappedControlHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mchd *MappedControlHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := mchd.Exec(ctx)
+func (_d *MappedControlHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (mchd *MappedControlHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *MappedControlHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(mappedcontrolhistory.Table, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = mchd.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, mchd.schemaConfig)
-	if ps := mchd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.MappedControlHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, mchd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	mchd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // MappedControlHistoryDeleteOne is the builder for deleting a single MappedControlHistory entity.
 type MappedControlHistoryDeleteOne struct {
-	mchd *MappedControlHistoryDelete
+	_d *MappedControlHistoryDelete
 }
 
 // Where appends a list predicates to the MappedControlHistoryDelete builder.
-func (mchdo *MappedControlHistoryDeleteOne) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryDeleteOne {
-	mchdo.mchd.mutation.Where(ps...)
-	return mchdo
+func (_d *MappedControlHistoryDeleteOne) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (mchdo *MappedControlHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := mchdo.mchd.Exec(ctx)
+func (_d *MappedControlHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (mchdo *MappedControlHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mchdo *MappedControlHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := mchdo.Exec(ctx); err != nil {
+func (_d *MappedControlHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -25,269 +25,269 @@ type OrgProductCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (opc *OrgProductCreate) SetCreatedAt(t time.Time) *OrgProductCreate {
-	opc.mutation.SetCreatedAt(t)
-	return opc
+func (_c *OrgProductCreate) SetCreatedAt(v time.Time) *OrgProductCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableCreatedAt(t *time.Time) *OrgProductCreate {
-	if t != nil {
-		opc.SetCreatedAt(*t)
+func (_c *OrgProductCreate) SetNillableCreatedAt(v *time.Time) *OrgProductCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (opc *OrgProductCreate) SetUpdatedAt(t time.Time) *OrgProductCreate {
-	opc.mutation.SetUpdatedAt(t)
-	return opc
+func (_c *OrgProductCreate) SetUpdatedAt(v time.Time) *OrgProductCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableUpdatedAt(t *time.Time) *OrgProductCreate {
-	if t != nil {
-		opc.SetUpdatedAt(*t)
+func (_c *OrgProductCreate) SetNillableUpdatedAt(v *time.Time) *OrgProductCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (opc *OrgProductCreate) SetCreatedBy(s string) *OrgProductCreate {
-	opc.mutation.SetCreatedBy(s)
-	return opc
+func (_c *OrgProductCreate) SetCreatedBy(v string) *OrgProductCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableCreatedBy(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetCreatedBy(*s)
+func (_c *OrgProductCreate) SetNillableCreatedBy(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (opc *OrgProductCreate) SetUpdatedBy(s string) *OrgProductCreate {
-	opc.mutation.SetUpdatedBy(s)
-	return opc
+func (_c *OrgProductCreate) SetUpdatedBy(v string) *OrgProductCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableUpdatedBy(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetUpdatedBy(*s)
+func (_c *OrgProductCreate) SetNillableUpdatedBy(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (opc *OrgProductCreate) SetDeletedAt(t time.Time) *OrgProductCreate {
-	opc.mutation.SetDeletedAt(t)
-	return opc
+func (_c *OrgProductCreate) SetDeletedAt(v time.Time) *OrgProductCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableDeletedAt(t *time.Time) *OrgProductCreate {
-	if t != nil {
-		opc.SetDeletedAt(*t)
+func (_c *OrgProductCreate) SetNillableDeletedAt(v *time.Time) *OrgProductCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (opc *OrgProductCreate) SetDeletedBy(s string) *OrgProductCreate {
-	opc.mutation.SetDeletedBy(s)
-	return opc
+func (_c *OrgProductCreate) SetDeletedBy(v string) *OrgProductCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableDeletedBy(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetDeletedBy(*s)
+func (_c *OrgProductCreate) SetNillableDeletedBy(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (opc *OrgProductCreate) SetTags(s []string) *OrgProductCreate {
-	opc.mutation.SetTags(s)
-	return opc
+func (_c *OrgProductCreate) SetTags(v []string) *OrgProductCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (opc *OrgProductCreate) SetOwnerID(s string) *OrgProductCreate {
-	opc.mutation.SetOwnerID(s)
-	return opc
+func (_c *OrgProductCreate) SetOwnerID(v string) *OrgProductCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableOwnerID(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetOwnerID(*s)
+func (_c *OrgProductCreate) SetNillableOwnerID(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetModule sets the "module" field.
-func (opc *OrgProductCreate) SetModule(s string) *OrgProductCreate {
-	opc.mutation.SetModule(s)
-	return opc
+func (_c *OrgProductCreate) SetModule(v string) *OrgProductCreate {
+	_c.mutation.SetModule(v)
+	return _c
 }
 
 // SetStripeProductID sets the "stripe_product_id" field.
-func (opc *OrgProductCreate) SetStripeProductID(s string) *OrgProductCreate {
-	opc.mutation.SetStripeProductID(s)
-	return opc
+func (_c *OrgProductCreate) SetStripeProductID(v string) *OrgProductCreate {
+	_c.mutation.SetStripeProductID(v)
+	return _c
 }
 
 // SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableStripeProductID(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetStripeProductID(*s)
+func (_c *OrgProductCreate) SetNillableStripeProductID(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetStripeProductID(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (opc *OrgProductCreate) SetStatus(s string) *OrgProductCreate {
-	opc.mutation.SetStatus(s)
-	return opc
+func (_c *OrgProductCreate) SetStatus(v string) *OrgProductCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableStatus(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetStatus(*s)
+func (_c *OrgProductCreate) SetNillableStatus(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetActive sets the "active" field.
-func (opc *OrgProductCreate) SetActive(b bool) *OrgProductCreate {
-	opc.mutation.SetActive(b)
-	return opc
+func (_c *OrgProductCreate) SetActive(v bool) *OrgProductCreate {
+	_c.mutation.SetActive(v)
+	return _c
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableActive(b *bool) *OrgProductCreate {
-	if b != nil {
-		opc.SetActive(*b)
+func (_c *OrgProductCreate) SetNillableActive(v *bool) *OrgProductCreate {
+	if v != nil {
+		_c.SetActive(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetSubscriptionID sets the "subscription_id" field.
-func (opc *OrgProductCreate) SetSubscriptionID(s string) *OrgProductCreate {
-	opc.mutation.SetSubscriptionID(s)
-	return opc
+func (_c *OrgProductCreate) SetSubscriptionID(v string) *OrgProductCreate {
+	_c.mutation.SetSubscriptionID(v)
+	return _c
 }
 
 // SetNillableSubscriptionID sets the "subscription_id" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableSubscriptionID(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetSubscriptionID(*s)
+func (_c *OrgProductCreate) SetNillableSubscriptionID(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetSubscriptionID(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetPriceID sets the "price_id" field.
-func (opc *OrgProductCreate) SetPriceID(s string) *OrgProductCreate {
-	opc.mutation.SetPriceID(s)
-	return opc
+func (_c *OrgProductCreate) SetPriceID(v string) *OrgProductCreate {
+	_c.mutation.SetPriceID(v)
+	return _c
 }
 
 // SetNillablePriceID sets the "price_id" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillablePriceID(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetPriceID(*s)
+func (_c *OrgProductCreate) SetNillablePriceID(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetPriceID(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (opc *OrgProductCreate) SetID(s string) *OrgProductCreate {
-	opc.mutation.SetID(s)
-	return opc
+func (_c *OrgProductCreate) SetID(v string) *OrgProductCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableID(s *string) *OrgProductCreate {
-	if s != nil {
-		opc.SetID(*s)
+func (_c *OrgProductCreate) SetNillableID(v *string) *OrgProductCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (opc *OrgProductCreate) SetOwner(o *Organization) *OrgProductCreate {
-	return opc.SetOwnerID(o.ID)
+func (_c *OrgProductCreate) SetOwner(v *Organization) *OrgProductCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // SetOrgSubscriptionID sets the "org_subscription" edge to the OrgSubscription entity by ID.
-func (opc *OrgProductCreate) SetOrgSubscriptionID(id string) *OrgProductCreate {
-	opc.mutation.SetOrgSubscriptionID(id)
-	return opc
+func (_c *OrgProductCreate) SetOrgSubscriptionID(id string) *OrgProductCreate {
+	_c.mutation.SetOrgSubscriptionID(id)
+	return _c
 }
 
 // SetNillableOrgSubscriptionID sets the "org_subscription" edge to the OrgSubscription entity by ID if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableOrgSubscriptionID(id *string) *OrgProductCreate {
+func (_c *OrgProductCreate) SetNillableOrgSubscriptionID(id *string) *OrgProductCreate {
 	if id != nil {
-		opc = opc.SetOrgSubscriptionID(*id)
+		_c = _c.SetOrgSubscriptionID(*id)
 	}
-	return opc
+	return _c
 }
 
 // SetOrgSubscription sets the "org_subscription" edge to the OrgSubscription entity.
-func (opc *OrgProductCreate) SetOrgSubscription(o *OrgSubscription) *OrgProductCreate {
-	return opc.SetOrgSubscriptionID(o.ID)
+func (_c *OrgProductCreate) SetOrgSubscription(v *OrgSubscription) *OrgProductCreate {
+	return _c.SetOrgSubscriptionID(v.ID)
 }
 
 // AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
-func (opc *OrgProductCreate) AddOrgPriceIDs(ids ...string) *OrgProductCreate {
-	opc.mutation.AddOrgPriceIDs(ids...)
-	return opc
+func (_c *OrgProductCreate) AddOrgPriceIDs(ids ...string) *OrgProductCreate {
+	_c.mutation.AddOrgPriceIDs(ids...)
+	return _c
 }
 
 // AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
-func (opc *OrgProductCreate) AddOrgPrices(o ...*OrgPrice) *OrgProductCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrgProductCreate) AddOrgPrices(v ...*OrgPrice) *OrgProductCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return opc.AddOrgPriceIDs(ids...)
+	return _c.AddOrgPriceIDs(ids...)
 }
 
 // AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
-func (opc *OrgProductCreate) AddOrgModuleIDs(ids ...string) *OrgProductCreate {
-	opc.mutation.AddOrgModuleIDs(ids...)
-	return opc
+func (_c *OrgProductCreate) AddOrgModuleIDs(ids ...string) *OrgProductCreate {
+	_c.mutation.AddOrgModuleIDs(ids...)
+	return _c
 }
 
 // AddOrgModules adds the "org_modules" edges to the OrgModule entity.
-func (opc *OrgProductCreate) AddOrgModules(o ...*OrgModule) *OrgProductCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_c *OrgProductCreate) AddOrgModules(v ...*OrgModule) *OrgProductCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return opc.AddOrgModuleIDs(ids...)
+	return _c.AddOrgModuleIDs(ids...)
 }
 
 // Mutation returns the OrgProductMutation object of the builder.
-func (opc *OrgProductCreate) Mutation() *OrgProductMutation {
-	return opc.mutation
+func (_c *OrgProductCreate) Mutation() *OrgProductMutation {
+	return _c.mutation
 }
 
 // Save creates the OrgProduct in the database.
-func (opc *OrgProductCreate) Save(ctx context.Context) (*OrgProduct, error) {
-	if err := opc.defaults(); err != nil {
+func (_c *OrgProductCreate) Save(ctx context.Context) (*OrgProduct, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, opc.sqlSave, opc.mutation, opc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (opc *OrgProductCreate) SaveX(ctx context.Context) *OrgProduct {
-	v, err := opc.Save(ctx)
+func (_c *OrgProductCreate) SaveX(ctx context.Context) *OrgProduct {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -295,74 +295,74 @@ func (opc *OrgProductCreate) SaveX(ctx context.Context) *OrgProduct {
 }
 
 // Exec executes the query.
-func (opc *OrgProductCreate) Exec(ctx context.Context) error {
-	_, err := opc.Save(ctx)
+func (_c *OrgProductCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opc *OrgProductCreate) ExecX(ctx context.Context) {
-	if err := opc.Exec(ctx); err != nil {
+func (_c *OrgProductCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (opc *OrgProductCreate) defaults() error {
-	if _, ok := opc.mutation.CreatedAt(); !ok {
+func (_c *OrgProductCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if orgproduct.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgproduct.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgproduct.DefaultCreatedAt()
-		opc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := opc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if orgproduct.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgproduct.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgproduct.DefaultUpdatedAt()
-		opc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := opc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := orgproduct.DefaultTags
-		opc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := opc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		v := orgproduct.DefaultActive
-		opc.mutation.SetActive(v)
+		_c.mutation.SetActive(v)
 	}
-	if _, ok := opc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if orgproduct.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized orgproduct.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := orgproduct.DefaultID()
-		opc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (opc *OrgProductCreate) check() error {
-	if v, ok := opc.mutation.OwnerID(); ok {
+func (_c *OrgProductCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := orgproduct.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "OrgProduct.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.Module(); !ok {
+	if _, ok := _c.mutation.Module(); !ok {
 		return &ValidationError{Name: "module", err: errors.New(`generated: missing required field "OrgProduct.module"`)}
 	}
-	if _, ok := opc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "OrgProduct.active"`)}
 	}
 	return nil
 }
 
-func (opc *OrgProductCreate) sqlSave(ctx context.Context) (*OrgProduct, error) {
-	if err := opc.check(); err != nil {
+func (_c *OrgProductCreate) sqlSave(ctx context.Context) (*OrgProduct, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := opc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, opc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -375,70 +375,70 @@ func (opc *OrgProductCreate) sqlSave(ctx context.Context) (*OrgProduct, error) {
 			return nil, fmt.Errorf("unexpected OrgProduct.ID type: %T", _spec.ID.Value)
 		}
 	}
-	opc.mutation.id = &_node.ID
-	opc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
+func (_c *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OrgProduct{config: opc.config}
+		_node = &OrgProduct{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(orgproduct.Table, sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString))
 	)
-	_spec.Schema = opc.schemaConfig.OrgProduct
-	if id, ok := opc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.OrgProduct
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := opc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(orgproduct.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := opc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgproduct.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := opc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(orgproduct.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := opc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgproduct.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := opc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgproduct.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := opc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(orgproduct.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := opc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(orgproduct.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := opc.mutation.Module(); ok {
+	if value, ok := _c.mutation.Module(); ok {
 		_spec.SetField(orgproduct.FieldModule, field.TypeString, value)
 		_node.Module = value
 	}
-	if value, ok := opc.mutation.StripeProductID(); ok {
+	if value, ok := _c.mutation.StripeProductID(); ok {
 		_spec.SetField(orgproduct.FieldStripeProductID, field.TypeString, value)
 		_node.StripeProductID = value
 	}
-	if value, ok := opc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(orgproduct.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
-	if value, ok := opc.mutation.Active(); ok {
+	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(orgproduct.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := opc.mutation.PriceID(); ok {
+	if value, ok := _c.mutation.PriceID(); ok {
 		_spec.SetField(orgproduct.FieldPriceID, field.TypeString, value)
 		_node.PriceID = value
 	}
-	if nodes := opc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -449,14 +449,14 @@ func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opc.schemaConfig.OrgProduct
+		edge.Schema = _c.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := opc.mutation.OrgSubscriptionIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgSubscriptionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -467,14 +467,14 @@ func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opc.schemaConfig.OrgProduct
+		edge.Schema = _c.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.SubscriptionID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := opc.mutation.OrgPricesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -485,13 +485,13 @@ func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opc.schemaConfig.OrgProductOrgPrices
+		edge.Schema = _c.schemaConfig.OrgProductOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := opc.mutation.OrgModulesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrgModulesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -502,7 +502,7 @@ func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opc.schemaConfig.OrgModule
+		edge.Schema = _c.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -519,16 +519,16 @@ type OrgProductCreateBulk struct {
 }
 
 // Save creates the OrgProduct entities in the database.
-func (opcb *OrgProductCreateBulk) Save(ctx context.Context) ([]*OrgProduct, error) {
-	if opcb.err != nil {
-		return nil, opcb.err
+func (_c *OrgProductCreateBulk) Save(ctx context.Context) ([]*OrgProduct, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(opcb.builders))
-	nodes := make([]*OrgProduct, len(opcb.builders))
-	mutators := make([]Mutator, len(opcb.builders))
-	for i := range opcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OrgProduct, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := opcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrgProductMutation)
@@ -542,11 +542,11 @@ func (opcb *OrgProductCreateBulk) Save(ctx context.Context) ([]*OrgProduct, erro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, opcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, opcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -566,7 +566,7 @@ func (opcb *OrgProductCreateBulk) Save(ctx context.Context) ([]*OrgProduct, erro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, opcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -574,8 +574,8 @@ func (opcb *OrgProductCreateBulk) Save(ctx context.Context) ([]*OrgProduct, erro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (opcb *OrgProductCreateBulk) SaveX(ctx context.Context) []*OrgProduct {
-	v, err := opcb.Save(ctx)
+func (_c *OrgProductCreateBulk) SaveX(ctx context.Context) []*OrgProduct {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -583,14 +583,14 @@ func (opcb *OrgProductCreateBulk) SaveX(ctx context.Context) []*OrgProduct {
 }
 
 // Exec executes the query.
-func (opcb *OrgProductCreateBulk) Exec(ctx context.Context) error {
-	_, err := opcb.Save(ctx)
+func (_c *OrgProductCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opcb *OrgProductCreateBulk) ExecX(ctx context.Context) {
-	if err := opcb.Exec(ctx); err != nil {
+func (_c *OrgProductCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

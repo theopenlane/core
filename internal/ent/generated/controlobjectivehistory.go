@@ -85,7 +85,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ControlObjectiveHistory fields.
-func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any) error {
+func (_m *ControlObjectiveHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -95,73 +95,73 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				coh.ID = value.String
+				_m.ID = value.String
 			}
 		case controlobjectivehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				coh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case controlobjectivehistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				coh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case controlobjectivehistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				coh.Operation = *value
+				_m.Operation = *value
 			}
 		case controlobjectivehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				coh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case controlobjectivehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				coh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case controlobjectivehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				coh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case controlobjectivehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				coh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case controlobjectivehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				coh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case controlobjectivehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				coh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case controlobjectivehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				coh.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case controlobjectivehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &coh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -169,58 +169,58 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
-				coh.Revision = value.String
+				_m.Revision = value.String
 			}
 		case controlobjectivehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				coh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case controlobjectivehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				coh.Name = value.String
+				_m.Name = value.String
 			}
 		case controlobjectivehistory.FieldDesiredOutcome:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field desired_outcome", values[i])
 			} else if value.Valid {
-				coh.DesiredOutcome = value.String
+				_m.DesiredOutcome = value.String
 			}
 		case controlobjectivehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				coh.Status = enums.ObjectiveStatus(value.String)
+				_m.Status = enums.ObjectiveStatus(value.String)
 			}
 		case controlobjectivehistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
-				coh.Source = enums.ControlSource(value.String)
+				_m.Source = enums.ControlSource(value.String)
 			}
 		case controlobjectivehistory.FieldControlObjectiveType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_type", values[i])
 			} else if value.Valid {
-				coh.ControlObjectiveType = value.String
+				_m.ControlObjectiveType = value.String
 			}
 		case controlobjectivehistory.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field category", values[i])
 			} else if value.Valid {
-				coh.Category = value.String
+				_m.Category = value.String
 			}
 		case controlobjectivehistory.FieldSubcategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcategory", values[i])
 			} else if value.Valid {
-				coh.Subcategory = value.String
+				_m.Subcategory = value.String
 			}
 		default:
-			coh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -228,92 +228,92 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ControlObjectiveHistory.
 // This includes values selected through modifiers, order, etc.
-func (coh *ControlObjectiveHistory) Value(name string) (ent.Value, error) {
-	return coh.selectValues.Get(name)
+func (_m *ControlObjectiveHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ControlObjectiveHistory.
 // Note that you need to call ControlObjectiveHistory.Unwrap() before calling this method if this ControlObjectiveHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (coh *ControlObjectiveHistory) Update() *ControlObjectiveHistoryUpdateOne {
-	return NewControlObjectiveHistoryClient(coh.config).UpdateOne(coh)
+func (_m *ControlObjectiveHistory) Update() *ControlObjectiveHistoryUpdateOne {
+	return NewControlObjectiveHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ControlObjectiveHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (coh *ControlObjectiveHistory) Unwrap() *ControlObjectiveHistory {
-	_tx, ok := coh.config.driver.(*txDriver)
+func (_m *ControlObjectiveHistory) Unwrap() *ControlObjectiveHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ControlObjectiveHistory is not a transactional entity")
 	}
-	coh.config.driver = _tx.drv
-	return coh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (coh *ControlObjectiveHistory) String() string {
+func (_m *ControlObjectiveHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ControlObjectiveHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", coh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(coh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(coh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", coh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(coh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(coh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(coh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(coh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(coh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(coh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(coh.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", coh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
-	builder.WriteString(coh.Revision)
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(coh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(coh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("desired_outcome=")
-	builder.WriteString(coh.DesiredOutcome)
+	builder.WriteString(_m.DesiredOutcome)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", coh.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("source=")
-	builder.WriteString(fmt.Sprintf("%v", coh.Source))
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteString(", ")
 	builder.WriteString("control_objective_type=")
-	builder.WriteString(coh.ControlObjectiveType)
+	builder.WriteString(_m.ControlObjectiveType)
 	builder.WriteString(", ")
 	builder.WriteString("category=")
-	builder.WriteString(coh.Category)
+	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("subcategory=")
-	builder.WriteString(coh.Subcategory)
+	builder.WriteString(_m.Subcategory)
 	builder.WriteByte(')')
 	return builder.String()
 }

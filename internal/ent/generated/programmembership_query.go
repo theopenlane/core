@@ -40,44 +40,44 @@ type ProgramMembershipQuery struct {
 }
 
 // Where adds a new predicate for the ProgramMembershipQuery builder.
-func (pmq *ProgramMembershipQuery) Where(ps ...predicate.ProgramMembership) *ProgramMembershipQuery {
-	pmq.predicates = append(pmq.predicates, ps...)
-	return pmq
+func (_q *ProgramMembershipQuery) Where(ps ...predicate.ProgramMembership) *ProgramMembershipQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (pmq *ProgramMembershipQuery) Limit(limit int) *ProgramMembershipQuery {
-	pmq.ctx.Limit = &limit
-	return pmq
+func (_q *ProgramMembershipQuery) Limit(limit int) *ProgramMembershipQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (pmq *ProgramMembershipQuery) Offset(offset int) *ProgramMembershipQuery {
-	pmq.ctx.Offset = &offset
-	return pmq
+func (_q *ProgramMembershipQuery) Offset(offset int) *ProgramMembershipQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (pmq *ProgramMembershipQuery) Unique(unique bool) *ProgramMembershipQuery {
-	pmq.ctx.Unique = &unique
-	return pmq
+func (_q *ProgramMembershipQuery) Unique(unique bool) *ProgramMembershipQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (pmq *ProgramMembershipQuery) Order(o ...programmembership.OrderOption) *ProgramMembershipQuery {
-	pmq.order = append(pmq.order, o...)
-	return pmq
+func (_q *ProgramMembershipQuery) Order(o ...programmembership.OrderOption) *ProgramMembershipQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryProgram chains the current query on the "program" edge.
-func (pmq *ProgramMembershipQuery) QueryProgram() *ProgramQuery {
-	query := (&ProgramClient{config: pmq.config}).Query()
+func (_q *ProgramMembershipQuery) QueryProgram() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pmq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pmq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -86,23 +86,23 @@ func (pmq *ProgramMembershipQuery) QueryProgram() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.ProgramTable, programmembership.ProgramColumn),
 		)
-		schemaConfig := pmq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramMembership
-		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUser chains the current query on the "user" edge.
-func (pmq *ProgramMembershipQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: pmq.config}).Query()
+func (_q *ProgramMembershipQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pmq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pmq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -111,23 +111,23 @@ func (pmq *ProgramMembershipQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UserTable, programmembership.UserColumn),
 		)
-		schemaConfig := pmq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.ProgramMembership
-		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOrgMembership chains the current query on the "org_membership" edge.
-func (pmq *ProgramMembershipQuery) QueryOrgMembership() *OrgMembershipQuery {
-	query := (&OrgMembershipClient{config: pmq.config}).Query()
+func (_q *ProgramMembershipQuery) QueryOrgMembership() *OrgMembershipQuery {
+	query := (&OrgMembershipClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pmq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := pmq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -136,10 +136,10 @@ func (pmq *ProgramMembershipQuery) QueryOrgMembership() *OrgMembershipQuery {
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.OrgMembershipTable, programmembership.OrgMembershipColumn),
 		)
-		schemaConfig := pmq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.ProgramMembership
-		fromU = sqlgraph.SetNeighbors(pmq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -147,8 +147,8 @@ func (pmq *ProgramMembershipQuery) QueryOrgMembership() *OrgMembershipQuery {
 
 // First returns the first ProgramMembership entity from the query.
 // Returns a *NotFoundError when no ProgramMembership was found.
-func (pmq *ProgramMembershipQuery) First(ctx context.Context) (*ProgramMembership, error) {
-	nodes, err := pmq.Limit(1).All(setContextOp(ctx, pmq.ctx, ent.OpQueryFirst))
+func (_q *ProgramMembershipQuery) First(ctx context.Context) (*ProgramMembership, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -159,8 +159,8 @@ func (pmq *ProgramMembershipQuery) First(ctx context.Context) (*ProgramMembershi
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) FirstX(ctx context.Context) *ProgramMembership {
-	node, err := pmq.First(ctx)
+func (_q *ProgramMembershipQuery) FirstX(ctx context.Context) *ProgramMembership {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -169,9 +169,9 @@ func (pmq *ProgramMembershipQuery) FirstX(ctx context.Context) *ProgramMembershi
 
 // FirstID returns the first ProgramMembership ID from the query.
 // Returns a *NotFoundError when no ProgramMembership ID was found.
-func (pmq *ProgramMembershipQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ProgramMembershipQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = pmq.Limit(1).IDs(setContextOp(ctx, pmq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -182,8 +182,8 @@ func (pmq *ProgramMembershipQuery) FirstID(ctx context.Context) (id string, err 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) FirstIDX(ctx context.Context) string {
-	id, err := pmq.FirstID(ctx)
+func (_q *ProgramMembershipQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -193,8 +193,8 @@ func (pmq *ProgramMembershipQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ProgramMembership entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ProgramMembership entity is found.
 // Returns a *NotFoundError when no ProgramMembership entities are found.
-func (pmq *ProgramMembershipQuery) Only(ctx context.Context) (*ProgramMembership, error) {
-	nodes, err := pmq.Limit(2).All(setContextOp(ctx, pmq.ctx, ent.OpQueryOnly))
+func (_q *ProgramMembershipQuery) Only(ctx context.Context) (*ProgramMembership, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -209,8 +209,8 @@ func (pmq *ProgramMembershipQuery) Only(ctx context.Context) (*ProgramMembership
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) OnlyX(ctx context.Context) *ProgramMembership {
-	node, err := pmq.Only(ctx)
+func (_q *ProgramMembershipQuery) OnlyX(ctx context.Context) *ProgramMembership {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,9 +220,9 @@ func (pmq *ProgramMembershipQuery) OnlyX(ctx context.Context) *ProgramMembership
 // OnlyID is like Only, but returns the only ProgramMembership ID in the query.
 // Returns a *NotSingularError when more than one ProgramMembership ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (pmq *ProgramMembershipQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ProgramMembershipQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = pmq.Limit(2).IDs(setContextOp(ctx, pmq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -237,8 +237,8 @@ func (pmq *ProgramMembershipQuery) OnlyID(ctx context.Context) (id string, err e
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) OnlyIDX(ctx context.Context) string {
-	id, err := pmq.OnlyID(ctx)
+func (_q *ProgramMembershipQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -246,18 +246,18 @@ func (pmq *ProgramMembershipQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ProgramMemberships.
-func (pmq *ProgramMembershipQuery) All(ctx context.Context) ([]*ProgramMembership, error) {
-	ctx = setContextOp(ctx, pmq.ctx, ent.OpQueryAll)
-	if err := pmq.prepareQuery(ctx); err != nil {
+func (_q *ProgramMembershipQuery) All(ctx context.Context) ([]*ProgramMembership, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ProgramMembership, *ProgramMembershipQuery]()
-	return withInterceptors[[]*ProgramMembership](ctx, pmq, qr, pmq.inters)
+	return withInterceptors[[]*ProgramMembership](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) AllX(ctx context.Context) []*ProgramMembership {
-	nodes, err := pmq.All(ctx)
+func (_q *ProgramMembershipQuery) AllX(ctx context.Context) []*ProgramMembership {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -265,20 +265,20 @@ func (pmq *ProgramMembershipQuery) AllX(ctx context.Context) []*ProgramMembershi
 }
 
 // IDs executes the query and returns a list of ProgramMembership IDs.
-func (pmq *ProgramMembershipQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if pmq.ctx.Unique == nil && pmq.path != nil {
-		pmq.Unique(true)
+func (_q *ProgramMembershipQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, pmq.ctx, ent.OpQueryIDs)
-	if err = pmq.Select(programmembership.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(programmembership.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) IDsX(ctx context.Context) []string {
-	ids, err := pmq.IDs(ctx)
+func (_q *ProgramMembershipQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -286,17 +286,17 @@ func (pmq *ProgramMembershipQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (pmq *ProgramMembershipQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, pmq.ctx, ent.OpQueryCount)
-	if err := pmq.prepareQuery(ctx); err != nil {
+func (_q *ProgramMembershipQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, pmq, querierCount[*ProgramMembershipQuery](), pmq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ProgramMembershipQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) CountX(ctx context.Context) int {
-	count, err := pmq.Count(ctx)
+func (_q *ProgramMembershipQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -304,9 +304,9 @@ func (pmq *ProgramMembershipQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (pmq *ProgramMembershipQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, pmq.ctx, ent.OpQueryExist)
-	switch _, err := pmq.FirstID(ctx); {
+func (_q *ProgramMembershipQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -317,8 +317,8 @@ func (pmq *ProgramMembershipQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (pmq *ProgramMembershipQuery) ExistX(ctx context.Context) bool {
-	exist, err := pmq.Exist(ctx)
+func (_q *ProgramMembershipQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -327,57 +327,57 @@ func (pmq *ProgramMembershipQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ProgramMembershipQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (pmq *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
-	if pmq == nil {
+func (_q *ProgramMembershipQuery) Clone() *ProgramMembershipQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ProgramMembershipQuery{
-		config:            pmq.config,
-		ctx:               pmq.ctx.Clone(),
-		order:             append([]programmembership.OrderOption{}, pmq.order...),
-		inters:            append([]Interceptor{}, pmq.inters...),
-		predicates:        append([]predicate.ProgramMembership{}, pmq.predicates...),
-		withProgram:       pmq.withProgram.Clone(),
-		withUser:          pmq.withUser.Clone(),
-		withOrgMembership: pmq.withOrgMembership.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]programmembership.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.ProgramMembership{}, _q.predicates...),
+		withProgram:       _q.withProgram.Clone(),
+		withUser:          _q.withUser.Clone(),
+		withOrgMembership: _q.withOrgMembership.Clone(),
 		// clone intermediate query.
-		sql:       pmq.sql.Clone(),
-		path:      pmq.path,
-		modifiers: append([]func(*sql.Selector){}, pmq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithProgram tells the query-builder to eager-load the nodes that are connected to
 // the "program" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithProgram(opts ...func(*ProgramQuery)) *ProgramMembershipQuery {
-	query := (&ProgramClient{config: pmq.config}).Query()
+func (_q *ProgramMembershipQuery) WithProgram(opts ...func(*ProgramQuery)) *ProgramMembershipQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pmq.withProgram = query
-	return pmq
+	_q.withProgram = query
+	return _q
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
 // the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithUser(opts ...func(*UserQuery)) *ProgramMembershipQuery {
-	query := (&UserClient{config: pmq.config}).Query()
+func (_q *ProgramMembershipQuery) WithUser(opts ...func(*UserQuery)) *ProgramMembershipQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pmq.withUser = query
-	return pmq
+	_q.withUser = query
+	return _q
 }
 
 // WithOrgMembership tells the query-builder to eager-load the nodes that are connected to
 // the "org_membership" edge. The optional arguments are used to configure the query builder of the edge.
-func (pmq *ProgramMembershipQuery) WithOrgMembership(opts ...func(*OrgMembershipQuery)) *ProgramMembershipQuery {
-	query := (&OrgMembershipClient{config: pmq.config}).Query()
+func (_q *ProgramMembershipQuery) WithOrgMembership(opts ...func(*OrgMembershipQuery)) *ProgramMembershipQuery {
+	query := (&OrgMembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pmq.withOrgMembership = query
-	return pmq
+	_q.withOrgMembership = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -394,10 +394,10 @@ func (pmq *ProgramMembershipQuery) WithOrgMembership(opts ...func(*OrgMembership
 //		GroupBy(programmembership.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (pmq *ProgramMembershipQuery) GroupBy(field string, fields ...string) *ProgramMembershipGroupBy {
-	pmq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ProgramMembershipGroupBy{build: pmq}
-	grbuild.flds = &pmq.ctx.Fields
+func (_q *ProgramMembershipQuery) GroupBy(field string, fields ...string) *ProgramMembershipGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ProgramMembershipGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = programmembership.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -415,63 +415,63 @@ func (pmq *ProgramMembershipQuery) GroupBy(field string, fields ...string) *Prog
 //	client.ProgramMembership.Query().
 //		Select(programmembership.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (pmq *ProgramMembershipQuery) Select(fields ...string) *ProgramMembershipSelect {
-	pmq.ctx.Fields = append(pmq.ctx.Fields, fields...)
-	sbuild := &ProgramMembershipSelect{ProgramMembershipQuery: pmq}
+func (_q *ProgramMembershipQuery) Select(fields ...string) *ProgramMembershipSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ProgramMembershipSelect{ProgramMembershipQuery: _q}
 	sbuild.label = programmembership.Label
-	sbuild.flds, sbuild.scan = &pmq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ProgramMembershipSelect configured with the given aggregations.
-func (pmq *ProgramMembershipQuery) Aggregate(fns ...AggregateFunc) *ProgramMembershipSelect {
-	return pmq.Select().Aggregate(fns...)
+func (_q *ProgramMembershipQuery) Aggregate(fns ...AggregateFunc) *ProgramMembershipSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (pmq *ProgramMembershipQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range pmq.inters {
+func (_q *ProgramMembershipQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, pmq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range pmq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !programmembership.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if pmq.path != nil {
-		prev, err := pmq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		pmq.sql = prev
+		_q.sql = prev
 	}
 	if programmembership.Policy == nil {
 		return errors.New("generated: uninitialized programmembership.Policy (forgotten import generated/runtime?)")
 	}
-	if err := programmembership.Policy.EvalQuery(ctx, pmq); err != nil {
+	if err := programmembership.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProgramMembership, error) {
+func (_q *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProgramMembership, error) {
 	var (
 		nodes       = []*ProgramMembership{}
-		withFKs     = pmq.withFKs
-		_spec       = pmq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			pmq.withProgram != nil,
-			pmq.withUser != nil,
-			pmq.withOrgMembership != nil,
+			_q.withProgram != nil,
+			_q.withUser != nil,
+			_q.withOrgMembership != nil,
 		}
 	)
-	if pmq.withOrgMembership != nil {
+	if _q.withOrgMembership != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -481,52 +481,52 @@ func (pmq *ProgramMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 		return (*ProgramMembership).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ProgramMembership{config: pmq.config}
+		node := &ProgramMembership{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = pmq.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, pmq.schemaConfig)
-	if len(pmq.modifiers) > 0 {
-		_spec.Modifiers = pmq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ProgramMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, pmq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pmq.withProgram; query != nil {
-		if err := pmq.loadProgram(ctx, query, nodes, nil,
+	if query := _q.withProgram; query != nil {
+		if err := _q.loadProgram(ctx, query, nodes, nil,
 			func(n *ProgramMembership, e *Program) { n.Edges.Program = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pmq.withUser; query != nil {
-		if err := pmq.loadUser(ctx, query, nodes, nil,
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *ProgramMembership, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pmq.withOrgMembership; query != nil {
-		if err := pmq.loadOrgMembership(ctx, query, nodes, nil,
+	if query := _q.withOrgMembership; query != nil {
+		if err := _q.loadOrgMembership(ctx, query, nodes, nil,
 			func(n *ProgramMembership, e *OrgMembership) { n.Edges.OrgMembership = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range pmq.loadTotal {
-		if err := pmq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (pmq *ProgramMembershipQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *Program)) error {
+func (_q *ProgramMembershipQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *Program)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
@@ -555,7 +555,7 @@ func (pmq *ProgramMembershipQuery) loadProgram(ctx context.Context, query *Progr
 	}
 	return nil
 }
-func (pmq *ProgramMembershipQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
+func (_q *ProgramMembershipQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
@@ -584,7 +584,7 @@ func (pmq *ProgramMembershipQuery) loadUser(ctx context.Context, query *UserQuer
 	}
 	return nil
 }
-func (pmq *ProgramMembershipQuery) loadOrgMembership(ctx context.Context, query *OrgMembershipQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *OrgMembership)) error {
+func (_q *ProgramMembershipQuery) loadOrgMembership(ctx context.Context, query *OrgMembershipQuery, nodes []*ProgramMembership, init func(*ProgramMembership), assign func(*ProgramMembership, *OrgMembership)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ProgramMembership)
 	for i := range nodes {
@@ -617,29 +617,29 @@ func (pmq *ProgramMembershipQuery) loadOrgMembership(ctx context.Context, query 
 	return nil
 }
 
-func (pmq *ProgramMembershipQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := pmq.querySpec()
-	_spec.Node.Schema = pmq.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, pmq.schemaConfig)
-	if len(pmq.modifiers) > 0 {
-		_spec.Modifiers = pmq.modifiers
+func (_q *ProgramMembershipQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ProgramMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = pmq.ctx.Fields
-	if len(pmq.ctx.Fields) > 0 {
-		_spec.Unique = pmq.ctx.Unique != nil && *pmq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, pmq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (pmq *ProgramMembershipQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ProgramMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(programmembership.Table, programmembership.Columns, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
-	_spec.From = pmq.sql
-	if unique := pmq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if pmq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := pmq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, programmembership.FieldID)
 		for i := range fields {
@@ -647,27 +647,27 @@ func (pmq *ProgramMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pmq.withProgram != nil {
+		if _q.withProgram != nil {
 			_spec.Node.AddColumnOnce(programmembership.FieldProgramID)
 		}
-		if pmq.withUser != nil {
+		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(programmembership.FieldUserID)
 		}
 	}
-	if ps := pmq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := pmq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := pmq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := pmq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -677,48 +677,48 @@ func (pmq *ProgramMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (pmq *ProgramMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(pmq.driver.Dialect())
+func (_q *ProgramMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(programmembership.Table)
-	columns := pmq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = programmembership.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if pmq.sql != nil {
-		selector = pmq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if pmq.ctx.Unique != nil && *pmq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(pmq.schemaConfig.ProgramMembership)
-	ctx = internal.NewSchemaConfigContext(ctx, pmq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ProgramMembership)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range pmq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range pmq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range pmq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := pmq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := pmq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (pmq *ProgramMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *ProgramMembershipSelect {
-	pmq.modifiers = append(pmq.modifiers, modifiers...)
-	return pmq.Select()
+func (_q *ProgramMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *ProgramMembershipSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -747,41 +747,41 @@ type ProgramMembershipGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (pmgb *ProgramMembershipGroupBy) Aggregate(fns ...AggregateFunc) *ProgramMembershipGroupBy {
-	pmgb.fns = append(pmgb.fns, fns...)
-	return pmgb
+func (_g *ProgramMembershipGroupBy) Aggregate(fns ...AggregateFunc) *ProgramMembershipGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (pmgb *ProgramMembershipGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, pmgb.build.ctx, ent.OpQueryGroupBy)
-	if err := pmgb.build.prepareQuery(ctx); err != nil {
+func (_g *ProgramMembershipGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ProgramMembershipQuery, *ProgramMembershipGroupBy](ctx, pmgb.build, pmgb, pmgb.build.inters, v)
+	return scanWithInterceptors[*ProgramMembershipQuery, *ProgramMembershipGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (pmgb *ProgramMembershipGroupBy) sqlScan(ctx context.Context, root *ProgramMembershipQuery, v any) error {
+func (_g *ProgramMembershipGroupBy) sqlScan(ctx context.Context, root *ProgramMembershipQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(pmgb.fns))
-	for _, fn := range pmgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*pmgb.flds)+len(pmgb.fns))
-		for _, f := range *pmgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*pmgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := pmgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -795,27 +795,27 @@ type ProgramMembershipSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (pms *ProgramMembershipSelect) Aggregate(fns ...AggregateFunc) *ProgramMembershipSelect {
-	pms.fns = append(pms.fns, fns...)
-	return pms
+func (_s *ProgramMembershipSelect) Aggregate(fns ...AggregateFunc) *ProgramMembershipSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (pms *ProgramMembershipSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, pms.ctx, ent.OpQuerySelect)
-	if err := pms.prepareQuery(ctx); err != nil {
+func (_s *ProgramMembershipSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ProgramMembershipQuery, *ProgramMembershipSelect](ctx, pms.ProgramMembershipQuery, pms, pms.inters, v)
+	return scanWithInterceptors[*ProgramMembershipQuery, *ProgramMembershipSelect](ctx, _s.ProgramMembershipQuery, _s, _s.inters, v)
 }
 
-func (pms *ProgramMembershipSelect) sqlScan(ctx context.Context, root *ProgramMembershipQuery, v any) error {
+func (_s *ProgramMembershipSelect) sqlScan(ctx context.Context, root *ProgramMembershipQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(pms.fns))
-	for _, fn := range pms.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*pms.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -823,7 +823,7 @@ func (pms *ProgramMembershipSelect) sqlScan(ctx context.Context, root *ProgramMe
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := pms.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -831,7 +831,7 @@ func (pms *ProgramMembershipSelect) sqlScan(ctx context.Context, root *ProgramMe
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (pms *ProgramMembershipSelect) Modify(modifiers ...func(s *sql.Selector)) *ProgramMembershipSelect {
-	pms.modifiers = append(pms.modifiers, modifiers...)
-	return pms
+func (_s *ProgramMembershipSelect) Modify(modifiers ...func(s *sql.Selector)) *ProgramMembershipSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

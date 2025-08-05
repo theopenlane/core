@@ -172,16 +172,6 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 			// write the tuples to the authz service, the permissions to the edges
 			// were already checked by the global edge permissions hook
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				// first check permissions, if the user doesn't have access
-				// these is the easiest place to check and roll back the transaction
-				if err := checkAccessToObjectsFromTuples(ctx, m, addTuples); err != nil {
-					return nil, err
-				}
-
-				if err := checkAccessToObjectsFromTuples(ctx, m, removeTuples); err != nil {
-					return nil, err
-				}
-
 				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 					return nil, err
 				}
@@ -460,47 +450,4 @@ func isPermissionsEdge(edge string) (string, fgax.Relation, bool) {
 	}
 
 	return "", "", false
-}
-
-// checkAccessToObjectsFromTuples checks if the user has access to the object they are trying to give permissions to
-// using the tuple structs that are about to be written
-func checkAccessToObjectsFromTuples(ctx context.Context, m ent.Mutation, tuples []fgax.TupleKey) error {
-	for _, tuple := range tuples {
-		// subject is the group that the permissions are being added to
-		// this is the reverse edge
-		objectID := tuple.Subject.Identifier
-		objectType := string(tuple.Subject.Kind)
-
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return nil
-		}
-
-		// get the user id or service id from the context
-		subject, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			return err
-		}
-
-		// does the user making the request have access to the edge object
-		ac := fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			SubjectType: auth.GetAuthzSubjectType(ctx),
-			SubjectID:   subject.SubjectID,
-			ObjectID:    objectID,
-			ObjectType:  fgax.Kind(objectType),
-			Context:     utils.NewOrganizationContextKey(subject.SubjectEmail),
-		}
-
-		access, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac)
-		if err != nil {
-			return err
-		}
-
-		// return an error if the user does not have access
-		if !access {
-			return generated.ErrPermissionDenied
-		}
-	}
-
-	return nil
 }

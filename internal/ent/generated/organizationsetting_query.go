@@ -39,44 +39,44 @@ type OrganizationSettingQuery struct {
 }
 
 // Where adds a new predicate for the OrganizationSettingQuery builder.
-func (osq *OrganizationSettingQuery) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingQuery {
-	osq.predicates = append(osq.predicates, ps...)
-	return osq
+func (_q *OrganizationSettingQuery) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (osq *OrganizationSettingQuery) Limit(limit int) *OrganizationSettingQuery {
-	osq.ctx.Limit = &limit
-	return osq
+func (_q *OrganizationSettingQuery) Limit(limit int) *OrganizationSettingQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (osq *OrganizationSettingQuery) Offset(offset int) *OrganizationSettingQuery {
-	osq.ctx.Offset = &offset
-	return osq
+func (_q *OrganizationSettingQuery) Offset(offset int) *OrganizationSettingQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (osq *OrganizationSettingQuery) Unique(unique bool) *OrganizationSettingQuery {
-	osq.ctx.Unique = &unique
-	return osq
+func (_q *OrganizationSettingQuery) Unique(unique bool) *OrganizationSettingQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (osq *OrganizationSettingQuery) Order(o ...organizationsetting.OrderOption) *OrganizationSettingQuery {
-	osq.order = append(osq.order, o...)
-	return osq
+func (_q *OrganizationSettingQuery) Order(o ...organizationsetting.OrderOption) *OrganizationSettingQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOrganization chains the current query on the "organization" edge.
-func (osq *OrganizationSettingQuery) QueryOrganization() *OrganizationQuery {
-	query := (&OrganizationClient{config: osq.config}).Query()
+func (_q *OrganizationSettingQuery) QueryOrganization() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := osq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := osq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,23 +85,23 @@ func (osq *OrganizationSettingQuery) QueryOrganization() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, organizationsetting.OrganizationTable, organizationsetting.OrganizationColumn),
 		)
-		schemaConfig := osq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrganizationSetting
-		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (osq *OrganizationSettingQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: osq.config}).Query()
+func (_q *OrganizationSettingQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := osq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := osq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func (osq *OrganizationSettingQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, organizationsetting.FilesTable, organizationsetting.FilesPrimaryKey...),
 		)
-		schemaConfig := osq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
-		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -121,8 +121,8 @@ func (osq *OrganizationSettingQuery) QueryFiles() *FileQuery {
 
 // First returns the first OrganizationSetting entity from the query.
 // Returns a *NotFoundError when no OrganizationSetting was found.
-func (osq *OrganizationSettingQuery) First(ctx context.Context) (*OrganizationSetting, error) {
-	nodes, err := osq.Limit(1).All(setContextOp(ctx, osq.ctx, ent.OpQueryFirst))
+func (_q *OrganizationSettingQuery) First(ctx context.Context) (*OrganizationSetting, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -133,8 +133,8 @@ func (osq *OrganizationSettingQuery) First(ctx context.Context) (*OrganizationSe
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) FirstX(ctx context.Context) *OrganizationSetting {
-	node, err := osq.First(ctx)
+func (_q *OrganizationSettingQuery) FirstX(ctx context.Context) *OrganizationSetting {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -143,9 +143,9 @@ func (osq *OrganizationSettingQuery) FirstX(ctx context.Context) *OrganizationSe
 
 // FirstID returns the first OrganizationSetting ID from the query.
 // Returns a *NotFoundError when no OrganizationSetting ID was found.
-func (osq *OrganizationSettingQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *OrganizationSettingQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = osq.Limit(1).IDs(setContextOp(ctx, osq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -156,8 +156,8 @@ func (osq *OrganizationSettingQuery) FirstID(ctx context.Context) (id string, er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) FirstIDX(ctx context.Context) string {
-	id, err := osq.FirstID(ctx)
+func (_q *OrganizationSettingQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -167,8 +167,8 @@ func (osq *OrganizationSettingQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single OrganizationSetting entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one OrganizationSetting entity is found.
 // Returns a *NotFoundError when no OrganizationSetting entities are found.
-func (osq *OrganizationSettingQuery) Only(ctx context.Context) (*OrganizationSetting, error) {
-	nodes, err := osq.Limit(2).All(setContextOp(ctx, osq.ctx, ent.OpQueryOnly))
+func (_q *OrganizationSettingQuery) Only(ctx context.Context) (*OrganizationSetting, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -183,8 +183,8 @@ func (osq *OrganizationSettingQuery) Only(ctx context.Context) (*OrganizationSet
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) OnlyX(ctx context.Context) *OrganizationSetting {
-	node, err := osq.Only(ctx)
+func (_q *OrganizationSettingQuery) OnlyX(ctx context.Context) *OrganizationSetting {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,9 +194,9 @@ func (osq *OrganizationSettingQuery) OnlyX(ctx context.Context) *OrganizationSet
 // OnlyID is like Only, but returns the only OrganizationSetting ID in the query.
 // Returns a *NotSingularError when more than one OrganizationSetting ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (osq *OrganizationSettingQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *OrganizationSettingQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = osq.Limit(2).IDs(setContextOp(ctx, osq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -211,8 +211,8 @@ func (osq *OrganizationSettingQuery) OnlyID(ctx context.Context) (id string, err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) OnlyIDX(ctx context.Context) string {
-	id, err := osq.OnlyID(ctx)
+func (_q *OrganizationSettingQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,18 +220,18 @@ func (osq *OrganizationSettingQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of OrganizationSettings.
-func (osq *OrganizationSettingQuery) All(ctx context.Context) ([]*OrganizationSetting, error) {
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryAll)
-	if err := osq.prepareQuery(ctx); err != nil {
+func (_q *OrganizationSettingQuery) All(ctx context.Context) ([]*OrganizationSetting, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*OrganizationSetting, *OrganizationSettingQuery]()
-	return withInterceptors[[]*OrganizationSetting](ctx, osq, qr, osq.inters)
+	return withInterceptors[[]*OrganizationSetting](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) AllX(ctx context.Context) []*OrganizationSetting {
-	nodes, err := osq.All(ctx)
+func (_q *OrganizationSettingQuery) AllX(ctx context.Context) []*OrganizationSetting {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,20 +239,20 @@ func (osq *OrganizationSettingQuery) AllX(ctx context.Context) []*OrganizationSe
 }
 
 // IDs executes the query and returns a list of OrganizationSetting IDs.
-func (osq *OrganizationSettingQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if osq.ctx.Unique == nil && osq.path != nil {
-		osq.Unique(true)
+func (_q *OrganizationSettingQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryIDs)
-	if err = osq.Select(organizationsetting.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(organizationsetting.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) IDsX(ctx context.Context) []string {
-	ids, err := osq.IDs(ctx)
+func (_q *OrganizationSettingQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -260,17 +260,17 @@ func (osq *OrganizationSettingQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (osq *OrganizationSettingQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryCount)
-	if err := osq.prepareQuery(ctx); err != nil {
+func (_q *OrganizationSettingQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, osq, querierCount[*OrganizationSettingQuery](), osq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OrganizationSettingQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) CountX(ctx context.Context) int {
-	count, err := osq.Count(ctx)
+func (_q *OrganizationSettingQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -278,9 +278,9 @@ func (osq *OrganizationSettingQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (osq *OrganizationSettingQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryExist)
-	switch _, err := osq.FirstID(ctx); {
+func (_q *OrganizationSettingQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -291,8 +291,8 @@ func (osq *OrganizationSettingQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (osq *OrganizationSettingQuery) ExistX(ctx context.Context) bool {
-	exist, err := osq.Exist(ctx)
+func (_q *OrganizationSettingQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -301,45 +301,45 @@ func (osq *OrganizationSettingQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OrganizationSettingQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (osq *OrganizationSettingQuery) Clone() *OrganizationSettingQuery {
-	if osq == nil {
+func (_q *OrganizationSettingQuery) Clone() *OrganizationSettingQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OrganizationSettingQuery{
-		config:           osq.config,
-		ctx:              osq.ctx.Clone(),
-		order:            append([]organizationsetting.OrderOption{}, osq.order...),
-		inters:           append([]Interceptor{}, osq.inters...),
-		predicates:       append([]predicate.OrganizationSetting{}, osq.predicates...),
-		withOrganization: osq.withOrganization.Clone(),
-		withFiles:        osq.withFiles.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]organizationsetting.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.OrganizationSetting{}, _q.predicates...),
+		withOrganization: _q.withOrganization.Clone(),
+		withFiles:        _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       osq.sql.Clone(),
-		path:      osq.path,
-		modifiers: append([]func(*sql.Selector){}, osq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOrganization tells the query-builder to eager-load the nodes that are connected to
 // the "organization" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrganizationSettingQuery) WithOrganization(opts ...func(*OrganizationQuery)) *OrganizationSettingQuery {
-	query := (&OrganizationClient{config: osq.config}).Query()
+func (_q *OrganizationSettingQuery) WithOrganization(opts ...func(*OrganizationQuery)) *OrganizationSettingQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withOrganization = query
-	return osq
+	_q.withOrganization = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrganizationSettingQuery) WithFiles(opts ...func(*FileQuery)) *OrganizationSettingQuery {
-	query := (&FileClient{config: osq.config}).Query()
+func (_q *OrganizationSettingQuery) WithFiles(opts ...func(*FileQuery)) *OrganizationSettingQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	osq.withFiles = query
-	return osq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -356,10 +356,10 @@ func (osq *OrganizationSettingQuery) WithFiles(opts ...func(*FileQuery)) *Organi
 //		GroupBy(organizationsetting.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (osq *OrganizationSettingQuery) GroupBy(field string, fields ...string) *OrganizationSettingGroupBy {
-	osq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OrganizationSettingGroupBy{build: osq}
-	grbuild.flds = &osq.ctx.Fields
+func (_q *OrganizationSettingQuery) GroupBy(field string, fields ...string) *OrganizationSettingGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OrganizationSettingGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = organizationsetting.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -377,112 +377,112 @@ func (osq *OrganizationSettingQuery) GroupBy(field string, fields ...string) *Or
 //	client.OrganizationSetting.Query().
 //		Select(organizationsetting.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (osq *OrganizationSettingQuery) Select(fields ...string) *OrganizationSettingSelect {
-	osq.ctx.Fields = append(osq.ctx.Fields, fields...)
-	sbuild := &OrganizationSettingSelect{OrganizationSettingQuery: osq}
+func (_q *OrganizationSettingQuery) Select(fields ...string) *OrganizationSettingSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OrganizationSettingSelect{OrganizationSettingQuery: _q}
 	sbuild.label = organizationsetting.Label
-	sbuild.flds, sbuild.scan = &osq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OrganizationSettingSelect configured with the given aggregations.
-func (osq *OrganizationSettingQuery) Aggregate(fns ...AggregateFunc) *OrganizationSettingSelect {
-	return osq.Select().Aggregate(fns...)
+func (_q *OrganizationSettingQuery) Aggregate(fns ...AggregateFunc) *OrganizationSettingSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (osq *OrganizationSettingQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range osq.inters {
+func (_q *OrganizationSettingQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, osq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range osq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !organizationsetting.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if osq.path != nil {
-		prev, err := osq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		osq.sql = prev
+		_q.sql = prev
 	}
 	if organizationsetting.Policy == nil {
 		return errors.New("generated: uninitialized organizationsetting.Policy (forgotten import generated/runtime?)")
 	}
-	if err := organizationsetting.Policy.EvalQuery(ctx, osq); err != nil {
+	if err := organizationsetting.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (osq *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrganizationSetting, error) {
+func (_q *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrganizationSetting, error) {
 	var (
 		nodes       = []*OrganizationSetting{}
-		_spec       = osq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			osq.withOrganization != nil,
-			osq.withFiles != nil,
+			_q.withOrganization != nil,
+			_q.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OrganizationSetting).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &OrganizationSetting{config: osq.config}
+		node := &OrganizationSetting{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = osq.schemaConfig.OrganizationSetting
-	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
-	if len(osq.modifiers) > 0 {
-		_spec.Modifiers = osq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.OrganizationSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, osq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := osq.withOrganization; query != nil {
-		if err := osq.loadOrganization(ctx, query, nodes, nil,
+	if query := _q.withOrganization; query != nil {
+		if err := _q.loadOrganization(ctx, query, nodes, nil,
 			func(n *OrganizationSetting, e *Organization) { n.Edges.Organization = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := osq.withFiles; query != nil {
-		if err := osq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *OrganizationSetting) { n.Edges.Files = []*File{} },
 			func(n *OrganizationSetting, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range osq.withNamedFiles {
-		if err := osq.loadFiles(ctx, query, nodes,
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *OrganizationSetting) { n.appendNamedFiles(name) },
 			func(n *OrganizationSetting, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range osq.loadTotal {
-		if err := osq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (osq *OrganizationSettingQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *Organization)) error {
+func (_q *OrganizationSettingQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrganizationSetting)
 	for i := range nodes {
@@ -511,7 +511,7 @@ func (osq *OrganizationSettingQuery) loadOrganization(ctx context.Context, query
 	}
 	return nil
 }
-func (osq *OrganizationSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *File)) error {
+func (_q *OrganizationSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*OrganizationSetting)
 	nids := make(map[string]map[*OrganizationSetting]struct{})
@@ -524,7 +524,7 @@ func (osq *OrganizationSettingQuery) loadFiles(ctx context.Context, query *FileQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(organizationsetting.FilesTable)
-		joinT.Schema(osq.schemaConfig.OrganizationSettingFiles)
+		joinT.Schema(_q.schemaConfig.OrganizationSettingFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(organizationsetting.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(organizationsetting.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -574,29 +574,29 @@ func (osq *OrganizationSettingQuery) loadFiles(ctx context.Context, query *FileQ
 	return nil
 }
 
-func (osq *OrganizationSettingQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := osq.querySpec()
-	_spec.Node.Schema = osq.schemaConfig.OrganizationSetting
-	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
-	if len(osq.modifiers) > 0 {
-		_spec.Modifiers = osq.modifiers
+func (_q *OrganizationSettingQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.OrganizationSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = osq.ctx.Fields
-	if len(osq.ctx.Fields) > 0 {
-		_spec.Unique = osq.ctx.Unique != nil && *osq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, osq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (osq *OrganizationSettingQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OrganizationSettingQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(organizationsetting.Table, organizationsetting.Columns, sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString))
-	_spec.From = osq.sql
-	if unique := osq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if osq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := osq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organizationsetting.FieldID)
 		for i := range fields {
@@ -604,24 +604,24 @@ func (osq *OrganizationSettingQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if osq.withOrganization != nil {
+		if _q.withOrganization != nil {
 			_spec.Node.AddColumnOnce(organizationsetting.FieldOrganizationID)
 		}
 	}
-	if ps := osq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := osq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := osq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := osq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -631,62 +631,62 @@ func (osq *OrganizationSettingQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (osq *OrganizationSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(osq.driver.Dialect())
+func (_q *OrganizationSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(organizationsetting.Table)
-	columns := osq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = organizationsetting.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if osq.sql != nil {
-		selector = osq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if osq.ctx.Unique != nil && *osq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(osq.schemaConfig.OrganizationSetting)
-	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
+	t1.Schema(_q.schemaConfig.OrganizationSetting)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range osq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range osq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range osq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := osq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := osq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (osq *OrganizationSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
-	osq.modifiers = append(osq.modifiers, modifiers...)
-	return osq.Select()
+func (_q *OrganizationSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (osq *OrganizationSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *OrganizationSettingQuery {
-	query := (&FileClient{config: osq.config}).Query()
+func (_q *OrganizationSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *OrganizationSettingQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if osq.withNamedFiles == nil {
-		osq.withNamedFiles = make(map[string]*FileQuery)
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
-	osq.withNamedFiles[name] = query
-	return osq
+	_q.withNamedFiles[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -715,41 +715,41 @@ type OrganizationSettingGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (osgb *OrganizationSettingGroupBy) Aggregate(fns ...AggregateFunc) *OrganizationSettingGroupBy {
-	osgb.fns = append(osgb.fns, fns...)
-	return osgb
+func (_g *OrganizationSettingGroupBy) Aggregate(fns ...AggregateFunc) *OrganizationSettingGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (osgb *OrganizationSettingGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, osgb.build.ctx, ent.OpQueryGroupBy)
-	if err := osgb.build.prepareQuery(ctx); err != nil {
+func (_g *OrganizationSettingGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrganizationSettingQuery, *OrganizationSettingGroupBy](ctx, osgb.build, osgb, osgb.build.inters, v)
+	return scanWithInterceptors[*OrganizationSettingQuery, *OrganizationSettingGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (osgb *OrganizationSettingGroupBy) sqlScan(ctx context.Context, root *OrganizationSettingQuery, v any) error {
+func (_g *OrganizationSettingGroupBy) sqlScan(ctx context.Context, root *OrganizationSettingQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(osgb.fns))
-	for _, fn := range osgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*osgb.flds)+len(osgb.fns))
-		for _, f := range *osgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*osgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := osgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -763,27 +763,27 @@ type OrganizationSettingSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (oss *OrganizationSettingSelect) Aggregate(fns ...AggregateFunc) *OrganizationSettingSelect {
-	oss.fns = append(oss.fns, fns...)
-	return oss
+func (_s *OrganizationSettingSelect) Aggregate(fns ...AggregateFunc) *OrganizationSettingSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (oss *OrganizationSettingSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oss.ctx, ent.OpQuerySelect)
-	if err := oss.prepareQuery(ctx); err != nil {
+func (_s *OrganizationSettingSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrganizationSettingQuery, *OrganizationSettingSelect](ctx, oss.OrganizationSettingQuery, oss, oss.inters, v)
+	return scanWithInterceptors[*OrganizationSettingQuery, *OrganizationSettingSelect](ctx, _s.OrganizationSettingQuery, _s, _s.inters, v)
 }
 
-func (oss *OrganizationSettingSelect) sqlScan(ctx context.Context, root *OrganizationSettingQuery, v any) error {
+func (_s *OrganizationSettingSelect) sqlScan(ctx context.Context, root *OrganizationSettingQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(oss.fns))
-	for _, fn := range oss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*oss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -791,7 +791,7 @@ func (oss *OrganizationSettingSelect) sqlScan(ctx context.Context, root *Organiz
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := oss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -799,7 +799,7 @@ func (oss *OrganizationSettingSelect) sqlScan(ctx context.Context, root *Organiz
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oss *OrganizationSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
-	oss.modifiers = append(oss.modifiers, modifiers...)
-	return oss
+func (_s *OrganizationSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

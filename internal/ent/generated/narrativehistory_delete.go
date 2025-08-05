@@ -22,58 +22,58 @@ type NarrativeHistoryDelete struct {
 }
 
 // Where appends a list predicates to the NarrativeHistoryDelete builder.
-func (nhd *NarrativeHistoryDelete) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryDelete {
-	nhd.mutation.Where(ps...)
-	return nhd
+func (_d *NarrativeHistoryDelete) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (nhd *NarrativeHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, nhd.sqlExec, nhd.mutation, nhd.hooks)
+func (_d *NarrativeHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nhd *NarrativeHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := nhd.Exec(ctx)
+func (_d *NarrativeHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (nhd *NarrativeHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *NarrativeHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(narrativehistory.Table, sqlgraph.NewFieldSpec(narrativehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = nhd.schemaConfig.NarrativeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhd.schemaConfig)
-	if ps := nhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.NarrativeHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, nhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	nhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // NarrativeHistoryDeleteOne is the builder for deleting a single NarrativeHistory entity.
 type NarrativeHistoryDeleteOne struct {
-	nhd *NarrativeHistoryDelete
+	_d *NarrativeHistoryDelete
 }
 
 // Where appends a list predicates to the NarrativeHistoryDelete builder.
-func (nhdo *NarrativeHistoryDeleteOne) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryDeleteOne {
-	nhdo.nhd.mutation.Where(ps...)
-	return nhdo
+func (_d *NarrativeHistoryDeleteOne) Where(ps ...predicate.NarrativeHistory) *NarrativeHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (nhdo *NarrativeHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := nhdo.nhd.Exec(ctx)
+func (_d *NarrativeHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (nhdo *NarrativeHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nhdo *NarrativeHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := nhdo.Exec(ctx); err != nil {
+func (_d *NarrativeHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

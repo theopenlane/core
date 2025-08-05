@@ -22,58 +22,58 @@ type MappableDomainDelete struct {
 }
 
 // Where appends a list predicates to the MappableDomainDelete builder.
-func (mdd *MappableDomainDelete) Where(ps ...predicate.MappableDomain) *MappableDomainDelete {
-	mdd.mutation.Where(ps...)
-	return mdd
+func (_d *MappableDomainDelete) Where(ps ...predicate.MappableDomain) *MappableDomainDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (mdd *MappableDomainDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, mdd.sqlExec, mdd.mutation, mdd.hooks)
+func (_d *MappableDomainDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mdd *MappableDomainDelete) ExecX(ctx context.Context) int {
-	n, err := mdd.Exec(ctx)
+func (_d *MappableDomainDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (mdd *MappableDomainDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *MappableDomainDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(mappabledomain.Table, sqlgraph.NewFieldSpec(mappabledomain.FieldID, field.TypeString))
-	_spec.Node.Schema = mdd.schemaConfig.MappableDomain
-	ctx = internal.NewSchemaConfigContext(ctx, mdd.schemaConfig)
-	if ps := mdd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.MappableDomain
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, mdd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	mdd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // MappableDomainDeleteOne is the builder for deleting a single MappableDomain entity.
 type MappableDomainDeleteOne struct {
-	mdd *MappableDomainDelete
+	_d *MappableDomainDelete
 }
 
 // Where appends a list predicates to the MappableDomainDelete builder.
-func (mddo *MappableDomainDeleteOne) Where(ps ...predicate.MappableDomain) *MappableDomainDeleteOne {
-	mddo.mdd.mutation.Where(ps...)
-	return mddo
+func (_d *MappableDomainDeleteOne) Where(ps ...predicate.MappableDomain) *MappableDomainDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (mddo *MappableDomainDeleteOne) Exec(ctx context.Context) error {
-	n, err := mddo.mdd.Exec(ctx)
+func (_d *MappableDomainDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (mddo *MappableDomainDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mddo *MappableDomainDeleteOne) ExecX(ctx context.Context) {
-	if err := mddo.Exec(ctx); err != nil {
+func (_d *MappableDomainDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

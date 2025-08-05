@@ -23,331 +23,331 @@ type UserHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (uhc *UserHistoryCreate) SetHistoryTime(t time.Time) *UserHistoryCreate {
-	uhc.mutation.SetHistoryTime(t)
-	return uhc
+func (_c *UserHistoryCreate) SetHistoryTime(v time.Time) *UserHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableHistoryTime(t *time.Time) *UserHistoryCreate {
-	if t != nil {
-		uhc.SetHistoryTime(*t)
+func (_c *UserHistoryCreate) SetNillableHistoryTime(v *time.Time) *UserHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (uhc *UserHistoryCreate) SetRef(s string) *UserHistoryCreate {
-	uhc.mutation.SetRef(s)
-	return uhc
+func (_c *UserHistoryCreate) SetRef(v string) *UserHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableRef(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetRef(*s)
+func (_c *UserHistoryCreate) SetNillableRef(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (uhc *UserHistoryCreate) SetOperation(ht history.OpType) *UserHistoryCreate {
-	uhc.mutation.SetOperation(ht)
-	return uhc
+func (_c *UserHistoryCreate) SetOperation(v history.OpType) *UserHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (uhc *UserHistoryCreate) SetCreatedAt(t time.Time) *UserHistoryCreate {
-	uhc.mutation.SetCreatedAt(t)
-	return uhc
+func (_c *UserHistoryCreate) SetCreatedAt(v time.Time) *UserHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableCreatedAt(t *time.Time) *UserHistoryCreate {
-	if t != nil {
-		uhc.SetCreatedAt(*t)
+func (_c *UserHistoryCreate) SetNillableCreatedAt(v *time.Time) *UserHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (uhc *UserHistoryCreate) SetUpdatedAt(t time.Time) *UserHistoryCreate {
-	uhc.mutation.SetUpdatedAt(t)
-	return uhc
+func (_c *UserHistoryCreate) SetUpdatedAt(v time.Time) *UserHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableUpdatedAt(t *time.Time) *UserHistoryCreate {
-	if t != nil {
-		uhc.SetUpdatedAt(*t)
+func (_c *UserHistoryCreate) SetNillableUpdatedAt(v *time.Time) *UserHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (uhc *UserHistoryCreate) SetCreatedBy(s string) *UserHistoryCreate {
-	uhc.mutation.SetCreatedBy(s)
-	return uhc
+func (_c *UserHistoryCreate) SetCreatedBy(v string) *UserHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableCreatedBy(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetCreatedBy(*s)
+func (_c *UserHistoryCreate) SetNillableCreatedBy(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (uhc *UserHistoryCreate) SetUpdatedBy(s string) *UserHistoryCreate {
-	uhc.mutation.SetUpdatedBy(s)
-	return uhc
+func (_c *UserHistoryCreate) SetUpdatedBy(v string) *UserHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableUpdatedBy(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetUpdatedBy(*s)
+func (_c *UserHistoryCreate) SetNillableUpdatedBy(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (uhc *UserHistoryCreate) SetDeletedAt(t time.Time) *UserHistoryCreate {
-	uhc.mutation.SetDeletedAt(t)
-	return uhc
+func (_c *UserHistoryCreate) SetDeletedAt(v time.Time) *UserHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableDeletedAt(t *time.Time) *UserHistoryCreate {
-	if t != nil {
-		uhc.SetDeletedAt(*t)
+func (_c *UserHistoryCreate) SetNillableDeletedAt(v *time.Time) *UserHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (uhc *UserHistoryCreate) SetDeletedBy(s string) *UserHistoryCreate {
-	uhc.mutation.SetDeletedBy(s)
-	return uhc
+func (_c *UserHistoryCreate) SetDeletedBy(v string) *UserHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableDeletedBy(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetDeletedBy(*s)
+func (_c *UserHistoryCreate) SetNillableDeletedBy(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (uhc *UserHistoryCreate) SetDisplayID(s string) *UserHistoryCreate {
-	uhc.mutation.SetDisplayID(s)
-	return uhc
+func (_c *UserHistoryCreate) SetDisplayID(v string) *UserHistoryCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (uhc *UserHistoryCreate) SetTags(s []string) *UserHistoryCreate {
-	uhc.mutation.SetTags(s)
-	return uhc
+func (_c *UserHistoryCreate) SetTags(v []string) *UserHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetEmail sets the "email" field.
-func (uhc *UserHistoryCreate) SetEmail(s string) *UserHistoryCreate {
-	uhc.mutation.SetEmail(s)
-	return uhc
+func (_c *UserHistoryCreate) SetEmail(v string) *UserHistoryCreate {
+	_c.mutation.SetEmail(v)
+	return _c
 }
 
 // SetFirstName sets the "first_name" field.
-func (uhc *UserHistoryCreate) SetFirstName(s string) *UserHistoryCreate {
-	uhc.mutation.SetFirstName(s)
-	return uhc
+func (_c *UserHistoryCreate) SetFirstName(v string) *UserHistoryCreate {
+	_c.mutation.SetFirstName(v)
+	return _c
 }
 
 // SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableFirstName(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetFirstName(*s)
+func (_c *UserHistoryCreate) SetNillableFirstName(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetFirstName(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetLastName sets the "last_name" field.
-func (uhc *UserHistoryCreate) SetLastName(s string) *UserHistoryCreate {
-	uhc.mutation.SetLastName(s)
-	return uhc
+func (_c *UserHistoryCreate) SetLastName(v string) *UserHistoryCreate {
+	_c.mutation.SetLastName(v)
+	return _c
 }
 
 // SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableLastName(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetLastName(*s)
+func (_c *UserHistoryCreate) SetNillableLastName(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetLastName(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetDisplayName sets the "display_name" field.
-func (uhc *UserHistoryCreate) SetDisplayName(s string) *UserHistoryCreate {
-	uhc.mutation.SetDisplayName(s)
-	return uhc
+func (_c *UserHistoryCreate) SetDisplayName(v string) *UserHistoryCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
 }
 
 // SetAvatarRemoteURL sets the "avatar_remote_url" field.
-func (uhc *UserHistoryCreate) SetAvatarRemoteURL(s string) *UserHistoryCreate {
-	uhc.mutation.SetAvatarRemoteURL(s)
-	return uhc
+func (_c *UserHistoryCreate) SetAvatarRemoteURL(v string) *UserHistoryCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
 }
 
 // SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableAvatarRemoteURL(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetAvatarRemoteURL(*s)
+func (_c *UserHistoryCreate) SetNillableAvatarRemoteURL(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (uhc *UserHistoryCreate) SetAvatarLocalFileID(s string) *UserHistoryCreate {
-	uhc.mutation.SetAvatarLocalFileID(s)
-	return uhc
+func (_c *UserHistoryCreate) SetAvatarLocalFileID(v string) *UserHistoryCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
 }
 
 // SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableAvatarLocalFileID(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetAvatarLocalFileID(*s)
+func (_c *UserHistoryCreate) SetNillableAvatarLocalFileID(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
-func (uhc *UserHistoryCreate) SetAvatarUpdatedAt(t time.Time) *UserHistoryCreate {
-	uhc.mutation.SetAvatarUpdatedAt(t)
-	return uhc
+func (_c *UserHistoryCreate) SetAvatarUpdatedAt(v time.Time) *UserHistoryCreate {
+	_c.mutation.SetAvatarUpdatedAt(v)
+	return _c
 }
 
 // SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableAvatarUpdatedAt(t *time.Time) *UserHistoryCreate {
-	if t != nil {
-		uhc.SetAvatarUpdatedAt(*t)
+func (_c *UserHistoryCreate) SetNillableAvatarUpdatedAt(v *time.Time) *UserHistoryCreate {
+	if v != nil {
+		_c.SetAvatarUpdatedAt(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetLastSeen sets the "last_seen" field.
-func (uhc *UserHistoryCreate) SetLastSeen(t time.Time) *UserHistoryCreate {
-	uhc.mutation.SetLastSeen(t)
-	return uhc
+func (_c *UserHistoryCreate) SetLastSeen(v time.Time) *UserHistoryCreate {
+	_c.mutation.SetLastSeen(v)
+	return _c
 }
 
 // SetNillableLastSeen sets the "last_seen" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableLastSeen(t *time.Time) *UserHistoryCreate {
-	if t != nil {
-		uhc.SetLastSeen(*t)
+func (_c *UserHistoryCreate) SetNillableLastSeen(v *time.Time) *UserHistoryCreate {
+	if v != nil {
+		_c.SetLastSeen(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetLastLoginProvider sets the "last_login_provider" field.
-func (uhc *UserHistoryCreate) SetLastLoginProvider(ep enums.AuthProvider) *UserHistoryCreate {
-	uhc.mutation.SetLastLoginProvider(ep)
-	return uhc
+func (_c *UserHistoryCreate) SetLastLoginProvider(v enums.AuthProvider) *UserHistoryCreate {
+	_c.mutation.SetLastLoginProvider(v)
+	return _c
 }
 
 // SetNillableLastLoginProvider sets the "last_login_provider" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableLastLoginProvider(ep *enums.AuthProvider) *UserHistoryCreate {
-	if ep != nil {
-		uhc.SetLastLoginProvider(*ep)
+func (_c *UserHistoryCreate) SetNillableLastLoginProvider(v *enums.AuthProvider) *UserHistoryCreate {
+	if v != nil {
+		_c.SetLastLoginProvider(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetPassword sets the "password" field.
-func (uhc *UserHistoryCreate) SetPassword(s string) *UserHistoryCreate {
-	uhc.mutation.SetPassword(s)
-	return uhc
+func (_c *UserHistoryCreate) SetPassword(v string) *UserHistoryCreate {
+	_c.mutation.SetPassword(v)
+	return _c
 }
 
 // SetNillablePassword sets the "password" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillablePassword(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetPassword(*s)
+func (_c *UserHistoryCreate) SetNillablePassword(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetPassword(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetSub sets the "sub" field.
-func (uhc *UserHistoryCreate) SetSub(s string) *UserHistoryCreate {
-	uhc.mutation.SetSub(s)
-	return uhc
+func (_c *UserHistoryCreate) SetSub(v string) *UserHistoryCreate {
+	_c.mutation.SetSub(v)
+	return _c
 }
 
 // SetNillableSub sets the "sub" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableSub(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetSub(*s)
+func (_c *UserHistoryCreate) SetNillableSub(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetSub(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetAuthProvider sets the "auth_provider" field.
-func (uhc *UserHistoryCreate) SetAuthProvider(ep enums.AuthProvider) *UserHistoryCreate {
-	uhc.mutation.SetAuthProvider(ep)
-	return uhc
+func (_c *UserHistoryCreate) SetAuthProvider(v enums.AuthProvider) *UserHistoryCreate {
+	_c.mutation.SetAuthProvider(v)
+	return _c
 }
 
 // SetNillableAuthProvider sets the "auth_provider" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableAuthProvider(ep *enums.AuthProvider) *UserHistoryCreate {
-	if ep != nil {
-		uhc.SetAuthProvider(*ep)
+func (_c *UserHistoryCreate) SetNillableAuthProvider(v *enums.AuthProvider) *UserHistoryCreate {
+	if v != nil {
+		_c.SetAuthProvider(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (uhc *UserHistoryCreate) SetRole(e enums.Role) *UserHistoryCreate {
-	uhc.mutation.SetRole(e)
-	return uhc
+func (_c *UserHistoryCreate) SetRole(v enums.Role) *UserHistoryCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableRole(e *enums.Role) *UserHistoryCreate {
-	if e != nil {
-		uhc.SetRole(*e)
+func (_c *UserHistoryCreate) SetNillableRole(v *enums.Role) *UserHistoryCreate {
+	if v != nil {
+		_c.SetRole(*v)
 	}
-	return uhc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (uhc *UserHistoryCreate) SetID(s string) *UserHistoryCreate {
-	uhc.mutation.SetID(s)
-	return uhc
+func (_c *UserHistoryCreate) SetID(v string) *UserHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableID(s *string) *UserHistoryCreate {
-	if s != nil {
-		uhc.SetID(*s)
+func (_c *UserHistoryCreate) SetNillableID(v *string) *UserHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return uhc
+	return _c
 }
 
 // Mutation returns the UserHistoryMutation object of the builder.
-func (uhc *UserHistoryCreate) Mutation() *UserHistoryMutation {
-	return uhc.mutation
+func (_c *UserHistoryCreate) Mutation() *UserHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the UserHistory in the database.
-func (uhc *UserHistoryCreate) Save(ctx context.Context) (*UserHistory, error) {
-	if err := uhc.defaults(); err != nil {
+func (_c *UserHistoryCreate) Save(ctx context.Context) (*UserHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, uhc.sqlSave, uhc.mutation, uhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (uhc *UserHistoryCreate) SaveX(ctx context.Context) *UserHistory {
-	v, err := uhc.Save(ctx)
+func (_c *UserHistoryCreate) SaveX(ctx context.Context) *UserHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -355,106 +355,106 @@ func (uhc *UserHistoryCreate) SaveX(ctx context.Context) *UserHistory {
 }
 
 // Exec executes the query.
-func (uhc *UserHistoryCreate) Exec(ctx context.Context) error {
-	_, err := uhc.Save(ctx)
+func (_c *UserHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (uhc *UserHistoryCreate) ExecX(ctx context.Context) {
-	if err := uhc.Exec(ctx); err != nil {
+func (_c *UserHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (uhc *UserHistoryCreate) defaults() error {
-	if _, ok := uhc.mutation.HistoryTime(); !ok {
+func (_c *UserHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if userhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := userhistory.DefaultHistoryTime()
-		uhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := uhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if userhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.DefaultCreatedAt()
-		uhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := uhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if userhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.DefaultUpdatedAt()
-		uhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := uhc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := userhistory.DefaultTags
-		uhc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := uhc.mutation.AvatarUpdatedAt(); !ok {
+	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
 		if userhistory.DefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := userhistory.DefaultAvatarUpdatedAt()
-		uhc.mutation.SetAvatarUpdatedAt(v)
+		_c.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := uhc.mutation.AuthProvider(); !ok {
+	if _, ok := _c.mutation.AuthProvider(); !ok {
 		v := userhistory.DefaultAuthProvider
-		uhc.mutation.SetAuthProvider(v)
+		_c.mutation.SetAuthProvider(v)
 	}
-	if _, ok := uhc.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		v := userhistory.DefaultRole
-		uhc.mutation.SetRole(v)
+		_c.mutation.SetRole(v)
 	}
-	if _, ok := uhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if userhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized userhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := userhistory.DefaultID()
-		uhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (uhc *UserHistoryCreate) check() error {
-	if _, ok := uhc.mutation.HistoryTime(); !ok {
+func (_c *UserHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "UserHistory.history_time"`)}
 	}
-	if _, ok := uhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "UserHistory.operation"`)}
 	}
-	if v, ok := uhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := userhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "UserHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := uhc.mutation.DisplayID(); !ok {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "UserHistory.display_id"`)}
 	}
-	if _, ok := uhc.mutation.Email(); !ok {
+	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "UserHistory.email"`)}
 	}
-	if _, ok := uhc.mutation.DisplayName(); !ok {
+	if _, ok := _c.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`generated: missing required field "UserHistory.display_name"`)}
 	}
-	if v, ok := uhc.mutation.LastLoginProvider(); ok {
+	if v, ok := _c.mutation.LastLoginProvider(); ok {
 		if err := userhistory.LastLoginProviderValidator(v); err != nil {
 			return &ValidationError{Name: "last_login_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.last_login_provider": %w`, err)}
 		}
 	}
-	if _, ok := uhc.mutation.AuthProvider(); !ok {
+	if _, ok := _c.mutation.AuthProvider(); !ok {
 		return &ValidationError{Name: "auth_provider", err: errors.New(`generated: missing required field "UserHistory.auth_provider"`)}
 	}
-	if v, ok := uhc.mutation.AuthProvider(); ok {
+	if v, ok := _c.mutation.AuthProvider(); ok {
 		if err := userhistory.AuthProviderValidator(v); err != nil {
 			return &ValidationError{Name: "auth_provider", err: fmt.Errorf(`generated: validator failed for field "UserHistory.auth_provider": %w`, err)}
 		}
 	}
-	if v, ok := uhc.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := userhistory.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "UserHistory.role": %w`, err)}
 		}
@@ -462,12 +462,12 @@ func (uhc *UserHistoryCreate) check() error {
 	return nil
 }
 
-func (uhc *UserHistoryCreate) sqlSave(ctx context.Context) (*UserHistory, error) {
-	if err := uhc.check(); err != nil {
+func (_c *UserHistoryCreate) sqlSave(ctx context.Context) (*UserHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := uhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, uhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -480,114 +480,114 @@ func (uhc *UserHistoryCreate) sqlSave(ctx context.Context) (*UserHistory, error)
 			return nil, fmt.Errorf("unexpected UserHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	uhc.mutation.id = &_node.ID
-	uhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) {
+func (_c *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &UserHistory{config: uhc.config}
+		_node = &UserHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(userhistory.Table, sqlgraph.NewFieldSpec(userhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = uhc.schemaConfig.UserHistory
-	if id, ok := uhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.UserHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := uhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(userhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := uhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(userhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := uhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(userhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := uhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(userhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := uhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := uhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(userhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := uhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := uhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := uhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := uhc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(userhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := uhc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(userhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := uhc.mutation.Email(); ok {
+	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(userhistory.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := uhc.mutation.FirstName(); ok {
+	if value, ok := _c.mutation.FirstName(); ok {
 		_spec.SetField(userhistory.FieldFirstName, field.TypeString, value)
 		_node.FirstName = value
 	}
-	if value, ok := uhc.mutation.LastName(); ok {
+	if value, ok := _c.mutation.LastName(); ok {
 		_spec.SetField(userhistory.FieldLastName, field.TypeString, value)
 		_node.LastName = value
 	}
-	if value, ok := uhc.mutation.DisplayName(); ok {
+	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(userhistory.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
 	}
-	if value, ok := uhc.mutation.AvatarRemoteURL(); ok {
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(userhistory.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
 	}
-	if value, ok := uhc.mutation.AvatarLocalFileID(); ok {
+	if value, ok := _c.mutation.AvatarLocalFileID(); ok {
 		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
 		_node.AvatarLocalFileID = &value
 	}
-	if value, ok := uhc.mutation.AvatarUpdatedAt(); ok {
+	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 		_node.AvatarUpdatedAt = &value
 	}
-	if value, ok := uhc.mutation.LastSeen(); ok {
+	if value, ok := _c.mutation.LastSeen(); ok {
 		_spec.SetField(userhistory.FieldLastSeen, field.TypeTime, value)
 		_node.LastSeen = &value
 	}
-	if value, ok := uhc.mutation.LastLoginProvider(); ok {
+	if value, ok := _c.mutation.LastLoginProvider(); ok {
 		_spec.SetField(userhistory.FieldLastLoginProvider, field.TypeEnum, value)
 		_node.LastLoginProvider = value
 	}
-	if value, ok := uhc.mutation.Password(); ok {
+	if value, ok := _c.mutation.Password(); ok {
 		_spec.SetField(userhistory.FieldPassword, field.TypeString, value)
 		_node.Password = &value
 	}
-	if value, ok := uhc.mutation.Sub(); ok {
+	if value, ok := _c.mutation.Sub(); ok {
 		_spec.SetField(userhistory.FieldSub, field.TypeString, value)
 		_node.Sub = value
 	}
-	if value, ok := uhc.mutation.AuthProvider(); ok {
+	if value, ok := _c.mutation.AuthProvider(); ok {
 		_spec.SetField(userhistory.FieldAuthProvider, field.TypeEnum, value)
 		_node.AuthProvider = value
 	}
-	if value, ok := uhc.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(userhistory.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
@@ -602,16 +602,16 @@ type UserHistoryCreateBulk struct {
 }
 
 // Save creates the UserHistory entities in the database.
-func (uhcb *UserHistoryCreateBulk) Save(ctx context.Context) ([]*UserHistory, error) {
-	if uhcb.err != nil {
-		return nil, uhcb.err
+func (_c *UserHistoryCreateBulk) Save(ctx context.Context) ([]*UserHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(uhcb.builders))
-	nodes := make([]*UserHistory, len(uhcb.builders))
-	mutators := make([]Mutator, len(uhcb.builders))
-	for i := range uhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*UserHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := uhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*UserHistoryMutation)
@@ -625,11 +625,11 @@ func (uhcb *UserHistoryCreateBulk) Save(ctx context.Context) ([]*UserHistory, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, uhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, uhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -649,7 +649,7 @@ func (uhcb *UserHistoryCreateBulk) Save(ctx context.Context) ([]*UserHistory, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, uhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -657,8 +657,8 @@ func (uhcb *UserHistoryCreateBulk) Save(ctx context.Context) ([]*UserHistory, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (uhcb *UserHistoryCreateBulk) SaveX(ctx context.Context) []*UserHistory {
-	v, err := uhcb.Save(ctx)
+func (_c *UserHistoryCreateBulk) SaveX(ctx context.Context) []*UserHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -666,14 +666,14 @@ func (uhcb *UserHistoryCreateBulk) SaveX(ctx context.Context) []*UserHistory {
 }
 
 // Exec executes the query.
-func (uhcb *UserHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := uhcb.Save(ctx)
+func (_c *UserHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (uhcb *UserHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := uhcb.Exec(ctx); err != nil {
+func (_c *UserHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

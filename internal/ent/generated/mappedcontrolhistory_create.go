@@ -23,229 +23,229 @@ type MappedControlHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (mchc *MappedControlHistoryCreate) SetHistoryTime(t time.Time) *MappedControlHistoryCreate {
-	mchc.mutation.SetHistoryTime(t)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetHistoryTime(v time.Time) *MappedControlHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableHistoryTime(t *time.Time) *MappedControlHistoryCreate {
-	if t != nil {
-		mchc.SetHistoryTime(*t)
+func (_c *MappedControlHistoryCreate) SetNillableHistoryTime(v *time.Time) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (mchc *MappedControlHistoryCreate) SetRef(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetRef(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetRef(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableRef(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetRef(*s)
+func (_c *MappedControlHistoryCreate) SetNillableRef(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (mchc *MappedControlHistoryCreate) SetOperation(ht history.OpType) *MappedControlHistoryCreate {
-	mchc.mutation.SetOperation(ht)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetOperation(v history.OpType) *MappedControlHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (mchc *MappedControlHistoryCreate) SetCreatedAt(t time.Time) *MappedControlHistoryCreate {
-	mchc.mutation.SetCreatedAt(t)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetCreatedAt(v time.Time) *MappedControlHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableCreatedAt(t *time.Time) *MappedControlHistoryCreate {
-	if t != nil {
-		mchc.SetCreatedAt(*t)
+func (_c *MappedControlHistoryCreate) SetNillableCreatedAt(v *time.Time) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mchc *MappedControlHistoryCreate) SetUpdatedAt(t time.Time) *MappedControlHistoryCreate {
-	mchc.mutation.SetUpdatedAt(t)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetUpdatedAt(v time.Time) *MappedControlHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableUpdatedAt(t *time.Time) *MappedControlHistoryCreate {
-	if t != nil {
-		mchc.SetUpdatedAt(*t)
+func (_c *MappedControlHistoryCreate) SetNillableUpdatedAt(v *time.Time) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (mchc *MappedControlHistoryCreate) SetCreatedBy(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetCreatedBy(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetCreatedBy(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableCreatedBy(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetCreatedBy(*s)
+func (_c *MappedControlHistoryCreate) SetNillableCreatedBy(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mchc *MappedControlHistoryCreate) SetUpdatedBy(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetUpdatedBy(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetUpdatedBy(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableUpdatedBy(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetUpdatedBy(*s)
+func (_c *MappedControlHistoryCreate) SetNillableUpdatedBy(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (mchc *MappedControlHistoryCreate) SetDeletedAt(t time.Time) *MappedControlHistoryCreate {
-	mchc.mutation.SetDeletedAt(t)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetDeletedAt(v time.Time) *MappedControlHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableDeletedAt(t *time.Time) *MappedControlHistoryCreate {
-	if t != nil {
-		mchc.SetDeletedAt(*t)
+func (_c *MappedControlHistoryCreate) SetNillableDeletedAt(v *time.Time) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (mchc *MappedControlHistoryCreate) SetDeletedBy(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetDeletedBy(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetDeletedBy(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableDeletedBy(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetDeletedBy(*s)
+func (_c *MappedControlHistoryCreate) SetNillableDeletedBy(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (mchc *MappedControlHistoryCreate) SetTags(s []string) *MappedControlHistoryCreate {
-	mchc.mutation.SetTags(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetTags(v []string) *MappedControlHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (mchc *MappedControlHistoryCreate) SetOwnerID(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetOwnerID(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetOwnerID(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableOwnerID(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetOwnerID(*s)
+func (_c *MappedControlHistoryCreate) SetNillableOwnerID(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetMappingType sets the "mapping_type" field.
-func (mchc *MappedControlHistoryCreate) SetMappingType(et enums.MappingType) *MappedControlHistoryCreate {
-	mchc.mutation.SetMappingType(et)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetMappingType(v enums.MappingType) *MappedControlHistoryCreate {
+	_c.mutation.SetMappingType(v)
+	return _c
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableMappingType(et *enums.MappingType) *MappedControlHistoryCreate {
-	if et != nil {
-		mchc.SetMappingType(*et)
+func (_c *MappedControlHistoryCreate) SetNillableMappingType(v *enums.MappingType) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetMappingType(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetRelation sets the "relation" field.
-func (mchc *MappedControlHistoryCreate) SetRelation(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetRelation(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetRelation(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetRelation(v)
+	return _c
 }
 
 // SetNillableRelation sets the "relation" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableRelation(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetRelation(*s)
+func (_c *MappedControlHistoryCreate) SetNillableRelation(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetRelation(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetConfidence sets the "confidence" field.
-func (mchc *MappedControlHistoryCreate) SetConfidence(i int) *MappedControlHistoryCreate {
-	mchc.mutation.SetConfidence(i)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetConfidence(v int) *MappedControlHistoryCreate {
+	_c.mutation.SetConfidence(v)
+	return _c
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableConfidence(i *int) *MappedControlHistoryCreate {
-	if i != nil {
-		mchc.SetConfidence(*i)
+func (_c *MappedControlHistoryCreate) SetNillableConfidence(v *int) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetConfidence(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetSource sets the "source" field.
-func (mchc *MappedControlHistoryCreate) SetSource(es enums.MappingSource) *MappedControlHistoryCreate {
-	mchc.mutation.SetSource(es)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetSource(v enums.MappingSource) *MappedControlHistoryCreate {
+	_c.mutation.SetSource(v)
+	return _c
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableSource(es *enums.MappingSource) *MappedControlHistoryCreate {
-	if es != nil {
-		mchc.SetSource(*es)
+func (_c *MappedControlHistoryCreate) SetNillableSource(v *enums.MappingSource) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetSource(*v)
 	}
-	return mchc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (mchc *MappedControlHistoryCreate) SetID(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetID(s)
-	return mchc
+func (_c *MappedControlHistoryCreate) SetID(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableID(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetID(*s)
+func (_c *MappedControlHistoryCreate) SetNillableID(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return mchc
+	return _c
 }
 
 // Mutation returns the MappedControlHistoryMutation object of the builder.
-func (mchc *MappedControlHistoryCreate) Mutation() *MappedControlHistoryMutation {
-	return mchc.mutation
+func (_c *MappedControlHistoryCreate) Mutation() *MappedControlHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the MappedControlHistory in the database.
-func (mchc *MappedControlHistoryCreate) Save(ctx context.Context) (*MappedControlHistory, error) {
-	if err := mchc.defaults(); err != nil {
+func (_c *MappedControlHistoryCreate) Save(ctx context.Context) (*MappedControlHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, mchc.sqlSave, mchc.mutation, mchc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mchc *MappedControlHistoryCreate) SaveX(ctx context.Context) *MappedControlHistory {
-	v, err := mchc.Save(ctx)
+func (_c *MappedControlHistoryCreate) SaveX(ctx context.Context) *MappedControlHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -253,85 +253,85 @@ func (mchc *MappedControlHistoryCreate) SaveX(ctx context.Context) *MappedContro
 }
 
 // Exec executes the query.
-func (mchc *MappedControlHistoryCreate) Exec(ctx context.Context) error {
-	_, err := mchc.Save(ctx)
+func (_c *MappedControlHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mchc *MappedControlHistoryCreate) ExecX(ctx context.Context) {
-	if err := mchc.Exec(ctx); err != nil {
+func (_c *MappedControlHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mchc *MappedControlHistoryCreate) defaults() error {
-	if _, ok := mchc.mutation.HistoryTime(); !ok {
+func (_c *MappedControlHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if mappedcontrolhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrolhistory.DefaultHistoryTime()
-		mchc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := mchc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if mappedcontrolhistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrolhistory.DefaultCreatedAt()
-		mchc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := mchc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if mappedcontrolhistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrolhistory.DefaultUpdatedAt()
-		mchc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mchc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := mappedcontrolhistory.DefaultTags
-		mchc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := mchc.mutation.MappingType(); !ok {
+	if _, ok := _c.mutation.MappingType(); !ok {
 		v := mappedcontrolhistory.DefaultMappingType
-		mchc.mutation.SetMappingType(v)
+		_c.mutation.SetMappingType(v)
 	}
-	if _, ok := mchc.mutation.Source(); !ok {
+	if _, ok := _c.mutation.Source(); !ok {
 		v := mappedcontrolhistory.DefaultSource
-		mchc.mutation.SetSource(v)
+		_c.mutation.SetSource(v)
 	}
-	if _, ok := mchc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if mappedcontrolhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := mappedcontrolhistory.DefaultID()
-		mchc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mchc *MappedControlHistoryCreate) check() error {
-	if _, ok := mchc.mutation.HistoryTime(); !ok {
+func (_c *MappedControlHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "MappedControlHistory.history_time"`)}
 	}
-	if _, ok := mchc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "MappedControlHistory.operation"`)}
 	}
-	if v, ok := mchc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := mappedcontrolhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := mchc.mutation.MappingType(); !ok {
+	if _, ok := _c.mutation.MappingType(); !ok {
 		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControlHistory.mapping_type"`)}
 	}
-	if v, ok := mchc.mutation.MappingType(); ok {
+	if v, ok := _c.mutation.MappingType(); ok {
 		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}
 		}
 	}
-	if v, ok := mchc.mutation.Source(); ok {
+	if v, ok := _c.mutation.Source(); ok {
 		if err := mappedcontrolhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.source": %w`, err)}
 		}
@@ -339,12 +339,12 @@ func (mchc *MappedControlHistoryCreate) check() error {
 	return nil
 }
 
-func (mchc *MappedControlHistoryCreate) sqlSave(ctx context.Context) (*MappedControlHistory, error) {
-	if err := mchc.check(); err != nil {
+func (_c *MappedControlHistoryCreate) sqlSave(ctx context.Context) (*MappedControlHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := mchc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mchc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -357,78 +357,78 @@ func (mchc *MappedControlHistoryCreate) sqlSave(ctx context.Context) (*MappedCon
 			return nil, fmt.Errorf("unexpected MappedControlHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	mchc.mutation.id = &_node.ID
-	mchc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (mchc *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sqlgraph.CreateSpec) {
+func (_c *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &MappedControlHistory{config: mchc.config}
+		_node = &MappedControlHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappedcontrolhistory.Table, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = mchc.schemaConfig.MappedControlHistory
-	if id, ok := mchc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.MappedControlHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := mchc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := mchc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := mchc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := mchc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := mchc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mchc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := mchc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := mchc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := mchc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := mchc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := mchc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := mchc.mutation.MappingType(); ok {
+	if value, ok := _c.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 		_node.MappingType = value
 	}
-	if value, ok := mchc.mutation.Relation(); ok {
+	if value, ok := _c.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 		_node.Relation = value
 	}
-	if value, ok := mchc.mutation.Confidence(); ok {
+	if value, ok := _c.mutation.Confidence(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
 		_node.Confidence = &value
 	}
-	if value, ok := mchc.mutation.Source(); ok {
+	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
@@ -443,16 +443,16 @@ type MappedControlHistoryCreateBulk struct {
 }
 
 // Save creates the MappedControlHistory entities in the database.
-func (mchcb *MappedControlHistoryCreateBulk) Save(ctx context.Context) ([]*MappedControlHistory, error) {
-	if mchcb.err != nil {
-		return nil, mchcb.err
+func (_c *MappedControlHistoryCreateBulk) Save(ctx context.Context) ([]*MappedControlHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(mchcb.builders))
-	nodes := make([]*MappedControlHistory, len(mchcb.builders))
-	mutators := make([]Mutator, len(mchcb.builders))
-	for i := range mchcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*MappedControlHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := mchcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MappedControlHistoryMutation)
@@ -466,11 +466,11 @@ func (mchcb *MappedControlHistoryCreateBulk) Save(ctx context.Context) ([]*Mappe
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mchcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mchcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -490,7 +490,7 @@ func (mchcb *MappedControlHistoryCreateBulk) Save(ctx context.Context) ([]*Mappe
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mchcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -498,8 +498,8 @@ func (mchcb *MappedControlHistoryCreateBulk) Save(ctx context.Context) ([]*Mappe
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mchcb *MappedControlHistoryCreateBulk) SaveX(ctx context.Context) []*MappedControlHistory {
-	v, err := mchcb.Save(ctx)
+func (_c *MappedControlHistoryCreateBulk) SaveX(ctx context.Context) []*MappedControlHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -507,14 +507,14 @@ func (mchcb *MappedControlHistoryCreateBulk) SaveX(ctx context.Context) []*Mappe
 }
 
 // Exec executes the query.
-func (mchcb *MappedControlHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := mchcb.Save(ctx)
+func (_c *MappedControlHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mchcb *MappedControlHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := mchcb.Exec(ctx); err != nil {
+func (_c *MappedControlHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -162,7 +162,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Scan fields.
-func (s *Scan) assignValues(columns []string, values []any) error {
+func (_m *Scan) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -172,49 +172,49 @@ func (s *Scan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				s.ID = value.String
+				_m.ID = value.String
 			}
 		case scan.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case scan.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case scan.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				s.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case scan.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				s.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case scan.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				s.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case scan.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case scan.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -222,25 +222,25 @@ func (s *Scan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				s.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case scan.FieldTarget:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field target", values[i])
 			} else if value.Valid {
-				s.Target = value.String
+				_m.Target = value.String
 			}
 		case scan.FieldScanType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scan_type", values[i])
 			} else if value.Valid {
-				s.ScanType = enums.ScanType(value.String)
+				_m.ScanType = enums.ScanType(value.String)
 			}
 		case scan.FieldMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field metadata", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Metadata); err != nil {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
@@ -248,31 +248,31 @@ func (s *Scan) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				s.Status = enums.ScanStatus(value.String)
+				_m.Status = enums.ScanStatus(value.String)
 			}
 		case scan.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_scans", values[i])
 			} else if value.Valid {
-				s.control_scans = new(string)
-				*s.control_scans = value.String
+				_m.control_scans = new(string)
+				*_m.control_scans = value.String
 			}
 		case scan.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_scans", values[i])
 			} else if value.Valid {
-				s.entity_scans = new(string)
-				*s.entity_scans = value.String
+				_m.entity_scans = new(string)
+				*_m.entity_scans = value.String
 			}
 		case scan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_scans", values[i])
 			} else if value.Valid {
-				s.risk_scans = new(string)
-				*s.risk_scans = value.String
+				_m.risk_scans = new(string)
+				*_m.risk_scans = value.String
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -280,219 +280,219 @@ func (s *Scan) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Scan.
 // This includes values selected through modifiers, order, etc.
-func (s *Scan) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Scan) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Scan entity.
-func (s *Scan) QueryOwner() *OrganizationQuery {
-	return NewScanClient(s.config).QueryOwner(s)
+func (_m *Scan) QueryOwner() *OrganizationQuery {
+	return NewScanClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the Scan entity.
-func (s *Scan) QueryBlockedGroups() *GroupQuery {
-	return NewScanClient(s.config).QueryBlockedGroups(s)
+func (_m *Scan) QueryBlockedGroups() *GroupQuery {
+	return NewScanClient(_m.config).QueryBlockedGroups(_m)
 }
 
 // QueryEditors queries the "editors" edge of the Scan entity.
-func (s *Scan) QueryEditors() *GroupQuery {
-	return NewScanClient(s.config).QueryEditors(s)
+func (_m *Scan) QueryEditors() *GroupQuery {
+	return NewScanClient(_m.config).QueryEditors(_m)
 }
 
 // QueryViewers queries the "viewers" edge of the Scan entity.
-func (s *Scan) QueryViewers() *GroupQuery {
-	return NewScanClient(s.config).QueryViewers(s)
+func (_m *Scan) QueryViewers() *GroupQuery {
+	return NewScanClient(_m.config).QueryViewers(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Scan entity.
-func (s *Scan) QueryAssets() *AssetQuery {
-	return NewScanClient(s.config).QueryAssets(s)
+func (_m *Scan) QueryAssets() *AssetQuery {
+	return NewScanClient(_m.config).QueryAssets(_m)
 }
 
 // QueryEntities queries the "entities" edge of the Scan entity.
-func (s *Scan) QueryEntities() *EntityQuery {
-	return NewScanClient(s.config).QueryEntities(s)
+func (_m *Scan) QueryEntities() *EntityQuery {
+	return NewScanClient(_m.config).QueryEntities(_m)
 }
 
 // Update returns a builder for updating this Scan.
 // Note that you need to call Scan.Unwrap() before calling this method if this Scan
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Scan) Update() *ScanUpdateOne {
-	return NewScanClient(s.config).UpdateOne(s)
+func (_m *Scan) Update() *ScanUpdateOne {
+	return NewScanClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Scan entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Scan) Unwrap() *Scan {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Scan) Unwrap() *Scan {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Scan is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Scan) String() string {
+func (_m *Scan) String() string {
 	var builder strings.Builder
 	builder.WriteString("Scan(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(s.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(s.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(s.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", s.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(s.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("target=")
-	builder.WriteString(s.Target)
+	builder.WriteString(_m.Target)
 	builder.WriteString(", ")
 	builder.WriteString("scan_type=")
-	builder.WriteString(fmt.Sprintf("%v", s.ScanType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ScanType))
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
-	builder.WriteString(fmt.Sprintf("%v", s.Metadata))
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", s.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Scan) NamedBlockedGroups(name string) ([]*Group, error) {
-	if s.Edges.namedBlockedGroups == nil {
+func (_m *Scan) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedBlockedGroups[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Scan) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if s.Edges.namedBlockedGroups == nil {
-		s.Edges.namedBlockedGroups = make(map[string][]*Group)
+func (_m *Scan) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedBlockedGroups[name] = []*Group{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		s.Edges.namedBlockedGroups[name] = append(s.Edges.namedBlockedGroups[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEditors returns the Editors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Scan) NamedEditors(name string) ([]*Group, error) {
-	if s.Edges.namedEditors == nil {
+func (_m *Scan) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedEditors[name]
+	nodes, ok := _m.Edges.namedEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Scan) appendNamedEditors(name string, edges ...*Group) {
-	if s.Edges.namedEditors == nil {
-		s.Edges.namedEditors = make(map[string][]*Group)
+func (_m *Scan) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedEditors[name] = []*Group{}
+		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
-		s.Edges.namedEditors[name] = append(s.Edges.namedEditors[name], edges...)
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 
 // NamedViewers returns the Viewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Scan) NamedViewers(name string) ([]*Group, error) {
-	if s.Edges.namedViewers == nil {
+func (_m *Scan) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedViewers[name]
+	nodes, ok := _m.Edges.namedViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Scan) appendNamedViewers(name string, edges ...*Group) {
-	if s.Edges.namedViewers == nil {
-		s.Edges.namedViewers = make(map[string][]*Group)
+func (_m *Scan) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedViewers[name] = []*Group{}
+		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
-		s.Edges.namedViewers[name] = append(s.Edges.namedViewers[name], edges...)
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
 	}
 }
 
 // NamedAssets returns the Assets named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Scan) NamedAssets(name string) ([]*Asset, error) {
-	if s.Edges.namedAssets == nil {
+func (_m *Scan) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedAssets[name]
+	nodes, ok := _m.Edges.namedAssets[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Scan) appendNamedAssets(name string, edges ...*Asset) {
-	if s.Edges.namedAssets == nil {
-		s.Edges.namedAssets = make(map[string][]*Asset)
+func (_m *Scan) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedAssets[name] = []*Asset{}
+		_m.Edges.namedAssets[name] = []*Asset{}
 	} else {
-		s.Edges.namedAssets[name] = append(s.Edges.namedAssets[name], edges...)
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
 	}
 }
 
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Scan) NamedEntities(name string) ([]*Entity, error) {
-	if s.Edges.namedEntities == nil {
+func (_m *Scan) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := s.Edges.namedEntities[name]
+	nodes, ok := _m.Edges.namedEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (s *Scan) appendNamedEntities(name string, edges ...*Entity) {
-	if s.Edges.namedEntities == nil {
-		s.Edges.namedEntities = make(map[string][]*Entity)
+func (_m *Scan) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedEntities[name] = []*Entity{}
+		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
-		s.Edges.namedEntities[name] = append(s.Edges.namedEntities[name], edges...)
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 

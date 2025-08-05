@@ -32,382 +32,382 @@ type ScanUpdate struct {
 }
 
 // Where appends a list predicates to the ScanUpdate builder.
-func (su *ScanUpdate) Where(ps ...predicate.Scan) *ScanUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *ScanUpdate) Where(ps ...predicate.Scan) *ScanUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (su *ScanUpdate) SetUpdatedAt(t time.Time) *ScanUpdate {
-	su.mutation.SetUpdatedAt(t)
-	return su
+func (_u *ScanUpdate) SetUpdatedAt(v time.Time) *ScanUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (su *ScanUpdate) ClearUpdatedAt() *ScanUpdate {
-	su.mutation.ClearUpdatedAt()
-	return su
+func (_u *ScanUpdate) ClearUpdatedAt() *ScanUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (su *ScanUpdate) SetUpdatedBy(s string) *ScanUpdate {
-	su.mutation.SetUpdatedBy(s)
-	return su
+func (_u *ScanUpdate) SetUpdatedBy(v string) *ScanUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableUpdatedBy(s *string) *ScanUpdate {
-	if s != nil {
-		su.SetUpdatedBy(*s)
+func (_u *ScanUpdate) SetNillableUpdatedBy(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *ScanUpdate) ClearUpdatedBy() *ScanUpdate {
-	su.mutation.ClearUpdatedBy()
-	return su
+func (_u *ScanUpdate) ClearUpdatedBy() *ScanUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (su *ScanUpdate) SetDeletedAt(t time.Time) *ScanUpdate {
-	su.mutation.SetDeletedAt(t)
-	return su
+func (_u *ScanUpdate) SetDeletedAt(v time.Time) *ScanUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableDeletedAt(t *time.Time) *ScanUpdate {
-	if t != nil {
-		su.SetDeletedAt(*t)
+func (_u *ScanUpdate) SetNillableDeletedAt(v *time.Time) *ScanUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (su *ScanUpdate) ClearDeletedAt() *ScanUpdate {
-	su.mutation.ClearDeletedAt()
-	return su
+func (_u *ScanUpdate) ClearDeletedAt() *ScanUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (su *ScanUpdate) SetDeletedBy(s string) *ScanUpdate {
-	su.mutation.SetDeletedBy(s)
-	return su
+func (_u *ScanUpdate) SetDeletedBy(v string) *ScanUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableDeletedBy(s *string) *ScanUpdate {
-	if s != nil {
-		su.SetDeletedBy(*s)
+func (_u *ScanUpdate) SetNillableDeletedBy(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *ScanUpdate) ClearDeletedBy() *ScanUpdate {
-	su.mutation.ClearDeletedBy()
-	return su
+func (_u *ScanUpdate) ClearDeletedBy() *ScanUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (su *ScanUpdate) SetTags(s []string) *ScanUpdate {
-	su.mutation.SetTags(s)
-	return su
+func (_u *ScanUpdate) SetTags(v []string) *ScanUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (su *ScanUpdate) AppendTags(s []string) *ScanUpdate {
-	su.mutation.AppendTags(s)
-	return su
+// AppendTags appends value to the "tags" field.
+func (_u *ScanUpdate) AppendTags(v []string) *ScanUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (su *ScanUpdate) ClearTags() *ScanUpdate {
-	su.mutation.ClearTags()
-	return su
+func (_u *ScanUpdate) ClearTags() *ScanUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (su *ScanUpdate) SetOwnerID(s string) *ScanUpdate {
-	su.mutation.SetOwnerID(s)
-	return su
+func (_u *ScanUpdate) SetOwnerID(v string) *ScanUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableOwnerID(s *string) *ScanUpdate {
-	if s != nil {
-		su.SetOwnerID(*s)
+func (_u *ScanUpdate) SetNillableOwnerID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (su *ScanUpdate) ClearOwnerID() *ScanUpdate {
-	su.mutation.ClearOwnerID()
-	return su
+func (_u *ScanUpdate) ClearOwnerID() *ScanUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTarget sets the "target" field.
-func (su *ScanUpdate) SetTarget(s string) *ScanUpdate {
-	su.mutation.SetTarget(s)
-	return su
+func (_u *ScanUpdate) SetTarget(v string) *ScanUpdate {
+	_u.mutation.SetTarget(v)
+	return _u
 }
 
 // SetNillableTarget sets the "target" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableTarget(s *string) *ScanUpdate {
-	if s != nil {
-		su.SetTarget(*s)
+func (_u *ScanUpdate) SetNillableTarget(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetTarget(*v)
 	}
-	return su
+	return _u
 }
 
 // SetScanType sets the "scan_type" field.
-func (su *ScanUpdate) SetScanType(et enums.ScanType) *ScanUpdate {
-	su.mutation.SetScanType(et)
-	return su
+func (_u *ScanUpdate) SetScanType(v enums.ScanType) *ScanUpdate {
+	_u.mutation.SetScanType(v)
+	return _u
 }
 
 // SetNillableScanType sets the "scan_type" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableScanType(et *enums.ScanType) *ScanUpdate {
-	if et != nil {
-		su.SetScanType(*et)
+func (_u *ScanUpdate) SetNillableScanType(v *enums.ScanType) *ScanUpdate {
+	if v != nil {
+		_u.SetScanType(*v)
 	}
-	return su
+	return _u
 }
 
 // SetMetadata sets the "metadata" field.
-func (su *ScanUpdate) SetMetadata(m map[string]interface{}) *ScanUpdate {
-	su.mutation.SetMetadata(m)
-	return su
+func (_u *ScanUpdate) SetMetadata(v map[string]interface{}) *ScanUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
 }
 
 // ClearMetadata clears the value of the "metadata" field.
-func (su *ScanUpdate) ClearMetadata() *ScanUpdate {
-	su.mutation.ClearMetadata()
-	return su
+func (_u *ScanUpdate) ClearMetadata() *ScanUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (su *ScanUpdate) SetStatus(es enums.ScanStatus) *ScanUpdate {
-	su.mutation.SetStatus(es)
-	return su
+func (_u *ScanUpdate) SetStatus(v enums.ScanStatus) *ScanUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (su *ScanUpdate) SetNillableStatus(es *enums.ScanStatus) *ScanUpdate {
-	if es != nil {
-		su.SetStatus(*es)
+func (_u *ScanUpdate) SetNillableStatus(v *enums.ScanStatus) *ScanUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return su
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (su *ScanUpdate) SetOwner(o *Organization) *ScanUpdate {
-	return su.SetOwnerID(o.ID)
+func (_u *ScanUpdate) SetOwner(v *Organization) *ScanUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (su *ScanUpdate) AddBlockedGroupIDs(ids ...string) *ScanUpdate {
-	su.mutation.AddBlockedGroupIDs(ids...)
-	return su
+func (_u *ScanUpdate) AddBlockedGroupIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (su *ScanUpdate) AddBlockedGroups(g ...*Group) *ScanUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdate) AddBlockedGroups(v ...*Group) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (su *ScanUpdate) AddEditorIDs(ids ...string) *ScanUpdate {
-	su.mutation.AddEditorIDs(ids...)
-	return su
+func (_u *ScanUpdate) AddEditorIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (su *ScanUpdate) AddEditors(g ...*Group) *ScanUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdate) AddEditors(v ...*Group) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (su *ScanUpdate) AddViewerIDs(ids ...string) *ScanUpdate {
-	su.mutation.AddViewerIDs(ids...)
-	return su
+func (_u *ScanUpdate) AddViewerIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (su *ScanUpdate) AddViewers(g ...*Group) *ScanUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdate) AddViewers(v ...*Group) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (su *ScanUpdate) AddAssetIDs(ids ...string) *ScanUpdate {
-	su.mutation.AddAssetIDs(ids...)
-	return su
+func (_u *ScanUpdate) AddAssetIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (su *ScanUpdate) AddAssets(a ...*Asset) *ScanUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ScanUpdate) AddAssets(v ...*Asset) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (su *ScanUpdate) AddEntityIDs(ids ...string) *ScanUpdate {
-	su.mutation.AddEntityIDs(ids...)
-	return su
+func (_u *ScanUpdate) AddEntityIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (su *ScanUpdate) AddEntities(e ...*Entity) *ScanUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ScanUpdate) AddEntities(v ...*Entity) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // Mutation returns the ScanMutation object of the builder.
-func (su *ScanUpdate) Mutation() *ScanMutation {
-	return su.mutation
+func (_u *ScanUpdate) Mutation() *ScanMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (su *ScanUpdate) ClearOwner() *ScanUpdate {
-	su.mutation.ClearOwner()
-	return su
+func (_u *ScanUpdate) ClearOwner() *ScanUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (su *ScanUpdate) ClearBlockedGroups() *ScanUpdate {
-	su.mutation.ClearBlockedGroups()
-	return su
+func (_u *ScanUpdate) ClearBlockedGroups() *ScanUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (su *ScanUpdate) RemoveBlockedGroupIDs(ids ...string) *ScanUpdate {
-	su.mutation.RemoveBlockedGroupIDs(ids...)
-	return su
+func (_u *ScanUpdate) RemoveBlockedGroupIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (su *ScanUpdate) RemoveBlockedGroups(g ...*Group) *ScanUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdate) RemoveBlockedGroups(v ...*Group) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (su *ScanUpdate) ClearEditors() *ScanUpdate {
-	su.mutation.ClearEditors()
-	return su
+func (_u *ScanUpdate) ClearEditors() *ScanUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (su *ScanUpdate) RemoveEditorIDs(ids ...string) *ScanUpdate {
-	su.mutation.RemoveEditorIDs(ids...)
-	return su
+func (_u *ScanUpdate) RemoveEditorIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (su *ScanUpdate) RemoveEditors(g ...*Group) *ScanUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdate) RemoveEditors(v ...*Group) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (su *ScanUpdate) ClearViewers() *ScanUpdate {
-	su.mutation.ClearViewers()
-	return su
+func (_u *ScanUpdate) ClearViewers() *ScanUpdate {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (su *ScanUpdate) RemoveViewerIDs(ids ...string) *ScanUpdate {
-	su.mutation.RemoveViewerIDs(ids...)
-	return su
+func (_u *ScanUpdate) RemoveViewerIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (su *ScanUpdate) RemoveViewers(g ...*Group) *ScanUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdate) RemoveViewers(v ...*Group) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (su *ScanUpdate) ClearAssets() *ScanUpdate {
-	su.mutation.ClearAssets()
-	return su
+func (_u *ScanUpdate) ClearAssets() *ScanUpdate {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (su *ScanUpdate) RemoveAssetIDs(ids ...string) *ScanUpdate {
-	su.mutation.RemoveAssetIDs(ids...)
-	return su
+func (_u *ScanUpdate) RemoveAssetIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (su *ScanUpdate) RemoveAssets(a ...*Asset) *ScanUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ScanUpdate) RemoveAssets(v ...*Asset) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (su *ScanUpdate) ClearEntities() *ScanUpdate {
-	su.mutation.ClearEntities()
-	return su
+func (_u *ScanUpdate) ClearEntities() *ScanUpdate {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (su *ScanUpdate) RemoveEntityIDs(ids ...string) *ScanUpdate {
-	su.mutation.RemoveEntityIDs(ids...)
-	return su
+func (_u *ScanUpdate) RemoveEntityIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (su *ScanUpdate) RemoveEntities(e ...*Entity) *ScanUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ScanUpdate) RemoveEntities(v ...*Entity) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *ScanUpdate) Save(ctx context.Context) (int, error) {
-	if err := su.defaults(); err != nil {
+func (_u *ScanUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *ScanUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *ScanUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -415,48 +415,48 @@ func (su *ScanUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *ScanUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *ScanUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *ScanUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *ScanUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (su *ScanUpdate) defaults() error {
-	if _, ok := su.mutation.UpdatedAt(); !ok && !su.mutation.UpdatedAtCleared() {
+func (_u *ScanUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scan.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scan.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scan.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *ScanUpdate) check() error {
-	if v, ok := su.mutation.OwnerID(); ok {
+func (_u *ScanUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := scan.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Scan.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Target(); ok {
+	if v, ok := _u.mutation.Target(); ok {
 		if err := scan.TargetValidator(v); err != nil {
 			return &ValidationError{Name: "target", err: fmt.Errorf(`generated: validator failed for field "Scan.target": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.ScanType(); ok {
+	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scan.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_type": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := scan.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Scan.status": %w`, err)}
 		}
@@ -465,80 +465,80 @@ func (su *ScanUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (su *ScanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanUpdate {
-	su.modifiers = append(su.modifiers, modifiers...)
-	return su
+func (_u *ScanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scan.Table, scan.Columns, sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if su.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scan.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scan.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if su.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scan.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scan.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scan.FieldUpdatedBy, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scan.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scan.FieldDeletedAt, field.TypeTime, value)
 	}
-	if su.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scan.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scan.FieldDeletedBy, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scan.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(scan.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := su.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scan.FieldTags, value)
 		})
 	}
-	if su.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
 	}
-	if value, ok := su.mutation.Target(); ok {
+	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 	}
-	if value, ok := su.mutation.ScanType(); ok {
+	if value, ok := _u.mutation.ScanType(); ok {
 		_spec.SetField(scan.FieldScanType, field.TypeEnum, value)
 	}
-	if value, ok := su.mutation.Metadata(); ok {
+	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(scan.FieldMetadata, field.TypeJSON, value)
 	}
-	if su.mutation.MetadataCleared() {
+	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scan.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := su.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
 	}
-	if su.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -549,10 +549,10 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -563,13 +563,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -580,10 +580,10 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanBlockedGroups
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !su.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -594,13 +594,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanBlockedGroups
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -611,13 +611,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanBlockedGroups
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -628,10 +628,10 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanEditors
+		edge.Schema = _u.schemaConfig.ScanEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !su.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -642,13 +642,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanEditors
+		edge.Schema = _u.schemaConfig.ScanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -659,13 +659,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanEditors
+		edge.Schema = _u.schemaConfig.ScanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -676,10 +676,10 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanViewers
+		edge.Schema = _u.schemaConfig.ScanViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedViewersIDs(); len(nodes) > 0 && !su.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -690,13 +690,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanViewers
+		edge.Schema = _u.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -707,13 +707,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanViewers
+		edge.Schema = _u.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -724,10 +724,10 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !su.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -738,13 +738,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -755,13 +755,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -772,10 +772,10 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !su.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -786,13 +786,13 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -803,16 +803,16 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = su.schemaConfig.Scan
-	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
-	_spec.AddModifiers(su.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Scan
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scan.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -820,8 +820,8 @@ func (su *ScanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ScanUpdateOne is the builder for updating a single Scan entity.
@@ -834,389 +834,389 @@ type ScanUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suo *ScanUpdateOne) SetUpdatedAt(t time.Time) *ScanUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
-	return suo
+func (_u *ScanUpdateOne) SetUpdatedAt(v time.Time) *ScanUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (suo *ScanUpdateOne) ClearUpdatedAt() *ScanUpdateOne {
-	suo.mutation.ClearUpdatedAt()
-	return suo
+func (_u *ScanUpdateOne) ClearUpdatedAt() *ScanUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suo *ScanUpdateOne) SetUpdatedBy(s string) *ScanUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
-	return suo
+func (_u *ScanUpdateOne) SetUpdatedBy(v string) *ScanUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableUpdatedBy(s *string) *ScanUpdateOne {
-	if s != nil {
-		suo.SetUpdatedBy(*s)
+func (_u *ScanUpdateOne) SetNillableUpdatedBy(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *ScanUpdateOne) ClearUpdatedBy() *ScanUpdateOne {
-	suo.mutation.ClearUpdatedBy()
-	return suo
+func (_u *ScanUpdateOne) ClearUpdatedBy() *ScanUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (suo *ScanUpdateOne) SetDeletedAt(t time.Time) *ScanUpdateOne {
-	suo.mutation.SetDeletedAt(t)
-	return suo
+func (_u *ScanUpdateOne) SetDeletedAt(v time.Time) *ScanUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableDeletedAt(t *time.Time) *ScanUpdateOne {
-	if t != nil {
-		suo.SetDeletedAt(*t)
+func (_u *ScanUpdateOne) SetNillableDeletedAt(v *time.Time) *ScanUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (suo *ScanUpdateOne) ClearDeletedAt() *ScanUpdateOne {
-	suo.mutation.ClearDeletedAt()
-	return suo
+func (_u *ScanUpdateOne) ClearDeletedAt() *ScanUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (suo *ScanUpdateOne) SetDeletedBy(s string) *ScanUpdateOne {
-	suo.mutation.SetDeletedBy(s)
-	return suo
+func (_u *ScanUpdateOne) SetDeletedBy(v string) *ScanUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableDeletedBy(s *string) *ScanUpdateOne {
-	if s != nil {
-		suo.SetDeletedBy(*s)
+func (_u *ScanUpdateOne) SetNillableDeletedBy(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *ScanUpdateOne) ClearDeletedBy() *ScanUpdateOne {
-	suo.mutation.ClearDeletedBy()
-	return suo
+func (_u *ScanUpdateOne) ClearDeletedBy() *ScanUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (suo *ScanUpdateOne) SetTags(s []string) *ScanUpdateOne {
-	suo.mutation.SetTags(s)
-	return suo
+func (_u *ScanUpdateOne) SetTags(v []string) *ScanUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (suo *ScanUpdateOne) AppendTags(s []string) *ScanUpdateOne {
-	suo.mutation.AppendTags(s)
-	return suo
+// AppendTags appends value to the "tags" field.
+func (_u *ScanUpdateOne) AppendTags(v []string) *ScanUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (suo *ScanUpdateOne) ClearTags() *ScanUpdateOne {
-	suo.mutation.ClearTags()
-	return suo
+func (_u *ScanUpdateOne) ClearTags() *ScanUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (suo *ScanUpdateOne) SetOwnerID(s string) *ScanUpdateOne {
-	suo.mutation.SetOwnerID(s)
-	return suo
+func (_u *ScanUpdateOne) SetOwnerID(v string) *ScanUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableOwnerID(s *string) *ScanUpdateOne {
-	if s != nil {
-		suo.SetOwnerID(*s)
+func (_u *ScanUpdateOne) SetNillableOwnerID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (suo *ScanUpdateOne) ClearOwnerID() *ScanUpdateOne {
-	suo.mutation.ClearOwnerID()
-	return suo
+func (_u *ScanUpdateOne) ClearOwnerID() *ScanUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTarget sets the "target" field.
-func (suo *ScanUpdateOne) SetTarget(s string) *ScanUpdateOne {
-	suo.mutation.SetTarget(s)
-	return suo
+func (_u *ScanUpdateOne) SetTarget(v string) *ScanUpdateOne {
+	_u.mutation.SetTarget(v)
+	return _u
 }
 
 // SetNillableTarget sets the "target" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableTarget(s *string) *ScanUpdateOne {
-	if s != nil {
-		suo.SetTarget(*s)
+func (_u *ScanUpdateOne) SetNillableTarget(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetTarget(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetScanType sets the "scan_type" field.
-func (suo *ScanUpdateOne) SetScanType(et enums.ScanType) *ScanUpdateOne {
-	suo.mutation.SetScanType(et)
-	return suo
+func (_u *ScanUpdateOne) SetScanType(v enums.ScanType) *ScanUpdateOne {
+	_u.mutation.SetScanType(v)
+	return _u
 }
 
 // SetNillableScanType sets the "scan_type" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableScanType(et *enums.ScanType) *ScanUpdateOne {
-	if et != nil {
-		suo.SetScanType(*et)
+func (_u *ScanUpdateOne) SetNillableScanType(v *enums.ScanType) *ScanUpdateOne {
+	if v != nil {
+		_u.SetScanType(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetMetadata sets the "metadata" field.
-func (suo *ScanUpdateOne) SetMetadata(m map[string]interface{}) *ScanUpdateOne {
-	suo.mutation.SetMetadata(m)
-	return suo
+func (_u *ScanUpdateOne) SetMetadata(v map[string]interface{}) *ScanUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
 }
 
 // ClearMetadata clears the value of the "metadata" field.
-func (suo *ScanUpdateOne) ClearMetadata() *ScanUpdateOne {
-	suo.mutation.ClearMetadata()
-	return suo
+func (_u *ScanUpdateOne) ClearMetadata() *ScanUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (suo *ScanUpdateOne) SetStatus(es enums.ScanStatus) *ScanUpdateOne {
-	suo.mutation.SetStatus(es)
-	return suo
+func (_u *ScanUpdateOne) SetStatus(v enums.ScanStatus) *ScanUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (suo *ScanUpdateOne) SetNillableStatus(es *enums.ScanStatus) *ScanUpdateOne {
-	if es != nil {
-		suo.SetStatus(*es)
+func (_u *ScanUpdateOne) SetNillableStatus(v *enums.ScanStatus) *ScanUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (suo *ScanUpdateOne) SetOwner(o *Organization) *ScanUpdateOne {
-	return suo.SetOwnerID(o.ID)
+func (_u *ScanUpdateOne) SetOwner(v *Organization) *ScanUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (suo *ScanUpdateOne) AddBlockedGroupIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.AddBlockedGroupIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) AddBlockedGroupIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (suo *ScanUpdateOne) AddBlockedGroups(g ...*Group) *ScanUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdateOne) AddBlockedGroups(v ...*Group) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (suo *ScanUpdateOne) AddEditorIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.AddEditorIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) AddEditorIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (suo *ScanUpdateOne) AddEditors(g ...*Group) *ScanUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdateOne) AddEditors(v ...*Group) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (suo *ScanUpdateOne) AddViewerIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.AddViewerIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) AddViewerIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (suo *ScanUpdateOne) AddViewers(g ...*Group) *ScanUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdateOne) AddViewers(v ...*Group) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
-func (suo *ScanUpdateOne) AddAssetIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.AddAssetIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) AddAssetIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
 // AddAssets adds the "assets" edges to the Asset entity.
-func (suo *ScanUpdateOne) AddAssets(a ...*Asset) *ScanUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ScanUpdateOne) AddAssets(v ...*Asset) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddAssetIDs(ids...)
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
-func (suo *ScanUpdateOne) AddEntityIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.AddEntityIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) AddEntityIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
 }
 
 // AddEntities adds the "entities" edges to the Entity entity.
-func (suo *ScanUpdateOne) AddEntities(e ...*Entity) *ScanUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ScanUpdateOne) AddEntities(v ...*Entity) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddEntityIDs(ids...)
+	return _u.AddEntityIDs(ids...)
 }
 
 // Mutation returns the ScanMutation object of the builder.
-func (suo *ScanUpdateOne) Mutation() *ScanMutation {
-	return suo.mutation
+func (_u *ScanUpdateOne) Mutation() *ScanMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (suo *ScanUpdateOne) ClearOwner() *ScanUpdateOne {
-	suo.mutation.ClearOwner()
-	return suo
+func (_u *ScanUpdateOne) ClearOwner() *ScanUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (suo *ScanUpdateOne) ClearBlockedGroups() *ScanUpdateOne {
-	suo.mutation.ClearBlockedGroups()
-	return suo
+func (_u *ScanUpdateOne) ClearBlockedGroups() *ScanUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (suo *ScanUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.RemoveBlockedGroupIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (suo *ScanUpdateOne) RemoveBlockedGroups(g ...*Group) *ScanUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdateOne) RemoveBlockedGroups(v ...*Group) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (suo *ScanUpdateOne) ClearEditors() *ScanUpdateOne {
-	suo.mutation.ClearEditors()
-	return suo
+func (_u *ScanUpdateOne) ClearEditors() *ScanUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (suo *ScanUpdateOne) RemoveEditorIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.RemoveEditorIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) RemoveEditorIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (suo *ScanUpdateOne) RemoveEditors(g ...*Group) *ScanUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdateOne) RemoveEditors(v ...*Group) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (suo *ScanUpdateOne) ClearViewers() *ScanUpdateOne {
-	suo.mutation.ClearViewers()
-	return suo
+func (_u *ScanUpdateOne) ClearViewers() *ScanUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (suo *ScanUpdateOne) RemoveViewerIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.RemoveViewerIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) RemoveViewerIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (suo *ScanUpdateOne) RemoveViewers(g ...*Group) *ScanUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ScanUpdateOne) RemoveViewers(v ...*Group) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearAssets clears all "assets" edges to the Asset entity.
-func (suo *ScanUpdateOne) ClearAssets() *ScanUpdateOne {
-	suo.mutation.ClearAssets()
-	return suo
+func (_u *ScanUpdateOne) ClearAssets() *ScanUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
 }
 
 // RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
-func (suo *ScanUpdateOne) RemoveAssetIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.RemoveAssetIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) RemoveAssetIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
 }
 
 // RemoveAssets removes "assets" edges to Asset entities.
-func (suo *ScanUpdateOne) RemoveAssets(a ...*Asset) *ScanUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ScanUpdateOne) RemoveAssets(v ...*Asset) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveAssetIDs(ids...)
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
-func (suo *ScanUpdateOne) ClearEntities() *ScanUpdateOne {
-	suo.mutation.ClearEntities()
-	return suo
+func (_u *ScanUpdateOne) ClearEntities() *ScanUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
 }
 
 // RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
-func (suo *ScanUpdateOne) RemoveEntityIDs(ids ...string) *ScanUpdateOne {
-	suo.mutation.RemoveEntityIDs(ids...)
-	return suo
+func (_u *ScanUpdateOne) RemoveEntityIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
 }
 
 // RemoveEntities removes "entities" edges to Entity entities.
-func (suo *ScanUpdateOne) RemoveEntities(e ...*Entity) *ScanUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ScanUpdateOne) RemoveEntities(v ...*Entity) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveEntityIDs(ids...)
+	return _u.RemoveEntityIDs(ids...)
 }
 
 // Where appends a list predicates to the ScanUpdate builder.
-func (suo *ScanUpdateOne) Where(ps ...predicate.Scan) *ScanUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *ScanUpdateOne) Where(ps ...predicate.Scan) *ScanUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *ScanUpdateOne) Select(field string, fields ...string) *ScanUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *ScanUpdateOne) Select(field string, fields ...string) *ScanUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Scan entity.
-func (suo *ScanUpdateOne) Save(ctx context.Context) (*Scan, error) {
-	if err := suo.defaults(); err != nil {
+func (_u *ScanUpdateOne) Save(ctx context.Context) (*Scan, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *ScanUpdateOne) SaveX(ctx context.Context) *Scan {
-	node, err := suo.Save(ctx)
+func (_u *ScanUpdateOne) SaveX(ctx context.Context) *Scan {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1224,48 +1224,48 @@ func (suo *ScanUpdateOne) SaveX(ctx context.Context) *Scan {
 }
 
 // Exec executes the query on the entity.
-func (suo *ScanUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *ScanUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *ScanUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *ScanUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suo *ScanUpdateOne) defaults() error {
-	if _, ok := suo.mutation.UpdatedAt(); !ok && !suo.mutation.UpdatedAtCleared() {
+func (_u *ScanUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if scan.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized scan.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := scan.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *ScanUpdateOne) check() error {
-	if v, ok := suo.mutation.OwnerID(); ok {
+func (_u *ScanUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := scan.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Scan.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Target(); ok {
+	if v, ok := _u.mutation.Target(); ok {
 		if err := scan.TargetValidator(v); err != nil {
 			return &ValidationError{Name: "target", err: fmt.Errorf(`generated: validator failed for field "Scan.target": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.ScanType(); ok {
+	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scan.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_type": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := scan.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Scan.status": %w`, err)}
 		}
@@ -1274,22 +1274,22 @@ func (suo *ScanUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suo *ScanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanUpdateOne {
-	suo.modifiers = append(suo.modifiers, modifiers...)
-	return suo
+func (_u *ScanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScanUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
-	if err := suo.check(); err != nil {
+func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scan.Table, scan.Columns, sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Scan.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scan.FieldID)
 		for _, f := range fields {
@@ -1301,70 +1301,70 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if suo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(scan.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(scan.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if suo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(scan.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(scan.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(scan.FieldUpdatedBy, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(scan.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(scan.FieldDeletedAt, field.TypeTime, value)
 	}
-	if suo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(scan.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(scan.FieldDeletedBy, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(scan.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(scan.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := suo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scan.FieldTags, value)
 		})
 	}
-	if suo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
 	}
-	if value, ok := suo.mutation.Target(); ok {
+	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.ScanType(); ok {
+	if value, ok := _u.mutation.ScanType(); ok {
 		_spec.SetField(scan.FieldScanType, field.TypeEnum, value)
 	}
-	if value, ok := suo.mutation.Metadata(); ok {
+	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(scan.FieldMetadata, field.TypeJSON, value)
 	}
-	if suo.mutation.MetadataCleared() {
+	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scan.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := suo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
 	}
-	if suo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1375,10 +1375,10 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1389,13 +1389,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Scan
+		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1406,10 +1406,10 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanBlockedGroups
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !suo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1420,13 +1420,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanBlockedGroups
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1437,13 +1437,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanBlockedGroups
+		edge.Schema = _u.schemaConfig.ScanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1454,10 +1454,10 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanEditors
+		edge.Schema = _u.schemaConfig.ScanEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !suo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1468,13 +1468,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanEditors
+		edge.Schema = _u.schemaConfig.ScanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1485,13 +1485,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanEditors
+		edge.Schema = _u.schemaConfig.ScanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1502,10 +1502,10 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanViewers
+		edge.Schema = _u.schemaConfig.ScanViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !suo.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1516,13 +1516,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanViewers
+		edge.Schema = _u.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1533,13 +1533,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanViewers
+		edge.Schema = _u.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.AssetsCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1550,10 +1550,10 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !suo.mutation.AssetsCleared() {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1564,13 +1564,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.AssetsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1581,13 +1581,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.ScanAssets
+		edge.Schema = _u.schemaConfig.ScanAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.EntitiesCleared() {
+	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1598,10 +1598,10 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !suo.mutation.EntitiesCleared() {
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1612,13 +1612,13 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.EntitiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1629,19 +1629,19 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = suo.schemaConfig.Scan
-	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)
-	_spec.AddModifiers(suo.modifiers...)
-	_node = &Scan{config: suo.config}
+	_spec.Node.Schema = _u.schemaConfig.Scan
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Scan{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scan.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1649,6 +1649,6 @@ func (suo *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) 
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

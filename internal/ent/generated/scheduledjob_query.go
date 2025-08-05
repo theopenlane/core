@@ -46,44 +46,44 @@ type ScheduledJobQuery struct {
 }
 
 // Where adds a new predicate for the ScheduledJobQuery builder.
-func (sjq *ScheduledJobQuery) Where(ps ...predicate.ScheduledJob) *ScheduledJobQuery {
-	sjq.predicates = append(sjq.predicates, ps...)
-	return sjq
+func (_q *ScheduledJobQuery) Where(ps ...predicate.ScheduledJob) *ScheduledJobQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sjq *ScheduledJobQuery) Limit(limit int) *ScheduledJobQuery {
-	sjq.ctx.Limit = &limit
-	return sjq
+func (_q *ScheduledJobQuery) Limit(limit int) *ScheduledJobQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sjq *ScheduledJobQuery) Offset(offset int) *ScheduledJobQuery {
-	sjq.ctx.Offset = &offset
-	return sjq
+func (_q *ScheduledJobQuery) Offset(offset int) *ScheduledJobQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sjq *ScheduledJobQuery) Unique(unique bool) *ScheduledJobQuery {
-	sjq.ctx.Unique = &unique
-	return sjq
+func (_q *ScheduledJobQuery) Unique(unique bool) *ScheduledJobQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sjq *ScheduledJobQuery) Order(o ...scheduledjob.OrderOption) *ScheduledJobQuery {
-	sjq.order = append(sjq.order, o...)
-	return sjq
+func (_q *ScheduledJobQuery) Order(o ...scheduledjob.OrderOption) *ScheduledJobQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (sjq *ScheduledJobQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -92,23 +92,23 @@ func (sjq *ScheduledJobQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.OwnerTable, scheduledjob.OwnerColumn),
 		)
-		schemaConfig := sjq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ScheduledJob
-		fromU = sqlgraph.SetNeighbors(sjq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryJobTemplate chains the current query on the "job_template" edge.
-func (sjq *ScheduledJobQuery) QueryJobTemplate() *JobTemplateQuery {
-	query := (&JobTemplateClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) QueryJobTemplate() *JobTemplateQuery {
+	query := (&JobTemplateClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -117,23 +117,23 @@ func (sjq *ScheduledJobQuery) QueryJobTemplate() *JobTemplateQuery {
 			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
 		)
-		schemaConfig := sjq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.JobTemplate
 		step.Edge.Schema = schemaConfig.ScheduledJob
-		fromU = sqlgraph.SetNeighbors(sjq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControls chains the current query on the "controls" edge.
-func (sjq *ScheduledJobQuery) QueryControls() *ControlQuery {
-	query := (&ControlClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -142,23 +142,23 @@ func (sjq *ScheduledJobQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scheduledjob.ControlsTable, scheduledjob.ControlsPrimaryKey...),
 		)
-		schemaConfig := sjq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ScheduledJobControls
-		fromU = sqlgraph.SetNeighbors(sjq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubcontrols chains the current query on the "subcontrols" edge.
-func (sjq *ScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
-	query := (&SubcontrolClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -167,23 +167,23 @@ func (sjq *ScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scheduledjob.SubcontrolsTable, scheduledjob.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := sjq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.ScheduledJobSubcontrols
-		fromU = sqlgraph.SetNeighbors(sjq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryJobRunner chains the current query on the "job_runner" edge.
-func (sjq *ScheduledJobQuery) QueryJobRunner() *JobRunnerQuery {
-	query := (&JobRunnerClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) QueryJobRunner() *JobRunnerQuery {
+	query := (&JobRunnerClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sjq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sjq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -192,10 +192,10 @@ func (sjq *ScheduledJobQuery) QueryJobRunner() *JobRunnerQuery {
 			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjob.JobRunnerTable, scheduledjob.JobRunnerColumn),
 		)
-		schemaConfig := sjq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.JobRunner
 		step.Edge.Schema = schemaConfig.ScheduledJob
-		fromU = sqlgraph.SetNeighbors(sjq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -203,8 +203,8 @@ func (sjq *ScheduledJobQuery) QueryJobRunner() *JobRunnerQuery {
 
 // First returns the first ScheduledJob entity from the query.
 // Returns a *NotFoundError when no ScheduledJob was found.
-func (sjq *ScheduledJobQuery) First(ctx context.Context) (*ScheduledJob, error) {
-	nodes, err := sjq.Limit(1).All(setContextOp(ctx, sjq.ctx, ent.OpQueryFirst))
+func (_q *ScheduledJobQuery) First(ctx context.Context) (*ScheduledJob, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -215,8 +215,8 @@ func (sjq *ScheduledJobQuery) First(ctx context.Context) (*ScheduledJob, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) FirstX(ctx context.Context) *ScheduledJob {
-	node, err := sjq.First(ctx)
+func (_q *ScheduledJobQuery) FirstX(ctx context.Context) *ScheduledJob {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -225,9 +225,9 @@ func (sjq *ScheduledJobQuery) FirstX(ctx context.Context) *ScheduledJob {
 
 // FirstID returns the first ScheduledJob ID from the query.
 // Returns a *NotFoundError when no ScheduledJob ID was found.
-func (sjq *ScheduledJobQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ScheduledJobQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sjq.Limit(1).IDs(setContextOp(ctx, sjq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -238,8 +238,8 @@ func (sjq *ScheduledJobQuery) FirstID(ctx context.Context) (id string, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) FirstIDX(ctx context.Context) string {
-	id, err := sjq.FirstID(ctx)
+func (_q *ScheduledJobQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -249,8 +249,8 @@ func (sjq *ScheduledJobQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ScheduledJob entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ScheduledJob entity is found.
 // Returns a *NotFoundError when no ScheduledJob entities are found.
-func (sjq *ScheduledJobQuery) Only(ctx context.Context) (*ScheduledJob, error) {
-	nodes, err := sjq.Limit(2).All(setContextOp(ctx, sjq.ctx, ent.OpQueryOnly))
+func (_q *ScheduledJobQuery) Only(ctx context.Context) (*ScheduledJob, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -265,8 +265,8 @@ func (sjq *ScheduledJobQuery) Only(ctx context.Context) (*ScheduledJob, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) OnlyX(ctx context.Context) *ScheduledJob {
-	node, err := sjq.Only(ctx)
+func (_q *ScheduledJobQuery) OnlyX(ctx context.Context) *ScheduledJob {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -276,9 +276,9 @@ func (sjq *ScheduledJobQuery) OnlyX(ctx context.Context) *ScheduledJob {
 // OnlyID is like Only, but returns the only ScheduledJob ID in the query.
 // Returns a *NotSingularError when more than one ScheduledJob ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sjq *ScheduledJobQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ScheduledJobQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = sjq.Limit(2).IDs(setContextOp(ctx, sjq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -293,8 +293,8 @@ func (sjq *ScheduledJobQuery) OnlyID(ctx context.Context) (id string, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) OnlyIDX(ctx context.Context) string {
-	id, err := sjq.OnlyID(ctx)
+func (_q *ScheduledJobQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -302,18 +302,18 @@ func (sjq *ScheduledJobQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ScheduledJobs.
-func (sjq *ScheduledJobQuery) All(ctx context.Context) ([]*ScheduledJob, error) {
-	ctx = setContextOp(ctx, sjq.ctx, ent.OpQueryAll)
-	if err := sjq.prepareQuery(ctx); err != nil {
+func (_q *ScheduledJobQuery) All(ctx context.Context) ([]*ScheduledJob, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ScheduledJob, *ScheduledJobQuery]()
-	return withInterceptors[[]*ScheduledJob](ctx, sjq, qr, sjq.inters)
+	return withInterceptors[[]*ScheduledJob](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) AllX(ctx context.Context) []*ScheduledJob {
-	nodes, err := sjq.All(ctx)
+func (_q *ScheduledJobQuery) AllX(ctx context.Context) []*ScheduledJob {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -321,20 +321,20 @@ func (sjq *ScheduledJobQuery) AllX(ctx context.Context) []*ScheduledJob {
 }
 
 // IDs executes the query and returns a list of ScheduledJob IDs.
-func (sjq *ScheduledJobQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if sjq.ctx.Unique == nil && sjq.path != nil {
-		sjq.Unique(true)
+func (_q *ScheduledJobQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sjq.ctx, ent.OpQueryIDs)
-	if err = sjq.Select(scheduledjob.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(scheduledjob.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) IDsX(ctx context.Context) []string {
-	ids, err := sjq.IDs(ctx)
+func (_q *ScheduledJobQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -342,17 +342,17 @@ func (sjq *ScheduledJobQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (sjq *ScheduledJobQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sjq.ctx, ent.OpQueryCount)
-	if err := sjq.prepareQuery(ctx); err != nil {
+func (_q *ScheduledJobQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sjq, querierCount[*ScheduledJobQuery](), sjq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ScheduledJobQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) CountX(ctx context.Context) int {
-	count, err := sjq.Count(ctx)
+func (_q *ScheduledJobQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -360,9 +360,9 @@ func (sjq *ScheduledJobQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sjq *ScheduledJobQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sjq.ctx, ent.OpQueryExist)
-	switch _, err := sjq.FirstID(ctx); {
+func (_q *ScheduledJobQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -373,8 +373,8 @@ func (sjq *ScheduledJobQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sjq *ScheduledJobQuery) ExistX(ctx context.Context) bool {
-	exist, err := sjq.Exist(ctx)
+func (_q *ScheduledJobQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -383,81 +383,81 @@ func (sjq *ScheduledJobQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ScheduledJobQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sjq *ScheduledJobQuery) Clone() *ScheduledJobQuery {
-	if sjq == nil {
+func (_q *ScheduledJobQuery) Clone() *ScheduledJobQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ScheduledJobQuery{
-		config:          sjq.config,
-		ctx:             sjq.ctx.Clone(),
-		order:           append([]scheduledjob.OrderOption{}, sjq.order...),
-		inters:          append([]Interceptor{}, sjq.inters...),
-		predicates:      append([]predicate.ScheduledJob{}, sjq.predicates...),
-		withOwner:       sjq.withOwner.Clone(),
-		withJobTemplate: sjq.withJobTemplate.Clone(),
-		withControls:    sjq.withControls.Clone(),
-		withSubcontrols: sjq.withSubcontrols.Clone(),
-		withJobRunner:   sjq.withJobRunner.Clone(),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]scheduledjob.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.ScheduledJob{}, _q.predicates...),
+		withOwner:       _q.withOwner.Clone(),
+		withJobTemplate: _q.withJobTemplate.Clone(),
+		withControls:    _q.withControls.Clone(),
+		withSubcontrols: _q.withSubcontrols.Clone(),
+		withJobRunner:   _q.withJobRunner.Clone(),
 		// clone intermediate query.
-		sql:       sjq.sql.Clone(),
-		path:      sjq.path,
-		modifiers: append([]func(*sql.Selector){}, sjq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithOwner(opts ...func(*OrganizationQuery)) *ScheduledJobQuery {
-	query := (&OrganizationClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithOwner(opts ...func(*OrganizationQuery)) *ScheduledJobQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjq.withOwner = query
-	return sjq
+	_q.withOwner = query
+	return _q
 }
 
 // WithJobTemplate tells the query-builder to eager-load the nodes that are connected to
 // the "job_template" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithJobTemplate(opts ...func(*JobTemplateQuery)) *ScheduledJobQuery {
-	query := (&JobTemplateClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithJobTemplate(opts ...func(*JobTemplateQuery)) *ScheduledJobQuery {
+	query := (&JobTemplateClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjq.withJobTemplate = query
-	return sjq
+	_q.withJobTemplate = query
+	return _q
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithControls(opts ...func(*ControlQuery)) *ScheduledJobQuery {
-	query := (&ControlClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithControls(opts ...func(*ControlQuery)) *ScheduledJobQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjq.withControls = query
-	return sjq
+	_q.withControls = query
+	return _q
 }
 
 // WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ScheduledJobQuery {
-	query := (&SubcontrolClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ScheduledJobQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjq.withSubcontrols = query
-	return sjq
+	_q.withSubcontrols = query
+	return _q
 }
 
 // WithJobRunner tells the query-builder to eager-load the nodes that are connected to
 // the "job_runner" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *ScheduledJobQuery {
-	query := (&JobRunnerClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *ScheduledJobQuery {
+	query := (&JobRunnerClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sjq.withJobRunner = query
-	return sjq
+	_q.withJobRunner = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -474,10 +474,10 @@ func (sjq *ScheduledJobQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *Sche
 //		GroupBy(scheduledjob.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (sjq *ScheduledJobQuery) GroupBy(field string, fields ...string) *ScheduledJobGroupBy {
-	sjq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ScheduledJobGroupBy{build: sjq}
-	grbuild.flds = &sjq.ctx.Fields
+func (_q *ScheduledJobQuery) GroupBy(field string, fields ...string) *ScheduledJobGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ScheduledJobGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = scheduledjob.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -495,141 +495,141 @@ func (sjq *ScheduledJobQuery) GroupBy(field string, fields ...string) *Scheduled
 //	client.ScheduledJob.Query().
 //		Select(scheduledjob.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (sjq *ScheduledJobQuery) Select(fields ...string) *ScheduledJobSelect {
-	sjq.ctx.Fields = append(sjq.ctx.Fields, fields...)
-	sbuild := &ScheduledJobSelect{ScheduledJobQuery: sjq}
+func (_q *ScheduledJobQuery) Select(fields ...string) *ScheduledJobSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ScheduledJobSelect{ScheduledJobQuery: _q}
 	sbuild.label = scheduledjob.Label
-	sbuild.flds, sbuild.scan = &sjq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ScheduledJobSelect configured with the given aggregations.
-func (sjq *ScheduledJobQuery) Aggregate(fns ...AggregateFunc) *ScheduledJobSelect {
-	return sjq.Select().Aggregate(fns...)
+func (_q *ScheduledJobQuery) Aggregate(fns ...AggregateFunc) *ScheduledJobSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sjq *ScheduledJobQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sjq.inters {
+func (_q *ScheduledJobQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sjq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sjq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !scheduledjob.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if sjq.path != nil {
-		prev, err := sjq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sjq.sql = prev
+		_q.sql = prev
 	}
 	if scheduledjob.Policy == nil {
 		return errors.New("generated: uninitialized scheduledjob.Policy (forgotten import generated/runtime?)")
 	}
-	if err := scheduledjob.Policy.EvalQuery(ctx, sjq); err != nil {
+	if err := scheduledjob.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sjq *ScheduledJobQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScheduledJob, error) {
+func (_q *ScheduledJobQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScheduledJob, error) {
 	var (
 		nodes       = []*ScheduledJob{}
-		_spec       = sjq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [5]bool{
-			sjq.withOwner != nil,
-			sjq.withJobTemplate != nil,
-			sjq.withControls != nil,
-			sjq.withSubcontrols != nil,
-			sjq.withJobRunner != nil,
+			_q.withOwner != nil,
+			_q.withJobTemplate != nil,
+			_q.withControls != nil,
+			_q.withSubcontrols != nil,
+			_q.withJobRunner != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ScheduledJob).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ScheduledJob{config: sjq.config}
+		node := &ScheduledJob{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = sjq.schemaConfig.ScheduledJob
-	ctx = internal.NewSchemaConfigContext(ctx, sjq.schemaConfig)
-	if len(sjq.modifiers) > 0 {
-		_spec.Modifiers = sjq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ScheduledJob
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sjq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sjq.withOwner; query != nil {
-		if err := sjq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *ScheduledJob, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sjq.withJobTemplate; query != nil {
-		if err := sjq.loadJobTemplate(ctx, query, nodes, nil,
+	if query := _q.withJobTemplate; query != nil {
+		if err := _q.loadJobTemplate(ctx, query, nodes, nil,
 			func(n *ScheduledJob, e *JobTemplate) { n.Edges.JobTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sjq.withControls; query != nil {
-		if err := sjq.loadControls(ctx, query, nodes,
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *ScheduledJob) { n.Edges.Controls = []*Control{} },
 			func(n *ScheduledJob, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sjq.withSubcontrols; query != nil {
-		if err := sjq.loadSubcontrols(ctx, query, nodes,
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *ScheduledJob) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *ScheduledJob, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sjq.withJobRunner; query != nil {
-		if err := sjq.loadJobRunner(ctx, query, nodes, nil,
+	if query := _q.withJobRunner; query != nil {
+		if err := _q.loadJobRunner(ctx, query, nodes, nil,
 			func(n *ScheduledJob, e *JobRunner) { n.Edges.JobRunner = e }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sjq.withNamedControls {
-		if err := sjq.loadControls(ctx, query, nodes,
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *ScheduledJob) { n.appendNamedControls(name) },
 			func(n *ScheduledJob, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range sjq.withNamedSubcontrols {
-		if err := sjq.loadSubcontrols(ctx, query, nodes,
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *ScheduledJob) { n.appendNamedSubcontrols(name) },
 			func(n *ScheduledJob, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range sjq.loadTotal {
-		if err := sjq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sjq *ScheduledJobQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Organization)) error {
+func (_q *ScheduledJobQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJob)
 	for i := range nodes {
@@ -658,7 +658,7 @@ func (sjq *ScheduledJobQuery) loadOwner(ctx context.Context, query *Organization
 	}
 	return nil
 }
-func (sjq *ScheduledJobQuery) loadJobTemplate(ctx context.Context, query *JobTemplateQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *JobTemplate)) error {
+func (_q *ScheduledJobQuery) loadJobTemplate(ctx context.Context, query *JobTemplateQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *JobTemplate)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJob)
 	for i := range nodes {
@@ -687,7 +687,7 @@ func (sjq *ScheduledJobQuery) loadJobTemplate(ctx context.Context, query *JobTem
 	}
 	return nil
 }
-func (sjq *ScheduledJobQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Control)) error {
+func (_q *ScheduledJobQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ScheduledJob)
 	nids := make(map[string]map[*ScheduledJob]struct{})
@@ -700,7 +700,7 @@ func (sjq *ScheduledJobQuery) loadControls(ctx context.Context, query *ControlQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scheduledjob.ControlsTable)
-		joinT.Schema(sjq.schemaConfig.ScheduledJobControls)
+		joinT.Schema(_q.schemaConfig.ScheduledJobControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(scheduledjob.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scheduledjob.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -749,7 +749,7 @@ func (sjq *ScheduledJobQuery) loadControls(ctx context.Context, query *ControlQu
 	}
 	return nil
 }
-func (sjq *ScheduledJobQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Subcontrol)) error {
+func (_q *ScheduledJobQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Subcontrol)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ScheduledJob)
 	nids := make(map[string]map[*ScheduledJob]struct{})
@@ -762,7 +762,7 @@ func (sjq *ScheduledJobQuery) loadSubcontrols(ctx context.Context, query *Subcon
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scheduledjob.SubcontrolsTable)
-		joinT.Schema(sjq.schemaConfig.ScheduledJobSubcontrols)
+		joinT.Schema(_q.schemaConfig.ScheduledJobSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(scheduledjob.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scheduledjob.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -811,7 +811,7 @@ func (sjq *ScheduledJobQuery) loadSubcontrols(ctx context.Context, query *Subcon
 	}
 	return nil
 }
-func (sjq *ScheduledJobQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *JobRunner)) error {
+func (_q *ScheduledJobQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *JobRunner)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJob)
 	for i := range nodes {
@@ -841,29 +841,29 @@ func (sjq *ScheduledJobQuery) loadJobRunner(ctx context.Context, query *JobRunne
 	return nil
 }
 
-func (sjq *ScheduledJobQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sjq.querySpec()
-	_spec.Node.Schema = sjq.schemaConfig.ScheduledJob
-	ctx = internal.NewSchemaConfigContext(ctx, sjq.schemaConfig)
-	if len(sjq.modifiers) > 0 {
-		_spec.Modifiers = sjq.modifiers
+func (_q *ScheduledJobQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ScheduledJob
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sjq.ctx.Fields
-	if len(sjq.ctx.Fields) > 0 {
-		_spec.Unique = sjq.ctx.Unique != nil && *sjq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sjq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sjq *ScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(scheduledjob.Table, scheduledjob.Columns, sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString))
-	_spec.From = sjq.sql
-	if unique := sjq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sjq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sjq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scheduledjob.FieldID)
 		for i := range fields {
@@ -871,30 +871,30 @@ func (sjq *ScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sjq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(scheduledjob.FieldOwnerID)
 		}
-		if sjq.withJobTemplate != nil {
+		if _q.withJobTemplate != nil {
 			_spec.Node.AddColumnOnce(scheduledjob.FieldJobID)
 		}
-		if sjq.withJobRunner != nil {
+		if _q.withJobRunner != nil {
 			_spec.Node.AddColumnOnce(scheduledjob.FieldJobRunnerID)
 		}
 	}
-	if ps := sjq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sjq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sjq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sjq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -904,76 +904,76 @@ func (sjq *ScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sjq *ScheduledJobQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sjq.driver.Dialect())
+func (_q *ScheduledJobQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(scheduledjob.Table)
-	columns := sjq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = scheduledjob.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sjq.sql != nil {
-		selector = sjq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sjq.ctx.Unique != nil && *sjq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(sjq.schemaConfig.ScheduledJob)
-	ctx = internal.NewSchemaConfigContext(ctx, sjq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ScheduledJob)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range sjq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sjq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sjq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sjq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sjq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sjq *ScheduledJobQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobSelect {
-	sjq.modifiers = append(sjq.modifiers, modifiers...)
-	return sjq.Select()
+func (_q *ScheduledJobQuery) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ScheduledJobQuery {
-	query := (&ControlClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ScheduledJobQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sjq.withNamedControls == nil {
-		sjq.withNamedControls = make(map[string]*ControlQuery)
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
-	sjq.withNamedControls[name] = query
-	return sjq
+	_q.withNamedControls[name] = query
+	return _q
 }
 
 // WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (sjq *ScheduledJobQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ScheduledJobQuery {
-	query := (&SubcontrolClient{config: sjq.config}).Query()
+func (_q *ScheduledJobQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ScheduledJobQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if sjq.withNamedSubcontrols == nil {
-		sjq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	sjq.withNamedSubcontrols[name] = query
-	return sjq
+	_q.withNamedSubcontrols[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -1002,41 +1002,41 @@ type ScheduledJobGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sjgb *ScheduledJobGroupBy) Aggregate(fns ...AggregateFunc) *ScheduledJobGroupBy {
-	sjgb.fns = append(sjgb.fns, fns...)
-	return sjgb
+func (_g *ScheduledJobGroupBy) Aggregate(fns ...AggregateFunc) *ScheduledJobGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sjgb *ScheduledJobGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sjgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sjgb.build.prepareQuery(ctx); err != nil {
+func (_g *ScheduledJobGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScheduledJobQuery, *ScheduledJobGroupBy](ctx, sjgb.build, sjgb, sjgb.build.inters, v)
+	return scanWithInterceptors[*ScheduledJobQuery, *ScheduledJobGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sjgb *ScheduledJobGroupBy) sqlScan(ctx context.Context, root *ScheduledJobQuery, v any) error {
+func (_g *ScheduledJobGroupBy) sqlScan(ctx context.Context, root *ScheduledJobQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sjgb.fns))
-	for _, fn := range sjgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sjgb.flds)+len(sjgb.fns))
-		for _, f := range *sjgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sjgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sjgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1050,27 +1050,27 @@ type ScheduledJobSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (sjs *ScheduledJobSelect) Aggregate(fns ...AggregateFunc) *ScheduledJobSelect {
-	sjs.fns = append(sjs.fns, fns...)
-	return sjs
+func (_s *ScheduledJobSelect) Aggregate(fns ...AggregateFunc) *ScheduledJobSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sjs *ScheduledJobSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sjs.ctx, ent.OpQuerySelect)
-	if err := sjs.prepareQuery(ctx); err != nil {
+func (_s *ScheduledJobSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScheduledJobQuery, *ScheduledJobSelect](ctx, sjs.ScheduledJobQuery, sjs, sjs.inters, v)
+	return scanWithInterceptors[*ScheduledJobQuery, *ScheduledJobSelect](ctx, _s.ScheduledJobQuery, _s, _s.inters, v)
 }
 
-func (sjs *ScheduledJobSelect) sqlScan(ctx context.Context, root *ScheduledJobQuery, v any) error {
+func (_s *ScheduledJobSelect) sqlScan(ctx context.Context, root *ScheduledJobQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(sjs.fns))
-	for _, fn := range sjs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*sjs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -1078,7 +1078,7 @@ func (sjs *ScheduledJobSelect) sqlScan(ctx context.Context, root *ScheduledJobQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sjs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -1086,7 +1086,7 @@ func (sjs *ScheduledJobSelect) sqlScan(ctx context.Context, root *ScheduledJobQu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sjs *ScheduledJobSelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobSelect {
-	sjs.modifiers = append(sjs.modifiers, modifiers...)
-	return sjs
+func (_s *ScheduledJobSelect) Modify(modifiers ...func(s *sql.Selector)) *ScheduledJobSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

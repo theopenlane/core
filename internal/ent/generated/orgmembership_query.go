@@ -41,44 +41,44 @@ type OrgMembershipQuery struct {
 }
 
 // Where adds a new predicate for the OrgMembershipQuery builder.
-func (omq *OrgMembershipQuery) Where(ps ...predicate.OrgMembership) *OrgMembershipQuery {
-	omq.predicates = append(omq.predicates, ps...)
-	return omq
+func (_q *OrgMembershipQuery) Where(ps ...predicate.OrgMembership) *OrgMembershipQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (omq *OrgMembershipQuery) Limit(limit int) *OrgMembershipQuery {
-	omq.ctx.Limit = &limit
-	return omq
+func (_q *OrgMembershipQuery) Limit(limit int) *OrgMembershipQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (omq *OrgMembershipQuery) Offset(offset int) *OrgMembershipQuery {
-	omq.ctx.Offset = &offset
-	return omq
+func (_q *OrgMembershipQuery) Offset(offset int) *OrgMembershipQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (omq *OrgMembershipQuery) Unique(unique bool) *OrgMembershipQuery {
-	omq.ctx.Unique = &unique
-	return omq
+func (_q *OrgMembershipQuery) Unique(unique bool) *OrgMembershipQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (omq *OrgMembershipQuery) Order(o ...orgmembership.OrderOption) *OrgMembershipQuery {
-	omq.order = append(omq.order, o...)
-	return omq
+func (_q *OrgMembershipQuery) Order(o ...orgmembership.OrderOption) *OrgMembershipQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOrganization chains the current query on the "organization" edge.
-func (omq *OrgMembershipQuery) QueryOrganization() *OrganizationQuery {
-	query := (&OrganizationClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) QueryOrganization() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := omq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := omq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -87,23 +87,23 @@ func (omq *OrgMembershipQuery) QueryOrganization() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.OrganizationTable, orgmembership.OrganizationColumn),
 		)
-		schemaConfig := omq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrgMembership
-		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUser chains the current query on the "user" edge.
-func (omq *OrgMembershipQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := omq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := omq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -112,23 +112,23 @@ func (omq *OrgMembershipQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, orgmembership.UserTable, orgmembership.UserColumn),
 		)
-		schemaConfig := omq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.OrgMembership
-		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvents chains the current query on the "events" edge.
-func (omq *OrgMembershipQuery) QueryEvents() *EventQuery {
-	query := (&EventClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := omq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := omq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -137,10 +137,10 @@ func (omq *OrgMembershipQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, orgmembership.EventsTable, orgmembership.EventsPrimaryKey...),
 		)
-		schemaConfig := omq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.OrgMembershipEvents
-		fromU = sqlgraph.SetNeighbors(omq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -148,8 +148,8 @@ func (omq *OrgMembershipQuery) QueryEvents() *EventQuery {
 
 // First returns the first OrgMembership entity from the query.
 // Returns a *NotFoundError when no OrgMembership was found.
-func (omq *OrgMembershipQuery) First(ctx context.Context) (*OrgMembership, error) {
-	nodes, err := omq.Limit(1).All(setContextOp(ctx, omq.ctx, ent.OpQueryFirst))
+func (_q *OrgMembershipQuery) First(ctx context.Context) (*OrgMembership, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -160,8 +160,8 @@ func (omq *OrgMembershipQuery) First(ctx context.Context) (*OrgMembership, error
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (omq *OrgMembershipQuery) FirstX(ctx context.Context) *OrgMembership {
-	node, err := omq.First(ctx)
+func (_q *OrgMembershipQuery) FirstX(ctx context.Context) *OrgMembership {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -170,9 +170,9 @@ func (omq *OrgMembershipQuery) FirstX(ctx context.Context) *OrgMembership {
 
 // FirstID returns the first OrgMembership ID from the query.
 // Returns a *NotFoundError when no OrgMembership ID was found.
-func (omq *OrgMembershipQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *OrgMembershipQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = omq.Limit(1).IDs(setContextOp(ctx, omq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -183,8 +183,8 @@ func (omq *OrgMembershipQuery) FirstID(ctx context.Context) (id string, err erro
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (omq *OrgMembershipQuery) FirstIDX(ctx context.Context) string {
-	id, err := omq.FirstID(ctx)
+func (_q *OrgMembershipQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -194,8 +194,8 @@ func (omq *OrgMembershipQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single OrgMembership entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one OrgMembership entity is found.
 // Returns a *NotFoundError when no OrgMembership entities are found.
-func (omq *OrgMembershipQuery) Only(ctx context.Context) (*OrgMembership, error) {
-	nodes, err := omq.Limit(2).All(setContextOp(ctx, omq.ctx, ent.OpQueryOnly))
+func (_q *OrgMembershipQuery) Only(ctx context.Context) (*OrgMembership, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -210,8 +210,8 @@ func (omq *OrgMembershipQuery) Only(ctx context.Context) (*OrgMembership, error)
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (omq *OrgMembershipQuery) OnlyX(ctx context.Context) *OrgMembership {
-	node, err := omq.Only(ctx)
+func (_q *OrgMembershipQuery) OnlyX(ctx context.Context) *OrgMembership {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -221,9 +221,9 @@ func (omq *OrgMembershipQuery) OnlyX(ctx context.Context) *OrgMembership {
 // OnlyID is like Only, but returns the only OrgMembership ID in the query.
 // Returns a *NotSingularError when more than one OrgMembership ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (omq *OrgMembershipQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *OrgMembershipQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = omq.Limit(2).IDs(setContextOp(ctx, omq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -238,8 +238,8 @@ func (omq *OrgMembershipQuery) OnlyID(ctx context.Context) (id string, err error
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (omq *OrgMembershipQuery) OnlyIDX(ctx context.Context) string {
-	id, err := omq.OnlyID(ctx)
+func (_q *OrgMembershipQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -247,18 +247,18 @@ func (omq *OrgMembershipQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of OrgMemberships.
-func (omq *OrgMembershipQuery) All(ctx context.Context) ([]*OrgMembership, error) {
-	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryAll)
-	if err := omq.prepareQuery(ctx); err != nil {
+func (_q *OrgMembershipQuery) All(ctx context.Context) ([]*OrgMembership, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*OrgMembership, *OrgMembershipQuery]()
-	return withInterceptors[[]*OrgMembership](ctx, omq, qr, omq.inters)
+	return withInterceptors[[]*OrgMembership](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (omq *OrgMembershipQuery) AllX(ctx context.Context) []*OrgMembership {
-	nodes, err := omq.All(ctx)
+func (_q *OrgMembershipQuery) AllX(ctx context.Context) []*OrgMembership {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -266,20 +266,20 @@ func (omq *OrgMembershipQuery) AllX(ctx context.Context) []*OrgMembership {
 }
 
 // IDs executes the query and returns a list of OrgMembership IDs.
-func (omq *OrgMembershipQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if omq.ctx.Unique == nil && omq.path != nil {
-		omq.Unique(true)
+func (_q *OrgMembershipQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryIDs)
-	if err = omq.Select(orgmembership.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(orgmembership.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (omq *OrgMembershipQuery) IDsX(ctx context.Context) []string {
-	ids, err := omq.IDs(ctx)
+func (_q *OrgMembershipQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -287,17 +287,17 @@ func (omq *OrgMembershipQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (omq *OrgMembershipQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryCount)
-	if err := omq.prepareQuery(ctx); err != nil {
+func (_q *OrgMembershipQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, omq, querierCount[*OrgMembershipQuery](), omq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OrgMembershipQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (omq *OrgMembershipQuery) CountX(ctx context.Context) int {
-	count, err := omq.Count(ctx)
+func (_q *OrgMembershipQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -305,9 +305,9 @@ func (omq *OrgMembershipQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (omq *OrgMembershipQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryExist)
-	switch _, err := omq.FirstID(ctx); {
+func (_q *OrgMembershipQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -318,8 +318,8 @@ func (omq *OrgMembershipQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (omq *OrgMembershipQuery) ExistX(ctx context.Context) bool {
-	exist, err := omq.Exist(ctx)
+func (_q *OrgMembershipQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -328,57 +328,57 @@ func (omq *OrgMembershipQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OrgMembershipQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (omq *OrgMembershipQuery) Clone() *OrgMembershipQuery {
-	if omq == nil {
+func (_q *OrgMembershipQuery) Clone() *OrgMembershipQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OrgMembershipQuery{
-		config:           omq.config,
-		ctx:              omq.ctx.Clone(),
-		order:            append([]orgmembership.OrderOption{}, omq.order...),
-		inters:           append([]Interceptor{}, omq.inters...),
-		predicates:       append([]predicate.OrgMembership{}, omq.predicates...),
-		withOrganization: omq.withOrganization.Clone(),
-		withUser:         omq.withUser.Clone(),
-		withEvents:       omq.withEvents.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]orgmembership.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.OrgMembership{}, _q.predicates...),
+		withOrganization: _q.withOrganization.Clone(),
+		withUser:         _q.withUser.Clone(),
+		withEvents:       _q.withEvents.Clone(),
 		// clone intermediate query.
-		sql:       omq.sql.Clone(),
-		path:      omq.path,
-		modifiers: append([]func(*sql.Selector){}, omq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOrganization tells the query-builder to eager-load the nodes that are connected to
 // the "organization" edge. The optional arguments are used to configure the query builder of the edge.
-func (omq *OrgMembershipQuery) WithOrganization(opts ...func(*OrganizationQuery)) *OrgMembershipQuery {
-	query := (&OrganizationClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) WithOrganization(opts ...func(*OrganizationQuery)) *OrgMembershipQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	omq.withOrganization = query
-	return omq
+	_q.withOrganization = query
+	return _q
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
 // the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (omq *OrgMembershipQuery) WithUser(opts ...func(*UserQuery)) *OrgMembershipQuery {
-	query := (&UserClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) WithUser(opts ...func(*UserQuery)) *OrgMembershipQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	omq.withUser = query
-	return omq
+	_q.withUser = query
+	return _q
 }
 
 // WithEvents tells the query-builder to eager-load the nodes that are connected to
 // the "events" edge. The optional arguments are used to configure the query builder of the edge.
-func (omq *OrgMembershipQuery) WithEvents(opts ...func(*EventQuery)) *OrgMembershipQuery {
-	query := (&EventClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) WithEvents(opts ...func(*EventQuery)) *OrgMembershipQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	omq.withEvents = query
-	return omq
+	_q.withEvents = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -395,10 +395,10 @@ func (omq *OrgMembershipQuery) WithEvents(opts ...func(*EventQuery)) *OrgMembers
 //		GroupBy(orgmembership.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (omq *OrgMembershipQuery) GroupBy(field string, fields ...string) *OrgMembershipGroupBy {
-	omq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OrgMembershipGroupBy{build: omq}
-	grbuild.flds = &omq.ctx.Fields
+func (_q *OrgMembershipQuery) GroupBy(field string, fields ...string) *OrgMembershipGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OrgMembershipGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = orgmembership.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -416,119 +416,119 @@ func (omq *OrgMembershipQuery) GroupBy(field string, fields ...string) *OrgMembe
 //	client.OrgMembership.Query().
 //		Select(orgmembership.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (omq *OrgMembershipQuery) Select(fields ...string) *OrgMembershipSelect {
-	omq.ctx.Fields = append(omq.ctx.Fields, fields...)
-	sbuild := &OrgMembershipSelect{OrgMembershipQuery: omq}
+func (_q *OrgMembershipQuery) Select(fields ...string) *OrgMembershipSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OrgMembershipSelect{OrgMembershipQuery: _q}
 	sbuild.label = orgmembership.Label
-	sbuild.flds, sbuild.scan = &omq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OrgMembershipSelect configured with the given aggregations.
-func (omq *OrgMembershipQuery) Aggregate(fns ...AggregateFunc) *OrgMembershipSelect {
-	return omq.Select().Aggregate(fns...)
+func (_q *OrgMembershipQuery) Aggregate(fns ...AggregateFunc) *OrgMembershipSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (omq *OrgMembershipQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range omq.inters {
+func (_q *OrgMembershipQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, omq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range omq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !orgmembership.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if omq.path != nil {
-		prev, err := omq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		omq.sql = prev
+		_q.sql = prev
 	}
 	if orgmembership.Policy == nil {
 		return errors.New("generated: uninitialized orgmembership.Policy (forgotten import generated/runtime?)")
 	}
-	if err := orgmembership.Policy.EvalQuery(ctx, omq); err != nil {
+	if err := orgmembership.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (omq *OrgMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgMembership, error) {
+func (_q *OrgMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrgMembership, error) {
 	var (
 		nodes       = []*OrgMembership{}
-		_spec       = omq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			omq.withOrganization != nil,
-			omq.withUser != nil,
-			omq.withEvents != nil,
+			_q.withOrganization != nil,
+			_q.withUser != nil,
+			_q.withEvents != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OrgMembership).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &OrgMembership{config: omq.config}
+		node := &OrgMembership{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = omq.schemaConfig.OrgMembership
-	ctx = internal.NewSchemaConfigContext(ctx, omq.schemaConfig)
-	if len(omq.modifiers) > 0 {
-		_spec.Modifiers = omq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.OrgMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, omq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := omq.withOrganization; query != nil {
-		if err := omq.loadOrganization(ctx, query, nodes, nil,
+	if query := _q.withOrganization; query != nil {
+		if err := _q.loadOrganization(ctx, query, nodes, nil,
 			func(n *OrgMembership, e *Organization) { n.Edges.Organization = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := omq.withUser; query != nil {
-		if err := omq.loadUser(ctx, query, nodes, nil,
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *OrgMembership, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := omq.withEvents; query != nil {
-		if err := omq.loadEvents(ctx, query, nodes,
+	if query := _q.withEvents; query != nil {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *OrgMembership) { n.Edges.Events = []*Event{} },
 			func(n *OrgMembership, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range omq.withNamedEvents {
-		if err := omq.loadEvents(ctx, query, nodes,
+	for name, query := range _q.withNamedEvents {
+		if err := _q.loadEvents(ctx, query, nodes,
 			func(n *OrgMembership) { n.appendNamedEvents(name) },
 			func(n *OrgMembership, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range omq.loadTotal {
-		if err := omq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (omq *OrgMembershipQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *Organization)) error {
+func (_q *OrgMembershipQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgMembership)
 	for i := range nodes {
@@ -557,7 +557,7 @@ func (omq *OrgMembershipQuery) loadOrganization(ctx context.Context, query *Orga
 	}
 	return nil
 }
-func (omq *OrgMembershipQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *User)) error {
+func (_q *OrgMembershipQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*OrgMembership)
 	for i := range nodes {
@@ -586,7 +586,7 @@ func (omq *OrgMembershipQuery) loadUser(ctx context.Context, query *UserQuery, n
 	}
 	return nil
 }
-func (omq *OrgMembershipQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *Event)) error {
+func (_q *OrgMembershipQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*OrgMembership, init func(*OrgMembership), assign func(*OrgMembership, *Event)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*OrgMembership)
 	nids := make(map[string]map[*OrgMembership]struct{})
@@ -599,7 +599,7 @@ func (omq *OrgMembershipQuery) loadEvents(ctx context.Context, query *EventQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(orgmembership.EventsTable)
-		joinT.Schema(omq.schemaConfig.OrgMembershipEvents)
+		joinT.Schema(_q.schemaConfig.OrgMembershipEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(orgmembership.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(orgmembership.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -649,29 +649,29 @@ func (omq *OrgMembershipQuery) loadEvents(ctx context.Context, query *EventQuery
 	return nil
 }
 
-func (omq *OrgMembershipQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := omq.querySpec()
-	_spec.Node.Schema = omq.schemaConfig.OrgMembership
-	ctx = internal.NewSchemaConfigContext(ctx, omq.schemaConfig)
-	if len(omq.modifiers) > 0 {
-		_spec.Modifiers = omq.modifiers
+func (_q *OrgMembershipQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.OrgMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = omq.ctx.Fields
-	if len(omq.ctx.Fields) > 0 {
-		_spec.Unique = omq.ctx.Unique != nil && *omq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, omq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (omq *OrgMembershipQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OrgMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(orgmembership.Table, orgmembership.Columns, sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString))
-	_spec.From = omq.sql
-	if unique := omq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if omq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := omq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgmembership.FieldID)
 		for i := range fields {
@@ -679,27 +679,27 @@ func (omq *OrgMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if omq.withOrganization != nil {
+		if _q.withOrganization != nil {
 			_spec.Node.AddColumnOnce(orgmembership.FieldOrganizationID)
 		}
-		if omq.withUser != nil {
+		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(orgmembership.FieldUserID)
 		}
 	}
-	if ps := omq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := omq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := omq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := omq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -709,62 +709,62 @@ func (omq *OrgMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (omq *OrgMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(omq.driver.Dialect())
+func (_q *OrgMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(orgmembership.Table)
-	columns := omq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = orgmembership.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if omq.sql != nil {
-		selector = omq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if omq.ctx.Unique != nil && *omq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(omq.schemaConfig.OrgMembership)
-	ctx = internal.NewSchemaConfigContext(ctx, omq.schemaConfig)
+	t1.Schema(_q.schemaConfig.OrgMembership)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range omq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range omq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range omq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := omq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := omq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (omq *OrgMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipSelect {
-	omq.modifiers = append(omq.modifiers, modifiers...)
-	return omq.Select()
+func (_q *OrgMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (omq *OrgMembershipQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *OrgMembershipQuery {
-	query := (&EventClient{config: omq.config}).Query()
+func (_q *OrgMembershipQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *OrgMembershipQuery {
+	query := (&EventClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if omq.withNamedEvents == nil {
-		omq.withNamedEvents = make(map[string]*EventQuery)
+	if _q.withNamedEvents == nil {
+		_q.withNamedEvents = make(map[string]*EventQuery)
 	}
-	omq.withNamedEvents[name] = query
-	return omq
+	_q.withNamedEvents[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -793,41 +793,41 @@ type OrgMembershipGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (omgb *OrgMembershipGroupBy) Aggregate(fns ...AggregateFunc) *OrgMembershipGroupBy {
-	omgb.fns = append(omgb.fns, fns...)
-	return omgb
+func (_g *OrgMembershipGroupBy) Aggregate(fns ...AggregateFunc) *OrgMembershipGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (omgb *OrgMembershipGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, omgb.build.ctx, ent.OpQueryGroupBy)
-	if err := omgb.build.prepareQuery(ctx); err != nil {
+func (_g *OrgMembershipGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrgMembershipQuery, *OrgMembershipGroupBy](ctx, omgb.build, omgb, omgb.build.inters, v)
+	return scanWithInterceptors[*OrgMembershipQuery, *OrgMembershipGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (omgb *OrgMembershipGroupBy) sqlScan(ctx context.Context, root *OrgMembershipQuery, v any) error {
+func (_g *OrgMembershipGroupBy) sqlScan(ctx context.Context, root *OrgMembershipQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(omgb.fns))
-	for _, fn := range omgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*omgb.flds)+len(omgb.fns))
-		for _, f := range *omgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*omgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := omgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -841,27 +841,27 @@ type OrgMembershipSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (oms *OrgMembershipSelect) Aggregate(fns ...AggregateFunc) *OrgMembershipSelect {
-	oms.fns = append(oms.fns, fns...)
-	return oms
+func (_s *OrgMembershipSelect) Aggregate(fns ...AggregateFunc) *OrgMembershipSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (oms *OrgMembershipSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oms.ctx, ent.OpQuerySelect)
-	if err := oms.prepareQuery(ctx); err != nil {
+func (_s *OrgMembershipSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrgMembershipQuery, *OrgMembershipSelect](ctx, oms.OrgMembershipQuery, oms, oms.inters, v)
+	return scanWithInterceptors[*OrgMembershipQuery, *OrgMembershipSelect](ctx, _s.OrgMembershipQuery, _s, _s.inters, v)
 }
 
-func (oms *OrgMembershipSelect) sqlScan(ctx context.Context, root *OrgMembershipQuery, v any) error {
+func (_s *OrgMembershipSelect) sqlScan(ctx context.Context, root *OrgMembershipQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(oms.fns))
-	for _, fn := range oms.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*oms.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -869,7 +869,7 @@ func (oms *OrgMembershipSelect) sqlScan(ctx context.Context, root *OrgMembership
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := oms.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -877,7 +877,7 @@ func (oms *OrgMembershipSelect) sqlScan(ctx context.Context, root *OrgMembership
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oms *OrgMembershipSelect) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipSelect {
-	oms.modifiers = append(oms.modifiers, modifiers...)
-	return oms
+func (_s *OrgMembershipSelect) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

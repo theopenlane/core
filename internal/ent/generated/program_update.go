@@ -44,984 +44,984 @@ type ProgramUpdate struct {
 }
 
 // Where appends a list predicates to the ProgramUpdate builder.
-func (pu *ProgramUpdate) Where(ps ...predicate.Program) *ProgramUpdate {
-	pu.mutation.Where(ps...)
-	return pu
+func (_u *ProgramUpdate) Where(ps ...predicate.Program) *ProgramUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (pu *ProgramUpdate) SetUpdatedAt(t time.Time) *ProgramUpdate {
-	pu.mutation.SetUpdatedAt(t)
-	return pu
+func (_u *ProgramUpdate) SetUpdatedAt(v time.Time) *ProgramUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (pu *ProgramUpdate) ClearUpdatedAt() *ProgramUpdate {
-	pu.mutation.ClearUpdatedAt()
-	return pu
+func (_u *ProgramUpdate) ClearUpdatedAt() *ProgramUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (pu *ProgramUpdate) SetUpdatedBy(s string) *ProgramUpdate {
-	pu.mutation.SetUpdatedBy(s)
-	return pu
+func (_u *ProgramUpdate) SetUpdatedBy(v string) *ProgramUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableUpdatedBy(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetUpdatedBy(*s)
+func (_u *ProgramUpdate) SetNillableUpdatedBy(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (pu *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
-	pu.mutation.ClearUpdatedBy()
-	return pu
+func (_u *ProgramUpdate) ClearUpdatedBy() *ProgramUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (pu *ProgramUpdate) SetDeletedAt(t time.Time) *ProgramUpdate {
-	pu.mutation.SetDeletedAt(t)
-	return pu
+func (_u *ProgramUpdate) SetDeletedAt(v time.Time) *ProgramUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableDeletedAt(t *time.Time) *ProgramUpdate {
-	if t != nil {
-		pu.SetDeletedAt(*t)
+func (_u *ProgramUpdate) SetNillableDeletedAt(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (pu *ProgramUpdate) ClearDeletedAt() *ProgramUpdate {
-	pu.mutation.ClearDeletedAt()
-	return pu
+func (_u *ProgramUpdate) ClearDeletedAt() *ProgramUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (pu *ProgramUpdate) SetDeletedBy(s string) *ProgramUpdate {
-	pu.mutation.SetDeletedBy(s)
-	return pu
+func (_u *ProgramUpdate) SetDeletedBy(v string) *ProgramUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableDeletedBy(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetDeletedBy(*s)
+func (_u *ProgramUpdate) SetNillableDeletedBy(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (pu *ProgramUpdate) ClearDeletedBy() *ProgramUpdate {
-	pu.mutation.ClearDeletedBy()
-	return pu
+func (_u *ProgramUpdate) ClearDeletedBy() *ProgramUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (pu *ProgramUpdate) SetTags(s []string) *ProgramUpdate {
-	pu.mutation.SetTags(s)
-	return pu
+func (_u *ProgramUpdate) SetTags(v []string) *ProgramUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (pu *ProgramUpdate) AppendTags(s []string) *ProgramUpdate {
-	pu.mutation.AppendTags(s)
-	return pu
+// AppendTags appends value to the "tags" field.
+func (_u *ProgramUpdate) AppendTags(v []string) *ProgramUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (pu *ProgramUpdate) ClearTags() *ProgramUpdate {
-	pu.mutation.ClearTags()
-	return pu
+func (_u *ProgramUpdate) ClearTags() *ProgramUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (pu *ProgramUpdate) SetOwnerID(s string) *ProgramUpdate {
-	pu.mutation.SetOwnerID(s)
-	return pu
+func (_u *ProgramUpdate) SetOwnerID(v string) *ProgramUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableOwnerID(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetOwnerID(*s)
+func (_u *ProgramUpdate) SetNillableOwnerID(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (pu *ProgramUpdate) ClearOwnerID() *ProgramUpdate {
-	pu.mutation.ClearOwnerID()
-	return pu
+func (_u *ProgramUpdate) ClearOwnerID() *ProgramUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (pu *ProgramUpdate) SetName(s string) *ProgramUpdate {
-	pu.mutation.SetName(s)
-	return pu
+func (_u *ProgramUpdate) SetName(v string) *ProgramUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableName(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetName(*s)
+func (_u *ProgramUpdate) SetNillableName(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (pu *ProgramUpdate) SetDescription(s string) *ProgramUpdate {
-	pu.mutation.SetDescription(s)
-	return pu
+func (_u *ProgramUpdate) SetDescription(v string) *ProgramUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableDescription(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetDescription(*s)
+func (_u *ProgramUpdate) SetNillableDescription(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (pu *ProgramUpdate) ClearDescription() *ProgramUpdate {
-	pu.mutation.ClearDescription()
-	return pu
+func (_u *ProgramUpdate) ClearDescription() *ProgramUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (pu *ProgramUpdate) SetStatus(es enums.ProgramStatus) *ProgramUpdate {
-	pu.mutation.SetStatus(es)
-	return pu
+func (_u *ProgramUpdate) SetStatus(v enums.ProgramStatus) *ProgramUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableStatus(es *enums.ProgramStatus) *ProgramUpdate {
-	if es != nil {
-		pu.SetStatus(*es)
+func (_u *ProgramUpdate) SetNillableStatus(v *enums.ProgramStatus) *ProgramUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetProgramType sets the "program_type" field.
-func (pu *ProgramUpdate) SetProgramType(et enums.ProgramType) *ProgramUpdate {
-	pu.mutation.SetProgramType(et)
-	return pu
+func (_u *ProgramUpdate) SetProgramType(v enums.ProgramType) *ProgramUpdate {
+	_u.mutation.SetProgramType(v)
+	return _u
 }
 
 // SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableProgramType(et *enums.ProgramType) *ProgramUpdate {
-	if et != nil {
-		pu.SetProgramType(*et)
+func (_u *ProgramUpdate) SetNillableProgramType(v *enums.ProgramType) *ProgramUpdate {
+	if v != nil {
+		_u.SetProgramType(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetFrameworkName sets the "framework_name" field.
-func (pu *ProgramUpdate) SetFrameworkName(s string) *ProgramUpdate {
-	pu.mutation.SetFrameworkName(s)
-	return pu
+func (_u *ProgramUpdate) SetFrameworkName(v string) *ProgramUpdate {
+	_u.mutation.SetFrameworkName(v)
+	return _u
 }
 
 // SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableFrameworkName(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetFrameworkName(*s)
+func (_u *ProgramUpdate) SetNillableFrameworkName(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetFrameworkName(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearFrameworkName clears the value of the "framework_name" field.
-func (pu *ProgramUpdate) ClearFrameworkName() *ProgramUpdate {
-	pu.mutation.ClearFrameworkName()
-	return pu
+func (_u *ProgramUpdate) ClearFrameworkName() *ProgramUpdate {
+	_u.mutation.ClearFrameworkName()
+	return _u
 }
 
 // SetStartDate sets the "start_date" field.
-func (pu *ProgramUpdate) SetStartDate(t time.Time) *ProgramUpdate {
-	pu.mutation.SetStartDate(t)
-	return pu
+func (_u *ProgramUpdate) SetStartDate(v time.Time) *ProgramUpdate {
+	_u.mutation.SetStartDate(v)
+	return _u
 }
 
 // SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableStartDate(t *time.Time) *ProgramUpdate {
-	if t != nil {
-		pu.SetStartDate(*t)
+func (_u *ProgramUpdate) SetNillableStartDate(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetStartDate(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearStartDate clears the value of the "start_date" field.
-func (pu *ProgramUpdate) ClearStartDate() *ProgramUpdate {
-	pu.mutation.ClearStartDate()
-	return pu
+func (_u *ProgramUpdate) ClearStartDate() *ProgramUpdate {
+	_u.mutation.ClearStartDate()
+	return _u
 }
 
 // SetEndDate sets the "end_date" field.
-func (pu *ProgramUpdate) SetEndDate(t time.Time) *ProgramUpdate {
-	pu.mutation.SetEndDate(t)
-	return pu
+func (_u *ProgramUpdate) SetEndDate(v time.Time) *ProgramUpdate {
+	_u.mutation.SetEndDate(v)
+	return _u
 }
 
 // SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableEndDate(t *time.Time) *ProgramUpdate {
-	if t != nil {
-		pu.SetEndDate(*t)
+func (_u *ProgramUpdate) SetNillableEndDate(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetEndDate(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearEndDate clears the value of the "end_date" field.
-func (pu *ProgramUpdate) ClearEndDate() *ProgramUpdate {
-	pu.mutation.ClearEndDate()
-	return pu
+func (_u *ProgramUpdate) ClearEndDate() *ProgramUpdate {
+	_u.mutation.ClearEndDate()
+	return _u
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
-func (pu *ProgramUpdate) SetAuditorReady(b bool) *ProgramUpdate {
-	pu.mutation.SetAuditorReady(b)
-	return pu
+func (_u *ProgramUpdate) SetAuditorReady(v bool) *ProgramUpdate {
+	_u.mutation.SetAuditorReady(v)
+	return _u
 }
 
 // SetNillableAuditorReady sets the "auditor_ready" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableAuditorReady(b *bool) *ProgramUpdate {
-	if b != nil {
-		pu.SetAuditorReady(*b)
+func (_u *ProgramUpdate) SetNillableAuditorReady(v *bool) *ProgramUpdate {
+	if v != nil {
+		_u.SetAuditorReady(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetAuditorWriteComments sets the "auditor_write_comments" field.
-func (pu *ProgramUpdate) SetAuditorWriteComments(b bool) *ProgramUpdate {
-	pu.mutation.SetAuditorWriteComments(b)
-	return pu
+func (_u *ProgramUpdate) SetAuditorWriteComments(v bool) *ProgramUpdate {
+	_u.mutation.SetAuditorWriteComments(v)
+	return _u
 }
 
 // SetNillableAuditorWriteComments sets the "auditor_write_comments" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableAuditorWriteComments(b *bool) *ProgramUpdate {
-	if b != nil {
-		pu.SetAuditorWriteComments(*b)
+func (_u *ProgramUpdate) SetNillableAuditorWriteComments(v *bool) *ProgramUpdate {
+	if v != nil {
+		_u.SetAuditorWriteComments(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetAuditorReadComments sets the "auditor_read_comments" field.
-func (pu *ProgramUpdate) SetAuditorReadComments(b bool) *ProgramUpdate {
-	pu.mutation.SetAuditorReadComments(b)
-	return pu
+func (_u *ProgramUpdate) SetAuditorReadComments(v bool) *ProgramUpdate {
+	_u.mutation.SetAuditorReadComments(v)
+	return _u
 }
 
 // SetNillableAuditorReadComments sets the "auditor_read_comments" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableAuditorReadComments(b *bool) *ProgramUpdate {
-	if b != nil {
-		pu.SetAuditorReadComments(*b)
+func (_u *ProgramUpdate) SetNillableAuditorReadComments(v *bool) *ProgramUpdate {
+	if v != nil {
+		_u.SetAuditorReadComments(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetAuditFirm sets the "audit_firm" field.
-func (pu *ProgramUpdate) SetAuditFirm(s string) *ProgramUpdate {
-	pu.mutation.SetAuditFirm(s)
-	return pu
+func (_u *ProgramUpdate) SetAuditFirm(v string) *ProgramUpdate {
+	_u.mutation.SetAuditFirm(v)
+	return _u
 }
 
 // SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableAuditFirm(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetAuditFirm(*s)
+func (_u *ProgramUpdate) SetNillableAuditFirm(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetAuditFirm(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearAuditFirm clears the value of the "audit_firm" field.
-func (pu *ProgramUpdate) ClearAuditFirm() *ProgramUpdate {
-	pu.mutation.ClearAuditFirm()
-	return pu
+func (_u *ProgramUpdate) ClearAuditFirm() *ProgramUpdate {
+	_u.mutation.ClearAuditFirm()
+	return _u
 }
 
 // SetAuditor sets the "auditor" field.
-func (pu *ProgramUpdate) SetAuditor(s string) *ProgramUpdate {
-	pu.mutation.SetAuditor(s)
-	return pu
+func (_u *ProgramUpdate) SetAuditor(v string) *ProgramUpdate {
+	_u.mutation.SetAuditor(v)
+	return _u
 }
 
 // SetNillableAuditor sets the "auditor" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableAuditor(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetAuditor(*s)
+func (_u *ProgramUpdate) SetNillableAuditor(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetAuditor(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearAuditor clears the value of the "auditor" field.
-func (pu *ProgramUpdate) ClearAuditor() *ProgramUpdate {
-	pu.mutation.ClearAuditor()
-	return pu
+func (_u *ProgramUpdate) ClearAuditor() *ProgramUpdate {
+	_u.mutation.ClearAuditor()
+	return _u
 }
 
 // SetAuditorEmail sets the "auditor_email" field.
-func (pu *ProgramUpdate) SetAuditorEmail(s string) *ProgramUpdate {
-	pu.mutation.SetAuditorEmail(s)
-	return pu
+func (_u *ProgramUpdate) SetAuditorEmail(v string) *ProgramUpdate {
+	_u.mutation.SetAuditorEmail(v)
+	return _u
 }
 
 // SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableAuditorEmail(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetAuditorEmail(*s)
+func (_u *ProgramUpdate) SetNillableAuditorEmail(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetAuditorEmail(*v)
 	}
-	return pu
+	return _u
 }
 
 // ClearAuditorEmail clears the value of the "auditor_email" field.
-func (pu *ProgramUpdate) ClearAuditorEmail() *ProgramUpdate {
-	pu.mutation.ClearAuditorEmail()
-	return pu
+func (_u *ProgramUpdate) ClearAuditorEmail() *ProgramUpdate {
+	_u.mutation.ClearAuditorEmail()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (pu *ProgramUpdate) SetOwner(o *Organization) *ProgramUpdate {
-	return pu.SetOwnerID(o.ID)
+func (_u *ProgramUpdate) SetOwner(v *Organization) *ProgramUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (pu *ProgramUpdate) AddBlockedGroupIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddBlockedGroupIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddBlockedGroupIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (pu *ProgramUpdate) AddBlockedGroups(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdate) AddBlockedGroups(v ...*Group) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (pu *ProgramUpdate) AddEditorIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddEditorIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddEditorIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (pu *ProgramUpdate) AddEditors(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdate) AddEditors(v ...*Group) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (pu *ProgramUpdate) AddViewerIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddViewerIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddViewerIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (pu *ProgramUpdate) AddViewers(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdate) AddViewers(v ...*Group) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (pu *ProgramUpdate) AddControlIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddControlIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddControlIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (pu *ProgramUpdate) AddControls(c ...*Control) *ProgramUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdate) AddControls(v ...*Control) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (pu *ProgramUpdate) AddSubcontrolIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddSubcontrolIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddSubcontrolIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (pu *ProgramUpdate) AddSubcontrols(s ...*Subcontrol) *ProgramUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ProgramUpdate) AddSubcontrols(v ...*Subcontrol) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (pu *ProgramUpdate) AddControlObjectiveIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddControlObjectiveIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddControlObjectiveIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (pu *ProgramUpdate) AddControlObjectives(c ...*ControlObjective) *ProgramUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdate) AddControlObjectives(v ...*ControlObjective) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (pu *ProgramUpdate) AddInternalPolicyIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddInternalPolicyIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddInternalPolicyIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (pu *ProgramUpdate) AddInternalPolicies(i ...*InternalPolicy) *ProgramUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *ProgramUpdate) AddInternalPolicies(v ...*InternalPolicy) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (pu *ProgramUpdate) AddProcedureIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddProcedureIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddProcedureIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (pu *ProgramUpdate) AddProcedures(p ...*Procedure) *ProgramUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdate) AddProcedures(v ...*Procedure) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (pu *ProgramUpdate) AddRiskIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddRiskIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddRiskIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (pu *ProgramUpdate) AddRisks(r ...*Risk) *ProgramUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ProgramUpdate) AddRisks(v ...*Risk) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (pu *ProgramUpdate) AddTaskIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddTaskIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddTaskIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (pu *ProgramUpdate) AddTasks(t ...*Task) *ProgramUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *ProgramUpdate) AddTasks(v ...*Task) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (pu *ProgramUpdate) AddNoteIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddNoteIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddNoteIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddNoteIDs(ids...)
+	return _u
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (pu *ProgramUpdate) AddNotes(n ...*Note) *ProgramUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdate) AddNotes(v ...*Note) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddNoteIDs(ids...)
+	return _u.AddNoteIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (pu *ProgramUpdate) AddFileIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddFileIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddFileIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (pu *ProgramUpdate) AddFiles(f ...*File) *ProgramUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ProgramUpdate) AddFiles(v ...*File) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (pu *ProgramUpdate) AddEvidenceIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddEvidenceIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddEvidenceIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (pu *ProgramUpdate) AddEvidence(e ...*Evidence) *ProgramUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ProgramUpdate) AddEvidence(v ...*Evidence) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddEvidenceIDs(ids...)
+	return _u.AddEvidenceIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (pu *ProgramUpdate) AddNarrativeIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddNarrativeIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddNarrativeIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddNarrativeIDs(ids...)
+	return _u
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (pu *ProgramUpdate) AddNarratives(n ...*Narrative) *ProgramUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdate) AddNarratives(v ...*Narrative) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddNarrativeIDs(ids...)
+	return _u.AddNarrativeIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (pu *ProgramUpdate) AddActionPlanIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddActionPlanIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddActionPlanIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (pu *ProgramUpdate) AddActionPlans(a ...*ActionPlan) *ProgramUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ProgramUpdate) AddActionPlans(v ...*ActionPlan) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddActionPlanIDs(ids...)
+	return _u.AddActionPlanIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (pu *ProgramUpdate) AddUserIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddUserIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddUserIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddUserIDs(ids...)
+	return _u
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (pu *ProgramUpdate) AddUsers(u ...*User) *ProgramUpdate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *ProgramUpdate) AddUsers(v ...*User) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddUserIDs(ids...)
+	return _u.AddUserIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
-func (pu *ProgramUpdate) AddMemberIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddMemberIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) AddMemberIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.AddMemberIDs(ids...)
+	return _u
 }
 
 // AddMembers adds the "members" edges to the ProgramMembership entity.
-func (pu *ProgramUpdate) AddMembers(p ...*ProgramMembership) *ProgramUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdate) AddMembers(v ...*ProgramMembership) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddMemberIDs(ids...)
+	return _u.AddMemberIDs(ids...)
 }
 
 // Mutation returns the ProgramMutation object of the builder.
-func (pu *ProgramUpdate) Mutation() *ProgramMutation {
-	return pu.mutation
+func (_u *ProgramUpdate) Mutation() *ProgramMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (pu *ProgramUpdate) ClearOwner() *ProgramUpdate {
-	pu.mutation.ClearOwner()
-	return pu
+func (_u *ProgramUpdate) ClearOwner() *ProgramUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (pu *ProgramUpdate) ClearBlockedGroups() *ProgramUpdate {
-	pu.mutation.ClearBlockedGroups()
-	return pu
+func (_u *ProgramUpdate) ClearBlockedGroups() *ProgramUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (pu *ProgramUpdate) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveBlockedGroupIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (pu *ProgramUpdate) RemoveBlockedGroups(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdate) RemoveBlockedGroups(v ...*Group) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (pu *ProgramUpdate) ClearEditors() *ProgramUpdate {
-	pu.mutation.ClearEditors()
-	return pu
+func (_u *ProgramUpdate) ClearEditors() *ProgramUpdate {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (pu *ProgramUpdate) RemoveEditorIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveEditorIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveEditorIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (pu *ProgramUpdate) RemoveEditors(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdate) RemoveEditors(v ...*Group) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (pu *ProgramUpdate) ClearViewers() *ProgramUpdate {
-	pu.mutation.ClearViewers()
-	return pu
+func (_u *ProgramUpdate) ClearViewers() *ProgramUpdate {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (pu *ProgramUpdate) RemoveViewerIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveViewerIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveViewerIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (pu *ProgramUpdate) RemoveViewers(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdate) RemoveViewers(v ...*Group) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (pu *ProgramUpdate) ClearControls() *ProgramUpdate {
-	pu.mutation.ClearControls()
-	return pu
+func (_u *ProgramUpdate) ClearControls() *ProgramUpdate {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (pu *ProgramUpdate) RemoveControlIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveControlIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveControlIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (pu *ProgramUpdate) RemoveControls(c ...*Control) *ProgramUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdate) RemoveControls(v ...*Control) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (pu *ProgramUpdate) ClearSubcontrols() *ProgramUpdate {
-	pu.mutation.ClearSubcontrols()
-	return pu
+func (_u *ProgramUpdate) ClearSubcontrols() *ProgramUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (pu *ProgramUpdate) RemoveSubcontrolIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveSubcontrolIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveSubcontrolIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (pu *ProgramUpdate) RemoveSubcontrols(s ...*Subcontrol) *ProgramUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ProgramUpdate) RemoveSubcontrols(v ...*Subcontrol) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (pu *ProgramUpdate) ClearControlObjectives() *ProgramUpdate {
-	pu.mutation.ClearControlObjectives()
-	return pu
+func (_u *ProgramUpdate) ClearControlObjectives() *ProgramUpdate {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (pu *ProgramUpdate) RemoveControlObjectiveIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveControlObjectiveIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveControlObjectiveIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (pu *ProgramUpdate) RemoveControlObjectives(c ...*ControlObjective) *ProgramUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdate) RemoveControlObjectives(v ...*ControlObjective) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (pu *ProgramUpdate) ClearInternalPolicies() *ProgramUpdate {
-	pu.mutation.ClearInternalPolicies()
-	return pu
+func (_u *ProgramUpdate) ClearInternalPolicies() *ProgramUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (pu *ProgramUpdate) RemoveInternalPolicyIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveInternalPolicyIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveInternalPolicyIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (pu *ProgramUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *ProgramUpdate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *ProgramUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (pu *ProgramUpdate) ClearProcedures() *ProgramUpdate {
-	pu.mutation.ClearProcedures()
-	return pu
+func (_u *ProgramUpdate) ClearProcedures() *ProgramUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (pu *ProgramUpdate) RemoveProcedureIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveProcedureIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveProcedureIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (pu *ProgramUpdate) RemoveProcedures(p ...*Procedure) *ProgramUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdate) RemoveProcedures(v ...*Procedure) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (pu *ProgramUpdate) ClearRisks() *ProgramUpdate {
-	pu.mutation.ClearRisks()
-	return pu
+func (_u *ProgramUpdate) ClearRisks() *ProgramUpdate {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (pu *ProgramUpdate) RemoveRiskIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveRiskIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveRiskIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (pu *ProgramUpdate) RemoveRisks(r ...*Risk) *ProgramUpdate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ProgramUpdate) RemoveRisks(v ...*Risk) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (pu *ProgramUpdate) ClearTasks() *ProgramUpdate {
-	pu.mutation.ClearTasks()
-	return pu
+func (_u *ProgramUpdate) ClearTasks() *ProgramUpdate {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (pu *ProgramUpdate) RemoveTaskIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveTaskIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveTaskIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (pu *ProgramUpdate) RemoveTasks(t ...*Task) *ProgramUpdate {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *ProgramUpdate) RemoveTasks(v ...*Task) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
-func (pu *ProgramUpdate) ClearNotes() *ProgramUpdate {
-	pu.mutation.ClearNotes()
-	return pu
+func (_u *ProgramUpdate) ClearNotes() *ProgramUpdate {
+	_u.mutation.ClearNotes()
+	return _u
 }
 
 // RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (pu *ProgramUpdate) RemoveNoteIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveNoteIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveNoteIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveNoteIDs(ids...)
+	return _u
 }
 
 // RemoveNotes removes "notes" edges to Note entities.
-func (pu *ProgramUpdate) RemoveNotes(n ...*Note) *ProgramUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdate) RemoveNotes(v ...*Note) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveNoteIDs(ids...)
+	return _u.RemoveNoteIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (pu *ProgramUpdate) ClearFiles() *ProgramUpdate {
-	pu.mutation.ClearFiles()
-	return pu
+func (_u *ProgramUpdate) ClearFiles() *ProgramUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (pu *ProgramUpdate) RemoveFileIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveFileIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveFileIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (pu *ProgramUpdate) RemoveFiles(f ...*File) *ProgramUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ProgramUpdate) RemoveFiles(v ...*File) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
-func (pu *ProgramUpdate) ClearEvidence() *ProgramUpdate {
-	pu.mutation.ClearEvidence()
-	return pu
+func (_u *ProgramUpdate) ClearEvidence() *ProgramUpdate {
+	_u.mutation.ClearEvidence()
+	return _u
 }
 
 // RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
-func (pu *ProgramUpdate) RemoveEvidenceIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveEvidenceIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveEvidenceIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
 }
 
 // RemoveEvidence removes "evidence" edges to Evidence entities.
-func (pu *ProgramUpdate) RemoveEvidence(e ...*Evidence) *ProgramUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ProgramUpdate) RemoveEvidence(v ...*Evidence) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveEvidenceIDs(ids...)
+	return _u.RemoveEvidenceIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
-func (pu *ProgramUpdate) ClearNarratives() *ProgramUpdate {
-	pu.mutation.ClearNarratives()
-	return pu
+func (_u *ProgramUpdate) ClearNarratives() *ProgramUpdate {
+	_u.mutation.ClearNarratives()
+	return _u
 }
 
 // RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
-func (pu *ProgramUpdate) RemoveNarrativeIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveNarrativeIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveNarrativeIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveNarrativeIDs(ids...)
+	return _u
 }
 
 // RemoveNarratives removes "narratives" edges to Narrative entities.
-func (pu *ProgramUpdate) RemoveNarratives(n ...*Narrative) *ProgramUpdate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdate) RemoveNarratives(v ...*Narrative) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveNarrativeIDs(ids...)
+	return _u.RemoveNarrativeIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (pu *ProgramUpdate) ClearActionPlans() *ProgramUpdate {
-	pu.mutation.ClearActionPlans()
-	return pu
+func (_u *ProgramUpdate) ClearActionPlans() *ProgramUpdate {
+	_u.mutation.ClearActionPlans()
+	return _u
 }
 
 // RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (pu *ProgramUpdate) RemoveActionPlanIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveActionPlanIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveActionPlanIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
 }
 
 // RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (pu *ProgramUpdate) RemoveActionPlans(a ...*ActionPlan) *ProgramUpdate {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ProgramUpdate) RemoveActionPlans(v ...*ActionPlan) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveActionPlanIDs(ids...)
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
-func (pu *ProgramUpdate) ClearUsers() *ProgramUpdate {
-	pu.mutation.ClearUsers()
-	return pu
+func (_u *ProgramUpdate) ClearUsers() *ProgramUpdate {
+	_u.mutation.ClearUsers()
+	return _u
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (pu *ProgramUpdate) RemoveUserIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveUserIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveUserIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveUserIDs(ids...)
+	return _u
 }
 
 // RemoveUsers removes "users" edges to User entities.
-func (pu *ProgramUpdate) RemoveUsers(u ...*User) *ProgramUpdate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *ProgramUpdate) RemoveUsers(v ...*User) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveUserIDs(ids...)
+	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the ProgramMembership entity.
-func (pu *ProgramUpdate) ClearMembers() *ProgramUpdate {
-	pu.mutation.ClearMembers()
-	return pu
+func (_u *ProgramUpdate) ClearMembers() *ProgramUpdate {
+	_u.mutation.ClearMembers()
+	return _u
 }
 
 // RemoveMemberIDs removes the "members" edge to ProgramMembership entities by IDs.
-func (pu *ProgramUpdate) RemoveMemberIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveMemberIDs(ids...)
-	return pu
+func (_u *ProgramUpdate) RemoveMemberIDs(ids ...string) *ProgramUpdate {
+	_u.mutation.RemoveMemberIDs(ids...)
+	return _u
 }
 
 // RemoveMembers removes "members" edges to ProgramMembership entities.
-func (pu *ProgramUpdate) RemoveMembers(p ...*ProgramMembership) *ProgramUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdate) RemoveMembers(v ...*ProgramMembership) *ProgramUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveMemberIDs(ids...)
+	return _u.RemoveMemberIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (pu *ProgramUpdate) Save(ctx context.Context) (int, error) {
-	if err := pu.defaults(); err != nil {
+func (_u *ProgramUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pu *ProgramUpdate) SaveX(ctx context.Context) int {
-	affected, err := pu.Save(ctx)
+func (_u *ProgramUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1029,53 +1029,53 @@ func (pu *ProgramUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (pu *ProgramUpdate) Exec(ctx context.Context) error {
-	_, err := pu.Save(ctx)
+func (_u *ProgramUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pu *ProgramUpdate) ExecX(ctx context.Context) {
-	if err := pu.Exec(ctx); err != nil {
+func (_u *ProgramUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pu *ProgramUpdate) defaults() error {
-	if _, ok := pu.mutation.UpdatedAt(); !ok && !pu.mutation.UpdatedAtCleared() {
+func (_u *ProgramUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if program.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized program.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := program.UpdateDefaultUpdatedAt()
-		pu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pu *ProgramUpdate) check() error {
-	if v, ok := pu.mutation.OwnerID(); ok {
+func (_u *ProgramUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := program.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Program.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := pu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := program.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Program.name": %w`, err)}
 		}
 	}
-	if v, ok := pu.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := program.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if v, ok := pu.mutation.ProgramType(); ok {
+	if v, ok := _u.mutation.ProgramType(); ok {
 		if err := program.ProgramTypeValidator(v); err != nil {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
-	if v, ok := pu.mutation.AuditorEmail(); ok {
+	if v, ok := _u.mutation.AuditorEmail(); ok {
 		if err := program.AuditorEmailValidator(v); err != nil {
 			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
 		}
@@ -1084,125 +1084,125 @@ func (pu *ProgramUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (pu *ProgramUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramUpdate {
-	pu.modifiers = append(pu.modifiers, modifiers...)
-	return pu
+func (_u *ProgramUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := pu.check(); err != nil {
-		return n, err
+func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(program.Table, program.Columns, sqlgraph.NewFieldSpec(program.FieldID, field.TypeString))
-	if ps := pu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if pu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(program.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := pu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(program.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if pu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
-	if pu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(program.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
 	}
-	if pu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(program.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
 	}
-	if pu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := pu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
 	}
-	if pu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(program.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := pu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := pu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, program.FieldTags, value)
 		})
 	}
-	if pu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(program.FieldTags, field.TypeJSON)
 	}
-	if value, ok := pu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(program.FieldName, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(program.FieldDescription, field.TypeString, value)
 	}
-	if pu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(program.FieldDescription, field.TypeString)
 	}
-	if value, ok := pu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := pu.mutation.ProgramType(); ok {
+	if value, ok := _u.mutation.ProgramType(); ok {
 		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
 	}
-	if value, ok := pu.mutation.FrameworkName(); ok {
+	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
 	}
-	if pu.mutation.FrameworkNameCleared() {
+	if _u.mutation.FrameworkNameCleared() {
 		_spec.ClearField(program.FieldFrameworkName, field.TypeString)
 	}
-	if value, ok := pu.mutation.StartDate(); ok {
+	if value, ok := _u.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)
 	}
-	if pu.mutation.StartDateCleared() {
+	if _u.mutation.StartDateCleared() {
 		_spec.ClearField(program.FieldStartDate, field.TypeTime)
 	}
-	if value, ok := pu.mutation.EndDate(); ok {
+	if value, ok := _u.mutation.EndDate(); ok {
 		_spec.SetField(program.FieldEndDate, field.TypeTime, value)
 	}
-	if pu.mutation.EndDateCleared() {
+	if _u.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
 	}
-	if value, ok := pu.mutation.AuditorReady(); ok {
+	if value, ok := _u.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
 	}
-	if value, ok := pu.mutation.AuditorWriteComments(); ok {
+	if value, ok := _u.mutation.AuditorWriteComments(); ok {
 		_spec.SetField(program.FieldAuditorWriteComments, field.TypeBool, value)
 	}
-	if value, ok := pu.mutation.AuditorReadComments(); ok {
+	if value, ok := _u.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if value, ok := pu.mutation.AuditFirm(); ok {
+	if value, ok := _u.mutation.AuditFirm(); ok {
 		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
 	}
-	if pu.mutation.AuditFirmCleared() {
+	if _u.mutation.AuditFirmCleared() {
 		_spec.ClearField(program.FieldAuditFirm, field.TypeString)
 	}
-	if value, ok := pu.mutation.Auditor(); ok {
+	if value, ok := _u.mutation.Auditor(); ok {
 		_spec.SetField(program.FieldAuditor, field.TypeString, value)
 	}
-	if pu.mutation.AuditorCleared() {
+	if _u.mutation.AuditorCleared() {
 		_spec.ClearField(program.FieldAuditor, field.TypeString)
 	}
-	if value, ok := pu.mutation.AuditorEmail(); ok {
+	if value, ok := _u.mutation.AuditorEmail(); ok {
 		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
 	}
-	if pu.mutation.AuditorEmailCleared() {
+	if _u.mutation.AuditorEmailCleared() {
 		_spec.ClearField(program.FieldAuditorEmail, field.TypeString)
 	}
-	if pu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1213,10 +1213,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1227,13 +1227,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1244,10 +1244,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _u.schemaConfig.ProgramBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !pu.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1258,13 +1258,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _u.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1275,13 +1275,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _u.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1292,10 +1292,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramEditors
+		edge.Schema = _u.schemaConfig.ProgramEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !pu.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1306,13 +1306,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramEditors
+		edge.Schema = _u.schemaConfig.ProgramEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1323,13 +1323,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramEditors
+		edge.Schema = _u.schemaConfig.ProgramEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1340,10 +1340,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramViewers
+		edge.Schema = _u.schemaConfig.ProgramViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !pu.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1354,13 +1354,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramViewers
+		edge.Schema = _u.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1371,13 +1371,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramViewers
+		edge.Schema = _u.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1388,10 +1388,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControls
+		edge.Schema = _u.schemaConfig.ProgramControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedControlsIDs(); len(nodes) > 0 && !pu.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1402,13 +1402,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControls
+		edge.Schema = _u.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1419,13 +1419,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControls
+		edge.Schema = _u.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1436,10 +1436,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !pu.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1450,13 +1450,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1467,13 +1467,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1484,10 +1484,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControlObjectives
+		edge.Schema = _u.schemaConfig.ProgramControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !pu.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1498,13 +1498,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControlObjectives
+		edge.Schema = _u.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1515,13 +1515,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramControlObjectives
+		edge.Schema = _u.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1532,10 +1532,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !pu.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1546,13 +1546,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1563,13 +1563,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1580,10 +1580,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramProcedures
+		edge.Schema = _u.schemaConfig.ProgramProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !pu.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1594,13 +1594,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramProcedures
+		edge.Schema = _u.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1611,13 +1611,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramProcedures
+		edge.Schema = _u.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1628,10 +1628,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedRisksIDs(); len(nodes) > 0 && !pu.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1642,13 +1642,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1659,13 +1659,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1676,10 +1676,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramTasks
+		edge.Schema = _u.schemaConfig.ProgramTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !pu.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1690,13 +1690,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramTasks
+		edge.Schema = _u.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1707,13 +1707,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramTasks
+		edge.Schema = _u.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.NotesCleared() {
+	if _u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1724,10 +1724,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedNotesIDs(); len(nodes) > 0 && !pu.mutation.NotesCleared() {
+	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1738,13 +1738,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1755,13 +1755,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1772,10 +1772,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramFiles
+		edge.Schema = _u.schemaConfig.ProgramFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !pu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1786,13 +1786,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramFiles
+		edge.Schema = _u.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1803,13 +1803,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramFiles
+		edge.Schema = _u.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.EvidenceCleared() {
+	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1820,10 +1820,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !pu.mutation.EvidenceCleared() {
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1834,13 +1834,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1851,13 +1851,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.NarrativesCleared() {
+	if _u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1868,10 +1868,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !pu.mutation.NarrativesCleared() {
+	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1882,13 +1882,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1899,13 +1899,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ActionPlansCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1916,10 +1916,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !pu.mutation.ActionPlansCleared() {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1930,13 +1930,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1947,13 +1947,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.UsersCleared() {
+	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1964,8 +1964,8 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramMembership
-		createE := &ProgramMembershipCreate{config: pu.config, mutation: newProgramMembershipMutation(pu.config, OpCreate)}
+		edge.Schema = _u.schemaConfig.ProgramMembership
+		createE := &ProgramMembershipCreate{config: _u.config, mutation: newProgramMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -1974,7 +1974,7 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !pu.mutation.UsersCleared() {
+	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1985,11 +1985,11 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &ProgramMembershipCreate{config: pu.config, mutation: newProgramMembershipMutation(pu.config, OpCreate)}
+		createE := &ProgramMembershipCreate{config: _u.config, mutation: newProgramMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -1998,7 +1998,7 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -2009,11 +2009,11 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &ProgramMembershipCreate{config: pu.config, mutation: newProgramMembershipMutation(pu.config, OpCreate)}
+		createE := &ProgramMembershipCreate{config: _u.config, mutation: newProgramMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -2022,7 +2022,7 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.MembersCleared() {
+	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -2033,10 +2033,10 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedMembersIDs(); len(nodes) > 0 && !pu.mutation.MembersCleared() {
+	if nodes := _u.mutation.RemovedMembersIDs(); len(nodes) > 0 && !_u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -2047,13 +2047,13 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -2064,16 +2064,16 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = pu.schemaConfig.Program
-	ctx = internal.NewSchemaConfigContext(ctx, pu.schemaConfig)
-	_spec.AddModifiers(pu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Program
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{program.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -2081,8 +2081,8 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	pu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ProgramUpdateOne is the builder for updating a single Program entity.
@@ -2095,991 +2095,991 @@ type ProgramUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (puo *ProgramUpdateOne) SetUpdatedAt(t time.Time) *ProgramUpdateOne {
-	puo.mutation.SetUpdatedAt(t)
-	return puo
+func (_u *ProgramUpdateOne) SetUpdatedAt(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (puo *ProgramUpdateOne) ClearUpdatedAt() *ProgramUpdateOne {
-	puo.mutation.ClearUpdatedAt()
-	return puo
+func (_u *ProgramUpdateOne) ClearUpdatedAt() *ProgramUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (puo *ProgramUpdateOne) SetUpdatedBy(s string) *ProgramUpdateOne {
-	puo.mutation.SetUpdatedBy(s)
-	return puo
+func (_u *ProgramUpdateOne) SetUpdatedBy(v string) *ProgramUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableUpdatedBy(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetUpdatedBy(*s)
+func (_u *ProgramUpdateOne) SetNillableUpdatedBy(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (puo *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
-	puo.mutation.ClearUpdatedBy()
-	return puo
+func (_u *ProgramUpdateOne) ClearUpdatedBy() *ProgramUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (puo *ProgramUpdateOne) SetDeletedAt(t time.Time) *ProgramUpdateOne {
-	puo.mutation.SetDeletedAt(t)
-	return puo
+func (_u *ProgramUpdateOne) SetDeletedAt(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramUpdateOne {
-	if t != nil {
-		puo.SetDeletedAt(*t)
+func (_u *ProgramUpdateOne) SetNillableDeletedAt(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (puo *ProgramUpdateOne) ClearDeletedAt() *ProgramUpdateOne {
-	puo.mutation.ClearDeletedAt()
-	return puo
+func (_u *ProgramUpdateOne) ClearDeletedAt() *ProgramUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (puo *ProgramUpdateOne) SetDeletedBy(s string) *ProgramUpdateOne {
-	puo.mutation.SetDeletedBy(s)
-	return puo
+func (_u *ProgramUpdateOne) SetDeletedBy(v string) *ProgramUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableDeletedBy(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetDeletedBy(*s)
+func (_u *ProgramUpdateOne) SetNillableDeletedBy(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (puo *ProgramUpdateOne) ClearDeletedBy() *ProgramUpdateOne {
-	puo.mutation.ClearDeletedBy()
-	return puo
+func (_u *ProgramUpdateOne) ClearDeletedBy() *ProgramUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (puo *ProgramUpdateOne) SetTags(s []string) *ProgramUpdateOne {
-	puo.mutation.SetTags(s)
-	return puo
+func (_u *ProgramUpdateOne) SetTags(v []string) *ProgramUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (puo *ProgramUpdateOne) AppendTags(s []string) *ProgramUpdateOne {
-	puo.mutation.AppendTags(s)
-	return puo
+// AppendTags appends value to the "tags" field.
+func (_u *ProgramUpdateOne) AppendTags(v []string) *ProgramUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (puo *ProgramUpdateOne) ClearTags() *ProgramUpdateOne {
-	puo.mutation.ClearTags()
-	return puo
+func (_u *ProgramUpdateOne) ClearTags() *ProgramUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (puo *ProgramUpdateOne) SetOwnerID(s string) *ProgramUpdateOne {
-	puo.mutation.SetOwnerID(s)
-	return puo
+func (_u *ProgramUpdateOne) SetOwnerID(v string) *ProgramUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableOwnerID(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetOwnerID(*s)
+func (_u *ProgramUpdateOne) SetNillableOwnerID(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (puo *ProgramUpdateOne) ClearOwnerID() *ProgramUpdateOne {
-	puo.mutation.ClearOwnerID()
-	return puo
+func (_u *ProgramUpdateOne) ClearOwnerID() *ProgramUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (puo *ProgramUpdateOne) SetName(s string) *ProgramUpdateOne {
-	puo.mutation.SetName(s)
-	return puo
+func (_u *ProgramUpdateOne) SetName(v string) *ProgramUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableName(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetName(*s)
+func (_u *ProgramUpdateOne) SetNillableName(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (puo *ProgramUpdateOne) SetDescription(s string) *ProgramUpdateOne {
-	puo.mutation.SetDescription(s)
-	return puo
+func (_u *ProgramUpdateOne) SetDescription(v string) *ProgramUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableDescription(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetDescription(*s)
+func (_u *ProgramUpdateOne) SetNillableDescription(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (puo *ProgramUpdateOne) ClearDescription() *ProgramUpdateOne {
-	puo.mutation.ClearDescription()
-	return puo
+func (_u *ProgramUpdateOne) ClearDescription() *ProgramUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (puo *ProgramUpdateOne) SetStatus(es enums.ProgramStatus) *ProgramUpdateOne {
-	puo.mutation.SetStatus(es)
-	return puo
+func (_u *ProgramUpdateOne) SetStatus(v enums.ProgramStatus) *ProgramUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableStatus(es *enums.ProgramStatus) *ProgramUpdateOne {
-	if es != nil {
-		puo.SetStatus(*es)
+func (_u *ProgramUpdateOne) SetNillableStatus(v *enums.ProgramStatus) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetProgramType sets the "program_type" field.
-func (puo *ProgramUpdateOne) SetProgramType(et enums.ProgramType) *ProgramUpdateOne {
-	puo.mutation.SetProgramType(et)
-	return puo
+func (_u *ProgramUpdateOne) SetProgramType(v enums.ProgramType) *ProgramUpdateOne {
+	_u.mutation.SetProgramType(v)
+	return _u
 }
 
 // SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableProgramType(et *enums.ProgramType) *ProgramUpdateOne {
-	if et != nil {
-		puo.SetProgramType(*et)
+func (_u *ProgramUpdateOne) SetNillableProgramType(v *enums.ProgramType) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetProgramType(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetFrameworkName sets the "framework_name" field.
-func (puo *ProgramUpdateOne) SetFrameworkName(s string) *ProgramUpdateOne {
-	puo.mutation.SetFrameworkName(s)
-	return puo
+func (_u *ProgramUpdateOne) SetFrameworkName(v string) *ProgramUpdateOne {
+	_u.mutation.SetFrameworkName(v)
+	return _u
 }
 
 // SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableFrameworkName(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetFrameworkName(*s)
+func (_u *ProgramUpdateOne) SetNillableFrameworkName(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetFrameworkName(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearFrameworkName clears the value of the "framework_name" field.
-func (puo *ProgramUpdateOne) ClearFrameworkName() *ProgramUpdateOne {
-	puo.mutation.ClearFrameworkName()
-	return puo
+func (_u *ProgramUpdateOne) ClearFrameworkName() *ProgramUpdateOne {
+	_u.mutation.ClearFrameworkName()
+	return _u
 }
 
 // SetStartDate sets the "start_date" field.
-func (puo *ProgramUpdateOne) SetStartDate(t time.Time) *ProgramUpdateOne {
-	puo.mutation.SetStartDate(t)
-	return puo
+func (_u *ProgramUpdateOne) SetStartDate(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetStartDate(v)
+	return _u
 }
 
 // SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableStartDate(t *time.Time) *ProgramUpdateOne {
-	if t != nil {
-		puo.SetStartDate(*t)
+func (_u *ProgramUpdateOne) SetNillableStartDate(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetStartDate(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearStartDate clears the value of the "start_date" field.
-func (puo *ProgramUpdateOne) ClearStartDate() *ProgramUpdateOne {
-	puo.mutation.ClearStartDate()
-	return puo
+func (_u *ProgramUpdateOne) ClearStartDate() *ProgramUpdateOne {
+	_u.mutation.ClearStartDate()
+	return _u
 }
 
 // SetEndDate sets the "end_date" field.
-func (puo *ProgramUpdateOne) SetEndDate(t time.Time) *ProgramUpdateOne {
-	puo.mutation.SetEndDate(t)
-	return puo
+func (_u *ProgramUpdateOne) SetEndDate(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetEndDate(v)
+	return _u
 }
 
 // SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableEndDate(t *time.Time) *ProgramUpdateOne {
-	if t != nil {
-		puo.SetEndDate(*t)
+func (_u *ProgramUpdateOne) SetNillableEndDate(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetEndDate(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearEndDate clears the value of the "end_date" field.
-func (puo *ProgramUpdateOne) ClearEndDate() *ProgramUpdateOne {
-	puo.mutation.ClearEndDate()
-	return puo
+func (_u *ProgramUpdateOne) ClearEndDate() *ProgramUpdateOne {
+	_u.mutation.ClearEndDate()
+	return _u
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
-func (puo *ProgramUpdateOne) SetAuditorReady(b bool) *ProgramUpdateOne {
-	puo.mutation.SetAuditorReady(b)
-	return puo
+func (_u *ProgramUpdateOne) SetAuditorReady(v bool) *ProgramUpdateOne {
+	_u.mutation.SetAuditorReady(v)
+	return _u
 }
 
 // SetNillableAuditorReady sets the "auditor_ready" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableAuditorReady(b *bool) *ProgramUpdateOne {
-	if b != nil {
-		puo.SetAuditorReady(*b)
+func (_u *ProgramUpdateOne) SetNillableAuditorReady(v *bool) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetAuditorReady(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetAuditorWriteComments sets the "auditor_write_comments" field.
-func (puo *ProgramUpdateOne) SetAuditorWriteComments(b bool) *ProgramUpdateOne {
-	puo.mutation.SetAuditorWriteComments(b)
-	return puo
+func (_u *ProgramUpdateOne) SetAuditorWriteComments(v bool) *ProgramUpdateOne {
+	_u.mutation.SetAuditorWriteComments(v)
+	return _u
 }
 
 // SetNillableAuditorWriteComments sets the "auditor_write_comments" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableAuditorWriteComments(b *bool) *ProgramUpdateOne {
-	if b != nil {
-		puo.SetAuditorWriteComments(*b)
+func (_u *ProgramUpdateOne) SetNillableAuditorWriteComments(v *bool) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetAuditorWriteComments(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetAuditorReadComments sets the "auditor_read_comments" field.
-func (puo *ProgramUpdateOne) SetAuditorReadComments(b bool) *ProgramUpdateOne {
-	puo.mutation.SetAuditorReadComments(b)
-	return puo
+func (_u *ProgramUpdateOne) SetAuditorReadComments(v bool) *ProgramUpdateOne {
+	_u.mutation.SetAuditorReadComments(v)
+	return _u
 }
 
 // SetNillableAuditorReadComments sets the "auditor_read_comments" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramUpdateOne {
-	if b != nil {
-		puo.SetAuditorReadComments(*b)
+func (_u *ProgramUpdateOne) SetNillableAuditorReadComments(v *bool) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetAuditorReadComments(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetAuditFirm sets the "audit_firm" field.
-func (puo *ProgramUpdateOne) SetAuditFirm(s string) *ProgramUpdateOne {
-	puo.mutation.SetAuditFirm(s)
-	return puo
+func (_u *ProgramUpdateOne) SetAuditFirm(v string) *ProgramUpdateOne {
+	_u.mutation.SetAuditFirm(v)
+	return _u
 }
 
 // SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableAuditFirm(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetAuditFirm(*s)
+func (_u *ProgramUpdateOne) SetNillableAuditFirm(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetAuditFirm(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearAuditFirm clears the value of the "audit_firm" field.
-func (puo *ProgramUpdateOne) ClearAuditFirm() *ProgramUpdateOne {
-	puo.mutation.ClearAuditFirm()
-	return puo
+func (_u *ProgramUpdateOne) ClearAuditFirm() *ProgramUpdateOne {
+	_u.mutation.ClearAuditFirm()
+	return _u
 }
 
 // SetAuditor sets the "auditor" field.
-func (puo *ProgramUpdateOne) SetAuditor(s string) *ProgramUpdateOne {
-	puo.mutation.SetAuditor(s)
-	return puo
+func (_u *ProgramUpdateOne) SetAuditor(v string) *ProgramUpdateOne {
+	_u.mutation.SetAuditor(v)
+	return _u
 }
 
 // SetNillableAuditor sets the "auditor" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableAuditor(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetAuditor(*s)
+func (_u *ProgramUpdateOne) SetNillableAuditor(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetAuditor(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearAuditor clears the value of the "auditor" field.
-func (puo *ProgramUpdateOne) ClearAuditor() *ProgramUpdateOne {
-	puo.mutation.ClearAuditor()
-	return puo
+func (_u *ProgramUpdateOne) ClearAuditor() *ProgramUpdateOne {
+	_u.mutation.ClearAuditor()
+	return _u
 }
 
 // SetAuditorEmail sets the "auditor_email" field.
-func (puo *ProgramUpdateOne) SetAuditorEmail(s string) *ProgramUpdateOne {
-	puo.mutation.SetAuditorEmail(s)
-	return puo
+func (_u *ProgramUpdateOne) SetAuditorEmail(v string) *ProgramUpdateOne {
+	_u.mutation.SetAuditorEmail(v)
+	return _u
 }
 
 // SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableAuditorEmail(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetAuditorEmail(*s)
+func (_u *ProgramUpdateOne) SetNillableAuditorEmail(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetAuditorEmail(*v)
 	}
-	return puo
+	return _u
 }
 
 // ClearAuditorEmail clears the value of the "auditor_email" field.
-func (puo *ProgramUpdateOne) ClearAuditorEmail() *ProgramUpdateOne {
-	puo.mutation.ClearAuditorEmail()
-	return puo
+func (_u *ProgramUpdateOne) ClearAuditorEmail() *ProgramUpdateOne {
+	_u.mutation.ClearAuditorEmail()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (puo *ProgramUpdateOne) SetOwner(o *Organization) *ProgramUpdateOne {
-	return puo.SetOwnerID(o.ID)
+func (_u *ProgramUpdateOne) SetOwner(v *Organization) *ProgramUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (puo *ProgramUpdateOne) AddBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddBlockedGroupIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
 }
 
 // AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (puo *ProgramUpdateOne) AddBlockedGroups(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdateOne) AddBlockedGroups(v ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddBlockedGroupIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
 }
 
 // AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (puo *ProgramUpdateOne) AddEditorIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddEditorIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddEditorIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
 }
 
 // AddEditors adds the "editors" edges to the Group entity.
-func (puo *ProgramUpdateOne) AddEditors(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdateOne) AddEditors(v ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddEditorIDs(ids...)
+	return _u.AddEditorIDs(ids...)
 }
 
 // AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (puo *ProgramUpdateOne) AddViewerIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddViewerIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddViewerIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
 }
 
 // AddViewers adds the "viewers" edges to the Group entity.
-func (puo *ProgramUpdateOne) AddViewers(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdateOne) AddViewers(v ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddViewerIDs(ids...)
+	return _u.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
-func (puo *ProgramUpdateOne) AddControlIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddControlIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddControlIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
 }
 
 // AddControls adds the "controls" edges to the Control entity.
-func (puo *ProgramUpdateOne) AddControls(c ...*Control) *ProgramUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdateOne) AddControls(v ...*Control) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddControlIDs(ids...)
+	return _u.AddControlIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
-func (puo *ProgramUpdateOne) AddSubcontrolIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddSubcontrolIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddSubcontrolIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
 }
 
 // AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
-func (puo *ProgramUpdateOne) AddSubcontrols(s ...*Subcontrol) *ProgramUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ProgramUpdateOne) AddSubcontrols(v ...*Subcontrol) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddSubcontrolIDs(ids...)
+	return _u.AddSubcontrolIDs(ids...)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
-func (puo *ProgramUpdateOne) AddControlObjectiveIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddControlObjectiveIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddControlObjectiveIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddControlObjectiveIDs(ids...)
+	return _u
 }
 
 // AddControlObjectives adds the "control_objectives" edges to the ControlObjective entity.
-func (puo *ProgramUpdateOne) AddControlObjectives(c ...*ControlObjective) *ProgramUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdateOne) AddControlObjectives(v ...*ControlObjective) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddControlObjectiveIDs(ids...)
+	return _u.AddControlObjectiveIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
-func (puo *ProgramUpdateOne) AddInternalPolicyIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddInternalPolicyIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddInternalPolicyIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
 }
 
 // AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
-func (puo *ProgramUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *ProgramUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *ProgramUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddInternalPolicyIDs(ids...)
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
-func (puo *ProgramUpdateOne) AddProcedureIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddProcedureIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddProcedureIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
 }
 
 // AddProcedures adds the "procedures" edges to the Procedure entity.
-func (puo *ProgramUpdateOne) AddProcedures(p ...*Procedure) *ProgramUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdateOne) AddProcedures(v ...*Procedure) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddProcedureIDs(ids...)
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
-func (puo *ProgramUpdateOne) AddRiskIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddRiskIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddRiskIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
 }
 
 // AddRisks adds the "risks" edges to the Risk entity.
-func (puo *ProgramUpdateOne) AddRisks(r ...*Risk) *ProgramUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ProgramUpdateOne) AddRisks(v ...*Risk) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddRiskIDs(ids...)
+	return _u.AddRiskIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
-func (puo *ProgramUpdateOne) AddTaskIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddTaskIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddTaskIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
 }
 
 // AddTasks adds the "tasks" edges to the Task entity.
-func (puo *ProgramUpdateOne) AddTasks(t ...*Task) *ProgramUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *ProgramUpdateOne) AddTasks(v ...*Task) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddTaskIDs(ids...)
+	return _u.AddTaskIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (puo *ProgramUpdateOne) AddNoteIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddNoteIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddNoteIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddNoteIDs(ids...)
+	return _u
 }
 
 // AddNotes adds the "notes" edges to the Note entity.
-func (puo *ProgramUpdateOne) AddNotes(n ...*Note) *ProgramUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdateOne) AddNotes(v ...*Note) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddNoteIDs(ids...)
+	return _u.AddNoteIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (puo *ProgramUpdateOne) AddFileIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddFileIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddFileIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (puo *ProgramUpdateOne) AddFiles(f ...*File) *ProgramUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ProgramUpdateOne) AddFiles(v ...*File) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
-func (puo *ProgramUpdateOne) AddEvidenceIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddEvidenceIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddEvidenceIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
 }
 
 // AddEvidence adds the "evidence" edges to the Evidence entity.
-func (puo *ProgramUpdateOne) AddEvidence(e ...*Evidence) *ProgramUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ProgramUpdateOne) AddEvidence(v ...*Evidence) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddEvidenceIDs(ids...)
+	return _u.AddEvidenceIDs(ids...)
 }
 
 // AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
-func (puo *ProgramUpdateOne) AddNarrativeIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddNarrativeIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddNarrativeIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddNarrativeIDs(ids...)
+	return _u
 }
 
 // AddNarratives adds the "narratives" edges to the Narrative entity.
-func (puo *ProgramUpdateOne) AddNarratives(n ...*Narrative) *ProgramUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdateOne) AddNarratives(v ...*Narrative) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddNarrativeIDs(ids...)
+	return _u.AddNarrativeIDs(ids...)
 }
 
 // AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
-func (puo *ProgramUpdateOne) AddActionPlanIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddActionPlanIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddActionPlanIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
 // AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
-func (puo *ProgramUpdateOne) AddActionPlans(a ...*ActionPlan) *ProgramUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ProgramUpdateOne) AddActionPlans(v ...*ActionPlan) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddActionPlanIDs(ids...)
+	return _u.AddActionPlanIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (puo *ProgramUpdateOne) AddUserIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddUserIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddUserIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddUserIDs(ids...)
+	return _u
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (puo *ProgramUpdateOne) AddUsers(u ...*User) *ProgramUpdateOne {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *ProgramUpdateOne) AddUsers(v ...*User) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddUserIDs(ids...)
+	return _u.AddUserIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
-func (puo *ProgramUpdateOne) AddMemberIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddMemberIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) AddMemberIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.AddMemberIDs(ids...)
+	return _u
 }
 
 // AddMembers adds the "members" edges to the ProgramMembership entity.
-func (puo *ProgramUpdateOne) AddMembers(p ...*ProgramMembership) *ProgramUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdateOne) AddMembers(v ...*ProgramMembership) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddMemberIDs(ids...)
+	return _u.AddMemberIDs(ids...)
 }
 
 // Mutation returns the ProgramMutation object of the builder.
-func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
-	return puo.mutation
+func (_u *ProgramUpdateOne) Mutation() *ProgramMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (puo *ProgramUpdateOne) ClearOwner() *ProgramUpdateOne {
-	puo.mutation.ClearOwner()
-	return puo
+func (_u *ProgramUpdateOne) ClearOwner() *ProgramUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (puo *ProgramUpdateOne) ClearBlockedGroups() *ProgramUpdateOne {
-	puo.mutation.ClearBlockedGroups()
-	return puo
+func (_u *ProgramUpdateOne) ClearBlockedGroups() *ProgramUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
 }
 
 // RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (puo *ProgramUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveBlockedGroupIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
 }
 
 // RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (puo *ProgramUpdateOne) RemoveBlockedGroups(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdateOne) RemoveBlockedGroups(v ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveBlockedGroupIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
 }
 
 // ClearEditors clears all "editors" edges to the Group entity.
-func (puo *ProgramUpdateOne) ClearEditors() *ProgramUpdateOne {
-	puo.mutation.ClearEditors()
-	return puo
+func (_u *ProgramUpdateOne) ClearEditors() *ProgramUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
 }
 
 // RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (puo *ProgramUpdateOne) RemoveEditorIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveEditorIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveEditorIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
 }
 
 // RemoveEditors removes "editors" edges to Group entities.
-func (puo *ProgramUpdateOne) RemoveEditors(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdateOne) RemoveEditors(v ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveEditorIDs(ids...)
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearViewers clears all "viewers" edges to the Group entity.
-func (puo *ProgramUpdateOne) ClearViewers() *ProgramUpdateOne {
-	puo.mutation.ClearViewers()
-	return puo
+func (_u *ProgramUpdateOne) ClearViewers() *ProgramUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
 }
 
 // RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (puo *ProgramUpdateOne) RemoveViewerIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveViewerIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveViewerIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
 }
 
 // RemoveViewers removes "viewers" edges to Group entities.
-func (puo *ProgramUpdateOne) RemoveViewers(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+func (_u *ProgramUpdateOne) RemoveViewers(v ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveViewerIDs(ids...)
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
-func (puo *ProgramUpdateOne) ClearControls() *ProgramUpdateOne {
-	puo.mutation.ClearControls()
-	return puo
+func (_u *ProgramUpdateOne) ClearControls() *ProgramUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
 }
 
 // RemoveControlIDs removes the "controls" edge to Control entities by IDs.
-func (puo *ProgramUpdateOne) RemoveControlIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveControlIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveControlIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
 }
 
 // RemoveControls removes "controls" edges to Control entities.
-func (puo *ProgramUpdateOne) RemoveControls(c ...*Control) *ProgramUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdateOne) RemoveControls(v ...*Control) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveControlIDs(ids...)
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
-func (puo *ProgramUpdateOne) ClearSubcontrols() *ProgramUpdateOne {
-	puo.mutation.ClearSubcontrols()
-	return puo
+func (_u *ProgramUpdateOne) ClearSubcontrols() *ProgramUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
 }
 
 // RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
-func (puo *ProgramUpdateOne) RemoveSubcontrolIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveSubcontrolIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveSubcontrolIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
 }
 
 // RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
-func (puo *ProgramUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ProgramUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ProgramUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveSubcontrolIDs(ids...)
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearControlObjectives clears all "control_objectives" edges to the ControlObjective entity.
-func (puo *ProgramUpdateOne) ClearControlObjectives() *ProgramUpdateOne {
-	puo.mutation.ClearControlObjectives()
-	return puo
+func (_u *ProgramUpdateOne) ClearControlObjectives() *ProgramUpdateOne {
+	_u.mutation.ClearControlObjectives()
+	return _u
 }
 
 // RemoveControlObjectiveIDs removes the "control_objectives" edge to ControlObjective entities by IDs.
-func (puo *ProgramUpdateOne) RemoveControlObjectiveIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveControlObjectiveIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveControlObjectiveIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveControlObjectiveIDs(ids...)
+	return _u
 }
 
 // RemoveControlObjectives removes "control_objectives" edges to ControlObjective entities.
-func (puo *ProgramUpdateOne) RemoveControlObjectives(c ...*ControlObjective) *ProgramUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ProgramUpdateOne) RemoveControlObjectives(v ...*ControlObjective) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveControlObjectiveIDs(ids...)
+	return _u.RemoveControlObjectiveIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
-func (puo *ProgramUpdateOne) ClearInternalPolicies() *ProgramUpdateOne {
-	puo.mutation.ClearInternalPolicies()
-	return puo
+func (_u *ProgramUpdateOne) ClearInternalPolicies() *ProgramUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
 }
 
 // RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
-func (puo *ProgramUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveInternalPolicyIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveInternalPolicyIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
 }
 
 // RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
-func (puo *ProgramUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *ProgramUpdateOne {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_u *ProgramUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveInternalPolicyIDs(ids...)
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
-func (puo *ProgramUpdateOne) ClearProcedures() *ProgramUpdateOne {
-	puo.mutation.ClearProcedures()
-	return puo
+func (_u *ProgramUpdateOne) ClearProcedures() *ProgramUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
 }
 
 // RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
-func (puo *ProgramUpdateOne) RemoveProcedureIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveProcedureIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveProcedureIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
 }
 
 // RemoveProcedures removes "procedures" edges to Procedure entities.
-func (puo *ProgramUpdateOne) RemoveProcedures(p ...*Procedure) *ProgramUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdateOne) RemoveProcedures(v ...*Procedure) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveProcedureIDs(ids...)
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
-func (puo *ProgramUpdateOne) ClearRisks() *ProgramUpdateOne {
-	puo.mutation.ClearRisks()
-	return puo
+func (_u *ProgramUpdateOne) ClearRisks() *ProgramUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
 }
 
 // RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
-func (puo *ProgramUpdateOne) RemoveRiskIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveRiskIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveRiskIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
 }
 
 // RemoveRisks removes "risks" edges to Risk entities.
-func (puo *ProgramUpdateOne) RemoveRisks(r ...*Risk) *ProgramUpdateOne {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
+func (_u *ProgramUpdateOne) RemoveRisks(v ...*Risk) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveRiskIDs(ids...)
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearTasks clears all "tasks" edges to the Task entity.
-func (puo *ProgramUpdateOne) ClearTasks() *ProgramUpdateOne {
-	puo.mutation.ClearTasks()
-	return puo
+func (_u *ProgramUpdateOne) ClearTasks() *ProgramUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
 }
 
 // RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
-func (puo *ProgramUpdateOne) RemoveTaskIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveTaskIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveTaskIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
 }
 
 // RemoveTasks removes "tasks" edges to Task entities.
-func (puo *ProgramUpdateOne) RemoveTasks(t ...*Task) *ProgramUpdateOne {
-	ids := make([]string, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *ProgramUpdateOne) RemoveTasks(v ...*Task) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveTaskIDs(ids...)
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
-func (puo *ProgramUpdateOne) ClearNotes() *ProgramUpdateOne {
-	puo.mutation.ClearNotes()
-	return puo
+func (_u *ProgramUpdateOne) ClearNotes() *ProgramUpdateOne {
+	_u.mutation.ClearNotes()
+	return _u
 }
 
 // RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (puo *ProgramUpdateOne) RemoveNoteIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveNoteIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveNoteIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveNoteIDs(ids...)
+	return _u
 }
 
 // RemoveNotes removes "notes" edges to Note entities.
-func (puo *ProgramUpdateOne) RemoveNotes(n ...*Note) *ProgramUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdateOne) RemoveNotes(v ...*Note) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveNoteIDs(ids...)
+	return _u.RemoveNoteIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (puo *ProgramUpdateOne) ClearFiles() *ProgramUpdateOne {
-	puo.mutation.ClearFiles()
-	return puo
+func (_u *ProgramUpdateOne) ClearFiles() *ProgramUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (puo *ProgramUpdateOne) RemoveFileIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveFileIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveFileIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (puo *ProgramUpdateOne) RemoveFiles(f ...*File) *ProgramUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *ProgramUpdateOne) RemoveFiles(v ...*File) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
-func (puo *ProgramUpdateOne) ClearEvidence() *ProgramUpdateOne {
-	puo.mutation.ClearEvidence()
-	return puo
+func (_u *ProgramUpdateOne) ClearEvidence() *ProgramUpdateOne {
+	_u.mutation.ClearEvidence()
+	return _u
 }
 
 // RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
-func (puo *ProgramUpdateOne) RemoveEvidenceIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveEvidenceIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveEvidenceIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
 }
 
 // RemoveEvidence removes "evidence" edges to Evidence entities.
-func (puo *ProgramUpdateOne) RemoveEvidence(e ...*Evidence) *ProgramUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *ProgramUpdateOne) RemoveEvidence(v ...*Evidence) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveEvidenceIDs(ids...)
+	return _u.RemoveEvidenceIDs(ids...)
 }
 
 // ClearNarratives clears all "narratives" edges to the Narrative entity.
-func (puo *ProgramUpdateOne) ClearNarratives() *ProgramUpdateOne {
-	puo.mutation.ClearNarratives()
-	return puo
+func (_u *ProgramUpdateOne) ClearNarratives() *ProgramUpdateOne {
+	_u.mutation.ClearNarratives()
+	return _u
 }
 
 // RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
-func (puo *ProgramUpdateOne) RemoveNarrativeIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveNarrativeIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveNarrativeIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveNarrativeIDs(ids...)
+	return _u
 }
 
 // RemoveNarratives removes "narratives" edges to Narrative entities.
-func (puo *ProgramUpdateOne) RemoveNarratives(n ...*Narrative) *ProgramUpdateOne {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
+func (_u *ProgramUpdateOne) RemoveNarratives(v ...*Narrative) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveNarrativeIDs(ids...)
+	return _u.RemoveNarrativeIDs(ids...)
 }
 
 // ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
-func (puo *ProgramUpdateOne) ClearActionPlans() *ProgramUpdateOne {
-	puo.mutation.ClearActionPlans()
-	return puo
+func (_u *ProgramUpdateOne) ClearActionPlans() *ProgramUpdateOne {
+	_u.mutation.ClearActionPlans()
+	return _u
 }
 
 // RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
-func (puo *ProgramUpdateOne) RemoveActionPlanIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveActionPlanIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveActionPlanIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveActionPlanIDs(ids...)
+	return _u
 }
 
 // RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
-func (puo *ProgramUpdateOne) RemoveActionPlans(a ...*ActionPlan) *ProgramUpdateOne {
-	ids := make([]string, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *ProgramUpdateOne) RemoveActionPlans(v ...*ActionPlan) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveActionPlanIDs(ids...)
+	return _u.RemoveActionPlanIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
-func (puo *ProgramUpdateOne) ClearUsers() *ProgramUpdateOne {
-	puo.mutation.ClearUsers()
-	return puo
+func (_u *ProgramUpdateOne) ClearUsers() *ProgramUpdateOne {
+	_u.mutation.ClearUsers()
+	return _u
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (puo *ProgramUpdateOne) RemoveUserIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveUserIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveUserIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveUserIDs(ids...)
+	return _u
 }
 
 // RemoveUsers removes "users" edges to User entities.
-func (puo *ProgramUpdateOne) RemoveUsers(u ...*User) *ProgramUpdateOne {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *ProgramUpdateOne) RemoveUsers(v ...*User) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveUserIDs(ids...)
+	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the ProgramMembership entity.
-func (puo *ProgramUpdateOne) ClearMembers() *ProgramUpdateOne {
-	puo.mutation.ClearMembers()
-	return puo
+func (_u *ProgramUpdateOne) ClearMembers() *ProgramUpdateOne {
+	_u.mutation.ClearMembers()
+	return _u
 }
 
 // RemoveMemberIDs removes the "members" edge to ProgramMembership entities by IDs.
-func (puo *ProgramUpdateOne) RemoveMemberIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveMemberIDs(ids...)
-	return puo
+func (_u *ProgramUpdateOne) RemoveMemberIDs(ids ...string) *ProgramUpdateOne {
+	_u.mutation.RemoveMemberIDs(ids...)
+	return _u
 }
 
 // RemoveMembers removes "members" edges to ProgramMembership entities.
-func (puo *ProgramUpdateOne) RemoveMembers(p ...*ProgramMembership) *ProgramUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *ProgramUpdateOne) RemoveMembers(v ...*ProgramMembership) *ProgramUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveMemberIDs(ids...)
+	return _u.RemoveMemberIDs(ids...)
 }
 
 // Where appends a list predicates to the ProgramUpdate builder.
-func (puo *ProgramUpdateOne) Where(ps ...predicate.Program) *ProgramUpdateOne {
-	puo.mutation.Where(ps...)
-	return puo
+func (_u *ProgramUpdateOne) Where(ps ...predicate.Program) *ProgramUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (puo *ProgramUpdateOne) Select(field string, fields ...string) *ProgramUpdateOne {
-	puo.fields = append([]string{field}, fields...)
-	return puo
+func (_u *ProgramUpdateOne) Select(field string, fields ...string) *ProgramUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Program entity.
-func (puo *ProgramUpdateOne) Save(ctx context.Context) (*Program, error) {
-	if err := puo.defaults(); err != nil {
+func (_u *ProgramUpdateOne) Save(ctx context.Context) (*Program, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (puo *ProgramUpdateOne) SaveX(ctx context.Context) *Program {
-	node, err := puo.Save(ctx)
+func (_u *ProgramUpdateOne) SaveX(ctx context.Context) *Program {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -3087,53 +3087,53 @@ func (puo *ProgramUpdateOne) SaveX(ctx context.Context) *Program {
 }
 
 // Exec executes the query on the entity.
-func (puo *ProgramUpdateOne) Exec(ctx context.Context) error {
-	_, err := puo.Save(ctx)
+func (_u *ProgramUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (puo *ProgramUpdateOne) ExecX(ctx context.Context) {
-	if err := puo.Exec(ctx); err != nil {
+func (_u *ProgramUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (puo *ProgramUpdateOne) defaults() error {
-	if _, ok := puo.mutation.UpdatedAt(); !ok && !puo.mutation.UpdatedAtCleared() {
+func (_u *ProgramUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if program.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized program.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := program.UpdateDefaultUpdatedAt()
-		puo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (puo *ProgramUpdateOne) check() error {
-	if v, ok := puo.mutation.OwnerID(); ok {
+func (_u *ProgramUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := program.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Program.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := puo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := program.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Program.name": %w`, err)}
 		}
 	}
-	if v, ok := puo.mutation.Status(); ok {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := program.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if v, ok := puo.mutation.ProgramType(); ok {
+	if v, ok := _u.mutation.ProgramType(); ok {
 		if err := program.ProgramTypeValidator(v); err != nil {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
-	if v, ok := puo.mutation.AuditorEmail(); ok {
+	if v, ok := _u.mutation.AuditorEmail(); ok {
 		if err := program.AuditorEmailValidator(v); err != nil {
 			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
 		}
@@ -3142,22 +3142,22 @@ func (puo *ProgramUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (puo *ProgramUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramUpdateOne {
-	puo.modifiers = append(puo.modifiers, modifiers...)
-	return puo
+func (_u *ProgramUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err error) {
-	if err := puo.check(); err != nil {
+func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(program.Table, program.Columns, sqlgraph.NewFieldSpec(program.FieldID, field.TypeString))
-	id, ok := puo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Program.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := puo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, program.FieldID)
 		for _, f := range fields {
@@ -3169,115 +3169,115 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			}
 		}
 	}
-	if ps := puo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if puo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(program.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := puo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(program.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if puo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(program.FieldUpdatedAt, field.TypeTime)
 	}
-	if puo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(program.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(program.FieldUpdatedBy, field.TypeString, value)
 	}
-	if puo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(program.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(program.FieldDeletedAt, field.TypeTime, value)
 	}
-	if puo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(program.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := puo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(program.FieldDeletedBy, field.TypeString, value)
 	}
-	if puo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(program.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := puo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(program.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := puo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, program.FieldTags, value)
 		})
 	}
-	if puo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(program.FieldTags, field.TypeJSON)
 	}
-	if value, ok := puo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(program.FieldName, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(program.FieldDescription, field.TypeString, value)
 	}
-	if puo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(program.FieldDescription, field.TypeString)
 	}
-	if value, ok := puo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := puo.mutation.ProgramType(); ok {
+	if value, ok := _u.mutation.ProgramType(); ok {
 		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
 	}
-	if value, ok := puo.mutation.FrameworkName(); ok {
+	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
 	}
-	if puo.mutation.FrameworkNameCleared() {
+	if _u.mutation.FrameworkNameCleared() {
 		_spec.ClearField(program.FieldFrameworkName, field.TypeString)
 	}
-	if value, ok := puo.mutation.StartDate(); ok {
+	if value, ok := _u.mutation.StartDate(); ok {
 		_spec.SetField(program.FieldStartDate, field.TypeTime, value)
 	}
-	if puo.mutation.StartDateCleared() {
+	if _u.mutation.StartDateCleared() {
 		_spec.ClearField(program.FieldStartDate, field.TypeTime)
 	}
-	if value, ok := puo.mutation.EndDate(); ok {
+	if value, ok := _u.mutation.EndDate(); ok {
 		_spec.SetField(program.FieldEndDate, field.TypeTime, value)
 	}
-	if puo.mutation.EndDateCleared() {
+	if _u.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
 	}
-	if value, ok := puo.mutation.AuditorReady(); ok {
+	if value, ok := _u.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
 	}
-	if value, ok := puo.mutation.AuditorWriteComments(); ok {
+	if value, ok := _u.mutation.AuditorWriteComments(); ok {
 		_spec.SetField(program.FieldAuditorWriteComments, field.TypeBool, value)
 	}
-	if value, ok := puo.mutation.AuditorReadComments(); ok {
+	if value, ok := _u.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if value, ok := puo.mutation.AuditFirm(); ok {
+	if value, ok := _u.mutation.AuditFirm(); ok {
 		_spec.SetField(program.FieldAuditFirm, field.TypeString, value)
 	}
-	if puo.mutation.AuditFirmCleared() {
+	if _u.mutation.AuditFirmCleared() {
 		_spec.ClearField(program.FieldAuditFirm, field.TypeString)
 	}
-	if value, ok := puo.mutation.Auditor(); ok {
+	if value, ok := _u.mutation.Auditor(); ok {
 		_spec.SetField(program.FieldAuditor, field.TypeString, value)
 	}
-	if puo.mutation.AuditorCleared() {
+	if _u.mutation.AuditorCleared() {
 		_spec.ClearField(program.FieldAuditor, field.TypeString)
 	}
-	if value, ok := puo.mutation.AuditorEmail(); ok {
+	if value, ok := _u.mutation.AuditorEmail(); ok {
 		_spec.SetField(program.FieldAuditorEmail, field.TypeString, value)
 	}
-	if puo.mutation.AuditorEmailCleared() {
+	if _u.mutation.AuditorEmailCleared() {
 		_spec.ClearField(program.FieldAuditorEmail, field.TypeString)
 	}
-	if puo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -3288,10 +3288,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -3302,13 +3302,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Program
+		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.BlockedGroupsCleared() {
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3319,10 +3319,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _u.schemaConfig.ProgramBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !puo.mutation.BlockedGroupsCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3333,13 +3333,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _u.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3350,13 +3350,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
+		edge.Schema = _u.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.EditorsCleared() {
+	if _u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3367,10 +3367,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramEditors
+		edge.Schema = _u.schemaConfig.ProgramEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !puo.mutation.EditorsCleared() {
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3381,13 +3381,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramEditors
+		edge.Schema = _u.schemaConfig.ProgramEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.EditorsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3398,13 +3398,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramEditors
+		edge.Schema = _u.schemaConfig.ProgramEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ViewersCleared() {
+	if _u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3415,10 +3415,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramViewers
+		edge.Schema = _u.schemaConfig.ProgramViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !puo.mutation.ViewersCleared() {
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3429,13 +3429,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramViewers
+		edge.Schema = _u.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ViewersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3446,13 +3446,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramViewers
+		edge.Schema = _u.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ControlsCleared() {
+	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3463,10 +3463,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControls
+		edge.Schema = _u.schemaConfig.ProgramControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !puo.mutation.ControlsCleared() {
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3477,13 +3477,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControls
+		edge.Schema = _u.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ControlsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3494,13 +3494,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControls
+		edge.Schema = _u.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.SubcontrolsCleared() {
+	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3511,10 +3511,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !puo.mutation.SubcontrolsCleared() {
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3525,13 +3525,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3542,13 +3542,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ControlObjectivesCleared() {
+	if _u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3559,10 +3559,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControlObjectives
+		edge.Schema = _u.schemaConfig.ProgramControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !puo.mutation.ControlObjectivesCleared() {
+	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3573,13 +3573,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControlObjectives
+		edge.Schema = _u.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ControlObjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3590,13 +3590,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramControlObjectives
+		edge.Schema = _u.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.InternalPoliciesCleared() {
+	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3607,10 +3607,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !puo.mutation.InternalPoliciesCleared() {
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3621,13 +3621,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3638,13 +3638,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramInternalPolicies
+		edge.Schema = _u.schemaConfig.ProgramInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ProceduresCleared() {
+	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3655,10 +3655,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramProcedures
+		edge.Schema = _u.schemaConfig.ProgramProcedures
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !puo.mutation.ProceduresCleared() {
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3669,13 +3669,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramProcedures
+		edge.Schema = _u.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ProceduresIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3686,13 +3686,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramProcedures
+		edge.Schema = _u.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.RisksCleared() {
+	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3703,10 +3703,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !puo.mutation.RisksCleared() {
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3717,13 +3717,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RisksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3734,13 +3734,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramRisks
+		edge.Schema = _u.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.TasksCleared() {
+	if _u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3751,10 +3751,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramTasks
+		edge.Schema = _u.schemaConfig.ProgramTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !puo.mutation.TasksCleared() {
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3765,13 +3765,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramTasks
+		edge.Schema = _u.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.TasksIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3782,13 +3782,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramTasks
+		edge.Schema = _u.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.NotesCleared() {
+	if _u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3799,10 +3799,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedNotesIDs(); len(nodes) > 0 && !puo.mutation.NotesCleared() {
+	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3813,13 +3813,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -3830,13 +3830,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.Note
+		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3847,10 +3847,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramFiles
+		edge.Schema = _u.schemaConfig.ProgramFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !puo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3861,13 +3861,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramFiles
+		edge.Schema = _u.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3878,13 +3878,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramFiles
+		edge.Schema = _u.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.EvidenceCleared() {
+	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3895,10 +3895,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !puo.mutation.EvidenceCleared() {
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3909,13 +3909,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.EvidenceIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3926,13 +3926,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramEvidence
+		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.NarrativesCleared() {
+	if _u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3943,10 +3943,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !puo.mutation.NarrativesCleared() {
+	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3957,13 +3957,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.NarrativesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.NarrativesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3974,13 +3974,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramNarratives
+		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ActionPlansCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -3991,10 +3991,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !puo.mutation.ActionPlansCleared() {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -4005,13 +4005,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ActionPlansIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -4022,13 +4022,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramActionPlans
+		edge.Schema = _u.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.UsersCleared() {
+	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -4039,8 +4039,8 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramMembership
-		createE := &ProgramMembershipCreate{config: puo.config, mutation: newProgramMembershipMutation(puo.config, OpCreate)}
+		edge.Schema = _u.schemaConfig.ProgramMembership
+		createE := &ProgramMembershipCreate{config: _u.config, mutation: newProgramMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -4049,7 +4049,7 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !puo.mutation.UsersCleared() {
+	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -4060,11 +4060,11 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &ProgramMembershipCreate{config: puo.config, mutation: newProgramMembershipMutation(puo.config, OpCreate)}
+		createE := &ProgramMembershipCreate{config: _u.config, mutation: newProgramMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -4073,7 +4073,7 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -4084,11 +4084,11 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &ProgramMembershipCreate{config: puo.config, mutation: newProgramMembershipMutation(puo.config, OpCreate)}
+		createE := &ProgramMembershipCreate{config: _u.config, mutation: newProgramMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -4097,7 +4097,7 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.MembersCleared() {
+	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -4108,10 +4108,10 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !puo.mutation.MembersCleared() {
+	if nodes := _u.mutation.RemovedMembersIDs(); len(nodes) > 0 && !_u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -4122,13 +4122,13 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.MembersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -4139,19 +4139,19 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.ProgramMembership
+		edge.Schema = _u.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = puo.schemaConfig.Program
-	ctx = internal.NewSchemaConfigContext(ctx, puo.schemaConfig)
-	_spec.AddModifiers(puo.modifiers...)
-	_node = &Program{config: puo.config}
+	_spec.Node.Schema = _u.schemaConfig.Program
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Program{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, puo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{program.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -4159,6 +4159,6 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		}
 		return nil, err
 	}
-	puo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

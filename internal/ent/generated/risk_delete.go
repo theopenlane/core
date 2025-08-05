@@ -22,58 +22,58 @@ type RiskDelete struct {
 }
 
 // Where appends a list predicates to the RiskDelete builder.
-func (rd *RiskDelete) Where(ps ...predicate.Risk) *RiskDelete {
-	rd.mutation.Where(ps...)
-	return rd
+func (_d *RiskDelete) Where(ps ...predicate.Risk) *RiskDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (rd *RiskDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, rd.sqlExec, rd.mutation, rd.hooks)
+func (_d *RiskDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rd *RiskDelete) ExecX(ctx context.Context) int {
-	n, err := rd.Exec(ctx)
+func (_d *RiskDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (rd *RiskDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *RiskDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(risk.Table, sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString))
-	_spec.Node.Schema = rd.schemaConfig.Risk
-	ctx = internal.NewSchemaConfigContext(ctx, rd.schemaConfig)
-	if ps := rd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.Risk
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, rd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	rd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // RiskDeleteOne is the builder for deleting a single Risk entity.
 type RiskDeleteOne struct {
-	rd *RiskDelete
+	_d *RiskDelete
 }
 
 // Where appends a list predicates to the RiskDelete builder.
-func (rdo *RiskDeleteOne) Where(ps ...predicate.Risk) *RiskDeleteOne {
-	rdo.rd.mutation.Where(ps...)
-	return rdo
+func (_d *RiskDeleteOne) Where(ps ...predicate.Risk) *RiskDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (rdo *RiskDeleteOne) Exec(ctx context.Context) error {
-	n, err := rdo.rd.Exec(ctx)
+func (_d *RiskDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (rdo *RiskDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rdo *RiskDeleteOne) ExecX(ctx context.Context) {
-	if err := rdo.Exec(ctx); err != nil {
+func (_d *RiskDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -139,7 +139,7 @@ func (r Risk) Edges() []ent.Edge {
 			field:      "stakeholder_id",
 			comment:    "the group of users who are responsible for risk oversight",
 			annotations: []schema.Annotation{
-				accessmap.EdgeAuthCheck(Group{}.Name()),
+				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -149,7 +149,7 @@ func (r Risk) Edges() []ent.Edge {
 			field:      "delegate_id",
 			comment:    "temporary delegates for the risk, used for temporary ownership",
 			annotations: []schema.Annotation{
-				accessmap.EdgeAuthCheck(Group{}.Name()),
+				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
 	}

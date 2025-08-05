@@ -30,290 +30,290 @@ type JobTemplateUpdate struct {
 }
 
 // Where appends a list predicates to the JobTemplateUpdate builder.
-func (jtu *JobTemplateUpdate) Where(ps ...predicate.JobTemplate) *JobTemplateUpdate {
-	jtu.mutation.Where(ps...)
-	return jtu
+func (_u *JobTemplateUpdate) Where(ps ...predicate.JobTemplate) *JobTemplateUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jtu *JobTemplateUpdate) SetUpdatedAt(t time.Time) *JobTemplateUpdate {
-	jtu.mutation.SetUpdatedAt(t)
-	return jtu
+func (_u *JobTemplateUpdate) SetUpdatedAt(v time.Time) *JobTemplateUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jtu *JobTemplateUpdate) ClearUpdatedAt() *JobTemplateUpdate {
-	jtu.mutation.ClearUpdatedAt()
-	return jtu
+func (_u *JobTemplateUpdate) ClearUpdatedAt() *JobTemplateUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jtu *JobTemplateUpdate) SetUpdatedBy(s string) *JobTemplateUpdate {
-	jtu.mutation.SetUpdatedBy(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetUpdatedBy(v string) *JobTemplateUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableUpdatedBy(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetUpdatedBy(*s)
+func (_u *JobTemplateUpdate) SetNillableUpdatedBy(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jtu *JobTemplateUpdate) ClearUpdatedBy() *JobTemplateUpdate {
-	jtu.mutation.ClearUpdatedBy()
-	return jtu
+func (_u *JobTemplateUpdate) ClearUpdatedBy() *JobTemplateUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jtu *JobTemplateUpdate) SetDeletedAt(t time.Time) *JobTemplateUpdate {
-	jtu.mutation.SetDeletedAt(t)
-	return jtu
+func (_u *JobTemplateUpdate) SetDeletedAt(v time.Time) *JobTemplateUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableDeletedAt(t *time.Time) *JobTemplateUpdate {
-	if t != nil {
-		jtu.SetDeletedAt(*t)
+func (_u *JobTemplateUpdate) SetNillableDeletedAt(v *time.Time) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jtu *JobTemplateUpdate) ClearDeletedAt() *JobTemplateUpdate {
-	jtu.mutation.ClearDeletedAt()
-	return jtu
+func (_u *JobTemplateUpdate) ClearDeletedAt() *JobTemplateUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jtu *JobTemplateUpdate) SetDeletedBy(s string) *JobTemplateUpdate {
-	jtu.mutation.SetDeletedBy(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetDeletedBy(v string) *JobTemplateUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableDeletedBy(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetDeletedBy(*s)
+func (_u *JobTemplateUpdate) SetNillableDeletedBy(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jtu *JobTemplateUpdate) ClearDeletedBy() *JobTemplateUpdate {
-	jtu.mutation.ClearDeletedBy()
-	return jtu
+func (_u *JobTemplateUpdate) ClearDeletedBy() *JobTemplateUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jtu *JobTemplateUpdate) SetTags(s []string) *JobTemplateUpdate {
-	jtu.mutation.SetTags(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetTags(v []string) *JobTemplateUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jtu *JobTemplateUpdate) AppendTags(s []string) *JobTemplateUpdate {
-	jtu.mutation.AppendTags(s)
-	return jtu
+// AppendTags appends value to the "tags" field.
+func (_u *JobTemplateUpdate) AppendTags(v []string) *JobTemplateUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jtu *JobTemplateUpdate) ClearTags() *JobTemplateUpdate {
-	jtu.mutation.ClearTags()
-	return jtu
+func (_u *JobTemplateUpdate) ClearTags() *JobTemplateUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jtu *JobTemplateUpdate) SetOwnerID(s string) *JobTemplateUpdate {
-	jtu.mutation.SetOwnerID(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetOwnerID(v string) *JobTemplateUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableOwnerID(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetOwnerID(*s)
+func (_u *JobTemplateUpdate) SetNillableOwnerID(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jtu *JobTemplateUpdate) ClearOwnerID() *JobTemplateUpdate {
-	jtu.mutation.ClearOwnerID()
-	return jtu
+func (_u *JobTemplateUpdate) ClearOwnerID() *JobTemplateUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (jtu *JobTemplateUpdate) SetTitle(s string) *JobTemplateUpdate {
-	jtu.mutation.SetTitle(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetTitle(v string) *JobTemplateUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableTitle(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetTitle(*s)
+func (_u *JobTemplateUpdate) SetNillableTitle(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return jtu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (jtu *JobTemplateUpdate) SetDescription(s string) *JobTemplateUpdate {
-	jtu.mutation.SetDescription(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetDescription(v string) *JobTemplateUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableDescription(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetDescription(*s)
+func (_u *JobTemplateUpdate) SetNillableDescription(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (jtu *JobTemplateUpdate) ClearDescription() *JobTemplateUpdate {
-	jtu.mutation.ClearDescription()
-	return jtu
+func (_u *JobTemplateUpdate) ClearDescription() *JobTemplateUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetWindmillPath sets the "windmill_path" field.
-func (jtu *JobTemplateUpdate) SetWindmillPath(s string) *JobTemplateUpdate {
-	jtu.mutation.SetWindmillPath(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetWindmillPath(v string) *JobTemplateUpdate {
+	_u.mutation.SetWindmillPath(v)
+	return _u
 }
 
 // SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableWindmillPath(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetWindmillPath(*s)
+func (_u *JobTemplateUpdate) SetNillableWindmillPath(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetWindmillPath(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearWindmillPath clears the value of the "windmill_path" field.
-func (jtu *JobTemplateUpdate) ClearWindmillPath() *JobTemplateUpdate {
-	jtu.mutation.ClearWindmillPath()
-	return jtu
+func (_u *JobTemplateUpdate) ClearWindmillPath() *JobTemplateUpdate {
+	_u.mutation.ClearWindmillPath()
+	return _u
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (jtu *JobTemplateUpdate) SetDownloadURL(s string) *JobTemplateUpdate {
-	jtu.mutation.SetDownloadURL(s)
-	return jtu
+func (_u *JobTemplateUpdate) SetDownloadURL(v string) *JobTemplateUpdate {
+	_u.mutation.SetDownloadURL(v)
+	return _u
 }
 
 // SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableDownloadURL(s *string) *JobTemplateUpdate {
-	if s != nil {
-		jtu.SetDownloadURL(*s)
+func (_u *JobTemplateUpdate) SetNillableDownloadURL(v *string) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetDownloadURL(*v)
 	}
-	return jtu
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (jtu *JobTemplateUpdate) SetConfiguration(mc models.JobConfiguration) *JobTemplateUpdate {
-	jtu.mutation.SetConfiguration(mc)
-	return jtu
+func (_u *JobTemplateUpdate) SetConfiguration(v models.JobConfiguration) *JobTemplateUpdate {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (jtu *JobTemplateUpdate) AppendConfiguration(mc models.JobConfiguration) *JobTemplateUpdate {
-	jtu.mutation.AppendConfiguration(mc)
-	return jtu
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *JobTemplateUpdate) AppendConfiguration(v models.JobConfiguration) *JobTemplateUpdate {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (jtu *JobTemplateUpdate) ClearConfiguration() *JobTemplateUpdate {
-	jtu.mutation.ClearConfiguration()
-	return jtu
+func (_u *JobTemplateUpdate) ClearConfiguration() *JobTemplateUpdate {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (jtu *JobTemplateUpdate) SetCron(m models.Cron) *JobTemplateUpdate {
-	jtu.mutation.SetCron(m)
-	return jtu
+func (_u *JobTemplateUpdate) SetCron(v models.Cron) *JobTemplateUpdate {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (jtu *JobTemplateUpdate) SetNillableCron(m *models.Cron) *JobTemplateUpdate {
-	if m != nil {
-		jtu.SetCron(*m)
+func (_u *JobTemplateUpdate) SetNillableCron(v *models.Cron) *JobTemplateUpdate {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return jtu
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (jtu *JobTemplateUpdate) ClearCron() *JobTemplateUpdate {
-	jtu.mutation.ClearCron()
-	return jtu
+func (_u *JobTemplateUpdate) ClearCron() *JobTemplateUpdate {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jtu *JobTemplateUpdate) SetOwner(o *Organization) *JobTemplateUpdate {
-	return jtu.SetOwnerID(o.ID)
+func (_u *JobTemplateUpdate) SetOwner(v *Organization) *JobTemplateUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (jtu *JobTemplateUpdate) AddScheduledJobIDs(ids ...string) *JobTemplateUpdate {
-	jtu.mutation.AddScheduledJobIDs(ids...)
-	return jtu
+func (_u *JobTemplateUpdate) AddScheduledJobIDs(ids ...string) *JobTemplateUpdate {
+	_u.mutation.AddScheduledJobIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (jtu *JobTemplateUpdate) AddScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *JobTemplateUpdate) AddScheduledJobs(v ...*ScheduledJob) *JobTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jtu.AddScheduledJobIDs(ids...)
+	return _u.AddScheduledJobIDs(ids...)
 }
 
 // Mutation returns the JobTemplateMutation object of the builder.
-func (jtu *JobTemplateUpdate) Mutation() *JobTemplateMutation {
-	return jtu.mutation
+func (_u *JobTemplateUpdate) Mutation() *JobTemplateMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jtu *JobTemplateUpdate) ClearOwner() *JobTemplateUpdate {
-	jtu.mutation.ClearOwner()
-	return jtu
+func (_u *JobTemplateUpdate) ClearOwner() *JobTemplateUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (jtu *JobTemplateUpdate) ClearScheduledJobs() *JobTemplateUpdate {
-	jtu.mutation.ClearScheduledJobs()
-	return jtu
+func (_u *JobTemplateUpdate) ClearScheduledJobs() *JobTemplateUpdate {
+	_u.mutation.ClearScheduledJobs()
+	return _u
 }
 
 // RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (jtu *JobTemplateUpdate) RemoveScheduledJobIDs(ids ...string) *JobTemplateUpdate {
-	jtu.mutation.RemoveScheduledJobIDs(ids...)
-	return jtu
+func (_u *JobTemplateUpdate) RemoveScheduledJobIDs(ids ...string) *JobTemplateUpdate {
+	_u.mutation.RemoveScheduledJobIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (jtu *JobTemplateUpdate) RemoveScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *JobTemplateUpdate) RemoveScheduledJobs(v ...*ScheduledJob) *JobTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jtu.RemoveScheduledJobIDs(ids...)
+	return _u.RemoveScheduledJobIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (jtu *JobTemplateUpdate) Save(ctx context.Context) (int, error) {
-	if err := jtu.defaults(); err != nil {
+func (_u *JobTemplateUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, jtu.sqlSave, jtu.mutation, jtu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jtu *JobTemplateUpdate) SaveX(ctx context.Context) int {
-	affected, err := jtu.Save(ctx)
+func (_u *JobTemplateUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -321,38 +321,38 @@ func (jtu *JobTemplateUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (jtu *JobTemplateUpdate) Exec(ctx context.Context) error {
-	_, err := jtu.Save(ctx)
+func (_u *JobTemplateUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jtu *JobTemplateUpdate) ExecX(ctx context.Context) {
-	if err := jtu.Exec(ctx); err != nil {
+func (_u *JobTemplateUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jtu *JobTemplateUpdate) defaults() error {
-	if _, ok := jtu.mutation.UpdatedAt(); !ok && !jtu.mutation.UpdatedAtCleared() {
+func (_u *JobTemplateUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobtemplate.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplate.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobtemplate.UpdateDefaultUpdatedAt()
-		jtu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jtu *JobTemplateUpdate) check() error {
-	if v, ok := jtu.mutation.Title(); ok {
+func (_u *JobTemplateUpdate) check() error {
+	if v, ok := _u.mutation.Title(); ok {
 		if err := jobtemplate.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.title": %w`, err)}
 		}
 	}
-	if v, ok := jtu.mutation.Cron(); ok {
+	if v, ok := _u.mutation.Cron(); ok {
 		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
 		}
@@ -361,103 +361,103 @@ func (jtu *JobTemplateUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jtu *JobTemplateUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateUpdate {
-	jtu.modifiers = append(jtu.modifiers, modifiers...)
-	return jtu
+func (_u *JobTemplateUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := jtu.check(); err != nil {
-		return n, err
+func (_u *JobTemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobtemplate.Table, jobtemplate.Columns, sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString))
-	if ps := jtu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jtu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobtemplate.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jtu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobtemplate.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jtu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobtemplate.FieldUpdatedAt, field.TypeTime)
 	}
-	if jtu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobtemplate.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jtu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobtemplate.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jtu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobtemplate.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jtu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobtemplate.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jtu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobtemplate.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jtu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobtemplate.FieldDeletedBy, field.TypeString, value)
 	}
-	if jtu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobtemplate.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jtu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobtemplate.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jtu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplate.FieldTags, value)
 		})
 	}
-	if jtu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobtemplate.FieldTags, field.TypeJSON)
 	}
-	if jtu.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobtemplate.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := jtu.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(jobtemplate.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := jtu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(jobtemplate.FieldDescription, field.TypeString, value)
 	}
-	if jtu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(jobtemplate.FieldDescription, field.TypeString)
 	}
-	if value, ok := jtu.mutation.WindmillPath(); ok {
+	if value, ok := _u.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplate.FieldWindmillPath, field.TypeString, value)
 	}
-	if jtu.mutation.WindmillPathCleared() {
+	if _u.mutation.WindmillPathCleared() {
 		_spec.ClearField(jobtemplate.FieldWindmillPath, field.TypeString)
 	}
-	if value, ok := jtu.mutation.DownloadURL(); ok {
+	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplate.FieldDownloadURL, field.TypeString, value)
 	}
-	if value, ok := jtu.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplate.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := jtu.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplate.FieldConfiguration, value)
 		})
 	}
-	if jtu.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(jobtemplate.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := jtu.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(jobtemplate.FieldCron, field.TypeString, value)
 	}
-	if jtu.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(jobtemplate.FieldCron, field.TypeString)
 	}
-	if jtu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -468,10 +468,10 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtu.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jtu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -482,13 +482,13 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtu.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jtu.mutation.ScheduledJobsCleared() {
+	if _u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -499,10 +499,10 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtu.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jtu.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !jtu.mutation.ScheduledJobsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -513,13 +513,13 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtu.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jtu.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -530,16 +530,16 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtu.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jtu.schemaConfig.JobTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, jtu.schemaConfig)
-	_spec.AddModifiers(jtu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, jtu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.JobTemplate
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobtemplate.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -547,8 +547,8 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	jtu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // JobTemplateUpdateOne is the builder for updating a single JobTemplate entity.
@@ -561,297 +561,297 @@ type JobTemplateUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jtuo *JobTemplateUpdateOne) SetUpdatedAt(t time.Time) *JobTemplateUpdateOne {
-	jtuo.mutation.SetUpdatedAt(t)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetUpdatedAt(v time.Time) *JobTemplateUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jtuo *JobTemplateUpdateOne) ClearUpdatedAt() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearUpdatedAt()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearUpdatedAt() *JobTemplateUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jtuo *JobTemplateUpdateOne) SetUpdatedBy(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetUpdatedBy(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetUpdatedBy(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableUpdatedBy(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetUpdatedBy(*s)
+func (_u *JobTemplateUpdateOne) SetNillableUpdatedBy(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jtuo *JobTemplateUpdateOne) ClearUpdatedBy() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearUpdatedBy()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearUpdatedBy() *JobTemplateUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jtuo *JobTemplateUpdateOne) SetDeletedAt(t time.Time) *JobTemplateUpdateOne {
-	jtuo.mutation.SetDeletedAt(t)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetDeletedAt(v time.Time) *JobTemplateUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableDeletedAt(t *time.Time) *JobTemplateUpdateOne {
-	if t != nil {
-		jtuo.SetDeletedAt(*t)
+func (_u *JobTemplateUpdateOne) SetNillableDeletedAt(v *time.Time) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jtuo *JobTemplateUpdateOne) ClearDeletedAt() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearDeletedAt()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearDeletedAt() *JobTemplateUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jtuo *JobTemplateUpdateOne) SetDeletedBy(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetDeletedBy(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetDeletedBy(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableDeletedBy(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetDeletedBy(*s)
+func (_u *JobTemplateUpdateOne) SetNillableDeletedBy(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jtuo *JobTemplateUpdateOne) ClearDeletedBy() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearDeletedBy()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearDeletedBy() *JobTemplateUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jtuo *JobTemplateUpdateOne) SetTags(s []string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetTags(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetTags(v []string) *JobTemplateUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jtuo *JobTemplateUpdateOne) AppendTags(s []string) *JobTemplateUpdateOne {
-	jtuo.mutation.AppendTags(s)
-	return jtuo
+// AppendTags appends value to the "tags" field.
+func (_u *JobTemplateUpdateOne) AppendTags(v []string) *JobTemplateUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jtuo *JobTemplateUpdateOne) ClearTags() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearTags()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearTags() *JobTemplateUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jtuo *JobTemplateUpdateOne) SetOwnerID(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetOwnerID(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetOwnerID(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableOwnerID(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetOwnerID(*s)
+func (_u *JobTemplateUpdateOne) SetNillableOwnerID(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jtuo *JobTemplateUpdateOne) ClearOwnerID() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearOwnerID()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearOwnerID() *JobTemplateUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (jtuo *JobTemplateUpdateOne) SetTitle(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetTitle(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetTitle(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableTitle(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetTitle(*s)
+func (_u *JobTemplateUpdateOne) SetNillableTitle(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (jtuo *JobTemplateUpdateOne) SetDescription(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetDescription(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetDescription(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableDescription(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetDescription(*s)
+func (_u *JobTemplateUpdateOne) SetNillableDescription(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (jtuo *JobTemplateUpdateOne) ClearDescription() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearDescription()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearDescription() *JobTemplateUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetWindmillPath sets the "windmill_path" field.
-func (jtuo *JobTemplateUpdateOne) SetWindmillPath(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetWindmillPath(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetWindmillPath(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetWindmillPath(v)
+	return _u
 }
 
 // SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableWindmillPath(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetWindmillPath(*s)
+func (_u *JobTemplateUpdateOne) SetNillableWindmillPath(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetWindmillPath(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearWindmillPath clears the value of the "windmill_path" field.
-func (jtuo *JobTemplateUpdateOne) ClearWindmillPath() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearWindmillPath()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearWindmillPath() *JobTemplateUpdateOne {
+	_u.mutation.ClearWindmillPath()
+	return _u
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (jtuo *JobTemplateUpdateOne) SetDownloadURL(s string) *JobTemplateUpdateOne {
-	jtuo.mutation.SetDownloadURL(s)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetDownloadURL(v string) *JobTemplateUpdateOne {
+	_u.mutation.SetDownloadURL(v)
+	return _u
 }
 
 // SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableDownloadURL(s *string) *JobTemplateUpdateOne {
-	if s != nil {
-		jtuo.SetDownloadURL(*s)
+func (_u *JobTemplateUpdateOne) SetNillableDownloadURL(v *string) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetDownloadURL(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (jtuo *JobTemplateUpdateOne) SetConfiguration(mc models.JobConfiguration) *JobTemplateUpdateOne {
-	jtuo.mutation.SetConfiguration(mc)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetConfiguration(v models.JobConfiguration) *JobTemplateUpdateOne {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (jtuo *JobTemplateUpdateOne) AppendConfiguration(mc models.JobConfiguration) *JobTemplateUpdateOne {
-	jtuo.mutation.AppendConfiguration(mc)
-	return jtuo
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *JobTemplateUpdateOne) AppendConfiguration(v models.JobConfiguration) *JobTemplateUpdateOne {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (jtuo *JobTemplateUpdateOne) ClearConfiguration() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearConfiguration()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearConfiguration() *JobTemplateUpdateOne {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (jtuo *JobTemplateUpdateOne) SetCron(m models.Cron) *JobTemplateUpdateOne {
-	jtuo.mutation.SetCron(m)
-	return jtuo
+func (_u *JobTemplateUpdateOne) SetCron(v models.Cron) *JobTemplateUpdateOne {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (jtuo *JobTemplateUpdateOne) SetNillableCron(m *models.Cron) *JobTemplateUpdateOne {
-	if m != nil {
-		jtuo.SetCron(*m)
+func (_u *JobTemplateUpdateOne) SetNillableCron(v *models.Cron) *JobTemplateUpdateOne {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return jtuo
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (jtuo *JobTemplateUpdateOne) ClearCron() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearCron()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearCron() *JobTemplateUpdateOne {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jtuo *JobTemplateUpdateOne) SetOwner(o *Organization) *JobTemplateUpdateOne {
-	return jtuo.SetOwnerID(o.ID)
+func (_u *JobTemplateUpdateOne) SetOwner(v *Organization) *JobTemplateUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (jtuo *JobTemplateUpdateOne) AddScheduledJobIDs(ids ...string) *JobTemplateUpdateOne {
-	jtuo.mutation.AddScheduledJobIDs(ids...)
-	return jtuo
+func (_u *JobTemplateUpdateOne) AddScheduledJobIDs(ids ...string) *JobTemplateUpdateOne {
+	_u.mutation.AddScheduledJobIDs(ids...)
+	return _u
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (jtuo *JobTemplateUpdateOne) AddScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *JobTemplateUpdateOne) AddScheduledJobs(v ...*ScheduledJob) *JobTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jtuo.AddScheduledJobIDs(ids...)
+	return _u.AddScheduledJobIDs(ids...)
 }
 
 // Mutation returns the JobTemplateMutation object of the builder.
-func (jtuo *JobTemplateUpdateOne) Mutation() *JobTemplateMutation {
-	return jtuo.mutation
+func (_u *JobTemplateUpdateOne) Mutation() *JobTemplateMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jtuo *JobTemplateUpdateOne) ClearOwner() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearOwner()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearOwner() *JobTemplateUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (jtuo *JobTemplateUpdateOne) ClearScheduledJobs() *JobTemplateUpdateOne {
-	jtuo.mutation.ClearScheduledJobs()
-	return jtuo
+func (_u *JobTemplateUpdateOne) ClearScheduledJobs() *JobTemplateUpdateOne {
+	_u.mutation.ClearScheduledJobs()
+	return _u
 }
 
 // RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (jtuo *JobTemplateUpdateOne) RemoveScheduledJobIDs(ids ...string) *JobTemplateUpdateOne {
-	jtuo.mutation.RemoveScheduledJobIDs(ids...)
-	return jtuo
+func (_u *JobTemplateUpdateOne) RemoveScheduledJobIDs(ids ...string) *JobTemplateUpdateOne {
+	_u.mutation.RemoveScheduledJobIDs(ids...)
+	return _u
 }
 
 // RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (jtuo *JobTemplateUpdateOne) RemoveScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdateOne {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *JobTemplateUpdateOne) RemoveScheduledJobs(v ...*ScheduledJob) *JobTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jtuo.RemoveScheduledJobIDs(ids...)
+	return _u.RemoveScheduledJobIDs(ids...)
 }
 
 // Where appends a list predicates to the JobTemplateUpdate builder.
-func (jtuo *JobTemplateUpdateOne) Where(ps ...predicate.JobTemplate) *JobTemplateUpdateOne {
-	jtuo.mutation.Where(ps...)
-	return jtuo
+func (_u *JobTemplateUpdateOne) Where(ps ...predicate.JobTemplate) *JobTemplateUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (jtuo *JobTemplateUpdateOne) Select(field string, fields ...string) *JobTemplateUpdateOne {
-	jtuo.fields = append([]string{field}, fields...)
-	return jtuo
+func (_u *JobTemplateUpdateOne) Select(field string, fields ...string) *JobTemplateUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated JobTemplate entity.
-func (jtuo *JobTemplateUpdateOne) Save(ctx context.Context) (*JobTemplate, error) {
-	if err := jtuo.defaults(); err != nil {
+func (_u *JobTemplateUpdateOne) Save(ctx context.Context) (*JobTemplate, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jtuo.sqlSave, jtuo.mutation, jtuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jtuo *JobTemplateUpdateOne) SaveX(ctx context.Context) *JobTemplate {
-	node, err := jtuo.Save(ctx)
+func (_u *JobTemplateUpdateOne) SaveX(ctx context.Context) *JobTemplate {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -859,38 +859,38 @@ func (jtuo *JobTemplateUpdateOne) SaveX(ctx context.Context) *JobTemplate {
 }
 
 // Exec executes the query on the entity.
-func (jtuo *JobTemplateUpdateOne) Exec(ctx context.Context) error {
-	_, err := jtuo.Save(ctx)
+func (_u *JobTemplateUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jtuo *JobTemplateUpdateOne) ExecX(ctx context.Context) {
-	if err := jtuo.Exec(ctx); err != nil {
+func (_u *JobTemplateUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jtuo *JobTemplateUpdateOne) defaults() error {
-	if _, ok := jtuo.mutation.UpdatedAt(); !ok && !jtuo.mutation.UpdatedAtCleared() {
+func (_u *JobTemplateUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobtemplate.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplate.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobtemplate.UpdateDefaultUpdatedAt()
-		jtuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jtuo *JobTemplateUpdateOne) check() error {
-	if v, ok := jtuo.mutation.Title(); ok {
+func (_u *JobTemplateUpdateOne) check() error {
+	if v, ok := _u.mutation.Title(); ok {
 		if err := jobtemplate.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.title": %w`, err)}
 		}
 	}
-	if v, ok := jtuo.mutation.Cron(); ok {
+	if v, ok := _u.mutation.Cron(); ok {
 		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
 		}
@@ -899,22 +899,22 @@ func (jtuo *JobTemplateUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jtuo *JobTemplateUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateUpdateOne {
-	jtuo.modifiers = append(jtuo.modifiers, modifiers...)
-	return jtuo
+func (_u *JobTemplateUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTemplate, err error) {
-	if err := jtuo.check(); err != nil {
+func (_u *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTemplate, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobtemplate.Table, jobtemplate.Columns, sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString))
-	id, ok := jtuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "JobTemplate.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := jtuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobtemplate.FieldID)
 		for _, f := range fields {
@@ -926,93 +926,93 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 			}
 		}
 	}
-	if ps := jtuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jtuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobtemplate.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jtuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobtemplate.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jtuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobtemplate.FieldUpdatedAt, field.TypeTime)
 	}
-	if jtuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobtemplate.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jtuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobtemplate.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jtuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobtemplate.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jtuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobtemplate.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jtuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobtemplate.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jtuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobtemplate.FieldDeletedBy, field.TypeString, value)
 	}
-	if jtuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobtemplate.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jtuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobtemplate.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jtuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplate.FieldTags, value)
 		})
 	}
-	if jtuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobtemplate.FieldTags, field.TypeJSON)
 	}
-	if jtuo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobtemplate.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := jtuo.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(jobtemplate.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := jtuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(jobtemplate.FieldDescription, field.TypeString, value)
 	}
-	if jtuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(jobtemplate.FieldDescription, field.TypeString)
 	}
-	if value, ok := jtuo.mutation.WindmillPath(); ok {
+	if value, ok := _u.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplate.FieldWindmillPath, field.TypeString, value)
 	}
-	if jtuo.mutation.WindmillPathCleared() {
+	if _u.mutation.WindmillPathCleared() {
 		_spec.ClearField(jobtemplate.FieldWindmillPath, field.TypeString)
 	}
-	if value, ok := jtuo.mutation.DownloadURL(); ok {
+	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplate.FieldDownloadURL, field.TypeString, value)
 	}
-	if value, ok := jtuo.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplate.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := jtuo.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplate.FieldConfiguration, value)
 		})
 	}
-	if jtuo.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(jobtemplate.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := jtuo.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(jobtemplate.FieldCron, field.TypeString, value)
 	}
-	if jtuo.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(jobtemplate.FieldCron, field.TypeString)
 	}
-	if jtuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1023,10 +1023,10 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtuo.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jtuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1037,13 +1037,13 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtuo.schemaConfig.JobTemplate
+		edge.Schema = _u.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jtuo.mutation.ScheduledJobsCleared() {
+	if _u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1054,10 +1054,10 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jtuo.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !jtuo.mutation.ScheduledJobsCleared() {
+	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1068,13 +1068,13 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jtuo.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -1085,19 +1085,19 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtuo.schemaConfig.ScheduledJob
+		edge.Schema = _u.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jtuo.schemaConfig.JobTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, jtuo.schemaConfig)
-	_spec.AddModifiers(jtuo.modifiers...)
-	_node = &JobTemplate{config: jtuo.config}
+	_spec.Node.Schema = _u.schemaConfig.JobTemplate
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &JobTemplate{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, jtuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobtemplate.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1105,6 +1105,6 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 		}
 		return nil, err
 	}
-	jtuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

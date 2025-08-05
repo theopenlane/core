@@ -123,7 +123,7 @@ func (*GroupMembership) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the GroupMembership fields.
-func (gm *GroupMembership) assignValues(columns []string, values []any) error {
+func (_m *GroupMembership) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -133,59 +133,59 @@ func (gm *GroupMembership) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				gm.ID = value.String
+				_m.ID = value.String
 			}
 		case groupmembership.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				gm.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case groupmembership.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				gm.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case groupmembership.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				gm.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case groupmembership.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				gm.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case groupmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
-				gm.Role = enums.Role(value.String)
+				_m.Role = enums.Role(value.String)
 			}
 		case groupmembership.FieldGroupID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field group_id", values[i])
 			} else if value.Valid {
-				gm.GroupID = value.String
+				_m.GroupID = value.String
 			}
 		case groupmembership.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				gm.UserID = value.String
+				_m.UserID = value.String
 			}
 		case groupmembership.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field group_membership_org_membership", values[i])
 			} else if value.Valid {
-				gm.group_membership_org_membership = new(string)
-				*gm.group_membership_org_membership = value.String
+				_m.group_membership_org_membership = new(string)
+				*_m.group_membership_org_membership = value.String
 			}
 		default:
-			gm.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -193,98 +193,98 @@ func (gm *GroupMembership) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the GroupMembership.
 // This includes values selected through modifiers, order, etc.
-func (gm *GroupMembership) Value(name string) (ent.Value, error) {
-	return gm.selectValues.Get(name)
+func (_m *GroupMembership) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryGroup queries the "group" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryGroup() *GroupQuery {
-	return NewGroupMembershipClient(gm.config).QueryGroup(gm)
+func (_m *GroupMembership) QueryGroup() *GroupQuery {
+	return NewGroupMembershipClient(_m.config).QueryGroup(_m)
 }
 
 // QueryUser queries the "user" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryUser() *UserQuery {
-	return NewGroupMembershipClient(gm.config).QueryUser(gm)
+func (_m *GroupMembership) QueryUser() *UserQuery {
+	return NewGroupMembershipClient(_m.config).QueryUser(_m)
 }
 
 // QueryOrgMembership queries the "org_membership" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryOrgMembership() *OrgMembershipQuery {
-	return NewGroupMembershipClient(gm.config).QueryOrgMembership(gm)
+func (_m *GroupMembership) QueryOrgMembership() *OrgMembershipQuery {
+	return NewGroupMembershipClient(_m.config).QueryOrgMembership(_m)
 }
 
 // QueryEvents queries the "events" edge of the GroupMembership entity.
-func (gm *GroupMembership) QueryEvents() *EventQuery {
-	return NewGroupMembershipClient(gm.config).QueryEvents(gm)
+func (_m *GroupMembership) QueryEvents() *EventQuery {
+	return NewGroupMembershipClient(_m.config).QueryEvents(_m)
 }
 
 // Update returns a builder for updating this GroupMembership.
 // Note that you need to call GroupMembership.Unwrap() before calling this method if this GroupMembership
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gm *GroupMembership) Update() *GroupMembershipUpdateOne {
-	return NewGroupMembershipClient(gm.config).UpdateOne(gm)
+func (_m *GroupMembership) Update() *GroupMembershipUpdateOne {
+	return NewGroupMembershipClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the GroupMembership entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gm *GroupMembership) Unwrap() *GroupMembership {
-	_tx, ok := gm.config.driver.(*txDriver)
+func (_m *GroupMembership) Unwrap() *GroupMembership {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: GroupMembership is not a transactional entity")
 	}
-	gm.config.driver = _tx.drv
-	return gm
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gm *GroupMembership) String() string {
+func (_m *GroupMembership) String() string {
 	var builder strings.Builder
 	builder.WriteString("GroupMembership(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gm.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(gm.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(gm.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(gm.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(gm.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", gm.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
 	builder.WriteString("group_id=")
-	builder.WriteString(gm.GroupID)
+	builder.WriteString(_m.GroupID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(gm.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gm *GroupMembership) NamedEvents(name string) ([]*Event, error) {
-	if gm.Edges.namedEvents == nil {
+func (_m *GroupMembership) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gm.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gm *GroupMembership) appendNamedEvents(name string, edges ...*Event) {
-	if gm.Edges.namedEvents == nil {
-		gm.Edges.namedEvents = make(map[string][]*Event)
+func (_m *GroupMembership) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		gm.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		gm.Edges.namedEvents[name] = append(gm.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 

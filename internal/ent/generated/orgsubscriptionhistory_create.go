@@ -23,337 +23,337 @@ type OrgSubscriptionHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetHistoryTime(t time.Time) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetHistoryTime(t)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetHistoryTime(v time.Time) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableHistoryTime(t *time.Time) *OrgSubscriptionHistoryCreate {
-	if t != nil {
-		oshc.SetHistoryTime(*t)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableHistoryTime(v *time.Time) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetRef(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetRef(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetRef(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableRef(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetRef(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableRef(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetOperation(ht history.OpType) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetOperation(ht)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetOperation(v history.OpType) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetCreatedAt(t time.Time) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetCreatedAt(t)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetCreatedAt(v time.Time) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableCreatedAt(t *time.Time) *OrgSubscriptionHistoryCreate {
-	if t != nil {
-		oshc.SetCreatedAt(*t)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableCreatedAt(v *time.Time) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedAt(t time.Time) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetUpdatedAt(t)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetUpdatedAt(v time.Time) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrgSubscriptionHistoryCreate {
-	if t != nil {
-		oshc.SetUpdatedAt(*t)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableUpdatedAt(v *time.Time) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetCreatedBy(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetCreatedBy(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetCreatedBy(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableCreatedBy(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetCreatedBy(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableCreatedBy(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetUpdatedBy(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetUpdatedBy(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetUpdatedBy(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetUpdatedBy(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableUpdatedBy(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetDeletedAt(t time.Time) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetDeletedAt(t)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetDeletedAt(v time.Time) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableDeletedAt(t *time.Time) *OrgSubscriptionHistoryCreate {
-	if t != nil {
-		oshc.SetDeletedAt(*t)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableDeletedAt(v *time.Time) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetDeletedBy(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetDeletedBy(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetDeletedBy(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableDeletedBy(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetDeletedBy(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableDeletedBy(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetTags(s []string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetTags(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetTags(v []string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetOwnerID(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetOwnerID(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetOwnerID(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableOwnerID(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetOwnerID(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableOwnerID(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetStripeSubscriptionID sets the "stripe_subscription_id" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetStripeSubscriptionID(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetStripeSubscriptionID(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetStripeSubscriptionID(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetStripeSubscriptionID(v)
+	return _c
 }
 
 // SetNillableStripeSubscriptionID sets the "stripe_subscription_id" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableStripeSubscriptionID(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetStripeSubscriptionID(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeSubscriptionID(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetStripeSubscriptionID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetProductTier sets the "product_tier" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetProductTier(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetProductTier(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetProductTier(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetProductTier(v)
+	return _c
 }
 
 // SetNillableProductTier sets the "product_tier" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableProductTier(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetProductTier(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableProductTier(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetProductTier(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetProductPrice sets the "product_price" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetProductPrice(m models.Price) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetProductPrice(m)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetProductPrice(v models.Price) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetProductPrice(v)
+	return _c
 }
 
 // SetNillableProductPrice sets the "product_price" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableProductPrice(m *models.Price) *OrgSubscriptionHistoryCreate {
-	if m != nil {
-		oshc.SetProductPrice(*m)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableProductPrice(v *models.Price) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetProductPrice(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetStripeProductTierID sets the "stripe_product_tier_id" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetStripeProductTierID(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetStripeProductTierID(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetStripeProductTierID(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetStripeProductTierID(v)
+	return _c
 }
 
 // SetNillableStripeProductTierID sets the "stripe_product_tier_id" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableStripeProductTierID(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetStripeProductTierID(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeProductTierID(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetStripeProductTierID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetStripeSubscriptionStatus sets the "stripe_subscription_status" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetStripeSubscriptionStatus(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetStripeSubscriptionStatus(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetStripeSubscriptionStatus(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetStripeSubscriptionStatus(v)
+	return _c
 }
 
 // SetNillableStripeSubscriptionStatus sets the "stripe_subscription_status" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableStripeSubscriptionStatus(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetStripeSubscriptionStatus(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeSubscriptionStatus(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetStripeSubscriptionStatus(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetActive sets the "active" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetActive(b bool) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetActive(b)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetActive(v bool) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetActive(v)
+	return _c
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableActive(b *bool) *OrgSubscriptionHistoryCreate {
-	if b != nil {
-		oshc.SetActive(*b)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableActive(v *bool) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetActive(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetStripeCustomerID sets the "stripe_customer_id" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetStripeCustomerID(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetStripeCustomerID(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetStripeCustomerID(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetStripeCustomerID(v)
+	return _c
 }
 
 // SetNillableStripeCustomerID sets the "stripe_customer_id" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableStripeCustomerID(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetStripeCustomerID(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableStripeCustomerID(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetStripeCustomerID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetExpiresAt(t time.Time) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetExpiresAt(t)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetExpiresAt(v time.Time) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableExpiresAt(t *time.Time) *OrgSubscriptionHistoryCreate {
-	if t != nil {
-		oshc.SetExpiresAt(*t)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableExpiresAt(v *time.Time) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetTrialExpiresAt sets the "trial_expires_at" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetTrialExpiresAt(t time.Time) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetTrialExpiresAt(t)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetTrialExpiresAt(v time.Time) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetTrialExpiresAt(v)
+	return _c
 }
 
 // SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableTrialExpiresAt(t *time.Time) *OrgSubscriptionHistoryCreate {
-	if t != nil {
-		oshc.SetTrialExpiresAt(*t)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableTrialExpiresAt(v *time.Time) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetTrialExpiresAt(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetDaysUntilDue sets the "days_until_due" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetDaysUntilDue(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetDaysUntilDue(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetDaysUntilDue(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetDaysUntilDue(v)
+	return _c
 }
 
 // SetNillableDaysUntilDue sets the "days_until_due" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableDaysUntilDue(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetDaysUntilDue(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableDaysUntilDue(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetDaysUntilDue(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetPaymentMethodAdded sets the "payment_method_added" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetPaymentMethodAdded(b bool) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetPaymentMethodAdded(b)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetPaymentMethodAdded(v bool) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetPaymentMethodAdded(v)
+	return _c
 }
 
 // SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillablePaymentMethodAdded(b *bool) *OrgSubscriptionHistoryCreate {
-	if b != nil {
-		oshc.SetPaymentMethodAdded(*b)
+func (_c *OrgSubscriptionHistoryCreate) SetNillablePaymentMethodAdded(v *bool) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetPaymentMethodAdded(*v)
 	}
-	return oshc
+	return _c
 }
 
 // SetFeatures sets the "features" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetFeatures(s []string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetFeatures(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetFeatures(v []string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetFeatures(v)
+	return _c
 }
 
 // SetFeatureLookupKeys sets the "feature_lookup_keys" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetFeatureLookupKeys(s []string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetFeatureLookupKeys(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetFeatureLookupKeys(v []string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetFeatureLookupKeys(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (oshc *OrgSubscriptionHistoryCreate) SetID(s string) *OrgSubscriptionHistoryCreate {
-	oshc.mutation.SetID(s)
-	return oshc
+func (_c *OrgSubscriptionHistoryCreate) SetID(v string) *OrgSubscriptionHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (oshc *OrgSubscriptionHistoryCreate) SetNillableID(s *string) *OrgSubscriptionHistoryCreate {
-	if s != nil {
-		oshc.SetID(*s)
+func (_c *OrgSubscriptionHistoryCreate) SetNillableID(v *string) *OrgSubscriptionHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return oshc
+	return _c
 }
 
 // Mutation returns the OrgSubscriptionHistoryMutation object of the builder.
-func (oshc *OrgSubscriptionHistoryCreate) Mutation() *OrgSubscriptionHistoryMutation {
-	return oshc.mutation
+func (_c *OrgSubscriptionHistoryCreate) Mutation() *OrgSubscriptionHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the OrgSubscriptionHistory in the database.
-func (oshc *OrgSubscriptionHistoryCreate) Save(ctx context.Context) (*OrgSubscriptionHistory, error) {
-	oshc.defaults()
-	return withHooks(ctx, oshc.sqlSave, oshc.mutation, oshc.hooks)
+func (_c *OrgSubscriptionHistoryCreate) Save(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (oshc *OrgSubscriptionHistoryCreate) SaveX(ctx context.Context) *OrgSubscriptionHistory {
-	v, err := oshc.Save(ctx)
+func (_c *OrgSubscriptionHistoryCreate) SaveX(ctx context.Context) *OrgSubscriptionHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -361,71 +361,71 @@ func (oshc *OrgSubscriptionHistoryCreate) SaveX(ctx context.Context) *OrgSubscri
 }
 
 // Exec executes the query.
-func (oshc *OrgSubscriptionHistoryCreate) Exec(ctx context.Context) error {
-	_, err := oshc.Save(ctx)
+func (_c *OrgSubscriptionHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshc *OrgSubscriptionHistoryCreate) ExecX(ctx context.Context) {
-	if err := oshc.Exec(ctx); err != nil {
+func (_c *OrgSubscriptionHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oshc *OrgSubscriptionHistoryCreate) defaults() {
-	if _, ok := oshc.mutation.HistoryTime(); !ok {
+func (_c *OrgSubscriptionHistoryCreate) defaults() {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		v := orgsubscriptionhistory.DefaultHistoryTime()
-		oshc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := oshc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := orgsubscriptionhistory.DefaultCreatedAt()
-		oshc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := oshc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := orgsubscriptionhistory.DefaultUpdatedAt()
-		oshc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := oshc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := orgsubscriptionhistory.DefaultTags
-		oshc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := oshc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		v := orgsubscriptionhistory.DefaultActive
-		oshc.mutation.SetActive(v)
+		_c.mutation.SetActive(v)
 	}
-	if _, ok := oshc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := orgsubscriptionhistory.DefaultID()
-		oshc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oshc *OrgSubscriptionHistoryCreate) check() error {
-	if _, ok := oshc.mutation.HistoryTime(); !ok {
+func (_c *OrgSubscriptionHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "OrgSubscriptionHistory.history_time"`)}
 	}
-	if _, ok := oshc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "OrgSubscriptionHistory.operation"`)}
 	}
-	if v, ok := oshc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := orgsubscriptionhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "OrgSubscriptionHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := oshc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "OrgSubscriptionHistory.active"`)}
 	}
 	return nil
 }
 
-func (oshc *OrgSubscriptionHistoryCreate) sqlSave(ctx context.Context) (*OrgSubscriptionHistory, error) {
-	if err := oshc.check(); err != nil {
+func (_c *OrgSubscriptionHistoryCreate) sqlSave(ctx context.Context) (*OrgSubscriptionHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := oshc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, oshc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -438,114 +438,114 @@ func (oshc *OrgSubscriptionHistoryCreate) sqlSave(ctx context.Context) (*OrgSubs
 			return nil, fmt.Errorf("unexpected OrgSubscriptionHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	oshc.mutation.id = &_node.ID
-	oshc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (oshc *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *sqlgraph.CreateSpec) {
+func (_c *OrgSubscriptionHistoryCreate) createSpec() (*OrgSubscriptionHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OrgSubscriptionHistory{config: oshc.config}
+		_node = &OrgSubscriptionHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(orgsubscriptionhistory.Table, sqlgraph.NewFieldSpec(orgsubscriptionhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = oshc.schemaConfig.OrgSubscriptionHistory
-	if id, ok := oshc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.OrgSubscriptionHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := oshc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := oshc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := oshc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := oshc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := oshc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oshc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := oshc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := oshc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := oshc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := oshc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := oshc.mutation.OwnerID(); ok {
+	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := oshc.mutation.StripeSubscriptionID(); ok {
+	if value, ok := _c.mutation.StripeSubscriptionID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionID, field.TypeString, value)
 		_node.StripeSubscriptionID = value
 	}
-	if value, ok := oshc.mutation.ProductTier(); ok {
+	if value, ok := _c.mutation.ProductTier(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldProductTier, field.TypeString, value)
 		_node.ProductTier = value
 	}
-	if value, ok := oshc.mutation.ProductPrice(); ok {
+	if value, ok := _c.mutation.ProductPrice(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldProductPrice, field.TypeJSON, value)
 		_node.ProductPrice = value
 	}
-	if value, ok := oshc.mutation.StripeProductTierID(); ok {
+	if value, ok := _c.mutation.StripeProductTierID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeProductTierID, field.TypeString, value)
 		_node.StripeProductTierID = value
 	}
-	if value, ok := oshc.mutation.StripeSubscriptionStatus(); ok {
+	if value, ok := _c.mutation.StripeSubscriptionStatus(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeSubscriptionStatus, field.TypeString, value)
 		_node.StripeSubscriptionStatus = value
 	}
-	if value, ok := oshc.mutation.Active(); ok {
+	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := oshc.mutation.StripeCustomerID(); ok {
+	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldStripeCustomerID, field.TypeString, value)
 		_node.StripeCustomerID = value
 	}
-	if value, ok := oshc.mutation.ExpiresAt(); ok {
+	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
 	}
-	if value, ok := oshc.mutation.TrialExpiresAt(); ok {
+	if value, ok := _c.mutation.TrialExpiresAt(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldTrialExpiresAt, field.TypeTime, value)
 		_node.TrialExpiresAt = &value
 	}
-	if value, ok := oshc.mutation.DaysUntilDue(); ok {
+	if value, ok := _c.mutation.DaysUntilDue(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldDaysUntilDue, field.TypeString, value)
 		_node.DaysUntilDue = &value
 	}
-	if value, ok := oshc.mutation.PaymentMethodAdded(); ok {
+	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldPaymentMethodAdded, field.TypeBool, value)
 		_node.PaymentMethodAdded = &value
 	}
-	if value, ok := oshc.mutation.Features(); ok {
+	if value, ok := _c.mutation.Features(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatures, field.TypeJSON, value)
 		_node.Features = value
 	}
-	if value, ok := oshc.mutation.FeatureLookupKeys(); ok {
+	if value, ok := _c.mutation.FeatureLookupKeys(); ok {
 		_spec.SetField(orgsubscriptionhistory.FieldFeatureLookupKeys, field.TypeJSON, value)
 		_node.FeatureLookupKeys = value
 	}
@@ -560,16 +560,16 @@ type OrgSubscriptionHistoryCreateBulk struct {
 }
 
 // Save creates the OrgSubscriptionHistory entities in the database.
-func (oshcb *OrgSubscriptionHistoryCreateBulk) Save(ctx context.Context) ([]*OrgSubscriptionHistory, error) {
-	if oshcb.err != nil {
-		return nil, oshcb.err
+func (_c *OrgSubscriptionHistoryCreateBulk) Save(ctx context.Context) ([]*OrgSubscriptionHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(oshcb.builders))
-	nodes := make([]*OrgSubscriptionHistory, len(oshcb.builders))
-	mutators := make([]Mutator, len(oshcb.builders))
-	for i := range oshcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OrgSubscriptionHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := oshcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OrgSubscriptionHistoryMutation)
@@ -583,11 +583,11 @@ func (oshcb *OrgSubscriptionHistoryCreateBulk) Save(ctx context.Context) ([]*Org
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, oshcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, oshcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -607,7 +607,7 @@ func (oshcb *OrgSubscriptionHistoryCreateBulk) Save(ctx context.Context) ([]*Org
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, oshcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -615,8 +615,8 @@ func (oshcb *OrgSubscriptionHistoryCreateBulk) Save(ctx context.Context) ([]*Org
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oshcb *OrgSubscriptionHistoryCreateBulk) SaveX(ctx context.Context) []*OrgSubscriptionHistory {
-	v, err := oshcb.Save(ctx)
+func (_c *OrgSubscriptionHistoryCreateBulk) SaveX(ctx context.Context) []*OrgSubscriptionHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -624,14 +624,14 @@ func (oshcb *OrgSubscriptionHistoryCreateBulk) SaveX(ctx context.Context) []*Org
 }
 
 // Exec executes the query.
-func (oshcb *OrgSubscriptionHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := oshcb.Save(ctx)
+func (_c *OrgSubscriptionHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oshcb *OrgSubscriptionHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := oshcb.Exec(ctx); err != nil {
+func (_c *OrgSubscriptionHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

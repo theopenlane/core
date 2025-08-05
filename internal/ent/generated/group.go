@@ -597,7 +597,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Group fields.
-func (gr *Group) assignValues(columns []string, values []any) error {
+func (_m *Group) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -607,55 +607,55 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				gr.ID = value.String
+				_m.ID = value.String
 			}
 		case group.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				gr.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case group.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				gr.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case group.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				gr.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case group.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				gr.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case group.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gr.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case group.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gr.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case group.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				gr.DisplayID = value.String
+				_m.DisplayID = value.String
 			}
 		case group.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &gr.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -663,165 +663,165 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				gr.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case group.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				gr.Name = value.String
+				_m.Name = value.String
 			}
 		case group.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				gr.Description = value.String
+				_m.Description = value.String
 			}
 		case group.FieldIsManaged:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_managed", values[i])
 			} else if value.Valid {
-				gr.IsManaged = value.Bool
+				_m.IsManaged = value.Bool
 			}
 		case group.FieldGravatarLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gravatar_logo_url", values[i])
 			} else if value.Valid {
-				gr.GravatarLogoURL = value.String
+				_m.GravatarLogoURL = value.String
 			}
 		case group.FieldLogoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_url", values[i])
 			} else if value.Valid {
-				gr.LogoURL = value.String
+				_m.LogoURL = value.String
 			}
 		case group.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
-				gr.DisplayName = value.String
+				_m.DisplayName = value.String
 			}
 		case group.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field asset_blocked_groups", values[i])
 			} else if value.Valid {
-				gr.asset_blocked_groups = new(string)
-				*gr.asset_blocked_groups = value.String
+				_m.asset_blocked_groups = new(string)
+				*_m.asset_blocked_groups = value.String
 			}
 		case group.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field asset_editors", values[i])
 			} else if value.Valid {
-				gr.asset_editors = new(string)
-				*gr.asset_editors = value.String
+				_m.asset_editors = new(string)
+				*_m.asset_editors = value.String
 			}
 		case group.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field asset_viewers", values[i])
 			} else if value.Valid {
-				gr.asset_viewers = new(string)
-				*gr.asset_viewers = value.String
+				_m.asset_viewers = new(string)
+				*_m.asset_viewers = value.String
 			}
 		case group.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_control_creators", values[i])
 			} else if value.Valid {
-				gr.organization_control_creators = new(string)
-				*gr.organization_control_creators = value.String
+				_m.organization_control_creators = new(string)
+				*_m.organization_control_creators = value.String
 			}
 		case group.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_control_implementation_creators", values[i])
 			} else if value.Valid {
-				gr.organization_control_implementation_creators = new(string)
-				*gr.organization_control_implementation_creators = value.String
+				_m.organization_control_implementation_creators = new(string)
+				*_m.organization_control_implementation_creators = value.String
 			}
 		case group.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_control_objective_creators", values[i])
 			} else if value.Valid {
-				gr.organization_control_objective_creators = new(string)
-				*gr.organization_control_objective_creators = value.String
+				_m.organization_control_objective_creators = new(string)
+				*_m.organization_control_objective_creators = value.String
 			}
 		case group.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_evidence_creators", values[i])
 			} else if value.Valid {
-				gr.organization_evidence_creators = new(string)
-				*gr.organization_evidence_creators = value.String
+				_m.organization_evidence_creators = new(string)
+				*_m.organization_evidence_creators = value.String
 			}
 		case group.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_group_creators", values[i])
 			} else if value.Valid {
-				gr.organization_group_creators = new(string)
-				*gr.organization_group_creators = value.String
+				_m.organization_group_creators = new(string)
+				*_m.organization_group_creators = value.String
 			}
 		case group.ForeignKeys[8]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_internal_policy_creators", values[i])
 			} else if value.Valid {
-				gr.organization_internal_policy_creators = new(string)
-				*gr.organization_internal_policy_creators = value.String
+				_m.organization_internal_policy_creators = new(string)
+				*_m.organization_internal_policy_creators = value.String
 			}
 		case group.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_mapped_control_creators", values[i])
 			} else if value.Valid {
-				gr.organization_mapped_control_creators = new(string)
-				*gr.organization_mapped_control_creators = value.String
+				_m.organization_mapped_control_creators = new(string)
+				*_m.organization_mapped_control_creators = value.String
 			}
 		case group.ForeignKeys[10]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_narrative_creators", values[i])
 			} else if value.Valid {
-				gr.organization_narrative_creators = new(string)
-				*gr.organization_narrative_creators = value.String
+				_m.organization_narrative_creators = new(string)
+				*_m.organization_narrative_creators = value.String
 			}
 		case group.ForeignKeys[11]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_procedure_creators", values[i])
 			} else if value.Valid {
-				gr.organization_procedure_creators = new(string)
-				*gr.organization_procedure_creators = value.String
+				_m.organization_procedure_creators = new(string)
+				*_m.organization_procedure_creators = value.String
 			}
 		case group.ForeignKeys[12]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_program_creators", values[i])
 			} else if value.Valid {
-				gr.organization_program_creators = new(string)
-				*gr.organization_program_creators = value.String
+				_m.organization_program_creators = new(string)
+				*_m.organization_program_creators = value.String
 			}
 		case group.ForeignKeys[13]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_risk_creators", values[i])
 			} else if value.Valid {
-				gr.organization_risk_creators = new(string)
-				*gr.organization_risk_creators = value.String
+				_m.organization_risk_creators = new(string)
+				*_m.organization_risk_creators = value.String
 			}
 		case group.ForeignKeys[14]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_scheduled_job_creators", values[i])
 			} else if value.Valid {
-				gr.organization_scheduled_job_creators = new(string)
-				*gr.organization_scheduled_job_creators = value.String
+				_m.organization_scheduled_job_creators = new(string)
+				*_m.organization_scheduled_job_creators = value.String
 			}
 		case group.ForeignKeys[15]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_standard_creators", values[i])
 			} else if value.Valid {
-				gr.organization_standard_creators = new(string)
-				*gr.organization_standard_creators = value.String
+				_m.organization_standard_creators = new(string)
+				*_m.organization_standard_creators = value.String
 			}
 		case group.ForeignKeys[16]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_template_creators", values[i])
 			} else if value.Valid {
-				gr.organization_template_creators = new(string)
-				*gr.organization_template_creators = value.String
+				_m.organization_template_creators = new(string)
+				*_m.organization_template_creators = value.String
 			}
 		default:
-			gr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -829,1132 +829,1132 @@ func (gr *Group) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Group.
 // This includes values selected through modifiers, order, etc.
-func (gr *Group) Value(name string) (ent.Value, error) {
-	return gr.selectValues.Get(name)
+func (_m *Group) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the Group entity.
-func (gr *Group) QueryOwner() *OrganizationQuery {
-	return NewGroupClient(gr.config).QueryOwner(gr)
+func (_m *Group) QueryOwner() *OrganizationQuery {
+	return NewGroupClient(_m.config).QueryOwner(_m)
 }
 
 // QueryProgramEditors queries the "program_editors" edge of the Group entity.
-func (gr *Group) QueryProgramEditors() *ProgramQuery {
-	return NewGroupClient(gr.config).QueryProgramEditors(gr)
+func (_m *Group) QueryProgramEditors() *ProgramQuery {
+	return NewGroupClient(_m.config).QueryProgramEditors(_m)
 }
 
 // QueryProgramBlockedGroups queries the "program_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryProgramBlockedGroups() *ProgramQuery {
-	return NewGroupClient(gr.config).QueryProgramBlockedGroups(gr)
+func (_m *Group) QueryProgramBlockedGroups() *ProgramQuery {
+	return NewGroupClient(_m.config).QueryProgramBlockedGroups(_m)
 }
 
 // QueryProgramViewers queries the "program_viewers" edge of the Group entity.
-func (gr *Group) QueryProgramViewers() *ProgramQuery {
-	return NewGroupClient(gr.config).QueryProgramViewers(gr)
+func (_m *Group) QueryProgramViewers() *ProgramQuery {
+	return NewGroupClient(_m.config).QueryProgramViewers(_m)
 }
 
 // QueryRiskEditors queries the "risk_editors" edge of the Group entity.
-func (gr *Group) QueryRiskEditors() *RiskQuery {
-	return NewGroupClient(gr.config).QueryRiskEditors(gr)
+func (_m *Group) QueryRiskEditors() *RiskQuery {
+	return NewGroupClient(_m.config).QueryRiskEditors(_m)
 }
 
 // QueryRiskBlockedGroups queries the "risk_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryRiskBlockedGroups() *RiskQuery {
-	return NewGroupClient(gr.config).QueryRiskBlockedGroups(gr)
+func (_m *Group) QueryRiskBlockedGroups() *RiskQuery {
+	return NewGroupClient(_m.config).QueryRiskBlockedGroups(_m)
 }
 
 // QueryRiskViewers queries the "risk_viewers" edge of the Group entity.
-func (gr *Group) QueryRiskViewers() *RiskQuery {
-	return NewGroupClient(gr.config).QueryRiskViewers(gr)
+func (_m *Group) QueryRiskViewers() *RiskQuery {
+	return NewGroupClient(_m.config).QueryRiskViewers(_m)
 }
 
 // QueryControlObjectiveEditors queries the "control_objective_editors" edge of the Group entity.
-func (gr *Group) QueryControlObjectiveEditors() *ControlObjectiveQuery {
-	return NewGroupClient(gr.config).QueryControlObjectiveEditors(gr)
+func (_m *Group) QueryControlObjectiveEditors() *ControlObjectiveQuery {
+	return NewGroupClient(_m.config).QueryControlObjectiveEditors(_m)
 }
 
 // QueryControlObjectiveBlockedGroups queries the "control_objective_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryControlObjectiveBlockedGroups() *ControlObjectiveQuery {
-	return NewGroupClient(gr.config).QueryControlObjectiveBlockedGroups(gr)
+func (_m *Group) QueryControlObjectiveBlockedGroups() *ControlObjectiveQuery {
+	return NewGroupClient(_m.config).QueryControlObjectiveBlockedGroups(_m)
 }
 
 // QueryControlObjectiveViewers queries the "control_objective_viewers" edge of the Group entity.
-func (gr *Group) QueryControlObjectiveViewers() *ControlObjectiveQuery {
-	return NewGroupClient(gr.config).QueryControlObjectiveViewers(gr)
+func (_m *Group) QueryControlObjectiveViewers() *ControlObjectiveQuery {
+	return NewGroupClient(_m.config).QueryControlObjectiveViewers(_m)
 }
 
 // QueryNarrativeEditors queries the "narrative_editors" edge of the Group entity.
-func (gr *Group) QueryNarrativeEditors() *NarrativeQuery {
-	return NewGroupClient(gr.config).QueryNarrativeEditors(gr)
+func (_m *Group) QueryNarrativeEditors() *NarrativeQuery {
+	return NewGroupClient(_m.config).QueryNarrativeEditors(_m)
 }
 
 // QueryNarrativeBlockedGroups queries the "narrative_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryNarrativeBlockedGroups() *NarrativeQuery {
-	return NewGroupClient(gr.config).QueryNarrativeBlockedGroups(gr)
+func (_m *Group) QueryNarrativeBlockedGroups() *NarrativeQuery {
+	return NewGroupClient(_m.config).QueryNarrativeBlockedGroups(_m)
 }
 
 // QueryNarrativeViewers queries the "narrative_viewers" edge of the Group entity.
-func (gr *Group) QueryNarrativeViewers() *NarrativeQuery {
-	return NewGroupClient(gr.config).QueryNarrativeViewers(gr)
+func (_m *Group) QueryNarrativeViewers() *NarrativeQuery {
+	return NewGroupClient(_m.config).QueryNarrativeViewers(_m)
 }
 
 // QueryControlImplementationEditors queries the "control_implementation_editors" edge of the Group entity.
-func (gr *Group) QueryControlImplementationEditors() *ControlImplementationQuery {
-	return NewGroupClient(gr.config).QueryControlImplementationEditors(gr)
+func (_m *Group) QueryControlImplementationEditors() *ControlImplementationQuery {
+	return NewGroupClient(_m.config).QueryControlImplementationEditors(_m)
 }
 
 // QueryControlImplementationBlockedGroups queries the "control_implementation_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryControlImplementationBlockedGroups() *ControlImplementationQuery {
-	return NewGroupClient(gr.config).QueryControlImplementationBlockedGroups(gr)
+func (_m *Group) QueryControlImplementationBlockedGroups() *ControlImplementationQuery {
+	return NewGroupClient(_m.config).QueryControlImplementationBlockedGroups(_m)
 }
 
 // QueryControlImplementationViewers queries the "control_implementation_viewers" edge of the Group entity.
-func (gr *Group) QueryControlImplementationViewers() *ControlImplementationQuery {
-	return NewGroupClient(gr.config).QueryControlImplementationViewers(gr)
+func (_m *Group) QueryControlImplementationViewers() *ControlImplementationQuery {
+	return NewGroupClient(_m.config).QueryControlImplementationViewers(_m)
 }
 
 // QueryScanEditors queries the "scan_editors" edge of the Group entity.
-func (gr *Group) QueryScanEditors() *ScanQuery {
-	return NewGroupClient(gr.config).QueryScanEditors(gr)
+func (_m *Group) QueryScanEditors() *ScanQuery {
+	return NewGroupClient(_m.config).QueryScanEditors(_m)
 }
 
 // QueryScanBlockedGroups queries the "scan_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryScanBlockedGroups() *ScanQuery {
-	return NewGroupClient(gr.config).QueryScanBlockedGroups(gr)
+func (_m *Group) QueryScanBlockedGroups() *ScanQuery {
+	return NewGroupClient(_m.config).QueryScanBlockedGroups(_m)
 }
 
 // QueryScanViewers queries the "scan_viewers" edge of the Group entity.
-func (gr *Group) QueryScanViewers() *ScanQuery {
-	return NewGroupClient(gr.config).QueryScanViewers(gr)
+func (_m *Group) QueryScanViewers() *ScanQuery {
+	return NewGroupClient(_m.config).QueryScanViewers(_m)
 }
 
 // QueryEntityEditors queries the "entity_editors" edge of the Group entity.
-func (gr *Group) QueryEntityEditors() *EntityQuery {
-	return NewGroupClient(gr.config).QueryEntityEditors(gr)
+func (_m *Group) QueryEntityEditors() *EntityQuery {
+	return NewGroupClient(_m.config).QueryEntityEditors(_m)
 }
 
 // QueryEntityBlockedGroups queries the "entity_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryEntityBlockedGroups() *EntityQuery {
-	return NewGroupClient(gr.config).QueryEntityBlockedGroups(gr)
+func (_m *Group) QueryEntityBlockedGroups() *EntityQuery {
+	return NewGroupClient(_m.config).QueryEntityBlockedGroups(_m)
 }
 
 // QueryEntityViewers queries the "entity_viewers" edge of the Group entity.
-func (gr *Group) QueryEntityViewers() *EntityQuery {
-	return NewGroupClient(gr.config).QueryEntityViewers(gr)
+func (_m *Group) QueryEntityViewers() *EntityQuery {
+	return NewGroupClient(_m.config).QueryEntityViewers(_m)
 }
 
 // QueryProcedureEditors queries the "procedure_editors" edge of the Group entity.
-func (gr *Group) QueryProcedureEditors() *ProcedureQuery {
-	return NewGroupClient(gr.config).QueryProcedureEditors(gr)
+func (_m *Group) QueryProcedureEditors() *ProcedureQuery {
+	return NewGroupClient(_m.config).QueryProcedureEditors(_m)
 }
 
 // QueryProcedureBlockedGroups queries the "procedure_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryProcedureBlockedGroups() *ProcedureQuery {
-	return NewGroupClient(gr.config).QueryProcedureBlockedGroups(gr)
+func (_m *Group) QueryProcedureBlockedGroups() *ProcedureQuery {
+	return NewGroupClient(_m.config).QueryProcedureBlockedGroups(_m)
 }
 
 // QueryInternalPolicyEditors queries the "internal_policy_editors" edge of the Group entity.
-func (gr *Group) QueryInternalPolicyEditors() *InternalPolicyQuery {
-	return NewGroupClient(gr.config).QueryInternalPolicyEditors(gr)
+func (_m *Group) QueryInternalPolicyEditors() *InternalPolicyQuery {
+	return NewGroupClient(_m.config).QueryInternalPolicyEditors(_m)
 }
 
 // QueryInternalPolicyBlockedGroups queries the "internal_policy_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryInternalPolicyBlockedGroups() *InternalPolicyQuery {
-	return NewGroupClient(gr.config).QueryInternalPolicyBlockedGroups(gr)
+func (_m *Group) QueryInternalPolicyBlockedGroups() *InternalPolicyQuery {
+	return NewGroupClient(_m.config).QueryInternalPolicyBlockedGroups(_m)
 }
 
 // QueryControlEditors queries the "control_editors" edge of the Group entity.
-func (gr *Group) QueryControlEditors() *ControlQuery {
-	return NewGroupClient(gr.config).QueryControlEditors(gr)
+func (_m *Group) QueryControlEditors() *ControlQuery {
+	return NewGroupClient(_m.config).QueryControlEditors(_m)
 }
 
 // QueryControlBlockedGroups queries the "control_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryControlBlockedGroups() *ControlQuery {
-	return NewGroupClient(gr.config).QueryControlBlockedGroups(gr)
+func (_m *Group) QueryControlBlockedGroups() *ControlQuery {
+	return NewGroupClient(_m.config).QueryControlBlockedGroups(_m)
 }
 
 // QueryMappedControlEditors queries the "mapped_control_editors" edge of the Group entity.
-func (gr *Group) QueryMappedControlEditors() *MappedControlQuery {
-	return NewGroupClient(gr.config).QueryMappedControlEditors(gr)
+func (_m *Group) QueryMappedControlEditors() *MappedControlQuery {
+	return NewGroupClient(_m.config).QueryMappedControlEditors(_m)
 }
 
 // QueryMappedControlBlockedGroups queries the "mapped_control_blocked_groups" edge of the Group entity.
-func (gr *Group) QueryMappedControlBlockedGroups() *MappedControlQuery {
-	return NewGroupClient(gr.config).QueryMappedControlBlockedGroups(gr)
+func (_m *Group) QueryMappedControlBlockedGroups() *MappedControlQuery {
+	return NewGroupClient(_m.config).QueryMappedControlBlockedGroups(_m)
 }
 
 // QuerySetting queries the "setting" edge of the Group entity.
-func (gr *Group) QuerySetting() *GroupSettingQuery {
-	return NewGroupClient(gr.config).QuerySetting(gr)
+func (_m *Group) QuerySetting() *GroupSettingQuery {
+	return NewGroupClient(_m.config).QuerySetting(_m)
 }
 
 // QueryUsers queries the "users" edge of the Group entity.
-func (gr *Group) QueryUsers() *UserQuery {
-	return NewGroupClient(gr.config).QueryUsers(gr)
+func (_m *Group) QueryUsers() *UserQuery {
+	return NewGroupClient(_m.config).QueryUsers(_m)
 }
 
 // QueryEvents queries the "events" edge of the Group entity.
-func (gr *Group) QueryEvents() *EventQuery {
-	return NewGroupClient(gr.config).QueryEvents(gr)
+func (_m *Group) QueryEvents() *EventQuery {
+	return NewGroupClient(_m.config).QueryEvents(_m)
 }
 
 // QueryIntegrations queries the "integrations" edge of the Group entity.
-func (gr *Group) QueryIntegrations() *IntegrationQuery {
-	return NewGroupClient(gr.config).QueryIntegrations(gr)
+func (_m *Group) QueryIntegrations() *IntegrationQuery {
+	return NewGroupClient(_m.config).QueryIntegrations(_m)
 }
 
 // QueryFiles queries the "files" edge of the Group entity.
-func (gr *Group) QueryFiles() *FileQuery {
-	return NewGroupClient(gr.config).QueryFiles(gr)
+func (_m *Group) QueryFiles() *FileQuery {
+	return NewGroupClient(_m.config).QueryFiles(_m)
 }
 
 // QueryTasks queries the "tasks" edge of the Group entity.
-func (gr *Group) QueryTasks() *TaskQuery {
-	return NewGroupClient(gr.config).QueryTasks(gr)
+func (_m *Group) QueryTasks() *TaskQuery {
+	return NewGroupClient(_m.config).QueryTasks(_m)
 }
 
 // QueryInvites queries the "invites" edge of the Group entity.
-func (gr *Group) QueryInvites() *InviteQuery {
-	return NewGroupClient(gr.config).QueryInvites(gr)
+func (_m *Group) QueryInvites() *InviteQuery {
+	return NewGroupClient(_m.config).QueryInvites(_m)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
-func (gr *Group) QueryMembers() *GroupMembershipQuery {
-	return NewGroupClient(gr.config).QueryMembers(gr)
+func (_m *Group) QueryMembers() *GroupMembershipQuery {
+	return NewGroupClient(_m.config).QueryMembers(_m)
 }
 
 // Update returns a builder for updating this Group.
 // Note that you need to call Group.Unwrap() before calling this method if this Group
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gr *Group) Update() *GroupUpdateOne {
-	return NewGroupClient(gr.config).UpdateOne(gr)
+func (_m *Group) Update() *GroupUpdateOne {
+	return NewGroupClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Group entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gr *Group) Unwrap() *Group {
-	_tx, ok := gr.config.driver.(*txDriver)
+func (_m *Group) Unwrap() *Group {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: Group is not a transactional entity")
 	}
-	gr.config.driver = _tx.drv
-	return gr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gr *Group) String() string {
+func (_m *Group) String() string {
 	var builder strings.Builder
 	builder.WriteString("Group(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(gr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(gr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(gr.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(gr.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(gr.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(gr.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(gr.DisplayID)
+	builder.WriteString(_m.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", gr.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(gr.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(gr.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(gr.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("is_managed=")
-	builder.WriteString(fmt.Sprintf("%v", gr.IsManaged))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsManaged))
 	builder.WriteString(", ")
 	builder.WriteString("gravatar_logo_url=")
-	builder.WriteString(gr.GravatarLogoURL)
+	builder.WriteString(_m.GravatarLogoURL)
 	builder.WriteString(", ")
 	builder.WriteString("logo_url=")
-	builder.WriteString(gr.LogoURL)
+	builder.WriteString(_m.LogoURL)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
-	builder.WriteString(gr.DisplayName)
+	builder.WriteString(_m.DisplayName)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedProgramEditors returns the ProgramEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedProgramEditors(name string) ([]*Program, error) {
-	if gr.Edges.namedProgramEditors == nil {
+func (_m *Group) NamedProgramEditors(name string) ([]*Program, error) {
+	if _m.Edges.namedProgramEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedProgramEditors[name]
+	nodes, ok := _m.Edges.namedProgramEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedProgramEditors(name string, edges ...*Program) {
-	if gr.Edges.namedProgramEditors == nil {
-		gr.Edges.namedProgramEditors = make(map[string][]*Program)
+func (_m *Group) appendNamedProgramEditors(name string, edges ...*Program) {
+	if _m.Edges.namedProgramEditors == nil {
+		_m.Edges.namedProgramEditors = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedProgramEditors[name] = []*Program{}
+		_m.Edges.namedProgramEditors[name] = []*Program{}
 	} else {
-		gr.Edges.namedProgramEditors[name] = append(gr.Edges.namedProgramEditors[name], edges...)
+		_m.Edges.namedProgramEditors[name] = append(_m.Edges.namedProgramEditors[name], edges...)
 	}
 }
 
 // NamedProgramBlockedGroups returns the ProgramBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedProgramBlockedGroups(name string) ([]*Program, error) {
-	if gr.Edges.namedProgramBlockedGroups == nil {
+func (_m *Group) NamedProgramBlockedGroups(name string) ([]*Program, error) {
+	if _m.Edges.namedProgramBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedProgramBlockedGroups[name]
+	nodes, ok := _m.Edges.namedProgramBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedProgramBlockedGroups(name string, edges ...*Program) {
-	if gr.Edges.namedProgramBlockedGroups == nil {
-		gr.Edges.namedProgramBlockedGroups = make(map[string][]*Program)
+func (_m *Group) appendNamedProgramBlockedGroups(name string, edges ...*Program) {
+	if _m.Edges.namedProgramBlockedGroups == nil {
+		_m.Edges.namedProgramBlockedGroups = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedProgramBlockedGroups[name] = []*Program{}
+		_m.Edges.namedProgramBlockedGroups[name] = []*Program{}
 	} else {
-		gr.Edges.namedProgramBlockedGroups[name] = append(gr.Edges.namedProgramBlockedGroups[name], edges...)
+		_m.Edges.namedProgramBlockedGroups[name] = append(_m.Edges.namedProgramBlockedGroups[name], edges...)
 	}
 }
 
 // NamedProgramViewers returns the ProgramViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedProgramViewers(name string) ([]*Program, error) {
-	if gr.Edges.namedProgramViewers == nil {
+func (_m *Group) NamedProgramViewers(name string) ([]*Program, error) {
+	if _m.Edges.namedProgramViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedProgramViewers[name]
+	nodes, ok := _m.Edges.namedProgramViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedProgramViewers(name string, edges ...*Program) {
-	if gr.Edges.namedProgramViewers == nil {
-		gr.Edges.namedProgramViewers = make(map[string][]*Program)
+func (_m *Group) appendNamedProgramViewers(name string, edges ...*Program) {
+	if _m.Edges.namedProgramViewers == nil {
+		_m.Edges.namedProgramViewers = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedProgramViewers[name] = []*Program{}
+		_m.Edges.namedProgramViewers[name] = []*Program{}
 	} else {
-		gr.Edges.namedProgramViewers[name] = append(gr.Edges.namedProgramViewers[name], edges...)
+		_m.Edges.namedProgramViewers[name] = append(_m.Edges.namedProgramViewers[name], edges...)
 	}
 }
 
 // NamedRiskEditors returns the RiskEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedRiskEditors(name string) ([]*Risk, error) {
-	if gr.Edges.namedRiskEditors == nil {
+func (_m *Group) NamedRiskEditors(name string) ([]*Risk, error) {
+	if _m.Edges.namedRiskEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedRiskEditors[name]
+	nodes, ok := _m.Edges.namedRiskEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedRiskEditors(name string, edges ...*Risk) {
-	if gr.Edges.namedRiskEditors == nil {
-		gr.Edges.namedRiskEditors = make(map[string][]*Risk)
+func (_m *Group) appendNamedRiskEditors(name string, edges ...*Risk) {
+	if _m.Edges.namedRiskEditors == nil {
+		_m.Edges.namedRiskEditors = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedRiskEditors[name] = []*Risk{}
+		_m.Edges.namedRiskEditors[name] = []*Risk{}
 	} else {
-		gr.Edges.namedRiskEditors[name] = append(gr.Edges.namedRiskEditors[name], edges...)
+		_m.Edges.namedRiskEditors[name] = append(_m.Edges.namedRiskEditors[name], edges...)
 	}
 }
 
 // NamedRiskBlockedGroups returns the RiskBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedRiskBlockedGroups(name string) ([]*Risk, error) {
-	if gr.Edges.namedRiskBlockedGroups == nil {
+func (_m *Group) NamedRiskBlockedGroups(name string) ([]*Risk, error) {
+	if _m.Edges.namedRiskBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedRiskBlockedGroups[name]
+	nodes, ok := _m.Edges.namedRiskBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedRiskBlockedGroups(name string, edges ...*Risk) {
-	if gr.Edges.namedRiskBlockedGroups == nil {
-		gr.Edges.namedRiskBlockedGroups = make(map[string][]*Risk)
+func (_m *Group) appendNamedRiskBlockedGroups(name string, edges ...*Risk) {
+	if _m.Edges.namedRiskBlockedGroups == nil {
+		_m.Edges.namedRiskBlockedGroups = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedRiskBlockedGroups[name] = []*Risk{}
+		_m.Edges.namedRiskBlockedGroups[name] = []*Risk{}
 	} else {
-		gr.Edges.namedRiskBlockedGroups[name] = append(gr.Edges.namedRiskBlockedGroups[name], edges...)
+		_m.Edges.namedRiskBlockedGroups[name] = append(_m.Edges.namedRiskBlockedGroups[name], edges...)
 	}
 }
 
 // NamedRiskViewers returns the RiskViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedRiskViewers(name string) ([]*Risk, error) {
-	if gr.Edges.namedRiskViewers == nil {
+func (_m *Group) NamedRiskViewers(name string) ([]*Risk, error) {
+	if _m.Edges.namedRiskViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedRiskViewers[name]
+	nodes, ok := _m.Edges.namedRiskViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedRiskViewers(name string, edges ...*Risk) {
-	if gr.Edges.namedRiskViewers == nil {
-		gr.Edges.namedRiskViewers = make(map[string][]*Risk)
+func (_m *Group) appendNamedRiskViewers(name string, edges ...*Risk) {
+	if _m.Edges.namedRiskViewers == nil {
+		_m.Edges.namedRiskViewers = make(map[string][]*Risk)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedRiskViewers[name] = []*Risk{}
+		_m.Edges.namedRiskViewers[name] = []*Risk{}
 	} else {
-		gr.Edges.namedRiskViewers[name] = append(gr.Edges.namedRiskViewers[name], edges...)
+		_m.Edges.namedRiskViewers[name] = append(_m.Edges.namedRiskViewers[name], edges...)
 	}
 }
 
 // NamedControlObjectiveEditors returns the ControlObjectiveEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlObjectiveEditors(name string) ([]*ControlObjective, error) {
-	if gr.Edges.namedControlObjectiveEditors == nil {
+func (_m *Group) NamedControlObjectiveEditors(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectiveEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlObjectiveEditors[name]
+	nodes, ok := _m.Edges.namedControlObjectiveEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlObjectiveEditors(name string, edges ...*ControlObjective) {
-	if gr.Edges.namedControlObjectiveEditors == nil {
-		gr.Edges.namedControlObjectiveEditors = make(map[string][]*ControlObjective)
+func (_m *Group) appendNamedControlObjectiveEditors(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectiveEditors == nil {
+		_m.Edges.namedControlObjectiveEditors = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlObjectiveEditors[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectiveEditors[name] = []*ControlObjective{}
 	} else {
-		gr.Edges.namedControlObjectiveEditors[name] = append(gr.Edges.namedControlObjectiveEditors[name], edges...)
+		_m.Edges.namedControlObjectiveEditors[name] = append(_m.Edges.namedControlObjectiveEditors[name], edges...)
 	}
 }
 
 // NamedControlObjectiveBlockedGroups returns the ControlObjectiveBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlObjectiveBlockedGroups(name string) ([]*ControlObjective, error) {
-	if gr.Edges.namedControlObjectiveBlockedGroups == nil {
+func (_m *Group) NamedControlObjectiveBlockedGroups(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectiveBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlObjectiveBlockedGroups[name]
+	nodes, ok := _m.Edges.namedControlObjectiveBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlObjectiveBlockedGroups(name string, edges ...*ControlObjective) {
-	if gr.Edges.namedControlObjectiveBlockedGroups == nil {
-		gr.Edges.namedControlObjectiveBlockedGroups = make(map[string][]*ControlObjective)
+func (_m *Group) appendNamedControlObjectiveBlockedGroups(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectiveBlockedGroups == nil {
+		_m.Edges.namedControlObjectiveBlockedGroups = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlObjectiveBlockedGroups[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectiveBlockedGroups[name] = []*ControlObjective{}
 	} else {
-		gr.Edges.namedControlObjectiveBlockedGroups[name] = append(gr.Edges.namedControlObjectiveBlockedGroups[name], edges...)
+		_m.Edges.namedControlObjectiveBlockedGroups[name] = append(_m.Edges.namedControlObjectiveBlockedGroups[name], edges...)
 	}
 }
 
 // NamedControlObjectiveViewers returns the ControlObjectiveViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlObjectiveViewers(name string) ([]*ControlObjective, error) {
-	if gr.Edges.namedControlObjectiveViewers == nil {
+func (_m *Group) NamedControlObjectiveViewers(name string) ([]*ControlObjective, error) {
+	if _m.Edges.namedControlObjectiveViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlObjectiveViewers[name]
+	nodes, ok := _m.Edges.namedControlObjectiveViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlObjectiveViewers(name string, edges ...*ControlObjective) {
-	if gr.Edges.namedControlObjectiveViewers == nil {
-		gr.Edges.namedControlObjectiveViewers = make(map[string][]*ControlObjective)
+func (_m *Group) appendNamedControlObjectiveViewers(name string, edges ...*ControlObjective) {
+	if _m.Edges.namedControlObjectiveViewers == nil {
+		_m.Edges.namedControlObjectiveViewers = make(map[string][]*ControlObjective)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlObjectiveViewers[name] = []*ControlObjective{}
+		_m.Edges.namedControlObjectiveViewers[name] = []*ControlObjective{}
 	} else {
-		gr.Edges.namedControlObjectiveViewers[name] = append(gr.Edges.namedControlObjectiveViewers[name], edges...)
+		_m.Edges.namedControlObjectiveViewers[name] = append(_m.Edges.namedControlObjectiveViewers[name], edges...)
 	}
 }
 
 // NamedNarrativeEditors returns the NarrativeEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedNarrativeEditors(name string) ([]*Narrative, error) {
-	if gr.Edges.namedNarrativeEditors == nil {
+func (_m *Group) NamedNarrativeEditors(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarrativeEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedNarrativeEditors[name]
+	nodes, ok := _m.Edges.namedNarrativeEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedNarrativeEditors(name string, edges ...*Narrative) {
-	if gr.Edges.namedNarrativeEditors == nil {
-		gr.Edges.namedNarrativeEditors = make(map[string][]*Narrative)
+func (_m *Group) appendNamedNarrativeEditors(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarrativeEditors == nil {
+		_m.Edges.namedNarrativeEditors = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedNarrativeEditors[name] = []*Narrative{}
+		_m.Edges.namedNarrativeEditors[name] = []*Narrative{}
 	} else {
-		gr.Edges.namedNarrativeEditors[name] = append(gr.Edges.namedNarrativeEditors[name], edges...)
+		_m.Edges.namedNarrativeEditors[name] = append(_m.Edges.namedNarrativeEditors[name], edges...)
 	}
 }
 
 // NamedNarrativeBlockedGroups returns the NarrativeBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedNarrativeBlockedGroups(name string) ([]*Narrative, error) {
-	if gr.Edges.namedNarrativeBlockedGroups == nil {
+func (_m *Group) NamedNarrativeBlockedGroups(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarrativeBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedNarrativeBlockedGroups[name]
+	nodes, ok := _m.Edges.namedNarrativeBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedNarrativeBlockedGroups(name string, edges ...*Narrative) {
-	if gr.Edges.namedNarrativeBlockedGroups == nil {
-		gr.Edges.namedNarrativeBlockedGroups = make(map[string][]*Narrative)
+func (_m *Group) appendNamedNarrativeBlockedGroups(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarrativeBlockedGroups == nil {
+		_m.Edges.namedNarrativeBlockedGroups = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedNarrativeBlockedGroups[name] = []*Narrative{}
+		_m.Edges.namedNarrativeBlockedGroups[name] = []*Narrative{}
 	} else {
-		gr.Edges.namedNarrativeBlockedGroups[name] = append(gr.Edges.namedNarrativeBlockedGroups[name], edges...)
+		_m.Edges.namedNarrativeBlockedGroups[name] = append(_m.Edges.namedNarrativeBlockedGroups[name], edges...)
 	}
 }
 
 // NamedNarrativeViewers returns the NarrativeViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedNarrativeViewers(name string) ([]*Narrative, error) {
-	if gr.Edges.namedNarrativeViewers == nil {
+func (_m *Group) NamedNarrativeViewers(name string) ([]*Narrative, error) {
+	if _m.Edges.namedNarrativeViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedNarrativeViewers[name]
+	nodes, ok := _m.Edges.namedNarrativeViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedNarrativeViewers(name string, edges ...*Narrative) {
-	if gr.Edges.namedNarrativeViewers == nil {
-		gr.Edges.namedNarrativeViewers = make(map[string][]*Narrative)
+func (_m *Group) appendNamedNarrativeViewers(name string, edges ...*Narrative) {
+	if _m.Edges.namedNarrativeViewers == nil {
+		_m.Edges.namedNarrativeViewers = make(map[string][]*Narrative)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedNarrativeViewers[name] = []*Narrative{}
+		_m.Edges.namedNarrativeViewers[name] = []*Narrative{}
 	} else {
-		gr.Edges.namedNarrativeViewers[name] = append(gr.Edges.namedNarrativeViewers[name], edges...)
+		_m.Edges.namedNarrativeViewers[name] = append(_m.Edges.namedNarrativeViewers[name], edges...)
 	}
 }
 
 // NamedControlImplementationEditors returns the ControlImplementationEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlImplementationEditors(name string) ([]*ControlImplementation, error) {
-	if gr.Edges.namedControlImplementationEditors == nil {
+func (_m *Group) NamedControlImplementationEditors(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementationEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlImplementationEditors[name]
+	nodes, ok := _m.Edges.namedControlImplementationEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlImplementationEditors(name string, edges ...*ControlImplementation) {
-	if gr.Edges.namedControlImplementationEditors == nil {
-		gr.Edges.namedControlImplementationEditors = make(map[string][]*ControlImplementation)
+func (_m *Group) appendNamedControlImplementationEditors(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementationEditors == nil {
+		_m.Edges.namedControlImplementationEditors = make(map[string][]*ControlImplementation)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlImplementationEditors[name] = []*ControlImplementation{}
+		_m.Edges.namedControlImplementationEditors[name] = []*ControlImplementation{}
 	} else {
-		gr.Edges.namedControlImplementationEditors[name] = append(gr.Edges.namedControlImplementationEditors[name], edges...)
+		_m.Edges.namedControlImplementationEditors[name] = append(_m.Edges.namedControlImplementationEditors[name], edges...)
 	}
 }
 
 // NamedControlImplementationBlockedGroups returns the ControlImplementationBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlImplementationBlockedGroups(name string) ([]*ControlImplementation, error) {
-	if gr.Edges.namedControlImplementationBlockedGroups == nil {
+func (_m *Group) NamedControlImplementationBlockedGroups(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementationBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlImplementationBlockedGroups[name]
+	nodes, ok := _m.Edges.namedControlImplementationBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlImplementationBlockedGroups(name string, edges ...*ControlImplementation) {
-	if gr.Edges.namedControlImplementationBlockedGroups == nil {
-		gr.Edges.namedControlImplementationBlockedGroups = make(map[string][]*ControlImplementation)
+func (_m *Group) appendNamedControlImplementationBlockedGroups(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementationBlockedGroups == nil {
+		_m.Edges.namedControlImplementationBlockedGroups = make(map[string][]*ControlImplementation)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlImplementationBlockedGroups[name] = []*ControlImplementation{}
+		_m.Edges.namedControlImplementationBlockedGroups[name] = []*ControlImplementation{}
 	} else {
-		gr.Edges.namedControlImplementationBlockedGroups[name] = append(gr.Edges.namedControlImplementationBlockedGroups[name], edges...)
+		_m.Edges.namedControlImplementationBlockedGroups[name] = append(_m.Edges.namedControlImplementationBlockedGroups[name], edges...)
 	}
 }
 
 // NamedControlImplementationViewers returns the ControlImplementationViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlImplementationViewers(name string) ([]*ControlImplementation, error) {
-	if gr.Edges.namedControlImplementationViewers == nil {
+func (_m *Group) NamedControlImplementationViewers(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementationViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlImplementationViewers[name]
+	nodes, ok := _m.Edges.namedControlImplementationViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlImplementationViewers(name string, edges ...*ControlImplementation) {
-	if gr.Edges.namedControlImplementationViewers == nil {
-		gr.Edges.namedControlImplementationViewers = make(map[string][]*ControlImplementation)
+func (_m *Group) appendNamedControlImplementationViewers(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementationViewers == nil {
+		_m.Edges.namedControlImplementationViewers = make(map[string][]*ControlImplementation)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlImplementationViewers[name] = []*ControlImplementation{}
+		_m.Edges.namedControlImplementationViewers[name] = []*ControlImplementation{}
 	} else {
-		gr.Edges.namedControlImplementationViewers[name] = append(gr.Edges.namedControlImplementationViewers[name], edges...)
+		_m.Edges.namedControlImplementationViewers[name] = append(_m.Edges.namedControlImplementationViewers[name], edges...)
 	}
 }
 
 // NamedScanEditors returns the ScanEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedScanEditors(name string) ([]*Scan, error) {
-	if gr.Edges.namedScanEditors == nil {
+func (_m *Group) NamedScanEditors(name string) ([]*Scan, error) {
+	if _m.Edges.namedScanEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedScanEditors[name]
+	nodes, ok := _m.Edges.namedScanEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedScanEditors(name string, edges ...*Scan) {
-	if gr.Edges.namedScanEditors == nil {
-		gr.Edges.namedScanEditors = make(map[string][]*Scan)
+func (_m *Group) appendNamedScanEditors(name string, edges ...*Scan) {
+	if _m.Edges.namedScanEditors == nil {
+		_m.Edges.namedScanEditors = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedScanEditors[name] = []*Scan{}
+		_m.Edges.namedScanEditors[name] = []*Scan{}
 	} else {
-		gr.Edges.namedScanEditors[name] = append(gr.Edges.namedScanEditors[name], edges...)
+		_m.Edges.namedScanEditors[name] = append(_m.Edges.namedScanEditors[name], edges...)
 	}
 }
 
 // NamedScanBlockedGroups returns the ScanBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedScanBlockedGroups(name string) ([]*Scan, error) {
-	if gr.Edges.namedScanBlockedGroups == nil {
+func (_m *Group) NamedScanBlockedGroups(name string) ([]*Scan, error) {
+	if _m.Edges.namedScanBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedScanBlockedGroups[name]
+	nodes, ok := _m.Edges.namedScanBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedScanBlockedGroups(name string, edges ...*Scan) {
-	if gr.Edges.namedScanBlockedGroups == nil {
-		gr.Edges.namedScanBlockedGroups = make(map[string][]*Scan)
+func (_m *Group) appendNamedScanBlockedGroups(name string, edges ...*Scan) {
+	if _m.Edges.namedScanBlockedGroups == nil {
+		_m.Edges.namedScanBlockedGroups = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedScanBlockedGroups[name] = []*Scan{}
+		_m.Edges.namedScanBlockedGroups[name] = []*Scan{}
 	} else {
-		gr.Edges.namedScanBlockedGroups[name] = append(gr.Edges.namedScanBlockedGroups[name], edges...)
+		_m.Edges.namedScanBlockedGroups[name] = append(_m.Edges.namedScanBlockedGroups[name], edges...)
 	}
 }
 
 // NamedScanViewers returns the ScanViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedScanViewers(name string) ([]*Scan, error) {
-	if gr.Edges.namedScanViewers == nil {
+func (_m *Group) NamedScanViewers(name string) ([]*Scan, error) {
+	if _m.Edges.namedScanViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedScanViewers[name]
+	nodes, ok := _m.Edges.namedScanViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedScanViewers(name string, edges ...*Scan) {
-	if gr.Edges.namedScanViewers == nil {
-		gr.Edges.namedScanViewers = make(map[string][]*Scan)
+func (_m *Group) appendNamedScanViewers(name string, edges ...*Scan) {
+	if _m.Edges.namedScanViewers == nil {
+		_m.Edges.namedScanViewers = make(map[string][]*Scan)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedScanViewers[name] = []*Scan{}
+		_m.Edges.namedScanViewers[name] = []*Scan{}
 	} else {
-		gr.Edges.namedScanViewers[name] = append(gr.Edges.namedScanViewers[name], edges...)
+		_m.Edges.namedScanViewers[name] = append(_m.Edges.namedScanViewers[name], edges...)
 	}
 }
 
 // NamedEntityEditors returns the EntityEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedEntityEditors(name string) ([]*Entity, error) {
-	if gr.Edges.namedEntityEditors == nil {
+func (_m *Group) NamedEntityEditors(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntityEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedEntityEditors[name]
+	nodes, ok := _m.Edges.namedEntityEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedEntityEditors(name string, edges ...*Entity) {
-	if gr.Edges.namedEntityEditors == nil {
-		gr.Edges.namedEntityEditors = make(map[string][]*Entity)
+func (_m *Group) appendNamedEntityEditors(name string, edges ...*Entity) {
+	if _m.Edges.namedEntityEditors == nil {
+		_m.Edges.namedEntityEditors = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedEntityEditors[name] = []*Entity{}
+		_m.Edges.namedEntityEditors[name] = []*Entity{}
 	} else {
-		gr.Edges.namedEntityEditors[name] = append(gr.Edges.namedEntityEditors[name], edges...)
+		_m.Edges.namedEntityEditors[name] = append(_m.Edges.namedEntityEditors[name], edges...)
 	}
 }
 
 // NamedEntityBlockedGroups returns the EntityBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedEntityBlockedGroups(name string) ([]*Entity, error) {
-	if gr.Edges.namedEntityBlockedGroups == nil {
+func (_m *Group) NamedEntityBlockedGroups(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntityBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedEntityBlockedGroups[name]
+	nodes, ok := _m.Edges.namedEntityBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedEntityBlockedGroups(name string, edges ...*Entity) {
-	if gr.Edges.namedEntityBlockedGroups == nil {
-		gr.Edges.namedEntityBlockedGroups = make(map[string][]*Entity)
+func (_m *Group) appendNamedEntityBlockedGroups(name string, edges ...*Entity) {
+	if _m.Edges.namedEntityBlockedGroups == nil {
+		_m.Edges.namedEntityBlockedGroups = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedEntityBlockedGroups[name] = []*Entity{}
+		_m.Edges.namedEntityBlockedGroups[name] = []*Entity{}
 	} else {
-		gr.Edges.namedEntityBlockedGroups[name] = append(gr.Edges.namedEntityBlockedGroups[name], edges...)
+		_m.Edges.namedEntityBlockedGroups[name] = append(_m.Edges.namedEntityBlockedGroups[name], edges...)
 	}
 }
 
 // NamedEntityViewers returns the EntityViewers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedEntityViewers(name string) ([]*Entity, error) {
-	if gr.Edges.namedEntityViewers == nil {
+func (_m *Group) NamedEntityViewers(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntityViewers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedEntityViewers[name]
+	nodes, ok := _m.Edges.namedEntityViewers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedEntityViewers(name string, edges ...*Entity) {
-	if gr.Edges.namedEntityViewers == nil {
-		gr.Edges.namedEntityViewers = make(map[string][]*Entity)
+func (_m *Group) appendNamedEntityViewers(name string, edges ...*Entity) {
+	if _m.Edges.namedEntityViewers == nil {
+		_m.Edges.namedEntityViewers = make(map[string][]*Entity)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedEntityViewers[name] = []*Entity{}
+		_m.Edges.namedEntityViewers[name] = []*Entity{}
 	} else {
-		gr.Edges.namedEntityViewers[name] = append(gr.Edges.namedEntityViewers[name], edges...)
+		_m.Edges.namedEntityViewers[name] = append(_m.Edges.namedEntityViewers[name], edges...)
 	}
 }
 
 // NamedProcedureEditors returns the ProcedureEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedProcedureEditors(name string) ([]*Procedure, error) {
-	if gr.Edges.namedProcedureEditors == nil {
+func (_m *Group) NamedProcedureEditors(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedureEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedProcedureEditors[name]
+	nodes, ok := _m.Edges.namedProcedureEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedProcedureEditors(name string, edges ...*Procedure) {
-	if gr.Edges.namedProcedureEditors == nil {
-		gr.Edges.namedProcedureEditors = make(map[string][]*Procedure)
+func (_m *Group) appendNamedProcedureEditors(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedureEditors == nil {
+		_m.Edges.namedProcedureEditors = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedProcedureEditors[name] = []*Procedure{}
+		_m.Edges.namedProcedureEditors[name] = []*Procedure{}
 	} else {
-		gr.Edges.namedProcedureEditors[name] = append(gr.Edges.namedProcedureEditors[name], edges...)
+		_m.Edges.namedProcedureEditors[name] = append(_m.Edges.namedProcedureEditors[name], edges...)
 	}
 }
 
 // NamedProcedureBlockedGroups returns the ProcedureBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedProcedureBlockedGroups(name string) ([]*Procedure, error) {
-	if gr.Edges.namedProcedureBlockedGroups == nil {
+func (_m *Group) NamedProcedureBlockedGroups(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedureBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedProcedureBlockedGroups[name]
+	nodes, ok := _m.Edges.namedProcedureBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedProcedureBlockedGroups(name string, edges ...*Procedure) {
-	if gr.Edges.namedProcedureBlockedGroups == nil {
-		gr.Edges.namedProcedureBlockedGroups = make(map[string][]*Procedure)
+func (_m *Group) appendNamedProcedureBlockedGroups(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedureBlockedGroups == nil {
+		_m.Edges.namedProcedureBlockedGroups = make(map[string][]*Procedure)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedProcedureBlockedGroups[name] = []*Procedure{}
+		_m.Edges.namedProcedureBlockedGroups[name] = []*Procedure{}
 	} else {
-		gr.Edges.namedProcedureBlockedGroups[name] = append(gr.Edges.namedProcedureBlockedGroups[name], edges...)
+		_m.Edges.namedProcedureBlockedGroups[name] = append(_m.Edges.namedProcedureBlockedGroups[name], edges...)
 	}
 }
 
 // NamedInternalPolicyEditors returns the InternalPolicyEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedInternalPolicyEditors(name string) ([]*InternalPolicy, error) {
-	if gr.Edges.namedInternalPolicyEditors == nil {
+func (_m *Group) NamedInternalPolicyEditors(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicyEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedInternalPolicyEditors[name]
+	nodes, ok := _m.Edges.namedInternalPolicyEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedInternalPolicyEditors(name string, edges ...*InternalPolicy) {
-	if gr.Edges.namedInternalPolicyEditors == nil {
-		gr.Edges.namedInternalPolicyEditors = make(map[string][]*InternalPolicy)
+func (_m *Group) appendNamedInternalPolicyEditors(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicyEditors == nil {
+		_m.Edges.namedInternalPolicyEditors = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedInternalPolicyEditors[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicyEditors[name] = []*InternalPolicy{}
 	} else {
-		gr.Edges.namedInternalPolicyEditors[name] = append(gr.Edges.namedInternalPolicyEditors[name], edges...)
+		_m.Edges.namedInternalPolicyEditors[name] = append(_m.Edges.namedInternalPolicyEditors[name], edges...)
 	}
 }
 
 // NamedInternalPolicyBlockedGroups returns the InternalPolicyBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedInternalPolicyBlockedGroups(name string) ([]*InternalPolicy, error) {
-	if gr.Edges.namedInternalPolicyBlockedGroups == nil {
+func (_m *Group) NamedInternalPolicyBlockedGroups(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicyBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedInternalPolicyBlockedGroups[name]
+	nodes, ok := _m.Edges.namedInternalPolicyBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedInternalPolicyBlockedGroups(name string, edges ...*InternalPolicy) {
-	if gr.Edges.namedInternalPolicyBlockedGroups == nil {
-		gr.Edges.namedInternalPolicyBlockedGroups = make(map[string][]*InternalPolicy)
+func (_m *Group) appendNamedInternalPolicyBlockedGroups(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicyBlockedGroups == nil {
+		_m.Edges.namedInternalPolicyBlockedGroups = make(map[string][]*InternalPolicy)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedInternalPolicyBlockedGroups[name] = []*InternalPolicy{}
+		_m.Edges.namedInternalPolicyBlockedGroups[name] = []*InternalPolicy{}
 	} else {
-		gr.Edges.namedInternalPolicyBlockedGroups[name] = append(gr.Edges.namedInternalPolicyBlockedGroups[name], edges...)
+		_m.Edges.namedInternalPolicyBlockedGroups[name] = append(_m.Edges.namedInternalPolicyBlockedGroups[name], edges...)
 	}
 }
 
 // NamedControlEditors returns the ControlEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlEditors(name string) ([]*Control, error) {
-	if gr.Edges.namedControlEditors == nil {
+func (_m *Group) NamedControlEditors(name string) ([]*Control, error) {
+	if _m.Edges.namedControlEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlEditors[name]
+	nodes, ok := _m.Edges.namedControlEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlEditors(name string, edges ...*Control) {
-	if gr.Edges.namedControlEditors == nil {
-		gr.Edges.namedControlEditors = make(map[string][]*Control)
+func (_m *Group) appendNamedControlEditors(name string, edges ...*Control) {
+	if _m.Edges.namedControlEditors == nil {
+		_m.Edges.namedControlEditors = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlEditors[name] = []*Control{}
+		_m.Edges.namedControlEditors[name] = []*Control{}
 	} else {
-		gr.Edges.namedControlEditors[name] = append(gr.Edges.namedControlEditors[name], edges...)
+		_m.Edges.namedControlEditors[name] = append(_m.Edges.namedControlEditors[name], edges...)
 	}
 }
 
 // NamedControlBlockedGroups returns the ControlBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedControlBlockedGroups(name string) ([]*Control, error) {
-	if gr.Edges.namedControlBlockedGroups == nil {
+func (_m *Group) NamedControlBlockedGroups(name string) ([]*Control, error) {
+	if _m.Edges.namedControlBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedControlBlockedGroups[name]
+	nodes, ok := _m.Edges.namedControlBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedControlBlockedGroups(name string, edges ...*Control) {
-	if gr.Edges.namedControlBlockedGroups == nil {
-		gr.Edges.namedControlBlockedGroups = make(map[string][]*Control)
+func (_m *Group) appendNamedControlBlockedGroups(name string, edges ...*Control) {
+	if _m.Edges.namedControlBlockedGroups == nil {
+		_m.Edges.namedControlBlockedGroups = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedControlBlockedGroups[name] = []*Control{}
+		_m.Edges.namedControlBlockedGroups[name] = []*Control{}
 	} else {
-		gr.Edges.namedControlBlockedGroups[name] = append(gr.Edges.namedControlBlockedGroups[name], edges...)
+		_m.Edges.namedControlBlockedGroups[name] = append(_m.Edges.namedControlBlockedGroups[name], edges...)
 	}
 }
 
 // NamedMappedControlEditors returns the MappedControlEditors named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedMappedControlEditors(name string) ([]*MappedControl, error) {
-	if gr.Edges.namedMappedControlEditors == nil {
+func (_m *Group) NamedMappedControlEditors(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedControlEditors == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedMappedControlEditors[name]
+	nodes, ok := _m.Edges.namedMappedControlEditors[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedMappedControlEditors(name string, edges ...*MappedControl) {
-	if gr.Edges.namedMappedControlEditors == nil {
-		gr.Edges.namedMappedControlEditors = make(map[string][]*MappedControl)
+func (_m *Group) appendNamedMappedControlEditors(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedControlEditors == nil {
+		_m.Edges.namedMappedControlEditors = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedMappedControlEditors[name] = []*MappedControl{}
+		_m.Edges.namedMappedControlEditors[name] = []*MappedControl{}
 	} else {
-		gr.Edges.namedMappedControlEditors[name] = append(gr.Edges.namedMappedControlEditors[name], edges...)
+		_m.Edges.namedMappedControlEditors[name] = append(_m.Edges.namedMappedControlEditors[name], edges...)
 	}
 }
 
 // NamedMappedControlBlockedGroups returns the MappedControlBlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedMappedControlBlockedGroups(name string) ([]*MappedControl, error) {
-	if gr.Edges.namedMappedControlBlockedGroups == nil {
+func (_m *Group) NamedMappedControlBlockedGroups(name string) ([]*MappedControl, error) {
+	if _m.Edges.namedMappedControlBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedMappedControlBlockedGroups[name]
+	nodes, ok := _m.Edges.namedMappedControlBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedMappedControlBlockedGroups(name string, edges ...*MappedControl) {
-	if gr.Edges.namedMappedControlBlockedGroups == nil {
-		gr.Edges.namedMappedControlBlockedGroups = make(map[string][]*MappedControl)
+func (_m *Group) appendNamedMappedControlBlockedGroups(name string, edges ...*MappedControl) {
+	if _m.Edges.namedMappedControlBlockedGroups == nil {
+		_m.Edges.namedMappedControlBlockedGroups = make(map[string][]*MappedControl)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedMappedControlBlockedGroups[name] = []*MappedControl{}
+		_m.Edges.namedMappedControlBlockedGroups[name] = []*MappedControl{}
 	} else {
-		gr.Edges.namedMappedControlBlockedGroups[name] = append(gr.Edges.namedMappedControlBlockedGroups[name], edges...)
+		_m.Edges.namedMappedControlBlockedGroups[name] = append(_m.Edges.namedMappedControlBlockedGroups[name], edges...)
 	}
 }
 
 // NamedUsers returns the Users named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedUsers(name string) ([]*User, error) {
-	if gr.Edges.namedUsers == nil {
+func (_m *Group) NamedUsers(name string) ([]*User, error) {
+	if _m.Edges.namedUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedUsers[name]
+	nodes, ok := _m.Edges.namedUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedUsers(name string, edges ...*User) {
-	if gr.Edges.namedUsers == nil {
-		gr.Edges.namedUsers = make(map[string][]*User)
+func (_m *Group) appendNamedUsers(name string, edges ...*User) {
+	if _m.Edges.namedUsers == nil {
+		_m.Edges.namedUsers = make(map[string][]*User)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedUsers[name] = []*User{}
+		_m.Edges.namedUsers[name] = []*User{}
 	} else {
-		gr.Edges.namedUsers[name] = append(gr.Edges.namedUsers[name], edges...)
+		_m.Edges.namedUsers[name] = append(_m.Edges.namedUsers[name], edges...)
 	}
 }
 
 // NamedEvents returns the Events named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedEvents(name string) ([]*Event, error) {
-	if gr.Edges.namedEvents == nil {
+func (_m *Group) NamedEvents(name string) ([]*Event, error) {
+	if _m.Edges.namedEvents == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedEvents[name]
+	nodes, ok := _m.Edges.namedEvents[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedEvents(name string, edges ...*Event) {
-	if gr.Edges.namedEvents == nil {
-		gr.Edges.namedEvents = make(map[string][]*Event)
+func (_m *Group) appendNamedEvents(name string, edges ...*Event) {
+	if _m.Edges.namedEvents == nil {
+		_m.Edges.namedEvents = make(map[string][]*Event)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedEvents[name] = []*Event{}
+		_m.Edges.namedEvents[name] = []*Event{}
 	} else {
-		gr.Edges.namedEvents[name] = append(gr.Edges.namedEvents[name], edges...)
+		_m.Edges.namedEvents[name] = append(_m.Edges.namedEvents[name], edges...)
 	}
 }
 
 // NamedIntegrations returns the Integrations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedIntegrations(name string) ([]*Integration, error) {
-	if gr.Edges.namedIntegrations == nil {
+func (_m *Group) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedIntegrations[name]
+	nodes, ok := _m.Edges.namedIntegrations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedIntegrations(name string, edges ...*Integration) {
-	if gr.Edges.namedIntegrations == nil {
-		gr.Edges.namedIntegrations = make(map[string][]*Integration)
+func (_m *Group) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedIntegrations[name] = []*Integration{}
+		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
-		gr.Edges.namedIntegrations[name] = append(gr.Edges.namedIntegrations[name], edges...)
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
 	}
 }
 
 // NamedFiles returns the Files named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedFiles(name string) ([]*File, error) {
-	if gr.Edges.namedFiles == nil {
+func (_m *Group) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedFiles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedFiles(name string, edges ...*File) {
-	if gr.Edges.namedFiles == nil {
-		gr.Edges.namedFiles = make(map[string][]*File)
+func (_m *Group) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedFiles[name] = []*File{}
 	} else {
-		gr.Edges.namedFiles[name] = append(gr.Edges.namedFiles[name], edges...)
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedTasks(name string) ([]*Task, error) {
-	if gr.Edges.namedTasks == nil {
+func (_m *Group) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedTasks[name]
+	nodes, ok := _m.Edges.namedTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedTasks(name string, edges ...*Task) {
-	if gr.Edges.namedTasks == nil {
-		gr.Edges.namedTasks = make(map[string][]*Task)
+func (_m *Group) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedTasks[name] = []*Task{}
+		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
-		gr.Edges.namedTasks[name] = append(gr.Edges.namedTasks[name], edges...)
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 
 // NamedInvites returns the Invites named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedInvites(name string) ([]*Invite, error) {
-	if gr.Edges.namedInvites == nil {
+func (_m *Group) NamedInvites(name string) ([]*Invite, error) {
+	if _m.Edges.namedInvites == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedInvites[name]
+	nodes, ok := _m.Edges.namedInvites[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedInvites(name string, edges ...*Invite) {
-	if gr.Edges.namedInvites == nil {
-		gr.Edges.namedInvites = make(map[string][]*Invite)
+func (_m *Group) appendNamedInvites(name string, edges ...*Invite) {
+	if _m.Edges.namedInvites == nil {
+		_m.Edges.namedInvites = make(map[string][]*Invite)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedInvites[name] = []*Invite{}
+		_m.Edges.namedInvites[name] = []*Invite{}
 	} else {
-		gr.Edges.namedInvites[name] = append(gr.Edges.namedInvites[name], edges...)
+		_m.Edges.namedInvites[name] = append(_m.Edges.namedInvites[name], edges...)
 	}
 }
 
 // NamedMembers returns the Members named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (gr *Group) NamedMembers(name string) ([]*GroupMembership, error) {
-	if gr.Edges.namedMembers == nil {
+func (_m *Group) NamedMembers(name string) ([]*GroupMembership, error) {
+	if _m.Edges.namedMembers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := gr.Edges.namedMembers[name]
+	nodes, ok := _m.Edges.namedMembers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (gr *Group) appendNamedMembers(name string, edges ...*GroupMembership) {
-	if gr.Edges.namedMembers == nil {
-		gr.Edges.namedMembers = make(map[string][]*GroupMembership)
+func (_m *Group) appendNamedMembers(name string, edges ...*GroupMembership) {
+	if _m.Edges.namedMembers == nil {
+		_m.Edges.namedMembers = make(map[string][]*GroupMembership)
 	}
 	if len(edges) == 0 {
-		gr.Edges.namedMembers[name] = []*GroupMembership{}
+		_m.Edges.namedMembers[name] = []*GroupMembership{}
 	} else {
-		gr.Edges.namedMembers[name] = append(gr.Edges.namedMembers[name], edges...)
+		_m.Edges.namedMembers[name] = append(_m.Edges.namedMembers[name], edges...)
 	}
 }
 

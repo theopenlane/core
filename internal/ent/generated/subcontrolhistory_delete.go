@@ -22,58 +22,58 @@ type SubcontrolHistoryDelete struct {
 }
 
 // Where appends a list predicates to the SubcontrolHistoryDelete builder.
-func (shd *SubcontrolHistoryDelete) Where(ps ...predicate.SubcontrolHistory) *SubcontrolHistoryDelete {
-	shd.mutation.Where(ps...)
-	return shd
+func (_d *SubcontrolHistoryDelete) Where(ps ...predicate.SubcontrolHistory) *SubcontrolHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (shd *SubcontrolHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, shd.sqlExec, shd.mutation, shd.hooks)
+func (_d *SubcontrolHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shd *SubcontrolHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := shd.Exec(ctx)
+func (_d *SubcontrolHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (shd *SubcontrolHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SubcontrolHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(subcontrolhistory.Table, sqlgraph.NewFieldSpec(subcontrolhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = shd.schemaConfig.SubcontrolHistory
-	ctx = internal.NewSchemaConfigContext(ctx, shd.schemaConfig)
-	if ps := shd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.SubcontrolHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, shd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	shd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SubcontrolHistoryDeleteOne is the builder for deleting a single SubcontrolHistory entity.
 type SubcontrolHistoryDeleteOne struct {
-	shd *SubcontrolHistoryDelete
+	_d *SubcontrolHistoryDelete
 }
 
 // Where appends a list predicates to the SubcontrolHistoryDelete builder.
-func (shdo *SubcontrolHistoryDeleteOne) Where(ps ...predicate.SubcontrolHistory) *SubcontrolHistoryDeleteOne {
-	shdo.shd.mutation.Where(ps...)
-	return shdo
+func (_d *SubcontrolHistoryDeleteOne) Where(ps ...predicate.SubcontrolHistory) *SubcontrolHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (shdo *SubcontrolHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := shdo.shd.Exec(ctx)
+func (_d *SubcontrolHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (shdo *SubcontrolHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shdo *SubcontrolHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := shdo.Exec(ctx); err != nil {
+func (_d *SubcontrolHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

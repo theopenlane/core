@@ -22,112 +22,112 @@ type OnboardingCreate struct {
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (oc *OnboardingCreate) SetDeletedAt(t time.Time) *OnboardingCreate {
-	oc.mutation.SetDeletedAt(t)
-	return oc
+func (_c *OnboardingCreate) SetDeletedAt(v time.Time) *OnboardingCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (oc *OnboardingCreate) SetNillableDeletedAt(t *time.Time) *OnboardingCreate {
-	if t != nil {
-		oc.SetDeletedAt(*t)
+func (_c *OnboardingCreate) SetNillableDeletedAt(v *time.Time) *OnboardingCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (oc *OnboardingCreate) SetDeletedBy(s string) *OnboardingCreate {
-	oc.mutation.SetDeletedBy(s)
-	return oc
+func (_c *OnboardingCreate) SetDeletedBy(v string) *OnboardingCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (oc *OnboardingCreate) SetNillableDeletedBy(s *string) *OnboardingCreate {
-	if s != nil {
-		oc.SetDeletedBy(*s)
+func (_c *OnboardingCreate) SetNillableDeletedBy(v *string) *OnboardingCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (oc *OnboardingCreate) SetOrganizationID(s string) *OnboardingCreate {
-	oc.mutation.SetOrganizationID(s)
-	return oc
+func (_c *OnboardingCreate) SetOrganizationID(v string) *OnboardingCreate {
+	_c.mutation.SetOrganizationID(v)
+	return _c
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (oc *OnboardingCreate) SetNillableOrganizationID(s *string) *OnboardingCreate {
-	if s != nil {
-		oc.SetOrganizationID(*s)
+func (_c *OnboardingCreate) SetNillableOrganizationID(v *string) *OnboardingCreate {
+	if v != nil {
+		_c.SetOrganizationID(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetCompanyName sets the "company_name" field.
-func (oc *OnboardingCreate) SetCompanyName(s string) *OnboardingCreate {
-	oc.mutation.SetCompanyName(s)
-	return oc
+func (_c *OnboardingCreate) SetCompanyName(v string) *OnboardingCreate {
+	_c.mutation.SetCompanyName(v)
+	return _c
 }
 
 // SetDomains sets the "domains" field.
-func (oc *OnboardingCreate) SetDomains(s []string) *OnboardingCreate {
-	oc.mutation.SetDomains(s)
-	return oc
+func (_c *OnboardingCreate) SetDomains(v []string) *OnboardingCreate {
+	_c.mutation.SetDomains(v)
+	return _c
 }
 
 // SetCompanyDetails sets the "company_details" field.
-func (oc *OnboardingCreate) SetCompanyDetails(m map[string]interface{}) *OnboardingCreate {
-	oc.mutation.SetCompanyDetails(m)
-	return oc
+func (_c *OnboardingCreate) SetCompanyDetails(v map[string]interface{}) *OnboardingCreate {
+	_c.mutation.SetCompanyDetails(v)
+	return _c
 }
 
 // SetUserDetails sets the "user_details" field.
-func (oc *OnboardingCreate) SetUserDetails(m map[string]interface{}) *OnboardingCreate {
-	oc.mutation.SetUserDetails(m)
-	return oc
+func (_c *OnboardingCreate) SetUserDetails(v map[string]interface{}) *OnboardingCreate {
+	_c.mutation.SetUserDetails(v)
+	return _c
 }
 
 // SetCompliance sets the "compliance" field.
-func (oc *OnboardingCreate) SetCompliance(m map[string]interface{}) *OnboardingCreate {
-	oc.mutation.SetCompliance(m)
-	return oc
+func (_c *OnboardingCreate) SetCompliance(v map[string]interface{}) *OnboardingCreate {
+	_c.mutation.SetCompliance(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (oc *OnboardingCreate) SetID(s string) *OnboardingCreate {
-	oc.mutation.SetID(s)
-	return oc
+func (_c *OnboardingCreate) SetID(v string) *OnboardingCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (oc *OnboardingCreate) SetNillableID(s *string) *OnboardingCreate {
-	if s != nil {
-		oc.SetID(*s)
+func (_c *OnboardingCreate) SetNillableID(v *string) *OnboardingCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return oc
+	return _c
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
-func (oc *OnboardingCreate) SetOrganization(o *Organization) *OnboardingCreate {
-	return oc.SetOrganizationID(o.ID)
+func (_c *OnboardingCreate) SetOrganization(v *Organization) *OnboardingCreate {
+	return _c.SetOrganizationID(v.ID)
 }
 
 // Mutation returns the OnboardingMutation object of the builder.
-func (oc *OnboardingCreate) Mutation() *OnboardingMutation {
-	return oc.mutation
+func (_c *OnboardingCreate) Mutation() *OnboardingMutation {
+	return _c.mutation
 }
 
 // Save creates the Onboarding in the database.
-func (oc *OnboardingCreate) Save(ctx context.Context) (*Onboarding, error) {
-	if err := oc.defaults(); err != nil {
+func (_c *OnboardingCreate) Save(ctx context.Context) (*Onboarding, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, oc.sqlSave, oc.mutation, oc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (oc *OnboardingCreate) SaveX(ctx context.Context) *Onboarding {
-	v, err := oc.Save(ctx)
+func (_c *OnboardingCreate) SaveX(ctx context.Context) *Onboarding {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -135,49 +135,49 @@ func (oc *OnboardingCreate) SaveX(ctx context.Context) *Onboarding {
 }
 
 // Exec executes the query.
-func (oc *OnboardingCreate) Exec(ctx context.Context) error {
-	_, err := oc.Save(ctx)
+func (_c *OnboardingCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oc *OnboardingCreate) ExecX(ctx context.Context) {
-	if err := oc.Exec(ctx); err != nil {
+func (_c *OnboardingCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oc *OnboardingCreate) defaults() error {
-	if _, ok := oc.mutation.ID(); !ok {
+func (_c *OnboardingCreate) defaults() error {
+	if _, ok := _c.mutation.ID(); !ok {
 		if onboarding.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized onboarding.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := onboarding.DefaultID()
-		oc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oc *OnboardingCreate) check() error {
-	if v, ok := oc.mutation.OrganizationID(); ok {
+func (_c *OnboardingCreate) check() error {
+	if v, ok := _c.mutation.OrganizationID(); ok {
 		if err := onboarding.OrganizationIDValidator(v); err != nil {
 			return &ValidationError{Name: "organization_id", err: fmt.Errorf(`generated: validator failed for field "Onboarding.organization_id": %w`, err)}
 		}
 	}
-	if _, ok := oc.mutation.CompanyName(); !ok {
+	if _, ok := _c.mutation.CompanyName(); !ok {
 		return &ValidationError{Name: "company_name", err: errors.New(`generated: missing required field "Onboarding.company_name"`)}
 	}
 	return nil
 }
 
-func (oc *OnboardingCreate) sqlSave(ctx context.Context) (*Onboarding, error) {
-	if err := oc.check(); err != nil {
+func (_c *OnboardingCreate) sqlSave(ctx context.Context) (*Onboarding, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := oc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, oc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -190,50 +190,50 @@ func (oc *OnboardingCreate) sqlSave(ctx context.Context) (*Onboarding, error) {
 			return nil, fmt.Errorf("unexpected Onboarding.ID type: %T", _spec.ID.Value)
 		}
 	}
-	oc.mutation.id = &_node.ID
-	oc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (oc *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
+func (_c *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Onboarding{config: oc.config}
+		_node = &Onboarding{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(onboarding.Table, sqlgraph.NewFieldSpec(onboarding.FieldID, field.TypeString))
 	)
-	_spec.Schema = oc.schemaConfig.Onboarding
-	if id, ok := oc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Onboarding
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := oc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(onboarding.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := oc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(onboarding.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := oc.mutation.CompanyName(); ok {
+	if value, ok := _c.mutation.CompanyName(); ok {
 		_spec.SetField(onboarding.FieldCompanyName, field.TypeString, value)
 		_node.CompanyName = value
 	}
-	if value, ok := oc.mutation.Domains(); ok {
+	if value, ok := _c.mutation.Domains(); ok {
 		_spec.SetField(onboarding.FieldDomains, field.TypeJSON, value)
 		_node.Domains = value
 	}
-	if value, ok := oc.mutation.CompanyDetails(); ok {
+	if value, ok := _c.mutation.CompanyDetails(); ok {
 		_spec.SetField(onboarding.FieldCompanyDetails, field.TypeJSON, value)
 		_node.CompanyDetails = value
 	}
-	if value, ok := oc.mutation.UserDetails(); ok {
+	if value, ok := _c.mutation.UserDetails(); ok {
 		_spec.SetField(onboarding.FieldUserDetails, field.TypeJSON, value)
 		_node.UserDetails = value
 	}
-	if value, ok := oc.mutation.Compliance(); ok {
+	if value, ok := _c.mutation.Compliance(); ok {
 		_spec.SetField(onboarding.FieldCompliance, field.TypeJSON, value)
 		_node.Compliance = value
 	}
-	if nodes := oc.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -244,7 +244,7 @@ func (oc *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = oc.schemaConfig.Onboarding
+		edge.Schema = _c.schemaConfig.Onboarding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -262,16 +262,16 @@ type OnboardingCreateBulk struct {
 }
 
 // Save creates the Onboarding entities in the database.
-func (ocb *OnboardingCreateBulk) Save(ctx context.Context) ([]*Onboarding, error) {
-	if ocb.err != nil {
-		return nil, ocb.err
+func (_c *OnboardingCreateBulk) Save(ctx context.Context) ([]*Onboarding, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ocb.builders))
-	nodes := make([]*Onboarding, len(ocb.builders))
-	mutators := make([]Mutator, len(ocb.builders))
-	for i := range ocb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Onboarding, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ocb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OnboardingMutation)
@@ -285,11 +285,11 @@ func (ocb *OnboardingCreateBulk) Save(ctx context.Context) ([]*Onboarding, error
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ocb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ocb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -309,7 +309,7 @@ func (ocb *OnboardingCreateBulk) Save(ctx context.Context) ([]*Onboarding, error
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ocb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -317,8 +317,8 @@ func (ocb *OnboardingCreateBulk) Save(ctx context.Context) ([]*Onboarding, error
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ocb *OnboardingCreateBulk) SaveX(ctx context.Context) []*Onboarding {
-	v, err := ocb.Save(ctx)
+func (_c *OnboardingCreateBulk) SaveX(ctx context.Context) []*Onboarding {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -326,14 +326,14 @@ func (ocb *OnboardingCreateBulk) SaveX(ctx context.Context) []*Onboarding {
 }
 
 // Exec executes the query.
-func (ocb *OnboardingCreateBulk) Exec(ctx context.Context) error {
-	_, err := ocb.Save(ctx)
+func (_c *OnboardingCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ocb *OnboardingCreateBulk) ExecX(ctx context.Context) {
-	if err := ocb.Exec(ctx); err != nil {
+func (_c *OnboardingCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

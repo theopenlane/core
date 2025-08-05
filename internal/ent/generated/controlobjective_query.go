@@ -70,44 +70,44 @@ type ControlObjectiveQuery struct {
 }
 
 // Where adds a new predicate for the ControlObjectiveQuery builder.
-func (coq *ControlObjectiveQuery) Where(ps ...predicate.ControlObjective) *ControlObjectiveQuery {
-	coq.predicates = append(coq.predicates, ps...)
-	return coq
+func (_q *ControlObjectiveQuery) Where(ps ...predicate.ControlObjective) *ControlObjectiveQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (coq *ControlObjectiveQuery) Limit(limit int) *ControlObjectiveQuery {
-	coq.ctx.Limit = &limit
-	return coq
+func (_q *ControlObjectiveQuery) Limit(limit int) *ControlObjectiveQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (coq *ControlObjectiveQuery) Offset(offset int) *ControlObjectiveQuery {
-	coq.ctx.Offset = &offset
-	return coq
+func (_q *ControlObjectiveQuery) Offset(offset int) *ControlObjectiveQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (coq *ControlObjectiveQuery) Unique(unique bool) *ControlObjectiveQuery {
-	coq.ctx.Unique = &unique
-	return coq
+func (_q *ControlObjectiveQuery) Unique(unique bool) *ControlObjectiveQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (coq *ControlObjectiveQuery) Order(o ...controlobjective.OrderOption) *ControlObjectiveQuery {
-	coq.order = append(coq.order, o...)
-	return coq
+func (_q *ControlObjectiveQuery) Order(o ...controlobjective.OrderOption) *ControlObjectiveQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (coq *ControlObjectiveQuery) QueryOwner() *OrganizationQuery {
-	query := (&OrganizationClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -116,23 +116,23 @@ func (coq *ControlObjectiveQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, controlobjective.OwnerTable, controlobjective.OwnerColumn),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ControlObjective
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (coq *ControlObjectiveQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -141,23 +141,23 @@ func (coq *ControlObjectiveQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.BlockedGroupsTable, controlobjective.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ControlObjectiveBlockedGroups
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEditors chains the current query on the "editors" edge.
-func (coq *ControlObjectiveQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -166,23 +166,23 @@ func (coq *ControlObjectiveQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.EditorsTable, controlobjective.EditorsPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ControlObjectiveEditors
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryViewers chains the current query on the "viewers" edge.
-func (coq *ControlObjectiveQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -191,23 +191,23 @@ func (coq *ControlObjectiveQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.ViewersTable, controlobjective.ViewersPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.ControlObjectiveViewers
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryPrograms chains the current query on the "programs" edge.
-func (coq *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
-	query := (&ProgramClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -216,23 +216,23 @@ func (coq *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ProgramsTable, controlobjective.ProgramsPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramControlObjectives
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryEvidence chains the current query on the "evidence" edge.
-func (coq *ControlObjectiveQuery) QueryEvidence() *EvidenceQuery {
-	query := (&EvidenceClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -241,23 +241,23 @@ func (coq *ControlObjectiveQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryControls chains the current query on the "controls" edge.
-func (coq *ControlObjectiveQuery) QueryControls() *ControlQuery {
-	query := (&ControlClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -266,23 +266,23 @@ func (coq *ControlObjectiveQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ControlsTable, controlobjective.ControlsPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlControlObjectives
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QuerySubcontrols chains the current query on the "subcontrols" edge.
-func (coq *ControlObjectiveQuery) QuerySubcontrols() *SubcontrolQuery {
-	query := (&SubcontrolClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -291,23 +291,23 @@ func (coq *ControlObjectiveQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.SubcontrolsTable, controlobjective.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
-func (coq *ControlObjectiveQuery) QueryInternalPolicies() *InternalPolicyQuery {
-	query := (&InternalPolicyClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -316,23 +316,23 @@ func (coq *ControlObjectiveQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.InternalPoliciesTable, controlobjective.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryProcedures chains the current query on the "procedures" edge.
-func (coq *ControlObjectiveQuery) QueryProcedures() *ProcedureQuery {
-	query := (&ProcedureClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -341,23 +341,23 @@ func (coq *ControlObjectiveQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.ProceduresTable, controlobjective.ProceduresColumn),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Procedure
 		step.Edge.Schema = schemaConfig.Procedure
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryRisks chains the current query on the "risks" edge.
-func (coq *ControlObjectiveQuery) QueryRisks() *RiskQuery {
-	query := (&RiskClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -366,23 +366,23 @@ func (coq *ControlObjectiveQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.RisksTable, controlobjective.RisksColumn),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.Risk
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryNarratives chains the current query on the "narratives" edge.
-func (coq *ControlObjectiveQuery) QueryNarratives() *NarrativeQuery {
-	query := (&NarrativeClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryNarratives() *NarrativeQuery {
+	query := (&NarrativeClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -391,23 +391,23 @@ func (coq *ControlObjectiveQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.NarrativesTable, controlobjective.NarrativesColumn),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
 		step.Edge.Schema = schemaConfig.Narrative
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTasks chains the current query on the "tasks" edge.
-func (coq *ControlObjectiveQuery) QueryTasks() *TaskQuery {
-	query := (&TaskClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := coq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := coq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -416,10 +416,10 @@ func (coq *ControlObjectiveQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.TasksTable, controlobjective.TasksPrimaryKey...),
 		)
-		schemaConfig := coq.schemaConfig
+		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
-		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -427,8 +427,8 @@ func (coq *ControlObjectiveQuery) QueryTasks() *TaskQuery {
 
 // First returns the first ControlObjective entity from the query.
 // Returns a *NotFoundError when no ControlObjective was found.
-func (coq *ControlObjectiveQuery) First(ctx context.Context) (*ControlObjective, error) {
-	nodes, err := coq.Limit(1).All(setContextOp(ctx, coq.ctx, ent.OpQueryFirst))
+func (_q *ControlObjectiveQuery) First(ctx context.Context) (*ControlObjective, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -439,8 +439,8 @@ func (coq *ControlObjectiveQuery) First(ctx context.Context) (*ControlObjective,
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) FirstX(ctx context.Context) *ControlObjective {
-	node, err := coq.First(ctx)
+func (_q *ControlObjectiveQuery) FirstX(ctx context.Context) *ControlObjective {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -449,9 +449,9 @@ func (coq *ControlObjectiveQuery) FirstX(ctx context.Context) *ControlObjective 
 
 // FirstID returns the first ControlObjective ID from the query.
 // Returns a *NotFoundError when no ControlObjective ID was found.
-func (coq *ControlObjectiveQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ControlObjectiveQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = coq.Limit(1).IDs(setContextOp(ctx, coq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -462,8 +462,8 @@ func (coq *ControlObjectiveQuery) FirstID(ctx context.Context) (id string, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) FirstIDX(ctx context.Context) string {
-	id, err := coq.FirstID(ctx)
+func (_q *ControlObjectiveQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -473,8 +473,8 @@ func (coq *ControlObjectiveQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ControlObjective entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ControlObjective entity is found.
 // Returns a *NotFoundError when no ControlObjective entities are found.
-func (coq *ControlObjectiveQuery) Only(ctx context.Context) (*ControlObjective, error) {
-	nodes, err := coq.Limit(2).All(setContextOp(ctx, coq.ctx, ent.OpQueryOnly))
+func (_q *ControlObjectiveQuery) Only(ctx context.Context) (*ControlObjective, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -489,8 +489,8 @@ func (coq *ControlObjectiveQuery) Only(ctx context.Context) (*ControlObjective, 
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) OnlyX(ctx context.Context) *ControlObjective {
-	node, err := coq.Only(ctx)
+func (_q *ControlObjectiveQuery) OnlyX(ctx context.Context) *ControlObjective {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -500,9 +500,9 @@ func (coq *ControlObjectiveQuery) OnlyX(ctx context.Context) *ControlObjective {
 // OnlyID is like Only, but returns the only ControlObjective ID in the query.
 // Returns a *NotSingularError when more than one ControlObjective ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (coq *ControlObjectiveQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ControlObjectiveQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = coq.Limit(2).IDs(setContextOp(ctx, coq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -517,8 +517,8 @@ func (coq *ControlObjectiveQuery) OnlyID(ctx context.Context) (id string, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) OnlyIDX(ctx context.Context) string {
-	id, err := coq.OnlyID(ctx)
+func (_q *ControlObjectiveQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -526,18 +526,18 @@ func (coq *ControlObjectiveQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ControlObjectives.
-func (coq *ControlObjectiveQuery) All(ctx context.Context) ([]*ControlObjective, error) {
-	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryAll)
-	if err := coq.prepareQuery(ctx); err != nil {
+func (_q *ControlObjectiveQuery) All(ctx context.Context) ([]*ControlObjective, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ControlObjective, *ControlObjectiveQuery]()
-	return withInterceptors[[]*ControlObjective](ctx, coq, qr, coq.inters)
+	return withInterceptors[[]*ControlObjective](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) AllX(ctx context.Context) []*ControlObjective {
-	nodes, err := coq.All(ctx)
+func (_q *ControlObjectiveQuery) AllX(ctx context.Context) []*ControlObjective {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -545,20 +545,20 @@ func (coq *ControlObjectiveQuery) AllX(ctx context.Context) []*ControlObjective 
 }
 
 // IDs executes the query and returns a list of ControlObjective IDs.
-func (coq *ControlObjectiveQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if coq.ctx.Unique == nil && coq.path != nil {
-		coq.Unique(true)
+func (_q *ControlObjectiveQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryIDs)
-	if err = coq.Select(controlobjective.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(controlobjective.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) IDsX(ctx context.Context) []string {
-	ids, err := coq.IDs(ctx)
+func (_q *ControlObjectiveQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -566,17 +566,17 @@ func (coq *ControlObjectiveQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (coq *ControlObjectiveQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryCount)
-	if err := coq.prepareQuery(ctx); err != nil {
+func (_q *ControlObjectiveQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, coq, querierCount[*ControlObjectiveQuery](), coq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ControlObjectiveQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) CountX(ctx context.Context) int {
-	count, err := coq.Count(ctx)
+func (_q *ControlObjectiveQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -584,9 +584,9 @@ func (coq *ControlObjectiveQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (coq *ControlObjectiveQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryExist)
-	switch _, err := coq.FirstID(ctx); {
+func (_q *ControlObjectiveQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -597,8 +597,8 @@ func (coq *ControlObjectiveQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (coq *ControlObjectiveQuery) ExistX(ctx context.Context) bool {
-	exist, err := coq.Exist(ctx)
+func (_q *ControlObjectiveQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -607,177 +607,177 @@ func (coq *ControlObjectiveQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ControlObjectiveQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
-	if coq == nil {
+func (_q *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ControlObjectiveQuery{
-		config:               coq.config,
-		ctx:                  coq.ctx.Clone(),
-		order:                append([]controlobjective.OrderOption{}, coq.order...),
-		inters:               append([]Interceptor{}, coq.inters...),
-		predicates:           append([]predicate.ControlObjective{}, coq.predicates...),
-		withOwner:            coq.withOwner.Clone(),
-		withBlockedGroups:    coq.withBlockedGroups.Clone(),
-		withEditors:          coq.withEditors.Clone(),
-		withViewers:          coq.withViewers.Clone(),
-		withPrograms:         coq.withPrograms.Clone(),
-		withEvidence:         coq.withEvidence.Clone(),
-		withControls:         coq.withControls.Clone(),
-		withSubcontrols:      coq.withSubcontrols.Clone(),
-		withInternalPolicies: coq.withInternalPolicies.Clone(),
-		withProcedures:       coq.withProcedures.Clone(),
-		withRisks:            coq.withRisks.Clone(),
-		withNarratives:       coq.withNarratives.Clone(),
-		withTasks:            coq.withTasks.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]controlobjective.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.ControlObjective{}, _q.predicates...),
+		withOwner:            _q.withOwner.Clone(),
+		withBlockedGroups:    _q.withBlockedGroups.Clone(),
+		withEditors:          _q.withEditors.Clone(),
+		withViewers:          _q.withViewers.Clone(),
+		withPrograms:         _q.withPrograms.Clone(),
+		withEvidence:         _q.withEvidence.Clone(),
+		withControls:         _q.withControls.Clone(),
+		withSubcontrols:      _q.withSubcontrols.Clone(),
+		withInternalPolicies: _q.withInternalPolicies.Clone(),
+		withProcedures:       _q.withProcedures.Clone(),
+		withRisks:            _q.withRisks.Clone(),
+		withNarratives:       _q.withNarratives.Clone(),
+		withTasks:            _q.withTasks.Clone(),
 		// clone intermediate query.
-		sql:       coq.sql.Clone(),
-		path:      coq.path,
-		modifiers: append([]func(*sql.Selector){}, coq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithOwner(opts ...func(*OrganizationQuery)) *ControlObjectiveQuery {
-	query := (&OrganizationClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithOwner(opts ...func(*OrganizationQuery)) *ControlObjectiveQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withOwner = query
-	return coq
+	_q.withOwner = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
 // the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ControlObjectiveQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ControlObjectiveQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withBlockedGroups = query
-	return coq
+	_q.withBlockedGroups = query
+	return _q
 }
 
 // WithEditors tells the query-builder to eager-load the nodes that are connected to
 // the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithEditors(opts ...func(*GroupQuery)) *ControlObjectiveQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithEditors(opts ...func(*GroupQuery)) *ControlObjectiveQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withEditors = query
-	return coq
+	_q.withEditors = query
+	return _q
 }
 
 // WithViewers tells the query-builder to eager-load the nodes that are connected to
 // the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithViewers(opts ...func(*GroupQuery)) *ControlObjectiveQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithViewers(opts ...func(*GroupQuery)) *ControlObjectiveQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withViewers = query
-	return coq
+	_q.withViewers = query
+	return _q
 }
 
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlObjectiveQuery {
-	query := (&ProgramClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlObjectiveQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withPrograms = query
-	return coq
+	_q.withPrograms = query
+	return _q
 }
 
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ControlObjectiveQuery {
-	query := (&EvidenceClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ControlObjectiveQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withEvidence = query
-	return coq
+	_q.withEvidence = query
+	return _q
 }
 
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithControls(opts ...func(*ControlQuery)) *ControlObjectiveQuery {
-	query := (&ControlClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithControls(opts ...func(*ControlQuery)) *ControlObjectiveQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withControls = query
-	return coq
+	_q.withControls = query
+	return _q
 }
 
 // WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ControlObjectiveQuery {
-	query := (&SubcontrolClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ControlObjectiveQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withSubcontrols = query
-	return coq
+	_q.withSubcontrols = query
+	return _q
 }
 
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
-	query := (&InternalPolicyClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withInternalPolicies = query
-	return coq
+	_q.withInternalPolicies = query
+	return _q
 }
 
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithProcedures(opts ...func(*ProcedureQuery)) *ControlObjectiveQuery {
-	query := (&ProcedureClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithProcedures(opts ...func(*ProcedureQuery)) *ControlObjectiveQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withProcedures = query
-	return coq
+	_q.withProcedures = query
+	return _q
 }
 
 // WithRisks tells the query-builder to eager-load the nodes that are connected to
 // the "risks" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithRisks(opts ...func(*RiskQuery)) *ControlObjectiveQuery {
-	query := (&RiskClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithRisks(opts ...func(*RiskQuery)) *ControlObjectiveQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withRisks = query
-	return coq
+	_q.withRisks = query
+	return _q
 }
 
 // WithNarratives tells the query-builder to eager-load the nodes that are connected to
 // the "narratives" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ControlObjectiveQuery {
-	query := (&NarrativeClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNarratives(opts ...func(*NarrativeQuery)) *ControlObjectiveQuery {
+	query := (&NarrativeClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withNarratives = query
-	return coq
+	_q.withNarratives = query
+	return _q
 }
 
 // WithTasks tells the query-builder to eager-load the nodes that are connected to
 // the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithTasks(opts ...func(*TaskQuery)) *ControlObjectiveQuery {
-	query := (&TaskClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithTasks(opts ...func(*TaskQuery)) *ControlObjectiveQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	coq.withTasks = query
-	return coq
+	_q.withTasks = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -794,10 +794,10 @@ func (coq *ControlObjectiveQuery) WithTasks(opts ...func(*TaskQuery)) *ControlOb
 //		GroupBy(controlobjective.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (coq *ControlObjectiveQuery) GroupBy(field string, fields ...string) *ControlObjectiveGroupBy {
-	coq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ControlObjectiveGroupBy{build: coq}
-	grbuild.flds = &coq.ctx.Fields
+func (_q *ControlObjectiveQuery) GroupBy(field string, fields ...string) *ControlObjectiveGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ControlObjectiveGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = controlobjective.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -815,151 +815,151 @@ func (coq *ControlObjectiveQuery) GroupBy(field string, fields ...string) *Contr
 //	client.ControlObjective.Query().
 //		Select(controlobjective.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (coq *ControlObjectiveQuery) Select(fields ...string) *ControlObjectiveSelect {
-	coq.ctx.Fields = append(coq.ctx.Fields, fields...)
-	sbuild := &ControlObjectiveSelect{ControlObjectiveQuery: coq}
+func (_q *ControlObjectiveQuery) Select(fields ...string) *ControlObjectiveSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ControlObjectiveSelect{ControlObjectiveQuery: _q}
 	sbuild.label = controlobjective.Label
-	sbuild.flds, sbuild.scan = &coq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ControlObjectiveSelect configured with the given aggregations.
-func (coq *ControlObjectiveQuery) Aggregate(fns ...AggregateFunc) *ControlObjectiveSelect {
-	return coq.Select().Aggregate(fns...)
+func (_q *ControlObjectiveQuery) Aggregate(fns ...AggregateFunc) *ControlObjectiveSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (coq *ControlObjectiveQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range coq.inters {
+func (_q *ControlObjectiveQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, coq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range coq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !controlobjective.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if coq.path != nil {
-		prev, err := coq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		coq.sql = prev
+		_q.sql = prev
 	}
 	if controlobjective.Policy == nil {
 		return errors.New("generated: uninitialized controlobjective.Policy (forgotten import generated/runtime?)")
 	}
-	if err := controlobjective.Policy.EvalQuery(ctx, coq); err != nil {
+	if err := controlobjective.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ControlObjective, error) {
+func (_q *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ControlObjective, error) {
 	var (
 		nodes       = []*ControlObjective{}
-		_spec       = coq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [13]bool{
-			coq.withOwner != nil,
-			coq.withBlockedGroups != nil,
-			coq.withEditors != nil,
-			coq.withViewers != nil,
-			coq.withPrograms != nil,
-			coq.withEvidence != nil,
-			coq.withControls != nil,
-			coq.withSubcontrols != nil,
-			coq.withInternalPolicies != nil,
-			coq.withProcedures != nil,
-			coq.withRisks != nil,
-			coq.withNarratives != nil,
-			coq.withTasks != nil,
+			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withViewers != nil,
+			_q.withPrograms != nil,
+			_q.withEvidence != nil,
+			_q.withControls != nil,
+			_q.withSubcontrols != nil,
+			_q.withInternalPolicies != nil,
+			_q.withProcedures != nil,
+			_q.withRisks != nil,
+			_q.withNarratives != nil,
+			_q.withTasks != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ControlObjective).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ControlObjective{config: coq.config}
+		node := &ControlObjective{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = coq.schemaConfig.ControlObjective
-	ctx = internal.NewSchemaConfigContext(ctx, coq.schemaConfig)
-	if len(coq.modifiers) > 0 {
-		_spec.Modifiers = coq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ControlObjective
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, coq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := coq.withOwner; query != nil {
-		if err := coq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *ControlObjective, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withBlockedGroups; query != nil {
-		if err := coq.loadBlockedGroups(ctx, query, nodes,
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.BlockedGroups = []*Group{} },
 			func(n *ControlObjective, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withEditors; query != nil {
-		if err := coq.loadEditors(ctx, query, nodes,
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Editors = []*Group{} },
 			func(n *ControlObjective, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withViewers; query != nil {
-		if err := coq.loadViewers(ctx, query, nodes,
+	if query := _q.withViewers; query != nil {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Viewers = []*Group{} },
 			func(n *ControlObjective, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withPrograms; query != nil {
-		if err := coq.loadPrograms(ctx, query, nodes,
+	if query := _q.withPrograms; query != nil {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Programs = []*Program{} },
 			func(n *ControlObjective, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withEvidence; query != nil {
-		if err := coq.loadEvidence(ctx, query, nodes,
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Evidence = []*Evidence{} },
 			func(n *ControlObjective, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withControls; query != nil {
-		if err := coq.loadControls(ctx, query, nodes,
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Controls = []*Control{} },
 			func(n *ControlObjective, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withSubcontrols; query != nil {
-		if err := coq.loadSubcontrols(ctx, query, nodes,
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *ControlObjective, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withInternalPolicies; query != nil {
-		if err := coq.loadInternalPolicies(ctx, query, nodes,
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.InternalPolicies = []*InternalPolicy{} },
 			func(n *ControlObjective, e *InternalPolicy) {
 				n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e)
@@ -967,127 +967,127 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			return nil, err
 		}
 	}
-	if query := coq.withProcedures; query != nil {
-		if err := coq.loadProcedures(ctx, query, nodes,
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Procedures = []*Procedure{} },
 			func(n *ControlObjective, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withRisks; query != nil {
-		if err := coq.loadRisks(ctx, query, nodes,
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Risks = []*Risk{} },
 			func(n *ControlObjective, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withNarratives; query != nil {
-		if err := coq.loadNarratives(ctx, query, nodes,
+	if query := _q.withNarratives; query != nil {
+		if err := _q.loadNarratives(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Narratives = []*Narrative{} },
 			func(n *ControlObjective, e *Narrative) { n.Edges.Narratives = append(n.Edges.Narratives, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := coq.withTasks; query != nil {
-		if err := coq.loadTasks(ctx, query, nodes,
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *ControlObjective) { n.Edges.Tasks = []*Task{} },
 			func(n *ControlObjective, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedBlockedGroups {
-		if err := coq.loadBlockedGroups(ctx, query, nodes,
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedBlockedGroups(name) },
 			func(n *ControlObjective, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedEditors {
-		if err := coq.loadEditors(ctx, query, nodes,
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedEditors(name) },
 			func(n *ControlObjective, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedViewers {
-		if err := coq.loadViewers(ctx, query, nodes,
+	for name, query := range _q.withNamedViewers {
+		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedViewers(name) },
 			func(n *ControlObjective, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedPrograms {
-		if err := coq.loadPrograms(ctx, query, nodes,
+	for name, query := range _q.withNamedPrograms {
+		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedPrograms(name) },
 			func(n *ControlObjective, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedEvidence {
-		if err := coq.loadEvidence(ctx, query, nodes,
+	for name, query := range _q.withNamedEvidence {
+		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedEvidence(name) },
 			func(n *ControlObjective, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedControls {
-		if err := coq.loadControls(ctx, query, nodes,
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedControls(name) },
 			func(n *ControlObjective, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedSubcontrols {
-		if err := coq.loadSubcontrols(ctx, query, nodes,
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedSubcontrols(name) },
 			func(n *ControlObjective, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedInternalPolicies {
-		if err := coq.loadInternalPolicies(ctx, query, nodes,
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedInternalPolicies(name) },
 			func(n *ControlObjective, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedProcedures {
-		if err := coq.loadProcedures(ctx, query, nodes,
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedProcedures(name) },
 			func(n *ControlObjective, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedRisks {
-		if err := coq.loadRisks(ctx, query, nodes,
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedRisks(name) },
 			func(n *ControlObjective, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedNarratives {
-		if err := coq.loadNarratives(ctx, query, nodes,
+	for name, query := range _q.withNamedNarratives {
+		if err := _q.loadNarratives(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedNarratives(name) },
 			func(n *ControlObjective, e *Narrative) { n.appendNamedNarratives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range coq.withNamedTasks {
-		if err := coq.loadTasks(ctx, query, nodes,
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedTasks(name) },
 			func(n *ControlObjective, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range coq.loadTotal {
-		if err := coq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (coq *ControlObjectiveQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Organization)) error {
+func (_q *ControlObjectiveQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ControlObjective)
 	for i := range nodes {
@@ -1116,7 +1116,7 @@ func (coq *ControlObjectiveQuery) loadOwner(ctx context.Context, query *Organiza
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Group)) error {
+func (_q *ControlObjectiveQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1129,7 +1129,7 @@ func (coq *ControlObjectiveQuery) loadBlockedGroups(ctx context.Context, query *
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.BlockedGroupsTable)
-		joinT.Schema(coq.schemaConfig.ControlObjectiveBlockedGroups)
+		joinT.Schema(_q.schemaConfig.ControlObjectiveBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlobjective.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1178,7 +1178,7 @@ func (coq *ControlObjectiveQuery) loadBlockedGroups(ctx context.Context, query *
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Group)) error {
+func (_q *ControlObjectiveQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1191,7 +1191,7 @@ func (coq *ControlObjectiveQuery) loadEditors(ctx context.Context, query *GroupQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.EditorsTable)
-		joinT.Schema(coq.schemaConfig.ControlObjectiveEditors)
+		joinT.Schema(_q.schemaConfig.ControlObjectiveEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlobjective.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1240,7 +1240,7 @@ func (coq *ControlObjectiveQuery) loadEditors(ctx context.Context, query *GroupQ
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Group)) error {
+func (_q *ControlObjectiveQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Group)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1253,7 +1253,7 @@ func (coq *ControlObjectiveQuery) loadViewers(ctx context.Context, query *GroupQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ViewersTable)
-		joinT.Schema(coq.schemaConfig.ControlObjectiveViewers)
+		joinT.Schema(_q.schemaConfig.ControlObjectiveViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlobjective.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1302,7 +1302,7 @@ func (coq *ControlObjectiveQuery) loadViewers(ctx context.Context, query *GroupQ
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Program)) error {
+func (_q *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1315,7 +1315,7 @@ func (coq *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *Progr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ProgramsTable)
-		joinT.Schema(coq.schemaConfig.ProgramControlObjectives)
+		joinT.Schema(_q.schemaConfig.ProgramControlObjectives)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(controlobjective.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1364,7 +1364,7 @@ func (coq *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *Progr
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Evidence)) error {
+func (_q *ControlObjectiveQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Evidence)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1377,7 +1377,7 @@ func (coq *ControlObjectiveQuery) loadEvidence(ctx context.Context, query *Evide
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.EvidenceTable)
-		joinT.Schema(coq.schemaConfig.EvidenceControlObjectives)
+		joinT.Schema(_q.schemaConfig.EvidenceControlObjectives)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(controlobjective.EvidencePrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.EvidencePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1426,7 +1426,7 @@ func (coq *ControlObjectiveQuery) loadEvidence(ctx context.Context, query *Evide
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Control)) error {
+func (_q *ControlObjectiveQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1439,7 +1439,7 @@ func (coq *ControlObjectiveQuery) loadControls(ctx context.Context, query *Contr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ControlsTable)
-		joinT.Schema(coq.schemaConfig.ControlControlObjectives)
+		joinT.Schema(_q.schemaConfig.ControlControlObjectives)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(controlobjective.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1488,7 +1488,7 @@ func (coq *ControlObjectiveQuery) loadControls(ctx context.Context, query *Contr
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Subcontrol)) error {
+func (_q *ControlObjectiveQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Subcontrol)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1501,7 +1501,7 @@ func (coq *ControlObjectiveQuery) loadSubcontrols(ctx context.Context, query *Su
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.SubcontrolsTable)
-		joinT.Schema(coq.schemaConfig.SubcontrolControlObjectives)
+		joinT.Schema(_q.schemaConfig.SubcontrolControlObjectives)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(controlobjective.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1550,7 +1550,7 @@ func (coq *ControlObjectiveQuery) loadSubcontrols(ctx context.Context, query *Su
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *InternalPolicy)) error {
+func (_q *ControlObjectiveQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1563,7 +1563,7 @@ func (coq *ControlObjectiveQuery) loadInternalPolicies(ctx context.Context, quer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.InternalPoliciesTable)
-		joinT.Schema(coq.schemaConfig.InternalPolicyControlObjectives)
+		joinT.Schema(_q.schemaConfig.InternalPolicyControlObjectives)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(controlobjective.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1612,7 +1612,7 @@ func (coq *ControlObjectiveQuery) loadInternalPolicies(ctx context.Context, quer
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Procedure)) error {
+func (_q *ControlObjectiveQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Procedure)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*ControlObjective)
 	for i := range nodes {
@@ -1643,7 +1643,7 @@ func (coq *ControlObjectiveQuery) loadProcedures(ctx context.Context, query *Pro
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Risk)) error {
+func (_q *ControlObjectiveQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Risk)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*ControlObjective)
 	for i := range nodes {
@@ -1674,7 +1674,7 @@ func (coq *ControlObjectiveQuery) loadRisks(ctx context.Context, query *RiskQuer
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Narrative)) error {
+func (_q *ControlObjectiveQuery) loadNarratives(ctx context.Context, query *NarrativeQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Narrative)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*ControlObjective)
 	for i := range nodes {
@@ -1705,7 +1705,7 @@ func (coq *ControlObjectiveQuery) loadNarratives(ctx context.Context, query *Nar
 	}
 	return nil
 }
-func (coq *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Task)) error {
+func (_q *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Task)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlObjective)
 	nids := make(map[string]map[*ControlObjective]struct{})
@@ -1718,7 +1718,7 @@ func (coq *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.TasksTable)
-		joinT.Schema(coq.schemaConfig.ControlObjectiveTasks)
+		joinT.Schema(_q.schemaConfig.ControlObjectiveTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(controlobjective.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1768,29 +1768,29 @@ func (coq *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuer
 	return nil
 }
 
-func (coq *ControlObjectiveQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := coq.querySpec()
-	_spec.Node.Schema = coq.schemaConfig.ControlObjective
-	ctx = internal.NewSchemaConfigContext(ctx, coq.schemaConfig)
-	if len(coq.modifiers) > 0 {
-		_spec.Modifiers = coq.modifiers
+func (_q *ControlObjectiveQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ControlObjective
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = coq.ctx.Fields
-	if len(coq.ctx.Fields) > 0 {
-		_spec.Unique = coq.ctx.Unique != nil && *coq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, coq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (coq *ControlObjectiveQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ControlObjectiveQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(controlobjective.Table, controlobjective.Columns, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
-	_spec.From = coq.sql
-	if unique := coq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if coq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := coq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, controlobjective.FieldID)
 		for i := range fields {
@@ -1798,24 +1798,24 @@ func (coq *ControlObjectiveQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if coq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(controlobjective.FieldOwnerID)
 		}
 	}
-	if ps := coq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := coq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := coq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := coq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -1825,216 +1825,216 @@ func (coq *ControlObjectiveQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (coq *ControlObjectiveQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(coq.driver.Dialect())
+func (_q *ControlObjectiveQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(controlobjective.Table)
-	columns := coq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = controlobjective.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if coq.sql != nil {
-		selector = coq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if coq.ctx.Unique != nil && *coq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(coq.schemaConfig.ControlObjective)
-	ctx = internal.NewSchemaConfigContext(ctx, coq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ControlObjective)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range coq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range coq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range coq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := coq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := coq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (coq *ControlObjectiveQuery) Modify(modifiers ...func(s *sql.Selector)) *ControlObjectiveSelect {
-	coq.modifiers = append(coq.modifiers, modifiers...)
-	return coq.Select()
+func (_q *ControlObjectiveQuery) Modify(modifiers ...func(s *sql.Selector)) *ControlObjectiveSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ControlObjectiveQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ControlObjectiveQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedBlockedGroups == nil {
-		coq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
 	}
-	coq.withNamedBlockedGroups[name] = query
-	return coq
+	_q.withNamedBlockedGroups[name] = query
+	return _q
 }
 
 // WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ControlObjectiveQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ControlObjectiveQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedEditors == nil {
-		coq.withNamedEditors = make(map[string]*GroupQuery)
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
-	coq.withNamedEditors[name] = query
-	return coq
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ControlObjectiveQuery {
-	query := (&GroupClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ControlObjectiveQuery {
+	query := (&GroupClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedViewers == nil {
-		coq.withNamedViewers = make(map[string]*GroupQuery)
+	if _q.withNamedViewers == nil {
+		_q.withNamedViewers = make(map[string]*GroupQuery)
 	}
-	coq.withNamedViewers[name] = query
-	return coq
+	_q.withNamedViewers[name] = query
+	return _q
 }
 
 // WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ControlObjectiveQuery {
-	query := (&ProgramClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ControlObjectiveQuery {
+	query := (&ProgramClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedPrograms == nil {
-		coq.withNamedPrograms = make(map[string]*ProgramQuery)
+	if _q.withNamedPrograms == nil {
+		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	coq.withNamedPrograms[name] = query
-	return coq
+	_q.withNamedPrograms[name] = query
+	return _q
 }
 
 // WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ControlObjectiveQuery {
-	query := (&EvidenceClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ControlObjectiveQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedEvidence == nil {
-		coq.withNamedEvidence = make(map[string]*EvidenceQuery)
+	if _q.withNamedEvidence == nil {
+		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
 	}
-	coq.withNamedEvidence[name] = query
-	return coq
+	_q.withNamedEvidence[name] = query
+	return _q
 }
 
 // WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ControlObjectiveQuery {
-	query := (&ControlClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ControlObjectiveQuery {
+	query := (&ControlClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedControls == nil {
-		coq.withNamedControls = make(map[string]*ControlQuery)
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
-	coq.withNamedControls[name] = query
-	return coq
+	_q.withNamedControls[name] = query
+	return _q
 }
 
 // WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ControlObjectiveQuery {
-	query := (&SubcontrolClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ControlObjectiveQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedSubcontrols == nil {
-		coq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	coq.withNamedSubcontrols[name] = query
-	return coq
+	_q.withNamedSubcontrols[name] = query
+	return _q
 }
 
 // WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
-	query := (&InternalPolicyClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ControlObjectiveQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedInternalPolicies == nil {
-		coq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
-	coq.withNamedInternalPolicies[name] = query
-	return coq
+	_q.withNamedInternalPolicies[name] = query
+	return _q
 }
 
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *ControlObjectiveQuery {
-	query := (&ProcedureClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *ControlObjectiveQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedProcedures == nil {
-		coq.withNamedProcedures = make(map[string]*ProcedureQuery)
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
 	}
-	coq.withNamedProcedures[name] = query
-	return coq
+	_q.withNamedProcedures[name] = query
+	return _q
 }
 
 // WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *ControlObjectiveQuery {
-	query := (&RiskClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *ControlObjectiveQuery {
+	query := (&RiskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedRisks == nil {
-		coq.withNamedRisks = make(map[string]*RiskQuery)
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
 	}
-	coq.withNamedRisks[name] = query
-	return coq
+	_q.withNamedRisks[name] = query
+	return _q
 }
 
 // WithNamedNarratives tells the query-builder to eager-load the nodes that are connected to the "narratives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedNarratives(name string, opts ...func(*NarrativeQuery)) *ControlObjectiveQuery {
-	query := (&NarrativeClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedNarratives(name string, opts ...func(*NarrativeQuery)) *ControlObjectiveQuery {
+	query := (&NarrativeClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedNarratives == nil {
-		coq.withNamedNarratives = make(map[string]*NarrativeQuery)
+	if _q.withNamedNarratives == nil {
+		_q.withNamedNarratives = make(map[string]*NarrativeQuery)
 	}
-	coq.withNamedNarratives[name] = query
-	return coq
+	_q.withNamedNarratives[name] = query
+	return _q
 }
 
 // WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (coq *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ControlObjectiveQuery {
-	query := (&TaskClient{config: coq.config}).Query()
+func (_q *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ControlObjectiveQuery {
+	query := (&TaskClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if coq.withNamedTasks == nil {
-		coq.withNamedTasks = make(map[string]*TaskQuery)
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
-	coq.withNamedTasks[name] = query
-	return coq
+	_q.withNamedTasks[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -2063,41 +2063,41 @@ type ControlObjectiveGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (cogb *ControlObjectiveGroupBy) Aggregate(fns ...AggregateFunc) *ControlObjectiveGroupBy {
-	cogb.fns = append(cogb.fns, fns...)
-	return cogb
+func (_g *ControlObjectiveGroupBy) Aggregate(fns ...AggregateFunc) *ControlObjectiveGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cogb *ControlObjectiveGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cogb.build.ctx, ent.OpQueryGroupBy)
-	if err := cogb.build.prepareQuery(ctx); err != nil {
+func (_g *ControlObjectiveGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ControlObjectiveQuery, *ControlObjectiveGroupBy](ctx, cogb.build, cogb, cogb.build.inters, v)
+	return scanWithInterceptors[*ControlObjectiveQuery, *ControlObjectiveGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (cogb *ControlObjectiveGroupBy) sqlScan(ctx context.Context, root *ControlObjectiveQuery, v any) error {
+func (_g *ControlObjectiveGroupBy) sqlScan(ctx context.Context, root *ControlObjectiveQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(cogb.fns))
-	for _, fn := range cogb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*cogb.flds)+len(cogb.fns))
-		for _, f := range *cogb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*cogb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cogb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2111,27 +2111,27 @@ type ControlObjectiveSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (cos *ControlObjectiveSelect) Aggregate(fns ...AggregateFunc) *ControlObjectiveSelect {
-	cos.fns = append(cos.fns, fns...)
-	return cos
+func (_s *ControlObjectiveSelect) Aggregate(fns ...AggregateFunc) *ControlObjectiveSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cos *ControlObjectiveSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cos.ctx, ent.OpQuerySelect)
-	if err := cos.prepareQuery(ctx); err != nil {
+func (_s *ControlObjectiveSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ControlObjectiveQuery, *ControlObjectiveSelect](ctx, cos.ControlObjectiveQuery, cos, cos.inters, v)
+	return scanWithInterceptors[*ControlObjectiveQuery, *ControlObjectiveSelect](ctx, _s.ControlObjectiveQuery, _s, _s.inters, v)
 }
 
-func (cos *ControlObjectiveSelect) sqlScan(ctx context.Context, root *ControlObjectiveQuery, v any) error {
+func (_s *ControlObjectiveSelect) sqlScan(ctx context.Context, root *ControlObjectiveQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(cos.fns))
-	for _, fn := range cos.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*cos.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -2139,7 +2139,7 @@ func (cos *ControlObjectiveSelect) sqlScan(ctx context.Context, root *ControlObj
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cos.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -2147,7 +2147,7 @@ func (cos *ControlObjectiveSelect) sqlScan(ctx context.Context, root *ControlObj
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (cos *ControlObjectiveSelect) Modify(modifiers ...func(s *sql.Selector)) *ControlObjectiveSelect {
-	cos.modifiers = append(cos.modifiers, modifiers...)
-	return cos
+func (_s *ControlObjectiveSelect) Modify(modifiers ...func(s *sql.Selector)) *ControlObjectiveSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

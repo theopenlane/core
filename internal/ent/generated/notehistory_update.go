@@ -26,113 +26,113 @@ type NoteHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the NoteHistoryUpdate builder.
-func (nhu *NoteHistoryUpdate) Where(ps ...predicate.NoteHistory) *NoteHistoryUpdate {
-	nhu.mutation.Where(ps...)
-	return nhu
+func (_u *NoteHistoryUpdate) Where(ps ...predicate.NoteHistory) *NoteHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nhu *NoteHistoryUpdate) SetUpdatedAt(t time.Time) *NoteHistoryUpdate {
-	nhu.mutation.SetUpdatedAt(t)
-	return nhu
+func (_u *NoteHistoryUpdate) SetUpdatedAt(v time.Time) *NoteHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nhu *NoteHistoryUpdate) ClearUpdatedAt() *NoteHistoryUpdate {
-	nhu.mutation.ClearUpdatedAt()
-	return nhu
+func (_u *NoteHistoryUpdate) ClearUpdatedAt() *NoteHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nhu *NoteHistoryUpdate) SetUpdatedBy(s string) *NoteHistoryUpdate {
-	nhu.mutation.SetUpdatedBy(s)
-	return nhu
+func (_u *NoteHistoryUpdate) SetUpdatedBy(v string) *NoteHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhu *NoteHistoryUpdate) SetNillableUpdatedBy(s *string) *NoteHistoryUpdate {
-	if s != nil {
-		nhu.SetUpdatedBy(*s)
+func (_u *NoteHistoryUpdate) SetNillableUpdatedBy(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nhu *NoteHistoryUpdate) ClearUpdatedBy() *NoteHistoryUpdate {
-	nhu.mutation.ClearUpdatedBy()
-	return nhu
+func (_u *NoteHistoryUpdate) ClearUpdatedBy() *NoteHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nhu *NoteHistoryUpdate) SetDeletedAt(t time.Time) *NoteHistoryUpdate {
-	nhu.mutation.SetDeletedAt(t)
-	return nhu
+func (_u *NoteHistoryUpdate) SetDeletedAt(v time.Time) *NoteHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nhu *NoteHistoryUpdate) SetNillableDeletedAt(t *time.Time) *NoteHistoryUpdate {
-	if t != nil {
-		nhu.SetDeletedAt(*t)
+func (_u *NoteHistoryUpdate) SetNillableDeletedAt(v *time.Time) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nhu *NoteHistoryUpdate) ClearDeletedAt() *NoteHistoryUpdate {
-	nhu.mutation.ClearDeletedAt()
-	return nhu
+func (_u *NoteHistoryUpdate) ClearDeletedAt() *NoteHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nhu *NoteHistoryUpdate) SetDeletedBy(s string) *NoteHistoryUpdate {
-	nhu.mutation.SetDeletedBy(s)
-	return nhu
+func (_u *NoteHistoryUpdate) SetDeletedBy(v string) *NoteHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhu *NoteHistoryUpdate) SetNillableDeletedBy(s *string) *NoteHistoryUpdate {
-	if s != nil {
-		nhu.SetDeletedBy(*s)
+func (_u *NoteHistoryUpdate) SetNillableDeletedBy(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nhu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nhu *NoteHistoryUpdate) ClearDeletedBy() *NoteHistoryUpdate {
-	nhu.mutation.ClearDeletedBy()
-	return nhu
+func (_u *NoteHistoryUpdate) ClearDeletedBy() *NoteHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetText sets the "text" field.
-func (nhu *NoteHistoryUpdate) SetText(s string) *NoteHistoryUpdate {
-	nhu.mutation.SetText(s)
-	return nhu
+func (_u *NoteHistoryUpdate) SetText(v string) *NoteHistoryUpdate {
+	_u.mutation.SetText(v)
+	return _u
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (nhu *NoteHistoryUpdate) SetNillableText(s *string) *NoteHistoryUpdate {
-	if s != nil {
-		nhu.SetText(*s)
+func (_u *NoteHistoryUpdate) SetNillableText(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetText(*v)
 	}
-	return nhu
+	return _u
 }
 
 // Mutation returns the NoteHistoryMutation object of the builder.
-func (nhu *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
-	return nhu.mutation
+func (_u *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (nhu *NoteHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := nhu.defaults(); err != nil {
+func (_u *NoteHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, nhu.sqlSave, nhu.mutation, nhu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nhu *NoteHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := nhu.Save(ctx)
+func (_u *NoteHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -140,88 +140,88 @@ func (nhu *NoteHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (nhu *NoteHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := nhu.Save(ctx)
+func (_u *NoteHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nhu *NoteHistoryUpdate) ExecX(ctx context.Context) {
-	if err := nhu.Exec(ctx); err != nil {
+func (_u *NoteHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nhu *NoteHistoryUpdate) defaults() error {
-	if _, ok := nhu.mutation.UpdatedAt(); !ok && !nhu.mutation.UpdatedAtCleared() {
+func (_u *NoteHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if notehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized notehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := notehistory.UpdateDefaultUpdatedAt()
-		nhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nhu *NoteHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdate {
-	nhu.modifiers = append(nhu.modifiers, modifiers...)
-	return nhu
+func (_u *NoteHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(notehistory.Table, notehistory.Columns, sqlgraph.NewFieldSpec(notehistory.FieldID, field.TypeString))
-	if ps := nhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(notehistory.FieldRef, field.TypeString)
 	}
-	if nhu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(notehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(notehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nhu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if nhu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(notehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nhu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nhu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(notehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nhu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if nhu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
 	}
-	if nhu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Text(); ok {
+	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
 	}
-	_spec.Node.Schema = nhu.schemaConfig.NoteHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhu.schemaConfig)
-	_spec.AddModifiers(nhu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, nhu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.NoteHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{notehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -229,8 +229,8 @@ func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	nhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // NoteHistoryUpdateOne is the builder for updating a single NoteHistory entity.
@@ -243,120 +243,120 @@ type NoteHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (nhuo *NoteHistoryUpdateOne) SetUpdatedAt(t time.Time) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetUpdatedAt(t)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) SetUpdatedAt(v time.Time) *NoteHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (nhuo *NoteHistoryUpdateOne) ClearUpdatedAt() *NoteHistoryUpdateOne {
-	nhuo.mutation.ClearUpdatedAt()
-	return nhuo
+func (_u *NoteHistoryUpdateOne) ClearUpdatedAt() *NoteHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (nhuo *NoteHistoryUpdateOne) SetUpdatedBy(s string) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetUpdatedBy(s)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) SetUpdatedBy(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (nhuo *NoteHistoryUpdateOne) SetNillableUpdatedBy(s *string) *NoteHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetUpdatedBy(*s)
+func (_u *NoteHistoryUpdateOne) SetNillableUpdatedBy(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (nhuo *NoteHistoryUpdateOne) ClearUpdatedBy() *NoteHistoryUpdateOne {
-	nhuo.mutation.ClearUpdatedBy()
-	return nhuo
+func (_u *NoteHistoryUpdateOne) ClearUpdatedBy() *NoteHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (nhuo *NoteHistoryUpdateOne) SetDeletedAt(t time.Time) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetDeletedAt(t)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) SetDeletedAt(v time.Time) *NoteHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (nhuo *NoteHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *NoteHistoryUpdateOne {
-	if t != nil {
-		nhuo.SetDeletedAt(*t)
+func (_u *NoteHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (nhuo *NoteHistoryUpdateOne) ClearDeletedAt() *NoteHistoryUpdateOne {
-	nhuo.mutation.ClearDeletedAt()
-	return nhuo
+func (_u *NoteHistoryUpdateOne) ClearDeletedAt() *NoteHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (nhuo *NoteHistoryUpdateOne) SetDeletedBy(s string) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetDeletedBy(s)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) SetDeletedBy(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (nhuo *NoteHistoryUpdateOne) SetNillableDeletedBy(s *string) *NoteHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetDeletedBy(*s)
+func (_u *NoteHistoryUpdateOne) SetNillableDeletedBy(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (nhuo *NoteHistoryUpdateOne) ClearDeletedBy() *NoteHistoryUpdateOne {
-	nhuo.mutation.ClearDeletedBy()
-	return nhuo
+func (_u *NoteHistoryUpdateOne) ClearDeletedBy() *NoteHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetText sets the "text" field.
-func (nhuo *NoteHistoryUpdateOne) SetText(s string) *NoteHistoryUpdateOne {
-	nhuo.mutation.SetText(s)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) SetText(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetText(v)
+	return _u
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (nhuo *NoteHistoryUpdateOne) SetNillableText(s *string) *NoteHistoryUpdateOne {
-	if s != nil {
-		nhuo.SetText(*s)
+func (_u *NoteHistoryUpdateOne) SetNillableText(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetText(*v)
 	}
-	return nhuo
+	return _u
 }
 
 // Mutation returns the NoteHistoryMutation object of the builder.
-func (nhuo *NoteHistoryUpdateOne) Mutation() *NoteHistoryMutation {
-	return nhuo.mutation
+func (_u *NoteHistoryUpdateOne) Mutation() *NoteHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the NoteHistoryUpdate builder.
-func (nhuo *NoteHistoryUpdateOne) Where(ps ...predicate.NoteHistory) *NoteHistoryUpdateOne {
-	nhuo.mutation.Where(ps...)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) Where(ps ...predicate.NoteHistory) *NoteHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (nhuo *NoteHistoryUpdateOne) Select(field string, fields ...string) *NoteHistoryUpdateOne {
-	nhuo.fields = append([]string{field}, fields...)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) Select(field string, fields ...string) *NoteHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated NoteHistory entity.
-func (nhuo *NoteHistoryUpdateOne) Save(ctx context.Context) (*NoteHistory, error) {
-	if err := nhuo.defaults(); err != nil {
+func (_u *NoteHistoryUpdateOne) Save(ctx context.Context) (*NoteHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, nhuo.sqlSave, nhuo.mutation, nhuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nhuo *NoteHistoryUpdateOne) SaveX(ctx context.Context) *NoteHistory {
-	node, err := nhuo.Save(ctx)
+func (_u *NoteHistoryUpdateOne) SaveX(ctx context.Context) *NoteHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -364,44 +364,44 @@ func (nhuo *NoteHistoryUpdateOne) SaveX(ctx context.Context) *NoteHistory {
 }
 
 // Exec executes the query on the entity.
-func (nhuo *NoteHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := nhuo.Save(ctx)
+func (_u *NoteHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nhuo *NoteHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := nhuo.Exec(ctx); err != nil {
+func (_u *NoteHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nhuo *NoteHistoryUpdateOne) defaults() error {
-	if _, ok := nhuo.mutation.UpdatedAt(); !ok && !nhuo.mutation.UpdatedAtCleared() {
+func (_u *NoteHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if notehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized notehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := notehistory.UpdateDefaultUpdatedAt()
-		nhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (nhuo *NoteHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdateOne {
-	nhuo.modifiers = append(nhuo.modifiers, modifiers...)
-	return nhuo
+func (_u *NoteHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory, err error) {
+func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(notehistory.Table, notehistory.Columns, sqlgraph.NewFieldSpec(notehistory.FieldID, field.TypeString))
-	id, ok := nhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "NoteHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := nhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, notehistory.FieldID)
 		for _, f := range fields {
@@ -413,59 +413,59 @@ func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHisto
 			}
 		}
 	}
-	if ps := nhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if nhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(notehistory.FieldRef, field.TypeString)
 	}
-	if nhuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(notehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := nhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(notehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if nhuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if nhuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(notehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if nhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if nhuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(notehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := nhuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if nhuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
 	}
-	if nhuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.Text(); ok {
+	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
 	}
-	_spec.Node.Schema = nhuo.schemaConfig.NoteHistory
-	ctx = internal.NewSchemaConfigContext(ctx, nhuo.schemaConfig)
-	_spec.AddModifiers(nhuo.modifiers...)
-	_node = &NoteHistory{config: nhuo.config}
+	_spec.Node.Schema = _u.schemaConfig.NoteHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &NoteHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, nhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{notehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -473,6 +473,6 @@ func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHisto
 		}
 		return nil, err
 	}
-	nhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

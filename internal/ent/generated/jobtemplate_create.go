@@ -25,245 +25,245 @@ type JobTemplateCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (jtc *JobTemplateCreate) SetCreatedAt(t time.Time) *JobTemplateCreate {
-	jtc.mutation.SetCreatedAt(t)
-	return jtc
+func (_c *JobTemplateCreate) SetCreatedAt(v time.Time) *JobTemplateCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableCreatedAt(t *time.Time) *JobTemplateCreate {
-	if t != nil {
-		jtc.SetCreatedAt(*t)
+func (_c *JobTemplateCreate) SetNillableCreatedAt(v *time.Time) *JobTemplateCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jtc *JobTemplateCreate) SetUpdatedAt(t time.Time) *JobTemplateCreate {
-	jtc.mutation.SetUpdatedAt(t)
-	return jtc
+func (_c *JobTemplateCreate) SetUpdatedAt(v time.Time) *JobTemplateCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableUpdatedAt(t *time.Time) *JobTemplateCreate {
-	if t != nil {
-		jtc.SetUpdatedAt(*t)
+func (_c *JobTemplateCreate) SetNillableUpdatedAt(v *time.Time) *JobTemplateCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (jtc *JobTemplateCreate) SetCreatedBy(s string) *JobTemplateCreate {
-	jtc.mutation.SetCreatedBy(s)
-	return jtc
+func (_c *JobTemplateCreate) SetCreatedBy(v string) *JobTemplateCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableCreatedBy(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetCreatedBy(*s)
+func (_c *JobTemplateCreate) SetNillableCreatedBy(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jtc *JobTemplateCreate) SetUpdatedBy(s string) *JobTemplateCreate {
-	jtc.mutation.SetUpdatedBy(s)
-	return jtc
+func (_c *JobTemplateCreate) SetUpdatedBy(v string) *JobTemplateCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableUpdatedBy(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetUpdatedBy(*s)
+func (_c *JobTemplateCreate) SetNillableUpdatedBy(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jtc *JobTemplateCreate) SetDeletedAt(t time.Time) *JobTemplateCreate {
-	jtc.mutation.SetDeletedAt(t)
-	return jtc
+func (_c *JobTemplateCreate) SetDeletedAt(v time.Time) *JobTemplateCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableDeletedAt(t *time.Time) *JobTemplateCreate {
-	if t != nil {
-		jtc.SetDeletedAt(*t)
+func (_c *JobTemplateCreate) SetNillableDeletedAt(v *time.Time) *JobTemplateCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jtc *JobTemplateCreate) SetDeletedBy(s string) *JobTemplateCreate {
-	jtc.mutation.SetDeletedBy(s)
-	return jtc
+func (_c *JobTemplateCreate) SetDeletedBy(v string) *JobTemplateCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableDeletedBy(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetDeletedBy(*s)
+func (_c *JobTemplateCreate) SetNillableDeletedBy(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetDisplayID sets the "display_id" field.
-func (jtc *JobTemplateCreate) SetDisplayID(s string) *JobTemplateCreate {
-	jtc.mutation.SetDisplayID(s)
-	return jtc
+func (_c *JobTemplateCreate) SetDisplayID(v string) *JobTemplateCreate {
+	_c.mutation.SetDisplayID(v)
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (jtc *JobTemplateCreate) SetTags(s []string) *JobTemplateCreate {
-	jtc.mutation.SetTags(s)
-	return jtc
+func (_c *JobTemplateCreate) SetTags(v []string) *JobTemplateCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jtc *JobTemplateCreate) SetOwnerID(s string) *JobTemplateCreate {
-	jtc.mutation.SetOwnerID(s)
-	return jtc
+func (_c *JobTemplateCreate) SetOwnerID(v string) *JobTemplateCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableOwnerID(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetOwnerID(*s)
+func (_c *JobTemplateCreate) SetNillableOwnerID(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetSystemOwned sets the "system_owned" field.
-func (jtc *JobTemplateCreate) SetSystemOwned(b bool) *JobTemplateCreate {
-	jtc.mutation.SetSystemOwned(b)
-	return jtc
+func (_c *JobTemplateCreate) SetSystemOwned(v bool) *JobTemplateCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
 }
 
 // SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableSystemOwned(b *bool) *JobTemplateCreate {
-	if b != nil {
-		jtc.SetSystemOwned(*b)
+func (_c *JobTemplateCreate) SetNillableSystemOwned(v *bool) *JobTemplateCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetTitle sets the "title" field.
-func (jtc *JobTemplateCreate) SetTitle(s string) *JobTemplateCreate {
-	jtc.mutation.SetTitle(s)
-	return jtc
+func (_c *JobTemplateCreate) SetTitle(v string) *JobTemplateCreate {
+	_c.mutation.SetTitle(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (jtc *JobTemplateCreate) SetDescription(s string) *JobTemplateCreate {
-	jtc.mutation.SetDescription(s)
-	return jtc
+func (_c *JobTemplateCreate) SetDescription(v string) *JobTemplateCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableDescription(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetDescription(*s)
+func (_c *JobTemplateCreate) SetNillableDescription(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetPlatform sets the "platform" field.
-func (jtc *JobTemplateCreate) SetPlatform(ept enums.JobPlatformType) *JobTemplateCreate {
-	jtc.mutation.SetPlatform(ept)
-	return jtc
+func (_c *JobTemplateCreate) SetPlatform(v enums.JobPlatformType) *JobTemplateCreate {
+	_c.mutation.SetPlatform(v)
+	return _c
 }
 
 // SetWindmillPath sets the "windmill_path" field.
-func (jtc *JobTemplateCreate) SetWindmillPath(s string) *JobTemplateCreate {
-	jtc.mutation.SetWindmillPath(s)
-	return jtc
+func (_c *JobTemplateCreate) SetWindmillPath(v string) *JobTemplateCreate {
+	_c.mutation.SetWindmillPath(v)
+	return _c
 }
 
 // SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableWindmillPath(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetWindmillPath(*s)
+func (_c *JobTemplateCreate) SetNillableWindmillPath(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetWindmillPath(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (jtc *JobTemplateCreate) SetDownloadURL(s string) *JobTemplateCreate {
-	jtc.mutation.SetDownloadURL(s)
-	return jtc
+func (_c *JobTemplateCreate) SetDownloadURL(v string) *JobTemplateCreate {
+	_c.mutation.SetDownloadURL(v)
+	return _c
 }
 
 // SetConfiguration sets the "configuration" field.
-func (jtc *JobTemplateCreate) SetConfiguration(mc models.JobConfiguration) *JobTemplateCreate {
-	jtc.mutation.SetConfiguration(mc)
-	return jtc
+func (_c *JobTemplateCreate) SetConfiguration(v models.JobConfiguration) *JobTemplateCreate {
+	_c.mutation.SetConfiguration(v)
+	return _c
 }
 
 // SetCron sets the "cron" field.
-func (jtc *JobTemplateCreate) SetCron(m models.Cron) *JobTemplateCreate {
-	jtc.mutation.SetCron(m)
-	return jtc
+func (_c *JobTemplateCreate) SetCron(v models.Cron) *JobTemplateCreate {
+	_c.mutation.SetCron(v)
+	return _c
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableCron(m *models.Cron) *JobTemplateCreate {
-	if m != nil {
-		jtc.SetCron(*m)
+func (_c *JobTemplateCreate) SetNillableCron(v *models.Cron) *JobTemplateCreate {
+	if v != nil {
+		_c.SetCron(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (jtc *JobTemplateCreate) SetID(s string) *JobTemplateCreate {
-	jtc.mutation.SetID(s)
-	return jtc
+func (_c *JobTemplateCreate) SetID(v string) *JobTemplateCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (jtc *JobTemplateCreate) SetNillableID(s *string) *JobTemplateCreate {
-	if s != nil {
-		jtc.SetID(*s)
+func (_c *JobTemplateCreate) SetNillableID(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return jtc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jtc *JobTemplateCreate) SetOwner(o *Organization) *JobTemplateCreate {
-	return jtc.SetOwnerID(o.ID)
+func (_c *JobTemplateCreate) SetOwner(v *Organization) *JobTemplateCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (jtc *JobTemplateCreate) AddScheduledJobIDs(ids ...string) *JobTemplateCreate {
-	jtc.mutation.AddScheduledJobIDs(ids...)
-	return jtc
+func (_c *JobTemplateCreate) AddScheduledJobIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddScheduledJobIDs(ids...)
+	return _c
 }
 
 // AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (jtc *JobTemplateCreate) AddScheduledJobs(s ...*ScheduledJob) *JobTemplateCreate {
-	ids := make([]string, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *JobTemplateCreate) AddScheduledJobs(v ...*ScheduledJob) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return jtc.AddScheduledJobIDs(ids...)
+	return _c.AddScheduledJobIDs(ids...)
 }
 
 // Mutation returns the JobTemplateMutation object of the builder.
-func (jtc *JobTemplateCreate) Mutation() *JobTemplateMutation {
-	return jtc.mutation
+func (_c *JobTemplateCreate) Mutation() *JobTemplateMutation {
+	return _c.mutation
 }
 
 // Save creates the JobTemplate in the database.
-func (jtc *JobTemplateCreate) Save(ctx context.Context) (*JobTemplate, error) {
-	if err := jtc.defaults(); err != nil {
+func (_c *JobTemplateCreate) Save(ctx context.Context) (*JobTemplate, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jtc.sqlSave, jtc.mutation, jtc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (jtc *JobTemplateCreate) SaveX(ctx context.Context) *JobTemplate {
-	v, err := jtc.Save(ctx)
+func (_c *JobTemplateCreate) SaveX(ctx context.Context) *JobTemplate {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -271,82 +271,82 @@ func (jtc *JobTemplateCreate) SaveX(ctx context.Context) *JobTemplate {
 }
 
 // Exec executes the query.
-func (jtc *JobTemplateCreate) Exec(ctx context.Context) error {
-	_, err := jtc.Save(ctx)
+func (_c *JobTemplateCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jtc *JobTemplateCreate) ExecX(ctx context.Context) {
-	if err := jtc.Exec(ctx); err != nil {
+func (_c *JobTemplateCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jtc *JobTemplateCreate) defaults() error {
-	if _, ok := jtc.mutation.CreatedAt(); !ok {
+func (_c *JobTemplateCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if jobtemplate.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplate.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobtemplate.DefaultCreatedAt()
-		jtc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := jtc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if jobtemplate.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplate.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobtemplate.DefaultUpdatedAt()
-		jtc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := jtc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := jobtemplate.DefaultTags
-		jtc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := jtc.mutation.SystemOwned(); !ok {
+	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := jobtemplate.DefaultSystemOwned
-		jtc.mutation.SetSystemOwned(v)
+		_c.mutation.SetSystemOwned(v)
 	}
-	if _, ok := jtc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if jobtemplate.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplate.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := jobtemplate.DefaultID()
-		jtc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jtc *JobTemplateCreate) check() error {
-	if _, ok := jtc.mutation.DisplayID(); !ok {
+func (_c *JobTemplateCreate) check() error {
+	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "JobTemplate.display_id"`)}
 	}
-	if v, ok := jtc.mutation.DisplayID(); ok {
+	if v, ok := _c.mutation.DisplayID(); ok {
 		if err := jobtemplate.DisplayIDValidator(v); err != nil {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.display_id": %w`, err)}
 		}
 	}
-	if _, ok := jtc.mutation.Title(); !ok {
+	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "JobTemplate.title"`)}
 	}
-	if v, ok := jtc.mutation.Title(); ok {
+	if v, ok := _c.mutation.Title(); ok {
 		if err := jobtemplate.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.title": %w`, err)}
 		}
 	}
-	if _, ok := jtc.mutation.Platform(); !ok {
+	if _, ok := _c.mutation.Platform(); !ok {
 		return &ValidationError{Name: "platform", err: errors.New(`generated: missing required field "JobTemplate.platform"`)}
 	}
-	if v, ok := jtc.mutation.Platform(); ok {
+	if v, ok := _c.mutation.Platform(); ok {
 		if err := jobtemplate.PlatformValidator(v); err != nil {
 			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.platform": %w`, err)}
 		}
 	}
-	if _, ok := jtc.mutation.DownloadURL(); !ok {
+	if _, ok := _c.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "JobTemplate.download_url"`)}
 	}
-	if v, ok := jtc.mutation.Cron(); ok {
+	if v, ok := _c.mutation.Cron(); ok {
 		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
 		}
@@ -354,12 +354,12 @@ func (jtc *JobTemplateCreate) check() error {
 	return nil
 }
 
-func (jtc *JobTemplateCreate) sqlSave(ctx context.Context) (*JobTemplate, error) {
-	if err := jtc.check(); err != nil {
+func (_c *JobTemplateCreate) sqlSave(ctx context.Context) (*JobTemplate, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := jtc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, jtc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -372,86 +372,86 @@ func (jtc *JobTemplateCreate) sqlSave(ctx context.Context) (*JobTemplate, error)
 			return nil, fmt.Errorf("unexpected JobTemplate.ID type: %T", _spec.ID.Value)
 		}
 	}
-	jtc.mutation.id = &_node.ID
-	jtc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (jtc *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) {
+func (_c *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) {
 	var (
-		_node = &JobTemplate{config: jtc.config}
+		_node = &JobTemplate{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(jobtemplate.Table, sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString))
 	)
-	_spec.Schema = jtc.schemaConfig.JobTemplate
-	if id, ok := jtc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.JobTemplate
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := jtc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(jobtemplate.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := jtc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobtemplate.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := jtc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(jobtemplate.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := jtc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobtemplate.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := jtc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(jobtemplate.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := jtc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(jobtemplate.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := jtc.mutation.DisplayID(); ok {
+	if value, ok := _c.mutation.DisplayID(); ok {
 		_spec.SetField(jobtemplate.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := jtc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(jobtemplate.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := jtc.mutation.SystemOwned(); ok {
+	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(jobtemplate.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
 	}
-	if value, ok := jtc.mutation.Title(); ok {
+	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(jobtemplate.FieldTitle, field.TypeString, value)
 		_node.Title = value
 	}
-	if value, ok := jtc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(jobtemplate.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := jtc.mutation.Platform(); ok {
+	if value, ok := _c.mutation.Platform(); ok {
 		_spec.SetField(jobtemplate.FieldPlatform, field.TypeEnum, value)
 		_node.Platform = value
 	}
-	if value, ok := jtc.mutation.WindmillPath(); ok {
+	if value, ok := _c.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplate.FieldWindmillPath, field.TypeString, value)
 		_node.WindmillPath = value
 	}
-	if value, ok := jtc.mutation.DownloadURL(); ok {
+	if value, ok := _c.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplate.FieldDownloadURL, field.TypeString, value)
 		_node.DownloadURL = value
 	}
-	if value, ok := jtc.mutation.Configuration(); ok {
+	if value, ok := _c.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplate.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
 	}
-	if value, ok := jtc.mutation.Cron(); ok {
+	if value, ok := _c.mutation.Cron(); ok {
 		_spec.SetField(jobtemplate.FieldCron, field.TypeString, value)
 		_node.Cron = &value
 	}
-	if nodes := jtc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -462,14 +462,14 @@ func (jtc *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtc.schemaConfig.JobTemplate
+		edge.Schema = _c.schemaConfig.JobTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := jtc.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -480,7 +480,7 @@ func (jtc *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) 
 				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jtc.schemaConfig.ScheduledJob
+		edge.Schema = _c.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -497,16 +497,16 @@ type JobTemplateCreateBulk struct {
 }
 
 // Save creates the JobTemplate entities in the database.
-func (jtcb *JobTemplateCreateBulk) Save(ctx context.Context) ([]*JobTemplate, error) {
-	if jtcb.err != nil {
-		return nil, jtcb.err
+func (_c *JobTemplateCreateBulk) Save(ctx context.Context) ([]*JobTemplate, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(jtcb.builders))
-	nodes := make([]*JobTemplate, len(jtcb.builders))
-	mutators := make([]Mutator, len(jtcb.builders))
-	for i := range jtcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*JobTemplate, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := jtcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*JobTemplateMutation)
@@ -520,11 +520,11 @@ func (jtcb *JobTemplateCreateBulk) Save(ctx context.Context) ([]*JobTemplate, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, jtcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, jtcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -544,7 +544,7 @@ func (jtcb *JobTemplateCreateBulk) Save(ctx context.Context) ([]*JobTemplate, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, jtcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -552,8 +552,8 @@ func (jtcb *JobTemplateCreateBulk) Save(ctx context.Context) ([]*JobTemplate, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jtcb *JobTemplateCreateBulk) SaveX(ctx context.Context) []*JobTemplate {
-	v, err := jtcb.Save(ctx)
+func (_c *JobTemplateCreateBulk) SaveX(ctx context.Context) []*JobTemplate {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -561,14 +561,14 @@ func (jtcb *JobTemplateCreateBulk) SaveX(ctx context.Context) []*JobTemplate {
 }
 
 // Exec executes the query.
-func (jtcb *JobTemplateCreateBulk) Exec(ctx context.Context) error {
-	_, err := jtcb.Save(ctx)
+func (_c *JobTemplateCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jtcb *JobTemplateCreateBulk) ExecX(ctx context.Context) {
-	if err := jtcb.Exec(ctx); err != nil {
+func (_c *JobTemplateCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

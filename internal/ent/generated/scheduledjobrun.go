@@ -119,7 +119,7 @@ func (*ScheduledJobRun) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ScheduledJobRun fields.
-func (sjr *ScheduledJobRun) assignValues(columns []string, values []any) error {
+func (_m *ScheduledJobRun) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -129,82 +129,82 @@ func (sjr *ScheduledJobRun) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				sjr.ID = value.String
+				_m.ID = value.String
 			}
 		case scheduledjobrun.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sjr.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case scheduledjobrun.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sjr.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case scheduledjobrun.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sjr.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case scheduledjobrun.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sjr.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case scheduledjobrun.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				sjr.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case scheduledjobrun.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				sjr.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case scheduledjobrun.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				sjr.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case scheduledjobrun.FieldJobRunnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
 			} else if value.Valid {
-				sjr.JobRunnerID = value.String
+				_m.JobRunnerID = value.String
 			}
 		case scheduledjobrun.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				sjr.Status = enums.ScheduledJobRunStatus(value.String)
+				_m.Status = enums.ScheduledJobRunStatus(value.String)
 			}
 		case scheduledjobrun.FieldScheduledJobID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scheduled_job_id", values[i])
 			} else if value.Valid {
-				sjr.ScheduledJobID = value.String
+				_m.ScheduledJobID = value.String
 			}
 		case scheduledjobrun.FieldExpectedExecutionTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expected_execution_time", values[i])
 			} else if value.Valid {
-				sjr.ExpectedExecutionTime = value.Time
+				_m.ExpectedExecutionTime = value.Time
 			}
 		case scheduledjobrun.FieldScript:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script", values[i])
 			} else if value.Valid {
-				sjr.Script = value.String
+				_m.Script = value.String
 			}
 		default:
-			sjr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -212,83 +212,83 @@ func (sjr *ScheduledJobRun) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ScheduledJobRun.
 // This includes values selected through modifiers, order, etc.
-func (sjr *ScheduledJobRun) Value(name string) (ent.Value, error) {
-	return sjr.selectValues.Get(name)
+func (_m *ScheduledJobRun) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the ScheduledJobRun entity.
-func (sjr *ScheduledJobRun) QueryOwner() *OrganizationQuery {
-	return NewScheduledJobRunClient(sjr.config).QueryOwner(sjr)
+func (_m *ScheduledJobRun) QueryOwner() *OrganizationQuery {
+	return NewScheduledJobRunClient(_m.config).QueryOwner(_m)
 }
 
 // QueryScheduledJob queries the "scheduled_job" edge of the ScheduledJobRun entity.
-func (sjr *ScheduledJobRun) QueryScheduledJob() *ScheduledJobQuery {
-	return NewScheduledJobRunClient(sjr.config).QueryScheduledJob(sjr)
+func (_m *ScheduledJobRun) QueryScheduledJob() *ScheduledJobQuery {
+	return NewScheduledJobRunClient(_m.config).QueryScheduledJob(_m)
 }
 
 // QueryJobRunner queries the "job_runner" edge of the ScheduledJobRun entity.
-func (sjr *ScheduledJobRun) QueryJobRunner() *JobRunnerQuery {
-	return NewScheduledJobRunClient(sjr.config).QueryJobRunner(sjr)
+func (_m *ScheduledJobRun) QueryJobRunner() *JobRunnerQuery {
+	return NewScheduledJobRunClient(_m.config).QueryJobRunner(_m)
 }
 
 // Update returns a builder for updating this ScheduledJobRun.
 // Note that you need to call ScheduledJobRun.Unwrap() before calling this method if this ScheduledJobRun
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sjr *ScheduledJobRun) Update() *ScheduledJobRunUpdateOne {
-	return NewScheduledJobRunClient(sjr.config).UpdateOne(sjr)
+func (_m *ScheduledJobRun) Update() *ScheduledJobRunUpdateOne {
+	return NewScheduledJobRunClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ScheduledJobRun entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sjr *ScheduledJobRun) Unwrap() *ScheduledJobRun {
-	_tx, ok := sjr.config.driver.(*txDriver)
+func (_m *ScheduledJobRun) Unwrap() *ScheduledJobRun {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: ScheduledJobRun is not a transactional entity")
 	}
-	sjr.config.driver = _tx.drv
-	return sjr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sjr *ScheduledJobRun) String() string {
+func (_m *ScheduledJobRun) String() string {
 	var builder strings.Builder
 	builder.WriteString("ScheduledJobRun(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sjr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(sjr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sjr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(sjr.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(sjr.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(sjr.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(sjr.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(sjr.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("job_runner_id=")
-	builder.WriteString(sjr.JobRunnerID)
+	builder.WriteString(_m.JobRunnerID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", sjr.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("scheduled_job_id=")
-	builder.WriteString(sjr.ScheduledJobID)
+	builder.WriteString(_m.ScheduledJobID)
 	builder.WriteString(", ")
 	builder.WriteString("expected_execution_time=")
-	builder.WriteString(sjr.ExpectedExecutionTime.Format(time.ANSIC))
+	builder.WriteString(_m.ExpectedExecutionTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("script=")
-	builder.WriteString(sjr.Script)
+	builder.WriteString(_m.Script)
 	builder.WriteByte(')')
 	return builder.String()
 }

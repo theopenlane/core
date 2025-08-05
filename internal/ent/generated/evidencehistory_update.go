@@ -28,285 +28,285 @@ type EvidenceHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the EvidenceHistoryUpdate builder.
-func (ehu *EvidenceHistoryUpdate) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryUpdate {
-	ehu.mutation.Where(ps...)
-	return ehu
+func (_u *EvidenceHistoryUpdate) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ehu *EvidenceHistoryUpdate) SetUpdatedAt(t time.Time) *EvidenceHistoryUpdate {
-	ehu.mutation.SetUpdatedAt(t)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetUpdatedAt(v time.Time) *EvidenceHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ehu *EvidenceHistoryUpdate) ClearUpdatedAt() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearUpdatedAt()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearUpdatedAt() *EvidenceHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ehu *EvidenceHistoryUpdate) SetUpdatedBy(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetUpdatedBy(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetUpdatedBy(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableUpdatedBy(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetUpdatedBy(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableUpdatedBy(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ehu *EvidenceHistoryUpdate) ClearUpdatedBy() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearUpdatedBy()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearUpdatedBy() *EvidenceHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ehu *EvidenceHistoryUpdate) SetDeletedAt(t time.Time) *EvidenceHistoryUpdate {
-	ehu.mutation.SetDeletedAt(t)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetDeletedAt(v time.Time) *EvidenceHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableDeletedAt(t *time.Time) *EvidenceHistoryUpdate {
-	if t != nil {
-		ehu.SetDeletedAt(*t)
+func (_u *EvidenceHistoryUpdate) SetNillableDeletedAt(v *time.Time) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ehu *EvidenceHistoryUpdate) ClearDeletedAt() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearDeletedAt()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearDeletedAt() *EvidenceHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ehu *EvidenceHistoryUpdate) SetDeletedBy(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetDeletedBy(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetDeletedBy(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableDeletedBy(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetDeletedBy(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableDeletedBy(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ehu *EvidenceHistoryUpdate) ClearDeletedBy() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearDeletedBy()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearDeletedBy() *EvidenceHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ehu *EvidenceHistoryUpdate) SetTags(s []string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetTags(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetTags(v []string) *EvidenceHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ehu *EvidenceHistoryUpdate) AppendTags(s []string) *EvidenceHistoryUpdate {
-	ehu.mutation.AppendTags(s)
-	return ehu
+// AppendTags appends value to the "tags" field.
+func (_u *EvidenceHistoryUpdate) AppendTags(v []string) *EvidenceHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ehu *EvidenceHistoryUpdate) ClearTags() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearTags()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearTags() *EvidenceHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ehu *EvidenceHistoryUpdate) SetName(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetName(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetName(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableName(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetName(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableName(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ehu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ehu *EvidenceHistoryUpdate) SetDescription(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetDescription(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetDescription(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableDescription(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetDescription(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableDescription(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ehu *EvidenceHistoryUpdate) ClearDescription() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearDescription()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearDescription() *EvidenceHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetCollectionProcedure sets the "collection_procedure" field.
-func (ehu *EvidenceHistoryUpdate) SetCollectionProcedure(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetCollectionProcedure(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetCollectionProcedure(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetCollectionProcedure(v)
+	return _u
 }
 
 // SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableCollectionProcedure(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetCollectionProcedure(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableCollectionProcedure(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetCollectionProcedure(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearCollectionProcedure clears the value of the "collection_procedure" field.
-func (ehu *EvidenceHistoryUpdate) ClearCollectionProcedure() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearCollectionProcedure()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearCollectionProcedure() *EvidenceHistoryUpdate {
+	_u.mutation.ClearCollectionProcedure()
+	return _u
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (ehu *EvidenceHistoryUpdate) SetCreationDate(t time.Time) *EvidenceHistoryUpdate {
-	ehu.mutation.SetCreationDate(t)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetCreationDate(v time.Time) *EvidenceHistoryUpdate {
+	_u.mutation.SetCreationDate(v)
+	return _u
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableCreationDate(t *time.Time) *EvidenceHistoryUpdate {
-	if t != nil {
-		ehu.SetCreationDate(*t)
+func (_u *EvidenceHistoryUpdate) SetNillableCreationDate(v *time.Time) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetCreationDate(*v)
 	}
-	return ehu
+	return _u
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (ehu *EvidenceHistoryUpdate) SetRenewalDate(t time.Time) *EvidenceHistoryUpdate {
-	ehu.mutation.SetRenewalDate(t)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetRenewalDate(v time.Time) *EvidenceHistoryUpdate {
+	_u.mutation.SetRenewalDate(v)
+	return _u
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableRenewalDate(t *time.Time) *EvidenceHistoryUpdate {
-	if t != nil {
-		ehu.SetRenewalDate(*t)
+func (_u *EvidenceHistoryUpdate) SetNillableRenewalDate(v *time.Time) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetRenewalDate(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearRenewalDate clears the value of the "renewal_date" field.
-func (ehu *EvidenceHistoryUpdate) ClearRenewalDate() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearRenewalDate()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearRenewalDate() *EvidenceHistoryUpdate {
+	_u.mutation.ClearRenewalDate()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (ehu *EvidenceHistoryUpdate) SetSource(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetSource(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetSource(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableSource(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetSource(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableSource(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (ehu *EvidenceHistoryUpdate) ClearSource() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearSource()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearSource() *EvidenceHistoryUpdate {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetIsAutomated sets the "is_automated" field.
-func (ehu *EvidenceHistoryUpdate) SetIsAutomated(b bool) *EvidenceHistoryUpdate {
-	ehu.mutation.SetIsAutomated(b)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetIsAutomated(v bool) *EvidenceHistoryUpdate {
+	_u.mutation.SetIsAutomated(v)
+	return _u
 }
 
 // SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableIsAutomated(b *bool) *EvidenceHistoryUpdate {
-	if b != nil {
-		ehu.SetIsAutomated(*b)
+func (_u *EvidenceHistoryUpdate) SetNillableIsAutomated(v *bool) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetIsAutomated(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearIsAutomated clears the value of the "is_automated" field.
-func (ehu *EvidenceHistoryUpdate) ClearIsAutomated() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearIsAutomated()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearIsAutomated() *EvidenceHistoryUpdate {
+	_u.mutation.ClearIsAutomated()
+	return _u
 }
 
 // SetURL sets the "url" field.
-func (ehu *EvidenceHistoryUpdate) SetURL(s string) *EvidenceHistoryUpdate {
-	ehu.mutation.SetURL(s)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetURL(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetURL(v)
+	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableURL(s *string) *EvidenceHistoryUpdate {
-	if s != nil {
-		ehu.SetURL(*s)
+func (_u *EvidenceHistoryUpdate) SetNillableURL(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetURL(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearURL clears the value of the "url" field.
-func (ehu *EvidenceHistoryUpdate) ClearURL() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearURL()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearURL() *EvidenceHistoryUpdate {
+	_u.mutation.ClearURL()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ehu *EvidenceHistoryUpdate) SetStatus(es enums.EvidenceStatus) *EvidenceHistoryUpdate {
-	ehu.mutation.SetStatus(es)
-	return ehu
+func (_u *EvidenceHistoryUpdate) SetStatus(v enums.EvidenceStatus) *EvidenceHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ehu *EvidenceHistoryUpdate) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceHistoryUpdate {
-	if es != nil {
-		ehu.SetStatus(*es)
+func (_u *EvidenceHistoryUpdate) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return ehu
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (ehu *EvidenceHistoryUpdate) ClearStatus() *EvidenceHistoryUpdate {
-	ehu.mutation.ClearStatus()
-	return ehu
+func (_u *EvidenceHistoryUpdate) ClearStatus() *EvidenceHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // Mutation returns the EvidenceHistoryMutation object of the builder.
-func (ehu *EvidenceHistoryUpdate) Mutation() *EvidenceHistoryMutation {
-	return ehu.mutation
+func (_u *EvidenceHistoryUpdate) Mutation() *EvidenceHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ehu *EvidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := ehu.defaults(); err != nil {
+func (_u *EvidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, ehu.sqlSave, ehu.mutation, ehu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ehu *EvidenceHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ehu.Save(ctx)
+func (_u *EvidenceHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,33 +314,33 @@ func (ehu *EvidenceHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ehu *EvidenceHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ehu.Save(ctx)
+func (_u *EvidenceHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ehu *EvidenceHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ehu.Exec(ctx); err != nil {
+func (_u *EvidenceHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ehu *EvidenceHistoryUpdate) defaults() error {
-	if _, ok := ehu.mutation.UpdatedAt(); !ok && !ehu.mutation.UpdatedAtCleared() {
+func (_u *EvidenceHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if evidencehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.UpdateDefaultUpdatedAt()
-		ehu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ehu *EvidenceHistoryUpdate) check() error {
-	if v, ok := ehu.mutation.Status(); ok {
+func (_u *EvidenceHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := evidencehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.status": %w`, err)}
 		}
@@ -349,122 +349,122 @@ func (ehu *EvidenceHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ehu *EvidenceHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdate {
-	ehu.modifiers = append(ehu.modifiers, modifiers...)
-	return ehu
+func (_u *EvidenceHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ehu *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ehu.check(); err != nil {
-		return n, err
+func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
-	if ps := ehu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ehu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(evidencehistory.FieldRef, field.TypeString)
 	}
-	if ehu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ehu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(evidencehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ehu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ehu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ehu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(evidencehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ehu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ehu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ehu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ehu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ehu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ehu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ehu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, evidencehistory.FieldTags, value)
 		})
 	}
-	if ehu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
 	}
-	if ehu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ehu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ehu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(evidencehistory.FieldDescription, field.TypeString, value)
 	}
-	if ehu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(evidencehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := ehu.mutation.CollectionProcedure(); ok {
+	if value, ok := _u.mutation.CollectionProcedure(); ok {
 		_spec.SetField(evidencehistory.FieldCollectionProcedure, field.TypeString, value)
 	}
-	if ehu.mutation.CollectionProcedureCleared() {
+	if _u.mutation.CollectionProcedureCleared() {
 		_spec.ClearField(evidencehistory.FieldCollectionProcedure, field.TypeString)
 	}
-	if value, ok := ehu.mutation.CreationDate(); ok {
+	if value, ok := _u.mutation.CreationDate(); ok {
 		_spec.SetField(evidencehistory.FieldCreationDate, field.TypeTime, value)
 	}
-	if value, ok := ehu.mutation.RenewalDate(); ok {
+	if value, ok := _u.mutation.RenewalDate(); ok {
 		_spec.SetField(evidencehistory.FieldRenewalDate, field.TypeTime, value)
 	}
-	if ehu.mutation.RenewalDateCleared() {
+	if _u.mutation.RenewalDateCleared() {
 		_spec.ClearField(evidencehistory.FieldRenewalDate, field.TypeTime)
 	}
-	if value, ok := ehu.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(evidencehistory.FieldSource, field.TypeString, value)
 	}
-	if ehu.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(evidencehistory.FieldSource, field.TypeString)
 	}
-	if value, ok := ehu.mutation.IsAutomated(); ok {
+	if value, ok := _u.mutation.IsAutomated(); ok {
 		_spec.SetField(evidencehistory.FieldIsAutomated, field.TypeBool, value)
 	}
-	if ehu.mutation.IsAutomatedCleared() {
+	if _u.mutation.IsAutomatedCleared() {
 		_spec.ClearField(evidencehistory.FieldIsAutomated, field.TypeBool)
 	}
-	if value, ok := ehu.mutation.URL(); ok {
+	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(evidencehistory.FieldURL, field.TypeString, value)
 	}
-	if ehu.mutation.URLCleared() {
+	if _u.mutation.URLCleared() {
 		_spec.ClearField(evidencehistory.FieldURL, field.TypeString)
 	}
-	if value, ok := ehu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
 	}
-	if ehu.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
 	}
-	_spec.Node.Schema = ehu.schemaConfig.EvidenceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
-	_spec.AddModifiers(ehu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, ehu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.EvidenceHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{evidencehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -472,8 +472,8 @@ func (ehu *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		return 0, err
 	}
-	ehu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EvidenceHistoryUpdateOne is the builder for updating a single EvidenceHistory entity.
@@ -486,292 +486,292 @@ type EvidenceHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetUpdatedAt(t time.Time) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetUpdatedAt(t)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetUpdatedAt(v time.Time) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearUpdatedAt() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearUpdatedAt()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearUpdatedAt() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetUpdatedBy(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetUpdatedBy(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetUpdatedBy(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableUpdatedBy(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetUpdatedBy(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableUpdatedBy(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearUpdatedBy() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearUpdatedBy()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearUpdatedBy() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetDeletedAt(t time.Time) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetDeletedAt(t)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetDeletedAt(v time.Time) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *EvidenceHistoryUpdateOne {
-	if t != nil {
-		ehuo.SetDeletedAt(*t)
+func (_u *EvidenceHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearDeletedAt() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearDeletedAt()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearDeletedAt() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetDeletedBy(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetDeletedBy(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetDeletedBy(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableDeletedBy(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetDeletedBy(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableDeletedBy(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearDeletedBy() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearDeletedBy()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearDeletedBy() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetTags(s []string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetTags(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetTags(v []string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (ehuo *EvidenceHistoryUpdateOne) AppendTags(s []string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.AppendTags(s)
-	return ehuo
+// AppendTags appends value to the "tags" field.
+func (_u *EvidenceHistoryUpdateOne) AppendTags(v []string) *EvidenceHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearTags() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearTags()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearTags() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetName(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetName(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetName(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableName(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetName(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableName(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetDescription(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetDescription(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetDescription(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableDescription(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetDescription(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableDescription(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearDescription() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearDescription()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearDescription() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetCollectionProcedure sets the "collection_procedure" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetCollectionProcedure(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetCollectionProcedure(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetCollectionProcedure(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetCollectionProcedure(v)
+	return _u
 }
 
 // SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableCollectionProcedure(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetCollectionProcedure(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableCollectionProcedure(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetCollectionProcedure(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearCollectionProcedure clears the value of the "collection_procedure" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearCollectionProcedure() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearCollectionProcedure()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearCollectionProcedure() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearCollectionProcedure()
+	return _u
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetCreationDate(t time.Time) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetCreationDate(t)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetCreationDate(v time.Time) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetCreationDate(v)
+	return _u
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableCreationDate(t *time.Time) *EvidenceHistoryUpdateOne {
-	if t != nil {
-		ehuo.SetCreationDate(*t)
+func (_u *EvidenceHistoryUpdateOne) SetNillableCreationDate(v *time.Time) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetCreationDate(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetRenewalDate(t time.Time) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetRenewalDate(t)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetRenewalDate(v time.Time) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetRenewalDate(v)
+	return _u
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableRenewalDate(t *time.Time) *EvidenceHistoryUpdateOne {
-	if t != nil {
-		ehuo.SetRenewalDate(*t)
+func (_u *EvidenceHistoryUpdateOne) SetNillableRenewalDate(v *time.Time) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetRenewalDate(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearRenewalDate clears the value of the "renewal_date" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearRenewalDate() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearRenewalDate()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearRenewalDate() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearRenewalDate()
+	return _u
 }
 
 // SetSource sets the "source" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetSource(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetSource(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetSource(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
 }
 
 // SetNillableSource sets the "source" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableSource(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetSource(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableSource(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearSource clears the value of the "source" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearSource() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearSource()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearSource() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
 }
 
 // SetIsAutomated sets the "is_automated" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetIsAutomated(b bool) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetIsAutomated(b)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetIsAutomated(v bool) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetIsAutomated(v)
+	return _u
 }
 
 // SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableIsAutomated(b *bool) *EvidenceHistoryUpdateOne {
-	if b != nil {
-		ehuo.SetIsAutomated(*b)
+func (_u *EvidenceHistoryUpdateOne) SetNillableIsAutomated(v *bool) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsAutomated(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearIsAutomated clears the value of the "is_automated" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearIsAutomated() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearIsAutomated()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearIsAutomated() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearIsAutomated()
+	return _u
 }
 
 // SetURL sets the "url" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetURL(s string) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetURL(s)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetURL(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetURL(v)
+	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableURL(s *string) *EvidenceHistoryUpdateOne {
-	if s != nil {
-		ehuo.SetURL(*s)
+func (_u *EvidenceHistoryUpdateOne) SetNillableURL(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetURL(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearURL clears the value of the "url" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearURL() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearURL()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearURL() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ehuo *EvidenceHistoryUpdateOne) SetStatus(es enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.SetStatus(es)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) SetStatus(v enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (ehuo *EvidenceHistoryUpdateOne) SetNillableStatus(es *enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
-	if es != nil {
-		ehuo.SetStatus(*es)
+func (_u *EvidenceHistoryUpdateOne) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return ehuo
+	return _u
 }
 
 // ClearStatus clears the value of the "status" field.
-func (ehuo *EvidenceHistoryUpdateOne) ClearStatus() *EvidenceHistoryUpdateOne {
-	ehuo.mutation.ClearStatus()
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) ClearStatus() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
 }
 
 // Mutation returns the EvidenceHistoryMutation object of the builder.
-func (ehuo *EvidenceHistoryUpdateOne) Mutation() *EvidenceHistoryMutation {
-	return ehuo.mutation
+func (_u *EvidenceHistoryUpdateOne) Mutation() *EvidenceHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the EvidenceHistoryUpdate builder.
-func (ehuo *EvidenceHistoryUpdateOne) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryUpdateOne {
-	ehuo.mutation.Where(ps...)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ehuo *EvidenceHistoryUpdateOne) Select(field string, fields ...string) *EvidenceHistoryUpdateOne {
-	ehuo.fields = append([]string{field}, fields...)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) Select(field string, fields ...string) *EvidenceHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated EvidenceHistory entity.
-func (ehuo *EvidenceHistoryUpdateOne) Save(ctx context.Context) (*EvidenceHistory, error) {
-	if err := ehuo.defaults(); err != nil {
+func (_u *EvidenceHistoryUpdateOne) Save(ctx context.Context) (*EvidenceHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ehuo.sqlSave, ehuo.mutation, ehuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ehuo *EvidenceHistoryUpdateOne) SaveX(ctx context.Context) *EvidenceHistory {
-	node, err := ehuo.Save(ctx)
+func (_u *EvidenceHistoryUpdateOne) SaveX(ctx context.Context) *EvidenceHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -779,33 +779,33 @@ func (ehuo *EvidenceHistoryUpdateOne) SaveX(ctx context.Context) *EvidenceHistor
 }
 
 // Exec executes the query on the entity.
-func (ehuo *EvidenceHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ehuo.Save(ctx)
+func (_u *EvidenceHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ehuo *EvidenceHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ehuo.Exec(ctx); err != nil {
+func (_u *EvidenceHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ehuo *EvidenceHistoryUpdateOne) defaults() error {
-	if _, ok := ehuo.mutation.UpdatedAt(); !ok && !ehuo.mutation.UpdatedAtCleared() {
+func (_u *EvidenceHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if evidencehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized evidencehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := evidencehistory.UpdateDefaultUpdatedAt()
-		ehuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ehuo *EvidenceHistoryUpdateOne) check() error {
-	if v, ok := ehuo.mutation.Status(); ok {
+func (_u *EvidenceHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := evidencehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "EvidenceHistory.status": %w`, err)}
 		}
@@ -814,22 +814,22 @@ func (ehuo *EvidenceHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (ehuo *EvidenceHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdateOne {
-	ehuo.modifiers = append(ehuo.modifiers, modifiers...)
-	return ehuo
+func (_u *EvidenceHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (ehuo *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EvidenceHistory, err error) {
-	if err := ehuo.check(); err != nil {
+func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EvidenceHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
-	id, ok := ehuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "EvidenceHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ehuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, evidencehistory.FieldID)
 		for _, f := range fields {
@@ -841,115 +841,115 @@ func (ehuo *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evide
 			}
 		}
 	}
-	if ps := ehuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if ehuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(evidencehistory.FieldRef, field.TypeString)
 	}
-	if ehuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := ehuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(evidencehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ehuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if ehuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(evidencehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if ehuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if ehuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := ehuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(evidencehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if ehuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := ehuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, evidencehistory.FieldTags, value)
 		})
 	}
-	if ehuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
 	}
-	if ehuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ehuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(evidencehistory.FieldDescription, field.TypeString, value)
 	}
-	if ehuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(evidencehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.CollectionProcedure(); ok {
+	if value, ok := _u.mutation.CollectionProcedure(); ok {
 		_spec.SetField(evidencehistory.FieldCollectionProcedure, field.TypeString, value)
 	}
-	if ehuo.mutation.CollectionProcedureCleared() {
+	if _u.mutation.CollectionProcedureCleared() {
 		_spec.ClearField(evidencehistory.FieldCollectionProcedure, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.CreationDate(); ok {
+	if value, ok := _u.mutation.CreationDate(); ok {
 		_spec.SetField(evidencehistory.FieldCreationDate, field.TypeTime, value)
 	}
-	if value, ok := ehuo.mutation.RenewalDate(); ok {
+	if value, ok := _u.mutation.RenewalDate(); ok {
 		_spec.SetField(evidencehistory.FieldRenewalDate, field.TypeTime, value)
 	}
-	if ehuo.mutation.RenewalDateCleared() {
+	if _u.mutation.RenewalDateCleared() {
 		_spec.ClearField(evidencehistory.FieldRenewalDate, field.TypeTime)
 	}
-	if value, ok := ehuo.mutation.Source(); ok {
+	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(evidencehistory.FieldSource, field.TypeString, value)
 	}
-	if ehuo.mutation.SourceCleared() {
+	if _u.mutation.SourceCleared() {
 		_spec.ClearField(evidencehistory.FieldSource, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.IsAutomated(); ok {
+	if value, ok := _u.mutation.IsAutomated(); ok {
 		_spec.SetField(evidencehistory.FieldIsAutomated, field.TypeBool, value)
 	}
-	if ehuo.mutation.IsAutomatedCleared() {
+	if _u.mutation.IsAutomatedCleared() {
 		_spec.ClearField(evidencehistory.FieldIsAutomated, field.TypeBool)
 	}
-	if value, ok := ehuo.mutation.URL(); ok {
+	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(evidencehistory.FieldURL, field.TypeString, value)
 	}
-	if ehuo.mutation.URLCleared() {
+	if _u.mutation.URLCleared() {
 		_spec.ClearField(evidencehistory.FieldURL, field.TypeString)
 	}
-	if value, ok := ehuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
 	}
-	if ehuo.mutation.StatusCleared() {
+	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
 	}
-	_spec.Node.Schema = ehuo.schemaConfig.EvidenceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)
-	_spec.AddModifiers(ehuo.modifiers...)
-	_node = &EvidenceHistory{config: ehuo.config}
+	_spec.Node.Schema = _u.schemaConfig.EvidenceHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &EvidenceHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ehuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{evidencehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -957,6 +957,6 @@ func (ehuo *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evide
 		}
 		return nil, err
 	}
-	ehuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

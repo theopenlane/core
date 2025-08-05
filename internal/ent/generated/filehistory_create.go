@@ -22,323 +22,323 @@ type FileHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (fhc *FileHistoryCreate) SetHistoryTime(t time.Time) *FileHistoryCreate {
-	fhc.mutation.SetHistoryTime(t)
-	return fhc
+func (_c *FileHistoryCreate) SetHistoryTime(v time.Time) *FileHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableHistoryTime(t *time.Time) *FileHistoryCreate {
-	if t != nil {
-		fhc.SetHistoryTime(*t)
+func (_c *FileHistoryCreate) SetNillableHistoryTime(v *time.Time) *FileHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (fhc *FileHistoryCreate) SetRef(s string) *FileHistoryCreate {
-	fhc.mutation.SetRef(s)
-	return fhc
+func (_c *FileHistoryCreate) SetRef(v string) *FileHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableRef(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetRef(*s)
+func (_c *FileHistoryCreate) SetNillableRef(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (fhc *FileHistoryCreate) SetOperation(ht history.OpType) *FileHistoryCreate {
-	fhc.mutation.SetOperation(ht)
-	return fhc
+func (_c *FileHistoryCreate) SetOperation(v history.OpType) *FileHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fhc *FileHistoryCreate) SetCreatedAt(t time.Time) *FileHistoryCreate {
-	fhc.mutation.SetCreatedAt(t)
-	return fhc
+func (_c *FileHistoryCreate) SetCreatedAt(v time.Time) *FileHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableCreatedAt(t *time.Time) *FileHistoryCreate {
-	if t != nil {
-		fhc.SetCreatedAt(*t)
+func (_c *FileHistoryCreate) SetNillableCreatedAt(v *time.Time) *FileHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fhc *FileHistoryCreate) SetUpdatedAt(t time.Time) *FileHistoryCreate {
-	fhc.mutation.SetUpdatedAt(t)
-	return fhc
+func (_c *FileHistoryCreate) SetUpdatedAt(v time.Time) *FileHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableUpdatedAt(t *time.Time) *FileHistoryCreate {
-	if t != nil {
-		fhc.SetUpdatedAt(*t)
+func (_c *FileHistoryCreate) SetNillableUpdatedAt(v *time.Time) *FileHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (fhc *FileHistoryCreate) SetCreatedBy(s string) *FileHistoryCreate {
-	fhc.mutation.SetCreatedBy(s)
-	return fhc
+func (_c *FileHistoryCreate) SetCreatedBy(v string) *FileHistoryCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableCreatedBy(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetCreatedBy(*s)
+func (_c *FileHistoryCreate) SetNillableCreatedBy(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (fhc *FileHistoryCreate) SetUpdatedBy(s string) *FileHistoryCreate {
-	fhc.mutation.SetUpdatedBy(s)
-	return fhc
+func (_c *FileHistoryCreate) SetUpdatedBy(v string) *FileHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableUpdatedBy(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetUpdatedBy(*s)
+func (_c *FileHistoryCreate) SetNillableUpdatedBy(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (fhc *FileHistoryCreate) SetDeletedAt(t time.Time) *FileHistoryCreate {
-	fhc.mutation.SetDeletedAt(t)
-	return fhc
+func (_c *FileHistoryCreate) SetDeletedAt(v time.Time) *FileHistoryCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableDeletedAt(t *time.Time) *FileHistoryCreate {
-	if t != nil {
-		fhc.SetDeletedAt(*t)
+func (_c *FileHistoryCreate) SetNillableDeletedAt(v *time.Time) *FileHistoryCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (fhc *FileHistoryCreate) SetDeletedBy(s string) *FileHistoryCreate {
-	fhc.mutation.SetDeletedBy(s)
-	return fhc
+func (_c *FileHistoryCreate) SetDeletedBy(v string) *FileHistoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableDeletedBy(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetDeletedBy(*s)
+func (_c *FileHistoryCreate) SetNillableDeletedBy(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (fhc *FileHistoryCreate) SetTags(s []string) *FileHistoryCreate {
-	fhc.mutation.SetTags(s)
-	return fhc
+func (_c *FileHistoryCreate) SetTags(v []string) *FileHistoryCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetProvidedFileName sets the "provided_file_name" field.
-func (fhc *FileHistoryCreate) SetProvidedFileName(s string) *FileHistoryCreate {
-	fhc.mutation.SetProvidedFileName(s)
-	return fhc
+func (_c *FileHistoryCreate) SetProvidedFileName(v string) *FileHistoryCreate {
+	_c.mutation.SetProvidedFileName(v)
+	return _c
 }
 
 // SetProvidedFileExtension sets the "provided_file_extension" field.
-func (fhc *FileHistoryCreate) SetProvidedFileExtension(s string) *FileHistoryCreate {
-	fhc.mutation.SetProvidedFileExtension(s)
-	return fhc
+func (_c *FileHistoryCreate) SetProvidedFileExtension(v string) *FileHistoryCreate {
+	_c.mutation.SetProvidedFileExtension(v)
+	return _c
 }
 
 // SetProvidedFileSize sets the "provided_file_size" field.
-func (fhc *FileHistoryCreate) SetProvidedFileSize(i int64) *FileHistoryCreate {
-	fhc.mutation.SetProvidedFileSize(i)
-	return fhc
+func (_c *FileHistoryCreate) SetProvidedFileSize(v int64) *FileHistoryCreate {
+	_c.mutation.SetProvidedFileSize(v)
+	return _c
 }
 
 // SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableProvidedFileSize(i *int64) *FileHistoryCreate {
-	if i != nil {
-		fhc.SetProvidedFileSize(*i)
+func (_c *FileHistoryCreate) SetNillableProvidedFileSize(v *int64) *FileHistoryCreate {
+	if v != nil {
+		_c.SetProvidedFileSize(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetPersistedFileSize sets the "persisted_file_size" field.
-func (fhc *FileHistoryCreate) SetPersistedFileSize(i int64) *FileHistoryCreate {
-	fhc.mutation.SetPersistedFileSize(i)
-	return fhc
+func (_c *FileHistoryCreate) SetPersistedFileSize(v int64) *FileHistoryCreate {
+	_c.mutation.SetPersistedFileSize(v)
+	return _c
 }
 
 // SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillablePersistedFileSize(i *int64) *FileHistoryCreate {
-	if i != nil {
-		fhc.SetPersistedFileSize(*i)
+func (_c *FileHistoryCreate) SetNillablePersistedFileSize(v *int64) *FileHistoryCreate {
+	if v != nil {
+		_c.SetPersistedFileSize(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetDetectedMimeType sets the "detected_mime_type" field.
-func (fhc *FileHistoryCreate) SetDetectedMimeType(s string) *FileHistoryCreate {
-	fhc.mutation.SetDetectedMimeType(s)
-	return fhc
+func (_c *FileHistoryCreate) SetDetectedMimeType(v string) *FileHistoryCreate {
+	_c.mutation.SetDetectedMimeType(v)
+	return _c
 }
 
 // SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableDetectedMimeType(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetDetectedMimeType(*s)
+func (_c *FileHistoryCreate) SetNillableDetectedMimeType(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetDetectedMimeType(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetMd5Hash sets the "md5_hash" field.
-func (fhc *FileHistoryCreate) SetMd5Hash(s string) *FileHistoryCreate {
-	fhc.mutation.SetMd5Hash(s)
-	return fhc
+func (_c *FileHistoryCreate) SetMd5Hash(v string) *FileHistoryCreate {
+	_c.mutation.SetMd5Hash(v)
+	return _c
 }
 
 // SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableMd5Hash(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetMd5Hash(*s)
+func (_c *FileHistoryCreate) SetNillableMd5Hash(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetMd5Hash(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetDetectedContentType sets the "detected_content_type" field.
-func (fhc *FileHistoryCreate) SetDetectedContentType(s string) *FileHistoryCreate {
-	fhc.mutation.SetDetectedContentType(s)
-	return fhc
+func (_c *FileHistoryCreate) SetDetectedContentType(v string) *FileHistoryCreate {
+	_c.mutation.SetDetectedContentType(v)
+	return _c
 }
 
 // SetStoreKey sets the "store_key" field.
-func (fhc *FileHistoryCreate) SetStoreKey(s string) *FileHistoryCreate {
-	fhc.mutation.SetStoreKey(s)
-	return fhc
+func (_c *FileHistoryCreate) SetStoreKey(v string) *FileHistoryCreate {
+	_c.mutation.SetStoreKey(v)
+	return _c
 }
 
 // SetNillableStoreKey sets the "store_key" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableStoreKey(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetStoreKey(*s)
+func (_c *FileHistoryCreate) SetNillableStoreKey(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetStoreKey(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetCategoryType sets the "category_type" field.
-func (fhc *FileHistoryCreate) SetCategoryType(s string) *FileHistoryCreate {
-	fhc.mutation.SetCategoryType(s)
-	return fhc
+func (_c *FileHistoryCreate) SetCategoryType(v string) *FileHistoryCreate {
+	_c.mutation.SetCategoryType(v)
+	return _c
 }
 
 // SetNillableCategoryType sets the "category_type" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableCategoryType(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetCategoryType(*s)
+func (_c *FileHistoryCreate) SetNillableCategoryType(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetCategoryType(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetURI sets the "uri" field.
-func (fhc *FileHistoryCreate) SetURI(s string) *FileHistoryCreate {
-	fhc.mutation.SetURI(s)
-	return fhc
+func (_c *FileHistoryCreate) SetURI(v string) *FileHistoryCreate {
+	_c.mutation.SetURI(v)
+	return _c
 }
 
 // SetNillableURI sets the "uri" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableURI(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetURI(*s)
+func (_c *FileHistoryCreate) SetNillableURI(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetURI(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetStorageScheme sets the "storage_scheme" field.
-func (fhc *FileHistoryCreate) SetStorageScheme(s string) *FileHistoryCreate {
-	fhc.mutation.SetStorageScheme(s)
-	return fhc
+func (_c *FileHistoryCreate) SetStorageScheme(v string) *FileHistoryCreate {
+	_c.mutation.SetStorageScheme(v)
+	return _c
 }
 
 // SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableStorageScheme(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetStorageScheme(*s)
+func (_c *FileHistoryCreate) SetNillableStorageScheme(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetStorageScheme(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetStorageVolume sets the "storage_volume" field.
-func (fhc *FileHistoryCreate) SetStorageVolume(s string) *FileHistoryCreate {
-	fhc.mutation.SetStorageVolume(s)
-	return fhc
+func (_c *FileHistoryCreate) SetStorageVolume(v string) *FileHistoryCreate {
+	_c.mutation.SetStorageVolume(v)
+	return _c
 }
 
 // SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableStorageVolume(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetStorageVolume(*s)
+func (_c *FileHistoryCreate) SetNillableStorageVolume(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetStorageVolume(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetStoragePath sets the "storage_path" field.
-func (fhc *FileHistoryCreate) SetStoragePath(s string) *FileHistoryCreate {
-	fhc.mutation.SetStoragePath(s)
-	return fhc
+func (_c *FileHistoryCreate) SetStoragePath(v string) *FileHistoryCreate {
+	_c.mutation.SetStoragePath(v)
+	return _c
 }
 
 // SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableStoragePath(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetStoragePath(*s)
+func (_c *FileHistoryCreate) SetNillableStoragePath(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetStoragePath(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetFileContents sets the "file_contents" field.
-func (fhc *FileHistoryCreate) SetFileContents(b []byte) *FileHistoryCreate {
-	fhc.mutation.SetFileContents(b)
-	return fhc
+func (_c *FileHistoryCreate) SetFileContents(v []byte) *FileHistoryCreate {
+	_c.mutation.SetFileContents(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (fhc *FileHistoryCreate) SetID(s string) *FileHistoryCreate {
-	fhc.mutation.SetID(s)
-	return fhc
+func (_c *FileHistoryCreate) SetID(v string) *FileHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableID(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetID(*s)
+func (_c *FileHistoryCreate) SetNillableID(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return fhc
+	return _c
 }
 
 // Mutation returns the FileHistoryMutation object of the builder.
-func (fhc *FileHistoryCreate) Mutation() *FileHistoryMutation {
-	return fhc.mutation
+func (_c *FileHistoryCreate) Mutation() *FileHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the FileHistory in the database.
-func (fhc *FileHistoryCreate) Save(ctx context.Context) (*FileHistory, error) {
-	if err := fhc.defaults(); err != nil {
+func (_c *FileHistoryCreate) Save(ctx context.Context) (*FileHistory, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, fhc.sqlSave, fhc.mutation, fhc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (fhc *FileHistoryCreate) SaveX(ctx context.Context) *FileHistory {
-	v, err := fhc.Save(ctx)
+func (_c *FileHistoryCreate) SaveX(ctx context.Context) *FileHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -346,86 +346,86 @@ func (fhc *FileHistoryCreate) SaveX(ctx context.Context) *FileHistory {
 }
 
 // Exec executes the query.
-func (fhc *FileHistoryCreate) Exec(ctx context.Context) error {
-	_, err := fhc.Save(ctx)
+func (_c *FileHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhc *FileHistoryCreate) ExecX(ctx context.Context) {
-	if err := fhc.Exec(ctx); err != nil {
+func (_c *FileHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (fhc *FileHistoryCreate) defaults() error {
-	if _, ok := fhc.mutation.HistoryTime(); !ok {
+func (_c *FileHistoryCreate) defaults() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if filehistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("generated: uninitialized filehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
 		}
 		v := filehistory.DefaultHistoryTime()
-		fhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := fhc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if filehistory.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized filehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := filehistory.DefaultCreatedAt()
-		fhc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := fhc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if filehistory.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized filehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := filehistory.DefaultUpdatedAt()
-		fhc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := fhc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := filehistory.DefaultTags
-		fhc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := fhc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if filehistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized filehistory.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := filehistory.DefaultID()
-		fhc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fhc *FileHistoryCreate) check() error {
-	if _, ok := fhc.mutation.HistoryTime(); !ok {
+func (_c *FileHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`generated: missing required field "FileHistory.history_time"`)}
 	}
-	if _, ok := fhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`generated: missing required field "FileHistory.operation"`)}
 	}
-	if v, ok := fhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := filehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "FileHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := fhc.mutation.ProvidedFileName(); !ok {
+	if _, ok := _c.mutation.ProvidedFileName(); !ok {
 		return &ValidationError{Name: "provided_file_name", err: errors.New(`generated: missing required field "FileHistory.provided_file_name"`)}
 	}
-	if _, ok := fhc.mutation.ProvidedFileExtension(); !ok {
+	if _, ok := _c.mutation.ProvidedFileExtension(); !ok {
 		return &ValidationError{Name: "provided_file_extension", err: errors.New(`generated: missing required field "FileHistory.provided_file_extension"`)}
 	}
-	if _, ok := fhc.mutation.DetectedContentType(); !ok {
+	if _, ok := _c.mutation.DetectedContentType(); !ok {
 		return &ValidationError{Name: "detected_content_type", err: errors.New(`generated: missing required field "FileHistory.detected_content_type"`)}
 	}
 	return nil
 }
 
-func (fhc *FileHistoryCreate) sqlSave(ctx context.Context) (*FileHistory, error) {
-	if err := fhc.check(); err != nil {
+func (_c *FileHistoryCreate) sqlSave(ctx context.Context) (*FileHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := fhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, fhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -438,114 +438,114 @@ func (fhc *FileHistoryCreate) sqlSave(ctx context.Context) (*FileHistory, error)
 			return nil, fmt.Errorf("unexpected FileHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
-	fhc.mutation.id = &_node.ID
-	fhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
+func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &FileHistory{config: fhc.config}
+		_node = &FileHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(filehistory.Table, sqlgraph.NewFieldSpec(filehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = fhc.schemaConfig.FileHistory
-	if id, ok := fhc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.FileHistory
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := fhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(filehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := fhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(filehistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := fhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(filehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := fhc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(filehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := fhc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(filehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := fhc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(filehistory.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := fhc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(filehistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := fhc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(filehistory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := fhc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(filehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := fhc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(filehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := fhc.mutation.ProvidedFileName(); ok {
+	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
 		_node.ProvidedFileName = value
 	}
-	if value, ok := fhc.mutation.ProvidedFileExtension(); ok {
+	if value, ok := _c.mutation.ProvidedFileExtension(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileExtension, field.TypeString, value)
 		_node.ProvidedFileExtension = value
 	}
-	if value, ok := fhc.mutation.ProvidedFileSize(); ok {
+	if value, ok := _c.mutation.ProvidedFileSize(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileSize, field.TypeInt64, value)
 		_node.ProvidedFileSize = value
 	}
-	if value, ok := fhc.mutation.PersistedFileSize(); ok {
+	if value, ok := _c.mutation.PersistedFileSize(); ok {
 		_spec.SetField(filehistory.FieldPersistedFileSize, field.TypeInt64, value)
 		_node.PersistedFileSize = value
 	}
-	if value, ok := fhc.mutation.DetectedMimeType(); ok {
+	if value, ok := _c.mutation.DetectedMimeType(); ok {
 		_spec.SetField(filehistory.FieldDetectedMimeType, field.TypeString, value)
 		_node.DetectedMimeType = value
 	}
-	if value, ok := fhc.mutation.Md5Hash(); ok {
+	if value, ok := _c.mutation.Md5Hash(); ok {
 		_spec.SetField(filehistory.FieldMd5Hash, field.TypeString, value)
 		_node.Md5Hash = value
 	}
-	if value, ok := fhc.mutation.DetectedContentType(); ok {
+	if value, ok := _c.mutation.DetectedContentType(); ok {
 		_spec.SetField(filehistory.FieldDetectedContentType, field.TypeString, value)
 		_node.DetectedContentType = value
 	}
-	if value, ok := fhc.mutation.StoreKey(); ok {
+	if value, ok := _c.mutation.StoreKey(); ok {
 		_spec.SetField(filehistory.FieldStoreKey, field.TypeString, value)
 		_node.StoreKey = value
 	}
-	if value, ok := fhc.mutation.CategoryType(); ok {
+	if value, ok := _c.mutation.CategoryType(); ok {
 		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)
 		_node.CategoryType = value
 	}
-	if value, ok := fhc.mutation.URI(); ok {
+	if value, ok := _c.mutation.URI(); ok {
 		_spec.SetField(filehistory.FieldURI, field.TypeString, value)
 		_node.URI = value
 	}
-	if value, ok := fhc.mutation.StorageScheme(); ok {
+	if value, ok := _c.mutation.StorageScheme(); ok {
 		_spec.SetField(filehistory.FieldStorageScheme, field.TypeString, value)
 		_node.StorageScheme = value
 	}
-	if value, ok := fhc.mutation.StorageVolume(); ok {
+	if value, ok := _c.mutation.StorageVolume(); ok {
 		_spec.SetField(filehistory.FieldStorageVolume, field.TypeString, value)
 		_node.StorageVolume = value
 	}
-	if value, ok := fhc.mutation.StoragePath(); ok {
+	if value, ok := _c.mutation.StoragePath(); ok {
 		_spec.SetField(filehistory.FieldStoragePath, field.TypeString, value)
 		_node.StoragePath = value
 	}
-	if value, ok := fhc.mutation.FileContents(); ok {
+	if value, ok := _c.mutation.FileContents(); ok {
 		_spec.SetField(filehistory.FieldFileContents, field.TypeBytes, value)
 		_node.FileContents = value
 	}
@@ -560,16 +560,16 @@ type FileHistoryCreateBulk struct {
 }
 
 // Save creates the FileHistory entities in the database.
-func (fhcb *FileHistoryCreateBulk) Save(ctx context.Context) ([]*FileHistory, error) {
-	if fhcb.err != nil {
-		return nil, fhcb.err
+func (_c *FileHistoryCreateBulk) Save(ctx context.Context) ([]*FileHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(fhcb.builders))
-	nodes := make([]*FileHistory, len(fhcb.builders))
-	mutators := make([]Mutator, len(fhcb.builders))
-	for i := range fhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*FileHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := fhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FileHistoryMutation)
@@ -583,11 +583,11 @@ func (fhcb *FileHistoryCreateBulk) Save(ctx context.Context) ([]*FileHistory, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, fhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, fhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -607,7 +607,7 @@ func (fhcb *FileHistoryCreateBulk) Save(ctx context.Context) ([]*FileHistory, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, fhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -615,8 +615,8 @@ func (fhcb *FileHistoryCreateBulk) Save(ctx context.Context) ([]*FileHistory, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fhcb *FileHistoryCreateBulk) SaveX(ctx context.Context) []*FileHistory {
-	v, err := fhcb.Save(ctx)
+func (_c *FileHistoryCreateBulk) SaveX(ctx context.Context) []*FileHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -624,14 +624,14 @@ func (fhcb *FileHistoryCreateBulk) SaveX(ctx context.Context) []*FileHistory {
 }
 
 // Exec executes the query.
-func (fhcb *FileHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := fhcb.Save(ctx)
+func (_c *FileHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhcb *FileHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := fhcb.Exec(ctx); err != nil {
+func (_c *FileHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

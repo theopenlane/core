@@ -72,7 +72,7 @@ func (*CustomDomainHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CustomDomainHistory fields.
-func (cdh *CustomDomainHistory) assignValues(columns []string, values []any) error {
+func (_m *CustomDomainHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -82,67 +82,67 @@ func (cdh *CustomDomainHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				cdh.ID = value.String
+				_m.ID = value.String
 			}
 		case customdomainhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				cdh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case customdomainhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				cdh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case customdomainhistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				cdh.Operation = *value
+				_m.Operation = *value
 			}
 		case customdomainhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				cdh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case customdomainhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				cdh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case customdomainhistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				cdh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case customdomainhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				cdh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case customdomainhistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				cdh.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case customdomainhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				cdh.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case customdomainhistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &cdh.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -150,28 +150,28 @@ func (cdh *CustomDomainHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				cdh.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case customdomainhistory.FieldCnameRecord:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cname_record", values[i])
 			} else if value.Valid {
-				cdh.CnameRecord = value.String
+				_m.CnameRecord = value.String
 			}
 		case customdomainhistory.FieldMappableDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mappable_domain_id", values[i])
 			} else if value.Valid {
-				cdh.MappableDomainID = value.String
+				_m.MappableDomainID = value.String
 			}
 		case customdomainhistory.FieldDNSVerificationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_id", values[i])
 			} else if value.Valid {
-				cdh.DNSVerificationID = value.String
+				_m.DNSVerificationID = value.String
 			}
 		default:
-			cdh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -179,74 +179,74 @@ func (cdh *CustomDomainHistory) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CustomDomainHistory.
 // This includes values selected through modifiers, order, etc.
-func (cdh *CustomDomainHistory) Value(name string) (ent.Value, error) {
-	return cdh.selectValues.Get(name)
+func (_m *CustomDomainHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CustomDomainHistory.
 // Note that you need to call CustomDomainHistory.Unwrap() before calling this method if this CustomDomainHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cdh *CustomDomainHistory) Update() *CustomDomainHistoryUpdateOne {
-	return NewCustomDomainHistoryClient(cdh.config).UpdateOne(cdh)
+func (_m *CustomDomainHistory) Update() *CustomDomainHistoryUpdateOne {
+	return NewCustomDomainHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CustomDomainHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cdh *CustomDomainHistory) Unwrap() *CustomDomainHistory {
-	_tx, ok := cdh.config.driver.(*txDriver)
+func (_m *CustomDomainHistory) Unwrap() *CustomDomainHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: CustomDomainHistory is not a transactional entity")
 	}
-	cdh.config.driver = _tx.drv
-	return cdh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (cdh *CustomDomainHistory) String() string {
+func (_m *CustomDomainHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("CustomDomainHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cdh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(cdh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(cdh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", cdh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(cdh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(cdh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(cdh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(cdh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(cdh.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(cdh.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", cdh.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(cdh.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("cname_record=")
-	builder.WriteString(cdh.CnameRecord)
+	builder.WriteString(_m.CnameRecord)
 	builder.WriteString(", ")
 	builder.WriteString("mappable_domain_id=")
-	builder.WriteString(cdh.MappableDomainID)
+	builder.WriteString(_m.MappableDomainID)
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_id=")
-	builder.WriteString(cdh.DNSVerificationID)
+	builder.WriteString(_m.DNSVerificationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

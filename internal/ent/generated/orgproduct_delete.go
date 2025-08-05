@@ -22,58 +22,58 @@ type OrgProductDelete struct {
 }
 
 // Where appends a list predicates to the OrgProductDelete builder.
-func (opd *OrgProductDelete) Where(ps ...predicate.OrgProduct) *OrgProductDelete {
-	opd.mutation.Where(ps...)
-	return opd
+func (_d *OrgProductDelete) Where(ps ...predicate.OrgProduct) *OrgProductDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (opd *OrgProductDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, opd.sqlExec, opd.mutation, opd.hooks)
+func (_d *OrgProductDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opd *OrgProductDelete) ExecX(ctx context.Context) int {
-	n, err := opd.Exec(ctx)
+func (_d *OrgProductDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (opd *OrgProductDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrgProductDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orgproduct.Table, sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString))
-	_spec.Node.Schema = opd.schemaConfig.OrgProduct
-	ctx = internal.NewSchemaConfigContext(ctx, opd.schemaConfig)
-	if ps := opd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrgProduct
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, opd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	opd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrgProductDeleteOne is the builder for deleting a single OrgProduct entity.
 type OrgProductDeleteOne struct {
-	opd *OrgProductDelete
+	_d *OrgProductDelete
 }
 
 // Where appends a list predicates to the OrgProductDelete builder.
-func (opdo *OrgProductDeleteOne) Where(ps ...predicate.OrgProduct) *OrgProductDeleteOne {
-	opdo.opd.mutation.Where(ps...)
-	return opdo
+func (_d *OrgProductDeleteOne) Where(ps ...predicate.OrgProduct) *OrgProductDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (opdo *OrgProductDeleteOne) Exec(ctx context.Context) error {
-	n, err := opdo.opd.Exec(ctx)
+func (_d *OrgProductDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (opdo *OrgProductDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opdo *OrgProductDeleteOne) ExecX(ctx context.Context) {
-	if err := opdo.Exec(ctx); err != nil {
+func (_d *OrgProductDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

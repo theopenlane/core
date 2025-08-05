@@ -88,7 +88,7 @@ func (*EmailVerificationToken) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the EmailVerificationToken fields.
-func (evt *EmailVerificationToken) assignValues(columns []string, values []any) error {
+func (_m *EmailVerificationToken) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -98,77 +98,77 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				evt.ID = value.String
+				_m.ID = value.String
 			}
 		case emailverificationtoken.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				evt.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case emailverificationtoken.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				evt.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case emailverificationtoken.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				evt.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case emailverificationtoken.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				evt.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case emailverificationtoken.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				evt.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case emailverificationtoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				evt.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case emailverificationtoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				evt.OwnerID = value.String
+				_m.OwnerID = value.String
 			}
 		case emailverificationtoken.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
-				evt.Token = value.String
+				_m.Token = value.String
 			}
 		case emailverificationtoken.FieldTTL:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field ttl", values[i])
 			} else if value.Valid {
-				evt.TTL = new(time.Time)
-				*evt.TTL = value.Time
+				_m.TTL = new(time.Time)
+				*_m.TTL = value.Time
 			}
 		case emailverificationtoken.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				evt.Email = value.String
+				_m.Email = value.String
 			}
 		case emailverificationtoken.FieldSecret:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field secret", values[i])
 			} else if value != nil {
-				evt.Secret = value
+				_m.Secret = value
 			}
 		default:
-			evt.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -176,71 +176,71 @@ func (evt *EmailVerificationToken) assignValues(columns []string, values []any) 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the EmailVerificationToken.
 // This includes values selected through modifiers, order, etc.
-func (evt *EmailVerificationToken) Value(name string) (ent.Value, error) {
-	return evt.selectValues.Get(name)
+func (_m *EmailVerificationToken) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOwner queries the "owner" edge of the EmailVerificationToken entity.
-func (evt *EmailVerificationToken) QueryOwner() *UserQuery {
-	return NewEmailVerificationTokenClient(evt.config).QueryOwner(evt)
+func (_m *EmailVerificationToken) QueryOwner() *UserQuery {
+	return NewEmailVerificationTokenClient(_m.config).QueryOwner(_m)
 }
 
 // Update returns a builder for updating this EmailVerificationToken.
 // Note that you need to call EmailVerificationToken.Unwrap() before calling this method if this EmailVerificationToken
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (evt *EmailVerificationToken) Update() *EmailVerificationTokenUpdateOne {
-	return NewEmailVerificationTokenClient(evt.config).UpdateOne(evt)
+func (_m *EmailVerificationToken) Update() *EmailVerificationTokenUpdateOne {
+	return NewEmailVerificationTokenClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the EmailVerificationToken entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (evt *EmailVerificationToken) Unwrap() *EmailVerificationToken {
-	_tx, ok := evt.config.driver.(*txDriver)
+func (_m *EmailVerificationToken) Unwrap() *EmailVerificationToken {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: EmailVerificationToken is not a transactional entity")
 	}
-	evt.config.driver = _tx.drv
-	return evt
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (evt *EmailVerificationToken) String() string {
+func (_m *EmailVerificationToken) String() string {
 	var builder strings.Builder
 	builder.WriteString("EmailVerificationToken(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", evt.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(evt.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(evt.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(evt.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(evt.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(evt.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(evt.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(evt.OwnerID)
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("token=")
-	builder.WriteString(evt.Token)
+	builder.WriteString(_m.Token)
 	builder.WriteString(", ")
-	if v := evt.TTL; v != nil {
+	if v := _m.TTL; v != nil {
 		builder.WriteString("ttl=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("email=")
-	builder.WriteString(evt.Email)
+	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
-	if v := evt.Secret; v != nil {
+	if v := _m.Secret; v != nil {
 		builder.WriteString("secret=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}

@@ -31,351 +31,351 @@ type UserSettingUpdate struct {
 }
 
 // Where appends a list predicates to the UserSettingUpdate builder.
-func (usu *UserSettingUpdate) Where(ps ...predicate.UserSetting) *UserSettingUpdate {
-	usu.mutation.Where(ps...)
-	return usu
+func (_u *UserSettingUpdate) Where(ps ...predicate.UserSetting) *UserSettingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (usu *UserSettingUpdate) SetUpdatedAt(t time.Time) *UserSettingUpdate {
-	usu.mutation.SetUpdatedAt(t)
-	return usu
+func (_u *UserSettingUpdate) SetUpdatedAt(v time.Time) *UserSettingUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (usu *UserSettingUpdate) ClearUpdatedAt() *UserSettingUpdate {
-	usu.mutation.ClearUpdatedAt()
-	return usu
+func (_u *UserSettingUpdate) ClearUpdatedAt() *UserSettingUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (usu *UserSettingUpdate) SetUpdatedBy(s string) *UserSettingUpdate {
-	usu.mutation.SetUpdatedBy(s)
-	return usu
+func (_u *UserSettingUpdate) SetUpdatedBy(v string) *UserSettingUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableUpdatedBy(s *string) *UserSettingUpdate {
-	if s != nil {
-		usu.SetUpdatedBy(*s)
+func (_u *UserSettingUpdate) SetNillableUpdatedBy(v *string) *UserSettingUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (usu *UserSettingUpdate) ClearUpdatedBy() *UserSettingUpdate {
-	usu.mutation.ClearUpdatedBy()
-	return usu
+func (_u *UserSettingUpdate) ClearUpdatedBy() *UserSettingUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (usu *UserSettingUpdate) SetDeletedAt(t time.Time) *UserSettingUpdate {
-	usu.mutation.SetDeletedAt(t)
-	return usu
+func (_u *UserSettingUpdate) SetDeletedAt(v time.Time) *UserSettingUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableDeletedAt(t *time.Time) *UserSettingUpdate {
-	if t != nil {
-		usu.SetDeletedAt(*t)
+func (_u *UserSettingUpdate) SetNillableDeletedAt(v *time.Time) *UserSettingUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (usu *UserSettingUpdate) ClearDeletedAt() *UserSettingUpdate {
-	usu.mutation.ClearDeletedAt()
-	return usu
+func (_u *UserSettingUpdate) ClearDeletedAt() *UserSettingUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (usu *UserSettingUpdate) SetDeletedBy(s string) *UserSettingUpdate {
-	usu.mutation.SetDeletedBy(s)
-	return usu
+func (_u *UserSettingUpdate) SetDeletedBy(v string) *UserSettingUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableDeletedBy(s *string) *UserSettingUpdate {
-	if s != nil {
-		usu.SetDeletedBy(*s)
+func (_u *UserSettingUpdate) SetNillableDeletedBy(v *string) *UserSettingUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (usu *UserSettingUpdate) ClearDeletedBy() *UserSettingUpdate {
-	usu.mutation.ClearDeletedBy()
-	return usu
+func (_u *UserSettingUpdate) ClearDeletedBy() *UserSettingUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (usu *UserSettingUpdate) SetTags(s []string) *UserSettingUpdate {
-	usu.mutation.SetTags(s)
-	return usu
+func (_u *UserSettingUpdate) SetTags(v []string) *UserSettingUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (usu *UserSettingUpdate) AppendTags(s []string) *UserSettingUpdate {
-	usu.mutation.AppendTags(s)
-	return usu
+// AppendTags appends value to the "tags" field.
+func (_u *UserSettingUpdate) AppendTags(v []string) *UserSettingUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (usu *UserSettingUpdate) ClearTags() *UserSettingUpdate {
-	usu.mutation.ClearTags()
-	return usu
+func (_u *UserSettingUpdate) ClearTags() *UserSettingUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (usu *UserSettingUpdate) SetUserID(s string) *UserSettingUpdate {
-	usu.mutation.SetUserID(s)
-	return usu
+func (_u *UserSettingUpdate) SetUserID(v string) *UserSettingUpdate {
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableUserID(s *string) *UserSettingUpdate {
-	if s != nil {
-		usu.SetUserID(*s)
+func (_u *UserSettingUpdate) SetNillableUserID(v *string) *UserSettingUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearUserID clears the value of the "user_id" field.
-func (usu *UserSettingUpdate) ClearUserID() *UserSettingUpdate {
-	usu.mutation.ClearUserID()
-	return usu
+func (_u *UserSettingUpdate) ClearUserID() *UserSettingUpdate {
+	_u.mutation.ClearUserID()
+	return _u
 }
 
 // SetLocked sets the "locked" field.
-func (usu *UserSettingUpdate) SetLocked(b bool) *UserSettingUpdate {
-	usu.mutation.SetLocked(b)
-	return usu
+func (_u *UserSettingUpdate) SetLocked(v bool) *UserSettingUpdate {
+	_u.mutation.SetLocked(v)
+	return _u
 }
 
 // SetNillableLocked sets the "locked" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableLocked(b *bool) *UserSettingUpdate {
-	if b != nil {
-		usu.SetLocked(*b)
+func (_u *UserSettingUpdate) SetNillableLocked(v *bool) *UserSettingUpdate {
+	if v != nil {
+		_u.SetLocked(*v)
 	}
-	return usu
+	return _u
 }
 
 // SetSilencedAt sets the "silenced_at" field.
-func (usu *UserSettingUpdate) SetSilencedAt(t time.Time) *UserSettingUpdate {
-	usu.mutation.SetSilencedAt(t)
-	return usu
+func (_u *UserSettingUpdate) SetSilencedAt(v time.Time) *UserSettingUpdate {
+	_u.mutation.SetSilencedAt(v)
+	return _u
 }
 
 // SetNillableSilencedAt sets the "silenced_at" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableSilencedAt(t *time.Time) *UserSettingUpdate {
-	if t != nil {
-		usu.SetSilencedAt(*t)
+func (_u *UserSettingUpdate) SetNillableSilencedAt(v *time.Time) *UserSettingUpdate {
+	if v != nil {
+		_u.SetSilencedAt(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearSilencedAt clears the value of the "silenced_at" field.
-func (usu *UserSettingUpdate) ClearSilencedAt() *UserSettingUpdate {
-	usu.mutation.ClearSilencedAt()
-	return usu
+func (_u *UserSettingUpdate) ClearSilencedAt() *UserSettingUpdate {
+	_u.mutation.ClearSilencedAt()
+	return _u
 }
 
 // SetSuspendedAt sets the "suspended_at" field.
-func (usu *UserSettingUpdate) SetSuspendedAt(t time.Time) *UserSettingUpdate {
-	usu.mutation.SetSuspendedAt(t)
-	return usu
+func (_u *UserSettingUpdate) SetSuspendedAt(v time.Time) *UserSettingUpdate {
+	_u.mutation.SetSuspendedAt(v)
+	return _u
 }
 
 // SetNillableSuspendedAt sets the "suspended_at" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableSuspendedAt(t *time.Time) *UserSettingUpdate {
-	if t != nil {
-		usu.SetSuspendedAt(*t)
+func (_u *UserSettingUpdate) SetNillableSuspendedAt(v *time.Time) *UserSettingUpdate {
+	if v != nil {
+		_u.SetSuspendedAt(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearSuspendedAt clears the value of the "suspended_at" field.
-func (usu *UserSettingUpdate) ClearSuspendedAt() *UserSettingUpdate {
-	usu.mutation.ClearSuspendedAt()
-	return usu
+func (_u *UserSettingUpdate) ClearSuspendedAt() *UserSettingUpdate {
+	_u.mutation.ClearSuspendedAt()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (usu *UserSettingUpdate) SetStatus(es enums.UserStatus) *UserSettingUpdate {
-	usu.mutation.SetStatus(es)
-	return usu
+func (_u *UserSettingUpdate) SetStatus(v enums.UserStatus) *UserSettingUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableStatus(es *enums.UserStatus) *UserSettingUpdate {
-	if es != nil {
-		usu.SetStatus(*es)
+func (_u *UserSettingUpdate) SetNillableStatus(v *enums.UserStatus) *UserSettingUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return usu
+	return _u
 }
 
 // SetEmailConfirmed sets the "email_confirmed" field.
-func (usu *UserSettingUpdate) SetEmailConfirmed(b bool) *UserSettingUpdate {
-	usu.mutation.SetEmailConfirmed(b)
-	return usu
+func (_u *UserSettingUpdate) SetEmailConfirmed(v bool) *UserSettingUpdate {
+	_u.mutation.SetEmailConfirmed(v)
+	return _u
 }
 
 // SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableEmailConfirmed(b *bool) *UserSettingUpdate {
-	if b != nil {
-		usu.SetEmailConfirmed(*b)
+func (_u *UserSettingUpdate) SetNillableEmailConfirmed(v *bool) *UserSettingUpdate {
+	if v != nil {
+		_u.SetEmailConfirmed(*v)
 	}
-	return usu
+	return _u
 }
 
 // SetIsWebauthnAllowed sets the "is_webauthn_allowed" field.
-func (usu *UserSettingUpdate) SetIsWebauthnAllowed(b bool) *UserSettingUpdate {
-	usu.mutation.SetIsWebauthnAllowed(b)
-	return usu
+func (_u *UserSettingUpdate) SetIsWebauthnAllowed(v bool) *UserSettingUpdate {
+	_u.mutation.SetIsWebauthnAllowed(v)
+	return _u
 }
 
 // SetNillableIsWebauthnAllowed sets the "is_webauthn_allowed" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableIsWebauthnAllowed(b *bool) *UserSettingUpdate {
-	if b != nil {
-		usu.SetIsWebauthnAllowed(*b)
+func (_u *UserSettingUpdate) SetNillableIsWebauthnAllowed(v *bool) *UserSettingUpdate {
+	if v != nil {
+		_u.SetIsWebauthnAllowed(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearIsWebauthnAllowed clears the value of the "is_webauthn_allowed" field.
-func (usu *UserSettingUpdate) ClearIsWebauthnAllowed() *UserSettingUpdate {
-	usu.mutation.ClearIsWebauthnAllowed()
-	return usu
+func (_u *UserSettingUpdate) ClearIsWebauthnAllowed() *UserSettingUpdate {
+	_u.mutation.ClearIsWebauthnAllowed()
+	return _u
 }
 
 // SetIsTfaEnabled sets the "is_tfa_enabled" field.
-func (usu *UserSettingUpdate) SetIsTfaEnabled(b bool) *UserSettingUpdate {
-	usu.mutation.SetIsTfaEnabled(b)
-	return usu
+func (_u *UserSettingUpdate) SetIsTfaEnabled(v bool) *UserSettingUpdate {
+	_u.mutation.SetIsTfaEnabled(v)
+	return _u
 }
 
 // SetNillableIsTfaEnabled sets the "is_tfa_enabled" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableIsTfaEnabled(b *bool) *UserSettingUpdate {
-	if b != nil {
-		usu.SetIsTfaEnabled(*b)
+func (_u *UserSettingUpdate) SetNillableIsTfaEnabled(v *bool) *UserSettingUpdate {
+	if v != nil {
+		_u.SetIsTfaEnabled(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearIsTfaEnabled clears the value of the "is_tfa_enabled" field.
-func (usu *UserSettingUpdate) ClearIsTfaEnabled() *UserSettingUpdate {
-	usu.mutation.ClearIsTfaEnabled()
-	return usu
+func (_u *UserSettingUpdate) ClearIsTfaEnabled() *UserSettingUpdate {
+	_u.mutation.ClearIsTfaEnabled()
+	return _u
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (usu *UserSettingUpdate) SetPhoneNumber(s string) *UserSettingUpdate {
-	usu.mutation.SetPhoneNumber(s)
-	return usu
+func (_u *UserSettingUpdate) SetPhoneNumber(v string) *UserSettingUpdate {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillablePhoneNumber(s *string) *UserSettingUpdate {
-	if s != nil {
-		usu.SetPhoneNumber(*s)
+func (_u *UserSettingUpdate) SetNillablePhoneNumber(v *string) *UserSettingUpdate {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
 	}
-	return usu
+	return _u
 }
 
 // ClearPhoneNumber clears the value of the "phone_number" field.
-func (usu *UserSettingUpdate) ClearPhoneNumber() *UserSettingUpdate {
-	usu.mutation.ClearPhoneNumber()
-	return usu
+func (_u *UserSettingUpdate) ClearPhoneNumber() *UserSettingUpdate {
+	_u.mutation.ClearPhoneNumber()
+	return _u
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (usu *UserSettingUpdate) SetUser(u *User) *UserSettingUpdate {
-	return usu.SetUserID(u.ID)
+func (_u *UserSettingUpdate) SetUser(v *User) *UserSettingUpdate {
+	return _u.SetUserID(v.ID)
 }
 
 // SetDefaultOrgID sets the "default_org" edge to the Organization entity by ID.
-func (usu *UserSettingUpdate) SetDefaultOrgID(id string) *UserSettingUpdate {
-	usu.mutation.SetDefaultOrgID(id)
-	return usu
+func (_u *UserSettingUpdate) SetDefaultOrgID(id string) *UserSettingUpdate {
+	_u.mutation.SetDefaultOrgID(id)
+	return _u
 }
 
 // SetNillableDefaultOrgID sets the "default_org" edge to the Organization entity by ID if the given value is not nil.
-func (usu *UserSettingUpdate) SetNillableDefaultOrgID(id *string) *UserSettingUpdate {
+func (_u *UserSettingUpdate) SetNillableDefaultOrgID(id *string) *UserSettingUpdate {
 	if id != nil {
-		usu = usu.SetDefaultOrgID(*id)
+		_u = _u.SetDefaultOrgID(*id)
 	}
-	return usu
+	return _u
 }
 
 // SetDefaultOrg sets the "default_org" edge to the Organization entity.
-func (usu *UserSettingUpdate) SetDefaultOrg(o *Organization) *UserSettingUpdate {
-	return usu.SetDefaultOrgID(o.ID)
+func (_u *UserSettingUpdate) SetDefaultOrg(v *Organization) *UserSettingUpdate {
+	return _u.SetDefaultOrgID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (usu *UserSettingUpdate) AddFileIDs(ids ...string) *UserSettingUpdate {
-	usu.mutation.AddFileIDs(ids...)
-	return usu
+func (_u *UserSettingUpdate) AddFileIDs(ids ...string) *UserSettingUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (usu *UserSettingUpdate) AddFiles(f ...*File) *UserSettingUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *UserSettingUpdate) AddFiles(v ...*File) *UserSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return usu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the UserSettingMutation object of the builder.
-func (usu *UserSettingUpdate) Mutation() *UserSettingMutation {
-	return usu.mutation
+func (_u *UserSettingUpdate) Mutation() *UserSettingMutation {
+	return _u.mutation
 }
 
 // ClearUser clears the "user" edge to the User entity.
-func (usu *UserSettingUpdate) ClearUser() *UserSettingUpdate {
-	usu.mutation.ClearUser()
-	return usu
+func (_u *UserSettingUpdate) ClearUser() *UserSettingUpdate {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // ClearDefaultOrg clears the "default_org" edge to the Organization entity.
-func (usu *UserSettingUpdate) ClearDefaultOrg() *UserSettingUpdate {
-	usu.mutation.ClearDefaultOrg()
-	return usu
+func (_u *UserSettingUpdate) ClearDefaultOrg() *UserSettingUpdate {
+	_u.mutation.ClearDefaultOrg()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (usu *UserSettingUpdate) ClearFiles() *UserSettingUpdate {
-	usu.mutation.ClearFiles()
-	return usu
+func (_u *UserSettingUpdate) ClearFiles() *UserSettingUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (usu *UserSettingUpdate) RemoveFileIDs(ids ...string) *UserSettingUpdate {
-	usu.mutation.RemoveFileIDs(ids...)
-	return usu
+func (_u *UserSettingUpdate) RemoveFileIDs(ids ...string) *UserSettingUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (usu *UserSettingUpdate) RemoveFiles(f ...*File) *UserSettingUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *UserSettingUpdate) RemoveFiles(v ...*File) *UserSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return usu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (usu *UserSettingUpdate) Save(ctx context.Context) (int, error) {
-	if err := usu.defaults(); err != nil {
+func (_u *UserSettingUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, usu.sqlSave, usu.mutation, usu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (usu *UserSettingUpdate) SaveX(ctx context.Context) int {
-	affected, err := usu.Save(ctx)
+func (_u *UserSettingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -383,33 +383,33 @@ func (usu *UserSettingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (usu *UserSettingUpdate) Exec(ctx context.Context) error {
-	_, err := usu.Save(ctx)
+func (_u *UserSettingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (usu *UserSettingUpdate) ExecX(ctx context.Context) {
-	if err := usu.Exec(ctx); err != nil {
+func (_u *UserSettingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (usu *UserSettingUpdate) defaults() error {
-	if _, ok := usu.mutation.UpdatedAt(); !ok && !usu.mutation.UpdatedAtCleared() {
+func (_u *UserSettingUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if usersetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized usersetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := usersetting.UpdateDefaultUpdatedAt()
-		usu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (usu *UserSettingUpdate) check() error {
-	if v, ok := usu.mutation.Status(); ok {
+func (_u *UserSettingUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := usersetting.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "UserSetting.status": %w`, err)}
 		}
@@ -418,104 +418,104 @@ func (usu *UserSettingUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (usu *UserSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingUpdate {
-	usu.modifiers = append(usu.modifiers, modifiers...)
-	return usu
+func (_u *UserSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := usu.check(); err != nil {
-		return n, err
+func (_u *UserSettingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(usersetting.Table, usersetting.Columns, sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString))
-	if ps := usu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if usu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(usersetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := usu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(usersetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if usu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if usu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(usersetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := usu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if usu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := usu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if usu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(usersetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := usu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if usu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(usersetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := usu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := usu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, usersetting.FieldTags, value)
 		})
 	}
-	if usu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(usersetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := usu.mutation.Locked(); ok {
+	if value, ok := _u.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)
 	}
-	if value, ok := usu.mutation.SilencedAt(); ok {
+	if value, ok := _u.mutation.SilencedAt(); ok {
 		_spec.SetField(usersetting.FieldSilencedAt, field.TypeTime, value)
 	}
-	if usu.mutation.SilencedAtCleared() {
+	if _u.mutation.SilencedAtCleared() {
 		_spec.ClearField(usersetting.FieldSilencedAt, field.TypeTime)
 	}
-	if value, ok := usu.mutation.SuspendedAt(); ok {
+	if value, ok := _u.mutation.SuspendedAt(); ok {
 		_spec.SetField(usersetting.FieldSuspendedAt, field.TypeTime, value)
 	}
-	if usu.mutation.SuspendedAtCleared() {
+	if _u.mutation.SuspendedAtCleared() {
 		_spec.ClearField(usersetting.FieldSuspendedAt, field.TypeTime)
 	}
-	if value, ok := usu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(usersetting.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := usu.mutation.EmailConfirmed(); ok {
+	if value, ok := _u.mutation.EmailConfirmed(); ok {
 		_spec.SetField(usersetting.FieldEmailConfirmed, field.TypeBool, value)
 	}
-	if value, ok := usu.mutation.IsWebauthnAllowed(); ok {
+	if value, ok := _u.mutation.IsWebauthnAllowed(); ok {
 		_spec.SetField(usersetting.FieldIsWebauthnAllowed, field.TypeBool, value)
 	}
-	if usu.mutation.IsWebauthnAllowedCleared() {
+	if _u.mutation.IsWebauthnAllowedCleared() {
 		_spec.ClearField(usersetting.FieldIsWebauthnAllowed, field.TypeBool)
 	}
-	if value, ok := usu.mutation.IsTfaEnabled(); ok {
+	if value, ok := _u.mutation.IsTfaEnabled(); ok {
 		_spec.SetField(usersetting.FieldIsTfaEnabled, field.TypeBool, value)
 	}
-	if usu.mutation.IsTfaEnabledCleared() {
+	if _u.mutation.IsTfaEnabledCleared() {
 		_spec.ClearField(usersetting.FieldIsTfaEnabled, field.TypeBool)
 	}
-	if value, ok := usu.mutation.PhoneNumber(); ok {
+	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(usersetting.FieldPhoneNumber, field.TypeString, value)
 	}
-	if usu.mutation.PhoneNumberCleared() {
+	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(usersetting.FieldPhoneNumber, field.TypeString)
 	}
-	if usu.mutation.UserCleared() {
+	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -526,10 +526,10 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usu.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -540,13 +540,13 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if usu.mutation.DefaultOrgCleared() {
+	if _u.mutation.DefaultOrgCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -557,10 +557,10 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usu.mutation.DefaultOrgIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DefaultOrgIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -571,13 +571,13 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if usu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -588,10 +588,10 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSettingFiles
+		edge.Schema = _u.schemaConfig.UserSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !usu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -602,13 +602,13 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSettingFiles
+		edge.Schema = _u.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -619,16 +619,16 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usu.schemaConfig.UserSettingFiles
+		edge.Schema = _u.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = usu.schemaConfig.UserSetting
-	ctx = internal.NewSchemaConfigContext(ctx, usu.schemaConfig)
-	_spec.AddModifiers(usu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, usu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.UserSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{usersetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -636,8 +636,8 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	usu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // UserSettingUpdateOne is the builder for updating a single UserSetting entity.
@@ -650,358 +650,358 @@ type UserSettingUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (usuo *UserSettingUpdateOne) SetUpdatedAt(t time.Time) *UserSettingUpdateOne {
-	usuo.mutation.SetUpdatedAt(t)
-	return usuo
+func (_u *UserSettingUpdateOne) SetUpdatedAt(v time.Time) *UserSettingUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (usuo *UserSettingUpdateOne) ClearUpdatedAt() *UserSettingUpdateOne {
-	usuo.mutation.ClearUpdatedAt()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearUpdatedAt() *UserSettingUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (usuo *UserSettingUpdateOne) SetUpdatedBy(s string) *UserSettingUpdateOne {
-	usuo.mutation.SetUpdatedBy(s)
-	return usuo
+func (_u *UserSettingUpdateOne) SetUpdatedBy(v string) *UserSettingUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableUpdatedBy(s *string) *UserSettingUpdateOne {
-	if s != nil {
-		usuo.SetUpdatedBy(*s)
+func (_u *UserSettingUpdateOne) SetNillableUpdatedBy(v *string) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (usuo *UserSettingUpdateOne) ClearUpdatedBy() *UserSettingUpdateOne {
-	usuo.mutation.ClearUpdatedBy()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearUpdatedBy() *UserSettingUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (usuo *UserSettingUpdateOne) SetDeletedAt(t time.Time) *UserSettingUpdateOne {
-	usuo.mutation.SetDeletedAt(t)
-	return usuo
+func (_u *UserSettingUpdateOne) SetDeletedAt(v time.Time) *UserSettingUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableDeletedAt(t *time.Time) *UserSettingUpdateOne {
-	if t != nil {
-		usuo.SetDeletedAt(*t)
+func (_u *UserSettingUpdateOne) SetNillableDeletedAt(v *time.Time) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (usuo *UserSettingUpdateOne) ClearDeletedAt() *UserSettingUpdateOne {
-	usuo.mutation.ClearDeletedAt()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearDeletedAt() *UserSettingUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (usuo *UserSettingUpdateOne) SetDeletedBy(s string) *UserSettingUpdateOne {
-	usuo.mutation.SetDeletedBy(s)
-	return usuo
+func (_u *UserSettingUpdateOne) SetDeletedBy(v string) *UserSettingUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableDeletedBy(s *string) *UserSettingUpdateOne {
-	if s != nil {
-		usuo.SetDeletedBy(*s)
+func (_u *UserSettingUpdateOne) SetNillableDeletedBy(v *string) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (usuo *UserSettingUpdateOne) ClearDeletedBy() *UserSettingUpdateOne {
-	usuo.mutation.ClearDeletedBy()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearDeletedBy() *UserSettingUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (usuo *UserSettingUpdateOne) SetTags(s []string) *UserSettingUpdateOne {
-	usuo.mutation.SetTags(s)
-	return usuo
+func (_u *UserSettingUpdateOne) SetTags(v []string) *UserSettingUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (usuo *UserSettingUpdateOne) AppendTags(s []string) *UserSettingUpdateOne {
-	usuo.mutation.AppendTags(s)
-	return usuo
+// AppendTags appends value to the "tags" field.
+func (_u *UserSettingUpdateOne) AppendTags(v []string) *UserSettingUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (usuo *UserSettingUpdateOne) ClearTags() *UserSettingUpdateOne {
-	usuo.mutation.ClearTags()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearTags() *UserSettingUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (usuo *UserSettingUpdateOne) SetUserID(s string) *UserSettingUpdateOne {
-	usuo.mutation.SetUserID(s)
-	return usuo
+func (_u *UserSettingUpdateOne) SetUserID(v string) *UserSettingUpdateOne {
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableUserID(s *string) *UserSettingUpdateOne {
-	if s != nil {
-		usuo.SetUserID(*s)
+func (_u *UserSettingUpdateOne) SetNillableUserID(v *string) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearUserID clears the value of the "user_id" field.
-func (usuo *UserSettingUpdateOne) ClearUserID() *UserSettingUpdateOne {
-	usuo.mutation.ClearUserID()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearUserID() *UserSettingUpdateOne {
+	_u.mutation.ClearUserID()
+	return _u
 }
 
 // SetLocked sets the "locked" field.
-func (usuo *UserSettingUpdateOne) SetLocked(b bool) *UserSettingUpdateOne {
-	usuo.mutation.SetLocked(b)
-	return usuo
+func (_u *UserSettingUpdateOne) SetLocked(v bool) *UserSettingUpdateOne {
+	_u.mutation.SetLocked(v)
+	return _u
 }
 
 // SetNillableLocked sets the "locked" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableLocked(b *bool) *UserSettingUpdateOne {
-	if b != nil {
-		usuo.SetLocked(*b)
+func (_u *UserSettingUpdateOne) SetNillableLocked(v *bool) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetLocked(*v)
 	}
-	return usuo
+	return _u
 }
 
 // SetSilencedAt sets the "silenced_at" field.
-func (usuo *UserSettingUpdateOne) SetSilencedAt(t time.Time) *UserSettingUpdateOne {
-	usuo.mutation.SetSilencedAt(t)
-	return usuo
+func (_u *UserSettingUpdateOne) SetSilencedAt(v time.Time) *UserSettingUpdateOne {
+	_u.mutation.SetSilencedAt(v)
+	return _u
 }
 
 // SetNillableSilencedAt sets the "silenced_at" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableSilencedAt(t *time.Time) *UserSettingUpdateOne {
-	if t != nil {
-		usuo.SetSilencedAt(*t)
+func (_u *UserSettingUpdateOne) SetNillableSilencedAt(v *time.Time) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetSilencedAt(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearSilencedAt clears the value of the "silenced_at" field.
-func (usuo *UserSettingUpdateOne) ClearSilencedAt() *UserSettingUpdateOne {
-	usuo.mutation.ClearSilencedAt()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearSilencedAt() *UserSettingUpdateOne {
+	_u.mutation.ClearSilencedAt()
+	return _u
 }
 
 // SetSuspendedAt sets the "suspended_at" field.
-func (usuo *UserSettingUpdateOne) SetSuspendedAt(t time.Time) *UserSettingUpdateOne {
-	usuo.mutation.SetSuspendedAt(t)
-	return usuo
+func (_u *UserSettingUpdateOne) SetSuspendedAt(v time.Time) *UserSettingUpdateOne {
+	_u.mutation.SetSuspendedAt(v)
+	return _u
 }
 
 // SetNillableSuspendedAt sets the "suspended_at" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableSuspendedAt(t *time.Time) *UserSettingUpdateOne {
-	if t != nil {
-		usuo.SetSuspendedAt(*t)
+func (_u *UserSettingUpdateOne) SetNillableSuspendedAt(v *time.Time) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetSuspendedAt(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearSuspendedAt clears the value of the "suspended_at" field.
-func (usuo *UserSettingUpdateOne) ClearSuspendedAt() *UserSettingUpdateOne {
-	usuo.mutation.ClearSuspendedAt()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearSuspendedAt() *UserSettingUpdateOne {
+	_u.mutation.ClearSuspendedAt()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (usuo *UserSettingUpdateOne) SetStatus(es enums.UserStatus) *UserSettingUpdateOne {
-	usuo.mutation.SetStatus(es)
-	return usuo
+func (_u *UserSettingUpdateOne) SetStatus(v enums.UserStatus) *UserSettingUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableStatus(es *enums.UserStatus) *UserSettingUpdateOne {
-	if es != nil {
-		usuo.SetStatus(*es)
+func (_u *UserSettingUpdateOne) SetNillableStatus(v *enums.UserStatus) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return usuo
+	return _u
 }
 
 // SetEmailConfirmed sets the "email_confirmed" field.
-func (usuo *UserSettingUpdateOne) SetEmailConfirmed(b bool) *UserSettingUpdateOne {
-	usuo.mutation.SetEmailConfirmed(b)
-	return usuo
+func (_u *UserSettingUpdateOne) SetEmailConfirmed(v bool) *UserSettingUpdateOne {
+	_u.mutation.SetEmailConfirmed(v)
+	return _u
 }
 
 // SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableEmailConfirmed(b *bool) *UserSettingUpdateOne {
-	if b != nil {
-		usuo.SetEmailConfirmed(*b)
+func (_u *UserSettingUpdateOne) SetNillableEmailConfirmed(v *bool) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetEmailConfirmed(*v)
 	}
-	return usuo
+	return _u
 }
 
 // SetIsWebauthnAllowed sets the "is_webauthn_allowed" field.
-func (usuo *UserSettingUpdateOne) SetIsWebauthnAllowed(b bool) *UserSettingUpdateOne {
-	usuo.mutation.SetIsWebauthnAllowed(b)
-	return usuo
+func (_u *UserSettingUpdateOne) SetIsWebauthnAllowed(v bool) *UserSettingUpdateOne {
+	_u.mutation.SetIsWebauthnAllowed(v)
+	return _u
 }
 
 // SetNillableIsWebauthnAllowed sets the "is_webauthn_allowed" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableIsWebauthnAllowed(b *bool) *UserSettingUpdateOne {
-	if b != nil {
-		usuo.SetIsWebauthnAllowed(*b)
+func (_u *UserSettingUpdateOne) SetNillableIsWebauthnAllowed(v *bool) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetIsWebauthnAllowed(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearIsWebauthnAllowed clears the value of the "is_webauthn_allowed" field.
-func (usuo *UserSettingUpdateOne) ClearIsWebauthnAllowed() *UserSettingUpdateOne {
-	usuo.mutation.ClearIsWebauthnAllowed()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearIsWebauthnAllowed() *UserSettingUpdateOne {
+	_u.mutation.ClearIsWebauthnAllowed()
+	return _u
 }
 
 // SetIsTfaEnabled sets the "is_tfa_enabled" field.
-func (usuo *UserSettingUpdateOne) SetIsTfaEnabled(b bool) *UserSettingUpdateOne {
-	usuo.mutation.SetIsTfaEnabled(b)
-	return usuo
+func (_u *UserSettingUpdateOne) SetIsTfaEnabled(v bool) *UserSettingUpdateOne {
+	_u.mutation.SetIsTfaEnabled(v)
+	return _u
 }
 
 // SetNillableIsTfaEnabled sets the "is_tfa_enabled" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableIsTfaEnabled(b *bool) *UserSettingUpdateOne {
-	if b != nil {
-		usuo.SetIsTfaEnabled(*b)
+func (_u *UserSettingUpdateOne) SetNillableIsTfaEnabled(v *bool) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetIsTfaEnabled(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearIsTfaEnabled clears the value of the "is_tfa_enabled" field.
-func (usuo *UserSettingUpdateOne) ClearIsTfaEnabled() *UserSettingUpdateOne {
-	usuo.mutation.ClearIsTfaEnabled()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearIsTfaEnabled() *UserSettingUpdateOne {
+	_u.mutation.ClearIsTfaEnabled()
+	return _u
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (usuo *UserSettingUpdateOne) SetPhoneNumber(s string) *UserSettingUpdateOne {
-	usuo.mutation.SetPhoneNumber(s)
-	return usuo
+func (_u *UserSettingUpdateOne) SetPhoneNumber(v string) *UserSettingUpdateOne {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillablePhoneNumber(s *string) *UserSettingUpdateOne {
-	if s != nil {
-		usuo.SetPhoneNumber(*s)
+func (_u *UserSettingUpdateOne) SetNillablePhoneNumber(v *string) *UserSettingUpdateOne {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
 	}
-	return usuo
+	return _u
 }
 
 // ClearPhoneNumber clears the value of the "phone_number" field.
-func (usuo *UserSettingUpdateOne) ClearPhoneNumber() *UserSettingUpdateOne {
-	usuo.mutation.ClearPhoneNumber()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearPhoneNumber() *UserSettingUpdateOne {
+	_u.mutation.ClearPhoneNumber()
+	return _u
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (usuo *UserSettingUpdateOne) SetUser(u *User) *UserSettingUpdateOne {
-	return usuo.SetUserID(u.ID)
+func (_u *UserSettingUpdateOne) SetUser(v *User) *UserSettingUpdateOne {
+	return _u.SetUserID(v.ID)
 }
 
 // SetDefaultOrgID sets the "default_org" edge to the Organization entity by ID.
-func (usuo *UserSettingUpdateOne) SetDefaultOrgID(id string) *UserSettingUpdateOne {
-	usuo.mutation.SetDefaultOrgID(id)
-	return usuo
+func (_u *UserSettingUpdateOne) SetDefaultOrgID(id string) *UserSettingUpdateOne {
+	_u.mutation.SetDefaultOrgID(id)
+	return _u
 }
 
 // SetNillableDefaultOrgID sets the "default_org" edge to the Organization entity by ID if the given value is not nil.
-func (usuo *UserSettingUpdateOne) SetNillableDefaultOrgID(id *string) *UserSettingUpdateOne {
+func (_u *UserSettingUpdateOne) SetNillableDefaultOrgID(id *string) *UserSettingUpdateOne {
 	if id != nil {
-		usuo = usuo.SetDefaultOrgID(*id)
+		_u = _u.SetDefaultOrgID(*id)
 	}
-	return usuo
+	return _u
 }
 
 // SetDefaultOrg sets the "default_org" edge to the Organization entity.
-func (usuo *UserSettingUpdateOne) SetDefaultOrg(o *Organization) *UserSettingUpdateOne {
-	return usuo.SetDefaultOrgID(o.ID)
+func (_u *UserSettingUpdateOne) SetDefaultOrg(v *Organization) *UserSettingUpdateOne {
+	return _u.SetDefaultOrgID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (usuo *UserSettingUpdateOne) AddFileIDs(ids ...string) *UserSettingUpdateOne {
-	usuo.mutation.AddFileIDs(ids...)
-	return usuo
+func (_u *UserSettingUpdateOne) AddFileIDs(ids ...string) *UserSettingUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (usuo *UserSettingUpdateOne) AddFiles(f ...*File) *UserSettingUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *UserSettingUpdateOne) AddFiles(v ...*File) *UserSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return usuo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the UserSettingMutation object of the builder.
-func (usuo *UserSettingUpdateOne) Mutation() *UserSettingMutation {
-	return usuo.mutation
+func (_u *UserSettingUpdateOne) Mutation() *UserSettingMutation {
+	return _u.mutation
 }
 
 // ClearUser clears the "user" edge to the User entity.
-func (usuo *UserSettingUpdateOne) ClearUser() *UserSettingUpdateOne {
-	usuo.mutation.ClearUser()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearUser() *UserSettingUpdateOne {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // ClearDefaultOrg clears the "default_org" edge to the Organization entity.
-func (usuo *UserSettingUpdateOne) ClearDefaultOrg() *UserSettingUpdateOne {
-	usuo.mutation.ClearDefaultOrg()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearDefaultOrg() *UserSettingUpdateOne {
+	_u.mutation.ClearDefaultOrg()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (usuo *UserSettingUpdateOne) ClearFiles() *UserSettingUpdateOne {
-	usuo.mutation.ClearFiles()
-	return usuo
+func (_u *UserSettingUpdateOne) ClearFiles() *UserSettingUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (usuo *UserSettingUpdateOne) RemoveFileIDs(ids ...string) *UserSettingUpdateOne {
-	usuo.mutation.RemoveFileIDs(ids...)
-	return usuo
+func (_u *UserSettingUpdateOne) RemoveFileIDs(ids ...string) *UserSettingUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (usuo *UserSettingUpdateOne) RemoveFiles(f ...*File) *UserSettingUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *UserSettingUpdateOne) RemoveFiles(v ...*File) *UserSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return usuo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the UserSettingUpdate builder.
-func (usuo *UserSettingUpdateOne) Where(ps ...predicate.UserSetting) *UserSettingUpdateOne {
-	usuo.mutation.Where(ps...)
-	return usuo
+func (_u *UserSettingUpdateOne) Where(ps ...predicate.UserSetting) *UserSettingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (usuo *UserSettingUpdateOne) Select(field string, fields ...string) *UserSettingUpdateOne {
-	usuo.fields = append([]string{field}, fields...)
-	return usuo
+func (_u *UserSettingUpdateOne) Select(field string, fields ...string) *UserSettingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated UserSetting entity.
-func (usuo *UserSettingUpdateOne) Save(ctx context.Context) (*UserSetting, error) {
-	if err := usuo.defaults(); err != nil {
+func (_u *UserSettingUpdateOne) Save(ctx context.Context) (*UserSetting, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, usuo.sqlSave, usuo.mutation, usuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (usuo *UserSettingUpdateOne) SaveX(ctx context.Context) *UserSetting {
-	node, err := usuo.Save(ctx)
+func (_u *UserSettingUpdateOne) SaveX(ctx context.Context) *UserSetting {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1009,33 +1009,33 @@ func (usuo *UserSettingUpdateOne) SaveX(ctx context.Context) *UserSetting {
 }
 
 // Exec executes the query on the entity.
-func (usuo *UserSettingUpdateOne) Exec(ctx context.Context) error {
-	_, err := usuo.Save(ctx)
+func (_u *UserSettingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (usuo *UserSettingUpdateOne) ExecX(ctx context.Context) {
-	if err := usuo.Exec(ctx); err != nil {
+func (_u *UserSettingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (usuo *UserSettingUpdateOne) defaults() error {
-	if _, ok := usuo.mutation.UpdatedAt(); !ok && !usuo.mutation.UpdatedAtCleared() {
+func (_u *UserSettingUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if usersetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized usersetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := usersetting.UpdateDefaultUpdatedAt()
-		usuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (usuo *UserSettingUpdateOne) check() error {
-	if v, ok := usuo.mutation.Status(); ok {
+func (_u *UserSettingUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := usersetting.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "UserSetting.status": %w`, err)}
 		}
@@ -1044,22 +1044,22 @@ func (usuo *UserSettingUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (usuo *UserSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingUpdateOne {
-	usuo.modifiers = append(usuo.modifiers, modifiers...)
-	return usuo
+func (_u *UserSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetting, err error) {
-	if err := usuo.check(); err != nil {
+func (_u *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetting, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(usersetting.Table, usersetting.Columns, sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString))
-	id, ok := usuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "UserSetting.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := usuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, usersetting.FieldID)
 		for _, f := range fields {
@@ -1071,94 +1071,94 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 			}
 		}
 	}
-	if ps := usuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if usuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(usersetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := usuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(usersetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if usuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if usuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(usersetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := usuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(usersetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if usuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(usersetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := usuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if usuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(usersetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := usuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if usuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(usersetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := usuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := usuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, usersetting.FieldTags, value)
 		})
 	}
-	if usuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(usersetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := usuo.mutation.Locked(); ok {
+	if value, ok := _u.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)
 	}
-	if value, ok := usuo.mutation.SilencedAt(); ok {
+	if value, ok := _u.mutation.SilencedAt(); ok {
 		_spec.SetField(usersetting.FieldSilencedAt, field.TypeTime, value)
 	}
-	if usuo.mutation.SilencedAtCleared() {
+	if _u.mutation.SilencedAtCleared() {
 		_spec.ClearField(usersetting.FieldSilencedAt, field.TypeTime)
 	}
-	if value, ok := usuo.mutation.SuspendedAt(); ok {
+	if value, ok := _u.mutation.SuspendedAt(); ok {
 		_spec.SetField(usersetting.FieldSuspendedAt, field.TypeTime, value)
 	}
-	if usuo.mutation.SuspendedAtCleared() {
+	if _u.mutation.SuspendedAtCleared() {
 		_spec.ClearField(usersetting.FieldSuspendedAt, field.TypeTime)
 	}
-	if value, ok := usuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(usersetting.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := usuo.mutation.EmailConfirmed(); ok {
+	if value, ok := _u.mutation.EmailConfirmed(); ok {
 		_spec.SetField(usersetting.FieldEmailConfirmed, field.TypeBool, value)
 	}
-	if value, ok := usuo.mutation.IsWebauthnAllowed(); ok {
+	if value, ok := _u.mutation.IsWebauthnAllowed(); ok {
 		_spec.SetField(usersetting.FieldIsWebauthnAllowed, field.TypeBool, value)
 	}
-	if usuo.mutation.IsWebauthnAllowedCleared() {
+	if _u.mutation.IsWebauthnAllowedCleared() {
 		_spec.ClearField(usersetting.FieldIsWebauthnAllowed, field.TypeBool)
 	}
-	if value, ok := usuo.mutation.IsTfaEnabled(); ok {
+	if value, ok := _u.mutation.IsTfaEnabled(); ok {
 		_spec.SetField(usersetting.FieldIsTfaEnabled, field.TypeBool, value)
 	}
-	if usuo.mutation.IsTfaEnabledCleared() {
+	if _u.mutation.IsTfaEnabledCleared() {
 		_spec.ClearField(usersetting.FieldIsTfaEnabled, field.TypeBool)
 	}
-	if value, ok := usuo.mutation.PhoneNumber(); ok {
+	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(usersetting.FieldPhoneNumber, field.TypeString, value)
 	}
-	if usuo.mutation.PhoneNumberCleared() {
+	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(usersetting.FieldPhoneNumber, field.TypeString)
 	}
-	if usuo.mutation.UserCleared() {
+	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -1169,10 +1169,10 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usuo.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -1183,13 +1183,13 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if usuo.mutation.DefaultOrgCleared() {
+	if _u.mutation.DefaultOrgCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1200,10 +1200,10 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usuo.mutation.DefaultOrgIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DefaultOrgIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1214,13 +1214,13 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSetting
+		edge.Schema = _u.schemaConfig.UserSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if usuo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1231,10 +1231,10 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSettingFiles
+		edge.Schema = _u.schemaConfig.UserSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !usuo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1245,13 +1245,13 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSettingFiles
+		edge.Schema = _u.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := usuo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1262,19 +1262,19 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = usuo.schemaConfig.UserSettingFiles
+		edge.Schema = _u.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = usuo.schemaConfig.UserSetting
-	ctx = internal.NewSchemaConfigContext(ctx, usuo.schemaConfig)
-	_spec.AddModifiers(usuo.modifiers...)
-	_node = &UserSetting{config: usuo.config}
+	_spec.Node.Schema = _u.schemaConfig.UserSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &UserSetting{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, usuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{usersetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1282,6 +1282,6 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 		}
 		return nil, err
 	}
-	usuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

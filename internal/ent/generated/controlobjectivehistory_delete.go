@@ -22,58 +22,58 @@ type ControlObjectiveHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ControlObjectiveHistoryDelete builder.
-func (cohd *ControlObjectiveHistoryDelete) Where(ps ...predicate.ControlObjectiveHistory) *ControlObjectiveHistoryDelete {
-	cohd.mutation.Where(ps...)
-	return cohd
+func (_d *ControlObjectiveHistoryDelete) Where(ps ...predicate.ControlObjectiveHistory) *ControlObjectiveHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cohd *ControlObjectiveHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cohd.sqlExec, cohd.mutation, cohd.hooks)
+func (_d *ControlObjectiveHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cohd *ControlObjectiveHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := cohd.Exec(ctx)
+func (_d *ControlObjectiveHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cohd *ControlObjectiveHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ControlObjectiveHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(controlobjectivehistory.Table, sqlgraph.NewFieldSpec(controlobjectivehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = cohd.schemaConfig.ControlObjectiveHistory
-	ctx = internal.NewSchemaConfigContext(ctx, cohd.schemaConfig)
-	if ps := cohd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ControlObjectiveHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cohd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cohd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ControlObjectiveHistoryDeleteOne is the builder for deleting a single ControlObjectiveHistory entity.
 type ControlObjectiveHistoryDeleteOne struct {
-	cohd *ControlObjectiveHistoryDelete
+	_d *ControlObjectiveHistoryDelete
 }
 
 // Where appends a list predicates to the ControlObjectiveHistoryDelete builder.
-func (cohdo *ControlObjectiveHistoryDeleteOne) Where(ps ...predicate.ControlObjectiveHistory) *ControlObjectiveHistoryDeleteOne {
-	cohdo.cohd.mutation.Where(ps...)
-	return cohdo
+func (_d *ControlObjectiveHistoryDeleteOne) Where(ps ...predicate.ControlObjectiveHistory) *ControlObjectiveHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cohdo *ControlObjectiveHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := cohdo.cohd.Exec(ctx)
+func (_d *ControlObjectiveHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (cohdo *ControlObjectiveHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cohdo *ControlObjectiveHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := cohdo.Exec(ctx); err != nil {
+func (_d *ControlObjectiveHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

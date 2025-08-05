@@ -28,203 +28,203 @@ type TemplateHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the TemplateHistoryUpdate builder.
-func (thu *TemplateHistoryUpdate) Where(ps ...predicate.TemplateHistory) *TemplateHistoryUpdate {
-	thu.mutation.Where(ps...)
-	return thu
+func (_u *TemplateHistoryUpdate) Where(ps ...predicate.TemplateHistory) *TemplateHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (thu *TemplateHistoryUpdate) SetUpdatedAt(t time.Time) *TemplateHistoryUpdate {
-	thu.mutation.SetUpdatedAt(t)
-	return thu
+func (_u *TemplateHistoryUpdate) SetUpdatedAt(v time.Time) *TemplateHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (thu *TemplateHistoryUpdate) ClearUpdatedAt() *TemplateHistoryUpdate {
-	thu.mutation.ClearUpdatedAt()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearUpdatedAt() *TemplateHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (thu *TemplateHistoryUpdate) SetUpdatedBy(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetUpdatedBy(s)
-	return thu
+func (_u *TemplateHistoryUpdate) SetUpdatedBy(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableUpdatedBy(s *string) *TemplateHistoryUpdate {
-	if s != nil {
-		thu.SetUpdatedBy(*s)
+func (_u *TemplateHistoryUpdate) SetNillableUpdatedBy(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (thu *TemplateHistoryUpdate) ClearUpdatedBy() *TemplateHistoryUpdate {
-	thu.mutation.ClearUpdatedBy()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearUpdatedBy() *TemplateHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (thu *TemplateHistoryUpdate) SetDeletedAt(t time.Time) *TemplateHistoryUpdate {
-	thu.mutation.SetDeletedAt(t)
-	return thu
+func (_u *TemplateHistoryUpdate) SetDeletedAt(v time.Time) *TemplateHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableDeletedAt(t *time.Time) *TemplateHistoryUpdate {
-	if t != nil {
-		thu.SetDeletedAt(*t)
+func (_u *TemplateHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (thu *TemplateHistoryUpdate) ClearDeletedAt() *TemplateHistoryUpdate {
-	thu.mutation.ClearDeletedAt()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearDeletedAt() *TemplateHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (thu *TemplateHistoryUpdate) SetDeletedBy(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetDeletedBy(s)
-	return thu
+func (_u *TemplateHistoryUpdate) SetDeletedBy(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableDeletedBy(s *string) *TemplateHistoryUpdate {
-	if s != nil {
-		thu.SetDeletedBy(*s)
+func (_u *TemplateHistoryUpdate) SetNillableDeletedBy(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (thu *TemplateHistoryUpdate) ClearDeletedBy() *TemplateHistoryUpdate {
-	thu.mutation.ClearDeletedBy()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearDeletedBy() *TemplateHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (thu *TemplateHistoryUpdate) SetTags(s []string) *TemplateHistoryUpdate {
-	thu.mutation.SetTags(s)
-	return thu
+func (_u *TemplateHistoryUpdate) SetTags(v []string) *TemplateHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (thu *TemplateHistoryUpdate) AppendTags(s []string) *TemplateHistoryUpdate {
-	thu.mutation.AppendTags(s)
-	return thu
+// AppendTags appends value to the "tags" field.
+func (_u *TemplateHistoryUpdate) AppendTags(v []string) *TemplateHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (thu *TemplateHistoryUpdate) ClearTags() *TemplateHistoryUpdate {
-	thu.mutation.ClearTags()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearTags() *TemplateHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (thu *TemplateHistoryUpdate) SetOwnerID(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetOwnerID(s)
-	return thu
+func (_u *TemplateHistoryUpdate) SetOwnerID(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableOwnerID(s *string) *TemplateHistoryUpdate {
-	if s != nil {
-		thu.SetOwnerID(*s)
+func (_u *TemplateHistoryUpdate) SetNillableOwnerID(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (thu *TemplateHistoryUpdate) ClearOwnerID() *TemplateHistoryUpdate {
-	thu.mutation.ClearOwnerID()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearOwnerID() *TemplateHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (thu *TemplateHistoryUpdate) SetName(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetName(s)
-	return thu
+func (_u *TemplateHistoryUpdate) SetName(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableName(s *string) *TemplateHistoryUpdate {
-	if s != nil {
-		thu.SetName(*s)
+func (_u *TemplateHistoryUpdate) SetNillableName(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return thu
+	return _u
 }
 
 // SetTemplateType sets the "template_type" field.
-func (thu *TemplateHistoryUpdate) SetTemplateType(et enums.DocumentType) *TemplateHistoryUpdate {
-	thu.mutation.SetTemplateType(et)
-	return thu
+func (_u *TemplateHistoryUpdate) SetTemplateType(v enums.DocumentType) *TemplateHistoryUpdate {
+	_u.mutation.SetTemplateType(v)
+	return _u
 }
 
 // SetNillableTemplateType sets the "template_type" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableTemplateType(et *enums.DocumentType) *TemplateHistoryUpdate {
-	if et != nil {
-		thu.SetTemplateType(*et)
+func (_u *TemplateHistoryUpdate) SetNillableTemplateType(v *enums.DocumentType) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTemplateType(*v)
 	}
-	return thu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (thu *TemplateHistoryUpdate) SetDescription(s string) *TemplateHistoryUpdate {
-	thu.mutation.SetDescription(s)
-	return thu
+func (_u *TemplateHistoryUpdate) SetDescription(v string) *TemplateHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (thu *TemplateHistoryUpdate) SetNillableDescription(s *string) *TemplateHistoryUpdate {
-	if s != nil {
-		thu.SetDescription(*s)
+func (_u *TemplateHistoryUpdate) SetNillableDescription(v *string) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (thu *TemplateHistoryUpdate) ClearDescription() *TemplateHistoryUpdate {
-	thu.mutation.ClearDescription()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearDescription() *TemplateHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (thu *TemplateHistoryUpdate) SetJsonconfig(m map[string]interface{}) *TemplateHistoryUpdate {
-	thu.mutation.SetJsonconfig(m)
-	return thu
+func (_u *TemplateHistoryUpdate) SetJsonconfig(v map[string]interface{}) *TemplateHistoryUpdate {
+	_u.mutation.SetJsonconfig(v)
+	return _u
 }
 
 // SetUischema sets the "uischema" field.
-func (thu *TemplateHistoryUpdate) SetUischema(m map[string]interface{}) *TemplateHistoryUpdate {
-	thu.mutation.SetUischema(m)
-	return thu
+func (_u *TemplateHistoryUpdate) SetUischema(v map[string]interface{}) *TemplateHistoryUpdate {
+	_u.mutation.SetUischema(v)
+	return _u
 }
 
 // ClearUischema clears the value of the "uischema" field.
-func (thu *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
-	thu.mutation.ClearUischema()
-	return thu
+func (_u *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
+	_u.mutation.ClearUischema()
+	return _u
 }
 
 // Mutation returns the TemplateHistoryMutation object of the builder.
-func (thu *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
-	return thu.mutation
+func (_u *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (thu *TemplateHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := thu.defaults(); err != nil {
+func (_u *TemplateHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, thu.sqlSave, thu.mutation, thu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thu *TemplateHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := thu.Save(ctx)
+func (_u *TemplateHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -232,33 +232,33 @@ func (thu *TemplateHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (thu *TemplateHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := thu.Save(ctx)
+func (_u *TemplateHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thu *TemplateHistoryUpdate) ExecX(ctx context.Context) {
-	if err := thu.Exec(ctx); err != nil {
+func (_u *TemplateHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (thu *TemplateHistoryUpdate) defaults() error {
-	if _, ok := thu.mutation.UpdatedAt(); !ok && !thu.mutation.UpdatedAtCleared() {
+func (_u *TemplateHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if templatehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized templatehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := templatehistory.UpdateDefaultUpdatedAt()
-		thu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (thu *TemplateHistoryUpdate) check() error {
-	if v, ok := thu.mutation.TemplateType(); ok {
+func (_u *TemplateHistoryUpdate) check() error {
+	if v, ok := _u.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
 		}
@@ -267,98 +267,98 @@ func (thu *TemplateHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (thu *TemplateHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdate {
-	thu.modifiers = append(thu.modifiers, modifiers...)
-	return thu
+func (_u *TemplateHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := thu.check(); err != nil {
-		return n, err
+func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(templatehistory.Table, templatehistory.Columns, sqlgraph.NewFieldSpec(templatehistory.FieldID, field.TypeString))
-	if ps := thu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if thu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(templatehistory.FieldRef, field.TypeString)
 	}
-	if thu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := thu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(templatehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if thu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if thu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := thu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if thu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := thu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if thu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := thu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if thu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := thu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(templatehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := thu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, templatehistory.FieldTags, value)
 		})
 	}
-	if thu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := thu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if thu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := thu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := thu.mutation.TemplateType(); ok {
+	if value, ok := _u.mutation.TemplateType(); ok {
 		_spec.SetField(templatehistory.FieldTemplateType, field.TypeEnum, value)
 	}
-	if value, ok := thu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(templatehistory.FieldDescription, field.TypeString, value)
 	}
-	if thu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(templatehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := thu.mutation.Jsonconfig(); ok {
+	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)
 	}
-	if value, ok := thu.mutation.Uischema(); ok {
+	if value, ok := _u.mutation.Uischema(); ok {
 		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
 	}
-	if thu.mutation.UischemaCleared() {
+	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
 	}
-	_spec.Node.Schema = thu.schemaConfig.TemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
-	_spec.AddModifiers(thu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, thu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{templatehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -366,8 +366,8 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		return 0, err
 	}
-	thu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TemplateHistoryUpdateOne is the builder for updating a single TemplateHistory entity.
@@ -380,210 +380,210 @@ type TemplateHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (thuo *TemplateHistoryUpdateOne) SetUpdatedAt(t time.Time) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetUpdatedAt(t)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetUpdatedAt(v time.Time) *TemplateHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (thuo *TemplateHistoryUpdateOne) ClearUpdatedAt() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearUpdatedAt()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearUpdatedAt() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (thuo *TemplateHistoryUpdateOne) SetUpdatedBy(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetUpdatedBy(s)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetUpdatedBy(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableUpdatedBy(s *string) *TemplateHistoryUpdateOne {
-	if s != nil {
-		thuo.SetUpdatedBy(*s)
+func (_u *TemplateHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (thuo *TemplateHistoryUpdateOne) ClearUpdatedBy() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearUpdatedBy()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearUpdatedBy() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (thuo *TemplateHistoryUpdateOne) SetDeletedAt(t time.Time) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetDeletedAt(t)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetDeletedAt(v time.Time) *TemplateHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *TemplateHistoryUpdateOne {
-	if t != nil {
-		thuo.SetDeletedAt(*t)
+func (_u *TemplateHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (thuo *TemplateHistoryUpdateOne) ClearDeletedAt() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearDeletedAt()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearDeletedAt() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (thuo *TemplateHistoryUpdateOne) SetDeletedBy(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetDeletedBy(s)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetDeletedBy(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableDeletedBy(s *string) *TemplateHistoryUpdateOne {
-	if s != nil {
-		thuo.SetDeletedBy(*s)
+func (_u *TemplateHistoryUpdateOne) SetNillableDeletedBy(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (thuo *TemplateHistoryUpdateOne) ClearDeletedBy() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearDeletedBy()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearDeletedBy() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (thuo *TemplateHistoryUpdateOne) SetTags(s []string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetTags(s)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetTags(v []string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (thuo *TemplateHistoryUpdateOne) AppendTags(s []string) *TemplateHistoryUpdateOne {
-	thuo.mutation.AppendTags(s)
-	return thuo
+// AppendTags appends value to the "tags" field.
+func (_u *TemplateHistoryUpdateOne) AppendTags(v []string) *TemplateHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (thuo *TemplateHistoryUpdateOne) ClearTags() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearTags()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearTags() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (thuo *TemplateHistoryUpdateOne) SetOwnerID(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetOwnerID(s)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetOwnerID(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableOwnerID(s *string) *TemplateHistoryUpdateOne {
-	if s != nil {
-		thuo.SetOwnerID(*s)
+func (_u *TemplateHistoryUpdateOne) SetNillableOwnerID(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (thuo *TemplateHistoryUpdateOne) ClearOwnerID() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearOwnerID()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearOwnerID() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (thuo *TemplateHistoryUpdateOne) SetName(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetName(s)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetName(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableName(s *string) *TemplateHistoryUpdateOne {
-	if s != nil {
-		thuo.SetName(*s)
+func (_u *TemplateHistoryUpdateOne) SetNillableName(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return thuo
+	return _u
 }
 
 // SetTemplateType sets the "template_type" field.
-func (thuo *TemplateHistoryUpdateOne) SetTemplateType(et enums.DocumentType) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetTemplateType(et)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetTemplateType(v enums.DocumentType) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTemplateType(v)
+	return _u
 }
 
 // SetNillableTemplateType sets the "template_type" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableTemplateType(et *enums.DocumentType) *TemplateHistoryUpdateOne {
-	if et != nil {
-		thuo.SetTemplateType(*et)
+func (_u *TemplateHistoryUpdateOne) SetNillableTemplateType(v *enums.DocumentType) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTemplateType(*v)
 	}
-	return thuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (thuo *TemplateHistoryUpdateOne) SetDescription(s string) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetDescription(s)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetDescription(v string) *TemplateHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (thuo *TemplateHistoryUpdateOne) SetNillableDescription(s *string) *TemplateHistoryUpdateOne {
-	if s != nil {
-		thuo.SetDescription(*s)
+func (_u *TemplateHistoryUpdateOne) SetNillableDescription(v *string) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (thuo *TemplateHistoryUpdateOne) ClearDescription() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearDescription()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearDescription() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetJsonconfig sets the "jsonconfig" field.
-func (thuo *TemplateHistoryUpdateOne) SetJsonconfig(m map[string]interface{}) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetJsonconfig(m)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetJsonconfig(v map[string]interface{}) *TemplateHistoryUpdateOne {
+	_u.mutation.SetJsonconfig(v)
+	return _u
 }
 
 // SetUischema sets the "uischema" field.
-func (thuo *TemplateHistoryUpdateOne) SetUischema(m map[string]interface{}) *TemplateHistoryUpdateOne {
-	thuo.mutation.SetUischema(m)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) SetUischema(v map[string]interface{}) *TemplateHistoryUpdateOne {
+	_u.mutation.SetUischema(v)
+	return _u
 }
 
 // ClearUischema clears the value of the "uischema" field.
-func (thuo *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne {
-	thuo.mutation.ClearUischema()
-	return thuo
+func (_u *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearUischema()
+	return _u
 }
 
 // Mutation returns the TemplateHistoryMutation object of the builder.
-func (thuo *TemplateHistoryUpdateOne) Mutation() *TemplateHistoryMutation {
-	return thuo.mutation
+func (_u *TemplateHistoryUpdateOne) Mutation() *TemplateHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TemplateHistoryUpdate builder.
-func (thuo *TemplateHistoryUpdateOne) Where(ps ...predicate.TemplateHistory) *TemplateHistoryUpdateOne {
-	thuo.mutation.Where(ps...)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) Where(ps ...predicate.TemplateHistory) *TemplateHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (thuo *TemplateHistoryUpdateOne) Select(field string, fields ...string) *TemplateHistoryUpdateOne {
-	thuo.fields = append([]string{field}, fields...)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) Select(field string, fields ...string) *TemplateHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TemplateHistory entity.
-func (thuo *TemplateHistoryUpdateOne) Save(ctx context.Context) (*TemplateHistory, error) {
-	if err := thuo.defaults(); err != nil {
+func (_u *TemplateHistoryUpdateOne) Save(ctx context.Context) (*TemplateHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, thuo.sqlSave, thuo.mutation, thuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thuo *TemplateHistoryUpdateOne) SaveX(ctx context.Context) *TemplateHistory {
-	node, err := thuo.Save(ctx)
+func (_u *TemplateHistoryUpdateOne) SaveX(ctx context.Context) *TemplateHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -591,33 +591,33 @@ func (thuo *TemplateHistoryUpdateOne) SaveX(ctx context.Context) *TemplateHistor
 }
 
 // Exec executes the query on the entity.
-func (thuo *TemplateHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := thuo.Save(ctx)
+func (_u *TemplateHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thuo *TemplateHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := thuo.Exec(ctx); err != nil {
+func (_u *TemplateHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (thuo *TemplateHistoryUpdateOne) defaults() error {
-	if _, ok := thuo.mutation.UpdatedAt(); !ok && !thuo.mutation.UpdatedAtCleared() {
+func (_u *TemplateHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if templatehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized templatehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := templatehistory.UpdateDefaultUpdatedAt()
-		thuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (thuo *TemplateHistoryUpdateOne) check() error {
-	if v, ok := thuo.mutation.TemplateType(); ok {
+func (_u *TemplateHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
 		}
@@ -626,22 +626,22 @@ func (thuo *TemplateHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (thuo *TemplateHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdateOne {
-	thuo.modifiers = append(thuo.modifiers, modifiers...)
-	return thuo
+func (_u *TemplateHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TemplateHistory, err error) {
-	if err := thuo.check(); err != nil {
+func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TemplateHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(templatehistory.Table, templatehistory.Columns, sqlgraph.NewFieldSpec(templatehistory.FieldID, field.TypeString))
-	id, ok := thuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TemplateHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := thuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, templatehistory.FieldID)
 		for _, f := range fields {
@@ -653,91 +653,91 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 			}
 		}
 	}
-	if ps := thuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if thuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(templatehistory.FieldRef, field.TypeString)
 	}
-	if thuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(templatehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if thuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if thuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := thuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if thuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := thuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if thuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := thuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if thuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(templatehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := thuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, templatehistory.FieldTags, value)
 		})
 	}
-	if thuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := thuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if thuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := thuo.mutation.TemplateType(); ok {
+	if value, ok := _u.mutation.TemplateType(); ok {
 		_spec.SetField(templatehistory.FieldTemplateType, field.TypeEnum, value)
 	}
-	if value, ok := thuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(templatehistory.FieldDescription, field.TypeString, value)
 	}
-	if thuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(templatehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := thuo.mutation.Jsonconfig(); ok {
+	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)
 	}
-	if value, ok := thuo.mutation.Uischema(); ok {
+	if value, ok := _u.mutation.Uischema(); ok {
 		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
 	}
-	if thuo.mutation.UischemaCleared() {
+	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
 	}
-	_spec.Node.Schema = thuo.schemaConfig.TemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)
-	_spec.AddModifiers(thuo.modifiers...)
-	_node = &TemplateHistory{config: thuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TemplateHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, thuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{templatehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -745,6 +745,6 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 		}
 		return nil, err
 	}
-	thuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

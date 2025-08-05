@@ -24,230 +24,230 @@ type HushCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (hc *HushCreate) SetCreatedAt(t time.Time) *HushCreate {
-	hc.mutation.SetCreatedAt(t)
-	return hc
+func (_c *HushCreate) SetCreatedAt(v time.Time) *HushCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (hc *HushCreate) SetNillableCreatedAt(t *time.Time) *HushCreate {
-	if t != nil {
-		hc.SetCreatedAt(*t)
+func (_c *HushCreate) SetNillableCreatedAt(v *time.Time) *HushCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (hc *HushCreate) SetUpdatedAt(t time.Time) *HushCreate {
-	hc.mutation.SetUpdatedAt(t)
-	return hc
+func (_c *HushCreate) SetUpdatedAt(v time.Time) *HushCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (hc *HushCreate) SetNillableUpdatedAt(t *time.Time) *HushCreate {
-	if t != nil {
-		hc.SetUpdatedAt(*t)
+func (_c *HushCreate) SetNillableUpdatedAt(v *time.Time) *HushCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (hc *HushCreate) SetCreatedBy(s string) *HushCreate {
-	hc.mutation.SetCreatedBy(s)
-	return hc
+func (_c *HushCreate) SetCreatedBy(v string) *HushCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (hc *HushCreate) SetNillableCreatedBy(s *string) *HushCreate {
-	if s != nil {
-		hc.SetCreatedBy(*s)
+func (_c *HushCreate) SetNillableCreatedBy(v *string) *HushCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (hc *HushCreate) SetUpdatedBy(s string) *HushCreate {
-	hc.mutation.SetUpdatedBy(s)
-	return hc
+func (_c *HushCreate) SetUpdatedBy(v string) *HushCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (hc *HushCreate) SetNillableUpdatedBy(s *string) *HushCreate {
-	if s != nil {
-		hc.SetUpdatedBy(*s)
+func (_c *HushCreate) SetNillableUpdatedBy(v *string) *HushCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (hc *HushCreate) SetDeletedAt(t time.Time) *HushCreate {
-	hc.mutation.SetDeletedAt(t)
-	return hc
+func (_c *HushCreate) SetDeletedAt(v time.Time) *HushCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (hc *HushCreate) SetNillableDeletedAt(t *time.Time) *HushCreate {
-	if t != nil {
-		hc.SetDeletedAt(*t)
+func (_c *HushCreate) SetNillableDeletedAt(v *time.Time) *HushCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (hc *HushCreate) SetDeletedBy(s string) *HushCreate {
-	hc.mutation.SetDeletedBy(s)
-	return hc
+func (_c *HushCreate) SetDeletedBy(v string) *HushCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (hc *HushCreate) SetNillableDeletedBy(s *string) *HushCreate {
-	if s != nil {
-		hc.SetDeletedBy(*s)
+func (_c *HushCreate) SetNillableDeletedBy(v *string) *HushCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (hc *HushCreate) SetOwnerID(s string) *HushCreate {
-	hc.mutation.SetOwnerID(s)
-	return hc
+func (_c *HushCreate) SetOwnerID(v string) *HushCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (hc *HushCreate) SetNillableOwnerID(s *string) *HushCreate {
-	if s != nil {
-		hc.SetOwnerID(*s)
+func (_c *HushCreate) SetNillableOwnerID(v *string) *HushCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (hc *HushCreate) SetName(s string) *HushCreate {
-	hc.mutation.SetName(s)
-	return hc
+func (_c *HushCreate) SetName(v string) *HushCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (hc *HushCreate) SetDescription(s string) *HushCreate {
-	hc.mutation.SetDescription(s)
-	return hc
+func (_c *HushCreate) SetDescription(v string) *HushCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (hc *HushCreate) SetNillableDescription(s *string) *HushCreate {
-	if s != nil {
-		hc.SetDescription(*s)
+func (_c *HushCreate) SetNillableDescription(v *string) *HushCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetKind sets the "kind" field.
-func (hc *HushCreate) SetKind(s string) *HushCreate {
-	hc.mutation.SetKind(s)
-	return hc
+func (_c *HushCreate) SetKind(v string) *HushCreate {
+	_c.mutation.SetKind(v)
+	return _c
 }
 
 // SetNillableKind sets the "kind" field if the given value is not nil.
-func (hc *HushCreate) SetNillableKind(s *string) *HushCreate {
-	if s != nil {
-		hc.SetKind(*s)
+func (_c *HushCreate) SetNillableKind(v *string) *HushCreate {
+	if v != nil {
+		_c.SetKind(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetSecretName sets the "secret_name" field.
-func (hc *HushCreate) SetSecretName(s string) *HushCreate {
-	hc.mutation.SetSecretName(s)
-	return hc
+func (_c *HushCreate) SetSecretName(v string) *HushCreate {
+	_c.mutation.SetSecretName(v)
+	return _c
 }
 
 // SetNillableSecretName sets the "secret_name" field if the given value is not nil.
-func (hc *HushCreate) SetNillableSecretName(s *string) *HushCreate {
-	if s != nil {
-		hc.SetSecretName(*s)
+func (_c *HushCreate) SetNillableSecretName(v *string) *HushCreate {
+	if v != nil {
+		_c.SetSecretName(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetSecretValue sets the "secret_value" field.
-func (hc *HushCreate) SetSecretValue(s string) *HushCreate {
-	hc.mutation.SetSecretValue(s)
-	return hc
+func (_c *HushCreate) SetSecretValue(v string) *HushCreate {
+	_c.mutation.SetSecretValue(v)
+	return _c
 }
 
 // SetNillableSecretValue sets the "secret_value" field if the given value is not nil.
-func (hc *HushCreate) SetNillableSecretValue(s *string) *HushCreate {
-	if s != nil {
-		hc.SetSecretValue(*s)
+func (_c *HushCreate) SetNillableSecretValue(v *string) *HushCreate {
+	if v != nil {
+		_c.SetSecretValue(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (hc *HushCreate) SetID(s string) *HushCreate {
-	hc.mutation.SetID(s)
-	return hc
+func (_c *HushCreate) SetID(v string) *HushCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (hc *HushCreate) SetNillableID(s *string) *HushCreate {
-	if s != nil {
-		hc.SetID(*s)
+func (_c *HushCreate) SetNillableID(v *string) *HushCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return hc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (hc *HushCreate) SetOwner(o *Organization) *HushCreate {
-	return hc.SetOwnerID(o.ID)
+func (_c *HushCreate) SetOwner(v *Organization) *HushCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
-func (hc *HushCreate) AddIntegrationIDs(ids ...string) *HushCreate {
-	hc.mutation.AddIntegrationIDs(ids...)
-	return hc
+func (_c *HushCreate) AddIntegrationIDs(ids ...string) *HushCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
 }
 
 // AddIntegrations adds the "integrations" edges to the Integration entity.
-func (hc *HushCreate) AddIntegrations(i ...*Integration) *HushCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
+func (_c *HushCreate) AddIntegrations(v ...*Integration) *HushCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return hc.AddIntegrationIDs(ids...)
+	return _c.AddIntegrationIDs(ids...)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (hc *HushCreate) AddEventIDs(ids ...string) *HushCreate {
-	hc.mutation.AddEventIDs(ids...)
-	return hc
+func (_c *HushCreate) AddEventIDs(ids ...string) *HushCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (hc *HushCreate) AddEvents(e ...*Event) *HushCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *HushCreate) AddEvents(v ...*Event) *HushCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return hc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // Mutation returns the HushMutation object of the builder.
-func (hc *HushCreate) Mutation() *HushMutation {
-	return hc.mutation
+func (_c *HushCreate) Mutation() *HushMutation {
+	return _c.mutation
 }
 
 // Save creates the Hush in the database.
-func (hc *HushCreate) Save(ctx context.Context) (*Hush, error) {
-	if err := hc.defaults(); err != nil {
+func (_c *HushCreate) Save(ctx context.Context) (*Hush, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, hc.sqlSave, hc.mutation, hc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (hc *HushCreate) SaveX(ctx context.Context) *Hush {
-	v, err := hc.Save(ctx)
+func (_c *HushCreate) SaveX(ctx context.Context) *Hush {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -255,55 +255,55 @@ func (hc *HushCreate) SaveX(ctx context.Context) *Hush {
 }
 
 // Exec executes the query.
-func (hc *HushCreate) Exec(ctx context.Context) error {
-	_, err := hc.Save(ctx)
+func (_c *HushCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hc *HushCreate) ExecX(ctx context.Context) {
-	if err := hc.Exec(ctx); err != nil {
+func (_c *HushCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (hc *HushCreate) defaults() error {
-	if _, ok := hc.mutation.CreatedAt(); !ok {
+func (_c *HushCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if hush.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized hush.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := hush.DefaultCreatedAt()
-		hc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := hc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if hush.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized hush.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := hush.DefaultUpdatedAt()
-		hc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := hc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if hush.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized hush.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := hush.DefaultID()
-		hc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (hc *HushCreate) check() error {
-	if v, ok := hc.mutation.OwnerID(); ok {
+func (_c *HushCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := hush.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Hush.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := hc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Hush.name"`)}
 	}
-	if v, ok := hc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := hush.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Hush.name": %w`, err)}
 		}
@@ -311,12 +311,12 @@ func (hc *HushCreate) check() error {
 	return nil
 }
 
-func (hc *HushCreate) sqlSave(ctx context.Context) (*Hush, error) {
-	if err := hc.check(); err != nil {
+func (_c *HushCreate) sqlSave(ctx context.Context) (*Hush, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := hc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, hc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -329,66 +329,66 @@ func (hc *HushCreate) sqlSave(ctx context.Context) (*Hush, error) {
 			return nil, fmt.Errorf("unexpected Hush.ID type: %T", _spec.ID.Value)
 		}
 	}
-	hc.mutation.id = &_node.ID
-	hc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
+func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Hush{config: hc.config}
+		_node = &Hush{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(hush.Table, sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString))
 	)
-	_spec.Schema = hc.schemaConfig.Hush
-	if id, ok := hc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Hush
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := hc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(hush.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := hc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(hush.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := hc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(hush.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := hc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(hush.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := hc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(hush.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := hc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(hush.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := hc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(hush.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := hc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(hush.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := hc.mutation.Kind(); ok {
+	if value, ok := _c.mutation.Kind(); ok {
 		_spec.SetField(hush.FieldKind, field.TypeString, value)
 		_node.Kind = value
 	}
-	if value, ok := hc.mutation.SecretName(); ok {
+	if value, ok := _c.mutation.SecretName(); ok {
 		_spec.SetField(hush.FieldSecretName, field.TypeString, value)
 		_node.SecretName = value
 	}
-	if value, ok := hc.mutation.SecretValue(); ok {
+	if value, ok := _c.mutation.SecretValue(); ok {
 		_spec.SetField(hush.FieldSecretValue, field.TypeString, value)
 		_node.SecretValue = value
 	}
-	if nodes := hc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -399,14 +399,14 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = hc.schemaConfig.Hush
+		edge.Schema = _c.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := hc.mutation.IntegrationsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -417,13 +417,13 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = hc.schemaConfig.IntegrationSecrets
+		edge.Schema = _c.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := hc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -434,7 +434,7 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = hc.schemaConfig.HushEvents
+		edge.Schema = _c.schemaConfig.HushEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -451,16 +451,16 @@ type HushCreateBulk struct {
 }
 
 // Save creates the Hush entities in the database.
-func (hcb *HushCreateBulk) Save(ctx context.Context) ([]*Hush, error) {
-	if hcb.err != nil {
-		return nil, hcb.err
+func (_c *HushCreateBulk) Save(ctx context.Context) ([]*Hush, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(hcb.builders))
-	nodes := make([]*Hush, len(hcb.builders))
-	mutators := make([]Mutator, len(hcb.builders))
-	for i := range hcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Hush, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := hcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HushMutation)
@@ -474,11 +474,11 @@ func (hcb *HushCreateBulk) Save(ctx context.Context) ([]*Hush, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, hcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, hcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -498,7 +498,7 @@ func (hcb *HushCreateBulk) Save(ctx context.Context) ([]*Hush, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, hcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -506,8 +506,8 @@ func (hcb *HushCreateBulk) Save(ctx context.Context) ([]*Hush, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (hcb *HushCreateBulk) SaveX(ctx context.Context) []*Hush {
-	v, err := hcb.Save(ctx)
+func (_c *HushCreateBulk) SaveX(ctx context.Context) []*Hush {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -515,14 +515,14 @@ func (hcb *HushCreateBulk) SaveX(ctx context.Context) []*Hush {
 }
 
 // Exec executes the query.
-func (hcb *HushCreateBulk) Exec(ctx context.Context) error {
-	_, err := hcb.Save(ctx)
+func (_c *HushCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (hcb *HushCreateBulk) ExecX(ctx context.Context) {
-	if err := hcb.Exec(ctx); err != nil {
+func (_c *HushCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

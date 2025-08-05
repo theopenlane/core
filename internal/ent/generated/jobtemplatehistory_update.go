@@ -28,243 +28,243 @@ type JobTemplateHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the JobTemplateHistoryUpdate builder.
-func (jthu *JobTemplateHistoryUpdate) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryUpdate {
-	jthu.mutation.Where(ps...)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jthu *JobTemplateHistoryUpdate) SetUpdatedAt(t time.Time) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetUpdatedAt(t)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetUpdatedAt(v time.Time) *JobTemplateHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jthu *JobTemplateHistoryUpdate) ClearUpdatedAt() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearUpdatedAt()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearUpdatedAt() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jthu *JobTemplateHistoryUpdate) SetUpdatedBy(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetUpdatedBy(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetUpdatedBy(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableUpdatedBy(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetUpdatedBy(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableUpdatedBy(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jthu *JobTemplateHistoryUpdate) ClearUpdatedBy() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearUpdatedBy()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearUpdatedBy() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jthu *JobTemplateHistoryUpdate) SetDeletedAt(t time.Time) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetDeletedAt(t)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetDeletedAt(v time.Time) *JobTemplateHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableDeletedAt(t *time.Time) *JobTemplateHistoryUpdate {
-	if t != nil {
-		jthu.SetDeletedAt(*t)
+func (_u *JobTemplateHistoryUpdate) SetNillableDeletedAt(v *time.Time) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jthu *JobTemplateHistoryUpdate) ClearDeletedAt() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearDeletedAt()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearDeletedAt() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jthu *JobTemplateHistoryUpdate) SetDeletedBy(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetDeletedBy(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetDeletedBy(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableDeletedBy(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetDeletedBy(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableDeletedBy(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jthu *JobTemplateHistoryUpdate) ClearDeletedBy() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearDeletedBy()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearDeletedBy() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jthu *JobTemplateHistoryUpdate) SetTags(s []string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetTags(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetTags(v []string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jthu *JobTemplateHistoryUpdate) AppendTags(s []string) *JobTemplateHistoryUpdate {
-	jthu.mutation.AppendTags(s)
-	return jthu
+// AppendTags appends value to the "tags" field.
+func (_u *JobTemplateHistoryUpdate) AppendTags(v []string) *JobTemplateHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jthu *JobTemplateHistoryUpdate) ClearTags() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearTags()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearTags() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jthu *JobTemplateHistoryUpdate) SetOwnerID(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetOwnerID(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetOwnerID(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableOwnerID(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetOwnerID(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableOwnerID(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jthu *JobTemplateHistoryUpdate) ClearOwnerID() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearOwnerID()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearOwnerID() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (jthu *JobTemplateHistoryUpdate) SetTitle(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetTitle(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetTitle(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableTitle(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetTitle(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableTitle(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return jthu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (jthu *JobTemplateHistoryUpdate) SetDescription(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetDescription(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetDescription(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableDescription(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetDescription(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableDescription(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (jthu *JobTemplateHistoryUpdate) ClearDescription() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearDescription()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearDescription() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetWindmillPath sets the "windmill_path" field.
-func (jthu *JobTemplateHistoryUpdate) SetWindmillPath(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetWindmillPath(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetWindmillPath(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetWindmillPath(v)
+	return _u
 }
 
 // SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableWindmillPath(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetWindmillPath(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableWindmillPath(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetWindmillPath(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearWindmillPath clears the value of the "windmill_path" field.
-func (jthu *JobTemplateHistoryUpdate) ClearWindmillPath() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearWindmillPath()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearWindmillPath() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearWindmillPath()
+	return _u
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (jthu *JobTemplateHistoryUpdate) SetDownloadURL(s string) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetDownloadURL(s)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetDownloadURL(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetDownloadURL(v)
+	return _u
 }
 
 // SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableDownloadURL(s *string) *JobTemplateHistoryUpdate {
-	if s != nil {
-		jthu.SetDownloadURL(*s)
+func (_u *JobTemplateHistoryUpdate) SetNillableDownloadURL(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetDownloadURL(*v)
 	}
-	return jthu
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (jthu *JobTemplateHistoryUpdate) SetConfiguration(mc models.JobConfiguration) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetConfiguration(mc)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetConfiguration(v models.JobConfiguration) *JobTemplateHistoryUpdate {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (jthu *JobTemplateHistoryUpdate) AppendConfiguration(mc models.JobConfiguration) *JobTemplateHistoryUpdate {
-	jthu.mutation.AppendConfiguration(mc)
-	return jthu
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *JobTemplateHistoryUpdate) AppendConfiguration(v models.JobConfiguration) *JobTemplateHistoryUpdate {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (jthu *JobTemplateHistoryUpdate) ClearConfiguration() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearConfiguration()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearConfiguration() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (jthu *JobTemplateHistoryUpdate) SetCron(m models.Cron) *JobTemplateHistoryUpdate {
-	jthu.mutation.SetCron(m)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) SetCron(v models.Cron) *JobTemplateHistoryUpdate {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (jthu *JobTemplateHistoryUpdate) SetNillableCron(m *models.Cron) *JobTemplateHistoryUpdate {
-	if m != nil {
-		jthu.SetCron(*m)
+func (_u *JobTemplateHistoryUpdate) SetNillableCron(v *models.Cron) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return jthu
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (jthu *JobTemplateHistoryUpdate) ClearCron() *JobTemplateHistoryUpdate {
-	jthu.mutation.ClearCron()
-	return jthu
+func (_u *JobTemplateHistoryUpdate) ClearCron() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // Mutation returns the JobTemplateHistoryMutation object of the builder.
-func (jthu *JobTemplateHistoryUpdate) Mutation() *JobTemplateHistoryMutation {
-	return jthu.mutation
+func (_u *JobTemplateHistoryUpdate) Mutation() *JobTemplateHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (jthu *JobTemplateHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := jthu.defaults(); err != nil {
+func (_u *JobTemplateHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, jthu.sqlSave, jthu.mutation, jthu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jthu *JobTemplateHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := jthu.Save(ctx)
+func (_u *JobTemplateHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -272,137 +272,137 @@ func (jthu *JobTemplateHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (jthu *JobTemplateHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := jthu.Save(ctx)
+func (_u *JobTemplateHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jthu *JobTemplateHistoryUpdate) ExecX(ctx context.Context) {
-	if err := jthu.Exec(ctx); err != nil {
+func (_u *JobTemplateHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jthu *JobTemplateHistoryUpdate) defaults() error {
-	if _, ok := jthu.mutation.UpdatedAt(); !ok && !jthu.mutation.UpdatedAtCleared() {
+func (_u *JobTemplateHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobtemplatehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplatehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobtemplatehistory.UpdateDefaultUpdatedAt()
-		jthu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jthu *JobTemplateHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateHistoryUpdate {
-	jthu.modifiers = append(jthu.modifiers, modifiers...)
-	return jthu
+func (_u *JobTemplateHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jthu *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(jobtemplatehistory.Table, jobtemplatehistory.Columns, sqlgraph.NewFieldSpec(jobtemplatehistory.FieldID, field.TypeString))
-	if ps := jthu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jthu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldRef, field.TypeString)
 	}
-	if jthu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jthu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobtemplatehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jthu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if jthu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jthu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobtemplatehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jthu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jthu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jthu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jthu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if jthu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jthu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobtemplatehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jthu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplatehistory.FieldTags, value)
 		})
 	}
-	if jthu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := jthu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(jobtemplatehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if jthu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldOwnerID, field.TypeString)
 	}
-	if jthu.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := jthu.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(jobtemplatehistory.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := jthu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDescription, field.TypeString, value)
 	}
-	if jthu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := jthu.mutation.WindmillPath(); ok {
+	if value, ok := _u.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
 	}
-	if jthu.mutation.WindmillPathCleared() {
+	if _u.mutation.WindmillPathCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldWindmillPath, field.TypeString)
 	}
-	if value, ok := jthu.mutation.DownloadURL(); ok {
+	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)
 	}
-	if value, ok := jthu.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplatehistory.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := jthu.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplatehistory.FieldConfiguration, value)
 		})
 	}
-	if jthu.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := jthu.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(jobtemplatehistory.FieldCron, field.TypeString, value)
 	}
-	if jthu.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCron, field.TypeString)
 	}
-	_spec.Node.Schema = jthu.schemaConfig.JobTemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, jthu.schemaConfig)
-	_spec.AddModifiers(jthu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, jthu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.JobTemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobtemplatehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -410,8 +410,8 @@ func (jthu *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	jthu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // JobTemplateHistoryUpdateOne is the builder for updating a single JobTemplateHistory entity.
@@ -424,250 +424,250 @@ type JobTemplateHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetUpdatedAt(t time.Time) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetUpdatedAt(t)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetUpdatedAt(v time.Time) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearUpdatedAt() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearUpdatedAt()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearUpdatedAt() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetUpdatedBy(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetUpdatedBy(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetUpdatedBy(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableUpdatedBy(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetUpdatedBy(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableUpdatedBy(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearUpdatedBy() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearUpdatedBy()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearUpdatedBy() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetDeletedAt(t time.Time) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetDeletedAt(t)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetDeletedAt(v time.Time) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *JobTemplateHistoryUpdateOne {
-	if t != nil {
-		jthuo.SetDeletedAt(*t)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearDeletedAt() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearDeletedAt()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearDeletedAt() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetDeletedBy(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetDeletedBy(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetDeletedBy(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableDeletedBy(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetDeletedBy(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableDeletedBy(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearDeletedBy() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearDeletedBy()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearDeletedBy() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetTags(s []string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetTags(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetTags(v []string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jthuo *JobTemplateHistoryUpdateOne) AppendTags(s []string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.AppendTags(s)
-	return jthuo
+// AppendTags appends value to the "tags" field.
+func (_u *JobTemplateHistoryUpdateOne) AppendTags(v []string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearTags() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearTags()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearTags() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetOwnerID(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetOwnerID(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetOwnerID(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableOwnerID(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetOwnerID(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableOwnerID(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearOwnerID() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearOwnerID()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearOwnerID() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetTitle(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetTitle(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetTitle(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableTitle(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetTitle(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableTitle(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetDescription(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetDescription(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetDescription(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableDescription(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetDescription(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableDescription(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearDescription() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearDescription()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearDescription() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetWindmillPath sets the "windmill_path" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetWindmillPath(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetWindmillPath(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetWindmillPath(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetWindmillPath(v)
+	return _u
 }
 
 // SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableWindmillPath(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetWindmillPath(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableWindmillPath(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetWindmillPath(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearWindmillPath clears the value of the "windmill_path" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearWindmillPath() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearWindmillPath()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearWindmillPath() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearWindmillPath()
+	return _u
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetDownloadURL(s string) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetDownloadURL(s)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetDownloadURL(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetDownloadURL(v)
+	return _u
 }
 
 // SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableDownloadURL(s *string) *JobTemplateHistoryUpdateOne {
-	if s != nil {
-		jthuo.SetDownloadURL(*s)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableDownloadURL(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetDownloadURL(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // SetConfiguration sets the "configuration" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetConfiguration(mc models.JobConfiguration) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetConfiguration(mc)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetConfiguration(v models.JobConfiguration) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetConfiguration(v)
+	return _u
 }
 
-// AppendConfiguration appends mc to the "configuration" field.
-func (jthuo *JobTemplateHistoryUpdateOne) AppendConfiguration(mc models.JobConfiguration) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.AppendConfiguration(mc)
-	return jthuo
+// AppendConfiguration appends value to the "configuration" field.
+func (_u *JobTemplateHistoryUpdateOne) AppendConfiguration(v models.JobConfiguration) *JobTemplateHistoryUpdateOne {
+	_u.mutation.AppendConfiguration(v)
+	return _u
 }
 
 // ClearConfiguration clears the value of the "configuration" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearConfiguration() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearConfiguration()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearConfiguration() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearConfiguration()
+	return _u
 }
 
 // SetCron sets the "cron" field.
-func (jthuo *JobTemplateHistoryUpdateOne) SetCron(m models.Cron) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.SetCron(m)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) SetCron(v models.Cron) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetCron(v)
+	return _u
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (jthuo *JobTemplateHistoryUpdateOne) SetNillableCron(m *models.Cron) *JobTemplateHistoryUpdateOne {
-	if m != nil {
-		jthuo.SetCron(*m)
+func (_u *JobTemplateHistoryUpdateOne) SetNillableCron(v *models.Cron) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetCron(*v)
 	}
-	return jthuo
+	return _u
 }
 
 // ClearCron clears the value of the "cron" field.
-func (jthuo *JobTemplateHistoryUpdateOne) ClearCron() *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.ClearCron()
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) ClearCron() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearCron()
+	return _u
 }
 
 // Mutation returns the JobTemplateHistoryMutation object of the builder.
-func (jthuo *JobTemplateHistoryUpdateOne) Mutation() *JobTemplateHistoryMutation {
-	return jthuo.mutation
+func (_u *JobTemplateHistoryUpdateOne) Mutation() *JobTemplateHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the JobTemplateHistoryUpdate builder.
-func (jthuo *JobTemplateHistoryUpdateOne) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryUpdateOne {
-	jthuo.mutation.Where(ps...)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) Where(ps ...predicate.JobTemplateHistory) *JobTemplateHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (jthuo *JobTemplateHistoryUpdateOne) Select(field string, fields ...string) *JobTemplateHistoryUpdateOne {
-	jthuo.fields = append([]string{field}, fields...)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) Select(field string, fields ...string) *JobTemplateHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated JobTemplateHistory entity.
-func (jthuo *JobTemplateHistoryUpdateOne) Save(ctx context.Context) (*JobTemplateHistory, error) {
-	if err := jthuo.defaults(); err != nil {
+func (_u *JobTemplateHistoryUpdateOne) Save(ctx context.Context) (*JobTemplateHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jthuo.sqlSave, jthuo.mutation, jthuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jthuo *JobTemplateHistoryUpdateOne) SaveX(ctx context.Context) *JobTemplateHistory {
-	node, err := jthuo.Save(ctx)
+func (_u *JobTemplateHistoryUpdateOne) SaveX(ctx context.Context) *JobTemplateHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -675,44 +675,44 @@ func (jthuo *JobTemplateHistoryUpdateOne) SaveX(ctx context.Context) *JobTemplat
 }
 
 // Exec executes the query on the entity.
-func (jthuo *JobTemplateHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := jthuo.Save(ctx)
+func (_u *JobTemplateHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jthuo *JobTemplateHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := jthuo.Exec(ctx); err != nil {
+func (_u *JobTemplateHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jthuo *JobTemplateHistoryUpdateOne) defaults() error {
-	if _, ok := jthuo.mutation.UpdatedAt(); !ok && !jthuo.mutation.UpdatedAtCleared() {
+func (_u *JobTemplateHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobtemplatehistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobtemplatehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobtemplatehistory.UpdateDefaultUpdatedAt()
-		jthuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jthuo *JobTemplateHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateHistoryUpdateOne {
-	jthuo.modifiers = append(jthuo.modifiers, modifiers...)
-	return jthuo
+func (_u *JobTemplateHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobTemplateHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jthuo *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *JobTemplateHistory, err error) {
+func (_u *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *JobTemplateHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(jobtemplatehistory.Table, jobtemplatehistory.Columns, sqlgraph.NewFieldSpec(jobtemplatehistory.FieldID, field.TypeString))
-	id, ok := jthuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "JobTemplateHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := jthuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobtemplatehistory.FieldID)
 		for _, f := range fields {
@@ -724,108 +724,108 @@ func (jthuo *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *J
 			}
 		}
 	}
-	if ps := jthuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jthuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldRef, field.TypeString)
 	}
-	if jthuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jthuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobtemplatehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jthuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if jthuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jthuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobtemplatehistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jthuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jthuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jthuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jthuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if jthuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jthuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobtemplatehistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jthuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplatehistory.FieldTags, value)
 		})
 	}
-	if jthuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := jthuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(jobtemplatehistory.FieldOwnerID, field.TypeString, value)
 	}
-	if jthuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldOwnerID, field.TypeString)
 	}
-	if jthuo.mutation.SystemOwnedCleared() {
+	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := jthuo.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(jobtemplatehistory.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := jthuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDescription, field.TypeString, value)
 	}
-	if jthuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := jthuo.mutation.WindmillPath(); ok {
+	if value, ok := _u.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
 	}
-	if jthuo.mutation.WindmillPathCleared() {
+	if _u.mutation.WindmillPathCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldWindmillPath, field.TypeString)
 	}
-	if value, ok := jthuo.mutation.DownloadURL(); ok {
+	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)
 	}
-	if value, ok := jthuo.mutation.Configuration(); ok {
+	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplatehistory.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := jthuo.mutation.AppendedConfiguration(); ok {
+	if value, ok := _u.mutation.AppendedConfiguration(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobtemplatehistory.FieldConfiguration, value)
 		})
 	}
-	if jthuo.mutation.ConfigurationCleared() {
+	if _u.mutation.ConfigurationCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldConfiguration, field.TypeJSON)
 	}
-	if value, ok := jthuo.mutation.Cron(); ok {
+	if value, ok := _u.mutation.Cron(); ok {
 		_spec.SetField(jobtemplatehistory.FieldCron, field.TypeString, value)
 	}
-	if jthuo.mutation.CronCleared() {
+	if _u.mutation.CronCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCron, field.TypeString)
 	}
-	_spec.Node.Schema = jthuo.schemaConfig.JobTemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, jthuo.schemaConfig)
-	_spec.AddModifiers(jthuo.modifiers...)
-	_node = &JobTemplateHistory{config: jthuo.config}
+	_spec.Node.Schema = _u.schemaConfig.JobTemplateHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &JobTemplateHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, jthuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobtemplatehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -833,6 +833,6 @@ func (jthuo *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *J
 		}
 		return nil, err
 	}
-	jthuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -22,58 +22,58 @@ type OrgMembershipHistoryDelete struct {
 }
 
 // Where appends a list predicates to the OrgMembershipHistoryDelete builder.
-func (omhd *OrgMembershipHistoryDelete) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryDelete {
-	omhd.mutation.Where(ps...)
-	return omhd
+func (_d *OrgMembershipHistoryDelete) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (omhd *OrgMembershipHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, omhd.sqlExec, omhd.mutation, omhd.hooks)
+func (_d *OrgMembershipHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omhd *OrgMembershipHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := omhd.Exec(ctx)
+func (_d *OrgMembershipHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (omhd *OrgMembershipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OrgMembershipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orgmembershiphistory.Table, sqlgraph.NewFieldSpec(orgmembershiphistory.FieldID, field.TypeString))
-	_spec.Node.Schema = omhd.schemaConfig.OrgMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, omhd.schemaConfig)
-	if ps := omhd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.OrgMembershipHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, omhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	omhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OrgMembershipHistoryDeleteOne is the builder for deleting a single OrgMembershipHistory entity.
 type OrgMembershipHistoryDeleteOne struct {
-	omhd *OrgMembershipHistoryDelete
+	_d *OrgMembershipHistoryDelete
 }
 
 // Where appends a list predicates to the OrgMembershipHistoryDelete builder.
-func (omhdo *OrgMembershipHistoryDeleteOne) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryDeleteOne {
-	omhdo.omhd.mutation.Where(ps...)
-	return omhdo
+func (_d *OrgMembershipHistoryDeleteOne) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (omhdo *OrgMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := omhdo.omhd.Exec(ctx)
+func (_d *OrgMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (omhdo *OrgMembershipHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omhdo *OrgMembershipHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := omhdo.Exec(ctx); err != nil {
+func (_d *OrgMembershipHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

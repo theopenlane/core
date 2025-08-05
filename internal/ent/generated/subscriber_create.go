@@ -23,267 +23,267 @@ type SubscriberCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (sc *SubscriberCreate) SetCreatedAt(t time.Time) *SubscriberCreate {
-	sc.mutation.SetCreatedAt(t)
-	return sc
+func (_c *SubscriberCreate) SetCreatedAt(v time.Time) *SubscriberCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableCreatedAt(t *time.Time) *SubscriberCreate {
-	if t != nil {
-		sc.SetCreatedAt(*t)
+func (_c *SubscriberCreate) SetNillableCreatedAt(v *time.Time) *SubscriberCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sc *SubscriberCreate) SetUpdatedAt(t time.Time) *SubscriberCreate {
-	sc.mutation.SetUpdatedAt(t)
-	return sc
+func (_c *SubscriberCreate) SetUpdatedAt(v time.Time) *SubscriberCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableUpdatedAt(t *time.Time) *SubscriberCreate {
-	if t != nil {
-		sc.SetUpdatedAt(*t)
+func (_c *SubscriberCreate) SetNillableUpdatedAt(v *time.Time) *SubscriberCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (sc *SubscriberCreate) SetCreatedBy(s string) *SubscriberCreate {
-	sc.mutation.SetCreatedBy(s)
-	return sc
+func (_c *SubscriberCreate) SetCreatedBy(v string) *SubscriberCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableCreatedBy(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetCreatedBy(*s)
+func (_c *SubscriberCreate) SetNillableCreatedBy(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sc *SubscriberCreate) SetUpdatedBy(s string) *SubscriberCreate {
-	sc.mutation.SetUpdatedBy(s)
-	return sc
+func (_c *SubscriberCreate) SetUpdatedBy(v string) *SubscriberCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableUpdatedBy(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetUpdatedBy(*s)
+func (_c *SubscriberCreate) SetNillableUpdatedBy(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sc *SubscriberCreate) SetDeletedAt(t time.Time) *SubscriberCreate {
-	sc.mutation.SetDeletedAt(t)
-	return sc
+func (_c *SubscriberCreate) SetDeletedAt(v time.Time) *SubscriberCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableDeletedAt(t *time.Time) *SubscriberCreate {
-	if t != nil {
-		sc.SetDeletedAt(*t)
+func (_c *SubscriberCreate) SetNillableDeletedAt(v *time.Time) *SubscriberCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sc *SubscriberCreate) SetDeletedBy(s string) *SubscriberCreate {
-	sc.mutation.SetDeletedBy(s)
-	return sc
+func (_c *SubscriberCreate) SetDeletedBy(v string) *SubscriberCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableDeletedBy(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetDeletedBy(*s)
+func (_c *SubscriberCreate) SetNillableDeletedBy(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetTags sets the "tags" field.
-func (sc *SubscriberCreate) SetTags(s []string) *SubscriberCreate {
-	sc.mutation.SetTags(s)
-	return sc
+func (_c *SubscriberCreate) SetTags(v []string) *SubscriberCreate {
+	_c.mutation.SetTags(v)
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (sc *SubscriberCreate) SetOwnerID(s string) *SubscriberCreate {
-	sc.mutation.SetOwnerID(s)
-	return sc
+func (_c *SubscriberCreate) SetOwnerID(v string) *SubscriberCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableOwnerID(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetOwnerID(*s)
+func (_c *SubscriberCreate) SetNillableOwnerID(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetEmail sets the "email" field.
-func (sc *SubscriberCreate) SetEmail(s string) *SubscriberCreate {
-	sc.mutation.SetEmail(s)
-	return sc
+func (_c *SubscriberCreate) SetEmail(v string) *SubscriberCreate {
+	_c.mutation.SetEmail(v)
+	return _c
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (sc *SubscriberCreate) SetPhoneNumber(s string) *SubscriberCreate {
-	sc.mutation.SetPhoneNumber(s)
-	return sc
+func (_c *SubscriberCreate) SetPhoneNumber(v string) *SubscriberCreate {
+	_c.mutation.SetPhoneNumber(v)
+	return _c
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillablePhoneNumber(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetPhoneNumber(*s)
+func (_c *SubscriberCreate) SetNillablePhoneNumber(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetPhoneNumber(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetVerifiedEmail sets the "verified_email" field.
-func (sc *SubscriberCreate) SetVerifiedEmail(b bool) *SubscriberCreate {
-	sc.mutation.SetVerifiedEmail(b)
-	return sc
+func (_c *SubscriberCreate) SetVerifiedEmail(v bool) *SubscriberCreate {
+	_c.mutation.SetVerifiedEmail(v)
+	return _c
 }
 
 // SetNillableVerifiedEmail sets the "verified_email" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableVerifiedEmail(b *bool) *SubscriberCreate {
-	if b != nil {
-		sc.SetVerifiedEmail(*b)
+func (_c *SubscriberCreate) SetNillableVerifiedEmail(v *bool) *SubscriberCreate {
+	if v != nil {
+		_c.SetVerifiedEmail(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetVerifiedPhone sets the "verified_phone" field.
-func (sc *SubscriberCreate) SetVerifiedPhone(b bool) *SubscriberCreate {
-	sc.mutation.SetVerifiedPhone(b)
-	return sc
+func (_c *SubscriberCreate) SetVerifiedPhone(v bool) *SubscriberCreate {
+	_c.mutation.SetVerifiedPhone(v)
+	return _c
 }
 
 // SetNillableVerifiedPhone sets the "verified_phone" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableVerifiedPhone(b *bool) *SubscriberCreate {
-	if b != nil {
-		sc.SetVerifiedPhone(*b)
+func (_c *SubscriberCreate) SetNillableVerifiedPhone(v *bool) *SubscriberCreate {
+	if v != nil {
+		_c.SetVerifiedPhone(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetActive sets the "active" field.
-func (sc *SubscriberCreate) SetActive(b bool) *SubscriberCreate {
-	sc.mutation.SetActive(b)
-	return sc
+func (_c *SubscriberCreate) SetActive(v bool) *SubscriberCreate {
+	_c.mutation.SetActive(v)
+	return _c
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableActive(b *bool) *SubscriberCreate {
-	if b != nil {
-		sc.SetActive(*b)
+func (_c *SubscriberCreate) SetNillableActive(v *bool) *SubscriberCreate {
+	if v != nil {
+		_c.SetActive(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetToken sets the "token" field.
-func (sc *SubscriberCreate) SetToken(s string) *SubscriberCreate {
-	sc.mutation.SetToken(s)
-	return sc
+func (_c *SubscriberCreate) SetToken(v string) *SubscriberCreate {
+	_c.mutation.SetToken(v)
+	return _c
 }
 
 // SetTTL sets the "ttl" field.
-func (sc *SubscriberCreate) SetTTL(t time.Time) *SubscriberCreate {
-	sc.mutation.SetTTL(t)
-	return sc
+func (_c *SubscriberCreate) SetTTL(v time.Time) *SubscriberCreate {
+	_c.mutation.SetTTL(v)
+	return _c
 }
 
 // SetSecret sets the "secret" field.
-func (sc *SubscriberCreate) SetSecret(b []byte) *SubscriberCreate {
-	sc.mutation.SetSecret(b)
-	return sc
+func (_c *SubscriberCreate) SetSecret(v []byte) *SubscriberCreate {
+	_c.mutation.SetSecret(v)
+	return _c
 }
 
 // SetUnsubscribed sets the "unsubscribed" field.
-func (sc *SubscriberCreate) SetUnsubscribed(b bool) *SubscriberCreate {
-	sc.mutation.SetUnsubscribed(b)
-	return sc
+func (_c *SubscriberCreate) SetUnsubscribed(v bool) *SubscriberCreate {
+	_c.mutation.SetUnsubscribed(v)
+	return _c
 }
 
 // SetNillableUnsubscribed sets the "unsubscribed" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableUnsubscribed(b *bool) *SubscriberCreate {
-	if b != nil {
-		sc.SetUnsubscribed(*b)
+func (_c *SubscriberCreate) SetNillableUnsubscribed(v *bool) *SubscriberCreate {
+	if v != nil {
+		_c.SetUnsubscribed(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetSendAttempts sets the "send_attempts" field.
-func (sc *SubscriberCreate) SetSendAttempts(i int) *SubscriberCreate {
-	sc.mutation.SetSendAttempts(i)
-	return sc
+func (_c *SubscriberCreate) SetSendAttempts(v int) *SubscriberCreate {
+	_c.mutation.SetSendAttempts(v)
+	return _c
 }
 
 // SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableSendAttempts(i *int) *SubscriberCreate {
-	if i != nil {
-		sc.SetSendAttempts(*i)
+func (_c *SubscriberCreate) SetNillableSendAttempts(v *int) *SubscriberCreate {
+	if v != nil {
+		_c.SetSendAttempts(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *SubscriberCreate) SetID(s string) *SubscriberCreate {
-	sc.mutation.SetID(s)
-	return sc
+func (_c *SubscriberCreate) SetID(v string) *SubscriberCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sc *SubscriberCreate) SetNillableID(s *string) *SubscriberCreate {
-	if s != nil {
-		sc.SetID(*s)
+func (_c *SubscriberCreate) SetNillableID(v *string) *SubscriberCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (sc *SubscriberCreate) SetOwner(o *Organization) *SubscriberCreate {
-	return sc.SetOwnerID(o.ID)
+func (_c *SubscriberCreate) SetOwner(v *Organization) *SubscriberCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (sc *SubscriberCreate) AddEventIDs(ids ...string) *SubscriberCreate {
-	sc.mutation.AddEventIDs(ids...)
-	return sc
+func (_c *SubscriberCreate) AddEventIDs(ids ...string) *SubscriberCreate {
+	_c.mutation.AddEventIDs(ids...)
+	return _c
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (sc *SubscriberCreate) AddEvents(e ...*Event) *SubscriberCreate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_c *SubscriberCreate) AddEvents(v ...*Event) *SubscriberCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddEventIDs(ids...)
+	return _c.AddEventIDs(ids...)
 }
 
 // Mutation returns the SubscriberMutation object of the builder.
-func (sc *SubscriberCreate) Mutation() *SubscriberMutation {
-	return sc.mutation
+func (_c *SubscriberCreate) Mutation() *SubscriberMutation {
+	return _c.mutation
 }
 
 // Save creates the Subscriber in the database.
-func (sc *SubscriberCreate) Save(ctx context.Context) (*Subscriber, error) {
-	if err := sc.defaults(); err != nil {
+func (_c *SubscriberCreate) Save(ctx context.Context) (*Subscriber, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *SubscriberCreate) SaveX(ctx context.Context) *Subscriber {
-	v, err := sc.Save(ctx)
+func (_c *SubscriberCreate) SaveX(ctx context.Context) *Subscriber {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -291,126 +291,126 @@ func (sc *SubscriberCreate) SaveX(ctx context.Context) *Subscriber {
 }
 
 // Exec executes the query.
-func (sc *SubscriberCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *SubscriberCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *SubscriberCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *SubscriberCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *SubscriberCreate) defaults() error {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
+func (_c *SubscriberCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if subscriber.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.DefaultCreatedAt (forgotten import generated/runtime?)")
 		}
 		v := subscriber.DefaultCreatedAt()
-		sc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if subscriber.DefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.DefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subscriber.DefaultUpdatedAt()
-		sc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sc.mutation.Tags(); !ok {
+	if _, ok := _c.mutation.Tags(); !ok {
 		v := subscriber.DefaultTags
-		sc.mutation.SetTags(v)
+		_c.mutation.SetTags(v)
 	}
-	if _, ok := sc.mutation.VerifiedEmail(); !ok {
+	if _, ok := _c.mutation.VerifiedEmail(); !ok {
 		v := subscriber.DefaultVerifiedEmail
-		sc.mutation.SetVerifiedEmail(v)
+		_c.mutation.SetVerifiedEmail(v)
 	}
-	if _, ok := sc.mutation.VerifiedPhone(); !ok {
+	if _, ok := _c.mutation.VerifiedPhone(); !ok {
 		v := subscriber.DefaultVerifiedPhone
-		sc.mutation.SetVerifiedPhone(v)
+		_c.mutation.SetVerifiedPhone(v)
 	}
-	if _, ok := sc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		v := subscriber.DefaultActive
-		sc.mutation.SetActive(v)
+		_c.mutation.SetActive(v)
 	}
-	if _, ok := sc.mutation.Unsubscribed(); !ok {
+	if _, ok := _c.mutation.Unsubscribed(); !ok {
 		v := subscriber.DefaultUnsubscribed
-		sc.mutation.SetUnsubscribed(v)
+		_c.mutation.SetUnsubscribed(v)
 	}
-	if _, ok := sc.mutation.SendAttempts(); !ok {
+	if _, ok := _c.mutation.SendAttempts(); !ok {
 		v := subscriber.DefaultSendAttempts
-		sc.mutation.SetSendAttempts(v)
+		_c.mutation.SetSendAttempts(v)
 	}
-	if _, ok := sc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		if subscriber.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.DefaultID (forgotten import generated/runtime?)")
 		}
 		v := subscriber.DefaultID()
-		sc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *SubscriberCreate) check() error {
-	if _, ok := sc.mutation.Email(); !ok {
+func (_c *SubscriberCreate) check() error {
+	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "Subscriber.email"`)}
 	}
-	if v, ok := sc.mutation.Email(); ok {
+	if v, ok := _c.mutation.Email(); ok {
 		if err := subscriber.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "Subscriber.email": %w`, err)}
 		}
 	}
-	if v, ok := sc.mutation.PhoneNumber(); ok {
+	if v, ok := _c.mutation.PhoneNumber(); ok {
 		if err := subscriber.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "Subscriber.phone_number": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.VerifiedEmail(); !ok {
+	if _, ok := _c.mutation.VerifiedEmail(); !ok {
 		return &ValidationError{Name: "verified_email", err: errors.New(`generated: missing required field "Subscriber.verified_email"`)}
 	}
-	if _, ok := sc.mutation.VerifiedPhone(); !ok {
+	if _, ok := _c.mutation.VerifiedPhone(); !ok {
 		return &ValidationError{Name: "verified_phone", err: errors.New(`generated: missing required field "Subscriber.verified_phone"`)}
 	}
-	if _, ok := sc.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "Subscriber.active"`)}
 	}
-	if _, ok := sc.mutation.Token(); !ok {
+	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "Subscriber.token"`)}
 	}
-	if v, ok := sc.mutation.Token(); ok {
+	if v, ok := _c.mutation.Token(); ok {
 		if err := subscriber.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "Subscriber.token": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.TTL(); !ok {
+	if _, ok := _c.mutation.TTL(); !ok {
 		return &ValidationError{Name: "ttl", err: errors.New(`generated: missing required field "Subscriber.ttl"`)}
 	}
-	if _, ok := sc.mutation.Secret(); !ok {
+	if _, ok := _c.mutation.Secret(); !ok {
 		return &ValidationError{Name: "secret", err: errors.New(`generated: missing required field "Subscriber.secret"`)}
 	}
-	if v, ok := sc.mutation.Secret(); ok {
+	if v, ok := _c.mutation.Secret(); ok {
 		if err := subscriber.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Subscriber.secret": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Unsubscribed(); !ok {
+	if _, ok := _c.mutation.Unsubscribed(); !ok {
 		return &ValidationError{Name: "unsubscribed", err: errors.New(`generated: missing required field "Subscriber.unsubscribed"`)}
 	}
-	if _, ok := sc.mutation.SendAttempts(); !ok {
+	if _, ok := _c.mutation.SendAttempts(); !ok {
 		return &ValidationError{Name: "send_attempts", err: errors.New(`generated: missing required field "Subscriber.send_attempts"`)}
 	}
 	return nil
 }
 
-func (sc *SubscriberCreate) sqlSave(ctx context.Context) (*Subscriber, error) {
-	if err := sc.check(); err != nil {
+func (_c *SubscriberCreate) sqlSave(ctx context.Context) (*Subscriber, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -423,90 +423,90 @@ func (sc *SubscriberCreate) sqlSave(ctx context.Context) (*Subscriber, error) {
 			return nil, fmt.Errorf("unexpected Subscriber.ID type: %T", _spec.ID.Value)
 		}
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
+func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Subscriber{config: sc.config}
+		_node = &Subscriber{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subscriber.Table, sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString))
 	)
-	_spec.Schema = sc.schemaConfig.Subscriber
-	if id, ok := sc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.Subscriber
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(subscriber.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := sc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(subscriber.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sc.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(subscriber.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := sc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := sc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sc.mutation.Tags(); ok {
+	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := sc.mutation.Email(); ok {
+	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := sc.mutation.PhoneNumber(); ok {
+	if value, ok := _c.mutation.PhoneNumber(); ok {
 		_spec.SetField(subscriber.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
 	}
-	if value, ok := sc.mutation.VerifiedEmail(); ok {
+	if value, ok := _c.mutation.VerifiedEmail(); ok {
 		_spec.SetField(subscriber.FieldVerifiedEmail, field.TypeBool, value)
 		_node.VerifiedEmail = value
 	}
-	if value, ok := sc.mutation.VerifiedPhone(); ok {
+	if value, ok := _c.mutation.VerifiedPhone(); ok {
 		_spec.SetField(subscriber.FieldVerifiedPhone, field.TypeBool, value)
 		_node.VerifiedPhone = value
 	}
-	if value, ok := sc.mutation.Active(); ok {
+	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(subscriber.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := sc.mutation.Token(); ok {
+	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(subscriber.FieldToken, field.TypeString, value)
 		_node.Token = value
 	}
-	if value, ok := sc.mutation.TTL(); ok {
+	if value, ok := _c.mutation.TTL(); ok {
 		_spec.SetField(subscriber.FieldTTL, field.TypeTime, value)
 		_node.TTL = &value
 	}
-	if value, ok := sc.mutation.Secret(); ok {
+	if value, ok := _c.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
 		_node.Secret = &value
 	}
-	if value, ok := sc.mutation.Unsubscribed(); ok {
+	if value, ok := _c.mutation.Unsubscribed(); ok {
 		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
 		_node.Unsubscribed = value
 	}
-	if value, ok := sc.mutation.SendAttempts(); ok {
+	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(subscriber.FieldSendAttempts, field.TypeInt, value)
 		_node.SendAttempts = value
 	}
-	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -517,14 +517,14 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.Subscriber
+		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -535,7 +535,7 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = sc.schemaConfig.SubscriberEvents
+		edge.Schema = _c.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -552,16 +552,16 @@ type SubscriberCreateBulk struct {
 }
 
 // Save creates the Subscriber entities in the database.
-func (scb *SubscriberCreateBulk) Save(ctx context.Context) ([]*Subscriber, error) {
-	if scb.err != nil {
-		return nil, scb.err
+func (_c *SubscriberCreateBulk) Save(ctx context.Context) ([]*Subscriber, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Subscriber, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Subscriber, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SubscriberMutation)
@@ -575,11 +575,11 @@ func (scb *SubscriberCreateBulk) Save(ctx context.Context) ([]*Subscriber, error
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -599,7 +599,7 @@ func (scb *SubscriberCreateBulk) Save(ctx context.Context) ([]*Subscriber, error
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -607,8 +607,8 @@ func (scb *SubscriberCreateBulk) Save(ctx context.Context) ([]*Subscriber, error
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *SubscriberCreateBulk) SaveX(ctx context.Context) []*Subscriber {
-	v, err := scb.Save(ctx)
+func (_c *SubscriberCreateBulk) SaveX(ctx context.Context) []*Subscriber {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -616,14 +616,14 @@ func (scb *SubscriberCreateBulk) SaveX(ctx context.Context) []*Subscriber {
 }
 
 // Exec executes the query.
-func (scb *SubscriberCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *SubscriberCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *SubscriberCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *SubscriberCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

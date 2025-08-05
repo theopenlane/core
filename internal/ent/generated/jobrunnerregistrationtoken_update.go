@@ -29,199 +29,199 @@ type JobRunnerRegistrationTokenUpdate struct {
 }
 
 // Where appends a list predicates to the JobRunnerRegistrationTokenUpdate builder.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.Where(ps...)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetUpdatedAt(t time.Time) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetUpdatedAt(t)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetUpdatedAt(v time.Time) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearUpdatedAt() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearUpdatedAt()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearUpdatedAt() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetUpdatedBy(s string) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetUpdatedBy(s)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetUpdatedBy(v string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetNillableUpdatedBy(s *string) *JobRunnerRegistrationTokenUpdate {
-	if s != nil {
-		jrrtu.SetUpdatedBy(*s)
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableUpdatedBy(v *string) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jrrtu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearUpdatedBy() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearUpdatedBy()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearUpdatedBy() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetDeletedAt(t time.Time) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetDeletedAt(t)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetDeletedAt(v time.Time) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetNillableDeletedAt(t *time.Time) *JobRunnerRegistrationTokenUpdate {
-	if t != nil {
-		jrrtu.SetDeletedAt(*t)
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableDeletedAt(v *time.Time) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jrrtu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearDeletedAt() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearDeletedAt()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearDeletedAt() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetDeletedBy(s string) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetDeletedBy(s)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetDeletedBy(v string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetNillableDeletedBy(s *string) *JobRunnerRegistrationTokenUpdate {
-	if s != nil {
-		jrrtu.SetDeletedBy(*s)
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableDeletedBy(v *string) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jrrtu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearDeletedBy() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearDeletedBy()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearDeletedBy() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetTags(s []string) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetTags(s)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetTags(v []string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) AppendTags(s []string) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.AppendTags(s)
-	return jrrtu
+// AppendTags appends value to the "tags" field.
+func (_u *JobRunnerRegistrationTokenUpdate) AppendTags(v []string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearTags() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearTags()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearTags() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetOwnerID(s string) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetOwnerID(s)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetOwnerID(v string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetNillableOwnerID(s *string) *JobRunnerRegistrationTokenUpdate {
-	if s != nil {
-		jrrtu.SetOwnerID(*s)
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableOwnerID(v *string) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jrrtu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearOwnerID() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearOwnerID()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearOwnerID() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetLastUsedAt(t time.Time) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetLastUsedAt(t)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetLastUsedAt(v time.Time) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetNillableLastUsedAt(t *time.Time) *JobRunnerRegistrationTokenUpdate {
-	if t != nil {
-		jrrtu.SetLastUsedAt(*t)
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableLastUsedAt(v *time.Time) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
 	}
-	return jrrtu
+	return _u
 }
 
 // ClearLastUsedAt clears the value of the "last_used_at" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearLastUsedAt() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearLastUsedAt()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearLastUsedAt() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearLastUsedAt()
+	return _u
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetJobRunnerID(s string) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.SetJobRunnerID(s)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) SetJobRunnerID(v string) *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.SetJobRunnerID(v)
+	return _u
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetNillableJobRunnerID(s *string) *JobRunnerRegistrationTokenUpdate {
-	if s != nil {
-		jrrtu.SetJobRunnerID(*s)
+func (_u *JobRunnerRegistrationTokenUpdate) SetNillableJobRunnerID(v *string) *JobRunnerRegistrationTokenUpdate {
+	if v != nil {
+		_u.SetJobRunnerID(*v)
 	}
-	return jrrtu
+	return _u
 }
 
 // ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearJobRunnerID() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearJobRunnerID()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearJobRunnerID() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearJobRunnerID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetOwner(o *Organization) *JobRunnerRegistrationTokenUpdate {
-	return jrrtu.SetOwnerID(o.ID)
+func (_u *JobRunnerRegistrationTokenUpdate) SetOwner(v *Organization) *JobRunnerRegistrationTokenUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SetJobRunner(j *JobRunner) *JobRunnerRegistrationTokenUpdate {
-	return jrrtu.SetJobRunnerID(j.ID)
+func (_u *JobRunnerRegistrationTokenUpdate) SetJobRunner(v *JobRunner) *JobRunnerRegistrationTokenUpdate {
+	return _u.SetJobRunnerID(v.ID)
 }
 
 // Mutation returns the JobRunnerRegistrationTokenMutation object of the builder.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) Mutation() *JobRunnerRegistrationTokenMutation {
-	return jrrtu.mutation
+func (_u *JobRunnerRegistrationTokenUpdate) Mutation() *JobRunnerRegistrationTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearOwner() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearOwner()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearOwner() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ClearJobRunner() *JobRunnerRegistrationTokenUpdate {
-	jrrtu.mutation.ClearJobRunner()
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) ClearJobRunner() *JobRunnerRegistrationTokenUpdate {
+	_u.mutation.ClearJobRunner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) Save(ctx context.Context) (int, error) {
-	if err := jrrtu.defaults(); err != nil {
+func (_u *JobRunnerRegistrationTokenUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, jrrtu.sqlSave, jrrtu.mutation, jrrtu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) SaveX(ctx context.Context) int {
-	affected, err := jrrtu.Save(ctx)
+func (_u *JobRunnerRegistrationTokenUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -229,33 +229,33 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) Exec(ctx context.Context) error {
-	_, err := jrrtu.Save(ctx)
+func (_u *JobRunnerRegistrationTokenUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) ExecX(ctx context.Context) {
-	if err := jrrtu.Exec(ctx); err != nil {
+func (_u *JobRunnerRegistrationTokenUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) defaults() error {
-	if _, ok := jrrtu.mutation.UpdatedAt(); !ok && !jrrtu.mutation.UpdatedAtCleared() {
+func (_u *JobRunnerRegistrationTokenUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobrunnerregistrationtoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunnerregistrationtoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunnerregistrationtoken.UpdateDefaultUpdatedAt()
-		jrrtu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) check() error {
-	if v, ok := jrrtu.mutation.OwnerID(); ok {
+func (_u *JobRunnerRegistrationTokenUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := jobrunnerregistrationtoken.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "JobRunnerRegistrationToken.owner_id": %w`, err)}
 		}
@@ -264,71 +264,71 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jrrtu *JobRunnerRegistrationTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerRegistrationTokenUpdate {
-	jrrtu.modifiers = append(jrrtu.modifiers, modifiers...)
-	return jrrtu
+func (_u *JobRunnerRegistrationTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerRegistrationTokenUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jrrtu *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := jrrtu.check(); err != nil {
-		return n, err
+func (_u *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.Columns, sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString))
-	if ps := jrrtu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jrrtu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jrrtu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jrrtu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if jrrtu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jrrtu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jrrtu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jrrtu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jrrtu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jrrtu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if jrrtu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jrrtu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jrrtu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobrunnerregistrationtoken.FieldTags, value)
 		})
 	}
-	if jrrtu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldTags, field.TypeJSON)
 	}
-	if value, ok := jrrtu.mutation.LastUsedAt(); ok {
+	if value, ok := _u.mutation.LastUsedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldLastUsedAt, field.TypeTime, value)
 	}
-	if jrrtu.mutation.LastUsedAtCleared() {
+	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if jrrtu.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -339,10 +339,10 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (n i
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtu.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jrrtu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -353,13 +353,13 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (n i
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtu.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jrrtu.mutation.JobRunnerCleared() {
+	if _u.mutation.JobRunnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -370,10 +370,10 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (n i
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtu.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jrrtu.mutation.JobRunnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -384,16 +384,16 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (n i
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtu.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jrrtu.schemaConfig.JobRunnerRegistrationToken
-	ctx = internal.NewSchemaConfigContext(ctx, jrrtu.schemaConfig)
-	_spec.AddModifiers(jrrtu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, jrrtu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.JobRunnerRegistrationToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobrunnerregistrationtoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -401,8 +401,8 @@ func (jrrtu *JobRunnerRegistrationTokenUpdate) sqlSave(ctx context.Context) (n i
 		}
 		return 0, err
 	}
-	jrrtu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // JobRunnerRegistrationTokenUpdateOne is the builder for updating a single JobRunnerRegistrationToken entity.
@@ -415,206 +415,206 @@ type JobRunnerRegistrationTokenUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetUpdatedAt(t time.Time) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetUpdatedAt(t)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetUpdatedAt(v time.Time) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearUpdatedAt() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearUpdatedAt()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearUpdatedAt() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetUpdatedBy(s string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetUpdatedBy(s)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetUpdatedBy(v string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetNillableUpdatedBy(s *string) *JobRunnerRegistrationTokenUpdateOne {
-	if s != nil {
-		jrrtuo.SetUpdatedBy(*s)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableUpdatedBy(v *string) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return jrrtuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearUpdatedBy() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearUpdatedBy()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearUpdatedBy() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetDeletedAt(t time.Time) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetDeletedAt(t)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetDeletedAt(v time.Time) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetNillableDeletedAt(t *time.Time) *JobRunnerRegistrationTokenUpdateOne {
-	if t != nil {
-		jrrtuo.SetDeletedAt(*t)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableDeletedAt(v *time.Time) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return jrrtuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearDeletedAt() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearDeletedAt()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearDeletedAt() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetDeletedBy(s string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetDeletedBy(s)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetDeletedBy(v string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetNillableDeletedBy(s *string) *JobRunnerRegistrationTokenUpdateOne {
-	if s != nil {
-		jrrtuo.SetDeletedBy(*s)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableDeletedBy(v *string) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return jrrtuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearDeletedBy() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearDeletedBy()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearDeletedBy() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetTags(s []string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetTags(s)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetTags(v []string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) AppendTags(s []string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.AppendTags(s)
-	return jrrtuo
+// AppendTags appends value to the "tags" field.
+func (_u *JobRunnerRegistrationTokenUpdateOne) AppendTags(v []string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearTags() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearTags()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearTags() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetOwnerID(s string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetOwnerID(s)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetOwnerID(v string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetNillableOwnerID(s *string) *JobRunnerRegistrationTokenUpdateOne {
-	if s != nil {
-		jrrtuo.SetOwnerID(*s)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableOwnerID(v *string) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return jrrtuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearOwnerID() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearOwnerID()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearOwnerID() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetLastUsedAt sets the "last_used_at" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetLastUsedAt(t time.Time) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetLastUsedAt(t)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetLastUsedAt(v time.Time) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetLastUsedAt(v)
+	return _u
 }
 
 // SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetNillableLastUsedAt(t *time.Time) *JobRunnerRegistrationTokenUpdateOne {
-	if t != nil {
-		jrrtuo.SetLastUsedAt(*t)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableLastUsedAt(v *time.Time) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetLastUsedAt(*v)
 	}
-	return jrrtuo
+	return _u
 }
 
 // ClearLastUsedAt clears the value of the "last_used_at" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearLastUsedAt() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearLastUsedAt()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearLastUsedAt() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearLastUsedAt()
+	return _u
 }
 
 // SetJobRunnerID sets the "job_runner_id" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetJobRunnerID(s string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.SetJobRunnerID(s)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetJobRunnerID(v string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.SetJobRunnerID(v)
+	return _u
 }
 
 // SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetNillableJobRunnerID(s *string) *JobRunnerRegistrationTokenUpdateOne {
-	if s != nil {
-		jrrtuo.SetJobRunnerID(*s)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetNillableJobRunnerID(v *string) *JobRunnerRegistrationTokenUpdateOne {
+	if v != nil {
+		_u.SetJobRunnerID(*v)
 	}
-	return jrrtuo
+	return _u
 }
 
 // ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearJobRunnerID() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearJobRunnerID()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearJobRunnerID() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearJobRunnerID()
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetOwner(o *Organization) *JobRunnerRegistrationTokenUpdateOne {
-	return jrrtuo.SetOwnerID(o.ID)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetOwner(v *Organization) *JobRunnerRegistrationTokenUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SetJobRunner(j *JobRunner) *JobRunnerRegistrationTokenUpdateOne {
-	return jrrtuo.SetJobRunnerID(j.ID)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SetJobRunner(v *JobRunner) *JobRunnerRegistrationTokenUpdateOne {
+	return _u.SetJobRunnerID(v.ID)
 }
 
 // Mutation returns the JobRunnerRegistrationTokenMutation object of the builder.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) Mutation() *JobRunnerRegistrationTokenMutation {
-	return jrrtuo.mutation
+func (_u *JobRunnerRegistrationTokenUpdateOne) Mutation() *JobRunnerRegistrationTokenMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearOwner() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearOwner()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearOwner() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ClearJobRunner() *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.ClearJobRunner()
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) ClearJobRunner() *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.ClearJobRunner()
+	return _u
 }
 
 // Where appends a list predicates to the JobRunnerRegistrationTokenUpdate builder.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.mutation.Where(ps...)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) Where(ps ...predicate.JobRunnerRegistrationToken) *JobRunnerRegistrationTokenUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) Select(field string, fields ...string) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.fields = append([]string{field}, fields...)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) Select(field string, fields ...string) *JobRunnerRegistrationTokenUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated JobRunnerRegistrationToken entity.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) Save(ctx context.Context) (*JobRunnerRegistrationToken, error) {
-	if err := jrrtuo.defaults(); err != nil {
+func (_u *JobRunnerRegistrationTokenUpdateOne) Save(ctx context.Context) (*JobRunnerRegistrationToken, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, jrrtuo.sqlSave, jrrtuo.mutation, jrrtuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SaveX(ctx context.Context) *JobRunnerRegistrationToken {
-	node, err := jrrtuo.Save(ctx)
+func (_u *JobRunnerRegistrationTokenUpdateOne) SaveX(ctx context.Context) *JobRunnerRegistrationToken {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -622,33 +622,33 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) SaveX(ctx context.Context) *J
 }
 
 // Exec executes the query on the entity.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) Exec(ctx context.Context) error {
-	_, err := jrrtuo.Save(ctx)
+func (_u *JobRunnerRegistrationTokenUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) ExecX(ctx context.Context) {
-	if err := jrrtuo.Exec(ctx); err != nil {
+func (_u *JobRunnerRegistrationTokenUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) defaults() error {
-	if _, ok := jrrtuo.mutation.UpdatedAt(); !ok && !jrrtuo.mutation.UpdatedAtCleared() {
+func (_u *JobRunnerRegistrationTokenUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if jobrunnerregistrationtoken.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized jobrunnerregistrationtoken.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := jobrunnerregistrationtoken.UpdateDefaultUpdatedAt()
-		jrrtuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) check() error {
-	if v, ok := jrrtuo.mutation.OwnerID(); ok {
+func (_u *JobRunnerRegistrationTokenUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := jobrunnerregistrationtoken.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "JobRunnerRegistrationToken.owner_id": %w`, err)}
 		}
@@ -657,22 +657,22 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerRegistrationTokenUpdateOne {
-	jrrtuo.modifiers = append(jrrtuo.modifiers, modifiers...)
-	return jrrtuo
+func (_u *JobRunnerRegistrationTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *JobRunnerRegistrationTokenUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) (_node *JobRunnerRegistrationToken, err error) {
-	if err := jrrtuo.check(); err != nil {
+func (_u *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) (_node *JobRunnerRegistrationToken, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.Columns, sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString))
-	id, ok := jrrtuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "JobRunnerRegistrationToken.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := jrrtuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, jobrunnerregistrationtoken.FieldID)
 		for _, f := range fields {
@@ -684,61 +684,61 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) 
 			}
 		}
 	}
-	if ps := jrrtuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if jrrtuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := jrrtuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if jrrtuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedAt, field.TypeTime)
 	}
-	if jrrtuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := jrrtuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString, value)
 	}
-	if jrrtuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := jrrtuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime, value)
 	}
-	if jrrtuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := jrrtuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldDeletedBy, field.TypeString, value)
 	}
-	if jrrtuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := jrrtuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := jrrtuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, jobrunnerregistrationtoken.FieldTags, value)
 		})
 	}
-	if jrrtuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldTags, field.TypeJSON)
 	}
-	if value, ok := jrrtuo.mutation.LastUsedAt(); ok {
+	if value, ok := _u.mutation.LastUsedAt(); ok {
 		_spec.SetField(jobrunnerregistrationtoken.FieldLastUsedAt, field.TypeTime, value)
 	}
-	if jrrtuo.mutation.LastUsedAtCleared() {
+	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(jobrunnerregistrationtoken.FieldLastUsedAt, field.TypeTime)
 	}
-	if jrrtuo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -749,10 +749,10 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtuo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jrrtuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -763,13 +763,13 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtuo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jrrtuo.mutation.JobRunnerCleared() {
+	if _u.mutation.JobRunnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -780,10 +780,10 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) 
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtuo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := jrrtuo.mutation.JobRunnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.JobRunnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -794,19 +794,19 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) 
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrrtuo.schemaConfig.JobRunnerRegistrationToken
+		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = jrrtuo.schemaConfig.JobRunnerRegistrationToken
-	ctx = internal.NewSchemaConfigContext(ctx, jrrtuo.schemaConfig)
-	_spec.AddModifiers(jrrtuo.modifiers...)
-	_node = &JobRunnerRegistrationToken{config: jrrtuo.config}
+	_spec.Node.Schema = _u.schemaConfig.JobRunnerRegistrationToken
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &JobRunnerRegistrationToken{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, jrrtuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{jobrunnerregistrationtoken.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -814,6 +814,6 @@ func (jrrtuo *JobRunnerRegistrationTokenUpdateOne) sqlSave(ctx context.Context) 
 		}
 		return nil, err
 	}
-	jrrtuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

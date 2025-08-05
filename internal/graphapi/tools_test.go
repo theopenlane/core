@@ -105,7 +105,12 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.tf = entdb.NewTestFixture()
 
 	// setup openFGA container
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
+		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithEnvVars(map[string]string{
+			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK": "100",
+		},
+		))
 
 	ctx := context.Background()
 

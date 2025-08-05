@@ -29,329 +29,329 @@ type SubscriberUpdate struct {
 }
 
 // Where appends a list predicates to the SubscriberUpdate builder.
-func (su *SubscriberUpdate) Where(ps ...predicate.Subscriber) *SubscriberUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *SubscriberUpdate) Where(ps ...predicate.Subscriber) *SubscriberUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (su *SubscriberUpdate) SetUpdatedAt(t time.Time) *SubscriberUpdate {
-	su.mutation.SetUpdatedAt(t)
-	return su
+func (_u *SubscriberUpdate) SetUpdatedAt(v time.Time) *SubscriberUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (su *SubscriberUpdate) ClearUpdatedAt() *SubscriberUpdate {
-	su.mutation.ClearUpdatedAt()
-	return su
+func (_u *SubscriberUpdate) ClearUpdatedAt() *SubscriberUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (su *SubscriberUpdate) SetUpdatedBy(s string) *SubscriberUpdate {
-	su.mutation.SetUpdatedBy(s)
-	return su
+func (_u *SubscriberUpdate) SetUpdatedBy(v string) *SubscriberUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableUpdatedBy(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetUpdatedBy(*s)
+func (_u *SubscriberUpdate) SetNillableUpdatedBy(v *string) *SubscriberUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (su *SubscriberUpdate) ClearUpdatedBy() *SubscriberUpdate {
-	su.mutation.ClearUpdatedBy()
-	return su
+func (_u *SubscriberUpdate) ClearUpdatedBy() *SubscriberUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (su *SubscriberUpdate) SetDeletedAt(t time.Time) *SubscriberUpdate {
-	su.mutation.SetDeletedAt(t)
-	return su
+func (_u *SubscriberUpdate) SetDeletedAt(v time.Time) *SubscriberUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableDeletedAt(t *time.Time) *SubscriberUpdate {
-	if t != nil {
-		su.SetDeletedAt(*t)
+func (_u *SubscriberUpdate) SetNillableDeletedAt(v *time.Time) *SubscriberUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (su *SubscriberUpdate) ClearDeletedAt() *SubscriberUpdate {
-	su.mutation.ClearDeletedAt()
-	return su
+func (_u *SubscriberUpdate) ClearDeletedAt() *SubscriberUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (su *SubscriberUpdate) SetDeletedBy(s string) *SubscriberUpdate {
-	su.mutation.SetDeletedBy(s)
-	return su
+func (_u *SubscriberUpdate) SetDeletedBy(v string) *SubscriberUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableDeletedBy(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetDeletedBy(*s)
+func (_u *SubscriberUpdate) SetNillableDeletedBy(v *string) *SubscriberUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *SubscriberUpdate) ClearDeletedBy() *SubscriberUpdate {
-	su.mutation.ClearDeletedBy()
-	return su
+func (_u *SubscriberUpdate) ClearDeletedBy() *SubscriberUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (su *SubscriberUpdate) SetTags(s []string) *SubscriberUpdate {
-	su.mutation.SetTags(s)
-	return su
+func (_u *SubscriberUpdate) SetTags(v []string) *SubscriberUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (su *SubscriberUpdate) AppendTags(s []string) *SubscriberUpdate {
-	su.mutation.AppendTags(s)
-	return su
+// AppendTags appends value to the "tags" field.
+func (_u *SubscriberUpdate) AppendTags(v []string) *SubscriberUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (su *SubscriberUpdate) ClearTags() *SubscriberUpdate {
-	su.mutation.ClearTags()
-	return su
+func (_u *SubscriberUpdate) ClearTags() *SubscriberUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (su *SubscriberUpdate) SetOwnerID(s string) *SubscriberUpdate {
-	su.mutation.SetOwnerID(s)
-	return su
+func (_u *SubscriberUpdate) SetOwnerID(v string) *SubscriberUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableOwnerID(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetOwnerID(*s)
+func (_u *SubscriberUpdate) SetNillableOwnerID(v *string) *SubscriberUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (su *SubscriberUpdate) ClearOwnerID() *SubscriberUpdate {
-	su.mutation.ClearOwnerID()
-	return su
+func (_u *SubscriberUpdate) ClearOwnerID() *SubscriberUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (su *SubscriberUpdate) SetEmail(s string) *SubscriberUpdate {
-	su.mutation.SetEmail(s)
-	return su
+func (_u *SubscriberUpdate) SetEmail(v string) *SubscriberUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableEmail(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetEmail(*s)
+func (_u *SubscriberUpdate) SetNillableEmail(v *string) *SubscriberUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return su
+	return _u
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (su *SubscriberUpdate) SetPhoneNumber(s string) *SubscriberUpdate {
-	su.mutation.SetPhoneNumber(s)
-	return su
+func (_u *SubscriberUpdate) SetPhoneNumber(v string) *SubscriberUpdate {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillablePhoneNumber(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetPhoneNumber(*s)
+func (_u *SubscriberUpdate) SetNillablePhoneNumber(v *string) *SubscriberUpdate {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearPhoneNumber clears the value of the "phone_number" field.
-func (su *SubscriberUpdate) ClearPhoneNumber() *SubscriberUpdate {
-	su.mutation.ClearPhoneNumber()
-	return su
+func (_u *SubscriberUpdate) ClearPhoneNumber() *SubscriberUpdate {
+	_u.mutation.ClearPhoneNumber()
+	return _u
 }
 
 // SetVerifiedEmail sets the "verified_email" field.
-func (su *SubscriberUpdate) SetVerifiedEmail(b bool) *SubscriberUpdate {
-	su.mutation.SetVerifiedEmail(b)
-	return su
+func (_u *SubscriberUpdate) SetVerifiedEmail(v bool) *SubscriberUpdate {
+	_u.mutation.SetVerifiedEmail(v)
+	return _u
 }
 
 // SetNillableVerifiedEmail sets the "verified_email" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableVerifiedEmail(b *bool) *SubscriberUpdate {
-	if b != nil {
-		su.SetVerifiedEmail(*b)
+func (_u *SubscriberUpdate) SetNillableVerifiedEmail(v *bool) *SubscriberUpdate {
+	if v != nil {
+		_u.SetVerifiedEmail(*v)
 	}
-	return su
+	return _u
 }
 
 // SetVerifiedPhone sets the "verified_phone" field.
-func (su *SubscriberUpdate) SetVerifiedPhone(b bool) *SubscriberUpdate {
-	su.mutation.SetVerifiedPhone(b)
-	return su
+func (_u *SubscriberUpdate) SetVerifiedPhone(v bool) *SubscriberUpdate {
+	_u.mutation.SetVerifiedPhone(v)
+	return _u
 }
 
 // SetNillableVerifiedPhone sets the "verified_phone" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableVerifiedPhone(b *bool) *SubscriberUpdate {
-	if b != nil {
-		su.SetVerifiedPhone(*b)
+func (_u *SubscriberUpdate) SetNillableVerifiedPhone(v *bool) *SubscriberUpdate {
+	if v != nil {
+		_u.SetVerifiedPhone(*v)
 	}
-	return su
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (su *SubscriberUpdate) SetActive(b bool) *SubscriberUpdate {
-	su.mutation.SetActive(b)
-	return su
+func (_u *SubscriberUpdate) SetActive(v bool) *SubscriberUpdate {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableActive(b *bool) *SubscriberUpdate {
-	if b != nil {
-		su.SetActive(*b)
+func (_u *SubscriberUpdate) SetNillableActive(v *bool) *SubscriberUpdate {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return su
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (su *SubscriberUpdate) SetToken(s string) *SubscriberUpdate {
-	su.mutation.SetToken(s)
-	return su
+func (_u *SubscriberUpdate) SetToken(v string) *SubscriberUpdate {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableToken(s *string) *SubscriberUpdate {
-	if s != nil {
-		su.SetToken(*s)
+func (_u *SubscriberUpdate) SetNillableToken(v *string) *SubscriberUpdate {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return su
+	return _u
 }
 
 // SetTTL sets the "ttl" field.
-func (su *SubscriberUpdate) SetTTL(t time.Time) *SubscriberUpdate {
-	su.mutation.SetTTL(t)
-	return su
+func (_u *SubscriberUpdate) SetTTL(v time.Time) *SubscriberUpdate {
+	_u.mutation.SetTTL(v)
+	return _u
 }
 
 // SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableTTL(t *time.Time) *SubscriberUpdate {
-	if t != nil {
-		su.SetTTL(*t)
+func (_u *SubscriberUpdate) SetNillableTTL(v *time.Time) *SubscriberUpdate {
+	if v != nil {
+		_u.SetTTL(*v)
 	}
-	return su
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (su *SubscriberUpdate) SetSecret(b []byte) *SubscriberUpdate {
-	su.mutation.SetSecret(b)
-	return su
+func (_u *SubscriberUpdate) SetSecret(v []byte) *SubscriberUpdate {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetUnsubscribed sets the "unsubscribed" field.
-func (su *SubscriberUpdate) SetUnsubscribed(b bool) *SubscriberUpdate {
-	su.mutation.SetUnsubscribed(b)
-	return su
+func (_u *SubscriberUpdate) SetUnsubscribed(v bool) *SubscriberUpdate {
+	_u.mutation.SetUnsubscribed(v)
+	return _u
 }
 
 // SetNillableUnsubscribed sets the "unsubscribed" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableUnsubscribed(b *bool) *SubscriberUpdate {
-	if b != nil {
-		su.SetUnsubscribed(*b)
+func (_u *SubscriberUpdate) SetNillableUnsubscribed(v *bool) *SubscriberUpdate {
+	if v != nil {
+		_u.SetUnsubscribed(*v)
 	}
-	return su
+	return _u
 }
 
 // SetSendAttempts sets the "send_attempts" field.
-func (su *SubscriberUpdate) SetSendAttempts(i int) *SubscriberUpdate {
-	su.mutation.ResetSendAttempts()
-	su.mutation.SetSendAttempts(i)
-	return su
+func (_u *SubscriberUpdate) SetSendAttempts(v int) *SubscriberUpdate {
+	_u.mutation.ResetSendAttempts()
+	_u.mutation.SetSendAttempts(v)
+	return _u
 }
 
 // SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (su *SubscriberUpdate) SetNillableSendAttempts(i *int) *SubscriberUpdate {
-	if i != nil {
-		su.SetSendAttempts(*i)
+func (_u *SubscriberUpdate) SetNillableSendAttempts(v *int) *SubscriberUpdate {
+	if v != nil {
+		_u.SetSendAttempts(*v)
 	}
-	return su
+	return _u
 }
 
-// AddSendAttempts adds i to the "send_attempts" field.
-func (su *SubscriberUpdate) AddSendAttempts(i int) *SubscriberUpdate {
-	su.mutation.AddSendAttempts(i)
-	return su
+// AddSendAttempts adds value to the "send_attempts" field.
+func (_u *SubscriberUpdate) AddSendAttempts(v int) *SubscriberUpdate {
+	_u.mutation.AddSendAttempts(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (su *SubscriberUpdate) SetOwner(o *Organization) *SubscriberUpdate {
-	return su.SetOwnerID(o.ID)
+func (_u *SubscriberUpdate) SetOwner(v *Organization) *SubscriberUpdate {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (su *SubscriberUpdate) AddEventIDs(ids ...string) *SubscriberUpdate {
-	su.mutation.AddEventIDs(ids...)
-	return su
+func (_u *SubscriberUpdate) AddEventIDs(ids ...string) *SubscriberUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (su *SubscriberUpdate) AddEvents(e ...*Event) *SubscriberUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *SubscriberUpdate) AddEvents(v ...*Event) *SubscriberUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the SubscriberMutation object of the builder.
-func (su *SubscriberUpdate) Mutation() *SubscriberMutation {
-	return su.mutation
+func (_u *SubscriberUpdate) Mutation() *SubscriberMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (su *SubscriberUpdate) ClearOwner() *SubscriberUpdate {
-	su.mutation.ClearOwner()
-	return su
+func (_u *SubscriberUpdate) ClearOwner() *SubscriberUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (su *SubscriberUpdate) ClearEvents() *SubscriberUpdate {
-	su.mutation.ClearEvents()
-	return su
+func (_u *SubscriberUpdate) ClearEvents() *SubscriberUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (su *SubscriberUpdate) RemoveEventIDs(ids ...string) *SubscriberUpdate {
-	su.mutation.RemoveEventIDs(ids...)
-	return su
+func (_u *SubscriberUpdate) RemoveEventIDs(ids ...string) *SubscriberUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (su *SubscriberUpdate) RemoveEvents(e ...*Event) *SubscriberUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *SubscriberUpdate) RemoveEvents(v ...*Event) *SubscriberUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *SubscriberUpdate) Save(ctx context.Context) (int, error) {
-	if err := su.defaults(); err != nil {
+func (_u *SubscriberUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *SubscriberUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *SubscriberUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -359,48 +359,48 @@ func (su *SubscriberUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *SubscriberUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *SubscriberUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *SubscriberUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *SubscriberUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (su *SubscriberUpdate) defaults() error {
-	if _, ok := su.mutation.UpdatedAt(); !ok && !su.mutation.UpdatedAtCleared() {
+func (_u *SubscriberUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if subscriber.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subscriber.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *SubscriberUpdate) check() error {
-	if v, ok := su.mutation.Email(); ok {
+func (_u *SubscriberUpdate) check() error {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := subscriber.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "Subscriber.email": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.PhoneNumber(); ok {
+	if v, ok := _u.mutation.PhoneNumber(); ok {
 		if err := subscriber.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "Subscriber.phone_number": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Token(); ok {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := subscriber.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "Subscriber.token": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := subscriber.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Subscriber.secret": %w`, err)}
 		}
@@ -409,101 +409,101 @@ func (su *SubscriberUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (su *SubscriberUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubscriberUpdate {
-	su.modifiers = append(su.modifiers, modifiers...)
-	return su
+func (_u *SubscriberUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubscriberUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *SubscriberUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(subscriber.Table, subscriber.Columns, sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if su.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(subscriber.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(subscriber.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if su.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedAt, field.TypeTime)
 	}
-	if su.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(subscriber.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
 	}
-	if su.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 	}
-	if su.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(subscriber.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
 	}
-	if su.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := su.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := su.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, subscriber.FieldTags, value)
 		})
 	}
-	if su.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
 	}
-	if value, ok := su.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := su.mutation.PhoneNumber(); ok {
+	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(subscriber.FieldPhoneNumber, field.TypeString, value)
 	}
-	if su.mutation.PhoneNumberCleared() {
+	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(subscriber.FieldPhoneNumber, field.TypeString)
 	}
-	if value, ok := su.mutation.VerifiedEmail(); ok {
+	if value, ok := _u.mutation.VerifiedEmail(); ok {
 		_spec.SetField(subscriber.FieldVerifiedEmail, field.TypeBool, value)
 	}
-	if value, ok := su.mutation.VerifiedPhone(); ok {
+	if value, ok := _u.mutation.VerifiedPhone(); ok {
 		_spec.SetField(subscriber.FieldVerifiedPhone, field.TypeBool, value)
 	}
-	if value, ok := su.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(subscriber.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := su.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(subscriber.FieldToken, field.TypeString, value)
 	}
-	if value, ok := su.mutation.TTL(); ok {
+	if value, ok := _u.mutation.TTL(); ok {
 		_spec.SetField(subscriber.FieldTTL, field.TypeTime, value)
 	}
-	if value, ok := su.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
 	}
-	if value, ok := su.mutation.Unsubscribed(); ok {
+	if value, ok := _u.mutation.Unsubscribed(); ok {
 		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
 	}
-	if value, ok := su.mutation.SendAttempts(); ok {
+	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(subscriber.FieldSendAttempts, field.TypeInt, value)
 	}
-	if value, ok := su.mutation.AddedSendAttempts(); ok {
+	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(subscriber.FieldSendAttempts, field.TypeInt, value)
 	}
-	if su.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -514,10 +514,10 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -528,13 +528,13 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -545,10 +545,10 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.SubscriberEvents
+		edge.Schema = _u.schemaConfig.SubscriberEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedEventsIDs(); len(nodes) > 0 && !su.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -559,13 +559,13 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.SubscriberEvents
+		edge.Schema = _u.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -576,16 +576,16 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = su.schemaConfig.SubscriberEvents
+		edge.Schema = _u.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = su.schemaConfig.Subscriber
-	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
-	_spec.AddModifiers(su.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.Subscriber
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subscriber.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -593,8 +593,8 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SubscriberUpdateOne is the builder for updating a single Subscriber entity.
@@ -607,336 +607,336 @@ type SubscriberUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suo *SubscriberUpdateOne) SetUpdatedAt(t time.Time) *SubscriberUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
-	return suo
+func (_u *SubscriberUpdateOne) SetUpdatedAt(v time.Time) *SubscriberUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (suo *SubscriberUpdateOne) ClearUpdatedAt() *SubscriberUpdateOne {
-	suo.mutation.ClearUpdatedAt()
-	return suo
+func (_u *SubscriberUpdateOne) ClearUpdatedAt() *SubscriberUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suo *SubscriberUpdateOne) SetUpdatedBy(s string) *SubscriberUpdateOne {
-	suo.mutation.SetUpdatedBy(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetUpdatedBy(v string) *SubscriberUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableUpdatedBy(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetUpdatedBy(*s)
+func (_u *SubscriberUpdateOne) SetNillableUpdatedBy(v *string) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (suo *SubscriberUpdateOne) ClearUpdatedBy() *SubscriberUpdateOne {
-	suo.mutation.ClearUpdatedBy()
-	return suo
+func (_u *SubscriberUpdateOne) ClearUpdatedBy() *SubscriberUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (suo *SubscriberUpdateOne) SetDeletedAt(t time.Time) *SubscriberUpdateOne {
-	suo.mutation.SetDeletedAt(t)
-	return suo
+func (_u *SubscriberUpdateOne) SetDeletedAt(v time.Time) *SubscriberUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableDeletedAt(t *time.Time) *SubscriberUpdateOne {
-	if t != nil {
-		suo.SetDeletedAt(*t)
+func (_u *SubscriberUpdateOne) SetNillableDeletedAt(v *time.Time) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (suo *SubscriberUpdateOne) ClearDeletedAt() *SubscriberUpdateOne {
-	suo.mutation.ClearDeletedAt()
-	return suo
+func (_u *SubscriberUpdateOne) ClearDeletedAt() *SubscriberUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (suo *SubscriberUpdateOne) SetDeletedBy(s string) *SubscriberUpdateOne {
-	suo.mutation.SetDeletedBy(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetDeletedBy(v string) *SubscriberUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableDeletedBy(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetDeletedBy(*s)
+func (_u *SubscriberUpdateOne) SetNillableDeletedBy(v *string) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *SubscriberUpdateOne) ClearDeletedBy() *SubscriberUpdateOne {
-	suo.mutation.ClearDeletedBy()
-	return suo
+func (_u *SubscriberUpdateOne) ClearDeletedBy() *SubscriberUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (suo *SubscriberUpdateOne) SetTags(s []string) *SubscriberUpdateOne {
-	suo.mutation.SetTags(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetTags(v []string) *SubscriberUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (suo *SubscriberUpdateOne) AppendTags(s []string) *SubscriberUpdateOne {
-	suo.mutation.AppendTags(s)
-	return suo
+// AppendTags appends value to the "tags" field.
+func (_u *SubscriberUpdateOne) AppendTags(v []string) *SubscriberUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (suo *SubscriberUpdateOne) ClearTags() *SubscriberUpdateOne {
-	suo.mutation.ClearTags()
-	return suo
+func (_u *SubscriberUpdateOne) ClearTags() *SubscriberUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (suo *SubscriberUpdateOne) SetOwnerID(s string) *SubscriberUpdateOne {
-	suo.mutation.SetOwnerID(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetOwnerID(v string) *SubscriberUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableOwnerID(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetOwnerID(*s)
+func (_u *SubscriberUpdateOne) SetNillableOwnerID(v *string) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (suo *SubscriberUpdateOne) ClearOwnerID() *SubscriberUpdateOne {
-	suo.mutation.ClearOwnerID()
-	return suo
+func (_u *SubscriberUpdateOne) ClearOwnerID() *SubscriberUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (suo *SubscriberUpdateOne) SetEmail(s string) *SubscriberUpdateOne {
-	suo.mutation.SetEmail(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetEmail(v string) *SubscriberUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableEmail(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetEmail(*s)
+func (_u *SubscriberUpdateOne) SetNillableEmail(v *string) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetPhoneNumber sets the "phone_number" field.
-func (suo *SubscriberUpdateOne) SetPhoneNumber(s string) *SubscriberUpdateOne {
-	suo.mutation.SetPhoneNumber(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetPhoneNumber(v string) *SubscriberUpdateOne {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
 }
 
 // SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillablePhoneNumber(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetPhoneNumber(*s)
+func (_u *SubscriberUpdateOne) SetNillablePhoneNumber(v *string) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearPhoneNumber clears the value of the "phone_number" field.
-func (suo *SubscriberUpdateOne) ClearPhoneNumber() *SubscriberUpdateOne {
-	suo.mutation.ClearPhoneNumber()
-	return suo
+func (_u *SubscriberUpdateOne) ClearPhoneNumber() *SubscriberUpdateOne {
+	_u.mutation.ClearPhoneNumber()
+	return _u
 }
 
 // SetVerifiedEmail sets the "verified_email" field.
-func (suo *SubscriberUpdateOne) SetVerifiedEmail(b bool) *SubscriberUpdateOne {
-	suo.mutation.SetVerifiedEmail(b)
-	return suo
+func (_u *SubscriberUpdateOne) SetVerifiedEmail(v bool) *SubscriberUpdateOne {
+	_u.mutation.SetVerifiedEmail(v)
+	return _u
 }
 
 // SetNillableVerifiedEmail sets the "verified_email" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableVerifiedEmail(b *bool) *SubscriberUpdateOne {
-	if b != nil {
-		suo.SetVerifiedEmail(*b)
+func (_u *SubscriberUpdateOne) SetNillableVerifiedEmail(v *bool) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetVerifiedEmail(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetVerifiedPhone sets the "verified_phone" field.
-func (suo *SubscriberUpdateOne) SetVerifiedPhone(b bool) *SubscriberUpdateOne {
-	suo.mutation.SetVerifiedPhone(b)
-	return suo
+func (_u *SubscriberUpdateOne) SetVerifiedPhone(v bool) *SubscriberUpdateOne {
+	_u.mutation.SetVerifiedPhone(v)
+	return _u
 }
 
 // SetNillableVerifiedPhone sets the "verified_phone" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableVerifiedPhone(b *bool) *SubscriberUpdateOne {
-	if b != nil {
-		suo.SetVerifiedPhone(*b)
+func (_u *SubscriberUpdateOne) SetNillableVerifiedPhone(v *bool) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetVerifiedPhone(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (suo *SubscriberUpdateOne) SetActive(b bool) *SubscriberUpdateOne {
-	suo.mutation.SetActive(b)
-	return suo
+func (_u *SubscriberUpdateOne) SetActive(v bool) *SubscriberUpdateOne {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableActive(b *bool) *SubscriberUpdateOne {
-	if b != nil {
-		suo.SetActive(*b)
+func (_u *SubscriberUpdateOne) SetNillableActive(v *bool) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetToken sets the "token" field.
-func (suo *SubscriberUpdateOne) SetToken(s string) *SubscriberUpdateOne {
-	suo.mutation.SetToken(s)
-	return suo
+func (_u *SubscriberUpdateOne) SetToken(v string) *SubscriberUpdateOne {
+	_u.mutation.SetToken(v)
+	return _u
 }
 
 // SetNillableToken sets the "token" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableToken(s *string) *SubscriberUpdateOne {
-	if s != nil {
-		suo.SetToken(*s)
+func (_u *SubscriberUpdateOne) SetNillableToken(v *string) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetToken(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetTTL sets the "ttl" field.
-func (suo *SubscriberUpdateOne) SetTTL(t time.Time) *SubscriberUpdateOne {
-	suo.mutation.SetTTL(t)
-	return suo
+func (_u *SubscriberUpdateOne) SetTTL(v time.Time) *SubscriberUpdateOne {
+	_u.mutation.SetTTL(v)
+	return _u
 }
 
 // SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableTTL(t *time.Time) *SubscriberUpdateOne {
-	if t != nil {
-		suo.SetTTL(*t)
+func (_u *SubscriberUpdateOne) SetNillableTTL(v *time.Time) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetTTL(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetSecret sets the "secret" field.
-func (suo *SubscriberUpdateOne) SetSecret(b []byte) *SubscriberUpdateOne {
-	suo.mutation.SetSecret(b)
-	return suo
+func (_u *SubscriberUpdateOne) SetSecret(v []byte) *SubscriberUpdateOne {
+	_u.mutation.SetSecret(v)
+	return _u
 }
 
 // SetUnsubscribed sets the "unsubscribed" field.
-func (suo *SubscriberUpdateOne) SetUnsubscribed(b bool) *SubscriberUpdateOne {
-	suo.mutation.SetUnsubscribed(b)
-	return suo
+func (_u *SubscriberUpdateOne) SetUnsubscribed(v bool) *SubscriberUpdateOne {
+	_u.mutation.SetUnsubscribed(v)
+	return _u
 }
 
 // SetNillableUnsubscribed sets the "unsubscribed" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableUnsubscribed(b *bool) *SubscriberUpdateOne {
-	if b != nil {
-		suo.SetUnsubscribed(*b)
+func (_u *SubscriberUpdateOne) SetNillableUnsubscribed(v *bool) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetUnsubscribed(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetSendAttempts sets the "send_attempts" field.
-func (suo *SubscriberUpdateOne) SetSendAttempts(i int) *SubscriberUpdateOne {
-	suo.mutation.ResetSendAttempts()
-	suo.mutation.SetSendAttempts(i)
-	return suo
+func (_u *SubscriberUpdateOne) SetSendAttempts(v int) *SubscriberUpdateOne {
+	_u.mutation.ResetSendAttempts()
+	_u.mutation.SetSendAttempts(v)
+	return _u
 }
 
 // SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (suo *SubscriberUpdateOne) SetNillableSendAttempts(i *int) *SubscriberUpdateOne {
-	if i != nil {
-		suo.SetSendAttempts(*i)
+func (_u *SubscriberUpdateOne) SetNillableSendAttempts(v *int) *SubscriberUpdateOne {
+	if v != nil {
+		_u.SetSendAttempts(*v)
 	}
-	return suo
+	return _u
 }
 
-// AddSendAttempts adds i to the "send_attempts" field.
-func (suo *SubscriberUpdateOne) AddSendAttempts(i int) *SubscriberUpdateOne {
-	suo.mutation.AddSendAttempts(i)
-	return suo
+// AddSendAttempts adds value to the "send_attempts" field.
+func (_u *SubscriberUpdateOne) AddSendAttempts(v int) *SubscriberUpdateOne {
+	_u.mutation.AddSendAttempts(v)
+	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
-func (suo *SubscriberUpdateOne) SetOwner(o *Organization) *SubscriberUpdateOne {
-	return suo.SetOwnerID(o.ID)
+func (_u *SubscriberUpdateOne) SetOwner(v *Organization) *SubscriberUpdateOne {
+	return _u.SetOwnerID(v.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (suo *SubscriberUpdateOne) AddEventIDs(ids ...string) *SubscriberUpdateOne {
-	suo.mutation.AddEventIDs(ids...)
-	return suo
+func (_u *SubscriberUpdateOne) AddEventIDs(ids ...string) *SubscriberUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (suo *SubscriberUpdateOne) AddEvents(e ...*Event) *SubscriberUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *SubscriberUpdateOne) AddEvents(v ...*Event) *SubscriberUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the SubscriberMutation object of the builder.
-func (suo *SubscriberUpdateOne) Mutation() *SubscriberMutation {
-	return suo.mutation
+func (_u *SubscriberUpdateOne) Mutation() *SubscriberMutation {
+	return _u.mutation
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
-func (suo *SubscriberUpdateOne) ClearOwner() *SubscriberUpdateOne {
-	suo.mutation.ClearOwner()
-	return suo
+func (_u *SubscriberUpdateOne) ClearOwner() *SubscriberUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (suo *SubscriberUpdateOne) ClearEvents() *SubscriberUpdateOne {
-	suo.mutation.ClearEvents()
-	return suo
+func (_u *SubscriberUpdateOne) ClearEvents() *SubscriberUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (suo *SubscriberUpdateOne) RemoveEventIDs(ids ...string) *SubscriberUpdateOne {
-	suo.mutation.RemoveEventIDs(ids...)
-	return suo
+func (_u *SubscriberUpdateOne) RemoveEventIDs(ids ...string) *SubscriberUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (suo *SubscriberUpdateOne) RemoveEvents(e ...*Event) *SubscriberUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *SubscriberUpdateOne) RemoveEvents(v ...*Event) *SubscriberUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the SubscriberUpdate builder.
-func (suo *SubscriberUpdateOne) Where(ps ...predicate.Subscriber) *SubscriberUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *SubscriberUpdateOne) Where(ps ...predicate.Subscriber) *SubscriberUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *SubscriberUpdateOne) Select(field string, fields ...string) *SubscriberUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *SubscriberUpdateOne) Select(field string, fields ...string) *SubscriberUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Subscriber entity.
-func (suo *SubscriberUpdateOne) Save(ctx context.Context) (*Subscriber, error) {
-	if err := suo.defaults(); err != nil {
+func (_u *SubscriberUpdateOne) Save(ctx context.Context) (*Subscriber, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *SubscriberUpdateOne) SaveX(ctx context.Context) *Subscriber {
-	node, err := suo.Save(ctx)
+func (_u *SubscriberUpdateOne) SaveX(ctx context.Context) *Subscriber {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -944,48 +944,48 @@ func (suo *SubscriberUpdateOne) SaveX(ctx context.Context) *Subscriber {
 }
 
 // Exec executes the query on the entity.
-func (suo *SubscriberUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *SubscriberUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *SubscriberUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *SubscriberUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suo *SubscriberUpdateOne) defaults() error {
-	if _, ok := suo.mutation.UpdatedAt(); !ok && !suo.mutation.UpdatedAtCleared() {
+func (_u *SubscriberUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if subscriber.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized subscriber.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := subscriber.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *SubscriberUpdateOne) check() error {
-	if v, ok := suo.mutation.Email(); ok {
+func (_u *SubscriberUpdateOne) check() error {
+	if v, ok := _u.mutation.Email(); ok {
 		if err := subscriber.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "Subscriber.email": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.PhoneNumber(); ok {
+	if v, ok := _u.mutation.PhoneNumber(); ok {
 		if err := subscriber.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "Subscriber.phone_number": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Token(); ok {
+	if v, ok := _u.mutation.Token(); ok {
 		if err := subscriber.TokenValidator(v); err != nil {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "Subscriber.token": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Secret(); ok {
+	if v, ok := _u.mutation.Secret(); ok {
 		if err := subscriber.SecretValidator(v); err != nil {
 			return &ValidationError{Name: "secret", err: fmt.Errorf(`generated: validator failed for field "Subscriber.secret": %w`, err)}
 		}
@@ -994,22 +994,22 @@ func (suo *SubscriberUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suo *SubscriberUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubscriberUpdateOne {
-	suo.modifiers = append(suo.modifiers, modifiers...)
-	return suo
+func (_u *SubscriberUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubscriberUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber, err error) {
-	if err := suo.check(); err != nil {
+func (_u *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(subscriber.Table, subscriber.Columns, sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "Subscriber.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, subscriber.FieldID)
 		for _, f := range fields {
@@ -1021,91 +1021,91 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if suo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(subscriber.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(subscriber.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if suo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedAt, field.TypeTime)
 	}
-	if suo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(subscriber.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(subscriber.FieldUpdatedBy, field.TypeString, value)
 	}
-	if suo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(subscriber.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
 	}
-	if suo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(subscriber.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
 	}
-	if suo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(subscriber.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := suo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(subscriber.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := suo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, subscriber.FieldTags, value)
 		})
 	}
-	if suo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subscriber.FieldTags, field.TypeJSON)
 	}
-	if value, ok := suo.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.PhoneNumber(); ok {
+	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(subscriber.FieldPhoneNumber, field.TypeString, value)
 	}
-	if suo.mutation.PhoneNumberCleared() {
+	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(subscriber.FieldPhoneNumber, field.TypeString)
 	}
-	if value, ok := suo.mutation.VerifiedEmail(); ok {
+	if value, ok := _u.mutation.VerifiedEmail(); ok {
 		_spec.SetField(subscriber.FieldVerifiedEmail, field.TypeBool, value)
 	}
-	if value, ok := suo.mutation.VerifiedPhone(); ok {
+	if value, ok := _u.mutation.VerifiedPhone(); ok {
 		_spec.SetField(subscriber.FieldVerifiedPhone, field.TypeBool, value)
 	}
-	if value, ok := suo.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(subscriber.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := suo.mutation.Token(); ok {
+	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(subscriber.FieldToken, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.TTL(); ok {
+	if value, ok := _u.mutation.TTL(); ok {
 		_spec.SetField(subscriber.FieldTTL, field.TypeTime, value)
 	}
-	if value, ok := suo.mutation.Secret(); ok {
+	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(subscriber.FieldSecret, field.TypeBytes, value)
 	}
-	if value, ok := suo.mutation.Unsubscribed(); ok {
+	if value, ok := _u.mutation.Unsubscribed(); ok {
 		_spec.SetField(subscriber.FieldUnsubscribed, field.TypeBool, value)
 	}
-	if value, ok := suo.mutation.SendAttempts(); ok {
+	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(subscriber.FieldSendAttempts, field.TypeInt, value)
 	}
-	if value, ok := suo.mutation.AddedSendAttempts(); ok {
+	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(subscriber.FieldSendAttempts, field.TypeInt, value)
 	}
-	if suo.mutation.OwnerCleared() {
+	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1116,10 +1116,10 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -1130,13 +1130,13 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.Subscriber
+		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1147,10 +1147,10 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.SubscriberEvents
+		edge.Schema = _u.schemaConfig.SubscriberEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !suo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1161,13 +1161,13 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.SubscriberEvents
+		edge.Schema = _u.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1178,19 +1178,19 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = suo.schemaConfig.SubscriberEvents
+		edge.Schema = _u.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = suo.schemaConfig.Subscriber
-	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)
-	_spec.AddModifiers(suo.modifiers...)
-	_node = &Subscriber{config: suo.config}
+	_spec.Node.Schema = _u.schemaConfig.Subscriber
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Subscriber{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subscriber.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1198,6 +1198,6 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

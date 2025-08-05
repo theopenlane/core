@@ -28,109 +28,109 @@ type OrgMembershipUpdate struct {
 }
 
 // Where appends a list predicates to the OrgMembershipUpdate builder.
-func (omu *OrgMembershipUpdate) Where(ps ...predicate.OrgMembership) *OrgMembershipUpdate {
-	omu.mutation.Where(ps...)
-	return omu
+func (_u *OrgMembershipUpdate) Where(ps ...predicate.OrgMembership) *OrgMembershipUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omu *OrgMembershipUpdate) SetUpdatedAt(t time.Time) *OrgMembershipUpdate {
-	omu.mutation.SetUpdatedAt(t)
-	return omu
+func (_u *OrgMembershipUpdate) SetUpdatedAt(v time.Time) *OrgMembershipUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (omu *OrgMembershipUpdate) ClearUpdatedAt() *OrgMembershipUpdate {
-	omu.mutation.ClearUpdatedAt()
-	return omu
+func (_u *OrgMembershipUpdate) ClearUpdatedAt() *OrgMembershipUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omu *OrgMembershipUpdate) SetUpdatedBy(s string) *OrgMembershipUpdate {
-	omu.mutation.SetUpdatedBy(s)
-	return omu
+func (_u *OrgMembershipUpdate) SetUpdatedBy(v string) *OrgMembershipUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableUpdatedBy(s *string) *OrgMembershipUpdate {
-	if s != nil {
-		omu.SetUpdatedBy(*s)
+func (_u *OrgMembershipUpdate) SetNillableUpdatedBy(v *string) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return omu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (omu *OrgMembershipUpdate) ClearUpdatedBy() *OrgMembershipUpdate {
-	omu.mutation.ClearUpdatedBy()
-	return omu
+func (_u *OrgMembershipUpdate) ClearUpdatedBy() *OrgMembershipUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (omu *OrgMembershipUpdate) SetRole(e enums.Role) *OrgMembershipUpdate {
-	omu.mutation.SetRole(e)
-	return omu
+func (_u *OrgMembershipUpdate) SetRole(v enums.Role) *OrgMembershipUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableRole(e *enums.Role) *OrgMembershipUpdate {
-	if e != nil {
-		omu.SetRole(*e)
+func (_u *OrgMembershipUpdate) SetNillableRole(v *enums.Role) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return omu
+	return _u
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (omu *OrgMembershipUpdate) AddEventIDs(ids ...string) *OrgMembershipUpdate {
-	omu.mutation.AddEventIDs(ids...)
-	return omu
+func (_u *OrgMembershipUpdate) AddEventIDs(ids ...string) *OrgMembershipUpdate {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (omu *OrgMembershipUpdate) AddEvents(e ...*Event) *OrgMembershipUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgMembershipUpdate) AddEvents(v ...*Event) *OrgMembershipUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omu.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the OrgMembershipMutation object of the builder.
-func (omu *OrgMembershipUpdate) Mutation() *OrgMembershipMutation {
-	return omu.mutation
+func (_u *OrgMembershipUpdate) Mutation() *OrgMembershipMutation {
+	return _u.mutation
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (omu *OrgMembershipUpdate) ClearEvents() *OrgMembershipUpdate {
-	omu.mutation.ClearEvents()
-	return omu
+func (_u *OrgMembershipUpdate) ClearEvents() *OrgMembershipUpdate {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (omu *OrgMembershipUpdate) RemoveEventIDs(ids ...string) *OrgMembershipUpdate {
-	omu.mutation.RemoveEventIDs(ids...)
-	return omu
+func (_u *OrgMembershipUpdate) RemoveEventIDs(ids ...string) *OrgMembershipUpdate {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (omu *OrgMembershipUpdate) RemoveEvents(e ...*Event) *OrgMembershipUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgMembershipUpdate) RemoveEvents(v ...*Event) *OrgMembershipUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omu.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (omu *OrgMembershipUpdate) Save(ctx context.Context) (int, error) {
-	if err := omu.defaults(); err != nil {
+func (_u *OrgMembershipUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, omu.sqlSave, omu.mutation, omu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omu *OrgMembershipUpdate) SaveX(ctx context.Context) int {
-	affected, err := omu.Save(ctx)
+func (_u *OrgMembershipUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,86 +138,86 @@ func (omu *OrgMembershipUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (omu *OrgMembershipUpdate) Exec(ctx context.Context) error {
-	_, err := omu.Save(ctx)
+func (_u *OrgMembershipUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omu *OrgMembershipUpdate) ExecX(ctx context.Context) {
-	if err := omu.Exec(ctx); err != nil {
+func (_u *OrgMembershipUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omu *OrgMembershipUpdate) defaults() error {
-	if _, ok := omu.mutation.UpdatedAt(); !ok && !omu.mutation.UpdatedAtCleared() {
+func (_u *OrgMembershipUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgmembership.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmembership.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmembership.UpdateDefaultUpdatedAt()
-		omu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omu *OrgMembershipUpdate) check() error {
-	if v, ok := omu.mutation.Role(); ok {
+func (_u *OrgMembershipUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := orgmembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "OrgMembership.role": %w`, err)}
 		}
 	}
-	if omu.mutation.OrganizationCleared() && len(omu.mutation.OrganizationIDs()) > 0 {
+	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "OrgMembership.organization"`)
 	}
-	if omu.mutation.UserCleared() && len(omu.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "OrgMembership.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (omu *OrgMembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipUpdate {
-	omu.modifiers = append(omu.modifiers, modifiers...)
-	return omu
+func (_u *OrgMembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := omu.check(); err != nil {
-		return n, err
+func (_u *OrgMembershipUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgmembership.Table, orgmembership.Columns, sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString))
-	if ps := omu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if omu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembership.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := omu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmembership.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if omu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if omu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmembership.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := omu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
 	}
-	if omu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omu.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
 	}
-	if omu.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -228,10 +228,10 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgMembershipEvents
+		edge.Schema = _u.schemaConfig.OrgMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !omu.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -242,13 +242,13 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgMembershipEvents
+		edge.Schema = _u.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omu.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -259,16 +259,16 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omu.schemaConfig.OrgMembershipEvents
+		edge.Schema = _u.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = omu.schemaConfig.OrgMembership
-	ctx = internal.NewSchemaConfigContext(ctx, omu.schemaConfig)
-	_spec.AddModifiers(omu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, omu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrgMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembership.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -276,8 +276,8 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		return 0, err
 	}
-	omu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrgMembershipUpdateOne is the builder for updating a single OrgMembership entity.
@@ -290,116 +290,116 @@ type OrgMembershipUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (omuo *OrgMembershipUpdateOne) SetUpdatedAt(t time.Time) *OrgMembershipUpdateOne {
-	omuo.mutation.SetUpdatedAt(t)
-	return omuo
+func (_u *OrgMembershipUpdateOne) SetUpdatedAt(v time.Time) *OrgMembershipUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (omuo *OrgMembershipUpdateOne) ClearUpdatedAt() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearUpdatedAt()
-	return omuo
+func (_u *OrgMembershipUpdateOne) ClearUpdatedAt() *OrgMembershipUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (omuo *OrgMembershipUpdateOne) SetUpdatedBy(s string) *OrgMembershipUpdateOne {
-	omuo.mutation.SetUpdatedBy(s)
-	return omuo
+func (_u *OrgMembershipUpdateOne) SetUpdatedBy(v string) *OrgMembershipUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableUpdatedBy(s *string) *OrgMembershipUpdateOne {
-	if s != nil {
-		omuo.SetUpdatedBy(*s)
+func (_u *OrgMembershipUpdateOne) SetNillableUpdatedBy(v *string) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return omuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (omuo *OrgMembershipUpdateOne) ClearUpdatedBy() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearUpdatedBy()
-	return omuo
+func (_u *OrgMembershipUpdateOne) ClearUpdatedBy() *OrgMembershipUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (omuo *OrgMembershipUpdateOne) SetRole(e enums.Role) *OrgMembershipUpdateOne {
-	omuo.mutation.SetRole(e)
-	return omuo
+func (_u *OrgMembershipUpdateOne) SetRole(v enums.Role) *OrgMembershipUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableRole(e *enums.Role) *OrgMembershipUpdateOne {
-	if e != nil {
-		omuo.SetRole(*e)
+func (_u *OrgMembershipUpdateOne) SetNillableRole(v *enums.Role) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return omuo
+	return _u
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
-func (omuo *OrgMembershipUpdateOne) AddEventIDs(ids ...string) *OrgMembershipUpdateOne {
-	omuo.mutation.AddEventIDs(ids...)
-	return omuo
+func (_u *OrgMembershipUpdateOne) AddEventIDs(ids ...string) *OrgMembershipUpdateOne {
+	_u.mutation.AddEventIDs(ids...)
+	return _u
 }
 
 // AddEvents adds the "events" edges to the Event entity.
-func (omuo *OrgMembershipUpdateOne) AddEvents(e ...*Event) *OrgMembershipUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgMembershipUpdateOne) AddEvents(v ...*Event) *OrgMembershipUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omuo.AddEventIDs(ids...)
+	return _u.AddEventIDs(ids...)
 }
 
 // Mutation returns the OrgMembershipMutation object of the builder.
-func (omuo *OrgMembershipUpdateOne) Mutation() *OrgMembershipMutation {
-	return omuo.mutation
+func (_u *OrgMembershipUpdateOne) Mutation() *OrgMembershipMutation {
+	return _u.mutation
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
-func (omuo *OrgMembershipUpdateOne) ClearEvents() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearEvents()
-	return omuo
+func (_u *OrgMembershipUpdateOne) ClearEvents() *OrgMembershipUpdateOne {
+	_u.mutation.ClearEvents()
+	return _u
 }
 
 // RemoveEventIDs removes the "events" edge to Event entities by IDs.
-func (omuo *OrgMembershipUpdateOne) RemoveEventIDs(ids ...string) *OrgMembershipUpdateOne {
-	omuo.mutation.RemoveEventIDs(ids...)
-	return omuo
+func (_u *OrgMembershipUpdateOne) RemoveEventIDs(ids ...string) *OrgMembershipUpdateOne {
+	_u.mutation.RemoveEventIDs(ids...)
+	return _u
 }
 
 // RemoveEvents removes "events" edges to Event entities.
-func (omuo *OrgMembershipUpdateOne) RemoveEvents(e ...*Event) *OrgMembershipUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
+func (_u *OrgMembershipUpdateOne) RemoveEvents(v ...*Event) *OrgMembershipUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return omuo.RemoveEventIDs(ids...)
+	return _u.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgMembershipUpdate builder.
-func (omuo *OrgMembershipUpdateOne) Where(ps ...predicate.OrgMembership) *OrgMembershipUpdateOne {
-	omuo.mutation.Where(ps...)
-	return omuo
+func (_u *OrgMembershipUpdateOne) Where(ps ...predicate.OrgMembership) *OrgMembershipUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (omuo *OrgMembershipUpdateOne) Select(field string, fields ...string) *OrgMembershipUpdateOne {
-	omuo.fields = append([]string{field}, fields...)
-	return omuo
+func (_u *OrgMembershipUpdateOne) Select(field string, fields ...string) *OrgMembershipUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrgMembership entity.
-func (omuo *OrgMembershipUpdateOne) Save(ctx context.Context) (*OrgMembership, error) {
-	if err := omuo.defaults(); err != nil {
+func (_u *OrgMembershipUpdateOne) Save(ctx context.Context) (*OrgMembership, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, omuo.sqlSave, omuo.mutation, omuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (omuo *OrgMembershipUpdateOne) SaveX(ctx context.Context) *OrgMembership {
-	node, err := omuo.Save(ctx)
+func (_u *OrgMembershipUpdateOne) SaveX(ctx context.Context) *OrgMembership {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -407,63 +407,63 @@ func (omuo *OrgMembershipUpdateOne) SaveX(ctx context.Context) *OrgMembership {
 }
 
 // Exec executes the query on the entity.
-func (omuo *OrgMembershipUpdateOne) Exec(ctx context.Context) error {
-	_, err := omuo.Save(ctx)
+func (_u *OrgMembershipUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (omuo *OrgMembershipUpdateOne) ExecX(ctx context.Context) {
-	if err := omuo.Exec(ctx); err != nil {
+func (_u *OrgMembershipUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (omuo *OrgMembershipUpdateOne) defaults() error {
-	if _, ok := omuo.mutation.UpdatedAt(); !ok && !omuo.mutation.UpdatedAtCleared() {
+func (_u *OrgMembershipUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if orgmembership.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized orgmembership.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := orgmembership.UpdateDefaultUpdatedAt()
-		omuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (omuo *OrgMembershipUpdateOne) check() error {
-	if v, ok := omuo.mutation.Role(); ok {
+func (_u *OrgMembershipUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := orgmembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "OrgMembership.role": %w`, err)}
 		}
 	}
-	if omuo.mutation.OrganizationCleared() && len(omuo.mutation.OrganizationIDs()) > 0 {
+	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "OrgMembership.organization"`)
 	}
-	if omuo.mutation.UserCleared() && len(omuo.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "OrgMembership.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (omuo *OrgMembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipUpdateOne {
-	omuo.modifiers = append(omuo.modifiers, modifiers...)
-	return omuo
+func (_u *OrgMembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembership, err error) {
-	if err := omuo.check(); err != nil {
+func (_u *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembership, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(orgmembership.Table, orgmembership.Columns, sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString))
-	id, ok := omuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrgMembership.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := omuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, orgmembership.FieldID)
 		for _, f := range fields {
@@ -475,35 +475,35 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 			}
 		}
 	}
-	if ps := omuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if omuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembership.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := omuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(orgmembership.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if omuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedAt, field.TypeTime)
 	}
-	if omuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmembership.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := omuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
 	}
-	if omuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omuo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
 	}
-	if omuo.mutation.EventsCleared() {
+	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -514,10 +514,10 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgMembershipEvents
+		edge.Schema = _u.schemaConfig.OrgMembershipEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !omuo.mutation.EventsCleared() {
+	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -528,13 +528,13 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgMembershipEvents
+		edge.Schema = _u.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := omuo.mutation.EventsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.EventsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -545,19 +545,19 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = omuo.schemaConfig.OrgMembershipEvents
+		edge.Schema = _u.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = omuo.schemaConfig.OrgMembership
-	ctx = internal.NewSchemaConfigContext(ctx, omuo.schemaConfig)
-	_spec.AddModifiers(omuo.modifiers...)
-	_node = &OrgMembership{config: omuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrgMembership
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrgMembership{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, omuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembership.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -565,6 +565,6 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 		}
 		return nil, err
 	}
-	omuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

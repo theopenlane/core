@@ -29,456 +29,456 @@ type TrustCenterSettingUpdate struct {
 }
 
 // Where appends a list predicates to the TrustCenterSettingUpdate builder.
-func (tcsu *TrustCenterSettingUpdate) Where(ps ...predicate.TrustCenterSetting) *TrustCenterSettingUpdate {
-	tcsu.mutation.Where(ps...)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) Where(ps ...predicate.TrustCenterSetting) *TrustCenterSettingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcsu *TrustCenterSettingUpdate) SetUpdatedAt(t time.Time) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetUpdatedAt(t)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetUpdatedAt(v time.Time) *TrustCenterSettingUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tcsu *TrustCenterSettingUpdate) ClearUpdatedAt() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearUpdatedAt()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearUpdatedAt() *TrustCenterSettingUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcsu *TrustCenterSettingUpdate) SetUpdatedBy(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetUpdatedBy(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetUpdatedBy(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableUpdatedBy(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetUpdatedBy(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableUpdatedBy(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tcsu *TrustCenterSettingUpdate) ClearUpdatedBy() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearUpdatedBy()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearUpdatedBy() *TrustCenterSettingUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcsu *TrustCenterSettingUpdate) SetDeletedAt(t time.Time) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetDeletedAt(t)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetDeletedAt(v time.Time) *TrustCenterSettingUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableDeletedAt(t *time.Time) *TrustCenterSettingUpdate {
-	if t != nil {
-		tcsu.SetDeletedAt(*t)
+func (_u *TrustCenterSettingUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tcsu *TrustCenterSettingUpdate) ClearDeletedAt() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearDeletedAt()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearDeletedAt() *TrustCenterSettingUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcsu *TrustCenterSettingUpdate) SetDeletedBy(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetDeletedBy(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetDeletedBy(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableDeletedBy(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetDeletedBy(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableDeletedBy(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tcsu *TrustCenterSettingUpdate) ClearDeletedBy() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearDeletedBy()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearDeletedBy() *TrustCenterSettingUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (tcsu *TrustCenterSettingUpdate) SetTrustCenterID(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetTrustCenterID(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetTrustCenterID(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableTrustCenterID(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetTrustCenterID(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableTrustCenterID(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (tcsu *TrustCenterSettingUpdate) ClearTrustCenterID() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearTrustCenterID()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearTrustCenterID() *TrustCenterSettingUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (tcsu *TrustCenterSettingUpdate) SetTitle(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetTitle(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetTitle(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableTitle(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetTitle(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableTitle(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearTitle clears the value of the "title" field.
-func (tcsu *TrustCenterSettingUpdate) ClearTitle() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearTitle()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearTitle() *TrustCenterSettingUpdate {
+	_u.mutation.ClearTitle()
+	return _u
 }
 
 // SetOverview sets the "overview" field.
-func (tcsu *TrustCenterSettingUpdate) SetOverview(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetOverview(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetOverview(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetOverview(v)
+	return _u
 }
 
 // SetNillableOverview sets the "overview" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableOverview(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetOverview(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableOverview(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetOverview(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearOverview clears the value of the "overview" field.
-func (tcsu *TrustCenterSettingUpdate) ClearOverview() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearOverview()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearOverview() *TrustCenterSettingUpdate {
+	_u.mutation.ClearOverview()
+	return _u
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (tcsu *TrustCenterSettingUpdate) SetLogoRemoteURL(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetLogoRemoteURL(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetLogoRemoteURL(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetLogoRemoteURL(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableLogoRemoteURL(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (tcsu *TrustCenterSettingUpdate) ClearLogoRemoteURL() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearLogoRemoteURL()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearLogoRemoteURL() *TrustCenterSettingUpdate {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (tcsu *TrustCenterSettingUpdate) SetLogoLocalFileID(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetLogoLocalFileID(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetLogoLocalFileID(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetLogoLocalFileID(v)
+	return _u
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetLogoLocalFileID(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableLogoLocalFileID(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetLogoLocalFileID(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (tcsu *TrustCenterSettingUpdate) ClearLogoLocalFileID() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearLogoLocalFileID()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearLogoLocalFileID() *TrustCenterSettingUpdate {
+	_u.mutation.ClearLogoLocalFileID()
+	return _u
 }
 
 // SetFaviconRemoteURL sets the "favicon_remote_url" field.
-func (tcsu *TrustCenterSettingUpdate) SetFaviconRemoteURL(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetFaviconRemoteURL(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetFaviconRemoteURL(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetFaviconRemoteURL(v)
+	return _u
 }
 
 // SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetFaviconRemoteURL(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableFaviconRemoteURL(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetFaviconRemoteURL(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
-func (tcsu *TrustCenterSettingUpdate) ClearFaviconRemoteURL() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearFaviconRemoteURL()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearFaviconRemoteURL() *TrustCenterSettingUpdate {
+	_u.mutation.ClearFaviconRemoteURL()
+	return _u
 }
 
 // SetFaviconLocalFileID sets the "favicon_local_file_id" field.
-func (tcsu *TrustCenterSettingUpdate) SetFaviconLocalFileID(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetFaviconLocalFileID(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetFaviconLocalFileID(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetFaviconLocalFileID(v)
+	return _u
 }
 
 // SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetFaviconLocalFileID(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableFaviconLocalFileID(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetFaviconLocalFileID(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
-func (tcsu *TrustCenterSettingUpdate) ClearFaviconLocalFileID() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearFaviconLocalFileID()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearFaviconLocalFileID() *TrustCenterSettingUpdate {
+	_u.mutation.ClearFaviconLocalFileID()
+	return _u
 }
 
 // SetThemeMode sets the "theme_mode" field.
-func (tcsu *TrustCenterSettingUpdate) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetThemeMode(ectm)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
+	_u.mutation.SetThemeMode(v)
+	return _u
 }
 
 // SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
-	if ectm != nil {
-		tcsu.SetThemeMode(*ectm)
+func (_u *TrustCenterSettingUpdate) SetNillableThemeMode(v *enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetThemeMode(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearThemeMode clears the value of the "theme_mode" field.
-func (tcsu *TrustCenterSettingUpdate) ClearThemeMode() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearThemeMode()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearThemeMode() *TrustCenterSettingUpdate {
+	_u.mutation.ClearThemeMode()
+	return _u
 }
 
 // SetPrimaryColor sets the "primary_color" field.
-func (tcsu *TrustCenterSettingUpdate) SetPrimaryColor(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetPrimaryColor(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetPrimaryColor(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetPrimaryColor(v)
+	return _u
 }
 
 // SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillablePrimaryColor(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetPrimaryColor(*s)
+func (_u *TrustCenterSettingUpdate) SetNillablePrimaryColor(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetPrimaryColor(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearPrimaryColor clears the value of the "primary_color" field.
-func (tcsu *TrustCenterSettingUpdate) ClearPrimaryColor() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearPrimaryColor()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearPrimaryColor() *TrustCenterSettingUpdate {
+	_u.mutation.ClearPrimaryColor()
+	return _u
 }
 
 // SetFont sets the "font" field.
-func (tcsu *TrustCenterSettingUpdate) SetFont(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetFont(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetFont(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetFont(v)
+	return _u
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableFont(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetFont(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableFont(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetFont(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearFont clears the value of the "font" field.
-func (tcsu *TrustCenterSettingUpdate) ClearFont() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearFont()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearFont() *TrustCenterSettingUpdate {
+	_u.mutation.ClearFont()
+	return _u
 }
 
 // SetForegroundColor sets the "foreground_color" field.
-func (tcsu *TrustCenterSettingUpdate) SetForegroundColor(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetForegroundColor(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetForegroundColor(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetForegroundColor(v)
+	return _u
 }
 
 // SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableForegroundColor(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetForegroundColor(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableForegroundColor(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetForegroundColor(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearForegroundColor clears the value of the "foreground_color" field.
-func (tcsu *TrustCenterSettingUpdate) ClearForegroundColor() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearForegroundColor()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearForegroundColor() *TrustCenterSettingUpdate {
+	_u.mutation.ClearForegroundColor()
+	return _u
 }
 
 // SetBackgroundColor sets the "background_color" field.
-func (tcsu *TrustCenterSettingUpdate) SetBackgroundColor(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetBackgroundColor(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetBackgroundColor(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetBackgroundColor(v)
+	return _u
 }
 
 // SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableBackgroundColor(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetBackgroundColor(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableBackgroundColor(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetBackgroundColor(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearBackgroundColor clears the value of the "background_color" field.
-func (tcsu *TrustCenterSettingUpdate) ClearBackgroundColor() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearBackgroundColor()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearBackgroundColor() *TrustCenterSettingUpdate {
+	_u.mutation.ClearBackgroundColor()
+	return _u
 }
 
 // SetAccentColor sets the "accent_color" field.
-func (tcsu *TrustCenterSettingUpdate) SetAccentColor(s string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetAccentColor(s)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetAccentColor(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetAccentColor(v)
+	return _u
 }
 
 // SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableAccentColor(s *string) *TrustCenterSettingUpdate {
-	if s != nil {
-		tcsu.SetAccentColor(*s)
+func (_u *TrustCenterSettingUpdate) SetNillableAccentColor(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetAccentColor(*v)
 	}
-	return tcsu
+	return _u
 }
 
 // ClearAccentColor clears the value of the "accent_color" field.
-func (tcsu *TrustCenterSettingUpdate) ClearAccentColor() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearAccentColor()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearAccentColor() *TrustCenterSettingUpdate {
+	_u.mutation.ClearAccentColor()
+	return _u
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (tcsu *TrustCenterSettingUpdate) SetTrustCenter(t *TrustCenter) *TrustCenterSettingUpdate {
-	return tcsu.SetTrustCenterID(t.ID)
+func (_u *TrustCenterSettingUpdate) SetTrustCenter(v *TrustCenter) *TrustCenterSettingUpdate {
+	return _u.SetTrustCenterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (tcsu *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
-	tcsu.mutation.AddFileIDs(ids...)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (tcsu *TrustCenterSettingUpdate) AddFiles(f ...*File) *TrustCenterSettingUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *TrustCenterSettingUpdate) AddFiles(v ...*File) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcsu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (tcsu *TrustCenterSettingUpdate) SetLogoFileID(id string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetLogoFileID(id)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetLogoFileID(id string) *TrustCenterSettingUpdate {
+	_u.mutation.SetLogoFileID(id)
+	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdate {
+func (_u *TrustCenterSettingUpdate) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdate {
 	if id != nil {
-		tcsu = tcsu.SetLogoFileID(*id)
+		_u = _u.SetLogoFileID(*id)
 	}
-	return tcsu
+	return _u
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (tcsu *TrustCenterSettingUpdate) SetLogoFile(f *File) *TrustCenterSettingUpdate {
-	return tcsu.SetLogoFileID(f.ID)
+func (_u *TrustCenterSettingUpdate) SetLogoFile(v *File) *TrustCenterSettingUpdate {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // SetFaviconFileID sets the "favicon_file" edge to the File entity by ID.
-func (tcsu *TrustCenterSettingUpdate) SetFaviconFileID(id string) *TrustCenterSettingUpdate {
-	tcsu.mutation.SetFaviconFileID(id)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) SetFaviconFileID(id string) *TrustCenterSettingUpdate {
+	_u.mutation.SetFaviconFileID(id)
+	return _u
 }
 
 // SetNillableFaviconFileID sets the "favicon_file" edge to the File entity by ID if the given value is not nil.
-func (tcsu *TrustCenterSettingUpdate) SetNillableFaviconFileID(id *string) *TrustCenterSettingUpdate {
+func (_u *TrustCenterSettingUpdate) SetNillableFaviconFileID(id *string) *TrustCenterSettingUpdate {
 	if id != nil {
-		tcsu = tcsu.SetFaviconFileID(*id)
+		_u = _u.SetFaviconFileID(*id)
 	}
-	return tcsu
+	return _u
 }
 
 // SetFaviconFile sets the "favicon_file" edge to the File entity.
-func (tcsu *TrustCenterSettingUpdate) SetFaviconFile(f *File) *TrustCenterSettingUpdate {
-	return tcsu.SetFaviconFileID(f.ID)
+func (_u *TrustCenterSettingUpdate) SetFaviconFile(v *File) *TrustCenterSettingUpdate {
+	return _u.SetFaviconFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
-func (tcsu *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
-	return tcsu.mutation
+func (_u *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
+	return _u.mutation
 }
 
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (tcsu *TrustCenterSettingUpdate) ClearTrustCenter() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearTrustCenter()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearTrustCenter() *TrustCenterSettingUpdate {
+	_u.mutation.ClearTrustCenter()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (tcsu *TrustCenterSettingUpdate) ClearFiles() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearFiles()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearFiles() *TrustCenterSettingUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (tcsu *TrustCenterSettingUpdate) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdate {
-	tcsu.mutation.RemoveFileIDs(ids...)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (tcsu *TrustCenterSettingUpdate) RemoveFiles(f ...*File) *TrustCenterSettingUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *TrustCenterSettingUpdate) RemoveFiles(v ...*File) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcsu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
-func (tcsu *TrustCenterSettingUpdate) ClearLogoFile() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearLogoFile()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearLogoFile() *TrustCenterSettingUpdate {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // ClearFaviconFile clears the "favicon_file" edge to the File entity.
-func (tcsu *TrustCenterSettingUpdate) ClearFaviconFile() *TrustCenterSettingUpdate {
-	tcsu.mutation.ClearFaviconFile()
-	return tcsu
+func (_u *TrustCenterSettingUpdate) ClearFaviconFile() *TrustCenterSettingUpdate {
+	_u.mutation.ClearFaviconFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tcsu *TrustCenterSettingUpdate) Save(ctx context.Context) (int, error) {
-	if err := tcsu.defaults(); err != nil {
+func (_u *TrustCenterSettingUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, tcsu.sqlSave, tcsu.mutation, tcsu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcsu *TrustCenterSettingUpdate) SaveX(ctx context.Context) int {
-	affected, err := tcsu.Save(ctx)
+func (_u *TrustCenterSettingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -486,58 +486,58 @@ func (tcsu *TrustCenterSettingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tcsu *TrustCenterSettingUpdate) Exec(ctx context.Context) error {
-	_, err := tcsu.Save(ctx)
+func (_u *TrustCenterSettingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcsu *TrustCenterSettingUpdate) ExecX(ctx context.Context) {
-	if err := tcsu.Exec(ctx); err != nil {
+func (_u *TrustCenterSettingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcsu *TrustCenterSettingUpdate) defaults() error {
-	if _, ok := tcsu.mutation.UpdatedAt(); !ok && !tcsu.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterSettingUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcentersetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentersetting.UpdateDefaultUpdatedAt()
-		tcsu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tcsu *TrustCenterSettingUpdate) check() error {
-	if v, ok := tcsu.mutation.TrustCenterID(); ok {
+func (_u *TrustCenterSettingUpdate) check() error {
+	if v, ok := _u.mutation.TrustCenterID(); ok {
 		if err := trustcentersetting.TrustCenterIDValidator(v); err != nil {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.trust_center_id": %w`, err)}
 		}
 	}
-	if v, ok := tcsu.mutation.Title(); ok {
+	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcentersetting.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
 		}
 	}
-	if v, ok := tcsu.mutation.Overview(); ok {
+	if v, ok := _u.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
 		}
 	}
-	if v, ok := tcsu.mutation.LogoRemoteURL(); ok {
+	if v, ok := _u.mutation.LogoRemoteURL(); ok {
 		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := tcsu.mutation.FaviconRemoteURL(); ok {
+	if v, ok := _u.mutation.FaviconRemoteURL(); ok {
 		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := tcsu.mutation.ThemeMode(); ok {
+	if v, ok := _u.mutation.ThemeMode(); ok {
 		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
 			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
@@ -546,114 +546,114 @@ func (tcsu *TrustCenterSettingUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tcsu *TrustCenterSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSettingUpdate {
-	tcsu.modifiers = append(tcsu.modifiers, modifiers...)
-	return tcsu
+func (_u *TrustCenterSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSettingUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tcsu.check(); err != nil {
-		return n, err
+func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersetting.Table, trustcentersetting.Columns, sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString))
-	if ps := tcsu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tcsu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tcsu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tcsu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if tcsu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tcsu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tcsu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tcsu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if tcsu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 	}
-	if tcsu.mutation.TitleCleared() {
+	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersetting.FieldTitle, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.Overview(); ok {
+	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
 	}
-	if tcsu.mutation.OverviewCleared() {
+	if _u.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersetting.FieldOverview, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.LogoRemoteURL(); ok {
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
 	}
-	if tcsu.mutation.LogoRemoteURLCleared() {
+	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(trustcentersetting.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.FaviconRemoteURL(); ok {
+	if value, ok := _u.mutation.FaviconRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
 	}
-	if tcsu.mutation.FaviconRemoteURLCleared() {
+	if _u.mutation.FaviconRemoteURLCleared() {
 		_spec.ClearField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.ThemeMode(); ok {
+	if value, ok := _u.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersetting.FieldThemeMode, field.TypeEnum, value)
 	}
-	if tcsu.mutation.ThemeModeCleared() {
+	if _u.mutation.ThemeModeCleared() {
 		_spec.ClearField(trustcentersetting.FieldThemeMode, field.TypeEnum)
 	}
-	if value, ok := tcsu.mutation.PrimaryColor(); ok {
+	if value, ok := _u.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
 	}
-	if tcsu.mutation.PrimaryColorCleared() {
+	if _u.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldPrimaryColor, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.Font(); ok {
+	if value, ok := _u.mutation.Font(); ok {
 		_spec.SetField(trustcentersetting.FieldFont, field.TypeString, value)
 	}
-	if tcsu.mutation.FontCleared() {
+	if _u.mutation.FontCleared() {
 		_spec.ClearField(trustcentersetting.FieldFont, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.ForegroundColor(); ok {
+	if value, ok := _u.mutation.ForegroundColor(); ok {
 		_spec.SetField(trustcentersetting.FieldForegroundColor, field.TypeString, value)
 	}
-	if tcsu.mutation.ForegroundColorCleared() {
+	if _u.mutation.ForegroundColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldForegroundColor, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.BackgroundColor(); ok {
+	if value, ok := _u.mutation.BackgroundColor(); ok {
 		_spec.SetField(trustcentersetting.FieldBackgroundColor, field.TypeString, value)
 	}
-	if tcsu.mutation.BackgroundColorCleared() {
+	if _u.mutation.BackgroundColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldBackgroundColor, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.AccentColor(); ok {
+	if value, ok := _u.mutation.AccentColor(); ok {
 		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
 	}
-	if tcsu.mutation.AccentColorCleared() {
+	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldAccentColor, field.TypeString)
 	}
-	if tcsu.mutation.TrustCenterCleared() {
+	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -664,10 +664,10 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsu.mutation.TrustCenterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -678,13 +678,13 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcsu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -695,10 +695,10 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tcsu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -709,13 +709,13 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -726,13 +726,13 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcsu.mutation.LogoFileCleared() {
+	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -743,10 +743,10 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsu.mutation.LogoFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -757,13 +757,13 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcsu.mutation.FaviconFileCleared() {
+	if _u.mutation.FaviconFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -774,10 +774,10 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsu.mutation.FaviconFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FaviconFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -788,16 +788,16 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = tcsu.schemaConfig.TrustCenterSetting
-	ctx = internal.NewSchemaConfigContext(ctx, tcsu.schemaConfig)
-	_spec.AddModifiers(tcsu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tcsu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -805,8 +805,8 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	tcsu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TrustCenterSettingUpdateOne is the builder for updating a single TrustCenterSetting entity.
@@ -819,463 +819,463 @@ type TrustCenterSettingUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetUpdatedAt(t time.Time) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetUpdatedAt(t)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearUpdatedAt() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearUpdatedAt()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearUpdatedAt() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetUpdatedBy(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetUpdatedBy(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetUpdatedBy(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableUpdatedBy(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetUpdatedBy(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearUpdatedBy() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearUpdatedBy()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearUpdatedBy() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetDeletedAt(t time.Time) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetDeletedAt(t)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetDeletedAt(v time.Time) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableDeletedAt(t *time.Time) *TrustCenterSettingUpdateOne {
-	if t != nil {
-		tcsuo.SetDeletedAt(*t)
+func (_u *TrustCenterSettingUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearDeletedAt() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearDeletedAt()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearDeletedAt() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetDeletedBy(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetDeletedBy(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetDeletedBy(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableDeletedBy(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetDeletedBy(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearDeletedBy() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearDeletedBy()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearDeletedBy() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetTrustCenterID(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetTrustCenterID(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetTrustCenterID(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableTrustCenterID(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetTrustCenterID(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearTrustCenterID() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearTrustCenterID()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearTrustCenterID() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
 }
 
 // SetTitle sets the "title" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetTitle(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetTitle(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetTitle(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
 }
 
 // SetNillableTitle sets the "title" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableTitle(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetTitle(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableTitle(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearTitle clears the value of the "title" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearTitle() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearTitle()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearTitle() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearTitle()
+	return _u
 }
 
 // SetOverview sets the "overview" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetOverview(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetOverview(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetOverview(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetOverview(v)
+	return _u
 }
 
 // SetNillableOverview sets the "overview" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableOverview(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetOverview(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableOverview(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetOverview(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearOverview clears the value of the "overview" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearOverview() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearOverview()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearOverview() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearOverview()
+	return _u
 }
 
 // SetLogoRemoteURL sets the "logo_remote_url" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetLogoRemoteURL(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetLogoRemoteURL(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetLogoRemoteURL(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
 }
 
 // SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetLogoRemoteURL(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableLogoRemoteURL(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearLogoRemoteURL()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
 }
 
 // SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetLogoLocalFileID(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetLogoLocalFileID(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetLogoLocalFileID(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetLogoLocalFileID(v)
+	return _u
 }
 
 // SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetLogoLocalFileID(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableLogoLocalFileID(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetLogoLocalFileID(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearLogoLocalFileID()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearLogoLocalFileID()
+	return _u
 }
 
 // SetFaviconRemoteURL sets the "favicon_remote_url" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconRemoteURL(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetFaviconRemoteURL(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetFaviconRemoteURL(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetFaviconRemoteURL(v)
+	return _u
 }
 
 // SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetFaviconRemoteURL(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableFaviconRemoteURL(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetFaviconRemoteURL(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearFaviconRemoteURL() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearFaviconRemoteURL()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearFaviconRemoteURL() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearFaviconRemoteURL()
+	return _u
 }
 
 // SetFaviconLocalFileID sets the "favicon_local_file_id" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconLocalFileID(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetFaviconLocalFileID(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetFaviconLocalFileID(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetFaviconLocalFileID(v)
+	return _u
 }
 
 // SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetFaviconLocalFileID(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableFaviconLocalFileID(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetFaviconLocalFileID(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearFaviconLocalFileID()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearFaviconLocalFileID()
+	return _u
 }
 
 // SetThemeMode sets the "theme_mode" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetThemeMode(ectm)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetThemeMode(v)
+	return _u
 }
 
 // SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingUpdateOne {
-	if ectm != nil {
-		tcsuo.SetThemeMode(*ectm)
+func (_u *TrustCenterSettingUpdateOne) SetNillableThemeMode(v *enums.TrustCenterThemeMode) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetThemeMode(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearThemeMode clears the value of the "theme_mode" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearThemeMode() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearThemeMode()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearThemeMode() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearThemeMode()
+	return _u
 }
 
 // SetPrimaryColor sets the "primary_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetPrimaryColor(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetPrimaryColor(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetPrimaryColor(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetPrimaryColor(v)
+	return _u
 }
 
 // SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillablePrimaryColor(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetPrimaryColor(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillablePrimaryColor(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetPrimaryColor(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearPrimaryColor clears the value of the "primary_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearPrimaryColor() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearPrimaryColor()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearPrimaryColor() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearPrimaryColor()
+	return _u
 }
 
 // SetFont sets the "font" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetFont(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetFont(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetFont(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetFont(v)
+	return _u
 }
 
 // SetNillableFont sets the "font" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFont(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetFont(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableFont(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetFont(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearFont clears the value of the "font" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearFont() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearFont()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearFont() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearFont()
+	return _u
 }
 
 // SetForegroundColor sets the "foreground_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetForegroundColor(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetForegroundColor(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetForegroundColor(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetForegroundColor(v)
+	return _u
 }
 
 // SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableForegroundColor(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetForegroundColor(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableForegroundColor(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetForegroundColor(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearForegroundColor clears the value of the "foreground_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearForegroundColor() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearForegroundColor()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearForegroundColor() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearForegroundColor()
+	return _u
 }
 
 // SetBackgroundColor sets the "background_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetBackgroundColor(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetBackgroundColor(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetBackgroundColor(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetBackgroundColor(v)
+	return _u
 }
 
 // SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableBackgroundColor(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetBackgroundColor(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableBackgroundColor(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetBackgroundColor(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearBackgroundColor clears the value of the "background_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearBackgroundColor() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearBackgroundColor()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearBackgroundColor() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearBackgroundColor()
+	return _u
 }
 
 // SetAccentColor sets the "accent_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) SetAccentColor(s string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetAccentColor(s)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetAccentColor(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetAccentColor(v)
+	return _u
 }
 
 // SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableAccentColor(s *string) *TrustCenterSettingUpdateOne {
-	if s != nil {
-		tcsuo.SetAccentColor(*s)
+func (_u *TrustCenterSettingUpdateOne) SetNillableAccentColor(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetAccentColor(*v)
 	}
-	return tcsuo
+	return _u
 }
 
 // ClearAccentColor clears the value of the "accent_color" field.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearAccentColor() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearAccentColor()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearAccentColor() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearAccentColor()
+	return _u
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (tcsuo *TrustCenterSettingUpdateOne) SetTrustCenter(t *TrustCenter) *TrustCenterSettingUpdateOne {
-	return tcsuo.SetTrustCenterID(t.ID)
+func (_u *TrustCenterSettingUpdateOne) SetTrustCenter(v *TrustCenter) *TrustCenterSettingUpdateOne {
+	return _u.SetTrustCenterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (tcsuo *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.AddFileIDs(ids...)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (tcsuo *TrustCenterSettingUpdateOne) AddFiles(f ...*File) *TrustCenterSettingUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *TrustCenterSettingUpdateOne) AddFiles(v ...*File) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcsuo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (tcsuo *TrustCenterSettingUpdateOne) SetLogoFileID(id string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetLogoFileID(id)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetLogoFileID(id string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetLogoFileID(id)
+	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdateOne {
+func (_u *TrustCenterSettingUpdateOne) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdateOne {
 	if id != nil {
-		tcsuo = tcsuo.SetLogoFileID(*id)
+		_u = _u.SetLogoFileID(*id)
 	}
-	return tcsuo
+	return _u
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (tcsuo *TrustCenterSettingUpdateOne) SetLogoFile(f *File) *TrustCenterSettingUpdateOne {
-	return tcsuo.SetLogoFileID(f.ID)
+func (_u *TrustCenterSettingUpdateOne) SetLogoFile(v *File) *TrustCenterSettingUpdateOne {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // SetFaviconFileID sets the "favicon_file" edge to the File entity by ID.
-func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconFileID(id string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.SetFaviconFileID(id)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) SetFaviconFileID(id string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetFaviconFileID(id)
+	return _u
 }
 
 // SetNillableFaviconFileID sets the "favicon_file" edge to the File entity by ID if the given value is not nil.
-func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFaviconFileID(id *string) *TrustCenterSettingUpdateOne {
+func (_u *TrustCenterSettingUpdateOne) SetNillableFaviconFileID(id *string) *TrustCenterSettingUpdateOne {
 	if id != nil {
-		tcsuo = tcsuo.SetFaviconFileID(*id)
+		_u = _u.SetFaviconFileID(*id)
 	}
-	return tcsuo
+	return _u
 }
 
 // SetFaviconFile sets the "favicon_file" edge to the File entity.
-func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconFile(f *File) *TrustCenterSettingUpdateOne {
-	return tcsuo.SetFaviconFileID(f.ID)
+func (_u *TrustCenterSettingUpdateOne) SetFaviconFile(v *File) *TrustCenterSettingUpdateOne {
+	return _u.SetFaviconFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
-func (tcsuo *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
-	return tcsuo.mutation
+func (_u *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
+	return _u.mutation
 }
 
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearTrustCenter() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearTrustCenter()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearTrustCenter() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearTrustCenter()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearFiles() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearFiles()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearFiles() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (tcsuo *TrustCenterSettingUpdateOne) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.RemoveFileIDs(ids...)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (tcsuo *TrustCenterSettingUpdateOne) RemoveFiles(f ...*File) *TrustCenterSettingUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *TrustCenterSettingUpdateOne) RemoveFiles(v ...*File) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tcsuo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoFile() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearLogoFile()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearLogoFile() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // ClearFaviconFile clears the "favicon_file" edge to the File entity.
-func (tcsuo *TrustCenterSettingUpdateOne) ClearFaviconFile() *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.ClearFaviconFile()
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) ClearFaviconFile() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearFaviconFile()
+	return _u
 }
 
 // Where appends a list predicates to the TrustCenterSettingUpdate builder.
-func (tcsuo *TrustCenterSettingUpdateOne) Where(ps ...predicate.TrustCenterSetting) *TrustCenterSettingUpdateOne {
-	tcsuo.mutation.Where(ps...)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) Where(ps ...predicate.TrustCenterSetting) *TrustCenterSettingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tcsuo *TrustCenterSettingUpdateOne) Select(field string, fields ...string) *TrustCenterSettingUpdateOne {
-	tcsuo.fields = append([]string{field}, fields...)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) Select(field string, fields ...string) *TrustCenterSettingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TrustCenterSetting entity.
-func (tcsuo *TrustCenterSettingUpdateOne) Save(ctx context.Context) (*TrustCenterSetting, error) {
-	if err := tcsuo.defaults(); err != nil {
+func (_u *TrustCenterSettingUpdateOne) Save(ctx context.Context) (*TrustCenterSetting, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tcsuo.sqlSave, tcsuo.mutation, tcsuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcsuo *TrustCenterSettingUpdateOne) SaveX(ctx context.Context) *TrustCenterSetting {
-	node, err := tcsuo.Save(ctx)
+func (_u *TrustCenterSettingUpdateOne) SaveX(ctx context.Context) *TrustCenterSetting {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1283,58 +1283,58 @@ func (tcsuo *TrustCenterSettingUpdateOne) SaveX(ctx context.Context) *TrustCente
 }
 
 // Exec executes the query on the entity.
-func (tcsuo *TrustCenterSettingUpdateOne) Exec(ctx context.Context) error {
-	_, err := tcsuo.Save(ctx)
+func (_u *TrustCenterSettingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcsuo *TrustCenterSettingUpdateOne) ExecX(ctx context.Context) {
-	if err := tcsuo.Exec(ctx); err != nil {
+func (_u *TrustCenterSettingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcsuo *TrustCenterSettingUpdateOne) defaults() error {
-	if _, ok := tcsuo.mutation.UpdatedAt(); !ok && !tcsuo.mutation.UpdatedAtCleared() {
+func (_u *TrustCenterSettingUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcentersetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := trustcentersetting.UpdateDefaultUpdatedAt()
-		tcsuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tcsuo *TrustCenterSettingUpdateOne) check() error {
-	if v, ok := tcsuo.mutation.TrustCenterID(); ok {
+func (_u *TrustCenterSettingUpdateOne) check() error {
+	if v, ok := _u.mutation.TrustCenterID(); ok {
 		if err := trustcentersetting.TrustCenterIDValidator(v); err != nil {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.trust_center_id": %w`, err)}
 		}
 	}
-	if v, ok := tcsuo.mutation.Title(); ok {
+	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcentersetting.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
 		}
 	}
-	if v, ok := tcsuo.mutation.Overview(); ok {
+	if v, ok := _u.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
 		}
 	}
-	if v, ok := tcsuo.mutation.LogoRemoteURL(); ok {
+	if v, ok := _u.mutation.LogoRemoteURL(); ok {
 		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := tcsuo.mutation.FaviconRemoteURL(); ok {
+	if v, ok := _u.mutation.FaviconRemoteURL(); ok {
 		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
 		}
 	}
-	if v, ok := tcsuo.mutation.ThemeMode(); ok {
+	if v, ok := _u.mutation.ThemeMode(); ok {
 		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
 			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
@@ -1343,22 +1343,22 @@ func (tcsuo *TrustCenterSettingUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tcsuo *TrustCenterSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSettingUpdateOne {
-	tcsuo.modifiers = append(tcsuo.modifiers, modifiers...)
-	return tcsuo
+func (_u *TrustCenterSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSettingUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSetting, err error) {
-	if err := tcsuo.check(); err != nil {
+func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSetting, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersetting.Table, trustcentersetting.Columns, sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString))
-	id, ok := tcsuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TrustCenterSetting.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tcsuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcentersetting.FieldID)
 		for _, f := range fields {
@@ -1370,104 +1370,104 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 			}
 		}
 	}
-	if ps := tcsuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tcsuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tcsuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tcsuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if tcsuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if tcsuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tcsuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := tcsuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(trustcentersetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if tcsuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.Title(); ok {
+	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 	}
-	if tcsuo.mutation.TitleCleared() {
+	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersetting.FieldTitle, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.Overview(); ok {
+	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
 	}
-	if tcsuo.mutation.OverviewCleared() {
+	if _u.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersetting.FieldOverview, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.LogoRemoteURL(); ok {
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
 	}
-	if tcsuo.mutation.LogoRemoteURLCleared() {
+	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(trustcentersetting.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.FaviconRemoteURL(); ok {
+	if value, ok := _u.mutation.FaviconRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
 	}
-	if tcsuo.mutation.FaviconRemoteURLCleared() {
+	if _u.mutation.FaviconRemoteURLCleared() {
 		_spec.ClearField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.ThemeMode(); ok {
+	if value, ok := _u.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersetting.FieldThemeMode, field.TypeEnum, value)
 	}
-	if tcsuo.mutation.ThemeModeCleared() {
+	if _u.mutation.ThemeModeCleared() {
 		_spec.ClearField(trustcentersetting.FieldThemeMode, field.TypeEnum)
 	}
-	if value, ok := tcsuo.mutation.PrimaryColor(); ok {
+	if value, ok := _u.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
 	}
-	if tcsuo.mutation.PrimaryColorCleared() {
+	if _u.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldPrimaryColor, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.Font(); ok {
+	if value, ok := _u.mutation.Font(); ok {
 		_spec.SetField(trustcentersetting.FieldFont, field.TypeString, value)
 	}
-	if tcsuo.mutation.FontCleared() {
+	if _u.mutation.FontCleared() {
 		_spec.ClearField(trustcentersetting.FieldFont, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.ForegroundColor(); ok {
+	if value, ok := _u.mutation.ForegroundColor(); ok {
 		_spec.SetField(trustcentersetting.FieldForegroundColor, field.TypeString, value)
 	}
-	if tcsuo.mutation.ForegroundColorCleared() {
+	if _u.mutation.ForegroundColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldForegroundColor, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.BackgroundColor(); ok {
+	if value, ok := _u.mutation.BackgroundColor(); ok {
 		_spec.SetField(trustcentersetting.FieldBackgroundColor, field.TypeString, value)
 	}
-	if tcsuo.mutation.BackgroundColorCleared() {
+	if _u.mutation.BackgroundColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldBackgroundColor, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.AccentColor(); ok {
+	if value, ok := _u.mutation.AccentColor(); ok {
 		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
 	}
-	if tcsuo.mutation.AccentColorCleared() {
+	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldAccentColor, field.TypeString)
 	}
-	if tcsuo.mutation.TrustCenterCleared() {
+	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -1478,10 +1478,10 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsuo.mutation.TrustCenterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -1492,13 +1492,13 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcsuo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1509,10 +1509,10 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tcsuo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1523,13 +1523,13 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsuo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1540,13 +1540,13 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcsuo.mutation.LogoFileCleared() {
+	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1557,10 +1557,10 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsuo.mutation.LogoFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1571,13 +1571,13 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tcsuo.mutation.FaviconFileCleared() {
+	if _u.mutation.FaviconFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1588,10 +1588,10 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tcsuo.mutation.FaviconFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FaviconFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1602,19 +1602,19 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = tcsuo.schemaConfig.TrustCenterSetting
-	ctx = internal.NewSchemaConfigContext(ctx, tcsuo.schemaConfig)
-	_spec.AddModifiers(tcsuo.modifiers...)
-	_node = &TrustCenterSetting{config: tcsuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TrustCenterSetting{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tcsuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1622,6 +1622,6 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 		}
 		return nil, err
 	}
-	tcsuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

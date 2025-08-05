@@ -22,58 +22,58 @@ type ActionPlanHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ActionPlanHistoryDelete builder.
-func (aphd *ActionPlanHistoryDelete) Where(ps ...predicate.ActionPlanHistory) *ActionPlanHistoryDelete {
-	aphd.mutation.Where(ps...)
-	return aphd
+func (_d *ActionPlanHistoryDelete) Where(ps ...predicate.ActionPlanHistory) *ActionPlanHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (aphd *ActionPlanHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, aphd.sqlExec, aphd.mutation, aphd.hooks)
+func (_d *ActionPlanHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aphd *ActionPlanHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := aphd.Exec(ctx)
+func (_d *ActionPlanHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (aphd *ActionPlanHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ActionPlanHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(actionplanhistory.Table, sqlgraph.NewFieldSpec(actionplanhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = aphd.schemaConfig.ActionPlanHistory
-	ctx = internal.NewSchemaConfigContext(ctx, aphd.schemaConfig)
-	if ps := aphd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ActionPlanHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, aphd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	aphd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ActionPlanHistoryDeleteOne is the builder for deleting a single ActionPlanHistory entity.
 type ActionPlanHistoryDeleteOne struct {
-	aphd *ActionPlanHistoryDelete
+	_d *ActionPlanHistoryDelete
 }
 
 // Where appends a list predicates to the ActionPlanHistoryDelete builder.
-func (aphdo *ActionPlanHistoryDeleteOne) Where(ps ...predicate.ActionPlanHistory) *ActionPlanHistoryDeleteOne {
-	aphdo.aphd.mutation.Where(ps...)
-	return aphdo
+func (_d *ActionPlanHistoryDeleteOne) Where(ps ...predicate.ActionPlanHistory) *ActionPlanHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (aphdo *ActionPlanHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := aphdo.aphd.Exec(ctx)
+func (_d *ActionPlanHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (aphdo *ActionPlanHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aphdo *ActionPlanHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := aphdo.Exec(ctx); err != nil {
+func (_d *ActionPlanHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

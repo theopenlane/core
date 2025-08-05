@@ -22,58 +22,58 @@ type GroupSettingDelete struct {
 }
 
 // Where appends a list predicates to the GroupSettingDelete builder.
-func (gsd *GroupSettingDelete) Where(ps ...predicate.GroupSetting) *GroupSettingDelete {
-	gsd.mutation.Where(ps...)
-	return gsd
+func (_d *GroupSettingDelete) Where(ps ...predicate.GroupSetting) *GroupSettingDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (gsd *GroupSettingDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, gsd.sqlExec, gsd.mutation, gsd.hooks)
+func (_d *GroupSettingDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gsd *GroupSettingDelete) ExecX(ctx context.Context) int {
-	n, err := gsd.Exec(ctx)
+func (_d *GroupSettingDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (gsd *GroupSettingDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *GroupSettingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(groupsetting.Table, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
-	_spec.Node.Schema = gsd.schemaConfig.GroupSetting
-	ctx = internal.NewSchemaConfigContext(ctx, gsd.schemaConfig)
-	if ps := gsd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.GroupSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, gsd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	gsd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // GroupSettingDeleteOne is the builder for deleting a single GroupSetting entity.
 type GroupSettingDeleteOne struct {
-	gsd *GroupSettingDelete
+	_d *GroupSettingDelete
 }
 
 // Where appends a list predicates to the GroupSettingDelete builder.
-func (gsdo *GroupSettingDeleteOne) Where(ps ...predicate.GroupSetting) *GroupSettingDeleteOne {
-	gsdo.gsd.mutation.Where(ps...)
-	return gsdo
+func (_d *GroupSettingDeleteOne) Where(ps ...predicate.GroupSetting) *GroupSettingDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (gsdo *GroupSettingDeleteOne) Exec(ctx context.Context) error {
-	n, err := gsdo.gsd.Exec(ctx)
+func (_d *GroupSettingDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (gsdo *GroupSettingDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gsdo *GroupSettingDeleteOne) ExecX(ctx context.Context) {
-	if err := gsdo.Exec(ctx); err != nil {
+func (_d *GroupSettingDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -62,7 +62,7 @@ func (*GroupMembershipHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the GroupMembershipHistory fields.
-func (gmh *GroupMembershipHistory) assignValues(columns []string, values []any) error {
+func (_m *GroupMembershipHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -72,70 +72,70 @@ func (gmh *GroupMembershipHistory) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				gmh.ID = value.String
+				_m.ID = value.String
 			}
 		case groupmembershiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				gmh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case groupmembershiphistory.FieldRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				gmh.Ref = value.String
+				_m.Ref = value.String
 			}
 		case groupmembershiphistory.FieldOperation:
 			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
-				gmh.Operation = *value
+				_m.Operation = *value
 			}
 		case groupmembershiphistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				gmh.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case groupmembershiphistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				gmh.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case groupmembershiphistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				gmh.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case groupmembershiphistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				gmh.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case groupmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value.Valid {
-				gmh.Role = enums.Role(value.String)
+				_m.Role = enums.Role(value.String)
 			}
 		case groupmembershiphistory.FieldGroupID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field group_id", values[i])
 			} else if value.Valid {
-				gmh.GroupID = value.String
+				_m.GroupID = value.String
 			}
 		case groupmembershiphistory.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				gmh.UserID = value.String
+				_m.UserID = value.String
 			}
 		default:
-			gmh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -143,62 +143,62 @@ func (gmh *GroupMembershipHistory) assignValues(columns []string, values []any) 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the GroupMembershipHistory.
 // This includes values selected through modifiers, order, etc.
-func (gmh *GroupMembershipHistory) Value(name string) (ent.Value, error) {
-	return gmh.selectValues.Get(name)
+func (_m *GroupMembershipHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this GroupMembershipHistory.
 // Note that you need to call GroupMembershipHistory.Unwrap() before calling this method if this GroupMembershipHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gmh *GroupMembershipHistory) Update() *GroupMembershipHistoryUpdateOne {
-	return NewGroupMembershipHistoryClient(gmh.config).UpdateOne(gmh)
+func (_m *GroupMembershipHistory) Update() *GroupMembershipHistoryUpdateOne {
+	return NewGroupMembershipHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the GroupMembershipHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gmh *GroupMembershipHistory) Unwrap() *GroupMembershipHistory {
-	_tx, ok := gmh.config.driver.(*txDriver)
+func (_m *GroupMembershipHistory) Unwrap() *GroupMembershipHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: GroupMembershipHistory is not a transactional entity")
 	}
-	gmh.config.driver = _tx.drv
-	return gmh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gmh *GroupMembershipHistory) String() string {
+func (_m *GroupMembershipHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("GroupMembershipHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gmh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(gmh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(gmh.Ref)
+	builder.WriteString(_m.Ref)
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", gmh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(gmh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(gmh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(gmh.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(gmh.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", gmh.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
 	builder.WriteString("group_id=")
-	builder.WriteString(gmh.GroupID)
+	builder.WriteString(_m.GroupID)
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(gmh.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -33,40 +33,40 @@ type ProgramHistoryQuery struct {
 }
 
 // Where adds a new predicate for the ProgramHistoryQuery builder.
-func (phq *ProgramHistoryQuery) Where(ps ...predicate.ProgramHistory) *ProgramHistoryQuery {
-	phq.predicates = append(phq.predicates, ps...)
-	return phq
+func (_q *ProgramHistoryQuery) Where(ps ...predicate.ProgramHistory) *ProgramHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (phq *ProgramHistoryQuery) Limit(limit int) *ProgramHistoryQuery {
-	phq.ctx.Limit = &limit
-	return phq
+func (_q *ProgramHistoryQuery) Limit(limit int) *ProgramHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (phq *ProgramHistoryQuery) Offset(offset int) *ProgramHistoryQuery {
-	phq.ctx.Offset = &offset
-	return phq
+func (_q *ProgramHistoryQuery) Offset(offset int) *ProgramHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (phq *ProgramHistoryQuery) Unique(unique bool) *ProgramHistoryQuery {
-	phq.ctx.Unique = &unique
-	return phq
+func (_q *ProgramHistoryQuery) Unique(unique bool) *ProgramHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (phq *ProgramHistoryQuery) Order(o ...programhistory.OrderOption) *ProgramHistoryQuery {
-	phq.order = append(phq.order, o...)
-	return phq
+func (_q *ProgramHistoryQuery) Order(o ...programhistory.OrderOption) *ProgramHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ProgramHistory entity from the query.
 // Returns a *NotFoundError when no ProgramHistory was found.
-func (phq *ProgramHistoryQuery) First(ctx context.Context) (*ProgramHistory, error) {
-	nodes, err := phq.Limit(1).All(setContextOp(ctx, phq.ctx, ent.OpQueryFirst))
+func (_q *ProgramHistoryQuery) First(ctx context.Context) (*ProgramHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (phq *ProgramHistoryQuery) First(ctx context.Context) (*ProgramHistory, err
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) FirstX(ctx context.Context) *ProgramHistory {
-	node, err := phq.First(ctx)
+func (_q *ProgramHistoryQuery) FirstX(ctx context.Context) *ProgramHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -87,9 +87,9 @@ func (phq *ProgramHistoryQuery) FirstX(ctx context.Context) *ProgramHistory {
 
 // FirstID returns the first ProgramHistory ID from the query.
 // Returns a *NotFoundError when no ProgramHistory ID was found.
-func (phq *ProgramHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+func (_q *ProgramHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = phq.Limit(1).IDs(setContextOp(ctx, phq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -100,8 +100,8 @@ func (phq *ProgramHistoryQuery) FirstID(ctx context.Context) (id string, err err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) FirstIDX(ctx context.Context) string {
-	id, err := phq.FirstID(ctx)
+func (_q *ProgramHistoryQuery) FirstIDX(ctx context.Context) string {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -111,8 +111,8 @@ func (phq *ProgramHistoryQuery) FirstIDX(ctx context.Context) string {
 // Only returns a single ProgramHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ProgramHistory entity is found.
 // Returns a *NotFoundError when no ProgramHistory entities are found.
-func (phq *ProgramHistoryQuery) Only(ctx context.Context) (*ProgramHistory, error) {
-	nodes, err := phq.Limit(2).All(setContextOp(ctx, phq.ctx, ent.OpQueryOnly))
+func (_q *ProgramHistoryQuery) Only(ctx context.Context) (*ProgramHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (phq *ProgramHistoryQuery) Only(ctx context.Context) (*ProgramHistory, erro
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) OnlyX(ctx context.Context) *ProgramHistory {
-	node, err := phq.Only(ctx)
+func (_q *ProgramHistoryQuery) OnlyX(ctx context.Context) *ProgramHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,9 +138,9 @@ func (phq *ProgramHistoryQuery) OnlyX(ctx context.Context) *ProgramHistory {
 // OnlyID is like Only, but returns the only ProgramHistory ID in the query.
 // Returns a *NotSingularError when more than one ProgramHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (phq *ProgramHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *ProgramHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = phq.Limit(2).IDs(setContextOp(ctx, phq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -155,8 +155,8 @@ func (phq *ProgramHistoryQuery) OnlyID(ctx context.Context) (id string, err erro
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) OnlyIDX(ctx context.Context) string {
-	id, err := phq.OnlyID(ctx)
+func (_q *ProgramHistoryQuery) OnlyIDX(ctx context.Context) string {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -164,18 +164,18 @@ func (phq *ProgramHistoryQuery) OnlyIDX(ctx context.Context) string {
 }
 
 // All executes the query and returns a list of ProgramHistories.
-func (phq *ProgramHistoryQuery) All(ctx context.Context) ([]*ProgramHistory, error) {
-	ctx = setContextOp(ctx, phq.ctx, ent.OpQueryAll)
-	if err := phq.prepareQuery(ctx); err != nil {
+func (_q *ProgramHistoryQuery) All(ctx context.Context) ([]*ProgramHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ProgramHistory, *ProgramHistoryQuery]()
-	return withInterceptors[[]*ProgramHistory](ctx, phq, qr, phq.inters)
+	return withInterceptors[[]*ProgramHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) AllX(ctx context.Context) []*ProgramHistory {
-	nodes, err := phq.All(ctx)
+func (_q *ProgramHistoryQuery) AllX(ctx context.Context) []*ProgramHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,20 +183,20 @@ func (phq *ProgramHistoryQuery) AllX(ctx context.Context) []*ProgramHistory {
 }
 
 // IDs executes the query and returns a list of ProgramHistory IDs.
-func (phq *ProgramHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
-	if phq.ctx.Unique == nil && phq.path != nil {
-		phq.Unique(true)
+func (_q *ProgramHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, phq.ctx, ent.OpQueryIDs)
-	if err = phq.Select(programhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(programhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) IDsX(ctx context.Context) []string {
-	ids, err := phq.IDs(ctx)
+func (_q *ProgramHistoryQuery) IDsX(ctx context.Context) []string {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,17 +204,17 @@ func (phq *ProgramHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (phq *ProgramHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, phq.ctx, ent.OpQueryCount)
-	if err := phq.prepareQuery(ctx); err != nil {
+func (_q *ProgramHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, phq, querierCount[*ProgramHistoryQuery](), phq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ProgramHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) CountX(ctx context.Context) int {
-	count, err := phq.Count(ctx)
+func (_q *ProgramHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -222,9 +222,9 @@ func (phq *ProgramHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (phq *ProgramHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, phq.ctx, ent.OpQueryExist)
-	switch _, err := phq.FirstID(ctx); {
+func (_q *ProgramHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -235,8 +235,8 @@ func (phq *ProgramHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (phq *ProgramHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := phq.Exist(ctx)
+func (_q *ProgramHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -245,20 +245,20 @@ func (phq *ProgramHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ProgramHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (phq *ProgramHistoryQuery) Clone() *ProgramHistoryQuery {
-	if phq == nil {
+func (_q *ProgramHistoryQuery) Clone() *ProgramHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ProgramHistoryQuery{
-		config:     phq.config,
-		ctx:        phq.ctx.Clone(),
-		order:      append([]programhistory.OrderOption{}, phq.order...),
-		inters:     append([]Interceptor{}, phq.inters...),
-		predicates: append([]predicate.ProgramHistory{}, phq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]programhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ProgramHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       phq.sql.Clone(),
-		path:      phq.path,
-		modifiers: append([]func(*sql.Selector){}, phq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -276,10 +276,10 @@ func (phq *ProgramHistoryQuery) Clone() *ProgramHistoryQuery {
 //		GroupBy(programhistory.FieldHistoryTime).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (phq *ProgramHistoryQuery) GroupBy(field string, fields ...string) *ProgramHistoryGroupBy {
-	phq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ProgramHistoryGroupBy{build: phq}
-	grbuild.flds = &phq.ctx.Fields
+func (_q *ProgramHistoryQuery) GroupBy(field string, fields ...string) *ProgramHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ProgramHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = programhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -297,109 +297,109 @@ func (phq *ProgramHistoryQuery) GroupBy(field string, fields ...string) *Program
 //	client.ProgramHistory.Query().
 //		Select(programhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (phq *ProgramHistoryQuery) Select(fields ...string) *ProgramHistorySelect {
-	phq.ctx.Fields = append(phq.ctx.Fields, fields...)
-	sbuild := &ProgramHistorySelect{ProgramHistoryQuery: phq}
+func (_q *ProgramHistoryQuery) Select(fields ...string) *ProgramHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ProgramHistorySelect{ProgramHistoryQuery: _q}
 	sbuild.label = programhistory.Label
-	sbuild.flds, sbuild.scan = &phq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ProgramHistorySelect configured with the given aggregations.
-func (phq *ProgramHistoryQuery) Aggregate(fns ...AggregateFunc) *ProgramHistorySelect {
-	return phq.Select().Aggregate(fns...)
+func (_q *ProgramHistoryQuery) Aggregate(fns ...AggregateFunc) *ProgramHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (phq *ProgramHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range phq.inters {
+func (_q *ProgramHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, phq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range phq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !programhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("generated: invalid field %q for query", f)}
 		}
 	}
-	if phq.path != nil {
-		prev, err := phq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		phq.sql = prev
+		_q.sql = prev
 	}
 	if programhistory.Policy == nil {
 		return errors.New("generated: uninitialized programhistory.Policy (forgotten import generated/runtime?)")
 	}
-	if err := programhistory.Policy.EvalQuery(ctx, phq); err != nil {
+	if err := programhistory.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (phq *ProgramHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProgramHistory, error) {
+func (_q *ProgramHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProgramHistory, error) {
 	var (
 		nodes = []*ProgramHistory{}
-		_spec = phq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ProgramHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ProgramHistory{config: phq.config}
+		node := &ProgramHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = phq.schemaConfig.ProgramHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phq.schemaConfig)
-	if len(phq.modifiers) > 0 {
-		_spec.Modifiers = phq.modifiers
+	_spec.Node.Schema = _q.schemaConfig.ProgramHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, phq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range phq.loadTotal {
-		if err := phq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (phq *ProgramHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := phq.querySpec()
-	_spec.Node.Schema = phq.schemaConfig.ProgramHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phq.schemaConfig)
-	if len(phq.modifiers) > 0 {
-		_spec.Modifiers = phq.modifiers
+func (_q *ProgramHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ProgramHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = phq.ctx.Fields
-	if len(phq.ctx.Fields) > 0 {
-		_spec.Unique = phq.ctx.Unique != nil && *phq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, phq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (phq *ProgramHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ProgramHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(programhistory.Table, programhistory.Columns, sqlgraph.NewFieldSpec(programhistory.FieldID, field.TypeString))
-	_spec.From = phq.sql
-	if unique := phq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if phq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := phq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, programhistory.FieldID)
 		for i := range fields {
@@ -408,20 +408,20 @@ func (phq *ProgramHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := phq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := phq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := phq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := phq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -431,48 +431,48 @@ func (phq *ProgramHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (phq *ProgramHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(phq.driver.Dialect())
+func (_q *ProgramHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(programhistory.Table)
-	columns := phq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = programhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if phq.sql != nil {
-		selector = phq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if phq.ctx.Unique != nil && *phq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(phq.schemaConfig.ProgramHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, phq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ProgramHistory)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, m := range phq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range phq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range phq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := phq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := phq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (phq *ProgramHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ProgramHistorySelect {
-	phq.modifiers = append(phq.modifiers, modifiers...)
-	return phq.Select()
+func (_q *ProgramHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ProgramHistorySelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
@@ -501,41 +501,41 @@ type ProgramHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (phgb *ProgramHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ProgramHistoryGroupBy {
-	phgb.fns = append(phgb.fns, fns...)
-	return phgb
+func (_g *ProgramHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ProgramHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (phgb *ProgramHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, phgb.build.ctx, ent.OpQueryGroupBy)
-	if err := phgb.build.prepareQuery(ctx); err != nil {
+func (_g *ProgramHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ProgramHistoryQuery, *ProgramHistoryGroupBy](ctx, phgb.build, phgb, phgb.build.inters, v)
+	return scanWithInterceptors[*ProgramHistoryQuery, *ProgramHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (phgb *ProgramHistoryGroupBy) sqlScan(ctx context.Context, root *ProgramHistoryQuery, v any) error {
+func (_g *ProgramHistoryGroupBy) sqlScan(ctx context.Context, root *ProgramHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(phgb.fns))
-	for _, fn := range phgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*phgb.flds)+len(phgb.fns))
-		for _, f := range *phgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*phgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := phgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -549,27 +549,27 @@ type ProgramHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (phs *ProgramHistorySelect) Aggregate(fns ...AggregateFunc) *ProgramHistorySelect {
-	phs.fns = append(phs.fns, fns...)
-	return phs
+func (_s *ProgramHistorySelect) Aggregate(fns ...AggregateFunc) *ProgramHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (phs *ProgramHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, phs.ctx, ent.OpQuerySelect)
-	if err := phs.prepareQuery(ctx); err != nil {
+func (_s *ProgramHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ProgramHistoryQuery, *ProgramHistorySelect](ctx, phs.ProgramHistoryQuery, phs, phs.inters, v)
+	return scanWithInterceptors[*ProgramHistoryQuery, *ProgramHistorySelect](ctx, _s.ProgramHistoryQuery, _s, _s.inters, v)
 }
 
-func (phs *ProgramHistorySelect) sqlScan(ctx context.Context, root *ProgramHistoryQuery, v any) error {
+func (_s *ProgramHistorySelect) sqlScan(ctx context.Context, root *ProgramHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(phs.fns))
-	for _, fn := range phs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*phs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -577,7 +577,7 @@ func (phs *ProgramHistorySelect) sqlScan(ctx context.Context, root *ProgramHisto
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := phs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -585,7 +585,7 @@ func (phs *ProgramHistorySelect) sqlScan(ctx context.Context, root *ProgramHisto
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (phs *ProgramHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ProgramHistorySelect {
-	phs.modifiers = append(phs.modifiers, modifiers...)
-	return phs
+func (_s *ProgramHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ProgramHistorySelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

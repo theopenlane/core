@@ -31,508 +31,508 @@ type OrganizationSettingUpdate struct {
 }
 
 // Where appends a list predicates to the OrganizationSettingUpdate builder.
-func (osu *OrganizationSettingUpdate) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingUpdate {
-	osu.mutation.Where(ps...)
-	return osu
+func (_u *OrganizationSettingUpdate) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (osu *OrganizationSettingUpdate) SetUpdatedAt(t time.Time) *OrganizationSettingUpdate {
-	osu.mutation.SetUpdatedAt(t)
-	return osu
+func (_u *OrganizationSettingUpdate) SetUpdatedAt(v time.Time) *OrganizationSettingUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (osu *OrganizationSettingUpdate) ClearUpdatedAt() *OrganizationSettingUpdate {
-	osu.mutation.ClearUpdatedAt()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearUpdatedAt() *OrganizationSettingUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (osu *OrganizationSettingUpdate) SetUpdatedBy(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetUpdatedBy(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetUpdatedBy(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableUpdatedBy(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetUpdatedBy(*s)
+func (_u *OrganizationSettingUpdate) SetNillableUpdatedBy(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (osu *OrganizationSettingUpdate) ClearUpdatedBy() *OrganizationSettingUpdate {
-	osu.mutation.ClearUpdatedBy()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearUpdatedBy() *OrganizationSettingUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (osu *OrganizationSettingUpdate) SetDeletedAt(t time.Time) *OrganizationSettingUpdate {
-	osu.mutation.SetDeletedAt(t)
-	return osu
+func (_u *OrganizationSettingUpdate) SetDeletedAt(v time.Time) *OrganizationSettingUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableDeletedAt(t *time.Time) *OrganizationSettingUpdate {
-	if t != nil {
-		osu.SetDeletedAt(*t)
+func (_u *OrganizationSettingUpdate) SetNillableDeletedAt(v *time.Time) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (osu *OrganizationSettingUpdate) ClearDeletedAt() *OrganizationSettingUpdate {
-	osu.mutation.ClearDeletedAt()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearDeletedAt() *OrganizationSettingUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (osu *OrganizationSettingUpdate) SetDeletedBy(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetDeletedBy(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetDeletedBy(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableDeletedBy(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetDeletedBy(*s)
+func (_u *OrganizationSettingUpdate) SetNillableDeletedBy(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (osu *OrganizationSettingUpdate) ClearDeletedBy() *OrganizationSettingUpdate {
-	osu.mutation.ClearDeletedBy()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearDeletedBy() *OrganizationSettingUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (osu *OrganizationSettingUpdate) SetTags(s []string) *OrganizationSettingUpdate {
-	osu.mutation.SetTags(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetTags(v []string) *OrganizationSettingUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (osu *OrganizationSettingUpdate) AppendTags(s []string) *OrganizationSettingUpdate {
-	osu.mutation.AppendTags(s)
-	return osu
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationSettingUpdate) AppendTags(v []string) *OrganizationSettingUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (osu *OrganizationSettingUpdate) ClearTags() *OrganizationSettingUpdate {
-	osu.mutation.ClearTags()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearTags() *OrganizationSettingUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (osu *OrganizationSettingUpdate) SetDomains(s []string) *OrganizationSettingUpdate {
-	osu.mutation.SetDomains(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (osu *OrganizationSettingUpdate) AppendDomains(s []string) *OrganizationSettingUpdate {
-	osu.mutation.AppendDomains(s)
-	return osu
+// AppendDomains appends value to the "domains" field.
+func (_u *OrganizationSettingUpdate) AppendDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (osu *OrganizationSettingUpdate) ClearDomains() *OrganizationSettingUpdate {
-	osu.mutation.ClearDomains()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearDomains() *OrganizationSettingUpdate {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetBillingContact sets the "billing_contact" field.
-func (osu *OrganizationSettingUpdate) SetBillingContact(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingContact(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetBillingContact(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetBillingContact(v)
+	return _u
 }
 
 // SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingContact(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetBillingContact(*s)
+func (_u *OrganizationSettingUpdate) SetNillableBillingContact(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetBillingContact(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearBillingContact clears the value of the "billing_contact" field.
-func (osu *OrganizationSettingUpdate) ClearBillingContact() *OrganizationSettingUpdate {
-	osu.mutation.ClearBillingContact()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearBillingContact() *OrganizationSettingUpdate {
+	_u.mutation.ClearBillingContact()
+	return _u
 }
 
 // SetBillingEmail sets the "billing_email" field.
-func (osu *OrganizationSettingUpdate) SetBillingEmail(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingEmail(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetBillingEmail(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetBillingEmail(v)
+	return _u
 }
 
 // SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingEmail(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetBillingEmail(*s)
+func (_u *OrganizationSettingUpdate) SetNillableBillingEmail(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetBillingEmail(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearBillingEmail clears the value of the "billing_email" field.
-func (osu *OrganizationSettingUpdate) ClearBillingEmail() *OrganizationSettingUpdate {
-	osu.mutation.ClearBillingEmail()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearBillingEmail() *OrganizationSettingUpdate {
+	_u.mutation.ClearBillingEmail()
+	return _u
 }
 
 // SetBillingPhone sets the "billing_phone" field.
-func (osu *OrganizationSettingUpdate) SetBillingPhone(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingPhone(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetBillingPhone(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetBillingPhone(v)
+	return _u
 }
 
 // SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingPhone(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetBillingPhone(*s)
+func (_u *OrganizationSettingUpdate) SetNillableBillingPhone(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetBillingPhone(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearBillingPhone clears the value of the "billing_phone" field.
-func (osu *OrganizationSettingUpdate) ClearBillingPhone() *OrganizationSettingUpdate {
-	osu.mutation.ClearBillingPhone()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearBillingPhone() *OrganizationSettingUpdate {
+	_u.mutation.ClearBillingPhone()
+	return _u
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osu *OrganizationSettingUpdate) SetBillingAddress(m models.Address) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingAddress(m)
-	return osu
+func (_u *OrganizationSettingUpdate) SetBillingAddress(v models.Address) *OrganizationSettingUpdate {
+	_u.mutation.SetBillingAddress(v)
+	return _u
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingAddress(m *models.Address) *OrganizationSettingUpdate {
-	if m != nil {
-		osu.SetBillingAddress(*m)
+func (_u *OrganizationSettingUpdate) SetNillableBillingAddress(v *models.Address) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetBillingAddress(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearBillingAddress clears the value of the "billing_address" field.
-func (osu *OrganizationSettingUpdate) ClearBillingAddress() *OrganizationSettingUpdate {
-	osu.mutation.ClearBillingAddress()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearBillingAddress() *OrganizationSettingUpdate {
+	_u.mutation.ClearBillingAddress()
+	return _u
 }
 
 // SetTaxIdentifier sets the "tax_identifier" field.
-func (osu *OrganizationSettingUpdate) SetTaxIdentifier(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetTaxIdentifier(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetTaxIdentifier(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetTaxIdentifier(v)
+	return _u
 }
 
 // SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableTaxIdentifier(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetTaxIdentifier(*s)
+func (_u *OrganizationSettingUpdate) SetNillableTaxIdentifier(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetTaxIdentifier(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearTaxIdentifier clears the value of the "tax_identifier" field.
-func (osu *OrganizationSettingUpdate) ClearTaxIdentifier() *OrganizationSettingUpdate {
-	osu.mutation.ClearTaxIdentifier()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearTaxIdentifier() *OrganizationSettingUpdate {
+	_u.mutation.ClearTaxIdentifier()
+	return _u
 }
 
 // SetGeoLocation sets the "geo_location" field.
-func (osu *OrganizationSettingUpdate) SetGeoLocation(e enums.Region) *OrganizationSettingUpdate {
-	osu.mutation.SetGeoLocation(e)
-	return osu
+func (_u *OrganizationSettingUpdate) SetGeoLocation(v enums.Region) *OrganizationSettingUpdate {
+	_u.mutation.SetGeoLocation(v)
+	return _u
 }
 
 // SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableGeoLocation(e *enums.Region) *OrganizationSettingUpdate {
-	if e != nil {
-		osu.SetGeoLocation(*e)
+func (_u *OrganizationSettingUpdate) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetGeoLocation(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearGeoLocation clears the value of the "geo_location" field.
-func (osu *OrganizationSettingUpdate) ClearGeoLocation() *OrganizationSettingUpdate {
-	osu.mutation.ClearGeoLocation()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearGeoLocation() *OrganizationSettingUpdate {
+	_u.mutation.ClearGeoLocation()
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (osu *OrganizationSettingUpdate) SetOrganizationID(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetOrganizationID(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetOrganizationID(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableOrganizationID(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetOrganizationID(*s)
+func (_u *OrganizationSettingUpdate) SetNillableOrganizationID(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearOrganizationID clears the value of the "organization_id" field.
-func (osu *OrganizationSettingUpdate) ClearOrganizationID() *OrganizationSettingUpdate {
-	osu.mutation.ClearOrganizationID()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearOrganizationID() *OrganizationSettingUpdate {
+	_u.mutation.ClearOrganizationID()
+	return _u
 }
 
 // SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (osu *OrganizationSettingUpdate) SetBillingNotificationsEnabled(b bool) *OrganizationSettingUpdate {
-	osu.mutation.SetBillingNotificationsEnabled(b)
-	return osu
+func (_u *OrganizationSettingUpdate) SetBillingNotificationsEnabled(v bool) *OrganizationSettingUpdate {
+	_u.mutation.SetBillingNotificationsEnabled(v)
+	return _u
 }
 
 // SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingUpdate {
-	if b != nil {
-		osu.SetBillingNotificationsEnabled(*b)
+func (_u *OrganizationSettingUpdate) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetBillingNotificationsEnabled(*v)
 	}
-	return osu
+	return _u
 }
 
 // SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (osu *OrganizationSettingUpdate) SetAllowedEmailDomains(s []string) *OrganizationSettingUpdate {
-	osu.mutation.SetAllowedEmailDomains(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetAllowedEmailDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.SetAllowedEmailDomains(v)
+	return _u
 }
 
-// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
-func (osu *OrganizationSettingUpdate) AppendAllowedEmailDomains(s []string) *OrganizationSettingUpdate {
-	osu.mutation.AppendAllowedEmailDomains(s)
-	return osu
+// AppendAllowedEmailDomains appends value to the "allowed_email_domains" field.
+func (_u *OrganizationSettingUpdate) AppendAllowedEmailDomains(v []string) *OrganizationSettingUpdate {
+	_u.mutation.AppendAllowedEmailDomains(v)
+	return _u
 }
 
 // ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
-func (osu *OrganizationSettingUpdate) ClearAllowedEmailDomains() *OrganizationSettingUpdate {
-	osu.mutation.ClearAllowedEmailDomains()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearAllowedEmailDomains() *OrganizationSettingUpdate {
+	_u.mutation.ClearAllowedEmailDomains()
+	return _u
 }
 
 // SetIdentityProvider sets the "identity_provider" field.
-func (osu *OrganizationSettingUpdate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingUpdate {
-	osu.mutation.SetIdentityProvider(ep)
-	return osu
+func (_u *OrganizationSettingUpdate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProvider(v)
+	return _u
 }
 
 // SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingUpdate {
-	if ep != nil {
-		osu.SetIdentityProvider(*ep)
+func (_u *OrganizationSettingUpdate) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetIdentityProvider(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearIdentityProvider clears the value of the "identity_provider" field.
-func (osu *OrganizationSettingUpdate) ClearIdentityProvider() *OrganizationSettingUpdate {
-	osu.mutation.ClearIdentityProvider()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearIdentityProvider() *OrganizationSettingUpdate {
+	_u.mutation.ClearIdentityProvider()
+	return _u
 }
 
 // SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (osu *OrganizationSettingUpdate) SetIdentityProviderClientID(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetIdentityProviderClientID(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetIdentityProviderClientID(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProviderClientID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetIdentityProviderClientID(*s)
+func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetIdentityProviderClientID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
-func (osu *OrganizationSettingUpdate) ClearIdentityProviderClientID() *OrganizationSettingUpdate {
-	osu.mutation.ClearIdentityProviderClientID()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearIdentityProviderClientID() *OrganizationSettingUpdate {
+	_u.mutation.ClearIdentityProviderClientID()
+	return _u
 }
 
 // SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (osu *OrganizationSettingUpdate) SetIdentityProviderClientSecret(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetIdentityProviderClientSecret(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetIdentityProviderClientSecret(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProviderClientSecret(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetIdentityProviderClientSecret(*s)
+func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetIdentityProviderClientSecret(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
-func (osu *OrganizationSettingUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingUpdate {
-	osu.mutation.ClearIdentityProviderClientSecret()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingUpdate {
+	_u.mutation.ClearIdentityProviderClientSecret()
+	return _u
 }
 
 // SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (osu *OrganizationSettingUpdate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetIdentityProviderMetadataEndpoint(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProviderMetadataEndpoint(v)
+	return _u
 }
 
 // SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetIdentityProviderMetadataEndpoint(*s)
+func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetIdentityProviderMetadataEndpoint(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
-func (osu *OrganizationSettingUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingUpdate {
-	osu.mutation.ClearIdentityProviderMetadataEndpoint()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingUpdate {
+	_u.mutation.ClearIdentityProviderMetadataEndpoint()
+	return _u
 }
 
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (osu *OrganizationSettingUpdate) SetIdentityProviderEntityID(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetIdentityProviderEntityID(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetIdentityProviderEntityID(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProviderEntityID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetIdentityProviderEntityID(*s)
+func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetIdentityProviderEntityID(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
-func (osu *OrganizationSettingUpdate) ClearIdentityProviderEntityID() *OrganizationSettingUpdate {
-	osu.mutation.ClearIdentityProviderEntityID()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearIdentityProviderEntityID() *OrganizationSettingUpdate {
+	_u.mutation.ClearIdentityProviderEntityID()
+	return _u
 }
 
 // SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (osu *OrganizationSettingUpdate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetOidcDiscoveryEndpoint(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetOidcDiscoveryEndpoint(v)
+	return _u
 }
 
 // SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetOidcDiscoveryEndpoint(*s)
+func (_u *OrganizationSettingUpdate) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetOidcDiscoveryEndpoint(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
-func (osu *OrganizationSettingUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingUpdate {
-	osu.mutation.ClearOidcDiscoveryEndpoint()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingUpdate {
+	_u.mutation.ClearOidcDiscoveryEndpoint()
+	return _u
 }
 
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (osu *OrganizationSettingUpdate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingUpdate {
-	osu.mutation.SetIdentityProviderLoginEnforced(b)
-	return osu
+func (_u *OrganizationSettingUpdate) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingUpdate {
+	_u.mutation.SetIdentityProviderLoginEnforced(v)
+	return _u
 }
 
 // SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingUpdate {
-	if b != nil {
-		osu.SetIdentityProviderLoginEnforced(*b)
+func (_u *OrganizationSettingUpdate) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetIdentityProviderLoginEnforced(*v)
 	}
-	return osu
+	return _u
 }
 
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (osu *OrganizationSettingUpdate) SetComplianceWebhookToken(s string) *OrganizationSettingUpdate {
-	osu.mutation.SetComplianceWebhookToken(s)
-	return osu
+func (_u *OrganizationSettingUpdate) SetComplianceWebhookToken(v string) *OrganizationSettingUpdate {
+	_u.mutation.SetComplianceWebhookToken(v)
+	return _u
 }
 
 // SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (osu *OrganizationSettingUpdate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingUpdate {
-	if s != nil {
-		osu.SetComplianceWebhookToken(*s)
+func (_u *OrganizationSettingUpdate) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetComplianceWebhookToken(*v)
 	}
-	return osu
+	return _u
 }
 
 // ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (osu *OrganizationSettingUpdate) ClearComplianceWebhookToken() *OrganizationSettingUpdate {
-	osu.mutation.ClearComplianceWebhookToken()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearComplianceWebhookToken() *OrganizationSettingUpdate {
+	_u.mutation.ClearComplianceWebhookToken()
+	return _u
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
-func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *OrganizationSettingUpdate {
-	return osu.SetOrganizationID(o.ID)
+func (_u *OrganizationSettingUpdate) SetOrganization(v *Organization) *OrganizationSettingUpdate {
+	return _u.SetOrganizationID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (osu *OrganizationSettingUpdate) AddFileIDs(ids ...string) *OrganizationSettingUpdate {
-	osu.mutation.AddFileIDs(ids...)
-	return osu
+func (_u *OrganizationSettingUpdate) AddFileIDs(ids ...string) *OrganizationSettingUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (osu *OrganizationSettingUpdate) AddFiles(f ...*File) *OrganizationSettingUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationSettingUpdate) AddFiles(v ...*File) *OrganizationSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the OrganizationSettingMutation object of the builder.
-func (osu *OrganizationSettingUpdate) Mutation() *OrganizationSettingMutation {
-	return osu.mutation
+func (_u *OrganizationSettingUpdate) Mutation() *OrganizationSettingMutation {
+	return _u.mutation
 }
 
 // ClearOrganization clears the "organization" edge to the Organization entity.
-func (osu *OrganizationSettingUpdate) ClearOrganization() *OrganizationSettingUpdate {
-	osu.mutation.ClearOrganization()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearOrganization() *OrganizationSettingUpdate {
+	_u.mutation.ClearOrganization()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (osu *OrganizationSettingUpdate) ClearFiles() *OrganizationSettingUpdate {
-	osu.mutation.ClearFiles()
-	return osu
+func (_u *OrganizationSettingUpdate) ClearFiles() *OrganizationSettingUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (osu *OrganizationSettingUpdate) RemoveFileIDs(ids ...string) *OrganizationSettingUpdate {
-	osu.mutation.RemoveFileIDs(ids...)
-	return osu
+func (_u *OrganizationSettingUpdate) RemoveFileIDs(ids ...string) *OrganizationSettingUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (osu *OrganizationSettingUpdate) RemoveFiles(f ...*File) *OrganizationSettingUpdate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationSettingUpdate) RemoveFiles(v ...*File) *OrganizationSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (osu *OrganizationSettingUpdate) Save(ctx context.Context) (int, error) {
-	if err := osu.defaults(); err != nil {
+func (_u *OrganizationSettingUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, osu.sqlSave, osu.mutation, osu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (osu *OrganizationSettingUpdate) SaveX(ctx context.Context) int {
-	affected, err := osu.Save(ctx)
+func (_u *OrganizationSettingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -540,58 +540,58 @@ func (osu *OrganizationSettingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (osu *OrganizationSettingUpdate) Exec(ctx context.Context) error {
-	_, err := osu.Save(ctx)
+func (_u *OrganizationSettingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osu *OrganizationSettingUpdate) ExecX(ctx context.Context) {
-	if err := osu.Exec(ctx); err != nil {
+func (_u *OrganizationSettingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (osu *OrganizationSettingUpdate) defaults() error {
-	if _, ok := osu.mutation.UpdatedAt(); !ok && !osu.mutation.UpdatedAtCleared() {
+func (_u *OrganizationSettingUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organizationsetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationsetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationsetting.UpdateDefaultUpdatedAt()
-		osu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (osu *OrganizationSettingUpdate) check() error {
-	if v, ok := osu.mutation.Domains(); ok {
+func (_u *OrganizationSettingUpdate) check() error {
+	if v, ok := _u.mutation.Domains(); ok {
 		if err := organizationsetting.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.domains": %w`, err)}
 		}
 	}
-	if v, ok := osu.mutation.BillingEmail(); ok {
+	if v, ok := _u.mutation.BillingEmail(); ok {
 		if err := organizationsetting.BillingEmailValidator(v); err != nil {
 			return &ValidationError{Name: "billing_email", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.billing_email": %w`, err)}
 		}
 	}
-	if v, ok := osu.mutation.BillingPhone(); ok {
+	if v, ok := _u.mutation.BillingPhone(); ok {
 		if err := organizationsetting.BillingPhoneValidator(v); err != nil {
 			return &ValidationError{Name: "billing_phone", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.billing_phone": %w`, err)}
 		}
 	}
-	if v, ok := osu.mutation.GeoLocation(); ok {
+	if v, ok := _u.mutation.GeoLocation(); ok {
 		if err := organizationsetting.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.geo_location": %w`, err)}
 		}
 	}
-	if v, ok := osu.mutation.AllowedEmailDomains(); ok {
+	if v, ok := _u.mutation.AllowedEmailDomains(); ok {
 		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
 		}
 	}
-	if v, ok := osu.mutation.IdentityProvider(); ok {
+	if v, ok := _u.mutation.IdentityProvider(); ok {
 		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
 		}
@@ -600,171 +600,171 @@ func (osu *OrganizationSettingUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (osu *OrganizationSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingUpdate {
-	osu.modifiers = append(osu.modifiers, modifiers...)
-	return osu
+func (_u *OrganizationSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := osu.check(); err != nil {
-		return n, err
+func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(organizationsetting.Table, organizationsetting.Columns, sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString))
-	if ps := osu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if osu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if osu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if osu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationsetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if osu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if osu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := osu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if osu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := osu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := osu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsetting.FieldTags, value)
 		})
 	}
-	if osu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationsetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(organizationsetting.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := osu.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsetting.FieldDomains, value)
 		})
 	}
-	if osu.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(organizationsetting.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.BillingContact(); ok {
+	if value, ok := _u.mutation.BillingContact(); ok {
 		_spec.SetField(organizationsetting.FieldBillingContact, field.TypeString, value)
 	}
-	if osu.mutation.BillingContactCleared() {
+	if _u.mutation.BillingContactCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingContact, field.TypeString)
 	}
-	if value, ok := osu.mutation.BillingEmail(); ok {
+	if value, ok := _u.mutation.BillingEmail(); ok {
 		_spec.SetField(organizationsetting.FieldBillingEmail, field.TypeString, value)
 	}
-	if osu.mutation.BillingEmailCleared() {
+	if _u.mutation.BillingEmailCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingEmail, field.TypeString)
 	}
-	if value, ok := osu.mutation.BillingPhone(); ok {
+	if value, ok := _u.mutation.BillingPhone(); ok {
 		_spec.SetField(organizationsetting.FieldBillingPhone, field.TypeString, value)
 	}
-	if osu.mutation.BillingPhoneCleared() {
+	if _u.mutation.BillingPhoneCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingPhone, field.TypeString)
 	}
-	if value, ok := osu.mutation.BillingAddress(); ok {
+	if value, ok := _u.mutation.BillingAddress(); ok {
 		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 	}
-	if osu.mutation.BillingAddressCleared() {
+	if _u.mutation.BillingAddressCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.TaxIdentifier(); ok {
+	if value, ok := _u.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsetting.FieldTaxIdentifier, field.TypeString, value)
 	}
-	if osu.mutation.TaxIdentifierCleared() {
+	if _u.mutation.TaxIdentifierCleared() {
 		_spec.ClearField(organizationsetting.FieldTaxIdentifier, field.TypeString)
 	}
-	if value, ok := osu.mutation.GeoLocation(); ok {
+	if value, ok := _u.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsetting.FieldGeoLocation, field.TypeEnum, value)
 	}
-	if osu.mutation.GeoLocationCleared() {
+	if _u.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
 	}
-	if value, ok := osu.mutation.BillingNotificationsEnabled(); ok {
+	if value, ok := _u.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
-	if value, ok := osu.mutation.AllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
 	}
-	if value, ok := osu.mutation.AppendedAllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AppendedAllowedEmailDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsetting.FieldAllowedEmailDomains, value)
 		})
 	}
-	if osu.mutation.AllowedEmailDomainsCleared() {
+	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON)
 	}
-	if value, ok := osu.mutation.IdentityProvider(); ok {
+	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
 	}
-	if osu.mutation.IdentityProviderCleared() {
+	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProvider, field.TypeEnum)
 	}
-	if value, ok := osu.mutation.IdentityProviderClientID(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientID(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderClientID, field.TypeString, value)
 	}
-	if osu.mutation.IdentityProviderClientIDCleared() {
+	if _u.mutation.IdentityProviderClientIDCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderClientID, field.TypeString)
 	}
-	if value, ok := osu.mutation.IdentityProviderClientSecret(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientSecret(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString, value)
 	}
-	if osu.mutation.IdentityProviderClientSecretCleared() {
+	if _u.mutation.IdentityProviderClientSecretCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString)
 	}
-	if value, ok := osu.mutation.IdentityProviderMetadataEndpoint(); ok {
+	if value, ok := _u.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 	}
-	if osu.mutation.IdentityProviderMetadataEndpointCleared() {
+	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString)
 	}
-	if value, ok := osu.mutation.IdentityProviderEntityID(); ok {
+	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString, value)
 	}
-	if osu.mutation.IdentityProviderEntityIDCleared() {
+	if _u.mutation.IdentityProviderEntityIDCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString)
 	}
-	if value, ok := osu.mutation.OidcDiscoveryEndpoint(); ok {
+	if value, ok := _u.mutation.OidcDiscoveryEndpoint(); ok {
 		_spec.SetField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString, value)
 	}
-	if osu.mutation.OidcDiscoveryEndpointCleared() {
+	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString)
 	}
-	if value, ok := osu.mutation.IdentityProviderLoginEnforced(); ok {
+	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 	}
-	if value, ok := osu.mutation.ComplianceWebhookToken(); ok {
+	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
 	}
-	if osu.mutation.ComplianceWebhookTokenCleared() {
+	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
 	}
-	if osu.mutation.OrganizationCleared() {
+	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -775,10 +775,10 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -789,13 +789,13 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -806,10 +806,10 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _u.schemaConfig.OrganizationSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !osu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -820,13 +820,13 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _u.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -837,16 +837,16 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osu.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _u.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = osu.schemaConfig.OrganizationSetting
-	ctx = internal.NewSchemaConfigContext(ctx, osu.schemaConfig)
-	_spec.AddModifiers(osu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, osu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.OrganizationSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -854,8 +854,8 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	osu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrganizationSettingUpdateOne is the builder for updating a single OrganizationSetting entity.
@@ -868,515 +868,515 @@ type OrganizationSettingUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (osuo *OrganizationSettingUpdateOne) SetUpdatedAt(t time.Time) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetUpdatedAt(t)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetUpdatedAt(v time.Time) *OrganizationSettingUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (osuo *OrganizationSettingUpdateOne) ClearUpdatedAt() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearUpdatedAt()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearUpdatedAt() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (osuo *OrganizationSettingUpdateOne) SetUpdatedBy(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetUpdatedBy(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetUpdatedBy(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableUpdatedBy(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetUpdatedBy(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableUpdatedBy(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (osuo *OrganizationSettingUpdateOne) ClearUpdatedBy() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearUpdatedBy()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearUpdatedBy() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (osuo *OrganizationSettingUpdateOne) SetDeletedAt(t time.Time) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetDeletedAt(t)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetDeletedAt(v time.Time) *OrganizationSettingUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableDeletedAt(t *time.Time) *OrganizationSettingUpdateOne {
-	if t != nil {
-		osuo.SetDeletedAt(*t)
+func (_u *OrganizationSettingUpdateOne) SetNillableDeletedAt(v *time.Time) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (osuo *OrganizationSettingUpdateOne) ClearDeletedAt() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearDeletedAt()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearDeletedAt() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (osuo *OrganizationSettingUpdateOne) SetDeletedBy(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetDeletedBy(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetDeletedBy(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableDeletedBy(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetDeletedBy(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableDeletedBy(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (osuo *OrganizationSettingUpdateOne) ClearDeletedBy() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearDeletedBy()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearDeletedBy() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (osuo *OrganizationSettingUpdateOne) SetTags(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetTags(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetTags(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (osuo *OrganizationSettingUpdateOne) AppendTags(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.AppendTags(s)
-	return osuo
+// AppendTags appends value to the "tags" field.
+func (_u *OrganizationSettingUpdateOne) AppendTags(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (osuo *OrganizationSettingUpdateOne) ClearTags() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearTags()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearTags() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetDomains sets the "domains" field.
-func (osuo *OrganizationSettingUpdateOne) SetDomains(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetDomains(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetDomains(v)
+	return _u
 }
 
-// AppendDomains appends s to the "domains" field.
-func (osuo *OrganizationSettingUpdateOne) AppendDomains(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.AppendDomains(s)
-	return osuo
+// AppendDomains appends value to the "domains" field.
+func (_u *OrganizationSettingUpdateOne) AppendDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.AppendDomains(v)
+	return _u
 }
 
 // ClearDomains clears the value of the "domains" field.
-func (osuo *OrganizationSettingUpdateOne) ClearDomains() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearDomains()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearDomains() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearDomains()
+	return _u
 }
 
 // SetBillingContact sets the "billing_contact" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingContact(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingContact(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetBillingContact(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetBillingContact(v)
+	return _u
 }
 
 // SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingContact(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetBillingContact(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableBillingContact(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetBillingContact(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearBillingContact clears the value of the "billing_contact" field.
-func (osuo *OrganizationSettingUpdateOne) ClearBillingContact() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearBillingContact()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearBillingContact() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearBillingContact()
+	return _u
 }
 
 // SetBillingEmail sets the "billing_email" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingEmail(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingEmail(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetBillingEmail(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetBillingEmail(v)
+	return _u
 }
 
 // SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingEmail(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetBillingEmail(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableBillingEmail(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetBillingEmail(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearBillingEmail clears the value of the "billing_email" field.
-func (osuo *OrganizationSettingUpdateOne) ClearBillingEmail() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearBillingEmail()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearBillingEmail() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearBillingEmail()
+	return _u
 }
 
 // SetBillingPhone sets the "billing_phone" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingPhone(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingPhone(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetBillingPhone(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetBillingPhone(v)
+	return _u
 }
 
 // SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingPhone(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetBillingPhone(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableBillingPhone(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetBillingPhone(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearBillingPhone clears the value of the "billing_phone" field.
-func (osuo *OrganizationSettingUpdateOne) ClearBillingPhone() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearBillingPhone()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearBillingPhone() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearBillingPhone()
+	return _u
 }
 
 // SetBillingAddress sets the "billing_address" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingAddress(m models.Address) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingAddress(m)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetBillingAddress(v models.Address) *OrganizationSettingUpdateOne {
+	_u.mutation.SetBillingAddress(v)
+	return _u
 }
 
 // SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingAddress(m *models.Address) *OrganizationSettingUpdateOne {
-	if m != nil {
-		osuo.SetBillingAddress(*m)
+func (_u *OrganizationSettingUpdateOne) SetNillableBillingAddress(v *models.Address) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetBillingAddress(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearBillingAddress clears the value of the "billing_address" field.
-func (osuo *OrganizationSettingUpdateOne) ClearBillingAddress() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearBillingAddress()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearBillingAddress() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearBillingAddress()
+	return _u
 }
 
 // SetTaxIdentifier sets the "tax_identifier" field.
-func (osuo *OrganizationSettingUpdateOne) SetTaxIdentifier(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetTaxIdentifier(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetTaxIdentifier(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetTaxIdentifier(v)
+	return _u
 }
 
 // SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableTaxIdentifier(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetTaxIdentifier(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableTaxIdentifier(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetTaxIdentifier(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearTaxIdentifier clears the value of the "tax_identifier" field.
-func (osuo *OrganizationSettingUpdateOne) ClearTaxIdentifier() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearTaxIdentifier()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearTaxIdentifier() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearTaxIdentifier()
+	return _u
 }
 
 // SetGeoLocation sets the "geo_location" field.
-func (osuo *OrganizationSettingUpdateOne) SetGeoLocation(e enums.Region) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetGeoLocation(e)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetGeoLocation(v enums.Region) *OrganizationSettingUpdateOne {
+	_u.mutation.SetGeoLocation(v)
+	return _u
 }
 
 // SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableGeoLocation(e *enums.Region) *OrganizationSettingUpdateOne {
-	if e != nil {
-		osuo.SetGeoLocation(*e)
+func (_u *OrganizationSettingUpdateOne) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetGeoLocation(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearGeoLocation clears the value of the "geo_location" field.
-func (osuo *OrganizationSettingUpdateOne) ClearGeoLocation() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearGeoLocation()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearGeoLocation() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearGeoLocation()
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (osuo *OrganizationSettingUpdateOne) SetOrganizationID(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetOrganizationID(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetOrganizationID(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableOrganizationID(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetOrganizationID(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableOrganizationID(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearOrganizationID clears the value of the "organization_id" field.
-func (osuo *OrganizationSettingUpdateOne) ClearOrganizationID() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearOrganizationID()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearOrganizationID() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearOrganizationID()
+	return _u
 }
 
 // SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (osuo *OrganizationSettingUpdateOne) SetBillingNotificationsEnabled(b bool) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetBillingNotificationsEnabled(b)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetBillingNotificationsEnabled(v bool) *OrganizationSettingUpdateOne {
+	_u.mutation.SetBillingNotificationsEnabled(v)
+	return _u
 }
 
 // SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableBillingNotificationsEnabled(b *bool) *OrganizationSettingUpdateOne {
-	if b != nil {
-		osuo.SetBillingNotificationsEnabled(*b)
+func (_u *OrganizationSettingUpdateOne) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetBillingNotificationsEnabled(*v)
 	}
-	return osuo
+	return _u
 }
 
 // SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (osuo *OrganizationSettingUpdateOne) SetAllowedEmailDomains(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetAllowedEmailDomains(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetAllowedEmailDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetAllowedEmailDomains(v)
+	return _u
 }
 
-// AppendAllowedEmailDomains appends s to the "allowed_email_domains" field.
-func (osuo *OrganizationSettingUpdateOne) AppendAllowedEmailDomains(s []string) *OrganizationSettingUpdateOne {
-	osuo.mutation.AppendAllowedEmailDomains(s)
-	return osuo
+// AppendAllowedEmailDomains appends value to the "allowed_email_domains" field.
+func (_u *OrganizationSettingUpdateOne) AppendAllowedEmailDomains(v []string) *OrganizationSettingUpdateOne {
+	_u.mutation.AppendAllowedEmailDomains(v)
+	return _u
 }
 
 // ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
-func (osuo *OrganizationSettingUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearAllowedEmailDomains()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearAllowedEmailDomains()
+	return _u
 }
 
 // SetIdentityProvider sets the "identity_provider" field.
-func (osuo *OrganizationSettingUpdateOne) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetIdentityProvider(ep)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProvider(v)
+	return _u
 }
 
 // SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingUpdateOne {
-	if ep != nil {
-		osuo.SetIdentityProvider(*ep)
+func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetIdentityProvider(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearIdentityProvider clears the value of the "identity_provider" field.
-func (osuo *OrganizationSettingUpdateOne) ClearIdentityProvider() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearIdentityProvider()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearIdentityProvider() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearIdentityProvider()
+	return _u
 }
 
 // SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderClientID(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetIdentityProviderClientID(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetIdentityProviderClientID(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProviderClientID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetIdentityProviderClientID(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderClientID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
-func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearIdentityProviderClientID()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearIdentityProviderClientID()
+	return _u
 }
 
 // SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderClientSecret(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetIdentityProviderClientSecret(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetIdentityProviderClientSecret(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProviderClientSecret(v)
+	return _u
 }
 
 // SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetIdentityProviderClientSecret(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderClientSecret(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
-func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearIdentityProviderClientSecret()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearIdentityProviderClientSecret()
+	return _u
 }
 
 // SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetIdentityProviderMetadataEndpoint(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProviderMetadataEndpoint(v)
+	return _u
 }
 
 // SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetIdentityProviderMetadataEndpoint(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderMetadataEndpoint(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
-func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearIdentityProviderMetadataEndpoint()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearIdentityProviderMetadataEndpoint()
+	return _u
 }
 
 // SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderEntityID(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetIdentityProviderEntityID(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetIdentityProviderEntityID(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProviderEntityID(v)
+	return _u
 }
 
 // SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetIdentityProviderEntityID(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderEntityID(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
-func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearIdentityProviderEntityID()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearIdentityProviderEntityID()
+	return _u
 }
 
 // SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (osuo *OrganizationSettingUpdateOne) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetOidcDiscoveryEndpoint(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetOidcDiscoveryEndpoint(v)
+	return _u
 }
 
 // SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetOidcDiscoveryEndpoint(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetOidcDiscoveryEndpoint(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
-func (osuo *OrganizationSettingUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearOidcDiscoveryEndpoint()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearOidcDiscoveryEndpoint()
+	return _u
 }
 
 // SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetIdentityProviderLoginEnforced(b)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingUpdateOne {
+	_u.mutation.SetIdentityProviderLoginEnforced(v)
+	return _u
 }
 
 // SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingUpdateOne {
-	if b != nil {
-		osuo.SetIdentityProviderLoginEnforced(*b)
+func (_u *OrganizationSettingUpdateOne) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetIdentityProviderLoginEnforced(*v)
 	}
-	return osuo
+	return _u
 }
 
 // SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (osuo *OrganizationSettingUpdateOne) SetComplianceWebhookToken(s string) *OrganizationSettingUpdateOne {
-	osuo.mutation.SetComplianceWebhookToken(s)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) SetComplianceWebhookToken(v string) *OrganizationSettingUpdateOne {
+	_u.mutation.SetComplianceWebhookToken(v)
+	return _u
 }
 
 // SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (osuo *OrganizationSettingUpdateOne) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingUpdateOne {
-	if s != nil {
-		osuo.SetComplianceWebhookToken(*s)
+func (_u *OrganizationSettingUpdateOne) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetComplianceWebhookToken(*v)
 	}
-	return osuo
+	return _u
 }
 
 // ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (osuo *OrganizationSettingUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearComplianceWebhookToken()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearComplianceWebhookToken()
+	return _u
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
-func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *OrganizationSettingUpdateOne {
-	return osuo.SetOrganizationID(o.ID)
+func (_u *OrganizationSettingUpdateOne) SetOrganization(v *Organization) *OrganizationSettingUpdateOne {
+	return _u.SetOrganizationID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (osuo *OrganizationSettingUpdateOne) AddFileIDs(ids ...string) *OrganizationSettingUpdateOne {
-	osuo.mutation.AddFileIDs(ids...)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) AddFileIDs(ids ...string) *OrganizationSettingUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (osuo *OrganizationSettingUpdateOne) AddFiles(f ...*File) *OrganizationSettingUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationSettingUpdateOne) AddFiles(v ...*File) *OrganizationSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the OrganizationSettingMutation object of the builder.
-func (osuo *OrganizationSettingUpdateOne) Mutation() *OrganizationSettingMutation {
-	return osuo.mutation
+func (_u *OrganizationSettingUpdateOne) Mutation() *OrganizationSettingMutation {
+	return _u.mutation
 }
 
 // ClearOrganization clears the "organization" edge to the Organization entity.
-func (osuo *OrganizationSettingUpdateOne) ClearOrganization() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearOrganization()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearOrganization() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearOrganization()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (osuo *OrganizationSettingUpdateOne) ClearFiles() *OrganizationSettingUpdateOne {
-	osuo.mutation.ClearFiles()
-	return osuo
+func (_u *OrganizationSettingUpdateOne) ClearFiles() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (osuo *OrganizationSettingUpdateOne) RemoveFileIDs(ids ...string) *OrganizationSettingUpdateOne {
-	osuo.mutation.RemoveFileIDs(ids...)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) RemoveFileIDs(ids ...string) *OrganizationSettingUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (osuo *OrganizationSettingUpdateOne) RemoveFiles(f ...*File) *OrganizationSettingUpdateOne {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *OrganizationSettingUpdateOne) RemoveFiles(v ...*File) *OrganizationSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return osuo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the OrganizationSettingUpdate builder.
-func (osuo *OrganizationSettingUpdateOne) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingUpdateOne {
-	osuo.mutation.Where(ps...)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) Where(ps ...predicate.OrganizationSetting) *OrganizationSettingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (osuo *OrganizationSettingUpdateOne) Select(field string, fields ...string) *OrganizationSettingUpdateOne {
-	osuo.fields = append([]string{field}, fields...)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) Select(field string, fields ...string) *OrganizationSettingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrganizationSetting entity.
-func (osuo *OrganizationSettingUpdateOne) Save(ctx context.Context) (*OrganizationSetting, error) {
-	if err := osuo.defaults(); err != nil {
+func (_u *OrganizationSettingUpdateOne) Save(ctx context.Context) (*OrganizationSetting, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, osuo.sqlSave, osuo.mutation, osuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (osuo *OrganizationSettingUpdateOne) SaveX(ctx context.Context) *OrganizationSetting {
-	node, err := osuo.Save(ctx)
+func (_u *OrganizationSettingUpdateOne) SaveX(ctx context.Context) *OrganizationSetting {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1384,58 +1384,58 @@ func (osuo *OrganizationSettingUpdateOne) SaveX(ctx context.Context) *Organizati
 }
 
 // Exec executes the query on the entity.
-func (osuo *OrganizationSettingUpdateOne) Exec(ctx context.Context) error {
-	_, err := osuo.Save(ctx)
+func (_u *OrganizationSettingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (osuo *OrganizationSettingUpdateOne) ExecX(ctx context.Context) {
-	if err := osuo.Exec(ctx); err != nil {
+func (_u *OrganizationSettingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (osuo *OrganizationSettingUpdateOne) defaults() error {
-	if _, ok := osuo.mutation.UpdatedAt(); !ok && !osuo.mutation.UpdatedAtCleared() {
+func (_u *OrganizationSettingUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if organizationsetting.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized organizationsetting.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := organizationsetting.UpdateDefaultUpdatedAt()
-		osuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (osuo *OrganizationSettingUpdateOne) check() error {
-	if v, ok := osuo.mutation.Domains(); ok {
+func (_u *OrganizationSettingUpdateOne) check() error {
+	if v, ok := _u.mutation.Domains(); ok {
 		if err := organizationsetting.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.domains": %w`, err)}
 		}
 	}
-	if v, ok := osuo.mutation.BillingEmail(); ok {
+	if v, ok := _u.mutation.BillingEmail(); ok {
 		if err := organizationsetting.BillingEmailValidator(v); err != nil {
 			return &ValidationError{Name: "billing_email", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.billing_email": %w`, err)}
 		}
 	}
-	if v, ok := osuo.mutation.BillingPhone(); ok {
+	if v, ok := _u.mutation.BillingPhone(); ok {
 		if err := organizationsetting.BillingPhoneValidator(v); err != nil {
 			return &ValidationError{Name: "billing_phone", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.billing_phone": %w`, err)}
 		}
 	}
-	if v, ok := osuo.mutation.GeoLocation(); ok {
+	if v, ok := _u.mutation.GeoLocation(); ok {
 		if err := organizationsetting.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.geo_location": %w`, err)}
 		}
 	}
-	if v, ok := osuo.mutation.AllowedEmailDomains(); ok {
+	if v, ok := _u.mutation.AllowedEmailDomains(); ok {
 		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
 		}
 	}
-	if v, ok := osuo.mutation.IdentityProvider(); ok {
+	if v, ok := _u.mutation.IdentityProvider(); ok {
 		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
 			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
 		}
@@ -1444,22 +1444,22 @@ func (osuo *OrganizationSettingUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (osuo *OrganizationSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingUpdateOne {
-	osuo.modifiers = append(osuo.modifiers, modifiers...)
-	return osuo
+func (_u *OrganizationSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSetting, err error) {
-	if err := osuo.check(); err != nil {
+func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSetting, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(organizationsetting.Table, organizationsetting.Columns, sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString))
-	id, ok := osuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "OrganizationSetting.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := osuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organizationsetting.FieldID)
 		for _, f := range fields {
@@ -1471,161 +1471,161 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 			}
 		}
 	}
-	if ps := osuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if osuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if osuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedAt, field.TypeTime)
 	}
-	if osuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationsetting.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(organizationsetting.FieldUpdatedBy, field.TypeString, value)
 	}
-	if osuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsetting.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
 	}
-	if osuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationsetting.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := osuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedBy, field.TypeString, value)
 	}
-	if osuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsetting.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := osuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(organizationsetting.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := osuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsetting.FieldTags, value)
 		})
 	}
-	if osuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationsetting.FieldTags, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.Domains(); ok {
+	if value, ok := _u.mutation.Domains(); ok {
 		_spec.SetField(organizationsetting.FieldDomains, field.TypeJSON, value)
 	}
-	if value, ok := osuo.mutation.AppendedDomains(); ok {
+	if value, ok := _u.mutation.AppendedDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsetting.FieldDomains, value)
 		})
 	}
-	if osuo.mutation.DomainsCleared() {
+	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(organizationsetting.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.BillingContact(); ok {
+	if value, ok := _u.mutation.BillingContact(); ok {
 		_spec.SetField(organizationsetting.FieldBillingContact, field.TypeString, value)
 	}
-	if osuo.mutation.BillingContactCleared() {
+	if _u.mutation.BillingContactCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingContact, field.TypeString)
 	}
-	if value, ok := osuo.mutation.BillingEmail(); ok {
+	if value, ok := _u.mutation.BillingEmail(); ok {
 		_spec.SetField(organizationsetting.FieldBillingEmail, field.TypeString, value)
 	}
-	if osuo.mutation.BillingEmailCleared() {
+	if _u.mutation.BillingEmailCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingEmail, field.TypeString)
 	}
-	if value, ok := osuo.mutation.BillingPhone(); ok {
+	if value, ok := _u.mutation.BillingPhone(); ok {
 		_spec.SetField(organizationsetting.FieldBillingPhone, field.TypeString, value)
 	}
-	if osuo.mutation.BillingPhoneCleared() {
+	if _u.mutation.BillingPhoneCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingPhone, field.TypeString)
 	}
-	if value, ok := osuo.mutation.BillingAddress(); ok {
+	if value, ok := _u.mutation.BillingAddress(); ok {
 		_spec.SetField(organizationsetting.FieldBillingAddress, field.TypeJSON, value)
 	}
-	if osuo.mutation.BillingAddressCleared() {
+	if _u.mutation.BillingAddressCleared() {
 		_spec.ClearField(organizationsetting.FieldBillingAddress, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.TaxIdentifier(); ok {
+	if value, ok := _u.mutation.TaxIdentifier(); ok {
 		_spec.SetField(organizationsetting.FieldTaxIdentifier, field.TypeString, value)
 	}
-	if osuo.mutation.TaxIdentifierCleared() {
+	if _u.mutation.TaxIdentifierCleared() {
 		_spec.ClearField(organizationsetting.FieldTaxIdentifier, field.TypeString)
 	}
-	if value, ok := osuo.mutation.GeoLocation(); ok {
+	if value, ok := _u.mutation.GeoLocation(); ok {
 		_spec.SetField(organizationsetting.FieldGeoLocation, field.TypeEnum, value)
 	}
-	if osuo.mutation.GeoLocationCleared() {
+	if _u.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
 	}
-	if value, ok := osuo.mutation.BillingNotificationsEnabled(); ok {
+	if value, ok := _u.mutation.BillingNotificationsEnabled(); ok {
 		_spec.SetField(organizationsetting.FieldBillingNotificationsEnabled, field.TypeBool, value)
 	}
-	if value, ok := osuo.mutation.AllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
 	}
-	if value, ok := osuo.mutation.AppendedAllowedEmailDomains(); ok {
+	if value, ok := _u.mutation.AppendedAllowedEmailDomains(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, organizationsetting.FieldAllowedEmailDomains, value)
 		})
 	}
-	if osuo.mutation.AllowedEmailDomainsCleared() {
+	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON)
 	}
-	if value, ok := osuo.mutation.IdentityProvider(); ok {
+	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
 	}
-	if osuo.mutation.IdentityProviderCleared() {
+	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProvider, field.TypeEnum)
 	}
-	if value, ok := osuo.mutation.IdentityProviderClientID(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientID(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderClientID, field.TypeString, value)
 	}
-	if osuo.mutation.IdentityProviderClientIDCleared() {
+	if _u.mutation.IdentityProviderClientIDCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderClientID, field.TypeString)
 	}
-	if value, ok := osuo.mutation.IdentityProviderClientSecret(); ok {
+	if value, ok := _u.mutation.IdentityProviderClientSecret(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString, value)
 	}
-	if osuo.mutation.IdentityProviderClientSecretCleared() {
+	if _u.mutation.IdentityProviderClientSecretCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString)
 	}
-	if value, ok := osuo.mutation.IdentityProviderMetadataEndpoint(); ok {
+	if value, ok := _u.mutation.IdentityProviderMetadataEndpoint(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
 	}
-	if osuo.mutation.IdentityProviderMetadataEndpointCleared() {
+	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString)
 	}
-	if value, ok := osuo.mutation.IdentityProviderEntityID(); ok {
+	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString, value)
 	}
-	if osuo.mutation.IdentityProviderEntityIDCleared() {
+	if _u.mutation.IdentityProviderEntityIDCleared() {
 		_spec.ClearField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString)
 	}
-	if value, ok := osuo.mutation.OidcDiscoveryEndpoint(); ok {
+	if value, ok := _u.mutation.OidcDiscoveryEndpoint(); ok {
 		_spec.SetField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString, value)
 	}
-	if osuo.mutation.OidcDiscoveryEndpointCleared() {
+	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString)
 	}
-	if value, ok := osuo.mutation.IdentityProviderLoginEnforced(); ok {
+	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
 	}
-	if value, ok := osuo.mutation.ComplianceWebhookToken(); ok {
+	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
 	}
-	if osuo.mutation.ComplianceWebhookTokenCleared() {
+	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
 	}
-	if osuo.mutation.OrganizationCleared() {
+	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -1636,10 +1636,10 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
 			Inverse: true,
@@ -1650,13 +1650,13 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrganizationSetting
+		edge.Schema = _u.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if osuo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1667,10 +1667,10 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _u.schemaConfig.OrganizationSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !osuo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1681,13 +1681,13 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _u.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := osuo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1698,19 +1698,19 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = osuo.schemaConfig.OrganizationSettingFiles
+		edge.Schema = _u.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = osuo.schemaConfig.OrganizationSetting
-	ctx = internal.NewSchemaConfigContext(ctx, osuo.schemaConfig)
-	_spec.AddModifiers(osuo.modifiers...)
-	_node = &OrganizationSetting{config: osuo.config}
+	_spec.Node.Schema = _u.schemaConfig.OrganizationSetting
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OrganizationSetting{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, osuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsetting.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1718,6 +1718,6 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 		}
 		return nil, err
 	}
-	osuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

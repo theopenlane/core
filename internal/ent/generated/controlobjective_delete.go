@@ -22,58 +22,58 @@ type ControlObjectiveDelete struct {
 }
 
 // Where appends a list predicates to the ControlObjectiveDelete builder.
-func (cod *ControlObjectiveDelete) Where(ps ...predicate.ControlObjective) *ControlObjectiveDelete {
-	cod.mutation.Where(ps...)
-	return cod
+func (_d *ControlObjectiveDelete) Where(ps ...predicate.ControlObjective) *ControlObjectiveDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cod *ControlObjectiveDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cod.sqlExec, cod.mutation, cod.hooks)
+func (_d *ControlObjectiveDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cod *ControlObjectiveDelete) ExecX(ctx context.Context) int {
-	n, err := cod.Exec(ctx)
+func (_d *ControlObjectiveDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cod *ControlObjectiveDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ControlObjectiveDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(controlobjective.Table, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
-	_spec.Node.Schema = cod.schemaConfig.ControlObjective
-	ctx = internal.NewSchemaConfigContext(ctx, cod.schemaConfig)
-	if ps := cod.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.ControlObjective
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cod.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cod.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ControlObjectiveDeleteOne is the builder for deleting a single ControlObjective entity.
 type ControlObjectiveDeleteOne struct {
-	cod *ControlObjectiveDelete
+	_d *ControlObjectiveDelete
 }
 
 // Where appends a list predicates to the ControlObjectiveDelete builder.
-func (codo *ControlObjectiveDeleteOne) Where(ps ...predicate.ControlObjective) *ControlObjectiveDeleteOne {
-	codo.cod.mutation.Where(ps...)
-	return codo
+func (_d *ControlObjectiveDeleteOne) Where(ps ...predicate.ControlObjective) *ControlObjectiveDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (codo *ControlObjectiveDeleteOne) Exec(ctx context.Context) error {
-	n, err := codo.cod.Exec(ctx)
+func (_d *ControlObjectiveDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -85,8 +85,8 @@ func (codo *ControlObjectiveDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (codo *ControlObjectiveDeleteOne) ExecX(ctx context.Context) {
-	if err := codo.Exec(ctx); err != nil {
+func (_d *ControlObjectiveDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -28,361 +28,361 @@ type ProgramHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ProgramHistoryUpdate builder.
-func (phu *ProgramHistoryUpdate) Where(ps ...predicate.ProgramHistory) *ProgramHistoryUpdate {
-	phu.mutation.Where(ps...)
-	return phu
+func (_u *ProgramHistoryUpdate) Where(ps ...predicate.ProgramHistory) *ProgramHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (phu *ProgramHistoryUpdate) SetUpdatedAt(t time.Time) *ProgramHistoryUpdate {
-	phu.mutation.SetUpdatedAt(t)
-	return phu
+func (_u *ProgramHistoryUpdate) SetUpdatedAt(v time.Time) *ProgramHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (phu *ProgramHistoryUpdate) ClearUpdatedAt() *ProgramHistoryUpdate {
-	phu.mutation.ClearUpdatedAt()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearUpdatedAt() *ProgramHistoryUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (phu *ProgramHistoryUpdate) SetUpdatedBy(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetUpdatedBy(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetUpdatedBy(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableUpdatedBy(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetUpdatedBy(*s)
+func (_u *ProgramHistoryUpdate) SetNillableUpdatedBy(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (phu *ProgramHistoryUpdate) ClearUpdatedBy() *ProgramHistoryUpdate {
-	phu.mutation.ClearUpdatedBy()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearUpdatedBy() *ProgramHistoryUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (phu *ProgramHistoryUpdate) SetDeletedAt(t time.Time) *ProgramHistoryUpdate {
-	phu.mutation.SetDeletedAt(t)
-	return phu
+func (_u *ProgramHistoryUpdate) SetDeletedAt(v time.Time) *ProgramHistoryUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ProgramHistoryUpdate {
-	if t != nil {
-		phu.SetDeletedAt(*t)
+func (_u *ProgramHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (phu *ProgramHistoryUpdate) ClearDeletedAt() *ProgramHistoryUpdate {
-	phu.mutation.ClearDeletedAt()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearDeletedAt() *ProgramHistoryUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (phu *ProgramHistoryUpdate) SetDeletedBy(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetDeletedBy(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetDeletedBy(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableDeletedBy(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetDeletedBy(*s)
+func (_u *ProgramHistoryUpdate) SetNillableDeletedBy(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (phu *ProgramHistoryUpdate) ClearDeletedBy() *ProgramHistoryUpdate {
-	phu.mutation.ClearDeletedBy()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearDeletedBy() *ProgramHistoryUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (phu *ProgramHistoryUpdate) SetTags(s []string) *ProgramHistoryUpdate {
-	phu.mutation.SetTags(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetTags(v []string) *ProgramHistoryUpdate {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (phu *ProgramHistoryUpdate) AppendTags(s []string) *ProgramHistoryUpdate {
-	phu.mutation.AppendTags(s)
-	return phu
+// AppendTags appends value to the "tags" field.
+func (_u *ProgramHistoryUpdate) AppendTags(v []string) *ProgramHistoryUpdate {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (phu *ProgramHistoryUpdate) ClearTags() *ProgramHistoryUpdate {
-	phu.mutation.ClearTags()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearTags() *ProgramHistoryUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (phu *ProgramHistoryUpdate) SetOwnerID(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetOwnerID(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetOwnerID(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableOwnerID(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetOwnerID(*s)
+func (_u *ProgramHistoryUpdate) SetNillableOwnerID(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (phu *ProgramHistoryUpdate) ClearOwnerID() *ProgramHistoryUpdate {
-	phu.mutation.ClearOwnerID()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearOwnerID() *ProgramHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (phu *ProgramHistoryUpdate) SetName(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetName(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetName(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableName(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetName(*s)
+func (_u *ProgramHistoryUpdate) SetNillableName(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (phu *ProgramHistoryUpdate) SetDescription(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetDescription(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetDescription(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableDescription(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetDescription(*s)
+func (_u *ProgramHistoryUpdate) SetNillableDescription(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (phu *ProgramHistoryUpdate) ClearDescription() *ProgramHistoryUpdate {
-	phu.mutation.ClearDescription()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearDescription() *ProgramHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (phu *ProgramHistoryUpdate) SetStatus(es enums.ProgramStatus) *ProgramHistoryUpdate {
-	phu.mutation.SetStatus(es)
-	return phu
+func (_u *ProgramHistoryUpdate) SetStatus(v enums.ProgramStatus) *ProgramHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableStatus(es *enums.ProgramStatus) *ProgramHistoryUpdate {
-	if es != nil {
-		phu.SetStatus(*es)
+func (_u *ProgramHistoryUpdate) SetNillableStatus(v *enums.ProgramStatus) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetProgramType sets the "program_type" field.
-func (phu *ProgramHistoryUpdate) SetProgramType(et enums.ProgramType) *ProgramHistoryUpdate {
-	phu.mutation.SetProgramType(et)
-	return phu
+func (_u *ProgramHistoryUpdate) SetProgramType(v enums.ProgramType) *ProgramHistoryUpdate {
+	_u.mutation.SetProgramType(v)
+	return _u
 }
 
 // SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryUpdate {
-	if et != nil {
-		phu.SetProgramType(*et)
+func (_u *ProgramHistoryUpdate) SetNillableProgramType(v *enums.ProgramType) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetProgramType(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetFrameworkName sets the "framework_name" field.
-func (phu *ProgramHistoryUpdate) SetFrameworkName(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetFrameworkName(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetFrameworkName(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetFrameworkName(v)
+	return _u
 }
 
 // SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableFrameworkName(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetFrameworkName(*s)
+func (_u *ProgramHistoryUpdate) SetNillableFrameworkName(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetFrameworkName(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearFrameworkName clears the value of the "framework_name" field.
-func (phu *ProgramHistoryUpdate) ClearFrameworkName() *ProgramHistoryUpdate {
-	phu.mutation.ClearFrameworkName()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearFrameworkName() *ProgramHistoryUpdate {
+	_u.mutation.ClearFrameworkName()
+	return _u
 }
 
 // SetStartDate sets the "start_date" field.
-func (phu *ProgramHistoryUpdate) SetStartDate(t time.Time) *ProgramHistoryUpdate {
-	phu.mutation.SetStartDate(t)
-	return phu
+func (_u *ProgramHistoryUpdate) SetStartDate(v time.Time) *ProgramHistoryUpdate {
+	_u.mutation.SetStartDate(v)
+	return _u
 }
 
 // SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableStartDate(t *time.Time) *ProgramHistoryUpdate {
-	if t != nil {
-		phu.SetStartDate(*t)
+func (_u *ProgramHistoryUpdate) SetNillableStartDate(v *time.Time) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetStartDate(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearStartDate clears the value of the "start_date" field.
-func (phu *ProgramHistoryUpdate) ClearStartDate() *ProgramHistoryUpdate {
-	phu.mutation.ClearStartDate()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearStartDate() *ProgramHistoryUpdate {
+	_u.mutation.ClearStartDate()
+	return _u
 }
 
 // SetEndDate sets the "end_date" field.
-func (phu *ProgramHistoryUpdate) SetEndDate(t time.Time) *ProgramHistoryUpdate {
-	phu.mutation.SetEndDate(t)
-	return phu
+func (_u *ProgramHistoryUpdate) SetEndDate(v time.Time) *ProgramHistoryUpdate {
+	_u.mutation.SetEndDate(v)
+	return _u
 }
 
 // SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableEndDate(t *time.Time) *ProgramHistoryUpdate {
-	if t != nil {
-		phu.SetEndDate(*t)
+func (_u *ProgramHistoryUpdate) SetNillableEndDate(v *time.Time) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetEndDate(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearEndDate clears the value of the "end_date" field.
-func (phu *ProgramHistoryUpdate) ClearEndDate() *ProgramHistoryUpdate {
-	phu.mutation.ClearEndDate()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearEndDate() *ProgramHistoryUpdate {
+	_u.mutation.ClearEndDate()
+	return _u
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
-func (phu *ProgramHistoryUpdate) SetAuditorReady(b bool) *ProgramHistoryUpdate {
-	phu.mutation.SetAuditorReady(b)
-	return phu
+func (_u *ProgramHistoryUpdate) SetAuditorReady(v bool) *ProgramHistoryUpdate {
+	_u.mutation.SetAuditorReady(v)
+	return _u
 }
 
 // SetNillableAuditorReady sets the "auditor_ready" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableAuditorReady(b *bool) *ProgramHistoryUpdate {
-	if b != nil {
-		phu.SetAuditorReady(*b)
+func (_u *ProgramHistoryUpdate) SetNillableAuditorReady(v *bool) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetAuditorReady(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetAuditorWriteComments sets the "auditor_write_comments" field.
-func (phu *ProgramHistoryUpdate) SetAuditorWriteComments(b bool) *ProgramHistoryUpdate {
-	phu.mutation.SetAuditorWriteComments(b)
-	return phu
+func (_u *ProgramHistoryUpdate) SetAuditorWriteComments(v bool) *ProgramHistoryUpdate {
+	_u.mutation.SetAuditorWriteComments(v)
+	return _u
 }
 
 // SetNillableAuditorWriteComments sets the "auditor_write_comments" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableAuditorWriteComments(b *bool) *ProgramHistoryUpdate {
-	if b != nil {
-		phu.SetAuditorWriteComments(*b)
+func (_u *ProgramHistoryUpdate) SetNillableAuditorWriteComments(v *bool) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetAuditorWriteComments(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetAuditorReadComments sets the "auditor_read_comments" field.
-func (phu *ProgramHistoryUpdate) SetAuditorReadComments(b bool) *ProgramHistoryUpdate {
-	phu.mutation.SetAuditorReadComments(b)
-	return phu
+func (_u *ProgramHistoryUpdate) SetAuditorReadComments(v bool) *ProgramHistoryUpdate {
+	_u.mutation.SetAuditorReadComments(v)
+	return _u
 }
 
 // SetNillableAuditorReadComments sets the "auditor_read_comments" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableAuditorReadComments(b *bool) *ProgramHistoryUpdate {
-	if b != nil {
-		phu.SetAuditorReadComments(*b)
+func (_u *ProgramHistoryUpdate) SetNillableAuditorReadComments(v *bool) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetAuditorReadComments(*v)
 	}
-	return phu
+	return _u
 }
 
 // SetAuditFirm sets the "audit_firm" field.
-func (phu *ProgramHistoryUpdate) SetAuditFirm(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetAuditFirm(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetAuditFirm(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetAuditFirm(v)
+	return _u
 }
 
 // SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableAuditFirm(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetAuditFirm(*s)
+func (_u *ProgramHistoryUpdate) SetNillableAuditFirm(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetAuditFirm(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearAuditFirm clears the value of the "audit_firm" field.
-func (phu *ProgramHistoryUpdate) ClearAuditFirm() *ProgramHistoryUpdate {
-	phu.mutation.ClearAuditFirm()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearAuditFirm() *ProgramHistoryUpdate {
+	_u.mutation.ClearAuditFirm()
+	return _u
 }
 
 // SetAuditor sets the "auditor" field.
-func (phu *ProgramHistoryUpdate) SetAuditor(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetAuditor(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetAuditor(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetAuditor(v)
+	return _u
 }
 
 // SetNillableAuditor sets the "auditor" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableAuditor(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetAuditor(*s)
+func (_u *ProgramHistoryUpdate) SetNillableAuditor(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetAuditor(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearAuditor clears the value of the "auditor" field.
-func (phu *ProgramHistoryUpdate) ClearAuditor() *ProgramHistoryUpdate {
-	phu.mutation.ClearAuditor()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearAuditor() *ProgramHistoryUpdate {
+	_u.mutation.ClearAuditor()
+	return _u
 }
 
 // SetAuditorEmail sets the "auditor_email" field.
-func (phu *ProgramHistoryUpdate) SetAuditorEmail(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetAuditorEmail(s)
-	return phu
+func (_u *ProgramHistoryUpdate) SetAuditorEmail(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetAuditorEmail(v)
+	return _u
 }
 
 // SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableAuditorEmail(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetAuditorEmail(*s)
+func (_u *ProgramHistoryUpdate) SetNillableAuditorEmail(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetAuditorEmail(*v)
 	}
-	return phu
+	return _u
 }
 
 // ClearAuditorEmail clears the value of the "auditor_email" field.
-func (phu *ProgramHistoryUpdate) ClearAuditorEmail() *ProgramHistoryUpdate {
-	phu.mutation.ClearAuditorEmail()
-	return phu
+func (_u *ProgramHistoryUpdate) ClearAuditorEmail() *ProgramHistoryUpdate {
+	_u.mutation.ClearAuditorEmail()
+	return _u
 }
 
 // Mutation returns the ProgramHistoryMutation object of the builder.
-func (phu *ProgramHistoryUpdate) Mutation() *ProgramHistoryMutation {
-	return phu.mutation
+func (_u *ProgramHistoryUpdate) Mutation() *ProgramHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (phu *ProgramHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := phu.defaults(); err != nil {
+func (_u *ProgramHistoryUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, phu.sqlSave, phu.mutation, phu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (phu *ProgramHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := phu.Save(ctx)
+func (_u *ProgramHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -390,38 +390,38 @@ func (phu *ProgramHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (phu *ProgramHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := phu.Save(ctx)
+func (_u *ProgramHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phu *ProgramHistoryUpdate) ExecX(ctx context.Context) {
-	if err := phu.Exec(ctx); err != nil {
+func (_u *ProgramHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (phu *ProgramHistoryUpdate) defaults() error {
-	if _, ok := phu.mutation.UpdatedAt(); !ok && !phu.mutation.UpdatedAtCleared() {
+func (_u *ProgramHistoryUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if programhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programhistory.UpdateDefaultUpdatedAt()
-		phu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (phu *ProgramHistoryUpdate) check() error {
-	if v, ok := phu.mutation.Status(); ok {
+func (_u *ProgramHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := programhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := phu.mutation.ProgramType(); ok {
+	if v, ok := _u.mutation.ProgramType(); ok {
 		if err := programhistory.ProgramTypeValidator(v); err != nil {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
 		}
@@ -430,137 +430,137 @@ func (phu *ProgramHistoryUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (phu *ProgramHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramHistoryUpdate {
-	phu.modifiers = append(phu.modifiers, modifiers...)
-	return phu
+func (_u *ProgramHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramHistoryUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := phu.check(); err != nil {
-		return n, err
+func (_u *ProgramHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(programhistory.Table, programhistory.Columns, sqlgraph.NewFieldSpec(programhistory.FieldID, field.TypeString))
-	if ps := phu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if phu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(programhistory.FieldRef, field.TypeString)
 	}
-	if phu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(programhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := phu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(programhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if phu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phu.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(programhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if phu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if phu.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(programhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phu.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(programhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if phu.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(programhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := phu.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(programhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := phu.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, programhistory.FieldTags, value)
 		})
 	}
-	if phu.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(programhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := phu.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(programhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if phu.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := phu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := phu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(programhistory.FieldDescription, field.TypeString, value)
 	}
-	if phu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(programhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := phu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := phu.mutation.ProgramType(); ok {
+	if value, ok := _u.mutation.ProgramType(); ok {
 		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
 	}
-	if value, ok := phu.mutation.FrameworkName(); ok {
+	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
 	}
-	if phu.mutation.FrameworkNameCleared() {
+	if _u.mutation.FrameworkNameCleared() {
 		_spec.ClearField(programhistory.FieldFrameworkName, field.TypeString)
 	}
-	if value, ok := phu.mutation.StartDate(); ok {
+	if value, ok := _u.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)
 	}
-	if phu.mutation.StartDateCleared() {
+	if _u.mutation.StartDateCleared() {
 		_spec.ClearField(programhistory.FieldStartDate, field.TypeTime)
 	}
-	if value, ok := phu.mutation.EndDate(); ok {
+	if value, ok := _u.mutation.EndDate(); ok {
 		_spec.SetField(programhistory.FieldEndDate, field.TypeTime, value)
 	}
-	if phu.mutation.EndDateCleared() {
+	if _u.mutation.EndDateCleared() {
 		_spec.ClearField(programhistory.FieldEndDate, field.TypeTime)
 	}
-	if value, ok := phu.mutation.AuditorReady(); ok {
+	if value, ok := _u.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)
 	}
-	if value, ok := phu.mutation.AuditorWriteComments(); ok {
+	if value, ok := _u.mutation.AuditorWriteComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorWriteComments, field.TypeBool, value)
 	}
-	if value, ok := phu.mutation.AuditorReadComments(); ok {
+	if value, ok := _u.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if value, ok := phu.mutation.AuditFirm(); ok {
+	if value, ok := _u.mutation.AuditFirm(); ok {
 		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
 	}
-	if phu.mutation.AuditFirmCleared() {
+	if _u.mutation.AuditFirmCleared() {
 		_spec.ClearField(programhistory.FieldAuditFirm, field.TypeString)
 	}
-	if value, ok := phu.mutation.Auditor(); ok {
+	if value, ok := _u.mutation.Auditor(); ok {
 		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
 	}
-	if phu.mutation.AuditorCleared() {
+	if _u.mutation.AuditorCleared() {
 		_spec.ClearField(programhistory.FieldAuditor, field.TypeString)
 	}
-	if value, ok := phu.mutation.AuditorEmail(); ok {
+	if value, ok := _u.mutation.AuditorEmail(); ok {
 		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
 	}
-	if phu.mutation.AuditorEmailCleared() {
+	if _u.mutation.AuditorEmailCleared() {
 		_spec.ClearField(programhistory.FieldAuditorEmail, field.TypeString)
 	}
-	_spec.Node.Schema = phu.schemaConfig.ProgramHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
-	_spec.AddModifiers(phu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, phu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.ProgramHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{programhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -568,8 +568,8 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		return 0, err
 	}
-	phu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ProgramHistoryUpdateOne is the builder for updating a single ProgramHistory entity.
@@ -582,368 +582,368 @@ type ProgramHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (phuo *ProgramHistoryUpdateOne) SetUpdatedAt(t time.Time) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetUpdatedAt(t)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetUpdatedAt(v time.Time) *ProgramHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (phuo *ProgramHistoryUpdateOne) ClearUpdatedAt() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearUpdatedAt()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearUpdatedAt() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (phuo *ProgramHistoryUpdateOne) SetUpdatedBy(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetUpdatedBy(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetUpdatedBy(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableUpdatedBy(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetUpdatedBy(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (phuo *ProgramHistoryUpdateOne) ClearUpdatedBy() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearUpdatedBy()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearUpdatedBy() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (phuo *ProgramHistoryUpdateOne) SetDeletedAt(t time.Time) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetDeletedAt(t)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetDeletedAt(v time.Time) *ProgramHistoryUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramHistoryUpdateOne {
-	if t != nil {
-		phuo.SetDeletedAt(*t)
+func (_u *ProgramHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (phuo *ProgramHistoryUpdateOne) ClearDeletedAt() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearDeletedAt()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearDeletedAt() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (phuo *ProgramHistoryUpdateOne) SetDeletedBy(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetDeletedBy(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetDeletedBy(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableDeletedBy(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDeletedBy(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableDeletedBy(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (phuo *ProgramHistoryUpdateOne) ClearDeletedBy() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearDeletedBy()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearDeletedBy() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetTags sets the "tags" field.
-func (phuo *ProgramHistoryUpdateOne) SetTags(s []string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetTags(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetTags(v []string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetTags(v)
+	return _u
 }
 
-// AppendTags appends s to the "tags" field.
-func (phuo *ProgramHistoryUpdateOne) AppendTags(s []string) *ProgramHistoryUpdateOne {
-	phuo.mutation.AppendTags(s)
-	return phuo
+// AppendTags appends value to the "tags" field.
+func (_u *ProgramHistoryUpdateOne) AppendTags(v []string) *ProgramHistoryUpdateOne {
+	_u.mutation.AppendTags(v)
+	return _u
 }
 
 // ClearTags clears the value of the "tags" field.
-func (phuo *ProgramHistoryUpdateOne) ClearTags() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearTags()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearTags() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (phuo *ProgramHistoryUpdateOne) SetOwnerID(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetOwnerID(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetOwnerID(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
 }
 
 // SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableOwnerID(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetOwnerID(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableOwnerID(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearOwnerID clears the value of the "owner_id" field.
-func (phuo *ProgramHistoryUpdateOne) ClearOwnerID() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearOwnerID()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearOwnerID() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (phuo *ProgramHistoryUpdateOne) SetName(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetName(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetName(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableName(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetName(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableName(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (phuo *ProgramHistoryUpdateOne) SetDescription(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetDescription(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetDescription(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableDescription(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetDescription(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableDescription(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (phuo *ProgramHistoryUpdateOne) ClearDescription() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearDescription()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearDescription() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (phuo *ProgramHistoryUpdateOne) SetStatus(es enums.ProgramStatus) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetStatus(es)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetStatus(v enums.ProgramStatus) *ProgramHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableStatus(es *enums.ProgramStatus) *ProgramHistoryUpdateOne {
-	if es != nil {
-		phuo.SetStatus(*es)
+func (_u *ProgramHistoryUpdateOne) SetNillableStatus(v *enums.ProgramStatus) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetProgramType sets the "program_type" field.
-func (phuo *ProgramHistoryUpdateOne) SetProgramType(et enums.ProgramType) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetProgramType(et)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetProgramType(v enums.ProgramType) *ProgramHistoryUpdateOne {
+	_u.mutation.SetProgramType(v)
+	return _u
 }
 
 // SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableProgramType(et *enums.ProgramType) *ProgramHistoryUpdateOne {
-	if et != nil {
-		phuo.SetProgramType(*et)
+func (_u *ProgramHistoryUpdateOne) SetNillableProgramType(v *enums.ProgramType) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetProgramType(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetFrameworkName sets the "framework_name" field.
-func (phuo *ProgramHistoryUpdateOne) SetFrameworkName(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetFrameworkName(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetFrameworkName(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetFrameworkName(v)
+	return _u
 }
 
 // SetNillableFrameworkName sets the "framework_name" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableFrameworkName(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetFrameworkName(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableFrameworkName(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetFrameworkName(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearFrameworkName clears the value of the "framework_name" field.
-func (phuo *ProgramHistoryUpdateOne) ClearFrameworkName() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearFrameworkName()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearFrameworkName() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearFrameworkName()
+	return _u
 }
 
 // SetStartDate sets the "start_date" field.
-func (phuo *ProgramHistoryUpdateOne) SetStartDate(t time.Time) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetStartDate(t)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetStartDate(v time.Time) *ProgramHistoryUpdateOne {
+	_u.mutation.SetStartDate(v)
+	return _u
 }
 
 // SetNillableStartDate sets the "start_date" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableStartDate(t *time.Time) *ProgramHistoryUpdateOne {
-	if t != nil {
-		phuo.SetStartDate(*t)
+func (_u *ProgramHistoryUpdateOne) SetNillableStartDate(v *time.Time) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetStartDate(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearStartDate clears the value of the "start_date" field.
-func (phuo *ProgramHistoryUpdateOne) ClearStartDate() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearStartDate()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearStartDate() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearStartDate()
+	return _u
 }
 
 // SetEndDate sets the "end_date" field.
-func (phuo *ProgramHistoryUpdateOne) SetEndDate(t time.Time) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetEndDate(t)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetEndDate(v time.Time) *ProgramHistoryUpdateOne {
+	_u.mutation.SetEndDate(v)
+	return _u
 }
 
 // SetNillableEndDate sets the "end_date" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableEndDate(t *time.Time) *ProgramHistoryUpdateOne {
-	if t != nil {
-		phuo.SetEndDate(*t)
+func (_u *ProgramHistoryUpdateOne) SetNillableEndDate(v *time.Time) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetEndDate(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearEndDate clears the value of the "end_date" field.
-func (phuo *ProgramHistoryUpdateOne) ClearEndDate() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearEndDate()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearEndDate() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearEndDate()
+	return _u
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
-func (phuo *ProgramHistoryUpdateOne) SetAuditorReady(b bool) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetAuditorReady(b)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetAuditorReady(v bool) *ProgramHistoryUpdateOne {
+	_u.mutation.SetAuditorReady(v)
+	return _u
 }
 
 // SetNillableAuditorReady sets the "auditor_ready" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableAuditorReady(b *bool) *ProgramHistoryUpdateOne {
-	if b != nil {
-		phuo.SetAuditorReady(*b)
+func (_u *ProgramHistoryUpdateOne) SetNillableAuditorReady(v *bool) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditorReady(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetAuditorWriteComments sets the "auditor_write_comments" field.
-func (phuo *ProgramHistoryUpdateOne) SetAuditorWriteComments(b bool) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetAuditorWriteComments(b)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetAuditorWriteComments(v bool) *ProgramHistoryUpdateOne {
+	_u.mutation.SetAuditorWriteComments(v)
+	return _u
 }
 
 // SetNillableAuditorWriteComments sets the "auditor_write_comments" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableAuditorWriteComments(b *bool) *ProgramHistoryUpdateOne {
-	if b != nil {
-		phuo.SetAuditorWriteComments(*b)
+func (_u *ProgramHistoryUpdateOne) SetNillableAuditorWriteComments(v *bool) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditorWriteComments(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetAuditorReadComments sets the "auditor_read_comments" field.
-func (phuo *ProgramHistoryUpdateOne) SetAuditorReadComments(b bool) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetAuditorReadComments(b)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetAuditorReadComments(v bool) *ProgramHistoryUpdateOne {
+	_u.mutation.SetAuditorReadComments(v)
+	return _u
 }
 
 // SetNillableAuditorReadComments sets the "auditor_read_comments" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramHistoryUpdateOne {
-	if b != nil {
-		phuo.SetAuditorReadComments(*b)
+func (_u *ProgramHistoryUpdateOne) SetNillableAuditorReadComments(v *bool) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditorReadComments(*v)
 	}
-	return phuo
+	return _u
 }
 
 // SetAuditFirm sets the "audit_firm" field.
-func (phuo *ProgramHistoryUpdateOne) SetAuditFirm(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetAuditFirm(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetAuditFirm(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetAuditFirm(v)
+	return _u
 }
 
 // SetNillableAuditFirm sets the "audit_firm" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableAuditFirm(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetAuditFirm(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableAuditFirm(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditFirm(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearAuditFirm clears the value of the "audit_firm" field.
-func (phuo *ProgramHistoryUpdateOne) ClearAuditFirm() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearAuditFirm()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearAuditFirm() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearAuditFirm()
+	return _u
 }
 
 // SetAuditor sets the "auditor" field.
-func (phuo *ProgramHistoryUpdateOne) SetAuditor(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetAuditor(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetAuditor(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetAuditor(v)
+	return _u
 }
 
 // SetNillableAuditor sets the "auditor" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableAuditor(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetAuditor(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableAuditor(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditor(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearAuditor clears the value of the "auditor" field.
-func (phuo *ProgramHistoryUpdateOne) ClearAuditor() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearAuditor()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearAuditor() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearAuditor()
+	return _u
 }
 
 // SetAuditorEmail sets the "auditor_email" field.
-func (phuo *ProgramHistoryUpdateOne) SetAuditorEmail(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetAuditorEmail(s)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) SetAuditorEmail(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetAuditorEmail(v)
+	return _u
 }
 
 // SetNillableAuditorEmail sets the "auditor_email" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableAuditorEmail(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetAuditorEmail(*s)
+func (_u *ProgramHistoryUpdateOne) SetNillableAuditorEmail(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetAuditorEmail(*v)
 	}
-	return phuo
+	return _u
 }
 
 // ClearAuditorEmail clears the value of the "auditor_email" field.
-func (phuo *ProgramHistoryUpdateOne) ClearAuditorEmail() *ProgramHistoryUpdateOne {
-	phuo.mutation.ClearAuditorEmail()
-	return phuo
+func (_u *ProgramHistoryUpdateOne) ClearAuditorEmail() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearAuditorEmail()
+	return _u
 }
 
 // Mutation returns the ProgramHistoryMutation object of the builder.
-func (phuo *ProgramHistoryUpdateOne) Mutation() *ProgramHistoryMutation {
-	return phuo.mutation
+func (_u *ProgramHistoryUpdateOne) Mutation() *ProgramHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ProgramHistoryUpdate builder.
-func (phuo *ProgramHistoryUpdateOne) Where(ps ...predicate.ProgramHistory) *ProgramHistoryUpdateOne {
-	phuo.mutation.Where(ps...)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) Where(ps ...predicate.ProgramHistory) *ProgramHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (phuo *ProgramHistoryUpdateOne) Select(field string, fields ...string) *ProgramHistoryUpdateOne {
-	phuo.fields = append([]string{field}, fields...)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) Select(field string, fields ...string) *ProgramHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ProgramHistory entity.
-func (phuo *ProgramHistoryUpdateOne) Save(ctx context.Context) (*ProgramHistory, error) {
-	if err := phuo.defaults(); err != nil {
+func (_u *ProgramHistoryUpdateOne) Save(ctx context.Context) (*ProgramHistory, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, phuo.sqlSave, phuo.mutation, phuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (phuo *ProgramHistoryUpdateOne) SaveX(ctx context.Context) *ProgramHistory {
-	node, err := phuo.Save(ctx)
+func (_u *ProgramHistoryUpdateOne) SaveX(ctx context.Context) *ProgramHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -951,38 +951,38 @@ func (phuo *ProgramHistoryUpdateOne) SaveX(ctx context.Context) *ProgramHistory 
 }
 
 // Exec executes the query on the entity.
-func (phuo *ProgramHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := phuo.Save(ctx)
+func (_u *ProgramHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (phuo *ProgramHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := phuo.Exec(ctx); err != nil {
+func (_u *ProgramHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (phuo *ProgramHistoryUpdateOne) defaults() error {
-	if _, ok := phuo.mutation.UpdatedAt(); !ok && !phuo.mutation.UpdatedAtCleared() {
+func (_u *ProgramHistoryUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if programhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized programhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
 		}
 		v := programhistory.UpdateDefaultUpdatedAt()
-		phuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (phuo *ProgramHistoryUpdateOne) check() error {
-	if v, ok := phuo.mutation.Status(); ok {
+func (_u *ProgramHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
 		if err := programhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := phuo.mutation.ProgramType(); ok {
+	if v, ok := _u.mutation.ProgramType(); ok {
 		if err := programhistory.ProgramTypeValidator(v); err != nil {
 			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.program_type": %w`, err)}
 		}
@@ -991,22 +991,22 @@ func (phuo *ProgramHistoryUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (phuo *ProgramHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramHistoryUpdateOne {
-	phuo.modifiers = append(phuo.modifiers, modifiers...)
-	return phuo
+func (_u *ProgramHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProgramHistoryUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramHistory, err error) {
-	if err := phuo.check(); err != nil {
+func (_u *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramHistory, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(programhistory.Table, programhistory.Columns, sqlgraph.NewFieldSpec(programhistory.FieldID, field.TypeString))
-	id, ok := phuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "ProgramHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := phuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, programhistory.FieldID)
 		for _, f := range fields {
@@ -1018,130 +1018,130 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 			}
 		}
 	}
-	if ps := phuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if phuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(programhistory.FieldRef, field.TypeString)
 	}
-	if phuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(programhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(programhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if phuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedAt, field.TypeTime)
 	}
-	if phuo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(programhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(programhistory.FieldUpdatedBy, field.TypeString, value)
 	}
-	if phuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(programhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(programhistory.FieldDeletedAt, field.TypeTime, value)
 	}
-	if phuo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(programhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(programhistory.FieldDeletedBy, field.TypeString, value)
 	}
-	if phuo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(programhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Tags(); ok {
+	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(programhistory.FieldTags, field.TypeJSON, value)
 	}
-	if value, ok := phuo.mutation.AppendedTags(); ok {
+	if value, ok := _u.mutation.AppendedTags(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, programhistory.FieldTags, value)
 		})
 	}
-	if phuo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		_spec.ClearField(programhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := phuo.mutation.OwnerID(); ok {
+	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(programhistory.FieldOwnerID, field.TypeString, value)
 	}
-	if phuo.mutation.OwnerIDCleared() {
+	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := phuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(programhistory.FieldDescription, field.TypeString, value)
 	}
-	if phuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(programhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := phuo.mutation.ProgramType(); ok {
+	if value, ok := _u.mutation.ProgramType(); ok {
 		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
 	}
-	if value, ok := phuo.mutation.FrameworkName(); ok {
+	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
 	}
-	if phuo.mutation.FrameworkNameCleared() {
+	if _u.mutation.FrameworkNameCleared() {
 		_spec.ClearField(programhistory.FieldFrameworkName, field.TypeString)
 	}
-	if value, ok := phuo.mutation.StartDate(); ok {
+	if value, ok := _u.mutation.StartDate(); ok {
 		_spec.SetField(programhistory.FieldStartDate, field.TypeTime, value)
 	}
-	if phuo.mutation.StartDateCleared() {
+	if _u.mutation.StartDateCleared() {
 		_spec.ClearField(programhistory.FieldStartDate, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.EndDate(); ok {
+	if value, ok := _u.mutation.EndDate(); ok {
 		_spec.SetField(programhistory.FieldEndDate, field.TypeTime, value)
 	}
-	if phuo.mutation.EndDateCleared() {
+	if _u.mutation.EndDateCleared() {
 		_spec.ClearField(programhistory.FieldEndDate, field.TypeTime)
 	}
-	if value, ok := phuo.mutation.AuditorReady(); ok {
+	if value, ok := _u.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)
 	}
-	if value, ok := phuo.mutation.AuditorWriteComments(); ok {
+	if value, ok := _u.mutation.AuditorWriteComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorWriteComments, field.TypeBool, value)
 	}
-	if value, ok := phuo.mutation.AuditorReadComments(); ok {
+	if value, ok := _u.mutation.AuditorReadComments(); ok {
 		_spec.SetField(programhistory.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if value, ok := phuo.mutation.AuditFirm(); ok {
+	if value, ok := _u.mutation.AuditFirm(); ok {
 		_spec.SetField(programhistory.FieldAuditFirm, field.TypeString, value)
 	}
-	if phuo.mutation.AuditFirmCleared() {
+	if _u.mutation.AuditFirmCleared() {
 		_spec.ClearField(programhistory.FieldAuditFirm, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Auditor(); ok {
+	if value, ok := _u.mutation.Auditor(); ok {
 		_spec.SetField(programhistory.FieldAuditor, field.TypeString, value)
 	}
-	if phuo.mutation.AuditorCleared() {
+	if _u.mutation.AuditorCleared() {
 		_spec.ClearField(programhistory.FieldAuditor, field.TypeString)
 	}
-	if value, ok := phuo.mutation.AuditorEmail(); ok {
+	if value, ok := _u.mutation.AuditorEmail(); ok {
 		_spec.SetField(programhistory.FieldAuditorEmail, field.TypeString, value)
 	}
-	if phuo.mutation.AuditorEmailCleared() {
+	if _u.mutation.AuditorEmailCleared() {
 		_spec.ClearField(programhistory.FieldAuditorEmail, field.TypeString)
 	}
-	_spec.Node.Schema = phuo.schemaConfig.ProgramHistory
-	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)
-	_spec.AddModifiers(phuo.modifiers...)
-	_node = &ProgramHistory{config: phuo.config}
+	_spec.Node.Schema = _u.schemaConfig.ProgramHistory
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &ProgramHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, phuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{programhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1149,6 +1149,6 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 		}
 		return nil, err
 	}
-	phuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -84,7 +84,7 @@ func (*MappableDomain) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the MappableDomain fields.
-func (md *MappableDomain) assignValues(columns []string, values []any) error {
+func (_m *MappableDomain) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -94,49 +94,49 @@ func (md *MappableDomain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				md.ID = value.String
+				_m.ID = value.String
 			}
 		case mappabledomain.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				md.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case mappabledomain.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				md.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case mappabledomain.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				md.CreatedBy = value.String
+				_m.CreatedBy = value.String
 			}
 		case mappabledomain.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				md.UpdatedBy = value.String
+				_m.UpdatedBy = value.String
 			}
 		case mappabledomain.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				md.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case mappabledomain.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				md.DeletedBy = value.String
+				_m.DeletedBy = value.String
 			}
 		case mappabledomain.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &md.Tags); err != nil {
+				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
@@ -144,16 +144,16 @@ func (md *MappableDomain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				md.Name = value.String
+				_m.Name = value.String
 			}
 		case mappabledomain.FieldZoneID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field zone_id", values[i])
 			} else if value.Valid {
-				md.ZoneID = value.String
+				_m.ZoneID = value.String
 			}
 		default:
-			md.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -161,89 +161,89 @@ func (md *MappableDomain) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the MappableDomain.
 // This includes values selected through modifiers, order, etc.
-func (md *MappableDomain) Value(name string) (ent.Value, error) {
-	return md.selectValues.Get(name)
+func (_m *MappableDomain) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCustomDomains queries the "custom_domains" edge of the MappableDomain entity.
-func (md *MappableDomain) QueryCustomDomains() *CustomDomainQuery {
-	return NewMappableDomainClient(md.config).QueryCustomDomains(md)
+func (_m *MappableDomain) QueryCustomDomains() *CustomDomainQuery {
+	return NewMappableDomainClient(_m.config).QueryCustomDomains(_m)
 }
 
 // Update returns a builder for updating this MappableDomain.
 // Note that you need to call MappableDomain.Unwrap() before calling this method if this MappableDomain
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (md *MappableDomain) Update() *MappableDomainUpdateOne {
-	return NewMappableDomainClient(md.config).UpdateOne(md)
+func (_m *MappableDomain) Update() *MappableDomainUpdateOne {
+	return NewMappableDomainClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the MappableDomain entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (md *MappableDomain) Unwrap() *MappableDomain {
-	_tx, ok := md.config.driver.(*txDriver)
+func (_m *MappableDomain) Unwrap() *MappableDomain {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("generated: MappableDomain is not a transactional entity")
 	}
-	md.config.driver = _tx.drv
-	return md
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (md *MappableDomain) String() string {
+func (_m *MappableDomain) String() string {
 	var builder strings.Builder
 	builder.WriteString("MappableDomain(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", md.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(md.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(md.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(md.CreatedBy)
+	builder.WriteString(_m.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(md.UpdatedBy)
+	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(md.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(md.DeletedBy)
+	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", md.Tags))
+	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(md.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("zone_id=")
-	builder.WriteString(md.ZoneID)
+	builder.WriteString(_m.ZoneID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedCustomDomains returns the CustomDomains named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (md *MappableDomain) NamedCustomDomains(name string) ([]*CustomDomain, error) {
-	if md.Edges.namedCustomDomains == nil {
+func (_m *MappableDomain) NamedCustomDomains(name string) ([]*CustomDomain, error) {
+	if _m.Edges.namedCustomDomains == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := md.Edges.namedCustomDomains[name]
+	nodes, ok := _m.Edges.namedCustomDomains[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (md *MappableDomain) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
-	if md.Edges.namedCustomDomains == nil {
-		md.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
+func (_m *MappableDomain) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
+	if _m.Edges.namedCustomDomains == nil {
+		_m.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
 	}
 	if len(edges) == 0 {
-		md.Edges.namedCustomDomains[name] = []*CustomDomain{}
+		_m.Edges.namedCustomDomains[name] = []*CustomDomain{}
 	} else {
-		md.Edges.namedCustomDomains[name] = append(md.Edges.namedCustomDomains[name], edges...)
+		_m.Edges.namedCustomDomains[name] = append(_m.Edges.namedCustomDomains[name], edges...)
 	}
 }
 
