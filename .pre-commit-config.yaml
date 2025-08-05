@@ -14,6 +14,7 @@ repos:
     rev: v0.17.2
     hooks:
       - id: yamlfmt
+        exclude: .goreleaser-debug.yaml|.goreleaser-old.yaml
   - repo: https://github.com/crate-ci/typos
     rev: v1.34.0
     hooks:
