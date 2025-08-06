@@ -54,7 +54,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --verbose --snapshot --clean --fail-fast --config "config/goreleaser/.goreleaser.yaml"
+          args: release --verbose --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
