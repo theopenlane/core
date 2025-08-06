@@ -26,7 +26,6 @@ func setupContext(org string, feats []models.OrgModule) context.Context {
 	r := testutils.NewRedisClient()
 	cache := permissioncache.NewCache(r, permissioncache.WithCacheTTL(time.Minute))
 
-	// Convert OrgModule slice to string slice for cache
 	featStrs := make([]string, len(feats))
 	for i, feat := range feats {
 		featStrs[i] = string(feat)
@@ -212,6 +211,76 @@ func TestDenyIfMissingAllFeatures_BypassScenarios(t *testing.T) {
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")
 	})
+}
+
+func TestDenyQueryIfMissingAllFeatures(t *testing.T) {
+	tests := []struct {
+		name          string
+		features      []models.OrgModule
+		enabledFeats  []models.OrgModule
+		expectedSkip  bool
+		expectedDeny  bool
+		expectedError string
+	}{
+		{
+			name:         "all features present should skip",
+			features:     []models.OrgModule{models.CatalogComplianceModule, models.CatalogTrustCenterModule},
+			enabledFeats: []models.OrgModule{models.CatalogComplianceModule, models.CatalogTrustCenterModule},
+			expectedSkip: true,
+		},
+		{
+			name:          "missing features should deny",
+			features:      []models.OrgModule{models.CatalogComplianceModule, models.CatalogTrustCenterModule},
+			enabledFeats:  []models.OrgModule{models.CatalogComplianceModule}, // missing trust_center_module
+			expectedDeny:  true,
+			expectedError: "features are not enabled",
+		},
+		{
+			name:         "single feature present should skip",
+			features:     []models.OrgModule{models.CatalogComplianceModule},
+			enabledFeats: []models.OrgModule{models.CatalogComplianceModule},
+			expectedSkip: true,
+		},
+		{
+			name:          "single feature missing should deny",
+			features:      []models.OrgModule{models.CatalogComplianceModule},
+			enabledFeats:  []models.OrgModule{models.CatalogBaseModule},
+			expectedDeny:  true,
+			expectedError: "features are not enabled",
+		},
+		{
+			name:         "empty features list should skip",
+			features:     []models.OrgModule{},
+			enabledFeats: []models.OrgModule{models.CatalogComplianceModule},
+			expectedSkip: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := setupContext("test-org", tt.enabledFeats)
+			featureRule := rule.DenyQueryIfMissingAllFeatures("test_schema", tt.features...)
+
+			mockQuery := &generated.OrganizationQuery{}
+
+			err := featureRule.EvalQuery(ctx, mockQuery)
+
+			if tt.expectedSkip {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), "skip rule")
+				return
+			}
+
+			if tt.expectedDeny {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.expectedError)
+				assert.NotContains(t, err.Error(), "skip rule")
+				return
+			}
+
+			require.NoError(t, err)
+		})
+	}
 }
 
 func TestDenyIfMissingAllFeatures_EdgeCases(t *testing.T) {

@@ -68,7 +68,7 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 	userCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	// create a non-personal test organization
-	testOrg := (&OrganizationBuilder{client: suite.client}).MustNew(userCtx, t)
+	testOrg := (&OrganizationBuilder{client: suite.client, Features: features}).MustNew(userCtx, t)
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org (and not the personal org)

@@ -595,8 +595,6 @@ func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRu
 
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process
 func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webauthn {
-	// ctx = setContext(ctx, w.client.db)
-
 	uuidBytes, err := uuid.NewUUID()
 	assert.NilError(t, err)
 
