@@ -177,6 +177,6 @@ func (s Standard) Policy() ent.Policy {
 
 func (Standard) Features() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogComplianceModule,
+		models.CatalogBaseModule,
 	}
 }
