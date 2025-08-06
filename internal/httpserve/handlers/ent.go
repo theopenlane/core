@@ -246,7 +246,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetSignCount(int32(credential.Authenticator.SignCount)). // nolint:gosec
 		Exec(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating email verification token")
+		log.Error().Err(err).Msg("error creating passkey")
 
 		return err
 	}

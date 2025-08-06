@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
@@ -145,18 +146,16 @@ func (w Webauthn) Annotations() []schema.Annotation {
 	}
 }
 
-func (Webauthn) Edges() []ent.Edge {
-	return []ent.Edge{}
-}
-
 // Policy of the Webauthn
 func (w Webauthn) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.DenyQueryIfMissingAllFeatures("webauthn", w.Features()...),
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("webauthn", w.Features()...),
+			privacy.AlwaysAllowRule(),
 		),
 	)
 }

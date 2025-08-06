@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -136,6 +137,7 @@ func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.DenyQueryIfMissingAllFeatures("program_memberships", p.Features()...),
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("programmembership", p.Features()...),

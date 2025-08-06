@@ -2,7 +2,6 @@ package rule
 
 import (
 	"context"
-	"errors"
 	"slices"
 
 	"entgo.io/ent"
@@ -256,6 +255,10 @@ func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.Mu
 			return privacy.Skip
 		}
 
+		if w := token.WebauthCreationContextKeyFromContext(ctx); w != nil {
+			return privacy.Skip
+		}
+
 		if tok := token.VerifyTokenFromContext(ctx); tok != nil {
 			return privacy.Skip
 		}
@@ -265,19 +268,18 @@ func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.Mu
 		}
 
 		ok, err := HasAllFeatures(ctx, features...)
-		if err != nil {
+		if !ok || err != nil {
+			// 	if _, err := auth.GetOrganizationIDFromContext(ctx); errors.Is(err, auth.ErrNoAuthUser) {
+			// 		// for personal access token and cases where the orgid might not be there
+			// 		// for deletions. Let the fgax client do the checks if the token has
+			// 		// enough permissions
+			// 		return privacy.Skip
+			// 	}
+			//
+			// 	return privacy.Denyf("features are not enabled", features)
+			// }
+
 			return err
-		}
-
-		if !ok {
-			if _, err := auth.GetOrganizationIDFromContext(ctx); errors.Is(err, auth.ErrNoAuthUser) {
-				// for personal access token and cases where the orgid might not be there
-				// for deletions. Let the fgax client do the checks if the token has
-				// enough permissions
-				return privacy.Skip
-			}
-
-			return privacy.Denyf("features are not enabled", features)
 		}
 
 		return privacy.Skip
@@ -309,6 +311,10 @@ func DenyQueryIfMissingAllFeatures(_ string, features ...models.OrgModule) priva
 			return privacy.Skip
 		}
 
+		if w := token.WebauthCreationContextKeyFromContext(ctx); w != nil {
+			return privacy.Skip
+		}
+
 		if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
 			return privacy.Skip
 		}
@@ -331,6 +337,15 @@ func DenyQueryIfMissingAllFeatures(_ string, features ...models.OrgModule) priva
 
 		_, err := HasAllFeatures(ctx, features...)
 		if err != nil {
+
+			// if errors.Is(err, auth.ErrNoAuthUser) {
+			// 	// for personal access token and cases where the orgid might not be there
+			// 	// for deletions. Let the fgax client do the checks if the token has
+			// 	// enough permissions
+			// 	fmt.Println("oooo")
+			// 	return privacy.Skip
+			// }
+			//
 			return err
 		}
 
