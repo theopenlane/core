@@ -1,8 +1,9 @@
 name: Release
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
-  release:
-    types: [created]
+
 permissions:
   contents: write
 jobs:
@@ -33,7 +34,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: macos-14 # Apple Silicon runner
+    runs-on: macos-15-xlarge
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,7 +55,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --clean --verbose
+          args: release --verbose --snapshot --clean --fail-fast --config "config/goreleaser/.goreleaser.yaml"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
