@@ -1,5 +1,10 @@
 version: 2
 project_name: openlane
+before:
+  hooks:
+    - echo "GOARCH=$GOARCH CGO_ENABLED=$CGO_ENABLED"
+    - time go build -x -v ./cmd/cli
+
 builds:
   # ------------------------
   # Linux amd64
@@ -17,27 +22,6 @@ builds:
       - -trimpath
     ldflags:
       - "-s -w"
-      - "-X main.Version={{ .Env.VERSION }}"
-      - "-X main.Commit={{ .Env.COMMIT }}"
-      - "-X main.CommitDate={{ .Env.COMMIT_DATE }}"
-      - "-X main.TreeState={{ .Env.TREE_STATE }}"
-      - "-X github.com/theopenlane/core/internal/constants.CLIVersion={{ .Env.VERSION }}"
-
-  # ------------------------
-  # Windows amd64
-  # ------------------------
-  - id: windows-amd64
-    main: ./cmd/cli
-    binary: openlane
-    goos:
-      - windows
-    goarch:
-      - amd64
-    env:
-      - CGO_ENABLED=0
-    flags:
-      - -trimpath
-    ldflags:
       - "-X main.Version={{ .Env.VERSION }}"
       - "-X main.Commit={{ .Env.COMMIT }}"
       - "-X main.CommitDate={{ .Env.COMMIT_DATE }}"

@@ -33,7 +33,7 @@ jobs:
     permissions:
       contents: write # To add assets to a release.
       id-token: write # To do keyless signing with cosign
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-large
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.9.2
 
-      - name: Test GoReleaser Build (Darwin only)
+      - name: Goreleaser AMD
         uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
