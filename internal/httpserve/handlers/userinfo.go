@@ -9,6 +9,10 @@ import (
 
 // UserInfo returns the user information for the authenticated user
 func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// setup view context
 	reqCtx := ctx.Request().Context()
 

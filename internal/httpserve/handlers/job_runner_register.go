@@ -13,7 +13,7 @@ import (
 )
 
 func (h *Handler) RegisterJobRunner(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleJobRunnerRegistrationRequest, openapi.Registry)
+	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleJobRunnerRegistrationRequest, models.ExampleJobRunnerRegistrationResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

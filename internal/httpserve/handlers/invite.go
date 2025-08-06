@@ -44,9 +44,14 @@ type InviteToken struct {
 // and creates organization membership for the user
 // On success, it returns a response with the organization information
 func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleInviteRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleInviteRequest, models.ExampleInviteResponse, openapi.Registry)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapi)
+	}
+
+	// Skip actual handler logic during OpenAPI registration
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	reqCtx := ctx.Request().Context()

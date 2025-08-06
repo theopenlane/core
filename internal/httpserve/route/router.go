@@ -10,14 +10,12 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
-	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -66,80 +64,78 @@ func (r *Router) addPathParametersFromPattern(path string, operation *openapi3.O
 	}
 }
 
-// registerSuccessResponseSchemas registers success response schemas based on operation patterns
+// registerSuccessResponseSchemas registers success response schemas dynamically
+// This completely eliminates static mappings by allowing handlers to register their own response types
 func (r *Router) registerSuccessResponseSchemas(config Config, openAPIContext *handlers.OpenAPIContext) {
 	if openAPIContext.Registry == nil {
 		return
 	}
 
-	// Map of operation IDs to their corresponding reply models
-	var replyModel any
+	// For special non-JSON responses, handle them explicitly
+	r.handleSpecialResponses(config.OperationID, openAPIContext)
+}
 
-	switch config.OperationID {
-	case "LoginHandler":
-		replyModel = models.ExampleLoginSuccessResponse
-	case "RefreshHandler":
-		replyModel = models.ExampleRefreshSuccessResponse
-	case "Register":
-		replyModel = models.ExampleRegisterSuccessResponse
-	case "VerifyEmail":
-		replyModel = models.ExampleVerifySuccessResponse
-	case "ResendEmail":
-		replyModel = models.ExampleResendEmailSuccessResponse
-	case "ForgotPassword":
-		replyModel = models.ExampleForgotPasswordSuccessResponse
-	case "ResetPassword":
-		replyModel = models.ExampleResetPasswordSuccessResponse
-	case "VerifySubscription":
-		replyModel = models.ExampleVerifySubscriptionResponse
-	case "TFAValidation":
-		replyModel = models.ExampleTFASSuccessResponse
-	case "OrganizationInviteAccept":
-		replyModel = models.ExampleInviteResponse
-	case "AgentNodeRegistration":
-		replyModel = models.ExampleJobRunnerRegistrationResponse
-	case "Switch":
-		replyModel = models.ExampleSwitchSuccessReply
-	case "AccountAccess":
-		replyModel = models.ExampleAccountAccessReply
-	case "AccountRoles":
-		replyModel = models.ExampleAccountRolesReply
-	case "AccountRolesOrganization", "AccountRolesOrganizationByID":
-		replyModel = models.ExampleAccountRolesOrganizationReply
-	case "AccountFeatures", "AccountFeaturesByID":
-		replyModel = models.ExampleAccountFeaturesReply
-	case "SSOLogin", "SSOCallback":
-		replyModel = models.ExampleSSOStatusReply
-	case "SSOTokenAuthorize", "SSOTokenCallback":
-		replyModel = models.ExampleSSOTokenAuthorizeReply
-	case "StartImpersonation":
-		replyModel = models.ExampleStartImpersonationReply
-	case "EndImpersonation":
-		replyModel = models.ExampleEndImpersonationReply
-	case "StartIntegrationOAuth":
-		replyModel = models.ExampleOAuthFlowResponse
-	case "IntegrationOAuthCallback":
-		replyModel = models.ExampleOAuthCallbackResponse
-	case "WebauthnRegistration":
-		replyModel = models.ExampleWebauthnBeginRegistrationResponse
-	case "FileUpload":
-		replyModel = models.ExampleUploadFilesSuccessResponse
+// handleSpecialResponses handles non-JSON response cases only
+func (r *Router) handleSpecialResponses(operationID string, openAPIContext *handlers.OpenAPIContext) {
+	switch operationID {
+	// Non-JSON responses only - these don't use h.Success() so need explicit registration
+	case "AcmeSolver":
+		r.addPlainTextResponse(openAPIContext, "ACME challenge response")
+	case "AppleMerchant", "SecurityTxt", "WebAuthnWellKnown", "Robots", "Favicon":
+		r.addFileResponse(openAPIContext, "Static file content")
+	case "JWKS":
+		r.addJSONResponse(openAPIContext, "JSON Web Key Set", "application/json")
+	case "APIDocs":
+		r.addJSONResponse(openAPIContext, "OpenAPI specification", "application/json")
+	case "CSRF":
+		r.addJSONResponse(openAPIContext, "CSRF token", "application/json")
+	case "ExampleCSV":
+		r.addFileResponse(openAPIContext, "CSV file content")
+	case "Files":
+		r.addFileResponse(openAPIContext, "File content")
+	case "GitHubCallback", "GitHubLogin", "GoogleCallback", "GoogleLogin":
+		r.addRedirectResponse(openAPIContext, "OAuth redirect")
+	case "UserInfo":
+		r.addJSONResponse(openAPIContext, "User information", "application/json")
+	case "RefreshIntegrationToken":
+		r.addJSONResponse(openAPIContext, "Integration token data", "application/json")
+	case "Livez", "Ready":
+		r.addJSONResponse(openAPIContext, "Health check status", "application/json")
+	case "StripeWebhook":
+		r.addPlainTextResponse(openAPIContext, "Webhook acknowledgment")
 	default:
-		// For endpoints without specific reply models, don't register success response
-		return
+		// All other endpoints register their responses via h.Success() calls during registration
 	}
+}
 
-	// Register the success response schema
-	if schemaRef, err := openAPIContext.Registry.GetOrRegister(replyModel); err == nil {
-		response := openapi3.NewResponse().
-			WithDescription("Success").
-			WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
-		openAPIContext.Operation.AddResponse(http.StatusOK, response)
+// addPlainTextResponse adds a plain text success response to the operation
+func (r *Router) addPlainTextResponse(openAPIContext *handlers.OpenAPIContext, description string) {
+	response := openapi3.NewResponse().
+		WithDescription(description).
+		WithContent(openapi3.NewContentWithSchema(openapi3.NewStringSchema(), []string{"text/plain"}))
+	openAPIContext.Operation.AddResponse(http.StatusOK, response)
+}
 
-		// Add example
-		response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-		response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(replyModel)}
-	}
+// addJSONResponse adds a JSON success response to the operation
+func (r *Router) addJSONResponse(openAPIContext *handlers.OpenAPIContext, description, contentType string) {
+	response := openapi3.NewResponse().
+		WithDescription(description).
+		WithContent(openapi3.NewContentWithSchema(openapi3.NewObjectSchema(), []string{contentType}))
+	openAPIContext.Operation.AddResponse(http.StatusOK, response)
+}
+
+// addFileResponse adds a file content success response to the operation
+func (r *Router) addFileResponse(openAPIContext *handlers.OpenAPIContext, description string) {
+	response := openapi3.NewResponse().
+		WithDescription(description).
+		WithContent(openapi3.NewContentWithSchema(openapi3.NewStringSchema(), []string{"application/octet-stream"}))
+	openAPIContext.Operation.AddResponse(http.StatusOK, response)
+}
+
+// addRedirectResponse adds a redirect success response to the operation
+func (r *Router) addRedirectResponse(openAPIContext *handlers.OpenAPIContext, description string) {
+	response := openapi3.NewResponse().WithDescription(description)
+	openAPIContext.Operation.AddResponse(http.StatusFound, response)
 }
 
 var (
@@ -469,7 +465,6 @@ func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 
 	// Ensure common error responses are registered for all endpoints
 	if openAPIContext.Operation != nil {
-		handlers.AddStandardResponses(openAPIContext.Operation)
 		r.registerSuccessResponseSchemas(config, openAPIContext)
 
 		// Add path parameters from the path pattern if not already added by BindAndValidateWithAutoRegistry

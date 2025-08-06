@@ -24,7 +24,7 @@ const (
 // and sending an email verification to the email address in the request
 // the user will not be able to authenticate until the email is verified
 func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRegisterSuccessRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRegisterSuccessRequest, models.ExampleRegisterSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

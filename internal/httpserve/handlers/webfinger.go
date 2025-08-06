@@ -21,7 +21,7 @@ import (
 // per the RFC, response codes should not always be 201 or similar, but 404, 200, etc.,
 // regular status codes should be used
 func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOStatusRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSSOStatusRequest, models.ExampleSSOStatusReply, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -42,14 +42,14 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		if err != nil {
 			log.Debug().Err(err).Msg("webfinger user lookup failed")
 
-			return h.NotFound(ctx, ErrNotFound)
+			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
 
 		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
 		if err != nil {
 			log.Debug().Err(err).Msg("webfinger org lookup failed")
 
-			return h.NotFound(ctx, ErrNotFound)
+			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
 	default:
 		return h.BadRequest(ctx, ErrMissingField, openapi)
@@ -64,7 +64,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		if ent.IsNotFound(err) {
 			log.Debug().Err(err).Msg("webfinger org setting not found")
 
-			return h.NotFound(ctx, ErrNotFound)
+			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
 
 		return h.InternalServerError(ctx, err, openapi)

@@ -15,7 +15,7 @@ import (
 
 // ResendEmail will resend an email verification email if the provided email exists
 func (h *Handler) ResendEmail(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResendEmailSuccessRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResendEmailSuccessRequest, models.ExampleResendEmailSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

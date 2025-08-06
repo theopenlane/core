@@ -16,7 +16,7 @@ import (
 
 // AccountFeaturesHandler lists all features the authenticated user has access to in relation to an organization
 func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleAccountFeaturesRequest, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleAccountFeaturesRequest, models.ExampleAccountFeaturesReply, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

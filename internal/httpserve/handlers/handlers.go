@@ -25,9 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // SchemaRegistry interface for dynamic schema registration
@@ -44,6 +46,16 @@ func isRegistrationContext(ctx echo.Context) bool {
 	_, ok := contextx.From[common.RegistrationMarker](ctx.Request().Context())
 
 	return ok
+}
+
+// CheckRegistrationModeWithResponse checks if we're in registration mode and returns early with nil
+// This should be called at the beginning of handlers to skip execution during OpenAPI generation
+func CheckRegistrationModeWithResponse(ctx echo.Context) error {
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
+	return nil
 }
 
 // OpenAPIContext holds the OpenAPI operation and schema registry for automatic registration
@@ -143,19 +155,19 @@ func BindAndValidateWithRequest[T any](ctx echo.Context, h *Handler, op *openapi
 	return BindAndValidate[T](ctx)
 }
 
-// BindAndValidateWithAutoRegistry registers the request with the OpenAPI specification using dynamic schema registration
-// and then binds and validates the payload.
-func BindAndValidateWithAutoRegistry[T any](ctx echo.Context, _ *Handler, op *openapi3.Operation, example T, registry interface {
+// BindAndValidateWithAutoRegistry registers the request and response with the OpenAPI specification using dynamic schema registration
+// and then binds and validates the payload. This automatically detects response examples using the ExampleProvider interface.
+func BindAndValidateWithAutoRegistry[T any, R any](ctx echo.Context, _ *Handler, op *openapi3.Operation, requestExample T, responseExample R, registry interface {
 	GetOrRegister(any) (*openapi3.SchemaRef, error)
 }) (*T, error) {
 	if op != nil && registry != nil {
 		// Auto-detect and register path parameters from struct tags
-		registerPathParameters(example, op)
+		registerPathParameters(requestExample, op)
 
 		// Only add request body for non-GET methods
 		if ctx.Request().Method != http.MethodGet {
 			// Register request body schema dynamically
-			schemaRef, err := registry.GetOrRegister(example)
+			schemaRef, err := registry.GetOrRegister(requestExample)
 			if err != nil {
 				return nil, err
 			}
@@ -164,13 +176,31 @@ func BindAndValidateWithAutoRegistry[T any](ctx echo.Context, _ *Handler, op *op
 			op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
 			request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(example)}
+			request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(requestExample)}
+		}
+
+		// Register success response schema dynamically
+		var exampleObject any = responseExample
+
+		// If the response implements ExampleProvider, use its example for the OpenAPI spec
+		if provider, ok := any(&responseExample).(models.ExampleProvider); ok {
+			exampleObject = provider.ExampleResponse()
+		}
+
+		if schemaRef, err := registry.GetOrRegister(responseExample); err == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Success").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			op.AddResponse(http.StatusOK, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
 		}
 	}
 
 	// If we're in OpenAPI registration mode, return the example object
 	if isRegistrationContext(ctx) {
-		return &example, nil
+		return &requestExample, nil
 	}
 
 	return BindAndValidate[T](ctx)
@@ -235,8 +265,8 @@ func AddResponseFor[T any](h *Handler, description string, example T, op *openap
 }
 
 // ProcessRequest provides a generic pattern for handling requests with automatic binding, validation, and response handling
-func ProcessRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, example TReq, processor func(context.Context, *TReq) (*TResp, error)) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, example, openapi.Registry)
+func ProcessRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq) (*TResp, error)) error {
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, requestExample, responseExample, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -252,9 +282,9 @@ func ProcessRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *Open
 }
 
 // ProcessAuthenticatedRequest provides a generic pattern for authenticated requests with automatic user context injection
-func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, example TReq, processor func(context.Context, *TReq, *auth.AuthenticatedUser) (*TResp, error)) error {
+func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq, *auth.AuthenticatedUser) (*TResp, error)) error {
 	// Bind and validate the request
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, example, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, requestExample, responseExample, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -278,11 +308,17 @@ func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, 
 }
 
 // BindAndValidateQueryParams binds and validates query parameters for GET requests and registers them in the OpenAPI schema
+// For backwards compatibility - use BindAndValidateQueryParamsWithResponse for new code
 func BindAndValidateQueryParams[T any](ctx echo.Context, op *openapi3.Operation, example T, registry SchemaRegistry) (*T, error) {
-	// Register query parameters in OpenAPI schema during registration
+	return BindAndValidateQueryParamsWithResponse(ctx, op, example, rout.Reply{}, registry)
+}
+
+// BindAndValidateQueryParamsWithResponse binds and validates query parameters and registers both request and response schemas
+func BindAndValidateQueryParamsWithResponse[T any, R any](ctx echo.Context, op *openapi3.Operation, requestExample T, responseExample R, registry SchemaRegistry) (*T, error) {
+	// Register query parameters and response schema in OpenAPI schema during registration
 	if op != nil && registry != nil {
 		// Use reflection to extract query parameter information
-		typ := reflect.TypeOf(example)
+		typ := reflect.TypeOf(requestExample)
 
 		// Handle pointer types
 		if typ.Kind() == reflect.Ptr {
@@ -346,11 +382,29 @@ func BindAndValidateQueryParams[T any](ctx echo.Context, op *openapi3.Operation,
 				}
 			}
 		}
+
+		// Register success response schema dynamically
+		var exampleObject any = responseExample
+
+		// If the response implements ExampleProvider, use its example for the OpenAPI spec
+		if provider, ok := any(&responseExample).(models.ExampleProvider); ok {
+			exampleObject = provider.ExampleResponse()
+		}
+
+		if schemaRef, err := registry.GetOrRegister(responseExample); err == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Success").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			op.AddResponse(http.StatusOK, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
+		}
 	}
 
 	// If we're in OpenAPI registration mode, return the example object
 	if isRegistrationContext(ctx) {
-		return &example, nil
+		return &requestExample, nil
 	}
 
 	// Bind query parameters to the struct

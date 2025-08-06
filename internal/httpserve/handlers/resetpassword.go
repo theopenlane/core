@@ -26,7 +26,7 @@ import (
 // and not expired. If the request is successful, a confirmation of the reset is sent
 // to the user and a 204 no content is returned
 func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResetPasswordSuccessRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResetPasswordSuccessRequest, models.ExampleResetPasswordSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

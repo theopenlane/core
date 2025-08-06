@@ -29,7 +29,7 @@ const (
 
 // BeginWebauthnRegistration is the request to begin a webauthn login
 func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnBeginRegistrationRequest, openapi.Registry)
+	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnBeginRegistrationRequest, models.ExampleWebauthnBeginRegistrationResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -204,7 +204,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 // BeginWebauthnLogin is the request to begin a webauthn login
 func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginRequest, openapi.Registry)
+	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginRequest, models.ExampleWebauthnBeginLoginResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

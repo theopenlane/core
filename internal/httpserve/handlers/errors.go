@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 var (
@@ -183,21 +184,24 @@ func invalidInputError(err error) error {
 // InternalServerError returns a 500 Internal Server Error response with the error message.
 // Automatically registers the response schema if an OpenAPI context is provided.
 func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*OpenAPIContext) error {
-	// Always register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil {
-		openapi[0].Operation.AddResponse(http.StatusInternalServerError, internalServerError())
-	}
-
-	// If we're in OpenAPI registration mode, don't proceed with actual response
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusInternalServerError)
 
 	// Create error response
 	errorResponse := rout.ErrorResponse(err)
+
+	// Automatically register response schema if OpenAPI context is provided
+	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Internal Server Error").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			openapi[0].Operation.AddResponse(http.StatusInternalServerError, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+		}
+	}
 
 	if jsonErr := ctx.JSON(http.StatusInternalServerError, errorResponse); jsonErr != nil {
 		return jsonErr
@@ -209,21 +213,24 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 // Unauthorized returns a 401 Unauthorized response with the error message.
 // Automatically registers the response schema if an OpenAPI context is provided.
 func (h *Handler) Unauthorized(ctx echo.Context, err error, openapi ...*OpenAPIContext) error {
-	// Always register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil {
-		openapi[0].Operation.AddResponse(http.StatusUnauthorized, unauthorized())
-	}
-
-	// If we're in OpenAPI registration mode, don't proceed with actual response
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusUnauthorized)
 
 	// Create error response
 	errorResponse := rout.ErrorResponse(err)
+
+	// Automatically register response schema if OpenAPI context is provided
+	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Unauthorized").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			openapi[0].Operation.AddResponse(http.StatusUnauthorized, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+		}
+	}
 
 	if jsonErr := ctx.JSON(http.StatusUnauthorized, errorResponse); jsonErr != nil {
 		return jsonErr
@@ -264,21 +271,24 @@ func (h *Handler) NotFound(ctx echo.Context, err error, openapi ...*OpenAPIConte
 // BadRequest returns a 400 Bad Request response with the error message.
 // Automatically registers the response schema if an OpenAPI context is provided.
 func (h *Handler) BadRequest(ctx echo.Context, err error, openapi ...*OpenAPIContext) error {
-	// Always register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil {
-		openapi[0].Operation.AddResponse(http.StatusBadRequest, badRequest())
-	}
-
-	// If we're in OpenAPI registration mode, don't proceed with actual response
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusBadRequest)
 
 	// Create error response
 	errorResponse := rout.ErrorResponse(err)
+
+	// Automatically register response schema if OpenAPI context is provided
+	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Bad Request").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			openapi[0].Operation.AddResponse(http.StatusBadRequest, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+		}
+	}
 
 	if jsonErr := ctx.JSON(http.StatusBadRequest, errorResponse); jsonErr != nil {
 		return jsonErr
@@ -319,21 +329,24 @@ func (h *Handler) BadRequestWithCode(ctx echo.Context, err error, code rout.Erro
 // InvalidInput returns a 400 Bad Request response with the error message.
 // Automatically registers the response schema if an OpenAPI context is provided.
 func (h *Handler) InvalidInput(ctx echo.Context, err error, openapi ...*OpenAPIContext) error {
-	// Always register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil {
-		openapi[0].Operation.AddResponse(http.StatusBadRequest, invalidInput())
-	}
-
-	// If we're in OpenAPI registration mode, don't proceed with actual response
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusBadRequest)
 
 	// Create error response
 	errorResponse := rout.ErrorResponseWithCode(err, InvalidInputErrCode)
+
+	// Automatically register response schema if OpenAPI context is provided
+	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Invalid Input").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			openapi[0].Operation.AddResponse(http.StatusBadRequest, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+		}
+	}
 
 	if jsonErr := ctx.JSON(http.StatusBadRequest, errorResponse); jsonErr != nil {
 		return jsonErr
@@ -403,8 +416,18 @@ func (h *Handler) TooManyRequests(ctx echo.Context, err error, openapi ...*OpenA
 // Success returns a 200 OK response with the response object.
 // Automatically registers the response schema if an OpenAPI context is provided.
 func (h *Handler) Success(ctx echo.Context, rep any, openapi ...*OpenAPIContext) error {
+	// Record metrics
+	metrics.RecordHandlerResult("Success", true)
+
 	// Automatically register response schema if OpenAPI context is provided
 	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		var exampleObject = rep
+
+		// If the response implements ExampleProvider, use its example for the OpenAPI spec
+		if provider, ok := any(&rep).(models.ExampleProvider); ok {
+			exampleObject = provider.ExampleResponse()
+		}
+
 		if schemaRef, err := openapi[0].Registry.GetOrRegister(rep); err == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Success").
@@ -412,17 +435,9 @@ func (h *Handler) Success(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 			openapi[0].Operation.AddResponse(http.StatusOK, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(rep)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
 		}
 	}
-
-	// If we're in OpenAPI registration mode
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
-	// Record metrics
-	metrics.RecordHandlerResult("Success", true)
 
 	return ctx.JSON(http.StatusOK, rep)
 }
@@ -435,6 +450,13 @@ func (h *Handler) Created(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 
 	// Automatically register response schema if OpenAPI context is provided
 	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		var exampleObject = rep
+
+		// If the response implements ExampleProvider, use its example for the OpenAPI spec
+		if provider, ok := any(&rep).(models.ExampleProvider); ok {
+			exampleObject = provider.ExampleResponse()
+		}
+
 		if schemaRef, err := openapi[0].Registry.GetOrRegister(rep); err == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Created").
@@ -442,7 +464,7 @@ func (h *Handler) Created(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 			openapi[0].Operation.AddResponse(http.StatusCreated, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(rep)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
 		}
 	}
 
@@ -481,21 +503,24 @@ func (h *Handler) SuccessBlob(ctx echo.Context, rep any, openapi ...*OpenAPICont
 // Forbidden returns a 403 Forbidden response with the error message.
 // Automatically registers the response schema if an OpenAPI context is provided.
 func (h *Handler) Forbidden(ctx echo.Context, err error, openapi ...*OpenAPIContext) error {
-	// Always register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil {
-		openapi[0].Operation.AddResponse(http.StatusForbidden, forbidden())
-	}
-
-	// If we're in OpenAPI registration mode, don't proceed with actual response
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusForbidden)
 
 	// Create error response
 	errorResponse := rout.ErrorResponse(err)
+
+	// Automatically register response schema if OpenAPI context is provided
+	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Forbidden").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			openapi[0].Operation.AddResponse(http.StatusForbidden, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+		}
+	}
 
 	if jsonErr := ctx.JSON(http.StatusForbidden, errorResponse); jsonErr != nil {
 		return jsonErr
@@ -505,9 +530,32 @@ func (h *Handler) Forbidden(ctx echo.Context, err error, openapi ...*OpenAPICont
 }
 
 // Redirect returns a 302 Found response with the location header.
-func (h *Handler) Redirect(ctx echo.Context, location string) error {
+// Automatically registers the response schema if an OpenAPI context is provided.
+func (h *Handler) Redirect(ctx echo.Context, location string, openapi ...*OpenAPIContext) error {
 	// Record metrics
 	metrics.RecordHandlerResult("Redirect", true)
+
+	// Create redirect response object for schema registration
+	redirectResponse := struct {
+		Location string `json:"location" description:"The URL to redirect to"`
+		Message  string `json:"message" description:"Redirect message"`
+	}{
+		Location: location,
+		Message:  "Redirecting",
+	}
+
+	// Automatically register response schema if OpenAPI context is provided
+	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(redirectResponse); schemaErr == nil {
+			response := openapi3.NewResponse().
+				WithDescription("Redirect").
+				WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+			openapi[0].Operation.AddResponse(http.StatusFound, response)
+
+			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["redirect"] = &openapi3.ExampleRef{Value: openapi3.NewExample(redirectResponse)}
+		}
+	}
 
 	return ctx.Redirect(http.StatusFound, location)
 }

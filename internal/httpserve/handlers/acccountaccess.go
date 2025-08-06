@@ -17,7 +17,7 @@ import (
 
 // AccountAccessHandler checks if a subject has access to an object
 func (h *Handler) AccountAccessHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountAccessRequest,
+	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountAccessRequest, models.ExampleAccountAccessReply,
 		func(reqCtx context.Context, in *models.AccountAccessRequest, subject *auth.AuthenticatedUser) (*models.AccountAccessReply, error) {
 			req := fgax.AccessCheck{
 				SubjectType: in.SubjectType,

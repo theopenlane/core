@@ -20,9 +20,14 @@ import (
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context
 func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSwitchSuccessRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSwitchSuccessRequest, &models.SwitchOrganizationReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	// Skip actual handler logic during OpenAPI registration
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	reqCtx := ctx.Request().Context()

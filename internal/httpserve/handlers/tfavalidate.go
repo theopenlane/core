@@ -16,9 +16,14 @@ import (
 // ValidateTOTP validates a user's TOTP code
 // this currently only supports TOTP and not OTP codes via email and SMS
 func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleTFASuccessRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleTFASuccessRequest, models.ExampleTFASSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	// Skip actual handler logic during OpenAPI registration
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	reqCtx := ctx.Request().Context()
