@@ -656,6 +656,13 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 	Session: "example-session-id",
 }
 
+// WebauthnRegistrationFinishRequest is the request to finish webauthn registration
+// This endpoint processes raw WebAuthn credential creation response data
+type WebauthnRegistrationFinishRequest struct{}
+
+// ExampleWebauthnRegistrationFinishRequest is an example WebAuthn registration finish request for OpenAPI documentation
+var ExampleWebauthnRegistrationFinishRequest = WebauthnRegistrationFinishRequest{}
+
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
 type WebauthnRegistrationResponse struct {
 	rout.Reply
@@ -701,6 +708,10 @@ type WebauthnBeginLoginResponse struct {
 	Session string `json:"session,omitempty"`
 }
 
+// WebauthnLoginFinishRequest is the request to finish webauthn login
+// This endpoint processes raw WebAuthn credential assertion response data
+type WebauthnLoginFinishRequest struct{}
+
 // WebauthnLoginResponse is the response after a successful webauthn login
 type WebauthnLoginResponse struct {
 	rout.Reply
@@ -733,6 +744,9 @@ func (r *WebauthnLoginResponse) ExampleResponse() any {
 		},
 	}
 }
+
+// ExampleWebauthnLoginFinishRequest is an example WebAuthn login finish request for OpenAPI documentation
+var ExampleWebauthnLoginFinishRequest = WebauthnLoginFinishRequest{}
 
 // ExampleWebauthnLoginResponse is an example WebAuthn login response for OpenAPI documentation
 var ExampleWebauthnLoginResponse = WebauthnLoginResponse{
