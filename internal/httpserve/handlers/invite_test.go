@@ -142,8 +142,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
 
-			// Test the user was added to the group
-			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
+			// test the user was added to the group
+			passthroughCtx := privacy.DecisionContext(recipientCtx, privacy.Allow)
+
+			group, err := suite.api.GetGroupByID(passthroughCtx, group.ID)
 			require.NoError(t, err)
 			assert.NotNil(t, group)
 
