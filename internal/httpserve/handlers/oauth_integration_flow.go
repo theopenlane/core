@@ -52,7 +52,7 @@ func wrapTokenError(operation, provider string, err error) error {
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOAuthFlowRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOAuthFlowRequest, models.ExampleOAuthFlowResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -132,9 +132,14 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 
 // HandleOAuthCallback processes the OAuth callback and stores integration tokens
 func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.OAuthCallbackRequest{}, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.OAuthCallbackRequest{}, models.ExampleOAuthCallbackResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	// Skip actual handler logic during OpenAPI registration
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	// Validate state matches what was set in the cookie
@@ -619,7 +624,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 
 // RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens
 func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshIntegrationTokenRequest, &models.IntegrationTokenResponse{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

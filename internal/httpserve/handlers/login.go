@@ -22,7 +22,7 @@ import (
 // LoginHandler validates the user credentials and returns a valid cookie
 // this handler only supports username password login
 func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleLoginSuccessRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleLoginSuccessRequest, models.ExampleLoginSuccessResponse, openapi.Registry)
 	if err != nil {
 		metrics.RecordLogin(false)
 		return h.InvalidInput(ctx, err, openapi)

@@ -14,7 +14,7 @@ import (
 
 // ForgotPassword will send an forgot password email if the provided email exists
 func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleForgotPasswordSuccessRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleForgotPasswordSuccessRequest, models.ExampleForgotPasswordSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

@@ -69,20 +69,6 @@ func unauthorized() *openapi3.Response {
 	return commonResponse(http.StatusUnauthorized)
 }
 
-// forbidden is a wrapper for OpenAPI forbidden response
-func forbidden() *openapi3.Response {
-	return commonResponse(http.StatusForbidden)
-}
-
-// invalidInput is a wrapper for OpenAPI invalid input response
-// Note: This uses the InvalidInput component, not BadRequest
-func invalidInput() *openapi3.Response {
-	// For now, just return a simple response without schema reference
-	// TODO: Add proper error schema references when StatusError schema is working
-	return openapi3.NewResponse().
-		WithDescription("Invalid Input")
-}
-
 // AddRequestBody is used to add a request body definition to the OpenAPI schema
 func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Operation) {
 	request := openapi3.NewRequestBody().
@@ -176,6 +162,8 @@ func AllSecurityRequirements() *openapi3.SecurityRequirements {
 }
 
 // AddStandardResponses adds common error responses to an OpenAPI operation
+// Note: This function is now a no-op since error responses are registered
+// dynamically by the error handler methods themselves when they are called.
 func AddStandardResponses(operation *openapi3.Operation) {
 	if operation != nil {
 		operation.AddResponse(http.StatusBadRequest, badRequest())

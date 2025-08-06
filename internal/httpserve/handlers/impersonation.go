@@ -17,7 +17,7 @@ import (
 
 // StartImpersonation handles requests to start user impersonation
 func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, &models.StartImpersonationReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -135,7 +135,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 
 // EndImpersonation handles requests to end an impersonation session
 func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleEndImpersonationRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleEndImpersonationRequest, &models.EndImpersonationReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

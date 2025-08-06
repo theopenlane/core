@@ -15,7 +15,7 @@ var examplecsv embed.FS
 
 // ExampleCSV will return an example csv file that can be used for bulk uploads of the object
 func (h *Handler) ExampleCSV(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleCSVRequest{}, openapi.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleCSVRequest{}, models.ExampleUploadFilesSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

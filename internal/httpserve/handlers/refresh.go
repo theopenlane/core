@@ -14,9 +14,14 @@ import (
 
 // RefreshHandler allows users to refresh their access token using their refresh token
 func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshRequest, openapi.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRefreshRequest, models.ExampleRefreshSuccessResponse, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	// Skip actual handler logic during OpenAPI registration
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	// verify the refresh token

@@ -23,9 +23,14 @@ import (
 
 // SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
 func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOTokenAuthorizeRequest, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOTokenAuthorizeRequest, models.SSOTokenAuthorizeReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	// Skip actual handler logic during OpenAPI registration
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	reqCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
@@ -77,7 +82,7 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 // It validates the state and nonce, exchanges the code if required and updates
 // the token's SSO authorizations for the organization.
 func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParams[models.SSOTokenCallbackRequest](ctx, openapi.Operation, models.ExampleSSOTokenCallbackRequest, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOTokenCallbackRequest, models.SSOTokenAuthorizeReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}

@@ -41,7 +41,7 @@ func newCookieConfig(secure bool) sessions.CookieConfig {
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
 // see docs/SSO.md for more details on the SSO flow
 func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOLoginRequest, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOLoginRequest, rout.Reply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -82,7 +82,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
 
 	// redirect the user to the IdP for authentication
-	return ctx.Redirect(http.StatusFound, authURL)
+	return h.Redirect(ctx, authURL, openapi)
 }
 
 // SSOCallbackHandler completes the OIDC login flow after the user returns from the IdP
@@ -90,7 +90,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	reqCtx := ctx.Request().Context()
 
-	in, err := BindAndValidateQueryParams(ctx, openapi.Operation, models.ExampleSSOCallbackRequest, openapi.Registry)
+	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, models.ExampleSSOCallbackRequest, models.LoginReply{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
@@ -176,7 +176,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.Email))
 
-		return ctx.Redirect(http.StatusFound, req.URL.String())
+		return h.Redirect(ctx, req.URL.String(), openapi)
 	}
 
 	// clean up the org ID cookie after successful login

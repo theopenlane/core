@@ -19,6 +19,12 @@ import (
 	"github.com/theopenlane/utils/passwd"
 )
 
+// ExampleProvider interface allows response models to provide their own examples
+// This eliminates the need for separate Example* variables and static switch statements
+type ExampleProvider interface {
+	ExampleResponse() any
+}
+
 var (
 	errProviderRequired      = errors.New("provider parameter is required")
 	errIntegrationIDRequired = errors.New("integration ID is required")
@@ -53,6 +59,23 @@ type LoginReply struct {
 	Message    string `json:"message"`
 }
 
+// ExampleResponse returns an example LoginReply for OpenAPI documentation
+func (r *LoginReply) ExampleResponse() any {
+	return LoginReply{
+		Reply: rout.Reply{
+			Success: true,
+		},
+		TFAEnabled: true,
+		AuthData: AuthData{
+			AccessToken:  "access_token",
+			RefreshToken: "refresh_token",
+			Session:      "session",
+			TokenType:    "bearer",
+		},
+		Message: "Login successful",
+	}
+}
+
 // Validate ensures the required fields are set on the LoginRequest request
 func (r *LoginRequest) Validate() error {
 	r.Username = strings.TrimSpace(r.Username)
@@ -72,6 +95,14 @@ func (r *LoginRequest) Validate() error {
 type AvailableAuthTypeReply struct {
 	rout.Reply
 	Methods []enums.AuthProvider `json:"methods,omitempty"`
+}
+
+// ExampleResponse returns an example AvailableAuthTypeReply for OpenAPI documentation
+func (r *AvailableAuthTypeReply) ExampleResponse() any {
+	return AvailableAuthTypeReply{
+		Reply:   rout.Reply{Success: true},
+		Methods: []enums.AuthProvider{enums.AuthProviderCredentials, enums.AuthProviderWebauthn},
+	}
 }
 
 // AvailableAuthTypeLoginRequest holds the payload for checking the auth types available to a user
@@ -147,6 +178,22 @@ type RefreshReply struct {
 	AuthData
 }
 
+// ExampleResponse returns an example RefreshReply for OpenAPI documentation
+func (r *RefreshReply) ExampleResponse() any {
+	return RefreshReply{
+		Reply: rout.Reply{
+			Success: true,
+		},
+		Message: "Token refreshed successfully",
+		AuthData: AuthData{
+			AccessToken:  "new_access_token",
+			RefreshToken: "new_refresh_token",
+			Session:      "session",
+			TokenType:    "bearer",
+		},
+	}
+}
+
 // Validate ensures the required fields are set on the RefreshRequest request
 func (r *RefreshRequest) Validate() error {
 	if r.RefreshToken == "" {
@@ -174,6 +221,43 @@ var ExampleRefreshSuccessResponse = RefreshReply{
 }
 
 // =========
+// USERINFO
+// =========
+
+// UserInfoReply contains user information for authenticated requests
+type UserInfoReply struct {
+	rout.Reply
+	ID              string  `json:"id" description:"The ID of the user" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	Email           string  `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	FirstName       string  `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
+	LastName        string  `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
+	DisplayName     string  `json:"display_name,omitempty" description:"The display name of the user" example:"Jon Snow"`
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty" description:"URL of the user's remote avatar" example:"https://example.com/avatar.jpg"`
+	LastSeen        *string `json:"last_seen,omitempty" description:"The time the user was last seen" example:"2023-01-01T00:00:00Z"`
+	Role            string  `json:"role,omitempty" description:"The user's role" example:"ADMIN"`
+	Sub             string  `json:"sub" description:"The subject of the user JWT" example:"user123"`
+}
+
+// ExampleUserInfoSuccessResponse is an example of a successful userinfo response for OpenAPI documentation
+var ExampleUserInfoSuccessResponse = UserInfoReply{
+	Reply:           rout.Reply{Success: true},
+	ID:              "01J4EXD5MM60CX4YNYN0DEE3Y1",
+	Email:           "jsnow@example.com",
+	FirstName:       "Jon",
+	LastName:        "Snow",
+	DisplayName:     "Jon Snow",
+	AvatarRemoteURL: stringPtr("https://example.com/avatar.jpg"),
+	LastSeen:        stringPtr("2023-01-01T00:00:00Z"),
+	Role:            "ADMIN",
+	Sub:             "user123",
+}
+
+// Helper function for string pointer
+func stringPtr(s string) *string {
+	return &s
+}
+
+// =========
 // REGISTER
 // =========
 
@@ -193,6 +277,16 @@ type RegisterReply struct {
 	Email   string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	Message string `json:"message"`
 	Token   string `json:"token,omitempty" exclude:"true"` // only used for requests against local development, excluded from OpenAPI documentation
+}
+
+// ExampleResponse returns an example RegisterReply for OpenAPI documentation
+func (r *RegisterReply) ExampleResponse() any {
+	return RegisterReply{
+		Reply:   rout.Reply{Success: true},
+		ID:      ulids.New().String(),
+		Email:   "jsnow@example.com",
+		Message: "User registered successfully",
+	}
 }
 
 // Validate ensures the required fields are set on the RegisterRequest request
@@ -251,6 +345,19 @@ type SwitchOrganizationReply struct {
 	AuthData
 }
 
+// ExampleResponse returns an example SwitchOrganizationReply for OpenAPI documentation
+func (r *SwitchOrganizationReply) ExampleResponse() any {
+	return SwitchOrganizationReply{
+		Reply: rout.Reply{Success: true},
+		AuthData: AuthData{
+			AccessToken:  "new_access_token",
+			RefreshToken: "new_refresh_token",
+			Session:      "new_session",
+			TokenType:    "bearer",
+		},
+	}
+}
+
 // Validate ensures the required fields are set on the SwitchOrganizationRequest request
 func (r *SwitchOrganizationRequest) Validate() error {
 	if r.TargetOrganizationID == "" {
@@ -294,6 +401,22 @@ type VerifyReply struct {
 	Email   string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	Message string `json:"message,omitempty"`
 	AuthData
+}
+
+// ExampleResponse returns an example VerifyReply for OpenAPI documentation
+func (r *VerifyReply) ExampleResponse() any {
+	return VerifyReply{
+		Reply:   rout.Reply{Success: true},
+		ID:      ulids.New().String(),
+		Email:   "jsnow@example.com",
+		Message: "Email verified successfully",
+		AuthData: AuthData{
+			AccessToken:  "access_token",
+			RefreshToken: "refresh_token",
+			Session:      "session",
+			TokenType:    "bearer",
+		},
+	}
 }
 
 // Validate ensures the required fields are set on the VerifyRequest request
@@ -341,6 +464,14 @@ type ResendReply struct {
 	Message string `json:"message"`
 }
 
+// ExampleResponse returns an example ResendReply for OpenAPI documentation
+func (r *ResendReply) ExampleResponse() any {
+	return ResendReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Verification email resent successfully",
+	}
+}
+
 // Validate ensures the required fields are set on the ResendRequest request
 func (r *ResendRequest) Validate() error {
 	if r.Email == "" {
@@ -376,6 +507,14 @@ type ForgotPasswordRequest struct {
 type ForgotPasswordReply struct {
 	rout.Reply
 	Message string `json:"message,omitempty"`
+}
+
+// ExampleResponse returns an example ForgotPasswordReply for OpenAPI documentation
+func (r *ForgotPasswordReply) ExampleResponse() any {
+	return ForgotPasswordReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Password reset email sent successfully",
+	}
 }
 
 // Validate ensures the required fields are set on the ForgotPasswordRequest request
@@ -415,6 +554,14 @@ type ResetPasswordRequest struct {
 type ResetPasswordReply struct {
 	rout.Reply
 	Message string `json:"message"`
+}
+
+// ExampleResponse returns an example ResetPasswordReply for OpenAPI documentation
+func (r *ResetPasswordReply) ExampleResponse() any {
+	return ResetPasswordReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Password reset successfully",
+	}
 }
 
 // Validate ensures the required fields are set on the ResetPasswordRequest request
@@ -473,6 +620,14 @@ type WebauthnBeginRegistrationResponse struct {
 	Session string `json:"session,omitempty"`
 }
 
+// ExampleResponse returns an example WebauthnBeginRegistrationResponse for OpenAPI documentation
+func (r *WebauthnBeginRegistrationResponse) ExampleResponse() any {
+	return WebauthnBeginRegistrationResponse{
+		Reply:   rout.Reply{Success: true},
+		Session: "registration_session_example",
+	}
+}
+
 var ExampleWebauthnBeginRegistrationRequest = WebauthnRegistrationRequest{
 	Email: "sarahisthebest@sarahsthebest.com",
 	Name:  "Sarah Funk",
@@ -501,11 +656,32 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 	Session: "example-session-id",
 }
 
+// WebauthnRegistrationFinishRequest is the request to finish webauthn registration
+// This endpoint processes raw WebAuthn credential creation response data
+type WebauthnRegistrationFinishRequest struct{}
+
+// ExampleWebauthnRegistrationFinishRequest is an example WebAuthn registration finish request for OpenAPI documentation
+var ExampleWebauthnRegistrationFinishRequest = WebauthnRegistrationFinishRequest{}
+
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
 type WebauthnRegistrationResponse struct {
 	rout.Reply
 	Message string `json:"message,omitempty"`
 	AuthData
+}
+
+// ExampleResponse returns an example WebauthnRegistrationResponse for OpenAPI documentation
+func (r *WebauthnRegistrationResponse) ExampleResponse() any {
+	return WebauthnRegistrationResponse{
+		Reply:   rout.Reply{Success: true},
+		Message: "WebAuthn registration successful",
+		AuthData: AuthData{
+			AccessToken:  "access_token",
+			RefreshToken: "refresh_token",
+			Session:      "session",
+			TokenType:    "bearer",
+		},
+	}
 }
 
 // WebauthnLoginRequest is the request to begin a webauthn login
@@ -532,11 +708,64 @@ type WebauthnBeginLoginResponse struct {
 	Session string `json:"session,omitempty"`
 }
 
+// WebauthnLoginFinishRequest is the request to finish webauthn login
+// This endpoint processes raw WebAuthn credential assertion response data
+type WebauthnLoginFinishRequest struct{}
+
 // WebauthnLoginResponse is the response after a successful webauthn login
 type WebauthnLoginResponse struct {
 	rout.Reply
 	Message string `json:"message,omitempty"`
 	AuthData
+}
+
+// ExampleResponse returns an example WebauthnBeginLoginResponse for OpenAPI documentation
+func (r *WebauthnBeginLoginResponse) ExampleResponse() any {
+	return WebauthnBeginLoginResponse{
+		Reply:   rout.Reply{Success: true},
+		Session: "session123",
+	}
+}
+
+// ExampleWebauthnBeginLoginResponse is an example WebAuthn begin login response for OpenAPI documentation
+var ExampleWebauthnBeginLoginResponse = WebauthnBeginLoginResponse{
+	Reply:   rout.Reply{Success: true},
+	Session: "session123",
+}
+
+// ExampleResponse returns an example WebauthnLoginResponse for OpenAPI documentation
+func (r *WebauthnLoginResponse) ExampleResponse() any {
+	return WebauthnLoginResponse{
+		Reply:   rout.Reply{Success: true},
+		Message: "Authentication successful",
+		AuthData: AuthData{
+			AccessToken:  "access_token_here",
+			RefreshToken: "refresh_token_here",
+		},
+	}
+}
+
+// ExampleWebauthnLoginFinishRequest is an example WebAuthn login finish request for OpenAPI documentation
+var ExampleWebauthnLoginFinishRequest = WebauthnLoginFinishRequest{}
+
+// ExampleWebauthnLoginResponse is an example WebAuthn login response for OpenAPI documentation
+var ExampleWebauthnLoginResponse = WebauthnLoginResponse{
+	Reply:   rout.Reply{Success: true},
+	Message: "Authentication successful",
+	AuthData: AuthData{
+		AccessToken:  "access_token_here",
+		RefreshToken: "refresh_token_here",
+	},
+}
+
+// ExampleWebauthnRegistrationResponse is an example WebAuthn registration response for OpenAPI documentation
+var ExampleWebauthnRegistrationResponse = WebauthnRegistrationResponse{
+	Reply:   rout.Reply{Success: true},
+	Message: "Registration successful",
+	AuthData: AuthData{
+		AccessToken:  "access_token_here",
+		RefreshToken: "refresh_token_here",
+	},
 }
 
 // =========
@@ -592,6 +821,24 @@ type InviteReply struct {
 	JoinedOrgID string `json:"joined_org_id" description:"The ID of the organization the user joined" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
 	Role        string `json:"role" description:"The role the user has in the organization" example:"admin"`
 	AuthData
+}
+
+// ExampleResponse returns an example InviteReply for OpenAPI documentation
+func (r *InviteReply) ExampleResponse() any {
+	return InviteReply{
+		Reply:       rout.Reply{Success: true},
+		ID:          ulids.New().String(),
+		Email:       "jsnow@example.com",
+		Message:     "Invitation accepted successfully",
+		JoinedOrgID: ulids.New().String(),
+		Role:        "admin",
+		AuthData: AuthData{
+			AccessToken:  "access_token",
+			RefreshToken: "refresh_token",
+			Session:      "session",
+			TokenType:    "bearer",
+		},
+	}
 }
 
 // Validate ensures the required fields are set on the InviteRequest request
@@ -668,6 +915,14 @@ type AccountAccessReply struct {
 	Allowed bool `json:"allowed"`
 }
 
+// ExampleResponse returns an example AccountAccessReply for OpenAPI documentation
+func (r *AccountAccessReply) ExampleResponse() any {
+	return AccountAccessReply{
+		Reply:   rout.Reply{Success: true},
+		Allowed: true,
+	}
+}
+
 // Validate ensures the required fields are set on the AccountAccessRequest
 func (r *AccountAccessRequest) Validate() error {
 	if r.ObjectID == "" {
@@ -721,6 +976,14 @@ type AccountRolesReply struct {
 	Roles []string `json:"roles"`
 }
 
+// ExampleResponse returns an example AccountRolesReply for OpenAPI documentation
+func (r *AccountRolesReply) ExampleResponse() any {
+	return AccountRolesReply{
+		Reply: rout.Reply{Success: true},
+		Roles: []string{"admin", "member"},
+	}
+}
+
 // Validate ensures the required fields are set on the AccountAccessRequest
 func (r *AccountRolesRequest) Validate() error {
 	if r.ObjectID == "" {
@@ -767,6 +1030,15 @@ type AccountRolesOrganizationReply struct {
 	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
+// ExampleResponse returns an example AccountRolesOrganizationReply for OpenAPI documentation
+func (r *AccountRolesOrganizationReply) ExampleResponse() any {
+	return AccountRolesOrganizationReply{
+		Reply:          rout.Reply{Success: true},
+		Roles:          []string{"can_view", "can_edit"},
+		OrganizationID: ulids.New().String(),
+	}
+}
+
 // Validate ensures the required fields are set on the AccountRolesOrganizationRequest
 func (r *AccountRolesOrganizationRequest) Validate() error {
 	// ID is optional - if empty, handler will get it from auth context
@@ -799,6 +1071,15 @@ type AccountFeaturesReply struct {
 	rout.Reply
 	Features       []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module"`
 	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// ExampleResponse returns an example AccountFeaturesReply for OpenAPI documentation
+func (r *AccountFeaturesReply) ExampleResponse() any {
+	return AccountFeaturesReply{
+		Reply:          rout.Reply{Success: true},
+		Features:       []string{"policy-and-procedure-module", "compliance-module"},
+		OrganizationID: ulids.New().String(),
+	}
 }
 
 // Validate ensures the required fields are set on the AccountFeaturesRequest
@@ -839,6 +1120,19 @@ type UploadFilesReply struct {
 	Message   string `json:"message,omitempty"`
 	FileCount int64  `json:"file_count,omitempty" description:"The number of files uploaded"`
 	Files     []File `json:"files,omitempty" description:"The files that were uploaded"`
+}
+
+// ExampleResponse returns an example UploadFilesReply for OpenAPI documentation
+func (r *UploadFilesReply) ExampleResponse() any {
+	return UploadFilesReply{
+		Reply:     rout.Reply{Success: true},
+		Message:   "Files uploaded successfully",
+		FileCount: 2, // nolint:mnd
+		Files: []File{
+			{Name: "example1.pdf", Size: 1024}, // nolint:mnd
+			{Name: "example2.jpg", Size: 2048}, // nolint:mnd
+		},
+	}
 }
 
 // File holds the fields that are sent on a response to the `/upload` endpoint
@@ -901,6 +1195,14 @@ type TFARequest struct {
 type TFAReply struct {
 	rout.Reply
 	Message string `json:"message"`
+}
+
+// ExampleResponse returns an example TFAReply for OpenAPI documentation
+func (r *TFAReply) ExampleResponse() any {
+	return TFAReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Two-factor authentication validated successfully",
+	}
 }
 
 // Validate ensures the required fields are set on the TFARequest request
@@ -985,6 +1287,14 @@ func (r *JobRunnerRegistrationRequest) Validate() error {
 type JobRunnerRegistrationReply struct {
 	Reply   rout.Reply
 	Message string `json:"message"`
+}
+
+// ExampleResponse returns an example JobRunnerRegistrationReply for OpenAPI documentation
+func (r *JobRunnerRegistrationReply) ExampleResponse() any {
+	return JobRunnerRegistrationReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Job runner registered successfully",
+	}
 }
 
 // ExampleJobRunnerRegistrationRequest is an example of a successful job runner
@@ -1150,6 +1460,17 @@ type SSOStatusReply struct {
 	OrganizationID string            `json:"organization_id,omitempty"`
 }
 
+// ExampleResponse returns an example SSOStatusReply for OpenAPI documentation
+func (r *SSOStatusReply) ExampleResponse() any {
+	return SSOStatusReply{
+		Reply:          rout.Reply{Success: true},
+		Enforced:       true,
+		Provider:       enums.SSOProviderOkta,
+		DiscoveryURL:   "https://accounts.example.com/.well-known/openid_configuration",
+		OrganizationID: ulids.New().String(),
+	}
+}
+
 // ExampleSSOStatusRequest is an example request for OpenAPI documentation
 var ExampleSSOStatusRequest = SSOStatusRequest{
 	Resource: "acct:mitb@theopenlane.io",
@@ -1199,6 +1520,16 @@ type SSOTokenAuthorizeReply struct {
 	Message        string `json:"message,omitempty"`
 }
 
+// ExampleResponse returns an example SSOTokenAuthorizeReply for OpenAPI documentation
+func (r *SSOTokenAuthorizeReply) ExampleResponse() any {
+	return SSOTokenAuthorizeReply{
+		Reply:          rout.Reply{Success: true},
+		OrganizationID: ulids.New().String(),
+		TokenID:        ulids.New().String(),
+		Message:        "Token authorized successfully",
+	}
+}
+
 // ExampleSSOTokenAuthorizeRequest is an example request for OpenAPI documentation
 var ExampleSSOTokenAuthorizeRequest = SSOTokenAuthorizeRequest{
 	OrganizationID: ulids.New().String(),
@@ -1217,6 +1548,24 @@ var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
 // CreateTrustCenterAnonymousJWTResponse is the response to a request to create a trust center anonymous JWT
 type CreateTrustCenterAnonymousJWTResponse struct {
 	AuthData
+}
+
+// ExampleResponse returns an example CreateTrustCenterAnonymousJWTResponse for OpenAPI documentation
+func (r *CreateTrustCenterAnonymousJWTResponse) ExampleResponse() any {
+	return CreateTrustCenterAnonymousJWTResponse{
+		AuthData: AuthData{
+			AccessToken: "anonymous_jwt_token",
+			TokenType:   "bearer",
+		},
+	}
+}
+
+// ExampleCreateTrustCenterAnonymousJWTResponse is an example trust center anonymous JWT response for OpenAPI documentation
+var ExampleCreateTrustCenterAnonymousJWTResponse = CreateTrustCenterAnonymousJWTResponse{
+	AuthData: AuthData{
+		AccessToken:  "access_token_here",
+		RefreshToken: "refresh_token_here",
+	},
 }
 
 // =================
@@ -1250,6 +1599,17 @@ type StartImpersonationReply struct {
 	Message   string    `json:"message" description:"Success message"`
 }
 
+// ExampleResponse returns an example StartImpersonationReply for OpenAPI documentation
+func (r *StartImpersonationReply) ExampleResponse() any {
+	return StartImpersonationReply{
+		Reply:     rout.Reply{Success: true},
+		Token:     "impersonation_token_example",
+		ExpiresAt: time.Now().Add(time.Hour),
+		SessionID: ulids.New().String(),
+		Message:   "Impersonation session started successfully",
+	}
+}
+
 // EndImpersonationRequest represents a request to end an impersonation session
 type EndImpersonationRequest struct {
 	SessionID string `json:"session_id" validate:"required" description:"The session ID to end"`
@@ -1260,6 +1620,14 @@ type EndImpersonationRequest struct {
 type EndImpersonationReply struct {
 	rout.Reply
 	Message string `json:"message" description:"Success message"`
+}
+
+// ExampleResponse returns an example EndImpersonationReply for OpenAPI documentation
+func (r *EndImpersonationReply) ExampleResponse() any {
+	return EndImpersonationReply{
+		Reply:   rout.Reply{Success: true},
+		Message: "Impersonation session ended successfully",
+	}
 }
 
 // Validate ensures the required fields are set on the StartImpersonationRequest
@@ -1333,6 +1701,20 @@ type IntegrationTokenResponse struct {
 	ExpiresAt *time.Time        `json:"expiresAt,omitempty"`
 }
 
+// ExampleResponse returns an example IntegrationTokenResponse for OpenAPI documentation
+func (r *IntegrationTokenResponse) ExampleResponse() any {
+	expiresAt := time.Now().Add(time.Hour * 24 * 30) // nolint:mnd
+	return IntegrationTokenResponse{
+		Reply:    rout.Reply{Success: true},
+		Provider: "github",
+		Token: &IntegrationToken{
+			AccessToken:  "ghr_example_token",
+			RefreshToken: "ghr_example_refresh_token",
+		},
+		ExpiresAt: &expiresAt,
+	}
+}
+
 // ListIntegrationsResponse is the response for listing integrations
 type ListIntegrationsResponse struct {
 	rout.Reply
@@ -1355,6 +1737,20 @@ type IntegrationStatusResponse struct {
 	TokenExpired bool   `json:"tokenExpired,omitempty"`
 	Message      string `json:"message"`
 	Integration  any    `json:"integration,omitempty"` // Will be *ent.Integration
+}
+
+// ExampleResponse returns an example IntegrationStatusResponse for OpenAPI documentation
+func (r *IntegrationStatusResponse) ExampleResponse() any {
+	return IntegrationStatusResponse{
+		Reply:        rout.Reply{Success: true},
+		Provider:     "github",
+		Connected:    true,
+		Status:       "connected",
+		TokenValid:   true,
+		TokenExpired: false,
+		Message:      "Integration status retrieved successfully",
+		Integration:  map[string]any{"id": ulids.New().String(), "name": "GitHub Integration"},
+	}
 }
 
 // GetIntegrationTokenRequest is the request for getting integration tokens
@@ -1465,11 +1861,22 @@ type OAuthFlowResponse struct {
 	RequiresLogin bool   `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow"`
 }
 
+// ExampleResponse returns an example OAuthFlowResponse for OpenAPI documentation
+func (r *OAuthFlowResponse) ExampleResponse() any {
+	return OAuthFlowResponse{
+		Reply:         rout.Reply{Success: true},
+		AuthURL:       "https://github.com/login/oauth/authorize?client_id=example&state=eyJvcmdJRCI6IjAxSE",
+		State:         "eyJvcmdJRCI6IjAxSE",
+		Message:       "",
+		RequiresLogin: false,
+	}
+}
+
 // OAuthCallbackRequest represents the OAuth callback data
 type OAuthCallbackRequest struct {
-	Provider string `json:"provider,omitempty" query:"provider" description:"OAuth provider (extracted from state)" example:"github"`
-	Code     string `json:"code" query:"code" description:"OAuth authorization code" example:"4/0AQl..."`
-	State    string `json:"state" query:"state" description:"OAuth state parameter" example:"eyJvcmdJRCI6IjAxSE..."`
+	Provider string `json:"provider,omitempty" query:"provider" description:"OAuth provider (extracted from state)"`
+	Code     string `json:"code" query:"code" description:"OAuth authorization code"`
+	State    string `json:"state" query:"state" description:"OAuth state parameter"`
 }
 
 // Validate ensures the required fields are set on the OAuthCallbackRequest
@@ -1523,6 +1930,16 @@ type OAuthCallbackResponse struct {
 	Success     bool   `json:"success" description:"Whether the OAuth callback was processed successfully"`
 	Integration any    `json:"integration,omitempty" description:"The created/updated integration object"`
 	Message     string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
+}
+
+// ExampleResponse returns an example OAuthCallbackResponse for OpenAPI documentation
+func (r *OAuthCallbackResponse) ExampleResponse() any {
+	return OAuthCallbackResponse{
+		Reply:       rout.Reply{Success: true},
+		Success:     true,
+		Integration: map[string]any{"id": ulids.New().String(), "provider": "github", "status": "connected"},
+		Message:     "Successfully connected GitHub integration",
+	}
 }
 
 // ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation
