@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -216,6 +217,7 @@ func (p Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.DenyQueryIfMissingAllFeatures("program", p.Features()...),
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("program", p.Features()...),

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
@@ -88,6 +89,7 @@ func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.DenyQueryIfMissingAllFeatures("integration", i.Features()...),
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("integration", i.Features()...),

@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -173,6 +174,7 @@ func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.DenyQueryIfMissingAllFeatures("control", c.Features()...),
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
 			// when an admin deletes a standard, we updated

@@ -349,6 +349,6 @@ func DenyQueryIfMissingAllFeatures(_ string, features ...models.OrgModule) priva
 			return err
 		}
 
-		return privacy.Allow
+		return privacy.Skip
 	})
 }
