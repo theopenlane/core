@@ -4,6 +4,8 @@ go 1.24.5
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
+replace google.golang.org/grpc => google.golang.org/grpc v1.73.0
+
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.2
@@ -430,6 +432,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
 	gonum.org/v1/gonum v0.16.0 // indirect
+	google.golang.org/grpc v1.74.2 // indirect
 	gopkg.in/VividCortex/ewma.v1 v1.1.1 // indirect
 	gopkg.in/djherbis/times.v1 v1.3.0 // indirect
 	gopkg.in/fatih/color.v1 v1.7.0 // indirect
@@ -620,7 +623,6 @@ require (
 	google.golang.org/api v0.244.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250721164621-a45f3dfb1074 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250728155136-f173205681a0 // indirect
-	google.golang.org/grpc v1.74.2 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/yaml.v3 v3.0.1

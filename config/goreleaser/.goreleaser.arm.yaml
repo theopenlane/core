@@ -1,10 +1,5 @@
 version: 2
 project_name: openlane
-before:
-  hooks:
-    - echo "GOARCH=$GOARCH CGO_ENABLED=$CGO_ENABLED"
-    - time go build -x -v ./cmd/cli
-
 builds:
   # ------------------------
   # Linux arm64

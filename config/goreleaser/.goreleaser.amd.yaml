@@ -1,10 +1,5 @@
 version: 2
 project_name: openlane
-before:
-  hooks:
-    - echo "GOARCH=$GOARCH CGO_ENABLED=$CGO_ENABLED"
-    - time go build -x -v ./cmd/cli
-
 builds:
   # ------------------------
   # Linux amd64
@@ -20,7 +15,6 @@ builds:
       - CGO_ENABLED=0
     flags:
       - -trimpath
-      - -tags=netgo
     ldflags:
       - "-s -w"
       - "-X main.Version={{ .Env.VERSION }}"
