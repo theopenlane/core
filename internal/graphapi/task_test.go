@@ -483,14 +483,18 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// to ensure we are paginating correctly when viewing as org admin
+	testUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleMember.String()}).MustNew(testUser.UserCtx, t)
+
+	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+
 	numTasks := 93
 	org1TaskIDs := []string{}
 	org2TaskIDs := []string{}
 	for range numTasks {
-		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser1.UserCtx, t)
-		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUser.UserCtx, t)
-		t3 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(adminUser.UserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
+		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUserCtx, t)
+		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID)
 
 		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser2.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
@@ -513,7 +517,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			name:            "happy path, with order by created date, page 1",
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -523,7 +527,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -533,7 +537,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -543,7 +547,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -553,7 +557,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -563,7 +567,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -573,7 +577,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -583,7 +587,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -593,7 +597,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      93,
@@ -603,7 +607,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldCreatedAt, Direction: testclient.OrderDirectionDesc}},
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUserCtx,
 			expectedResults: 3,
 			totalCount:      93,
 		},
@@ -659,7 +663,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
 }
 
