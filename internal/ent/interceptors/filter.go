@@ -276,19 +276,22 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 	}
 
 	// filter the results based on the allowed ids
-	filteredResults := make([]*T, 0, len(allowedIDs))
-
+	// this must be done in the same order as the original list
+	// to maintain the order of the results
+	allowed := make(map[string]struct{}, len(allowedIDs))
 	for _, id := range allowedIDs {
-		for _, item := range listResults {
-			objID, err := getObjectIDFromEntValue(item)
-			if err != nil {
-				return nil, err
-			}
+		allowed[id] = struct{}{}
+	}
 
-			if id == objID {
-				filteredResults = append(filteredResults, item)
-				break
-			}
+	filteredResults := make([]*T, 0, len(allowedIDs))
+	for _, item := range listResults {
+		objID, err := getObjectIDFromEntValue(item)
+		if err != nil {
+			return nil, err
+		}
+
+		if _, ok := allowed[objID]; ok {
+			filteredResults = append(filteredResults, item)
 		}
 	}
 
