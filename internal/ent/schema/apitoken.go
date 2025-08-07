@@ -154,6 +154,7 @@ func (APIToken) Hooks() []ent.Hook {
 // Interceptors of the APIToken
 func (a APIToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+        interceptors.InterceptorFeatures(a.Features()...),
 		interceptors.InterceptorAPIToken(),
 	}
 }
@@ -161,9 +162,6 @@ func (a APIToken) Interceptors() []ent.Interceptor {
 // Policy of the APIToken
 func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("apitoken", a.Features()...),
-		),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
 			rule.DenyIfMissingAllFeatures("apitoken", a.Features()...),

@@ -130,6 +130,7 @@ func (OrgMembership) Hooks() []ent.Hook {
 // Interceptors of the OrgMembership
 func (o OrgMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(o.Features()...),
 		interceptors.InterceptorOrgMember(),
 		interceptors.TraverseOrgMembers(),
 	}
@@ -144,9 +145,7 @@ func (o OrgMembership) Features() []models.OrgModule {
 // Policy of the OrgMembership
 func (o OrgMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("org_memberships", o.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithOnMutationRules(
 			ent.OpDelete|ent.OpDeleteOne,
 			rule.AllowSelfOrgMembershipDelete(),

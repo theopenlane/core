@@ -126,7 +126,6 @@ func (t TFASetting) Annotations() []schema.Annotation {
 func (t TFASetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("tfasetting", t.Features()...),
 			rule.AllowIfSelf(),
 		),
 		policy.WithMutationRules(

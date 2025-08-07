@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -150,6 +151,13 @@ func (i Invite) Annotations() []schema.Annotation {
 	}
 }
 
+// Interceptors of the Invite
+func (i Invite) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(i.Features()...),
+	}
+}
+
 // Hooks of the Invite
 func (Invite) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -163,7 +171,6 @@ func (Invite) Hooks() []ent.Hook {
 func (i Invite) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("invite", i.Features()...),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 		),
 		policy.WithMutationRules(

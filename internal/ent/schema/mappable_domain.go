@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -85,9 +86,7 @@ func (MappableDomain) Indexes() []ent.Index {
 // Policy of the MappableDomain
 func (e MappableDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("mappable_domain", e.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 			rule.DenyIfMissingAllFeatures("mappable_domain", e.Features()...),
@@ -104,5 +103,12 @@ func (MappableDomain) Hooks() []ent.Hook {
 func (MappableDomain) Features() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
+	}
+}
+
+// Interceptors of the MappableDomain
+func (e MappableDomain) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(e.Features()...),
 	}
 }

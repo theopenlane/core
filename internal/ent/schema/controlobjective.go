@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+    "github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -140,12 +141,16 @@ func (c ControlObjective) Annotations() []schema.Annotation {
 	}
 }
 
+// Interceptors of the ControlObjective
+func (c ControlObjective) Interceptors() []ent.Interceptor {
+    return []ent.Interceptor{
+        interceptors.InterceptorFeatures(c.Features()...),
+    }
+}
+
 // Policy of the ControlObjective
 func (c ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("controlobjective", c.Features()...),
-		),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("controlobjective", c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent),     // if mutation contains program_id, check access

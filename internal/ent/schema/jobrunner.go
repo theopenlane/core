@@ -127,6 +127,7 @@ func (JobRunner) Hooks() []ent.Hook {
 // Interceptors of the JobRunner
 func (j JobRunner) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(j.Features()...),
 		interceptors.InterceptorJobRunnerFilterSystemOwned(),
 	}
 }
@@ -134,9 +135,7 @@ func (j JobRunner) Interceptors() []ent.Interceptor {
 // Policy of the JobRunner
 func (j JobRunner) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("jobrunner", j.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
 			rule.DenyIfMissingAllFeatures("jobrunner", j.Features()...),

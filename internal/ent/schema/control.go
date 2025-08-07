@@ -169,13 +169,19 @@ func (Control) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the Control
+func (c Control) Interceptors() []ent.Interceptor {
+    return []ent.Interceptor{
+        interceptors.InterceptorFeatures(c.Features()...),
+    }
+}
+
 // Policy of the Control
 func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("control", c.Features()...),
-			privacy.AlwaysAllowRule(),
-		),
+        policy.WithQueryRules(
+            privacy.AlwaysAllowRule(),
+        ),
 		policy.WithMutationRules(
 			// when an admin deletes a standard, we updated
 			// controls to unlink the standard that might belong to an organization

@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -144,12 +145,17 @@ func (Subcontrol) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the Subcontrol
+func (s Subcontrol) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(s.Features()...),
+	}
+}
+
 // Policy of the Subcontrol
 func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("subcontrol", s.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
 			rule.DenyIfMissingAllFeatures("subcontrol", s.Features()...),

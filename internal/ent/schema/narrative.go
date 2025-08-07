@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -105,12 +106,17 @@ func (n Narrative) Annotations() []schema.Annotation {
 	}
 }
 
+// Interceptors of the Narrative
+func (n Narrative) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(n.Features()...),
+	}
+}
+
 // Policy of the Narrative
 func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("narrative", n.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("narrative", n.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access

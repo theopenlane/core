@@ -112,9 +112,7 @@ func (GroupSetting) Mixin() []ent.Mixin {
 // Policy defines the privacy policy of the GroupSetting
 func (g GroupSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("groupsetting", g.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("groupsetting", g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupSettingMutation](),

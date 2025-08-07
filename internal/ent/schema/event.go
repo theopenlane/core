@@ -9,6 +9,7 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -95,11 +96,17 @@ func (Event) Mixin() []ent.Mixin {
 	}
 }
 
+// Interceptors of the Event
+func (e Event) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(e.Features()...),
+	}
+}
+
 // Policy of the Event
 func (e Event) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("event", e.Features()...),
 			// allow after interceptors are properly added
 			privacy.AlwaysDenyRule(),
 		),

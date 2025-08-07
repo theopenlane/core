@@ -128,6 +128,7 @@ func (ProgramMembership) Hooks() []ent.Hook {
 // Interceptors of the ProgramMembership
 func (ProgramMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(ProgramMembership{}.Features()...),
 		interceptors.FilterListQuery(),
 	}
 }
@@ -136,7 +137,6 @@ func (ProgramMembership) Interceptors() []ent.Interceptor {
 func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("program_memberships", p.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(

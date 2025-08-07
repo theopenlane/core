@@ -126,9 +126,7 @@ func (TrustCenter) Hooks() []ent.Hook {
 // Policy of the TrustCenter
 func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("trustcenter", t.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("trustcenter", t.Features()...),
 			policy.CheckOrgWriteAccess(),

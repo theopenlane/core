@@ -44748,7 +44748,7 @@ type Query {
 		ID of the task
 		"""
 		id: ID!
-	): Task!
+	): Task
 	"""
 	Look up template by ID
 	"""

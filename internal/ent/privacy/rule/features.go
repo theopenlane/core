@@ -283,22 +283,3 @@ func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.Mu
 		return privacy.Skip
 	})
 }
-
-func DenyQueryIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.QueryRule {
-	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		if shouldSkipFeatureCheck(ctx, features) {
-			return privacy.Skip
-		}
-
-		ok, err := HasAllFeatures(ctx, features...)
-		if err != nil {
-			return err
-		}
-
-		if !ok {
-			return privacy.Denyf("features are not enabled")
-		}
-
-		return privacy.Skip
-	})
-}

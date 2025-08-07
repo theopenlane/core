@@ -157,9 +157,7 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("trustcenter_settings", t.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("trustcenter_settings", t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),

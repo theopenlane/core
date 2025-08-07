@@ -150,7 +150,6 @@ func (w Webauthn) Annotations() []schema.Annotation {
 func (w Webauthn) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("webauthn", w.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(

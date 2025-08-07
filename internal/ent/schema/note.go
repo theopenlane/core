@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -91,12 +92,17 @@ func (n Note) Annotations() []schema.Annotation {
 	}
 }
 
+// Interceptors of the Note
+func (n Note) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(n.Features()...),
+	}
+}
+
 // Policy of the Note
 func (n Note) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("note", n.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("note", n.Features()...),
 			entfga.CheckEditAccess[*generated.NoteMutation](),

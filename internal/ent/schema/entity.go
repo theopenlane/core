@@ -9,13 +9,14 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Entity holds the schema definition for the Entity entity
@@ -137,12 +138,17 @@ func (Entity) Hooks() []ent.Hook {
 	}
 }
 
+// Interceptors of the Entity
+func (e Entity) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(e.Features()...),
+	}
+}
+
 // Policy of the Entity
 func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("entity", e.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.DenyIfMissingAllFeatures("entity", e.Features()...),
 			policy.CheckOrgWriteAccess(),

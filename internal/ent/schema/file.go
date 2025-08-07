@@ -145,9 +145,7 @@ func (f File) Interceptors() []ent.Interceptor {
 // Policy of the File
 func (f File) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("file", f.Features()...),
-		),
+		policy.WithQueryRules(),
 		policy.WithOnMutationRules(
 			// check permissions on delete and update operations, creation is handled by the parent object
 			ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,

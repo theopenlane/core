@@ -13,6 +13,7 @@ import (
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -22,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
@@ -428,7 +430,10 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 // setContext is a helper function to set the context for the client
 // setting privacy to allow and adding the client to the context
 func setContext(ctx context.Context, db *ent.Client) context.Context {
-	return ent.NewContext(rule.WithInternalContext(ctx), db)
+	ctx = ent.NewContext(rule.WithInternalContext(ctx), db)
+
+	// add the GraphQL response context to prevent panics from interceptors that call graphql.AddError
+	return graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database

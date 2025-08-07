@@ -115,6 +115,7 @@ func (Hush) Hooks() []ent.Hook {
 // Interceptors of the Hush
 func (h Hush) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(h.Features()...),
 		interceptors.InterceptorHush(),
 	}
 }
@@ -123,7 +124,6 @@ func (h Hush) Interceptors() []ent.Interceptor {
 func (h Hush) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.DenyQueryIfMissingAllFeatures("hush", h.Features()...),
 			// restrict read access to hush secrets to organization members with write access
 			policy.CheckOrgEditAccess(),
 		),
