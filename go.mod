@@ -98,7 +98,7 @@ require (
 	gocloud.dev v0.43.0
 	golang.org/x/crypto v0.40.0
 	golang.org/x/oauth2 v0.30.0
-	golang.org/x/term v0.33.0
+	golang.org/x/term v0.34.0
 	golang.org/x/text v0.28.0
 	golang.org/x/tools v0.35.0
 	gotest.tools/gotestsum v1.12.3
@@ -644,7 +644,7 @@ require (
 	golang.org/x/mod v0.26.0
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sync v0.16.0
-	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/api v0.244.0
