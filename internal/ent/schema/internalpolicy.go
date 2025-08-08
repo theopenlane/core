@@ -50,6 +50,7 @@ func (InternalPolicy) Fields() []ent.Field {
 func (i InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(i, ControlObjective{}),
+		defaultEdgeToWithPagination(i, ControlImplementation{}),
 		defaultEdgeToWithPagination(i, Control{}),
 		defaultEdgeToWithPagination(i, Subcontrol{}),
 		defaultEdgeToWithPagination(i, Procedure{}),

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -34,35 +35,37 @@ import (
 // TaskQuery is the builder for querying Task entities.
 type TaskQuery struct {
 	config
-	ctx                        *QueryContext
-	order                      []task.OrderOption
-	inters                     []Interceptor
-	predicates                 []predicate.Task
-	withOwner                  *OrganizationQuery
-	withAssigner               *UserQuery
-	withAssignee               *UserQuery
-	withComments               *NoteQuery
-	withGroups                 *GroupQuery
-	withInternalPolicies       *InternalPolicyQuery
-	withProcedures             *ProcedureQuery
-	withControls               *ControlQuery
-	withSubcontrols            *SubcontrolQuery
-	withControlObjectives      *ControlObjectiveQuery
-	withPrograms               *ProgramQuery
-	withRisks                  *RiskQuery
-	withEvidence               *EvidenceQuery
-	loadTotal                  []func(context.Context, []*Task) error
-	modifiers                  []func(*sql.Selector)
-	withNamedComments          map[string]*NoteQuery
-	withNamedGroups            map[string]*GroupQuery
-	withNamedInternalPolicies  map[string]*InternalPolicyQuery
-	withNamedProcedures        map[string]*ProcedureQuery
-	withNamedControls          map[string]*ControlQuery
-	withNamedSubcontrols       map[string]*SubcontrolQuery
-	withNamedControlObjectives map[string]*ControlObjectiveQuery
-	withNamedPrograms          map[string]*ProgramQuery
-	withNamedRisks             map[string]*RiskQuery
-	withNamedEvidence          map[string]*EvidenceQuery
+	ctx                             *QueryContext
+	order                           []task.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.Task
+	withOwner                       *OrganizationQuery
+	withAssigner                    *UserQuery
+	withAssignee                    *UserQuery
+	withComments                    *NoteQuery
+	withGroups                      *GroupQuery
+	withInternalPolicies            *InternalPolicyQuery
+	withProcedures                  *ProcedureQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withControlObjectives           *ControlObjectiveQuery
+	withPrograms                    *ProgramQuery
+	withRisks                       *RiskQuery
+	withControlImplementations      *ControlImplementationQuery
+	withEvidence                    *EvidenceQuery
+	loadTotal                       []func(context.Context, []*Task) error
+	modifiers                       []func(*sql.Selector)
+	withNamedComments               map[string]*NoteQuery
+	withNamedGroups                 map[string]*GroupQuery
+	withNamedInternalPolicies       map[string]*InternalPolicyQuery
+	withNamedProcedures             map[string]*ProcedureQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedControlObjectives      map[string]*ControlObjectiveQuery
+	withNamedPrograms               map[string]*ProgramQuery
+	withNamedRisks                  map[string]*RiskQuery
+	withNamedControlImplementations map[string]*ControlImplementationQuery
+	withNamedEvidence               map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -399,6 +402,31 @@ func (_q *TaskQuery) QueryRisks() *RiskQuery {
 	return query
 }
 
+// QueryControlImplementations chains the current query on the "control_implementations" edge.
+func (_q *TaskQuery) QueryControlImplementations() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlImplementationsTable, task.ControlImplementationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationTasks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEvidence chains the current query on the "evidence" edge.
 func (_q *TaskQuery) QueryEvidence() *EvidenceQuery {
 	query := (&EvidenceClient{config: _q.config}).Query()
@@ -611,24 +639,25 @@ func (_q *TaskQuery) Clone() *TaskQuery {
 		return nil
 	}
 	return &TaskQuery{
-		config:                _q.config,
-		ctx:                   _q.ctx.Clone(),
-		order:                 append([]task.OrderOption{}, _q.order...),
-		inters:                append([]Interceptor{}, _q.inters...),
-		predicates:            append([]predicate.Task{}, _q.predicates...),
-		withOwner:             _q.withOwner.Clone(),
-		withAssigner:          _q.withAssigner.Clone(),
-		withAssignee:          _q.withAssignee.Clone(),
-		withComments:          _q.withComments.Clone(),
-		withGroups:            _q.withGroups.Clone(),
-		withInternalPolicies:  _q.withInternalPolicies.Clone(),
-		withProcedures:        _q.withProcedures.Clone(),
-		withControls:          _q.withControls.Clone(),
-		withSubcontrols:       _q.withSubcontrols.Clone(),
-		withControlObjectives: _q.withControlObjectives.Clone(),
-		withPrograms:          _q.withPrograms.Clone(),
-		withRisks:             _q.withRisks.Clone(),
-		withEvidence:          _q.withEvidence.Clone(),
+		config:                     _q.config,
+		ctx:                        _q.ctx.Clone(),
+		order:                      append([]task.OrderOption{}, _q.order...),
+		inters:                     append([]Interceptor{}, _q.inters...),
+		predicates:                 append([]predicate.Task{}, _q.predicates...),
+		withOwner:                  _q.withOwner.Clone(),
+		withAssigner:               _q.withAssigner.Clone(),
+		withAssignee:               _q.withAssignee.Clone(),
+		withComments:               _q.withComments.Clone(),
+		withGroups:                 _q.withGroups.Clone(),
+		withInternalPolicies:       _q.withInternalPolicies.Clone(),
+		withProcedures:             _q.withProcedures.Clone(),
+		withControls:               _q.withControls.Clone(),
+		withSubcontrols:            _q.withSubcontrols.Clone(),
+		withControlObjectives:      _q.withControlObjectives.Clone(),
+		withPrograms:               _q.withPrograms.Clone(),
+		withRisks:                  _q.withRisks.Clone(),
+		withControlImplementations: _q.withControlImplementations.Clone(),
+		withEvidence:               _q.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -768,6 +797,17 @@ func (_q *TaskQuery) WithRisks(opts ...func(*RiskQuery)) *TaskQuery {
 	return _q
 }
 
+// WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *TaskQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlImplementations = query
+	return _q
+}
+
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *TaskQuery) WithEvidence(opts ...func(*EvidenceQuery)) *TaskQuery {
@@ -863,7 +903,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	var (
 		nodes       = []*Task{}
 		_spec       = _q.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			_q.withOwner != nil,
 			_q.withAssigner != nil,
 			_q.withAssignee != nil,
@@ -876,6 +916,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			_q.withControlObjectives != nil,
 			_q.withPrograms != nil,
 			_q.withRisks != nil,
+			_q.withControlImplementations != nil,
 			_q.withEvidence != nil,
 		}
 	)
@@ -983,6 +1024,15 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	if query := _q.withControlImplementations; query != nil {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *Task) { n.Edges.ControlImplementations = []*ControlImplementation{} },
+			func(n *Task, e *ControlImplementation) {
+				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withEvidence; query != nil {
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *Task) { n.Edges.Evidence = []*Evidence{} },
@@ -1050,6 +1100,13 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *Task) { n.appendNamedRisks(name) },
 			func(n *Task, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControlImplementations {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *Task) { n.appendNamedControlImplementations(name) },
+			func(n *Task, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1682,6 +1739,68 @@ func (_q *TaskQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*T
 	}
 	return nil
 }
+func (_q *TaskQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*Task, init func(*Task), assign func(*Task, *ControlImplementation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Task)
+	nids := make(map[string]map[*Task]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(task.ControlImplementationsTable)
+		joinT.Schema(_q.schemaConfig.ControlImplementationTasks)
+		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(task.ControlImplementationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(task.ControlImplementationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(task.ControlImplementationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Task]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlImplementation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "control_implementations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Task, init func(*Task), assign func(*Task, *Evidence)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
@@ -1975,6 +2094,20 @@ func (_q *TaskQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *Task
 		_q.withNamedRisks = make(map[string]*RiskQuery)
 	}
 	_q.withNamedRisks[name] = query
+	return _q
+}
+
+// WithNamedControlImplementations tells the query-builder to eager-load the nodes that are connected to the "control_implementations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithNamedControlImplementations(name string, opts ...func(*ControlImplementationQuery)) *TaskQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControlImplementations == nil {
+		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
+	}
+	_q.withNamedControlImplementations[name] = query
 	return _q
 }
 

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -428,6 +429,21 @@ func (_u *TaskUpdate) AddRisks(v ...*Risk) *TaskUpdate {
 	return _u.AddRiskIDs(ids...)
 }
 
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *TaskUpdate) AddControlImplementationIDs(ids ...string) *TaskUpdate {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *TaskUpdate) AddControlImplementations(v ...*ControlImplementation) *TaskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *TaskUpdate) AddEvidenceIDs(ids ...string) *TaskUpdate {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -647,6 +663,27 @@ func (_u *TaskUpdate) RemoveRisks(v ...*Risk) *TaskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *TaskUpdate) ClearControlImplementations() *TaskUpdate {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *TaskUpdate) RemoveControlImplementationIDs(ids ...string) *TaskUpdate {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *TaskUpdate) RemoveControlImplementations(v ...*ControlImplementation) *TaskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
@@ -1310,6 +1347,54 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1765,6 +1850,21 @@ func (_u *TaskUpdateOne) AddRisks(v ...*Risk) *TaskUpdateOne {
 	return _u.AddRiskIDs(ids...)
 }
 
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *TaskUpdateOne) AddControlImplementationIDs(ids ...string) *TaskUpdateOne {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *TaskUpdateOne) AddControlImplementations(v ...*ControlImplementation) *TaskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *TaskUpdateOne) AddEvidenceIDs(ids ...string) *TaskUpdateOne {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -1984,6 +2084,27 @@ func (_u *TaskUpdateOne) RemoveRisks(v ...*Risk) *TaskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *TaskUpdateOne) ClearControlImplementations() *TaskUpdateOne {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *TaskUpdateOne) RemoveControlImplementationIDs(ids ...string) *TaskUpdateOne {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *TaskUpdateOne) RemoveControlImplementations(v ...*ControlImplementation) *TaskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
@@ -2672,6 +2793,54 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

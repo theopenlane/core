@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -535,6 +536,21 @@ func (_u *InternalPolicyUpdate) AddControlObjectives(v ...*ControlObjective) *In
 	return _u.AddControlObjectiveIDs(ids...)
 }
 
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *InternalPolicyUpdate) AddControlImplementationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdate) AddControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *InternalPolicyUpdate) AddControlIDs(ids ...string) *InternalPolicyUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -724,6 +740,27 @@ func (_u *InternalPolicyUpdate) RemoveControlObjectives(v ...*ControlObjective) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdate) ClearControlImplementations() *InternalPolicyUpdate {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveControlImplementationIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *InternalPolicyUpdate) RemoveControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1348,6 +1385,54 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2205,6 +2290,21 @@ func (_u *InternalPolicyUpdateOne) AddControlObjectives(v ...*ControlObjective) 
 	return _u.AddControlObjectiveIDs(ids...)
 }
 
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddControlImplementationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddControlImplementationIDs(ids...)
+	return _u
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdateOne) AddControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlImplementationIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *InternalPolicyUpdateOne) AddControlIDs(ids ...string) *InternalPolicyUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -2394,6 +2494,27 @@ func (_u *InternalPolicyUpdateOne) RemoveControlObjectives(v ...*ControlObjectiv
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlObjectiveIDs(ids...)
+}
+
+// ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
+func (_u *InternalPolicyUpdateOne) ClearControlImplementations() *InternalPolicyUpdateOne {
+	_u.mutation.ClearControlImplementations()
+	return _u
+}
+
+// RemoveControlImplementationIDs removes the "control_implementations" edge to ControlImplementation entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveControlImplementationIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveControlImplementationIDs(ids...)
+	return _u
+}
+
+// RemoveControlImplementations removes "control_implementations" edges to ControlImplementation entities.
+func (_u *InternalPolicyUpdateOne) RemoveControlImplementations(v ...*ControlImplementation) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlImplementationIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -3048,6 +3169,54 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.InternalPolicyControlObjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.ControlImplementationsTable,
+			Columns: []string{internalpolicy.ControlImplementationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

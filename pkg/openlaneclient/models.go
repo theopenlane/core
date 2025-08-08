@@ -2760,6 +2760,7 @@ type ControlImplementation struct {
 	Viewers       *GroupConnection      `json:"viewers"`
 	Controls      *ControlConnection    `json:"controls"`
 	Subcontrols   *SubcontrolConnection `json:"subcontrols"`
+	Tasks         *TaskConnection       `json:"tasks"`
 }
 
 func (ControlImplementation) IsNode() {}
@@ -3191,6 +3192,9 @@ type ControlImplementationWhereInput struct {
 	// subcontrols edge predicates
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 }
 
 type ControlObjective struct {
@@ -4357,6 +4361,7 @@ type CreateControlImplementationInput struct {
 	ViewerIDs       []string `json:"viewerIDs,omitempty"`
 	ControlIDs      []string `json:"controlIDs,omitempty"`
 	SubcontrolIDs   []string `json:"subcontrolIDs,omitempty"`
+	TaskIDs         []string `json:"taskIDs,omitempty"`
 }
 
 // CreateControlInput is used for create Control object.
@@ -4596,14 +4601,15 @@ type CreateEvidenceInput struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status              *enums.EvidenceStatus `json:"status,omitempty"`
-	OwnerID             *string               `json:"ownerID,omitempty"`
-	ControlObjectiveIDs []string              `json:"controlObjectiveIDs,omitempty"`
-	ControlIDs          []string              `json:"controlIDs,omitempty"`
-	SubcontrolIDs       []string              `json:"subcontrolIDs,omitempty"`
-	FileIDs             []string              `json:"fileIDs,omitempty"`
-	ProgramIDs          []string              `json:"programIDs,omitempty"`
-	TaskIDs             []string              `json:"taskIDs,omitempty"`
+	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
+	OwnerID                  *string               `json:"ownerID,omitempty"`
+	ControlObjectiveIDs      []string              `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs []string              `json:"controlImplementationIDs,omitempty"`
+	ControlIDs               []string              `json:"controlIDs,omitempty"`
+	SubcontrolIDs            []string              `json:"subcontrolIDs,omitempty"`
+	FileIDs                  []string              `json:"fileIDs,omitempty"`
+	ProgramIDs               []string              `json:"programIDs,omitempty"`
+	TaskIDs                  []string              `json:"taskIDs,omitempty"`
 }
 
 // CreateExportInput is used for create Export object.
@@ -4809,6 +4815,7 @@ type CreateInternalPolicyInput struct {
 	ApproverID                      *string  `json:"approverID,omitempty"`
 	DelegateID                      *string  `json:"delegateID,omitempty"`
 	ControlObjectiveIDs             []string `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs        []string `json:"controlImplementationIDs,omitempty"`
 	ControlIDs                      []string `json:"controlIDs,omitempty"`
 	SubcontrolIDs                   []string `json:"subcontrolIDs,omitempty"`
 	ProcedureIDs                    []string `json:"procedureIDs,omitempty"`
@@ -5519,20 +5526,21 @@ type CreateTaskInput struct {
 	// the due date of the task
 	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed           *models.DateTime `json:"completed,omitempty"`
-	OwnerID             *string          `json:"ownerID,omitempty"`
-	AssignerID          *string          `json:"assignerID,omitempty"`
-	AssigneeID          *string          `json:"assigneeID,omitempty"`
-	CommentIDs          []string         `json:"commentIDs,omitempty"`
-	GroupIDs            []string         `json:"groupIDs,omitempty"`
-	InternalPolicyIDs   []string         `json:"internalPolicyIDs,omitempty"`
-	ProcedureIDs        []string         `json:"procedureIDs,omitempty"`
-	ControlIDs          []string         `json:"controlIDs,omitempty"`
-	SubcontrolIDs       []string         `json:"subcontrolIDs,omitempty"`
-	ControlObjectiveIDs []string         `json:"controlObjectiveIDs,omitempty"`
-	ProgramIDs          []string         `json:"programIDs,omitempty"`
-	RiskIDs             []string         `json:"riskIDs,omitempty"`
-	EvidenceIDs         []string         `json:"evidenceIDs,omitempty"`
+	Completed                *models.DateTime `json:"completed,omitempty"`
+	OwnerID                  *string          `json:"ownerID,omitempty"`
+	AssignerID               *string          `json:"assignerID,omitempty"`
+	AssigneeID               *string          `json:"assigneeID,omitempty"`
+	CommentIDs               []string         `json:"commentIDs,omitempty"`
+	GroupIDs                 []string         `json:"groupIDs,omitempty"`
+	InternalPolicyIDs        []string         `json:"internalPolicyIDs,omitempty"`
+	ProcedureIDs             []string         `json:"procedureIDs,omitempty"`
+	ControlIDs               []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs            []string         `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs      []string         `json:"controlObjectiveIDs,omitempty"`
+	ProgramIDs               []string         `json:"programIDs,omitempty"`
+	RiskIDs                  []string         `json:"riskIDs,omitempty"`
+	ControlImplementationIDs []string         `json:"controlImplementationIDs,omitempty"`
+	EvidenceIDs              []string         `json:"evidenceIDs,omitempty"`
 }
 
 // CreateTemplateInput is used for create Template object.
@@ -8191,14 +8199,15 @@ type Evidence struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status            *enums.EvidenceStatus       `json:"status,omitempty"`
-	Owner             *Organization               `json:"owner,omitempty"`
-	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
-	Controls          *ControlConnection          `json:"controls"`
-	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
-	Files             *FileConnection             `json:"files"`
-	Programs          *ProgramConnection          `json:"programs"`
-	Tasks             *TaskConnection             `json:"tasks"`
+	Status                 *enums.EvidenceStatus            `json:"status,omitempty"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	Controls               *ControlConnection               `json:"controls"`
+	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
+	Files                  *FileConnection                  `json:"files"`
+	Programs               *ProgramConnection               `json:"programs"`
+	Tasks                  *TaskConnection                  `json:"tasks"`
 }
 
 func (Evidence) IsNode() {}
@@ -8776,6 +8785,9 @@ type EvidenceWhereInput struct {
 	// control_objectives edge predicates
 	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
 	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -12046,15 +12058,16 @@ type InternalPolicy struct {
 	// the group of users who are responsible for approving the policy
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the policy, used for temporary approval
-	Delegate          *Group                      `json:"delegate,omitempty"`
-	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
-	Controls          *ControlConnection          `json:"controls"`
-	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
-	Procedures        *ProcedureConnection        `json:"procedures"`
-	Narratives        *NarrativeConnection        `json:"narratives"`
-	Tasks             *TaskConnection             `json:"tasks"`
-	Risks             *RiskConnection             `json:"risks"`
-	Programs          *ProgramConnection          `json:"programs"`
+	Delegate               *Group                           `json:"delegate,omitempty"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	Controls               *ControlConnection               `json:"controls"`
+	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
+	Procedures             *ProcedureConnection             `json:"procedures"`
+	Narratives             *NarrativeConnection             `json:"narratives"`
+	Tasks                  *TaskConnection                  `json:"tasks"`
+	Risks                  *RiskConnection                  `json:"risks"`
+	Programs               *ProgramConnection               `json:"programs"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -12695,6 +12708,9 @@ type InternalPolicyWhereInput struct {
 	// control_objectives edge predicates
 	HasControlObjectives     *bool                         `json:"hasControlObjectives,omitempty"`
 	HasControlObjectivesWith []*ControlObjectiveWhereInput `json:"hasControlObjectivesWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -24950,20 +24966,21 @@ type Task struct {
 	// the id of the user who was assigned the task
 	AssigneeID *string `json:"assigneeID,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
-	AssignerID        *string                     `json:"assignerID,omitempty"`
-	Owner             *Organization               `json:"owner,omitempty"`
-	Assigner          *User                       `json:"assigner,omitempty"`
-	Assignee          *User                       `json:"assignee,omitempty"`
-	Comments          *NoteConnection             `json:"comments"`
-	Groups            *GroupConnection            `json:"groups"`
-	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
-	Procedures        *ProcedureConnection        `json:"procedures"`
-	Controls          *ControlConnection          `json:"controls"`
-	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
-	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
-	Programs          *ProgramConnection          `json:"programs"`
-	Risks             *RiskConnection             `json:"risks"`
-	Evidence          *EvidenceConnection         `json:"evidence"`
+	AssignerID             *string                          `json:"assignerID,omitempty"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
+	Assigner               *User                            `json:"assigner,omitempty"`
+	Assignee               *User                            `json:"assignee,omitempty"`
+	Comments               *NoteConnection                  `json:"comments"`
+	Groups                 *GroupConnection                 `json:"groups"`
+	InternalPolicies       *InternalPolicyConnection        `json:"internalPolicies"`
+	Procedures             *ProcedureConnection             `json:"procedures"`
+	Controls               *ControlConnection               `json:"controls"`
+	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
+	Programs               *ProgramConnection               `json:"programs"`
+	Risks                  *RiskConnection                  `json:"risks"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	Evidence               *EvidenceConnection              `json:"evidence"`
 }
 
 func (Task) IsNode() {}
@@ -25567,6 +25584,9 @@ type TaskWhereInput struct {
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -28031,6 +28051,9 @@ type UpdateControlImplementationInput struct {
 	AddSubcontrolIDs      []string `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs   []string `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols      *bool    `json:"clearSubcontrols,omitempty"`
+	AddTaskIDs            []string `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs         []string `json:"removeTaskIDs,omitempty"`
+	ClearTasks            *bool    `json:"clearTasks,omitempty"`
 }
 
 // UpdateControlInput is used for update Control object.
@@ -28436,26 +28459,29 @@ type UpdateEvidenceInput struct {
 	URL      *string `json:"url,omitempty"`
 	ClearURL *bool   `json:"clearURL,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status                    *enums.EvidenceStatus `json:"status,omitempty"`
-	ClearStatus               *bool                 `json:"clearStatus,omitempty"`
-	AddControlObjectiveIDs    []string              `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string              `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool                 `json:"clearControlObjectives,omitempty"`
-	AddControlIDs             []string              `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string              `json:"removeControlIDs,omitempty"`
-	ClearControls             *bool                 `json:"clearControls,omitempty"`
-	AddSubcontrolIDs          []string              `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs       []string              `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols          *bool                 `json:"clearSubcontrols,omitempty"`
-	AddFileIDs                []string              `json:"addFileIDs,omitempty"`
-	RemoveFileIDs             []string              `json:"removeFileIDs,omitempty"`
-	ClearFiles                *bool                 `json:"clearFiles,omitempty"`
-	AddProgramIDs             []string              `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string              `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool                 `json:"clearPrograms,omitempty"`
-	AddTaskIDs                []string              `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs             []string              `json:"removeTaskIDs,omitempty"`
-	ClearTasks                *bool                 `json:"clearTasks,omitempty"`
+	Status                         *enums.EvidenceStatus `json:"status,omitempty"`
+	ClearStatus                    *bool                 `json:"clearStatus,omitempty"`
+	AddControlObjectiveIDs         []string              `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs      []string              `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives         *bool                 `json:"clearControlObjectives,omitempty"`
+	AddControlImplementationIDs    []string              `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string              `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool                 `json:"clearControlImplementations,omitempty"`
+	AddControlIDs                  []string              `json:"addControlIDs,omitempty"`
+	RemoveControlIDs               []string              `json:"removeControlIDs,omitempty"`
+	ClearControls                  *bool                 `json:"clearControls,omitempty"`
+	AddSubcontrolIDs               []string              `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string              `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool                 `json:"clearSubcontrols,omitempty"`
+	AddFileIDs                     []string              `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                  []string              `json:"removeFileIDs,omitempty"`
+	ClearFiles                     *bool                 `json:"clearFiles,omitempty"`
+	AddProgramIDs                  []string              `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string              `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool                 `json:"clearPrograms,omitempty"`
+	AddTaskIDs                     []string              `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                  []string              `json:"removeTaskIDs,omitempty"`
+	ClearTasks                     *bool                 `json:"clearTasks,omitempty"`
 }
 
 // UpdateExportInput is used for update Export object.
@@ -28806,6 +28832,9 @@ type UpdateInternalPolicyInput struct {
 	AddControlObjectiveIDs                []string            `json:"addControlObjectiveIDs,omitempty"`
 	RemoveControlObjectiveIDs             []string            `json:"removeControlObjectiveIDs,omitempty"`
 	ClearControlObjectives                *bool               `json:"clearControlObjectives,omitempty"`
+	AddControlImplementationIDs           []string            `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs        []string            `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations           *bool               `json:"clearControlImplementations,omitempty"`
 	AddControlIDs                         []string            `json:"addControlIDs,omitempty"`
 	RemoveControlIDs                      []string            `json:"removeControlIDs,omitempty"`
 	ClearControls                         *bool               `json:"clearControls,omitempty"`
@@ -29951,44 +29980,47 @@ type UpdateTaskInput struct {
 	Due      *models.DateTime `json:"due,omitempty"`
 	ClearDue *bool            `json:"clearDue,omitempty"`
 	// the completion date of the task
-	Completed                 *models.DateTime `json:"completed,omitempty"`
-	ClearCompleted            *bool            `json:"clearCompleted,omitempty"`
-	AssignerID                *string          `json:"assignerID,omitempty"`
-	ClearAssigner             *bool            `json:"clearAssigner,omitempty"`
-	AssigneeID                *string          `json:"assigneeID,omitempty"`
-	ClearAssignee             *bool            `json:"clearAssignee,omitempty"`
-	AddCommentIDs             []string         `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs          []string         `json:"removeCommentIDs,omitempty"`
-	ClearComments             *bool            `json:"clearComments,omitempty"`
-	AddGroupIDs               []string         `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs            []string         `json:"removeGroupIDs,omitempty"`
-	ClearGroups               *bool            `json:"clearGroups,omitempty"`
-	AddInternalPolicyIDs      []string         `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs   []string         `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies     *bool            `json:"clearInternalPolicies,omitempty"`
-	AddProcedureIDs           []string         `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs        []string         `json:"removeProcedureIDs,omitempty"`
-	ClearProcedures           *bool            `json:"clearProcedures,omitempty"`
-	AddControlIDs             []string         `json:"addControlIDs,omitempty"`
-	RemoveControlIDs          []string         `json:"removeControlIDs,omitempty"`
-	ClearControls             *bool            `json:"clearControls,omitempty"`
-	AddSubcontrolIDs          []string         `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs       []string         `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols          *bool            `json:"clearSubcontrols,omitempty"`
-	AddControlObjectiveIDs    []string         `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs []string         `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives    *bool            `json:"clearControlObjectives,omitempty"`
-	AddProgramIDs             []string         `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs          []string         `json:"removeProgramIDs,omitempty"`
-	ClearPrograms             *bool            `json:"clearPrograms,omitempty"`
-	AddRiskIDs                []string         `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs             []string         `json:"removeRiskIDs,omitempty"`
-	ClearRisks                *bool            `json:"clearRisks,omitempty"`
-	AddEvidenceIDs            []string         `json:"addEvidenceIDs,omitempty"`
-	RemoveEvidenceIDs         []string         `json:"removeEvidenceIDs,omitempty"`
-	ClearEvidence             *bool            `json:"clearEvidence,omitempty"`
-	AddComment                *CreateNoteInput `json:"addComment,omitempty"`
-	DeleteComment             *string          `json:"deleteComment,omitempty"`
+	Completed                      *models.DateTime `json:"completed,omitempty"`
+	ClearCompleted                 *bool            `json:"clearCompleted,omitempty"`
+	AssignerID                     *string          `json:"assignerID,omitempty"`
+	ClearAssigner                  *bool            `json:"clearAssigner,omitempty"`
+	AssigneeID                     *string          `json:"assigneeID,omitempty"`
+	ClearAssignee                  *bool            `json:"clearAssignee,omitempty"`
+	AddCommentIDs                  []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs               []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments                  *bool            `json:"clearComments,omitempty"`
+	AddGroupIDs                    []string         `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs                 []string         `json:"removeGroupIDs,omitempty"`
+	ClearGroups                    *bool            `json:"clearGroups,omitempty"`
+	AddInternalPolicyIDs           []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs        []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies          *bool            `json:"clearInternalPolicies,omitempty"`
+	AddProcedureIDs                []string         `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs             []string         `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures                *bool            `json:"clearProcedures,omitempty"`
+	AddControlIDs                  []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs               []string         `json:"removeControlIDs,omitempty"`
+	ClearControls                  *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs               []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool            `json:"clearSubcontrols,omitempty"`
+	AddControlObjectiveIDs         []string         `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs      []string         `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives         *bool            `json:"clearControlObjectives,omitempty"`
+	AddProgramIDs                  []string         `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string         `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool            `json:"clearPrograms,omitempty"`
+	AddRiskIDs                     []string         `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                  []string         `json:"removeRiskIDs,omitempty"`
+	ClearRisks                     *bool            `json:"clearRisks,omitempty"`
+	AddControlImplementationIDs    []string         `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string         `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool            `json:"clearControlImplementations,omitempty"`
+	AddEvidenceIDs                 []string         `json:"addEvidenceIDs,omitempty"`
+	RemoveEvidenceIDs              []string         `json:"removeEvidenceIDs,omitempty"`
+	ClearEvidence                  *bool            `json:"clearEvidence,omitempty"`
+	AddComment                     *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment                  *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateTemplateInput is used for update Template object.

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -36,6 +37,8 @@ type ControlImplementationQuery struct {
 	withViewers            *GroupQuery
 	withControls           *ControlQuery
 	withSubcontrols        *SubcontrolQuery
+	withTasks              *TaskQuery
+	withFKs                bool
 	loadTotal              []func(context.Context, []*ControlImplementation) error
 	modifiers              []func(*sql.Selector)
 	withNamedBlockedGroups map[string]*GroupQuery
@@ -43,6 +46,7 @@ type ControlImplementationQuery struct {
 	withNamedViewers       map[string]*GroupQuery
 	withNamedControls      map[string]*ControlQuery
 	withNamedSubcontrols   map[string]*SubcontrolQuery
+	withNamedTasks         map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -223,6 +227,31 @@ func (_q *ControlImplementationQuery) QuerySubcontrols() *SubcontrolQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolControlImplementations
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (_q *ControlImplementationQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.TasksTable, controlimplementation.TasksPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ControlImplementationTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -427,6 +456,7 @@ func (_q *ControlImplementationQuery) Clone() *ControlImplementationQuery {
 		withViewers:       _q.withViewers.Clone(),
 		withControls:      _q.withControls.Clone(),
 		withSubcontrols:   _q.withSubcontrols.Clone(),
+		withTasks:         _q.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -497,6 +527,17 @@ func (_q *ControlImplementationQuery) WithSubcontrols(opts ...func(*SubcontrolQu
 		opt(query)
 	}
 	_q.withSubcontrols = query
+	return _q
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithTasks(opts ...func(*TaskQuery)) *ControlImplementationQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTasks = query
 	return _q
 }
 
@@ -583,16 +624,21 @@ func (_q *ControlImplementationQuery) prepareQuery(ctx context.Context) error {
 func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ControlImplementation, error) {
 	var (
 		nodes       = []*ControlImplementation{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
+			_q.withTasks != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, controlimplementation.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ControlImplementation).scanValues(nil, columns)
 	}
@@ -657,6 +703,13 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 			return nil, err
 		}
 	}
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.Tasks = []*Task{} },
+			func(n *ControlImplementation, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *ControlImplementation) { n.appendNamedBlockedGroups(name) },
@@ -689,6 +742,13 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *ControlImplementation) { n.appendNamedSubcontrols(name) },
 			func(n *ControlImplementation, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedTasks(name) },
+			func(n *ControlImplementation, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1039,6 +1099,68 @@ func (_q *ControlImplementationQuery) loadSubcontrols(ctx context.Context, query
 	}
 	return nil
 }
+func (_q *ControlImplementationQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlImplementation)
+	nids := make(map[string]map[*ControlImplementation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlimplementation.TasksTable)
+		joinT.Schema(_q.schemaConfig.ControlImplementationTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(controlimplementation.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(controlimplementation.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlimplementation.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlImplementation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *ControlImplementationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1208,6 +1330,20 @@ func (_q *ControlImplementationQuery) WithNamedSubcontrols(name string, opts ...
 		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	_q.withNamedSubcontrols[name] = query
+	return _q
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ControlImplementationQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	_q.withNamedTasks[name] = query
 	return _q
 }
 

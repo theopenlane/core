@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -32,35 +33,37 @@ import (
 // InternalPolicyQuery is the builder for querying InternalPolicy entities.
 type InternalPolicyQuery struct {
 	config
-	ctx                        *QueryContext
-	order                      []internalpolicy.OrderOption
-	inters                     []Interceptor
-	predicates                 []predicate.InternalPolicy
-	withOwner                  *OrganizationQuery
-	withBlockedGroups          *GroupQuery
-	withEditors                *GroupQuery
-	withApprover               *GroupQuery
-	withDelegate               *GroupQuery
-	withControlObjectives      *ControlObjectiveQuery
-	withControls               *ControlQuery
-	withSubcontrols            *SubcontrolQuery
-	withProcedures             *ProcedureQuery
-	withNarratives             *NarrativeQuery
-	withTasks                  *TaskQuery
-	withRisks                  *RiskQuery
-	withPrograms               *ProgramQuery
-	loadTotal                  []func(context.Context, []*InternalPolicy) error
-	modifiers                  []func(*sql.Selector)
-	withNamedBlockedGroups     map[string]*GroupQuery
-	withNamedEditors           map[string]*GroupQuery
-	withNamedControlObjectives map[string]*ControlObjectiveQuery
-	withNamedControls          map[string]*ControlQuery
-	withNamedSubcontrols       map[string]*SubcontrolQuery
-	withNamedProcedures        map[string]*ProcedureQuery
-	withNamedNarratives        map[string]*NarrativeQuery
-	withNamedTasks             map[string]*TaskQuery
-	withNamedRisks             map[string]*RiskQuery
-	withNamedPrograms          map[string]*ProgramQuery
+	ctx                             *QueryContext
+	order                           []internalpolicy.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.InternalPolicy
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withApprover                    *GroupQuery
+	withDelegate                    *GroupQuery
+	withControlObjectives           *ControlObjectiveQuery
+	withControlImplementations      *ControlImplementationQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withProcedures                  *ProcedureQuery
+	withNarratives                  *NarrativeQuery
+	withTasks                       *TaskQuery
+	withRisks                       *RiskQuery
+	withPrograms                    *ProgramQuery
+	loadTotal                       []func(context.Context, []*InternalPolicy) error
+	modifiers                       []func(*sql.Selector)
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedControlObjectives      map[string]*ControlObjectiveQuery
+	withNamedControlImplementations map[string]*ControlImplementationQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedProcedures             map[string]*ProcedureQuery
+	withNamedNarratives             map[string]*NarrativeQuery
+	withNamedTasks                  map[string]*TaskQuery
+	withNamedRisks                  map[string]*RiskQuery
+	withNamedPrograms               map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -241,6 +244,31 @@ func (_q *InternalPolicyQuery) QueryControlObjectives() *ControlObjectiveQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlImplementations chains the current query on the "control_implementations" edge.
+func (_q *InternalPolicyQuery) QueryControlImplementations() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.ControlImplementationsTable, internalpolicy.ControlImplementationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -609,24 +637,25 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		return nil
 	}
 	return &InternalPolicyQuery{
-		config:                _q.config,
-		ctx:                   _q.ctx.Clone(),
-		order:                 append([]internalpolicy.OrderOption{}, _q.order...),
-		inters:                append([]Interceptor{}, _q.inters...),
-		predicates:            append([]predicate.InternalPolicy{}, _q.predicates...),
-		withOwner:             _q.withOwner.Clone(),
-		withBlockedGroups:     _q.withBlockedGroups.Clone(),
-		withEditors:           _q.withEditors.Clone(),
-		withApprover:          _q.withApprover.Clone(),
-		withDelegate:          _q.withDelegate.Clone(),
-		withControlObjectives: _q.withControlObjectives.Clone(),
-		withControls:          _q.withControls.Clone(),
-		withSubcontrols:       _q.withSubcontrols.Clone(),
-		withProcedures:        _q.withProcedures.Clone(),
-		withNarratives:        _q.withNarratives.Clone(),
-		withTasks:             _q.withTasks.Clone(),
-		withRisks:             _q.withRisks.Clone(),
-		withPrograms:          _q.withPrograms.Clone(),
+		config:                     _q.config,
+		ctx:                        _q.ctx.Clone(),
+		order:                      append([]internalpolicy.OrderOption{}, _q.order...),
+		inters:                     append([]Interceptor{}, _q.inters...),
+		predicates:                 append([]predicate.InternalPolicy{}, _q.predicates...),
+		withOwner:                  _q.withOwner.Clone(),
+		withBlockedGroups:          _q.withBlockedGroups.Clone(),
+		withEditors:                _q.withEditors.Clone(),
+		withApprover:               _q.withApprover.Clone(),
+		withDelegate:               _q.withDelegate.Clone(),
+		withControlObjectives:      _q.withControlObjectives.Clone(),
+		withControlImplementations: _q.withControlImplementations.Clone(),
+		withControls:               _q.withControls.Clone(),
+		withSubcontrols:            _q.withSubcontrols.Clone(),
+		withProcedures:             _q.withProcedures.Clone(),
+		withNarratives:             _q.withNarratives.Clone(),
+		withTasks:                  _q.withTasks.Clone(),
+		withRisks:                  _q.withRisks.Clone(),
+		withPrograms:               _q.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -697,6 +726,17 @@ func (_q *InternalPolicyQuery) WithControlObjectives(opts ...func(*ControlObject
 		opt(query)
 	}
 	_q.withControlObjectives = query
+	return _q
+}
+
+// WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *InternalPolicyQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlImplementations = query
 	return _q
 }
 
@@ -861,13 +901,14 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = _q.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withControlObjectives != nil,
+			_q.withControlImplementations != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withProcedures != nil,
@@ -941,6 +982,15 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withControlImplementations; query != nil {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.ControlImplementations = []*ControlImplementation{} },
+			func(n *InternalPolicy, e *ControlImplementation) {
+				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControls; query != nil {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Controls = []*Control{} },
@@ -1008,6 +1058,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadControlObjectives(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedControlObjectives(name) },
 			func(n *InternalPolicy, e *ControlObjective) { n.appendNamedControlObjectives(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControlImplementations {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedControlImplementations(name) },
+			func(n *InternalPolicy, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1338,6 +1395,37 @@ func (_q *InternalPolicyQuery) loadControlObjectives(ctx context.Context, query 
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *InternalPolicyQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *ControlImplementation)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*InternalPolicy)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ControlImplementation(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(internalpolicy.ControlImplementationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.internal_policy_control_implementations
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "internal_policy_control_implementations" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_control_implementations" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1922,6 +2010,20 @@ func (_q *InternalPolicyQuery) WithNamedControlObjectives(name string, opts ...f
 		_q.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
 	}
 	_q.withNamedControlObjectives[name] = query
+	return _q
+}
+
+// WithNamedControlImplementations tells the query-builder to eager-load the nodes that are connected to the "control_implementations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedControlImplementations(name string, opts ...func(*ControlImplementationQuery)) *InternalPolicyQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControlImplementations == nil {
+		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
+	}
+	_q.withNamedControlImplementations[name] = query
 	return _q
 }
 

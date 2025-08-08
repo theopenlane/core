@@ -196,6 +196,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "subcontrol",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "control_objective": {"owner": {
 	ObjectType:      "owner",
@@ -403,6 +407,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "control_objectives": {
 	ObjectType:      "control_objective",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "control_implementations": {
+	ObjectType:      "control_implementation",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "controls": {
@@ -719,6 +727,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "control_objectives": {
 	ObjectType:      "control_objective",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "control_implementations": {
+	ObjectType:      "control_implementation",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "controls": {
@@ -1660,40 +1672,44 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "groups": {
 	ObjectType:      "group",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "internal_policies": {
 	ObjectType:      "internal_policy",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "procedures": {
 	ObjectType:      "procedure",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "controls": {
 	ObjectType:      "control",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "subcontrols": {
 	ObjectType:      "subcontrol",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "control_objectives": {
 	ObjectType:      "control_objective",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "programs": {
 	ObjectType:      "program",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "risks": {
 	ObjectType:      "risk",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "control_implementations": {
+	ObjectType:      "control_implementation",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "evidence": {
 	ObjectType:      "evidence",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "template": {"owner": {
 	ObjectType:      "owner",
