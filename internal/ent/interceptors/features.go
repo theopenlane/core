@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -25,8 +24,6 @@ func InterceptorFeatures(features ...models.OrgModule) ent.Interceptor {
 			if err == nil {
 				err = ErrFeatureNotEnabled
 			}
-
-			log.Err(err).Msg("cannot access all modules")
 
 			// force an evaluation to false always
 			// so the data to be returned will always be empty or not found
@@ -48,7 +45,7 @@ func InterceptorFeatures(features ...models.OrgModule) ent.Interceptor {
 			}
 
 			graphql.AddError(ctx, &gqlerror.Error{
-				Err:     gqlerrors.NewCustomError(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), ErrFeatureNotEnabled),
+				Err:     gqlerrors.NewCustomError(gqlerrors.NoAccessToModule, ErrFeatureNotEnabled.Error(), err),
 				Message: ErrFeatureNotEnabled.Error(),
 				Path:    path,
 			})

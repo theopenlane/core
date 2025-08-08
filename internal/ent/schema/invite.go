@@ -175,7 +175,7 @@ func (i Invite) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
-			rule.DenyIfMissingAllFeatures("invite", i.Features()...),
+			rule.DenyIfMissingAllFeatures(i.Features()...),
 			rule.CanInviteUsers(),
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),

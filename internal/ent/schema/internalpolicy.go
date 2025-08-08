@@ -117,7 +117,7 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 func (i InternalPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("internalpolicy", i.Features()...),
+			rule.DenyIfMissingAllFeatures(i.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.InternalPolicyMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),

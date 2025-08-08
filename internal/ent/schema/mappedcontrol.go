@@ -158,7 +158,7 @@ func (m MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("mappedcontrol", m.Features()...),
+			rule.DenyIfMissingAllFeatures(m.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),

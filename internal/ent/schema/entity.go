@@ -150,7 +150,7 @@ func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("entity", e.Features()...),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

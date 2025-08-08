@@ -142,7 +142,7 @@ func (g GroupMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("groupmembership", g.Features()...),
+			rule.DenyIfMissingAllFeatures(g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),
 		),
 	)

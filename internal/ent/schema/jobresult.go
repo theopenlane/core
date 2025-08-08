@@ -158,7 +158,7 @@ func (JobResult) Interceptors() []ent.Interceptor {
 func (j JobResult) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("jobresult", j.Features()...),
+			rule.DenyIfMissingAllFeatures(j.Features()...),
 			policy.CheckCreateAccess(),
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 			policy.CheckCreateAccess(),

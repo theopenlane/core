@@ -191,7 +191,7 @@ func (t Task) Interceptors() []ent.Interceptor {
 func (t Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("task", t.Features()...),
+			rule.DenyIfMissingAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)

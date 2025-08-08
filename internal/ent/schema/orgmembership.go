@@ -151,7 +151,7 @@ func (o OrgMembership) Policy() ent.Policy {
 			rule.AllowSelfOrgMembershipDelete(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("org_memberships", o.Features()...),
+			rule.DenyIfMissingAllFeatures(o.Features()...),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
 		),

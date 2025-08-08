@@ -143,7 +143,7 @@ func (s ScheduledJobRun) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("scheduledjobrun", s.Features()...),
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

@@ -153,7 +153,7 @@ func (w Webauthn) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("webauthn", w.Features()...),
+			rule.DenyIfMissingAllFeatures(w.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 	)

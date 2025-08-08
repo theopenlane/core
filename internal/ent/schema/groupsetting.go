@@ -114,7 +114,7 @@ func (g GroupSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("groupsetting", g.Features()...),
+			rule.DenyIfMissingAllFeatures(g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
 		),
 	)

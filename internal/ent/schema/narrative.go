@@ -118,7 +118,7 @@ func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("narrative", n.Features()...),
+			rule.DenyIfMissingAllFeatures(n.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.NarrativeMutation](),

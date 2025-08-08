@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -171,23 +170,20 @@ func (Control) Hooks() []ent.Hook {
 
 // Interceptors of the Control
 func (c Control) Interceptors() []ent.Interceptor {
-    return []ent.Interceptor{
-        interceptors.InterceptorFeatures(c.Features()...),
-    }
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(c.Features()...),
+	}
 }
 
 // Policy of the Control
 func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
-        policy.WithQueryRules(
-            privacy.AlwaysAllowRule(),
-        ),
 		policy.WithMutationRules(
 			// when an admin deletes a standard, we updated
 			// controls to unlink the standard that might belong to an organization
 			rule.AllowMutationIfSystemAdmin(),
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures("control", c.Features()...),
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),

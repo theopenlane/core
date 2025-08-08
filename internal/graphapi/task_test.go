@@ -2,7 +2,6 @@ package graphapi_test
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"testing"
 	"time"
@@ -103,7 +102,6 @@ func TestQueryTasks(t *testing.T) {
 
 		t4 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser2.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
-		fmt.Println("ORG1", t4.ID)
 	}
 
 	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.PersonalOrgID)
@@ -290,7 +288,6 @@ func TestQueryTasks(t *testing.T) {
 	}
 
 	// cleanup
-	fmt.Println(testUser1.OrganizationID, testUser2.OrganizationID, "ORG")
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskPersonal.ID}).MustDelete(userCtxPersonalOrg, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)

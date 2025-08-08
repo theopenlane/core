@@ -131,7 +131,7 @@ func TestDenyIfMissingAllFeatures(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := setupContext("test-org", tt.enabledFeats)
-			featureRule := rule.DenyIfMissingAllFeatures("test_schema", tt.features...)
+			featureRule := rule.DenyIfMissingAllFeatures(tt.features...)
 
 			mockMutation := &generated.OrganizationMutation{}
 			mockMutation.SetOp(ent.OpCreate)
@@ -158,7 +158,7 @@ func TestDenyIfMissingAllFeatures(t *testing.T) {
 
 func TestDenyIfMissingAllFeatures_BypassScenarios(t *testing.T) {
 	baseCtx := setupContext("test-org", []models.OrgModule{})
-	featureRule := rule.DenyIfMissingAllFeatures("test_schema", models.CatalogComplianceModule)
+	featureRule := rule.DenyIfMissingAllFeatures(models.CatalogComplianceModule)
 
 	mockMutation := &generated.OrganizationMutation{}
 	mockMutation.SetOp(ent.OpCreate)
@@ -225,7 +225,7 @@ func TestDenyIfMissingAllFeatures_EdgeCases(t *testing.T) {
 
 		// no authenticated user in context
 
-		featureRule := rule.DenyIfMissingAllFeatures("test_schema", models.CatalogComplianceModule)
+		featureRule := rule.DenyIfMissingAllFeatures(models.CatalogComplianceModule)
 		err := featureRule.EvalMutation(ctx, mockMutation)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")
@@ -238,7 +238,7 @@ func TestDenyIfMissingAllFeatures_EdgeCases(t *testing.T) {
 		ctx = permissioncache.WithCache(ctx, cache)
 		ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{OrganizationID: ""})
 
-		featureRule := rule.DenyIfMissingAllFeatures("test_schema", models.CatalogComplianceModule)
+		featureRule := rule.DenyIfMissingAllFeatures(models.CatalogComplianceModule)
 		err := featureRule.EvalMutation(ctx, mockMutation)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")
@@ -246,7 +246,7 @@ func TestDenyIfMissingAllFeatures_EdgeCases(t *testing.T) {
 
 	t.Run("no features to check should skip", func(t *testing.T) {
 		ctx := setupContext("test-org", []models.OrgModule{})
-		featureRule := rule.DenyIfMissingAllFeatures("test_schema")
+        featureRule := rule.DenyIfMissingAllFeatures()
 		err := featureRule.EvalMutation(ctx, mockMutation)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")

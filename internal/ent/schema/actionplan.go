@@ -100,16 +100,16 @@ func (a ActionPlan) Annotations() []schema.Annotation {
 
 // Interceptors of the ActionPlan
 func (a ActionPlan) Interceptors() []ent.Interceptor {
-    return []ent.Interceptor{
-        interceptors.InterceptorFeatures(a.Features()...),
-    }
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(a.Features()...),
+	}
 }
 
 // Policy of the ActionPlan
 func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("actionplan", a.Features()...),
+			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),

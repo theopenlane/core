@@ -153,7 +153,7 @@ func (j JobRunnerRegistrationToken) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.DenyIfMissingAllFeatures("jobrunner_registration_token", j.Features()...),
+			rule.DenyIfMissingAllFeatures(j.Features()...),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckOrgWriteAccess(),
 		),

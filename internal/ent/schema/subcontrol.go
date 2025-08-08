@@ -158,7 +158,7 @@ func (s Subcontrol) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures("subcontrol", s.Features()...),
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.ControlParent), // if mutation contains control_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.SubcontrolMutation](),

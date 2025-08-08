@@ -130,7 +130,7 @@ func (e Export) Policy() ent.Policy {
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithOnMutationRules(ent.OpCreate,
-			rule.DenyIfMissingAllFeatures("export", e.Features()...),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,

@@ -152,7 +152,7 @@ func (f File) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.FileMutation](),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("file", f.Features()...),
+			rule.DenyIfMissingAllFeatures(f.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 	)

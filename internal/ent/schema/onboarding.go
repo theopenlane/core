@@ -137,7 +137,7 @@ func (o Onboarding) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
-			rule.DenyIfMissingAllFeatures("onboarding", o.Features()...),
+			rule.DenyIfMissingAllFeatures(o.Features()...),
 			privacy.AlwaysAllowRule(), // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),
 	)

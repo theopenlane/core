@@ -265,7 +265,7 @@ func shouldSkipFeatureCheck(ctx context.Context, features []models.OrgModule) bo
 }
 
 // DenyIfMissingAllFeatures acts as a prerequisite check - denies if features missing, Allows if present
-func DenyIfMissingAllFeatures(_ string, features ...models.OrgModule) privacy.MutationRule {
+func DenyIfMissingAllFeatures(features ...models.OrgModule) privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
 		if shouldSkipFeatureCheck(ctx, features) {
 			return privacy.Skip

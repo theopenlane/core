@@ -7,9 +7,11 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -46,6 +48,7 @@ type userInput struct {
 	email         string
 	password      string
 	confirmedUser bool
+	features      []models.OrgModule
 }
 
 func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *userInput) testUserDetails {
@@ -140,6 +143,28 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	testUser.UserCtx = ent.NewContext(testUser.UserCtx, suite.db)
 
 	return testUser
+}
+
+func (suite *HandlerTestSuite) enableModules(ctx context.Context, userID, orgID string, features []models.OrgModule) {
+	// default to all modules if none provided
+	if len(features) == 0 {
+		features = models.AllOrgModules
+	}
+
+	newCtx := auth.NewTestContextWithOrgID(userID, orgID)
+	newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
+	newCtx = ent.NewContext(newCtx, suite.db)
+
+	for _, feature := range features {
+		err := suite.db.OrgModule.Update().
+			Where(
+				orgmodule.OwnerID(orgID),
+				orgmodule.Module(string(feature)),
+			).
+			SetActive(true).
+			Exec(newCtx)
+		require.NoError(suite.T(), err)
+	}
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens

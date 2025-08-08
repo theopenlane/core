@@ -128,13 +128,13 @@ func (EmailVerificationToken) Hooks() []ent.Hook {
 // Policy of the EmailVerificationToken
 func (e EmailVerificationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
-        policy.WithQueryRules(
-            rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](),
-        ),
+		policy.WithQueryRules(
+			rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](),
+		),
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
-			rule.DenyIfMissingAllFeatures("emailverificationtoken", e.Features()...),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

@@ -216,7 +216,7 @@ func (p Program) Interceptors() []ent.Interceptor {
 func (p Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("program", p.Features()...),
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProgramMutation](),
 		),

@@ -104,7 +104,7 @@ func (n Note) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("note", n.Features()...),
+			rule.DenyIfMissingAllFeatures(n.Features()...),
 			entfga.CheckEditAccess[*generated.NoteMutation](),
 		),
 	)

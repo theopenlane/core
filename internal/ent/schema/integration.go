@@ -99,7 +99,7 @@ func (i Integration) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("integration", i.Features()...),
+			rule.DenyIfMissingAllFeatures(i.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

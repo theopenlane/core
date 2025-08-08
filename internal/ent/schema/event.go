@@ -111,7 +111,7 @@ func (e Event) Policy() ent.Policy {
 			privacy.AlwaysDenyRule(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("event", e.Features()...),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 		),
 	)
 }

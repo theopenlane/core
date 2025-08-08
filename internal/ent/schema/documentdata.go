@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-    "github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -90,16 +90,16 @@ func (d DocumentData) Annotations() []schema.Annotation {
 
 // Interceptors of the DocumentData
 func (d DocumentData) Interceptors() []ent.Interceptor {
-    return []ent.Interceptor{
-        interceptors.InterceptorFeatures(d.Features()...),
-    }
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(d.Features()...),
+	}
 }
 
 // Policy of the DocumentData
 func (d DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("documentdata", d.Features()...),
+			rule.DenyIfMissingAllFeatures(d.Features()...),
 			entfga.CheckEditAccess[*generated.DocumentDataMutation](),
 		),
 	)

@@ -140,7 +140,7 @@ func (p ProgramMembership) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("programmembership", p.Features()...),
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)

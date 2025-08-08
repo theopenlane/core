@@ -128,7 +128,7 @@ func (e CustomDomain) Policy() ent.Policy {
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
-			rule.DenyIfMissingAllFeatures("customdomain", e.Features()...),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

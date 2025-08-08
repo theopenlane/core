@@ -76,7 +76,7 @@ func (s Scan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("scan", s.Features()...),
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),
 		),

@@ -214,16 +214,16 @@ func (r Risk) Annotations() []schema.Annotation {
 
 // Interceptors of the Risk
 func (r Risk) Interceptors() []ent.Interceptor {
-    return []ent.Interceptor{
-        interceptors.InterceptorFeatures(r.Features()...),
-    }
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(r.Features()...),
+	}
 }
 
 // Policy of the Risk
 func (r Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("risk", r.Features()...),
+			rule.DenyIfMissingAllFeatures(r.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.RiskMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.RiskMutation](),

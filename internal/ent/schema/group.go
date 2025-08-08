@@ -189,7 +189,7 @@ func (g Group) Annotations() []schema.Annotation {
 // Interceptors of the Group
 func (g Group) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-        interceptors.InterceptorFeatures(g.Features()...),
+		interceptors.InterceptorFeatures(g.Features()...),
 		interceptors.FilterQueryResults[generated.Group](),
 	}
 }
@@ -210,7 +210,7 @@ func (g Group) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("group", g.Features()...),
+			rule.DenyIfMissingAllFeatures(g.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.GroupMutation](),
 		),

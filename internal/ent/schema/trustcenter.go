@@ -128,7 +128,7 @@ func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("trustcenter", t.Features()...),
+			rule.DenyIfMissingAllFeatures(t.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

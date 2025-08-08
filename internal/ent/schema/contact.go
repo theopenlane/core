@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
-    "github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -132,7 +132,7 @@ func (Contact) Hooks() []ent.Hook {
 func (c Contact) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("contact", c.Features()...),
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -151,7 +151,7 @@ func (c Contact) Annotations() []schema.Annotation {
 
 // Interceptors of the Contact
 func (c Contact) Interceptors() []ent.Interceptor {
-    return []ent.Interceptor{
-        interceptors.InterceptorFeatures(c.Features()...),
-    }
+	return []ent.Interceptor{
+		interceptors.InterceptorFeatures(c.Features()...),
+	}
 }

@@ -128,7 +128,7 @@ func (h Hush) Policy() ent.Policy {
 			policy.CheckOrgEditAccess(),
 		),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("hush", h.Features()...),
+			rule.DenyIfMissingAllFeatures(h.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

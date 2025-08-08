@@ -157,7 +157,7 @@ func (e Evidence) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			rule.DenyIfMissingAllFeatures("evidence", e.Features()...),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.EvidenceMutation](),
 		),

@@ -83,6 +83,10 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standa
 		return nil, err
 	}
 
+	if std.IsPublic {
+		ctx = allowCtx
+	}
+
 	return r.cloneControls(ctx, controls, programID)
 }
 
