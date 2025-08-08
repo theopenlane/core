@@ -140,15 +140,76 @@ func (t Task) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
-		defaultEdgeFromWithPagination(t, Group{}),
-		defaultEdgeFromWithPagination(t, InternalPolicy{}),
-		defaultEdgeFromWithPagination(t, Procedure{}),
-		defaultEdgeFromWithPagination(t, Control{}),
-		defaultEdgeFromWithPagination(t, Subcontrol{}),
-		defaultEdgeFromWithPagination(t, ControlObjective{}),
-		defaultEdgeFromWithPagination(t, Program{}),
-		defaultEdgeFromWithPagination(t, Risk{}),
-		defaultEdgeToWithPagination(t, Evidence{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Group{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Group{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: InternalPolicy{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Procedure{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Procedure{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Control{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: ControlObjective{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(ControlObjective{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Program{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Program{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Risk{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: ControlImplementation{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(ControlImplementation{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Evidence{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Evidence{}.Name()),
+			},
+		}),
 	}
 }
 

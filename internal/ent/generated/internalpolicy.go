@@ -93,6 +93,8 @@ type InternalPolicyEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// ControlObjectives holds the value of the control_objectives edge.
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
+	// ControlImplementations holds the value of the control_implementations edge.
+	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -109,20 +111,21 @@ type InternalPolicyEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
-	namedBlockedGroups     map[string][]*Group
-	namedEditors           map[string][]*Group
-	namedControlObjectives map[string][]*ControlObjective
-	namedControls          map[string][]*Control
-	namedSubcontrols       map[string][]*Subcontrol
-	namedProcedures        map[string][]*Procedure
-	namedNarratives        map[string][]*Narrative
-	namedTasks             map[string][]*Task
-	namedRisks             map[string][]*Risk
-	namedPrograms          map[string][]*Program
+	namedBlockedGroups          map[string][]*Group
+	namedEditors                map[string][]*Group
+	namedControlObjectives      map[string][]*ControlObjective
+	namedControlImplementations map[string][]*ControlImplementation
+	namedControls               map[string][]*Control
+	namedSubcontrols            map[string][]*Subcontrol
+	namedProcedures             map[string][]*Procedure
+	namedNarratives             map[string][]*Narrative
+	namedTasks                  map[string][]*Task
+	namedRisks                  map[string][]*Risk
+	namedPrograms               map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -185,10 +188,19 @@ func (e InternalPolicyEdges) ControlObjectivesOrErr() ([]*ControlObjective, erro
 	return nil, &NotLoadedError{edge: "control_objectives"}
 }
 
+// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
+	if e.loadedTypes[6] {
+		return e.ControlImplementations, nil
+	}
+	return nil, &NotLoadedError{edge: "control_implementations"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -197,7 +209,7 @@ func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -206,7 +218,7 @@ func (e InternalPolicyEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -215,7 +227,7 @@ func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -224,7 +236,7 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -233,7 +245,7 @@ func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -242,7 +254,7 @@ func (e InternalPolicyEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -495,6 +507,11 @@ func (_m *InternalPolicy) QueryControlObjectives() *ControlObjectiveQuery {
 	return NewInternalPolicyClient(_m.config).QueryControlObjectives(_m)
 }
 
+// QueryControlImplementations queries the "control_implementations" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryControlImplementations() *ControlImplementationQuery {
+	return NewInternalPolicyClient(_m.config).QueryControlImplementations(_m)
+}
+
 // QueryControls queries the "controls" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryControls() *ControlQuery {
 	return NewInternalPolicyClient(_m.config).QueryControls(_m)
@@ -703,6 +720,30 @@ func (_m *InternalPolicy) appendNamedControlObjectives(name string, edges ...*Co
 		_m.Edges.namedControlObjectives[name] = []*ControlObjective{}
 	} else {
 		_m.Edges.namedControlObjectives[name] = append(_m.Edges.namedControlObjectives[name], edges...)
+	}
+}
+
+// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlImplementations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+	} else {
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 

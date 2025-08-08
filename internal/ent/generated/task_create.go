@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -410,6 +411,21 @@ func (_c *TaskCreate) AddRisks(v ...*Risk) *TaskCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddRiskIDs(ids...)
+}
+
+// AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
+func (_c *TaskCreate) AddControlImplementationIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddControlImplementationIDs(ids...)
+	return _c
+}
+
+// AddControlImplementations adds the "control_implementations" edges to the ControlImplementation entity.
+func (_c *TaskCreate) AddControlImplementations(v ...*ControlImplementation) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlImplementationIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
@@ -821,6 +837,23 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlImplementationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ControlImplementationsTable,
+			Columns: task.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlImplementationTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

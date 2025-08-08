@@ -4863,6 +4863,37 @@ type ControlImplementation implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	tasks(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Tasks returned from the connection.
+		"""
+		orderBy: [TaskOrder!]
+
+		"""
+		Filtering options for Tasks returned from the connection.
+		"""
+		where: TaskWhereInput
+	): TaskConnection!
 }
 """
 Return response for createBulkControlImplementation mutation
@@ -5464,6 +5495,11 @@ input ControlImplementationWhereInput {
 	"""
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	tasks edge predicates
+	"""
+	hasTasks: Boolean
+	hasTasksWith: [TaskWhereInput!]
 }
 type ControlObjective implements Node {
 	id: ID!
@@ -7447,6 +7483,7 @@ input CreateControlImplementationInput {
 	viewerIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	taskIDs: [ID!]
 }
 """
 CreateControlInput is used for create Control object.
@@ -7817,6 +7854,7 @@ input CreateEvidenceInput {
 	status: EvidenceEvidenceStatus
 	ownerID: ID
 	controlObjectiveIDs: [ID!]
+	controlImplementationIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	fileIDs: [ID!]
@@ -8125,6 +8163,7 @@ input CreateInternalPolicyInput {
 	approverID: ID
 	delegateID: ID
 	controlObjectiveIDs: [ID!]
+	controlImplementationIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	procedureIDs: [ID!]
@@ -9234,6 +9273,7 @@ input CreateTaskInput {
 	controlObjectiveIDs: [ID!]
 	programIDs: [ID!]
 	riskIDs: [ID!]
+	controlImplementationIDs: [ID!]
 	evidenceIDs: [ID!]
 }
 """
@@ -13684,6 +13724,37 @@ type Evidence implements Node {
 		"""
 		where: ControlObjectiveWhereInput
 	): ControlObjectiveConnection!
+	controlImplementations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -14612,6 +14683,11 @@ input EvidenceWhereInput {
 	"""
 	hasControlObjectives: Boolean
 	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+	"""
+	control_implementations edge predicates
+	"""
+	hasControlImplementations: Boolean
+	hasControlImplementationsWith: [ControlImplementationWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -20511,6 +20587,37 @@ type InternalPolicy implements Node {
 		"""
 		where: ControlObjectiveWhereInput
 	): ControlObjectiveConnection!
+	controlImplementations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -21611,6 +21718,11 @@ input InternalPolicyWhereInput {
 	"""
 	hasControlObjectives: Boolean
 	hasControlObjectivesWith: [ControlObjectiveWhereInput!]
+	"""
+	control_implementations edge predicates
+	"""
+	hasControlImplementations: Boolean
+	hasControlImplementationsWith: [ControlImplementationWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -52213,6 +52325,37 @@ type Task implements Node {
 		"""
 		where: RiskWhereInput
 	): RiskConnection!
+	controlImplementations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
 	evidence(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -53060,6 +53203,11 @@ input TaskWhereInput {
 	"""
 	hasRisks: Boolean
 	hasRisksWith: [RiskWhereInput!]
+	"""
+	control_implementations edge predicates
+	"""
+	hasControlImplementations: Boolean
+	hasControlImplementationsWith: [ControlImplementationWhereInput!]
 	"""
 	evidence edge predicates
 	"""
@@ -56467,6 +56615,9 @@ input UpdateControlImplementationInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -57002,6 +57153,9 @@ input UpdateEvidenceInput {
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
 	clearControlObjectives: Boolean
+	addControlImplementationIDs: [ID!]
+	removeControlImplementationIDs: [ID!]
+	clearControlImplementations: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -57460,6 +57614,9 @@ input UpdateInternalPolicyInput {
 	addControlObjectiveIDs: [ID!]
 	removeControlObjectiveIDs: [ID!]
 	clearControlObjectives: Boolean
+	addControlImplementationIDs: [ID!]
+	removeControlImplementationIDs: [ID!]
+	clearControlImplementations: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -58991,6 +59148,9 @@ input UpdateTaskInput {
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
+	addControlImplementationIDs: [ID!]
+	removeControlImplementationIDs: [ID!]
+	clearControlImplementations: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean

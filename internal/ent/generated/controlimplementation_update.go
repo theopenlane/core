@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -301,6 +302,21 @@ func (_u *ControlImplementationUpdate) AddSubcontrols(v ...*Subcontrol) *Control
 	return _u.AddSubcontrolIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ControlImplementationUpdate) AddTaskIDs(ids ...string) *ControlImplementationUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ControlImplementationUpdate) AddTasks(v ...*Task) *ControlImplementationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (_u *ControlImplementationUpdate) Mutation() *ControlImplementationMutation {
 	return _u.mutation
@@ -409,6 +425,27 @@ func (_u *ControlImplementationUpdate) RemoveSubcontrols(v ...*Subcontrol) *Cont
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ControlImplementationUpdate) ClearTasks() *ControlImplementationUpdate {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ControlImplementationUpdate) RemoveTaskIDs(ids ...string) *ControlImplementationUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ControlImplementationUpdate) RemoveTasks(v ...*Task) *ControlImplementationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -792,6 +829,54 @@ func (_u *ControlImplementationUpdate) sqlSave(ctx context.Context) (_node int, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.ControlImplementation
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1081,6 +1166,21 @@ func (_u *ControlImplementationUpdateOne) AddSubcontrols(v ...*Subcontrol) *Cont
 	return _u.AddSubcontrolIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ControlImplementationUpdateOne) AddTaskIDs(ids ...string) *ControlImplementationUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ControlImplementationUpdateOne) AddTasks(v ...*Task) *ControlImplementationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (_u *ControlImplementationUpdateOne) Mutation() *ControlImplementationMutation {
 	return _u.mutation
@@ -1189,6 +1289,27 @@ func (_u *ControlImplementationUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *C
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ControlImplementationUpdateOne) ClearTasks() *ControlImplementationUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ControlImplementationUpdateOne) RemoveTaskIDs(ids ...string) *ControlImplementationUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ControlImplementationUpdateOne) RemoveTasks(v ...*Task) *ControlImplementationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlImplementationUpdate builder.
@@ -1597,6 +1718,54 @@ func (_u *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *C
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubcontrolControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlImplementationTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

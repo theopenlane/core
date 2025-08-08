@@ -48,8 +48,10 @@ type ControlImplementation struct {
 	Details string `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlImplementationQuery when eager-loading is set.
-	Edges        ControlImplementationEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                                   ControlImplementationEdges `json:"edges"`
+	evidence_control_implementations        *string
+	internal_policy_control_implementations *string
+	selectValues                            sql.SelectValues
 }
 
 // ControlImplementationEdges holds the relations/edges for other nodes in the graph.
@@ -66,17 +68,20 @@ type ControlImplementationEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
 	namedViewers       map[string][]*Group
 	namedControls      map[string][]*Control
 	namedSubcontrols   map[string][]*Subcontrol
+	namedTasks         map[string][]*Task
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -135,6 +140,15 @@ func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[6] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -148,6 +162,10 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case controlimplementation.FieldCreatedAt, controlimplementation.FieldUpdatedAt, controlimplementation.FieldDeletedAt, controlimplementation.FieldImplementationDate, controlimplementation.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
+		case controlimplementation.ForeignKeys[0]: // evidence_control_implementations
+			values[i] = new(sql.NullString)
+		case controlimplementation.ForeignKeys[1]: // internal_policy_control_implementations
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -249,6 +267,20 @@ func (_m *ControlImplementation) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.Details = value.String
 			}
+		case controlimplementation.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_control_implementations", values[i])
+			} else if value.Valid {
+				_m.evidence_control_implementations = new(string)
+				*_m.evidence_control_implementations = value.String
+			}
+		case controlimplementation.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_control_implementations", values[i])
+			} else if value.Valid {
+				_m.internal_policy_control_implementations = new(string)
+				*_m.internal_policy_control_implementations = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -290,6 +322,11 @@ func (_m *ControlImplementation) QueryControls() *ControlQuery {
 // QuerySubcontrols queries the "subcontrols" edge of the ControlImplementation entity.
 func (_m *ControlImplementation) QuerySubcontrols() *SubcontrolQuery {
 	return NewControlImplementationClient(_m.config).QuerySubcontrols(_m)
+}
+
+// QueryTasks queries the "tasks" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryTasks() *TaskQuery {
+	return NewControlImplementationClient(_m.config).QueryTasks(_m)
 }
 
 // Update returns a builder for updating this ControlImplementation.
@@ -474,6 +511,30 @@ func (_m *ControlImplementation) appendNamedSubcontrols(name string, edges ...*S
 		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ControlImplementation) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ControlImplementation) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTasks[name] = []*Task{}
+	} else {
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -292,6 +293,21 @@ func (_c *ControlImplementationCreate) AddSubcontrols(v ...*Subcontrol) *Control
 	return _c.AddSubcontrolIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_c *ControlImplementationCreate) AddTaskIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_c *ControlImplementationCreate) AddTasks(v ...*Task) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (_c *ControlImplementationCreate) Mutation() *ControlImplementationMutation {
 	return _c.mutation
@@ -555,6 +571,23 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 			},
 		}
 		edge.Schema = _c.schemaConfig.SubcontrolControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.TasksTable,
+			Columns: controlimplementation.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlImplementationTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

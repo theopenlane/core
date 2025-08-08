@@ -678,6 +678,9 @@ func TestMutationCreateTask(t *testing.T) {
 	userCtx := auth.NewTestContextWithOrgID(om.UserID, om.OrganizationID)
 	adminCtx := auth.NewTestContextWithOrgID(om2.UserID, om2.OrganizationID)
 
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateTaskInput
@@ -694,9 +697,16 @@ func TestMutationCreateTask(t *testing.T) {
 			ctx:    testUser.UserCtx,
 		},
 		{
-			name: "happy path, minimal input by member user",
+			name: "happy path, minimal input by member user with edges",
 			request: testclient.CreateTaskInput{
-				Title: "test-task",
+				Title:             "test-task",
+				Details:           lo.ToPtr("test details of the task"),
+				Status:            &enums.TaskStatusInProgress,
+				Category:          lo.ToPtr("evidence upload"),
+				Due:               lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
+				ControlIDs:        []string{control.ID},
+				InternalPolicyIDs: []string{internalPolicy.ID},
+				AssigneeID:        &om.UserID, // assign the task to self
 			},
 			client: suite.client.api,
 			ctx:    userCtx,
@@ -829,10 +839,12 @@ func TestMutationCreateTask(t *testing.T) {
 				assert.NilError(t, err)
 				assert.Check(t, taskResp != nil)
 
-				// make sure the another org member cannot see the task
-				taskResp, err = suite.client.api.GetTaskByID(adminCtx, resp.CreateTask.Task.ID)
+				// make sure the another org member cannot see the task if not linked to objects they can see
+				if tc.request.ControlIDs == nil {
+					taskResp, err = suite.client.api.GetTaskByID(adminCtx, resp.CreateTask.Task.ID)
 
-				assert.Check(t, is.Nil(taskResp))
+					assert.Check(t, is.Nil(taskResp))
+				}
 			}
 
 			// cleanup

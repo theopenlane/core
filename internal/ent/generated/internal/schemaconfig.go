@@ -31,6 +31,7 @@ type SchemaConfig struct {
 	ControlImplementationBlockedGroups string // ControlImplementation-blocked_groups->Group table.
 	ControlImplementationEditors       string // ControlImplementation-editors->Group table.
 	ControlImplementationViewers       string // ControlImplementation-viewers->Group table.
+	ControlImplementationTasks         string // ControlImplementation-tasks->Task table.
 	ControlImplementationHistory       string // ControlImplementationHistory table.
 	ControlObjective                   string // ControlObjective table.
 	ControlObjectiveBlockedGroups      string // ControlObjective-blocked_groups->Group table.

@@ -88,24 +88,27 @@ type TaskEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
+	// ControlImplementations holds the value of the control_implementations edge.
+	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
-	namedComments          map[string][]*Note
-	namedGroups            map[string][]*Group
-	namedInternalPolicies  map[string][]*InternalPolicy
-	namedProcedures        map[string][]*Procedure
-	namedControls          map[string][]*Control
-	namedSubcontrols       map[string][]*Subcontrol
-	namedControlObjectives map[string][]*ControlObjective
-	namedPrograms          map[string][]*Program
-	namedRisks             map[string][]*Risk
-	namedEvidence          map[string][]*Evidence
+	namedComments               map[string][]*Note
+	namedGroups                 map[string][]*Group
+	namedInternalPolicies       map[string][]*InternalPolicy
+	namedProcedures             map[string][]*Procedure
+	namedControls               map[string][]*Control
+	namedSubcontrols            map[string][]*Subcontrol
+	namedControlObjectives      map[string][]*ControlObjective
+	namedPrograms               map[string][]*Program
+	namedRisks                  map[string][]*Risk
+	namedControlImplementations map[string][]*ControlImplementation
+	namedEvidence               map[string][]*Evidence
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -222,10 +225,19 @@ func (e TaskEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
+// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
+	if e.loadedTypes[12] {
+		return e.ControlImplementations, nil
+	}
+	return nil, &NotLoadedError{edge: "control_implementations"}
+}
+
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -442,6 +454,11 @@ func (_m *Task) QueryPrograms() *ProgramQuery {
 // QueryRisks queries the "risks" edge of the Task entity.
 func (_m *Task) QueryRisks() *RiskQuery {
 	return NewTaskClient(_m.config).QueryRisks(_m)
+}
+
+// QueryControlImplementations queries the "control_implementations" edge of the Task entity.
+func (_m *Task) QueryControlImplementations() *ControlImplementationQuery {
+	return NewTaskClient(_m.config).QueryControlImplementations(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the Task entity.
@@ -743,6 +760,30 @@ func (_m *Task) appendNamedRisks(name string, edges ...*Risk) {
 		_m.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlImplementations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+	} else {
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
 	}
 }
 

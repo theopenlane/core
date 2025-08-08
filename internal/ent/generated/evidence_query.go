@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -29,25 +30,27 @@ import (
 // EvidenceQuery is the builder for querying Evidence entities.
 type EvidenceQuery struct {
 	config
-	ctx                        *QueryContext
-	order                      []evidence.OrderOption
-	inters                     []Interceptor
-	predicates                 []predicate.Evidence
-	withOwner                  *OrganizationQuery
-	withControlObjectives      *ControlObjectiveQuery
-	withControls               *ControlQuery
-	withSubcontrols            *SubcontrolQuery
-	withFiles                  *FileQuery
-	withPrograms               *ProgramQuery
-	withTasks                  *TaskQuery
-	loadTotal                  []func(context.Context, []*Evidence) error
-	modifiers                  []func(*sql.Selector)
-	withNamedControlObjectives map[string]*ControlObjectiveQuery
-	withNamedControls          map[string]*ControlQuery
-	withNamedSubcontrols       map[string]*SubcontrolQuery
-	withNamedFiles             map[string]*FileQuery
-	withNamedPrograms          map[string]*ProgramQuery
-	withNamedTasks             map[string]*TaskQuery
+	ctx                             *QueryContext
+	order                           []evidence.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.Evidence
+	withOwner                       *OrganizationQuery
+	withControlObjectives           *ControlObjectiveQuery
+	withControlImplementations      *ControlImplementationQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withFiles                       *FileQuery
+	withPrograms                    *ProgramQuery
+	withTasks                       *TaskQuery
+	loadTotal                       []func(context.Context, []*Evidence) error
+	modifiers                       []func(*sql.Selector)
+	withNamedControlObjectives      map[string]*ControlObjectiveQuery
+	withNamedControlImplementations map[string]*ControlImplementationQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedFiles                  map[string]*FileQuery
+	withNamedPrograms               map[string]*ProgramQuery
+	withNamedTasks                  map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -128,6 +131,31 @@ func (_q *EvidenceQuery) QueryControlObjectives() *ControlObjectiveQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlImplementations chains the current query on the "control_implementations" edge.
+func (_q *EvidenceQuery) QueryControlImplementations() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlImplementationsTable, evidence.ControlImplementationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -446,18 +474,19 @@ func (_q *EvidenceQuery) Clone() *EvidenceQuery {
 		return nil
 	}
 	return &EvidenceQuery{
-		config:                _q.config,
-		ctx:                   _q.ctx.Clone(),
-		order:                 append([]evidence.OrderOption{}, _q.order...),
-		inters:                append([]Interceptor{}, _q.inters...),
-		predicates:            append([]predicate.Evidence{}, _q.predicates...),
-		withOwner:             _q.withOwner.Clone(),
-		withControlObjectives: _q.withControlObjectives.Clone(),
-		withControls:          _q.withControls.Clone(),
-		withSubcontrols:       _q.withSubcontrols.Clone(),
-		withFiles:             _q.withFiles.Clone(),
-		withPrograms:          _q.withPrograms.Clone(),
-		withTasks:             _q.withTasks.Clone(),
+		config:                     _q.config,
+		ctx:                        _q.ctx.Clone(),
+		order:                      append([]evidence.OrderOption{}, _q.order...),
+		inters:                     append([]Interceptor{}, _q.inters...),
+		predicates:                 append([]predicate.Evidence{}, _q.predicates...),
+		withOwner:                  _q.withOwner.Clone(),
+		withControlObjectives:      _q.withControlObjectives.Clone(),
+		withControlImplementations: _q.withControlImplementations.Clone(),
+		withControls:               _q.withControls.Clone(),
+		withSubcontrols:            _q.withSubcontrols.Clone(),
+		withFiles:                  _q.withFiles.Clone(),
+		withPrograms:               _q.withPrograms.Clone(),
+		withTasks:                  _q.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -484,6 +513,17 @@ func (_q *EvidenceQuery) WithControlObjectives(opts ...func(*ControlObjectiveQue
 		opt(query)
 	}
 	_q.withControlObjectives = query
+	return _q
+}
+
+// WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *EvidenceQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlImplementations = query
 	return _q
 }
 
@@ -626,9 +666,10 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	var (
 		nodes       = []*Evidence{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withOwner != nil,
 			_q.withControlObjectives != nil,
+			_q.withControlImplementations != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withFiles != nil,
@@ -674,6 +715,15 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			return nil, err
 		}
 	}
+	if query := _q.withControlImplementations; query != nil {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.ControlImplementations = []*ControlImplementation{} },
+			func(n *Evidence, e *ControlImplementation) {
+				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControls; query != nil {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Evidence) { n.Edges.Controls = []*Control{} },
@@ -713,6 +763,13 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 		if err := _q.loadControlObjectives(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedControlObjectives(name) },
 			func(n *Evidence, e *ControlObjective) { n.appendNamedControlObjectives(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControlImplementations {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedControlImplementations(name) },
+			func(n *Evidence, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -847,6 +904,37 @@ func (_q *EvidenceQuery) loadControlObjectives(ctx context.Context, query *Contr
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *ControlImplementation)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Evidence)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ControlImplementation(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(evidence.ControlImplementationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.evidence_control_implementations
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "evidence_control_implementations" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "evidence_control_implementations" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1273,6 +1361,20 @@ func (_q *EvidenceQuery) WithNamedControlObjectives(name string, opts ...func(*C
 		_q.withNamedControlObjectives = make(map[string]*ControlObjectiveQuery)
 	}
 	_q.withNamedControlObjectives[name] = query
+	return _q
+}
+
+// WithNamedControlImplementations tells the query-builder to eager-load the nodes that are connected to the "control_implementations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedControlImplementations(name string, opts ...func(*ControlImplementationQuery)) *EvidenceQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControlImplementations == nil {
+		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
+	}
+	_q.withNamedControlImplementations[name] = query
 	return _q
 }
 

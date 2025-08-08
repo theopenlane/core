@@ -82,6 +82,8 @@ const (
 	EdgeDelegate = "delegate"
 	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
 	EdgeControlObjectives = "control_objectives"
+	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
+	EdgeControlImplementations = "control_implementations"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -134,6 +136,13 @@ const (
 	// ControlObjectivesInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
 	ControlObjectivesInverseTable = "control_objectives"
+	// ControlImplementationsTable is the table that holds the control_implementations relation/edge.
+	ControlImplementationsTable = "control_implementations"
+	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
+	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
+	ControlImplementationsInverseTable = "control_implementations"
+	// ControlImplementationsColumn is the table column denoting the control_implementations relation/edge.
+	ControlImplementationsColumn = "internal_policy_control_implementations"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "internal_policy_controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -480,6 +489,20 @@ func ByControlObjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByControlImplementationsCount orders the results by control_implementations count.
+func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlImplementationsStep(), opts...)
+	}
+}
+
+// ByControlImplementations orders the results by control_implementations terms.
+func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -617,6 +640,13 @@ func newControlObjectivesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlObjectivesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectivesTable, ControlObjectivesPrimaryKey...),
+	)
+}
+func newControlImplementationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

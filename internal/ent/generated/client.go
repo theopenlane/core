@@ -3504,6 +3504,25 @@ func (c *ControlImplementationClient) QuerySubcontrols(_m *ControlImplementation
 	return query
 }
 
+// QueryTasks queries the tasks edge of a ControlImplementation.
+func (c *ControlImplementationClient) QueryTasks(_m *ControlImplementation) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.TasksTable, controlimplementation.TasksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ControlImplementationTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ControlImplementationClient) Hooks() []Hook {
 	hooks := c.hooks.ControlImplementation
@@ -6607,6 +6626,25 @@ func (c *EvidenceClient) QueryControlObjectives(_m *Evidence) *ControlObjectiveQ
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementations queries the control_implementations edge of a Evidence.
+func (c *EvidenceClient) QueryControlImplementations(_m *Evidence) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlImplementationsTable, evidence.ControlImplementationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10095,6 +10133,25 @@ func (c *InternalPolicyClient) QueryControlObjectives(_m *InternalPolicy) *Contr
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementations queries the control_implementations edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryControlImplementations(_m *InternalPolicy) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.ControlImplementationsTable, internalpolicy.ControlImplementationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -21559,6 +21616,25 @@ func (c *TaskClient) QueryRisks(_m *Task) *RiskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementations queries the control_implementations edge of a Task.
+func (c *TaskClient) QueryControlImplementations(_m *Task) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ControlImplementationsTable, task.ControlImplementationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationTasks
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
