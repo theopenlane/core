@@ -7,7 +7,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -156,13 +155,12 @@ func (suite *HandlerTestSuite) enableModules(ctx context.Context, userID, orgID 
 	newCtx = ent.NewContext(newCtx, suite.db)
 
 	for _, feature := range features {
-		err := suite.db.OrgModule.Update().
-			Where(
-				orgmodule.OwnerID(orgID),
-				orgmodule.Module(string(feature)),
-			).
+		_, err := suite.db.OrgModule.Create().
+			SetOwnerID(orgID).
+			SetModule(string(feature)).
 			SetActive(true).
-			Exec(newCtx)
+			SetPrice(models.Price{Amount: 0, Interval: "month"}).
+			Save(newCtx)
 		require.NoError(suite.T(), err)
 	}
 }
